@@ -1,0 +1,40 @@
+package org.openhds.hdsscapture.Repositories;
+
+import android.app.Application;
+
+import org.openhds.hdsscapture.AppDatabase;
+import org.openhds.hdsscapture.Dao.InmigrationDao;
+import org.openhds.hdsscapture.entity.Inmigration;
+
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+public class InmigrationRepository {
+
+    private final InmigrationDao dao;
+
+    public InmigrationRepository(Application application){
+        AppDatabase db = AppDatabase.getDatabase(application);
+        dao = db.inmigrationDao();
+    }
+
+
+    public void create(Inmigration data) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            dao.create(data);
+        });
+    }
+
+
+    public List<Inmigration> findAll() throws ExecutionException, InterruptedException {
+
+        Callable<List<Inmigration>> callable = () -> dao.retrieve();
+
+        Future<List<Inmigration>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+}

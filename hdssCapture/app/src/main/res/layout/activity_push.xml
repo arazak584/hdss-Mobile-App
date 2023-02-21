@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Snow"
+    tools:context=".Activity.PushActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_send_to_server"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/buttonSendLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_location"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonSendVisit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_visit"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendVisit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+    <Button
+            android:id="@+id/buttonSendIndividual"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_individual"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendIndividual"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonSendEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_event"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+    <Button
+            android:id="@+id/buttonSendEvents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_event"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendEvents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+
+    </LinearLayout>
+</ScrollView>

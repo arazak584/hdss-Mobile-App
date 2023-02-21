@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable-v24/border_shape.xml" value="0.216" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable-v24/ic_baseline_add_24.xml" value="0.216" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable-v24/ic_close.xml" value="0.2135" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable-v24/ic_menu.xml" value="0.233" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable-v24/ic_save.xml" value="0.1325" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable-v24/ic_settings.xml" value="0.215" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable/census.xml" value="0.184" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable/chat.xml" value="0.184" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable/home.xml" value="0.184" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable/ic_baseline_login_24.xml" value="0.216" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable/ic_more_vert_black_24dp.xml" value="0.215" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable/language.xml" value="0.184" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable/person_search.xml" value="0.215" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable/pull.xml" value="0.184" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable/push.xml" value="0.184" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable/send.xml" value="0.184" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable/sends.xml" value="0.184" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable/update.xml" value="0.184" />
+        <entry key="..\:/hdssCapture/app/src/main/res/drawable/updates.xml" value="0.184" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout-w600dp/fragment_summary.xml" value="0.3223958333333333" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout-w600dp/location_view_items.xml" value="0.325" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout-w600dp/locations_view_items.xml" value="0.325" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout-w600dp/save_buttons.xml" value="0.31302083333333336" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_add_expenses.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_add_individual.xml" value="0.2359375" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_add_individual_view.xml" value="0.2359375" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_addindividual_item.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_death.xml" value="0.2359375" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_demographics.xml" value="0.2359375" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_expenses.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_expenseslist.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_form_list.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_hierarchy.xml" value="0.26875" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_hierarchy_selection.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_household.xml" value="0.264" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_individual.xml" value="0.264" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_individual_list.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_individual_list2.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_individuals.xml" value="0.21323529411764705" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_inmigration_form.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_location.xml" value="0.264" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_location2.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_main.xml" value="0.23177083333333334" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_membership.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_outmigration.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_pregnancyoutcome.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_pregobservation.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_pull.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_pulls.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_push.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_residency.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_selection.xml" value="0.264" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_socialgroup.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_sync.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/activity_visit.xml" value="0.264" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/addindividual_item.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/content_push.xml" value="0.264" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/database.xml" value="0.59375" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/expenses_item.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/father_itemlist.xml" value="0.264" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_blank.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_death.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_demographic.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_events.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_father_dialog.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_hierarchy.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_house_visit.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_household.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_individual.xml" value="0.264" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_individual_list.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_inmigration.xml" value="0.264" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_location.xml" value="0.128" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_mother_dialog.xml" value="0.2359375" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_my_dialog.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_outmigration.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_pregnancy.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_prenancyoutcome.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_relationship.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_residency.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_selection.xml" value="0.4" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_socialgroup.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/fragment_visit.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/hierarchy_list.xml" value="0.2677083333333333" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/individual.xml" value="0.2359375" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/individual_itemlist.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/individual_list.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/individual_summary.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/individual_view.xml" value="0.24895833333333334" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/individualentry.xml" value="0.20512820512820512" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/individuallist.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/individuals_list.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/list_households.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/location_view_items.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/locationlist_view.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/mother_itemlist.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/save_buttons.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/select.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/spinner_item.xml" value="0.24895833333333334" />
+        <entry key="..\:/hdssCapture/app/src/main/res/layout/test.xml" value="0.24895833333333334" />
+        <entry key="..\:/hdssCapture/app/src/main/res/menu/add_expenses_menu.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/menu/add_form.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/menu/add_individual.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/menu/bottom_menu.xml" value="0.2546875" />
+        <entry key="..\:/hdssCapture/app/src/main/res/menu/note_menu.xml" value="0.26875" />
+        <entry key="..\:/hdssCapture/app/src/main/res/menu/save_menu.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/menu/search_menu.xml" value="0.25" />
+        <entry key="..\:/hdssCapture/app/src/main/res/xml/network_security_config.xml" value="0.11614583333333334" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

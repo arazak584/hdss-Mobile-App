@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/socialgroup_fragment">
+
+    <data>
+
+        <variable
+            name="socialgroup"
+            type="org.openhds.hdsscapture.entity.Socialgroup" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/socialgroup"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_margin="5dp"
+        android:background="@color/colorPrimaryDark" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragment.SocialgroupFragment">
+
+
+        <LinearLayout
+            android:id="@+id/SOCIALGROUP_LAYOUT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/fw"
+                android:text="@string/fw">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/fw"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={socialgroup.fw}"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/button_social_insertDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/visitDate"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
+            <TextView
+                android:id="@+id/editText_insertDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:ems="10"
+                android:minHeight="40dp"
+                android:text="@={socialgroup.insertDate}"
+                android:textSize="20sp"
+                tools:ignore="TextContrastCheck" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/socialgroupid">
+                android:text="@string/socialgroupid">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/sociagroup_extid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={socialgroup.extId}"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/socialgroupname">
+                android:text="@string/socialgroupname">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/groupName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={socialgroup.groupName}"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/ind_extid">
+                android:text="@string/ind_extid">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/head_extid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={socialgroup.headid}"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:text="@string/grouptype"/>
+
+            <Spinner
+                android:id="@+id/select_groupType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textColor="#000301"
+                selection="@{socialgroup.groupType}"
+                android:onItemSelected="@{socialgroup::setGroupTypes}"
+                android:padding="20dp"/>
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:id="@+id/buttonSaveClose"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/saveclosedata" />
+
+                <Button
+                    android:id="@+id/buttonClose"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/closedata" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+    </ScrollView>
+    </LinearLayout>
+
+
+
+</layout>

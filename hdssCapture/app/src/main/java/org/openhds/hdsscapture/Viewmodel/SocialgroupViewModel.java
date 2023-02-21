@@ -1,0 +1,48 @@
+package org.openhds.hdsscapture.Viewmodel;
+
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+
+import org.openhds.hdsscapture.Repositories.SocialgroupRepository;
+import org.openhds.hdsscapture.entity.Socialgroup;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+public class SocialgroupViewModel extends AndroidViewModel {
+
+    private final SocialgroupRepository socialgroupRepository;
+
+
+    public SocialgroupViewModel(@NonNull Application application) {
+        super(application);
+        socialgroupRepository = new SocialgroupRepository(application);
+    }
+
+    public Socialgroup find(String id) throws ExecutionException, InterruptedException {
+        return socialgroupRepository.find(id);
+    }
+
+    public LiveData<List<Socialgroup>> findSocialgroup(String id) throws ExecutionException, InterruptedException {
+        return socialgroupRepository.findByLocationSocial(id);
+    }
+
+    public List<Socialgroup> findAll() throws ExecutionException, InterruptedException {
+        return socialgroupRepository.findAll();
+    }
+
+    public List<Socialgroup> findToSync() throws ExecutionException, InterruptedException {
+        return socialgroupRepository.findToSync();
+    }
+
+    public void add(Socialgroup data){
+        socialgroupRepository.create(data);
+    }
+
+    public void add(Socialgroup... data){
+        socialgroupRepository.create(data);
+    }
+}

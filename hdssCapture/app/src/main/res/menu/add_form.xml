@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/addsocialgroup"
+        android:title="Socialgroup"/>
+    <item android:id="@+id/addresidency"
+        android:title="Residency"/>
+    <item android:id="@+id/addmembership"
+        android:title="Membership"/>
+    <item android:id="@+id/addinmigration"
+        android:title="Inmigration"/>
+    <item android:id="@+id/adddeath"
+        android:title="Death"/>
+    <item android:id="@+id/addoutmigration"
+        android:title="Outmigration"/>
+    <item android:id="@+id/addpregnancy"
+        android:title="Pregnancy Observation"/>
+    <item android:id="@+id/addpregoutcome"
+        android:title="Pregnancy Outcome"/>
+</menu>

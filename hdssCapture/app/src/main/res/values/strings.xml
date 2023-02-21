@@ -1,0 +1,248 @@
+<resources>
+    <string name="app_name">HDSS</string>
+    <string name="update">update</string>
+    <string name="send">send</string>
+    <string name="sync">sync</string>
+    <string name="census">census</string>
+    <string name="location">Compound Registration Form</string>
+    <string name="visit">Visit Registration Form</string>
+    <string name="interviewee">Is the person selected the one you are actually interviewing?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="respond">Name of Respondent</string>
+    <string name="locationtype">Location Type</string>
+    <string name="rural">Rural</string>
+    <string name="urban">Urban</string>
+    <string name="see_list">See List</string>
+    <string name="location_hint_lbl">Location External Id</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_push">PushActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_transform">Transform</string>
+    <string name="menu_reflow">Reflow</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_settings">Settings</string>
+
+    <string name="lorem_ipsum_title">Lorem Ipsum"</string>
+    <string name="lorem_ipsum">Lorem Ipsum is simply placeholder text of the printing and
+        typesetting industry. Lorem Ipsum has been the industry\'s standard placeholder text ever
+        since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
+        type specimen book"
+    </string>
+    <string name="fab_content_description">Represents a view to invoke an action</string>
+    <string name="image_view_item_transform_content_description">Represents an image view in the
+        item
+    </string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="send_location">Send Location</string>
+    <string name="send_visit">Send Visit</string>
+    <string name="send_individual">Send Individual</string>
+    <string name="send_residency">Send Residency</string>
+    <string name="send_inmigration">Send Inmigration</string>
+    <string name="send_outmigration">Send Outmigration</string>
+    <string name="send_membership">Send Membership</string>
+    <string name="send_socialgroup">Send Socialgroup</string>
+    <string name="send_pregnancy">Send Pregnancy Observation</string>
+    <string name="send_outcome">Send Outcome</string>
+    <string name="send_pregoutcome">Send Pregnancy Outcome</string>
+    <string name="send_relationship">Send Relationship</string>
+    <string name="send_death">Send Death</string>
+
+    <string name="get_hierarchy">Get Hierarchy</string>
+    <string name="get_location">Get Location</string>
+    <string name="get_round">Get Round</string>
+    <string name="get_individual">Get Individual</string>
+    <string name="get_residency">Get Residency</string>
+    <string name="get_membership">Get Membership</string>
+    <string name="get_socialgroup">Get Socialgroup</string>
+    <string name="get_pregobservation">Get Pregnancy Observation</string>
+
+
+    <!-- TODO: In IndividualOLD Detatils  -->
+    <string name="ind_Details" translatable="false">Individual</string>
+    <string name="ind_q1">BACKGROUND</string>
+    <string name="ind_q1p1">START TIME</string>
+    <string name="fw">FIELD WORKERS CODE</string>
+    <string name="visitDate">DATE OF INTERVIEW (DD/MM/YYYY)</string>
+    <string name="ind_q2">INDIVIDUAL CHARACTERISTICS</string>
+    <string name="ind_extid">Individual ID</string>
+    <string name="ind_name">Name of Individual</string>
+    <string name="ind_nick">Nick Name of Individual</string>
+    <string name="dob">Date of birth actual</string>
+    <string name="actual_dob">Date of Birth</string>
+    <string name="ind_q4p5">Age</string>
+    <string name="gender">Gender of Individual</string>
+    <string name="tribe">Ethnicity of Individual</string>
+    <string name="tribe_other">Other ethnicity specified</string>
+    <string name="save">Save Record</string>
+    <string name="individualOLD">Individual</string>
+    <string name="occupation">Occupation</string>
+    <string name="religion">Select Religion</string>
+    <string name="resident">Resident</string>
+    <string name="crtlocation">Create Location</string>
+    <string name="father_extid">Select Biological Father</string>
+    <string name="mother_extid">Select Biological Mother</string>
+    <string name="phone">Phone Number of Individual</string>
+
+    <!-- TODO: In MembershipForm Detatils  -->
+    <string name="membership" translatable="false">Membership</string>
+    <string name="household_select">Select Household</string>
+    <string name="rltn_head">Relationship to GroupHead</string>
+    <string name="starttype">Select Start Type</string>
+    <string name="startdate">Select Start Date</string>
+    <string name="endtype">Select End Type</string>
+    <string name="enddate">Select End Date</string>
+    <string name="hierarchy">Location Selection</string>
+    <string name="region">Select Region</string>
+    <string name="district">Select District</string>
+    <string name="subdistrict">Sub District</string>
+    <string name="village">Village/Sector</string>
+    <string name="cluster">Cluster</string>
+    <string name="phone2">Extra Phone Number</string>
+    <string name="residency">Residency</string>
+    <string name="location_select">Select Location</string>
+    <string name="visitid">Visit ID</string>
+    <string name="visit_outcome">Visit Outcome</string>
+    <string name="round_select">Select Round</string>
+    <string name="socialgroupname">Enter Name of Household Head</string>
+    <string name="socialgroupid">Household ID</string>
+    <string name="socialgroup">Household</string>
+    <string name="compoundnumber">Enter compound Number written on Structure</string>
+    <string name="compoundName">Enter the Name of Compound</string>
+    <string name="location_status">Compound Status</string>
+    <string name="deathform">Death</string>
+    <string name="dod">Date of Death</string>
+    <string name="causeofdeath">Cause of Death</string>
+    <string name="deathplace">Place of Death</string>
+    <string name="respondent_name">Name of Respondent</string>
+    <string name="respondent_phone">Phone Number of Respondent</string>
+    <string name="pregobs">Pregnancy Observation</string>
+    <string name="conception">Estimated Date of Conception</string>
+    <string name="delivery">Expected Date of Delivery</string>
+    <string name="outcome">Has the the outcome been recorded</string>
+    <string name="outcomeDate">Date of Outcome</string>
+    <string name="pregoutcome">Pregnancy Outcome</string>
+    <string name="outcome_number">Number of Outcomes</string>
+    <string name="child_extid">Child Permid</string>
+    <string name="outcometype">Type of Outcome</string>
+    <string name="demographics">Demographics</string>
+    <string name="marital">Marital Status</string>
+    <string name="education">Educational Level</string>
+    <string name="partner">Married Partner</string>
+    <string name="marriageDate">Date of Marriage</string>
+    <string name="migtype">Type of Inmigration</string>
+    <string name="origin">Where is the Individual Migrating from</string>
+    <string name="reason">Reason for Inmigration</string>
+    <string name="birthplace">Place of Birth</string>
+    <string name="outmigration">Outmigration Form</string>
+    <string name="destination">Where did the Individual move to</string>
+    <string name="outdate">Date of Outmigration</string>
+    <string name="reason_out">Reason for Outmigration</string>
+    <string name="get_codebook">GET CODEBOOK</string>
+    <string name="get_relationship">GET RELATIONSHIP</string>
+    <string name="firstname">First Name of Individual</string>
+    <string name="lastname">Surname or Family Name of Individual</string>
+    <string name="uuid">UUID</string>
+    <string name="ind_uuid">Individual uuid</string>
+    <string name="grouptype">Social Group Type</string>
+    <string name="settings">settings</string>
+    <string name="delete">delete</string>
+    <string name="search">Search Individual</string>
+
+
+    //Expenses
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="amount">Amount</string>
+    <string name="date">Date:</string>
+    <string name="pick_date">Pick Date</string>
+    <string name="_04_11_2022">04/11/2022</string>
+    <string name="inmigration">Inmigration</string>
+    <string name="residency_uuid">Residency uuid</string>
+    <string name="migration_date">Date of Migration</string>
+    <string name="form_complete">Is the Form complete</string>
+    <string name="text_country">Country</string>
+    <string name="text_location_note">PLEASE SELECT THE LOCATION OF THE INTERVIEW TO PROCEED</string>
+    <string name="text_searchid">Search Using Compound Number or Compound Name</string>
+    <string name="text_newlocation">New Location</string>
+    <string name="button_home">Home</string>
+    <string name="text_location_text">Cluster</string>
+    <string name="text_submit"><![CDATA[Save & Continue]]></string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="login_form_login">Login</string>
+    <string name="login_form_password">Password</string>
+    <string name="login_form_username">username</string>
+    <string name="login_form_title">"Fieldworker Login "</string>
+    <string name="login_form">Fieldworker Login</string>
+    <string name="syncFieldworker">Sync Fieldworker</string>
+    <string name="staffcode">Staff Code</string>
+    <string name="text_household">Select Household to Continue Interview</string>
+    <string name="text_newhousehold">New Household</string>
+    <string name="nameofhousehold">Name of Household Head</string>
+    <string name="nameofcompound">Name of Compound</string>
+    <string name="newindividual">Add Individual</string>
+    <string name="visithousehold">Visit Household</string>
+    <string name="text_extid">extId</string>
+    <string name="compname">Compound Name</string>
+    <string name="text_compid">Structure Number</string>
+    <string name="status">Compound Status</string>
+    <string name="username">Interviewer\'s Username</string>
+    <string name="password">Interviewer\'s Pin</string>
+    <string name="text_location_extid">extId</string>
+    <string name="individual">Individual Registration</string>
+    <string name="download">Download</string>
+    <string name="outmigrationsec">SECTION C: OUTMIGRATION</string>
+    <string name="inmigrationsec">SECTION B: INMIGRATION</string>
+    <string name="relationship">RELATIONSHIP</string>
+    <string name="expectedDelivery">Expected Delivery Date</string>
+    <string name="childextid">Child Permid</string>
+    <string name="type">Outcome Type</string>
+    <string name="childeverborn">Number of Outcomes</string>
+    <string name="livebirth">Number of Live Birth</string>
+    <string name="text_send_to_server">SEND DATA TO SERVER</string>
+    <string name="init_syncing">Initialize sync process…</string>
+    <string name="send_event">Send Events</string>
+    <string name="send_vpm">Send vpm</string>
+    <string name="get_database">Sync Database</string>
+    <string name="text_round">Round</string>
+    <string name="longitude">Longitude</string>
+    <string name="text_ESTIMATED_AGE">Estimated Age in Years</string>
+    <string name="visit_household">Visit Household</string>
+    <string name="createHousehold">Create Pseudo Household</string>
+    <string name="saveclosedata"><![CDATA[Save & Close]]></string>
+    <string name="closedata">Close Form</string>
+    <string name="get_demography">Get Demography</string>
+    <string name="text_searchindividual">Search Using Name of Individual or Compound Number or Phone Number</string>
+    <string name="name">Name</string>
+    <string name="fname">FirstName</string>
+    <string name="text_lname">Surname</string>
+    <string name="text_permid">Permid</string>
+    <string name="text_dob">DOB</string>
+    <string name="mainmenu">Back to Menu</string>
+    <string name="motherid">Mother ID</string>
+    <string name="fatherid">Father ID</string>
+    <string name="age">Age of Participant</string>
+
+
+</resources>
