@@ -83,7 +83,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         holder.lastname.setText(individual.getLastName());
         holder.nickname.setText(individual.getNickName());
         holder.dob.setText(individual.getDob());
-        //holder.hhid.setText(residency.getSocialgroup());
+        holder.hhid.setText(individual.socialgroup);
 
         holder.linearLayout.setOnClickListener(v -> {
             activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,

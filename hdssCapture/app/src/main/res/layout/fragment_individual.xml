@@ -243,7 +243,6 @@
                         android:id="@+id/individual_age"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:required="false"
                         android:inputType="number"/>
                 </com.google.android.material.textfield.TextInputLayout>
 

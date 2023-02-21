@@ -53,11 +53,11 @@ public class IndividualRepository {
         return future.get();
     }
 
-    public List<ExtendedIndividual> retrieveByLocationId(String id) throws ExecutionException, InterruptedException {
+    public List<Individual> retrieveByLocationId(String id) throws ExecutionException, InterruptedException {
 
-        Callable<List<ExtendedIndividual>> callable = () -> dao.retrieveByLocationId(id);
+        Callable<List<Individual>> callable = () -> dao.retrieveByLocationId(id);
 
-        Future<List<ExtendedIndividual>> future = Executors.newSingleThreadExecutor().submit(callable);
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }

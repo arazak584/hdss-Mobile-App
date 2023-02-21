@@ -9,7 +9,6 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.subentity.ExtendedIndividual;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 
 import java.util.List;
@@ -48,8 +47,8 @@ public interface IndividualDao {
 
     @Query("SELECT a.*,b.location,b.socialgroup FROM individual as a " + "INNER JOIN residency as b ON a.extId = b.extId " +
             " INNER JOIN location as c on b.location=c.extId " +
-            " WHERE endType=1 and b.location=:id order by socialgroup,dob")
-    List<ExtendedIndividual> retrieveByLocationId(String id);
+            " WHERE endType=1 and b.location=:id order by socialgroup")
+    List<Individual> retrieveByLocationId(String id);
 
     @Query("SELECT a.firstName,a.lastName,a.extId,b.location FROM individual as a " + "INNER JOIN residency as b ON a.extId = b.extId " +
             " INNER JOIN location as c on b.location=c.extId " +

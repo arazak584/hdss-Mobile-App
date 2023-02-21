@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -93,6 +94,11 @@ public class Individual extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "complete")
     public Integer complete;
 
+    @Ignore
+    public String location;
+
+    public String socialgroup;
+
     public Individual(){}
 
     @Ignore
@@ -125,23 +131,16 @@ public class Individual extends BaseObservable implements Parcelable {
 
     @Bindable
     public String getDob() {
-        if (dob == null) return "";
+        if (dob == null) return "SELECT DATE";
         return f.format(dob);
     }
 
     public void setDob(String dob) {
-        if(dob == null) this.dob = null;
-        else
         try {
             this.dob = f.parse(dob);
+            notifyPropertyChanged(BR.dob);
         } catch (ParseException e) {
-            try {
-                this.insertDate = new Date(Long.parseLong(dob));
-            } catch (NumberFormatException ne) {
-                System.out.println("Dob error1 " + e.getMessage());
-                System.out.println("Dob error2 " + ne.getMessage());
-
-            }
+            System.out.println("Dob error " + e.getMessage());
         }
     }
 
@@ -243,6 +242,8 @@ public class Individual extends BaseObservable implements Parcelable {
     public void setComplete(Integer complete) {
         this.complete = complete;
     }
+
+
 
     protected Individual(Parcel in) {
         this.extId = in.readString();

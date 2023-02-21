@@ -27,7 +27,7 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.findAll();
     }
 
-    public List<ExtendedIndividual> retrieveByLocationId(String id) throws ExecutionException, InterruptedException {
+    public List<Individual> retrieveByLocationId(String id) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveByLocationId(id);
     }
 

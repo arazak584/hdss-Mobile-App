@@ -26,9 +26,13 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -99,6 +103,12 @@ public class IndividualFragment extends Fragment {
         binding = FragmentIndividualBinding.inflate(inflater, container, false);
         binding.setIndividual(individual);
 
+        if (binding.getIndividual().dob!=null) {
+            final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
+            binding.individualAge.setText("" + estimatedAge + " years old");
+            binding.dob.setError(null);
+        }
+
         final TextView compno = binding.getRoot().findViewById(R.id.textView2_compextId);
         final TextView compname = binding.getRoot().findViewById(R.id.textView2_compname);
         final TextView cluster = binding.getRoot().findViewById(R.id.textView2_clusterId);
@@ -131,7 +141,43 @@ public class IndividualFragment extends Fragment {
             }
         });
 
+        //CHOOSING THE DATE
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            // We use a String here, but any type that can be put in a Bundle is supported
+            if (bundle.containsKey((IndividualFragment.DATE_BUNDLES.INSERTDATE.getBundleKey()))) {
+                final String result = bundle.getString(IndividualFragment.DATE_BUNDLES.INSERTDATE.getBundleKey());
+                binding.individualInsertDate.setText(result);
 
+            }
+
+
+            if (bundle.containsKey((IndividualFragment.DATE_BUNDLES.DOB.getBundleKey()))) {
+                final String result = bundle.getString(IndividualFragment.DATE_BUNDLES.DOB.getBundleKey());
+                binding.dob.setText(result);
+            }
+
+        });
+
+        binding.buttonIndividualInsertDate.setOnClickListener(v -> {
+            final Calendar c = Calendar.getInstance();
+            DialogFragment newFragment = new DatePickerFragment(IndividualFragment.DATE_BUNDLES.INSERTDATE.getBundleKey(), c);
+            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+        });
+
+
+        binding.buttonIndividualDob.setOnClickListener(v -> {
+            final Calendar c = Calendar.getInstance();
+            final String curbrthdat = binding.dob.getText().toString();
+            if(curbrthdat!=null){
+                final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                try {
+                    c.setTime(Objects.requireNonNull(f.parse(curbrthdat)));
+                } catch (ParseException e) {
+                }
+            }
+            DialogFragment newFragment = new DatePickerFragment(IndividualFragment.DATE_BUNDLES.DOB.getBundleKey(), c);
+            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+        });
 
 
         binding.buttonSaveClose.setOnClickListener(v -> {
@@ -182,45 +228,12 @@ public class IndividualFragment extends Fragment {
 
         });
 
-        if (binding.getIndividual().dob!=null) {
-            final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
-            binding.individualAge.setText("" + estimatedAge + " years old");
-            binding.dob.setError(null);
-        }
-
-        //CHOOSING THE DATE
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-                    // We use a String here, but any type that can be put in a Bundle is supported
-                    if (bundle.containsKey((IndividualFragment.DATE_BUNDLES.INSERTDATE.getBundleKey()))) {
-                        final String result = bundle.getString(IndividualFragment.DATE_BUNDLES.INSERTDATE.getBundleKey());
-                        binding.individualInsertDate.setText(result);
-
-                    }
-
-
-                    if (bundle.containsKey((DATE_BUNDLES.DOB.getBundleKey()))) {
-                        final String result = bundle.getString(IndividualFragment.DATE_BUNDLES.DOB.getBundleKey());
-                        binding.dob.setText(result);
-                    }
-
-                });
-
         //LOAD SPINNERS
         loadCodeData(binding.dobAspect, "yn");
         loadCodeData(binding.individualComplete,  "yn");
         loadCodeData(binding.gender, "gender");
 
-        binding.buttonIndividualInsertDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(IndividualFragment.DATE_BUNDLES.INSERTDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
 
-        binding.buttonIndividualDob.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(IndividualFragment.DATE_BUNDLES.DOB.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 

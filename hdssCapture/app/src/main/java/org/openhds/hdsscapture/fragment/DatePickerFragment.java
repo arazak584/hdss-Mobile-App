@@ -38,7 +38,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, day);
-        final String selectedDate = new SimpleDateFormat("dd/MMM/yyyy", Locale.ENGLISH).format(c.getTime());
+        final String selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(c.getTime());
         Bundle result = new Bundle();
         result.putString(bundleKey, selectedDate);
 
