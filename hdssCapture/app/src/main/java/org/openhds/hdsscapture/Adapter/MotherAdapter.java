@@ -15,6 +15,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.fragment.IndividualFragment;
 import org.openhds.hdsscapture.fragment.MotherDialogFragment;
 
 import java.util.ArrayList;
@@ -43,11 +44,12 @@ public class MotherAdapter extends RecyclerView.Adapter<MotherAdapter.ViewHolder
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView firstname, lastname, permid;
+        TextView firstname, lastname, permid,dob;
         LinearLayout linearLayout;
         public ViewHolder(View view) {
             super(view);
             this.permid = view.findViewById(R.id.mother_permid);
+            this.dob = view.findViewById(R.id.mother_dob);
             this.firstname = view.findViewById(R.id.mother_fname);
             this.lastname = view.findViewById(R.id.mother_lname);
             this.linearLayout = view.findViewById(R.id.searchedMother);
@@ -70,12 +72,13 @@ public class MotherAdapter extends RecyclerView.Adapter<MotherAdapter.ViewHolder
         final Individual individual = individualList.get(position);
 
         holder.permid.setText(individual.getExtId());
+        holder.dob.setText(individual.getDob());
         holder.firstname.setText(individual.getFirstName());
         holder.lastname.setText(individual.getLastName());
 
         holder.linearLayout.setOnClickListener(v -> {
             activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                    MotherDialogFragment.newInstance(individual, residency, location, socialgroup )).commit();
+                    IndividualFragment.newInstance(individual, residency, location, socialgroup )).commit();
         });
     }
 

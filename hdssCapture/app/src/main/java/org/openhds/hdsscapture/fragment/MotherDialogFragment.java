@@ -1,6 +1,7 @@
 package org.openhds.hdsscapture.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.openhds.hdsscapture.Adapter.MotherAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
-import org.openhds.hdsscapture.databinding.FragmentMotherDialogBinding;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Residency;
@@ -41,7 +41,6 @@ public class MotherDialogFragment extends DialogFragment {
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
-    private FragmentMotherDialogBinding binding;
 
     public MotherDialogFragment() {
         // Required empty public constructor
@@ -78,6 +77,7 @@ public class MotherDialogFragment extends DialogFragment {
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
+        Log.d(TAG, "location: " + location);
     }
 
     @Override
@@ -87,13 +87,17 @@ public class MotherDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_mother_dialog, container, false);
 
 
-        final TextView compno = view.findViewById(R.id.textView3_compextId);
-
-        //compno.setText(location.getExtId());
+        final TextView compno = view.findViewById(R.id.textViewmother_compextId);
+        if (location != null) {
+            compno.setText(location.getExtId());
+        } else {
+            // Handle the case where location is null
+            compno.setText("Error loading location data");
+        }
 
 
         //Load Mother Data
-        final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view);
+        final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_mother);
         final MotherAdapter adapter = new MotherAdapter(this, residency,location, socialgroup );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 

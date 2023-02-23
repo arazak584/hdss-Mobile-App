@@ -27,8 +27,9 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView4_compextId"
+                android:id="@+id/textViewfather_compextId"
                 android:layout_width="0dp"
+                android:textAlignment="center"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="@color/design_default_color_on_secondary"

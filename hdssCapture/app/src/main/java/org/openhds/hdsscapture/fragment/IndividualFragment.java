@@ -126,8 +126,10 @@ public class IndividualFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Show the dialog fragment
-                MotherDialogFragment dialogFragment = new MotherDialogFragment();
-                dialogFragment.show(getChildFragmentManager(), "MotherDialogFragment");
+                MotherDialogFragment.newInstance(individual, residency, location,socialgroup)
+                        .show(getChildFragmentManager(), "MotherDialogFragment");
+//                MotherDialogFragment dialogFragment = new MotherDialogFragment();
+//                dialogFragment.show(getChildFragmentManager(), "MotherDialogFragment");
             }
         });
 
@@ -136,8 +138,8 @@ public class IndividualFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Show the dialog fragment
-                FatherDialogFragment dialogFragment = new FatherDialogFragment();
-                dialogFragment.show(getChildFragmentManager(), "FatherDialogFragment");
+                FatherDialogFragment.newInstance(individual, residency, location,socialgroup)
+                        .show(getChildFragmentManager(), "FatherDialogFragment");
             }
         });
 

@@ -25,6 +25,7 @@ import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -43,6 +44,10 @@ public class Individual extends BaseObservable implements Parcelable {
     @Expose
     @ColumnInfo(name = "dob")
     public Date dob;
+
+    @Expose
+    @ColumnInfo(name = "age")
+    public Integer age;
 
     @SerializedName("insertDate")
     @Expose
@@ -94,7 +99,6 @@ public class Individual extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "complete")
     public Integer complete;
 
-    @Ignore
     public String location;
 
     public String socialgroup;
@@ -116,6 +120,8 @@ public class Individual extends BaseObservable implements Parcelable {
         this.fw = fw;
         this.complete = complete;
     }
+
+
 
     @NotNull
     public String getExtId() {
@@ -144,6 +150,24 @@ public class Individual extends BaseObservable implements Parcelable {
         }
     }
 
+    @Bindable
+    public int getAge() {
+        if (dob == null) {
+            return 0;
+        }
+        Calendar dobCalendar = Calendar.getInstance();
+        dobCalendar.setTime(dob);
+        Calendar nowCalendar = Calendar.getInstance();
+        int age = nowCalendar.get(Calendar.YEAR) - dobCalendar.get(Calendar.YEAR);
+        if (nowCalendar.get(Calendar.DAY_OF_YEAR) < dobCalendar.get(Calendar.DAY_OF_YEAR)) {
+            age--;
+        }
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
 
     @Bindable
     public String getInsertDate() {

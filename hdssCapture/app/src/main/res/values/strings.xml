@@ -76,7 +76,7 @@
     <string name="ind_q1">BACKGROUND</string>
     <string name="ind_q1p1">START TIME</string>
     <string name="fw">FIELD WORKERS CODE</string>
-    <string name="visitDate">DATE OF INTERVIEW (DD/MM/YYYY)</string>
+    <string name="visitDate">DATE OF INTERVIEW (YYYY-MM-DD)</string>
     <string name="ind_q2">INDIVIDUAL CHARACTERISTICS</string>
     <string name="ind_extid">Individual ID</string>
     <string name="ind_name">Name of Individual</string>

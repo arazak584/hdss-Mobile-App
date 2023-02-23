@@ -5,7 +5,6 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.IndividualDao;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.subentity.ExtendedIndividual;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -71,15 +70,6 @@ public class IndividualRepository {
         return future.get();
     }
 
-    public List<Individual> retrieveBySearch(String id) throws ExecutionException, InterruptedException {
-
-        Callable<List<Individual>> callable = () -> dao.retrieveBySearch(id);
-
-        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
     public List<Individual> retrieveByMotherSearch(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Individual>> callable = () -> dao.retrieveByMotherSearch(id);
@@ -89,9 +79,29 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public List<Individual> retrieveBySearch(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.retrieveBySearch(id);
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+
+
     public List<Individual> retrieveByFatherSearch(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Individual>> callable = () -> dao.retrieveByFatherSearch(id);
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Individual> retrieveByFather(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.retrieveByFather(id);
 
         Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
 

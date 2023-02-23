@@ -7,7 +7,6 @@ import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.IndividualRepository;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.subentity.ExtendedIndividual;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -35,6 +34,11 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.retrieveByMother(id);
     }
 
+
+    public List<Individual> retrieveByMotherSearch(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.retrieveByMotherSearch("%" + id + "%");
+    }
+
     public List<Individual> findToSync() throws ExecutionException, InterruptedException {
         return individualRepository.findToSync();
     }
@@ -43,13 +47,15 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.retrieveBySearch("%" + id + "%");
     }
 
-    public List<Individual> retrieveByMotherSearch(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveByMotherSearch("%" + id + "%");
-    }
 
     public List<Individual> retrieveByFatherSearch(String id) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveByFatherSearch("%" + id + "%");
     }
+
+    public List<Individual> retrieveByFather(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.retrieveByFather(id);
+    }
+
 
     public void add(Individual data){ individualRepository.create(data);}
 

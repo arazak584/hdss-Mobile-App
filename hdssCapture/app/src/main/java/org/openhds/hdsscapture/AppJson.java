@@ -15,8 +15,8 @@ public class AppJson {
 
     private static volatile AppJson INSTANCE;
 
-    private static final String BASE_URL = "http://192.168.10.52:8080/api/";
-    private static final int NUMBER_OF_THREADS = 6;
+    private static final String BASE_URL = "http://ksurvey.org:8080/api/";
+    private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService jsonWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     private final ApiDao jsonApi;

@@ -73,18 +73,27 @@
                     android:layout_height="wrap_content"
                     android:text="@string/visitDate"
                     tools:ignore="DuplicateSpeakableTextCheck"
+                    android:visibility="gone"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
-                <TextView
-                    android:id="@+id/location_insertDate"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints=""
-                    android:ems="10"
-                    android:minHeight="40dp"
-                    android:text="@={location.insertDate}"
-                    android:textSize="20sp"
-                    tools:ignore="TextContrastCheck" />
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/visitDate"
+                    android:text="@string/visitDate">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/location_insertDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={location.insertDate}"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -164,11 +173,12 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-                <com.google.android.material.textview.MaterialTextView
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+
                     android:text="@string/location_status"/>
 
 

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -85,7 +86,15 @@ public class FatherDialogFragment extends DialogFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_father_dialog, container, false);
 
-        //Load Mother Data
+        final TextView compno = view.findViewById(R.id.textViewfather_compextId);
+        if (location != null) {
+            compno.setText(location.getExtId());
+        } else {
+            // Handle the case where location is null
+            compno.setText("Error loading location data");
+        }
+
+        //Load Father Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_father);
         final FatherAdapter adapter = new FatherAdapter(this, residency,location, socialgroup );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);

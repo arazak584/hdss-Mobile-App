@@ -28,7 +28,6 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
     HouseVisitFragment activity;
     LayoutInflater inflater;
     private Location location;
-    //private Cluster clusterData;
     private Socialgroup socialgroup;
     private Residency residency;
     private List<Individual> individualList;
@@ -45,7 +44,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView firstname, lastname, nickname, permid, dob, gender, hhid;
+        TextView firstname, lastname, nickname, permid, dob, age, hhid;
         LinearLayout linearLayout;
 
         public ViewHolder(View view) {
@@ -56,6 +55,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
             this.nickname = view.findViewById(R.id.text_nickname);
             this.dob = view.findViewById(R.id.text_dob);
             this.hhid = view.findViewById(R.id.text_hhid);
+            this.age = view.findViewById(R.id.text_age);
             this.linearLayout = view.findViewById(R.id.searchedIindividual);
         }
     }
@@ -83,6 +83,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         holder.lastname.setText(individual.getLastName());
         holder.nickname.setText(individual.getNickName());
         holder.dob.setText(individual.getDob());
+        holder.age.setText(String.valueOf(individual.getAge()));
         holder.hhid.setText(individual.socialgroup);
 
         holder.linearLayout.setOnClickListener(v -> {

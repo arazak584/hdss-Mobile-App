@@ -358,7 +358,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 5000;
+                                        int batchSize = 10000;
                                         List<Individual> individuals = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -485,7 +485,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 5000;
+                                        int batchSize = 10000;
                                         List<Location> locations = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {

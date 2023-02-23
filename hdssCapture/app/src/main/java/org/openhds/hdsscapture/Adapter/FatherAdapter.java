@@ -43,11 +43,12 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView firstname, lastname, permid;
+        TextView firstname, lastname, permid, dob;
         LinearLayout linearLayout;
         public ViewHolder(View view) {
             super(view);
             this.permid = view.findViewById(R.id.father_permid);
+            this.dob = view.findViewById(R.id.father_dob);
             this.firstname = view.findViewById(R.id.father_fname);
             this.lastname = view.findViewById(R.id.father_lname);
             this.linearLayout = view.findViewById(R.id.searchedFather);
@@ -70,6 +71,7 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
         final Individual individual = individualList.get(position);
 
         holder.permid.setText(individual.getExtId());
+        holder.dob.setText(individual.getDob());
         holder.firstname.setText(individual.getFirstName());
         holder.lastname.setText(individual.getLastName());
 
@@ -104,7 +106,7 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
 
             if(location != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveByMother(location.getExtId());
+                    List<Individual> list = individualViewModel.retrieveByFather(location.getExtId());
 
                     if (list != null) {
                         individualList.addAll(list);

@@ -118,20 +118,6 @@ public class LocationFragment extends Fragment {
         name = getArguments().getString("name");
         textField.setText(name);
 
-        // Inflate the layout for this fragment
-        //View view = inflater.inflate(R.layout.fragment_blank, container, false);
-
-        /*TextView location_insertDate = view.findViewById(R.id.location_insertDate);
-
-        if (location_insertDate.getText().toString().equals("")) {
-            // TextView is currently null, so set it to today's date
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            String currentDate = sdf.format(new Date());
-            location_insertDate.setText(currentDate);
-        }*/
-
-
-
         final Intent intent = getActivity().getIntent();
         final Cluster clusterData = intent.getParcelableExtra(HierarchyActivity.CLUSTER_DATA);
 
@@ -183,6 +169,11 @@ public class LocationFragment extends Fragment {
             binding.locationInsertDate.setError(null);
             binding.locationFw.setError(null);
             binding.locationcompno.setError(null);
+
+            if (binding.locationInsertDate.getText().toString().isEmpty()) {
+                binding.locationInsertDate.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Calendar.getInstance().getTime()));
+            }
+
 
             if(location.clusterId==null){
                 isExists = true;
