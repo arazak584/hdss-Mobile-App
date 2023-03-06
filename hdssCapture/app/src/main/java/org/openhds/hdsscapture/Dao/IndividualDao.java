@@ -51,7 +51,7 @@ public interface IndividualDao {
     List<Individual> retrieveByLocationId(String id);
 
     @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.extId = b.extId" +
-            " WHERE firstName LIKE:id OR lastName LIKE:id OR b.location LIKE:id")
+            " WHERE firstName LIKE:id OR lastName LIKE:id OR b.compno LIKE:id")
     List<Individual> retrieveBySearch(String id);
 
     @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.extId = b.extId " +
@@ -64,7 +64,7 @@ public interface IndividualDao {
             "INNER JOIN residency AS b ON a.extId = b.extId " +
             "WHERE gender = 2 AND endType = 1 AND " +
             "date('now', '-11 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) AND " +
-            "(firstName LIKE :id OR lastName LIKE :id OR b.location LIKE :id)")
+            "(firstName LIKE :id OR lastName LIKE :id OR b.compno LIKE :id)")
     List<Individual> retrieveByMotherSearch(String id);
 
     @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.extId = b.extId " +
@@ -78,7 +78,7 @@ public interface IndividualDao {
             "INNER JOIN residency AS b ON a.extId = b.extId " +
             "WHERE gender = 1 AND endType = 1 AND " +
             "date('now', '-11 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) AND " +
-            "(firstName LIKE :id OR lastName LIKE :id OR b.location LIKE :id)")
+            "(firstName LIKE :id OR lastName LIKE :id OR b.compno LIKE :id)")
     List<Individual> retrieveByFatherSearch(String id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

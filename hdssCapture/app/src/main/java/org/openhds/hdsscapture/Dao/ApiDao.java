@@ -56,25 +56,25 @@ public interface ApiDao {
     @GET("cluster")
     Call<DataWrapper<Cluster>> getAllClusters();
 
-    @GET("zip/location")
+    @GET("task/location.zip")
     Call<ResponseBody> downloadLocation();
 
-    @GET("zip/residency")
+    @GET("task/residency.zip")
     Call<ResponseBody> downloadResidency();
 
-    @GET("zip/socialgroup")
+    @GET("task/socialgroup.zip")
     Call<ResponseBody> downloadSocialgroup();
 
-    @GET("zip/relationship")
+    @GET("task/relationship.zip")
     Call<ResponseBody> downloadRelationship();
 
-    @GET("zip/pregnancy")
+    @GET("task/pregnancy.zip")
     Call<ResponseBody> downloadPregnancy();
 
-    @GET("zip/individual")
+    @GET("task/individual.zip")
     Call<ResponseBody> downloadZipFile();
 
-    @GET("zip/demographic")
+    @GET("task/demography.zip")
     Call<ResponseBody> downloadDemography();
 
     @POST("location")

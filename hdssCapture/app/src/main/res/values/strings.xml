@@ -243,6 +243,7 @@
     <string name="motherid">Mother ID</string>
     <string name="fatherid">Father ID</string>
     <string name="age">Age of Participant</string>
+    <string name="compno">Compound Number</string>
 
 
 </resources>

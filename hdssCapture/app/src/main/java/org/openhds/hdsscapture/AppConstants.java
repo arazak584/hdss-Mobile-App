@@ -8,7 +8,7 @@ public class AppConstants {
     public static final String MARKED_COMPLETE="MARKED AS COMPLETED";
     public static final String MARKED_INCOMPLETE="INCOMPLETE";
     public static final String NOT_DONE="NOT DONE";
-    public static final String NOT_ENROLLED = "NOT ENROLLED";
+    public static final String NOT_VISITED = "NOT VISITED";
 
     public static final int NOT_COMPLETE = 0, COMPLETE=1, ELIGIBILITY_COMPLETE=2, ELIGIBILITY_ENROLLED=3;
     public static final int NOSELECT = 0;

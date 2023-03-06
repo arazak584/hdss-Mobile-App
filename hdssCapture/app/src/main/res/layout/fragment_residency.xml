@@ -139,6 +139,23 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
+                android:hint="@string/compno">
+                android:text="@string/compno">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/location_compno"
+                    android:text="@={residency.compno}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
                 android:hint="@string/household_select">
                 android:text="@string/household_select">
 

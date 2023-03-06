@@ -60,7 +60,7 @@ import java.util.concurrent.Executors;
         Relationship.class, Location.class, Residency.class, Pregnancyoutcome.class, Individual.class, Round.class, Demographic.class,
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class,
         Region.class, Country.class, District.class, Subdistrict.class, Village.class, Cluster.class, Fieldworker.class, Inmigration.class
-},         version = 6, exportSchema = true)
+},         version = 1, exportSchema = true)
 
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {

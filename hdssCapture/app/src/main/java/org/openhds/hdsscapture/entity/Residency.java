@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "residency",
-indices = {@Index(value = {"extId","location","socialgroup"}, unique = false)})
+indices = {@Index(value = {"extId","location","socialgroup","compno"}, unique = false)})
 public class Residency extends BaseObservable implements Parcelable {
 
     @Expose
@@ -43,6 +43,9 @@ public class Residency extends BaseObservable implements Parcelable {
 
     @Expose
     public String location;
+
+    @Expose
+    public String compno;
 
     @Expose
     public String socialgroup;
@@ -80,6 +83,30 @@ public class Residency extends BaseObservable implements Parcelable {
     public Residency(){}
 
     @Ignore
+    public Residency(@NotNull String uuid, Date insertDate, Date startDate, Date endDate, String extId, String location,
+                     String compno, String socialgroup, Integer endType, Integer startType, String visitid, String fw,
+                     Integer migType, Integer reason, Integer origin, Integer destination, Integer omgreason) {
+        this.uuid = uuid;
+        this.insertDate = insertDate;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.extId = extId;
+        this.location = location;
+        this.compno = compno;
+        this.socialgroup = socialgroup;
+        this.endType = endType;
+        this.startType = startType;
+        this.visitid = visitid;
+        this.fw = fw;
+        this.migType = migType;
+        this.reason = reason;
+        this.origin = origin;
+        this.destination = destination;
+        this.omgreason = omgreason;
+    }
+
+    @Ignore
+
     public Residency(@NotNull String uuid, Date insertDate, Date startDate, Date endDate, String extId, String location, String socialgroup, Integer endType, Integer startType, String visitid, String fw, Integer migType, Integer reason, Integer origin, Integer destination, Integer omgreason) {
         this.uuid = uuid;
         this.insertDate = insertDate;
@@ -165,6 +192,14 @@ public class Residency extends BaseObservable implements Parcelable {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getCompno() {
+        return compno;
+    }
+
+    public void setCompno(String compno) {
+        this.compno = compno;
     }
 
     @Bindable
@@ -255,6 +290,7 @@ public class Residency extends BaseObservable implements Parcelable {
         this.endDate = (java.util.Date) in.readSerializable();
         this.extId = in.readString();
         this.location = in.readString();
+        this.compno = in.readString();
         this.socialgroup = in.readString();
         this.endType = in.readInt();
         this.startType = in.readInt();
@@ -292,6 +328,7 @@ public class Residency extends BaseObservable implements Parcelable {
         dest.writeSerializable(this.endDate);
         dest.writeString(this.extId);
         dest.writeString(this.location);
+        dest.writeString(this.compno);
         dest.writeString(this.socialgroup);
         dest.writeInt(this.endType);
         dest.writeInt(this.startType);

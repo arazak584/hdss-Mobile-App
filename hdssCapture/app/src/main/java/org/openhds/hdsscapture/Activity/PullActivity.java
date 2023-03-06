@@ -608,7 +608,7 @@ public class PullActivity extends AppCompatActivity {
                                 if (residencyDao != null) {
                                     File unzippedFile = new File(getExternalCacheDir() + File.separator + "residency.csv");
                                     CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("endDate").addColumn("endType")
+                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("compno").addColumn("endDate").addColumn("endType")
                                             .addColumn("extId").addColumn("fw").addColumn("insertDate").addColumn("location")
                                             .addColumn("socialgroup").addColumn("startDate").addColumn("startType").build();
                                     MappingIterator<Residency> iterator = mapper.readerFor(Residency.class).with(schema).readValues(unzippedFile);
@@ -1081,7 +1081,7 @@ public class PullActivity extends AppCompatActivity {
                                 // Read the response body into a file
                                 progress.setMessage("Downloading Demography Zip File...");
                                 InputStream inputStream = response.body().byteStream();
-                                File file = new File(getExternalCacheDir(), "demographic.zip");
+                                File file = new File(getExternalCacheDir(), "demography.zip");
                                 if (file.exists()) {
                                     file.delete();
                                 }
@@ -1120,7 +1120,7 @@ public class PullActivity extends AppCompatActivity {
                                 demographicDao = appDatabase.demographicDao();
                                 // Import the unzipped CSV file into the Room database
                                 if (demographicDao != null) {
-                                    File unzippedFile = new File(getExternalCacheDir() + File.separator + "demographic.csv");
+                                    File unzippedFile = new File(getExternalCacheDir() + File.separator + "demography.csv");
                                     CsvMapper mapper = new CsvMapper();
                                     CsvSchema schema = CsvSchema.builder().addColumn("extId").addColumn("education").addColumn("fw").addColumn("insertDate")
                                             .addColumn("marital").addColumn("occupation").addColumn("phone1").addColumn("phone2")
