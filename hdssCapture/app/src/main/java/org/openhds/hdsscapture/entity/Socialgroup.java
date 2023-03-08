@@ -139,6 +139,14 @@ public class Socialgroup extends BaseObservable implements Parcelable {
         this.groupType = groupType;
     }
 
+    public Integer getComplete() {
+        return complete;
+    }
+
+    public void setComplete(Integer complete) {
+        this.complete = complete;
+    }
+
     protected Socialgroup(Parcel in) {
         this.extId = in.readString();
         this.groupName = in.readString();
@@ -191,6 +199,23 @@ public class Socialgroup extends BaseObservable implements Parcelable {
             final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
             groupType = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.rgb(0, 114, 133));
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY COMPLETE FORM FOR SYNC
+    public void setComplete(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            complete = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            complete = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }
 

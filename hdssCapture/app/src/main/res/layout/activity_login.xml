@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="40dp"
-    android:background="@color/white"
     tools:context=".Activity.LoginActivity">
 
 
@@ -81,7 +80,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="40dp"
                 android:layout_marginLeft="40dp"
-                android:textColor="@color/yellow"
                 app:icon="@drawable/ic_baseline_login_24"
                 android:text="@string/login_form_login" />
 
@@ -91,7 +89,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="40dp"
                 android:layout_marginLeft="40dp"
-                android:textColor="@color/yellow"
                 app:icon="@drawable/pull"
                 android:text="@string/syncFieldworker" />
 

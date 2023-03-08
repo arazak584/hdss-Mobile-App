@@ -1,7 +1,11 @@
 package org.openhds.hdsscapture.entity;
 
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
 import androidx.room.ColumnInfo;
@@ -13,6 +17,8 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
+import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -68,6 +74,9 @@ public class Inmigration extends BaseObservable implements Parcelable {
     @Expose
     @ColumnInfo(name = "fw")
     public String fw;
+
+    @ColumnInfo(name = "complete")
+    public Integer complete;
 
     public Inmigration(){}
 
@@ -210,5 +219,22 @@ public class Inmigration extends BaseObservable implements Parcelable {
         dest.writeString(this.visitid);
         dest.writeInt(this.origin);
         dest.writeString(this.fw);
+    }
+
+    //SPINNERS ENTITY COMPLETE FORM FOR SYNC
+    public void setComplete(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            complete = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            complete = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
     }
 }

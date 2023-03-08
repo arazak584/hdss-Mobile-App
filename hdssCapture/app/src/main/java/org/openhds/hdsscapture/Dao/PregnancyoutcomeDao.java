@@ -18,12 +18,12 @@ PregnancyoutcomeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Pregnancyoutcome... pregnancyoutcome);
 
-    @Query("SELECT * FROM outcome ")
+    @Query("SELECT * FROM pregnancyoutcome ")
     List<Pregnancyoutcome> getAll();
 
-    @Query("SELECT * FROM outcome")
+    @Query("SELECT * FROM pregnancyoutcome")
     List<Pregnancyoutcome> retrieve();
 
-    @Query("SELECT * FROM outcome WHERE complete=1")
+    @Query("SELECT * FROM pregnancyoutcome WHERE complete=1")
     List<Pregnancyoutcome> retrieveToSync();
 }

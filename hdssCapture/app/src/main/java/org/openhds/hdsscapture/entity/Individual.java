@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -144,7 +143,6 @@ public class Individual extends BaseObservable implements Parcelable {
     public void setDob(String dob) {
         try {
             this.dob = f.parse(dob);
-            notifyPropertyChanged(BR.dob);
         } catch (ParseException e) {
             System.out.println("Dob error " + e.getMessage());
         }

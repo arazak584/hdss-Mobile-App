@@ -382,15 +382,50 @@
                     android:textColor="#000301"
                     android:padding="20dp"/>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/form_complete"/>
+
+                <Spinner
+                    android:id="@+id/individual_complete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{residency.complete}"
+                    android:onItemSelected="@{residency::setComplete}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="15dp"/>
+
             </LinearLayout>
 
-            <Button
-                android:id="@+id/button_submit"
+            <LinearLayout
+                android:id="@+id/linearLayout_save"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="60dip"
-                android:text="@string/text_submit"
-                android:textSize="24sp" />
+                android:orientation="horizontal">
+
+
+                <Button
+                    android:id="@+id/buttonSaveClose"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/saveclosedata" />
+
+                <Button
+                    android:id="@+id/buttonClose"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/closedata" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

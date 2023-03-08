@@ -182,6 +182,24 @@
                     android:textColor="#000301"
                     android:padding="10dp"/>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/form_complete"/>
+
+                <Spinner
+                    android:id="@+id/individual_complete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{pregnancy.complete}"
+                    android:onItemSelected="@{pregnancy::setComplete}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="15dp"/>
+
 
                 <LinearLayout
                     android:id="@+id/linearLayout_save"

@@ -175,41 +175,15 @@ public class Visit extends BaseObservable implements Parcelable {
         this.fw = fw;
     }
 
-    //SPINNERS ENTITY
-    public void setComplete(AdapterView<?> parent, View view, int position, long id) {
-
-        if (position != parent.getSelectedItemPosition()) {
-            parent.setSelection(position);
-        }
-        if (position == 0) {
-            complete = AppConstants.NOSELECT;
-        } else {
-            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            complete = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-            ((TextView) parent.getChildAt(0)).setTextSize(20);
-        }
-
+    public Integer getComplete() {
+        return complete;
     }
 
-    //SPINNERS ENTITY
-    public void setRealVisit(AdapterView<?> parent, View view, int position, long id) {
-
-        if (position != parent.getSelectedItemPosition()) {
-            parent.setSelection(position);
-        }
-        if (position == 0) {
-            realVisit = AppConstants.NOSELECT;
-        } else {
-            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            realVisit = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-            ((TextView) parent.getChildAt(0)).setTextSize(20);
-        }
-
+    public void setComplete(Integer complete) {
+        this.complete = complete;
     }
 
-    protected Visit (Parcel in) {
+      protected Visit (Parcel in) {
         this.extId = in.readString();
         this.location = in.readString();
         this.household = in.readString();
@@ -249,6 +223,42 @@ public class Visit extends BaseObservable implements Parcelable {
         dest.writeInt(this.realVisit);
         dest.writeString(this.respondent);
         dest.writeString(this.fw);
+
+    }
+
+    //SPINNERS ENTITY COMPLETE FORM FOR SYNC
+    public void setComplete(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            complete = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            complete = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+
+
+    //SPINNERS ENTITY
+    public void setRealVisit(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            realVisit = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            realVisit = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
 
     }
 }

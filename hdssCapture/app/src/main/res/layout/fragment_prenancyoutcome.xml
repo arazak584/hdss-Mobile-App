@@ -8,8 +8,12 @@
     <data>
 
         <variable
-            name="outcome"
+            name="pregoutcome"
             type="org.openhds.hdsscapture.entity.Pregnancyoutcome" />
+
+        <variable
+            name="outcome"
+            type="org.openhds.hdsscapture.entity.Outcome" />
 
     </data>
 
@@ -58,7 +62,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/fw"
-                android:text="@={outcome.fw}"
+                android:text="@={pregoutcome.fw}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"/>
@@ -79,9 +83,17 @@
             android:autofillHints=""
             android:ems="10"
             android:minHeight="40dp"
-            android:text="@={outcome.insertDate}"
+            android:text="@={pregoutcome.insertDate}"
             android:textSize="20sp"
             tools:ignore="TextContrastCheck" />
+
+        <Button
+            android:id="@+id/button_individual_mother"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/mother_extid"
+            tools:ignore="DuplicateSpeakableTextCheck"
+            app:icon="@drawable/ic_baseline_pregnant_woman_24" />
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
@@ -89,14 +101,58 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:hint="@string/ind_extid">
-            android:text="@string/ind_extid">
+            android:hint="@string/motherid">
+            android:text="@string/motherid">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/extid"
+                android:id="@+id/preg_mother"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={outcome.extId}"
+                android:text="@={pregoutcome.mother}"
+                android:required="true"
+                android:inputType="textPersonName|textCapCharacters"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/button_individual_father"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/father_extid"
+            tools:ignore="DuplicateSpeakableTextCheck"
+            app:icon="@drawable/ic_baseline_person_24" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:hint="@string/fatherid">
+            android:text="@string/fatherid">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/preg_father"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={pregoutcome.father}"
+                android:required="true"
+                android:inputType="textPersonName|textCapCharacters"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:hint="@string/uuid">
+            android:text="@string/uuid">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/uuid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={pregoutcome.uuid}"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -113,7 +169,7 @@
                 android:id="@+id/visitid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={outcome.visitid}"
+                android:text="@={pregoutcome.visitid}"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -130,7 +186,7 @@
                 android:id="@+id/childeverborn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={outcome.childEverborn}"
+                android:text="@={pregoutcome.childEverborn}"
                 android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -147,7 +203,7 @@
                 android:id="@+id/livebirth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={outcome.numberofBirths}"
+                android:text="@={pregoutcome.numberofBirths}"
                 android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -166,20 +222,6 @@
             android:textColor="#000301"
             android:padding="10dp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:padding="5dp"
-            android:text="@string/childextid"/>
-
-        <Spinner
-            android:id="@+id/childextid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textColor="#000301"
-            android:padding="10dp"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -226,18 +268,52 @@
             android:autofillHints=""
             android:ems="10"
             android:minHeight="40dp"
-            android:text="@={outcome.outcomeDate}"
+            android:text="@={pregoutcome.outcomeDate}"
             android:textSize="20sp"
             tools:ignore="TextContrastCheck" />
 
-        <Button
-            android:id="@+id/button_submit"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="60dip"
-            android:text="@string/text_submit"
-            android:textSize="24sp" />
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="@string/form_complete"/>
 
+        <Spinner
+            android:id="@+id/individual_complete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            selection="@{pregoutcome.complete}"
+            android:onItemSelected="@{pregoutcome::setComplete}"
+            android:gravity="left"
+            android:textColor="#000301"
+            android:padding="15dp"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/buttonSaveClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="@string/saveclosedata" />
+
+            <Button
+                android:id="@+id/buttonClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="@string/closedata" />
+
+        </LinearLayout>
 
     </LinearLayout>
     </ScrollView>

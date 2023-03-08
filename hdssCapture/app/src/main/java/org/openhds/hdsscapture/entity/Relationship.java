@@ -29,58 +29,54 @@ public class Relationship extends BaseObservable implements Parcelable {
     @PrimaryKey
     public String uuid;
 
-    @SerializedName("extId")
     @Expose
-    @ColumnInfo(name = "extId")
     public String extId;
 
-    @SerializedName("extIdB")
     @Expose
-    @ColumnInfo(name = "extIdB")
     public String extIdB;
 
-    @SerializedName("startDate")
     @Expose
-    @ColumnInfo(name = "startDate")
     public Date startDate;
 
-    @SerializedName("endDate")
     @Expose
-    @ColumnInfo(name = "endDate")
     public Date endDate;
 
-    @SerializedName("insertDate")
     @Expose
-    @ColumnInfo(name = "insertDate")
     public Date insertDate;
 
-    @SerializedName("startType")
     @Expose
-    @ColumnInfo(name = "startType")
     public String startType;
 
-    @SerializedName("endType")
     @Expose
-    @ColumnInfo(name = "endType")
     public String endType;
 
-    @SerializedName("aIsToB")
     @Expose
-    @ColumnInfo(name = "aIsToB")
     public Integer aIsToB;
 
-
-    @SerializedName("fw")
     @Expose
-    @ColumnInfo(name = "fw")
     public String fw;
 
     @Expose
     public Integer complete;
+    @Expose
+    private Integer mar;//Is this the first marriage of the woman?
+    @Expose
+    private Integer tnbch;//Total Number of biological children
+    @Expose
+    private Integer nchdm;//Number of biological children from this marriage
+    @Expose
+    private Integer polygamous;//Are you in a polygamous marriage
+    @Expose
+    private Integer nwive;//Number of wives of husband(including you)
+    @Expose
+    private Integer lcow;//Does women live in the same household with co-wife(s)
+    @Expose
+    private Integer mrank;//Woman's rank (In current marriage)
 
 
     public Relationship(){}
 
+    @Ignore
     public Relationship(@NotNull String extId, String extIdB, Date startDate, Date endDate, Date insertDate, String startType, String endType, Integer aIsToB, String fw) {
         this.extId = extId;
         this.extIdB = extIdB;
@@ -173,6 +169,71 @@ public class Relationship extends BaseObservable implements Parcelable {
 
     public void setaIsToB(Integer aIsToB) {
         this.aIsToB = aIsToB;
+    }
+
+    @NotNull
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(@NotNull String uuid) {
+        this.uuid = uuid;
+    }
+
+    public Integer getMar() {
+        return mar;
+    }
+
+    public void setMar(Integer mar) {
+        this.mar = mar;
+    }
+
+    public Integer getTnbch() {
+        return tnbch;
+    }
+
+    public void setTnbch(Integer tnbch) {
+        this.tnbch = tnbch;
+    }
+
+    public Integer getNchdm() {
+        return nchdm;
+    }
+
+    public void setNchdm(Integer nchdm) {
+        this.nchdm = nchdm;
+    }
+
+    public Integer getPolygamous() {
+        return polygamous;
+    }
+
+    public void setPolygamous(Integer polygamous) {
+        this.polygamous = polygamous;
+    }
+
+    public Integer getNwive() {
+        return nwive;
+    }
+
+    public void setNwive(Integer nwive) {
+        this.nwive = nwive;
+    }
+
+    public Integer getLcow() {
+        return lcow;
+    }
+
+    public void setLcow(Integer lcow) {
+        this.lcow = lcow;
+    }
+
+    public Integer getMrank() {
+        return mrank;
+    }
+
+    public void setMrank(Integer mrank) {
+        this.mrank = mrank;
     }
 
     public String getFw() {
