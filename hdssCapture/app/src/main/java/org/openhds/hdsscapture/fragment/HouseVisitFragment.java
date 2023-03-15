@@ -175,7 +175,7 @@ public class HouseVisitFragment extends Fragment {
             final Visit visit = new Visit();
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                    DemographicFragment.newInstance(individual,residency,location, socialgroup)).commit();
+                    VisitFragment.newInstance(individual,residency,location, socialgroup,visit)).commit();
         });
 
 

@@ -17,6 +17,41 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView4_compextId"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/design_default_color_on_secondary"
+                android:textSize="15sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/textView4_clusterId"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/design_default_color_on_secondary"
+                android:textSize="15sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/textView4_compname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="textEnd"
+                android:textColor="@color/design_default_color_on_secondary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +90,7 @@
             android:text="@string/fw">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/fw"
+                android:id="@+id/visit_fw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@={visit.fw}"
@@ -80,14 +115,14 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/button_location_insertDate"
+            android:id="@+id/button_visit_insertDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/visitDate"
             tools:ignore="DuplicateSpeakableTextCheck" />
 
         <TextView
-            android:id="@+id/editText_insertDate"
+            android:id="@+id/visit_insertDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints=""
@@ -107,7 +142,7 @@
             android:text="@string/location_select">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/location_extid"
+                android:id="@+id/visit_Location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@={visit.location}"
@@ -141,7 +176,7 @@
             android:text="@string/visitid">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/visit_extid"
+                android:id="@+id/visit_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@={visit.extId}"
@@ -172,7 +207,7 @@
             android:text="@string/form_complete"/>
 
         <Spinner
-            android:id="@+id/complete"
+            android:id="@+id/visitcomplete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
@@ -182,14 +217,30 @@
             android:padding="20dp"/>
 
 
-          <Button
-            android:id="@+id/button_submit"
+        <LinearLayout
+            android:id="@+id/linearLayout_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/yellow"
-            android:minHeight="60dip"
-            android:text="@string/text_submit"
-            android:textSize="24sp" />
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/buttonSaveClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="@string/saveclosedata" />
+
+            <Button
+                android:id="@+id/buttonClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="@string/closedata" />
+
+        </LinearLayout>
 
 
 
