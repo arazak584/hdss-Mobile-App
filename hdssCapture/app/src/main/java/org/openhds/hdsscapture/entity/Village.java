@@ -43,6 +43,11 @@ public class Village implements Parcelable {
         this.subdistrictId = subdistrictId;
     }
 
+    public Village(@NotNull String villageId, String villageNm) {
+        this.extId = villageId;
+        this.name = villageNm;
+    }
+
     @NotNull
     public String getExtId() {
         return extId;

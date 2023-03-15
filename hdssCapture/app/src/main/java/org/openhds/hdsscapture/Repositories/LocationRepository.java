@@ -61,6 +61,15 @@ public class LocationRepository {
         return future.get();
     }
 
+    public List<Location> retrieveByVillage(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Location>> callable = () -> dao.retrieveByVillage(id);
+
+        Future<List<Location>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Location> findAll() throws ExecutionException, InterruptedException {
 
         Callable<List<Location>> callable = () -> dao.retrieve();

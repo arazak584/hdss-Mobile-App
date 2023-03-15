@@ -161,7 +161,8 @@
                     android:layout_marginBottom="12dp"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/compoundName">
+                    android:hint="@string/compoundName"
+                    app:isRequired="true"
                     android:text="@string/compoundName">
 
                     <com.google.android.material.textfield.TextInputEditText

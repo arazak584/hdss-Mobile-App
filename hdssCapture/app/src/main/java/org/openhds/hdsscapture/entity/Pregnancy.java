@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -78,7 +79,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     @Expose
     public Integer attend_you;//Who attended to you?
     @Expose
-    public Integer attend_you_other;//Other, Specify
+    public String attend_you_other;//Other, Specify
     @Expose
     public Integer first_rec;//How many months pregnant were you when you first received antenatal care for this pregnancy
     @Expose
@@ -109,8 +110,6 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     public Integer healthfacility;//Have you attended a Health Facility other than visiting for anc service?
     @Expose
     public Integer medicineforpregnancy;//Have you received any medicine for the pregnancy?
-    @Expose
-    public String othermedicine;//Specify if other medicine
     @Expose
     public Integer ttinjection;//Have you received TT injection?
     @Expose
@@ -257,22 +256,6 @@ public class Pregnancy extends BaseObservable implements Parcelable {
         this.anteNatalClinic = anteNatalClinic;
     }
 
-    public Integer getAgeOfPregFromPregNotes() {
-        return ageOfPregFromPregNotes;
-    }
-
-    public void setAgeOfPregFromPregNotes(Integer ageOfPregFromPregNotes) {
-        this.ageOfPregFromPregNotes = ageOfPregFromPregNotes;
-    }
-
-    public Integer getEstimatedAgeOfPreg() {
-        return estimatedAgeOfPreg;
-    }
-
-    public void setEstimatedAgeOfPreg(Integer estimatedAgeOfPreg) {
-        this.estimatedAgeOfPreg = estimatedAgeOfPreg;
-    }
-
     public Integer getAttend_you() {
         return attend_you;
     }
@@ -281,28 +264,12 @@ public class Pregnancy extends BaseObservable implements Parcelable {
         this.attend_you = attend_you;
     }
 
-    public Integer getAttend_you_other() {
+    public String getAttend_you_other() {
         return attend_you_other;
     }
 
-    public void setAttend_you_other(Integer attend_you_other) {
+    public void setAttend_you_other(String attend_you_other) {
         this.attend_you_other = attend_you_other;
-    }
-
-    public Integer getFirst_rec() {
-        return first_rec;
-    }
-
-    public void setFirst_rec(Integer first_rec) {
-        this.first_rec = first_rec;
-    }
-
-    public Integer getAnc_visits() {
-        return anc_visits;
-    }
-
-    public void setAnc_visits(Integer anc_visits) {
-        this.anc_visits = anc_visits;
     }
 
     public Integer getWhy_no() {
@@ -327,14 +294,6 @@ public class Pregnancy extends BaseObservable implements Parcelable {
 
     public void setOwn_bnet(Integer own_bnet) {
         this.own_bnet = own_bnet;
-    }
-
-    public Integer getHow_many() {
-        return how_many;
-    }
-
-    public void setHow_many(Integer how_many) {
-        this.how_many = how_many;
     }
 
     public Integer getBnet_sou() {
@@ -401,14 +360,6 @@ public class Pregnancy extends BaseObservable implements Parcelable {
         this.medicineforpregnancy = medicineforpregnancy;
     }
 
-    public String getOthermedicine() {
-        return othermedicine;
-    }
-
-    public void setOthermedicine(String othermedicine) {
-        this.othermedicine = othermedicine;
-    }
-
     public Integer getTtinjection() {
         return ttinjection;
     }
@@ -425,13 +376,84 @@ public class Pregnancy extends BaseObservable implements Parcelable {
         this.first_preg = first_preg;
     }
 
-    public Integer getPregnancyNumber() {
-        return pregnancyNumber;
+    @Bindable
+    public String getFirst_rec() {
+        return first_rec == null ? "" : String.valueOf(first_rec);
     }
 
-    public void setPregnancyNumber(Integer pregnancyNumber) {
-        this.pregnancyNumber = pregnancyNumber;
+    public void setFirst_rec(String first_rec) {
+
+        try {
+            this.first_rec = (first_rec == null) ? null : Integer.valueOf(first_rec);
+        } catch (NumberFormatException e) {
+        }
     }
+
+    @Bindable
+    public String getAnc_visits() {
+        return anc_visits == null ? "" : String.valueOf(anc_visits);
+    }
+
+    public void setAnc_visits(String anc_visits) {
+
+        try {
+            this.anc_visits = (anc_visits == null) ? null : Integer.valueOf(anc_visits);
+        } catch (NumberFormatException e) {
+        }
+    }
+
+    @Bindable
+    public String getEstimatedAgeOfPreg() {
+        return estimatedAgeOfPreg == null ? "" : String.valueOf(estimatedAgeOfPreg);
+    }
+
+    public void setEstimatedAgeOfPreg(String estimatedAgeOfPreg) {
+
+        try {
+            this.estimatedAgeOfPreg = (estimatedAgeOfPreg == null) ? null : Integer.valueOf(estimatedAgeOfPreg);
+        } catch (NumberFormatException e) {
+        }
+    }
+
+    @Bindable
+    public String getAgeOfPregFromPregNotes() {
+        return ageOfPregFromPregNotes == null ? "" : String.valueOf(ageOfPregFromPregNotes);
+    }
+
+    public void setAgeOfPregFromPregNotes(String ageOfPregFromPregNotes) {
+
+        try {
+            this.ageOfPregFromPregNotes = (ageOfPregFromPregNotes == null) ? null : Integer.valueOf(ageOfPregFromPregNotes);
+        } catch (NumberFormatException e) {
+        }
+    }
+
+    @Bindable
+    public String getHow_many() {
+        return how_many == null ? "" : String.valueOf(how_many);
+    }
+
+    public void setHow_many(String how_many) {
+
+        try {
+            this.how_many = (how_many == null) ? null : Integer.valueOf(how_many);
+        } catch (NumberFormatException e) {
+        }
+    }
+
+    @Bindable
+    public String getPregnancyNumber() {
+        return how_many == null ? "" : String.valueOf(pregnancyNumber);
+    }
+
+    public void setPregnancyNumber(String pregnancyNumber) {
+
+        try {
+            this.pregnancyNumber = (pregnancyNumber == null) ? null : Integer.valueOf(pregnancyNumber);
+        } catch (NumberFormatException e) {
+        }
+    }
+
 
     public Integer getComplete() {
         return complete;
@@ -498,4 +520,210 @@ public class Pregnancy extends BaseObservable implements Parcelable {
         }
 
     }
+
+    //SPINNERS ENTITY COMPLETE FORM FOR SYNC
+    public void setAnteNatalClinic(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            anteNatalClinic = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            anteNatalClinic = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setAttend_you(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            attend_you = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            attend_you = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setWhy_no(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            why_no = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            why_no = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setOwn_bnet(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            own_bnet = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            own_bnet = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+
+    //SPINNERS ENTITY
+    public void setBnet_sou(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            bnet_sou = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            bnet_sou = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setBnet_loc(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            bnet_loc = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            bnet_loc = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setSlp_bednet(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            slp_bednet = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            slp_bednet = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setTrt_bednet(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            trt_bednet = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            trt_bednet = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setHealthfacility(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            healthfacility = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            healthfacility = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setMedicineforpregnancy(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            medicineforpregnancy = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            medicineforpregnancy = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setTtinjection(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            ttinjection = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            ttinjection = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setFirst_preg(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            first_preg = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            first_preg = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
 }

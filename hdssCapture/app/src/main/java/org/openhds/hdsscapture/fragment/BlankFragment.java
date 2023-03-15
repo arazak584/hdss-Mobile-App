@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.openhds.hdsscapture.Adapter.LocationViewAdapter;
 import org.openhds.hdsscapture.R;
@@ -105,7 +105,7 @@ public class BlankFragment extends Fragment {
         });
         
 
-        final ExtendedFloatingActionButton add_location = view.findViewById(R.id.button_add_location);
+        final FloatingActionButton add_location = view.findViewById(R.id.button_add_location);
         add_location.setOnClickListener(v -> {
 
             final Location location = new Location();

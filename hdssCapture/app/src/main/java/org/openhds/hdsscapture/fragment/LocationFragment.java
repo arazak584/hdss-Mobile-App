@@ -7,10 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -28,13 +26,8 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -112,11 +105,7 @@ public class LocationFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentLocationBinding.inflate(inflater, container, false);
         binding.setLocation(location);
-        View view = inflater.inflate(R.layout.fragment_location, container, false);
-
-        TextView textField = view.findViewById(R.id.location_fw);
-        name = getArguments().getString("name");
-        textField.setText(name);
+        //View view = inflater.inflate(R.layout.fragment_location, container, false);
 
         final Intent intent = getActivity().getIntent();
         final Cluster clusterData = intent.getParcelableExtra(HierarchyActivity.CLUSTER_DATA);
@@ -141,20 +130,6 @@ public class LocationFragment extends Fragment {
         loadCodeData(binding.complete, codeBookViewModel, "yn");
         loadCodeData(binding.locationtype, codeBookViewModel, "locationType");
 
-        binding.buttonLocationInsertDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            final String curinsertdate = binding.locationInsertDate.getText().toString();
-            if(curinsertdate!=null){
-                final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                try {
-                    c.setTime(Objects.requireNonNull(f.parse(curinsertdate)));
-                } catch (ParseException e) {
-                }
-            }
-            DialogFragment newFragment = new DatePickerFragment(LocationFragment.DATE_BUNDLES.INSERTDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
 
         binding.buttonSubmit.setOnClickListener(v -> {
             final LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
@@ -170,9 +145,9 @@ public class LocationFragment extends Fragment {
             binding.locationFw.setError(null);
             binding.locationcompno.setError(null);
 
-            if (binding.locationInsertDate.getText().toString().isEmpty()) {
+            /*if (binding.locationInsertDate.getText().toString().isEmpty()) {
                 binding.locationInsertDate.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Calendar.getInstance().getTime()));
-            }
+            }*/
 
 
             if(location.clusterId==null){

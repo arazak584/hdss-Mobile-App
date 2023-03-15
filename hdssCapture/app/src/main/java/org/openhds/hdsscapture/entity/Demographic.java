@@ -103,11 +103,11 @@ public class Demographic extends BaseObservable implements Parcelable {
     }
 
     @NotNull
-    public String getExtid() {
+    public String getExtId() {
         return extId;
     }
 
-    public void setExtid(@NotNull String extId) {
+    public void setExtId(@NotNull String extId) {
         this.extId = extId;
     }
 

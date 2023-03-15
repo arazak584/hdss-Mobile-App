@@ -244,6 +244,33 @@
     <string name="fatherid">Father ID</string>
     <string name="age">Age of Participant</string>
     <string name="compno">Compound Number</string>
+    <string name="anteNatalClinic">Have you been to an ANC clinic?</string>
+    <string name="ageOfPregFromPregNotes">Age of pregnancy from pregnancy notes (In Weeks; Use the information in the ANC Booklet)</string>
+    <string name="anc">ANC VISIT</string>
+    <string name="estimatedAgeOfPreg">Number of months pregnant (Use the information in the ANC Booklet)</string>
+    <string name="attend_you">Who attended to you?</string>
+    <string name="attend_you_other">Other, Specify</string>
+    <string name="first_rec">How many months pregnant were you when you first received antenatal care for this pregnancy</string>
+    <string name="anc_visits">How many Antenatal care visits have you made for this pregnancy</string>
+    <string name="why_no">If no, Why?</string>
+    <string name="bednet">BED NET</string>
+    <string name="own_bnet">Do you have a bed net?</string>
+    <string name="how_many">How many?</string>
+    <string name="bnet_sou">Source of bednet</string>
+    <string name="bnet_loc">Location of bednet</string>
+    <string name="slp_bednet">Did you sleep under a bed net last night?</string>
+    <string name="trt_bednet">Is the bed net you slept under last night treated?</string>
+    <string name="lastClinicVisitDate">Last clinic visit date</string>
+    <string name="ttinjection">Have you received TT injection?</string>
+    <string name="healthfacility">Have you attended a Health Facility other than visiting for anc service?</string>
+    <string name="medicineforpregnancy">Have you received any medicine for the pregnancy?</string>
+    <string name="first_preg">Is this your first Pregnancy?</string>
+    <string name="pregnancyNumber">Total number of pregnancies to date</string>
+    <string name="title_activity_remainder">RemainderActivity</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="remainder">Select Village to View Remaining Compounds</string>
 
 
 </resources>

@@ -11,6 +11,7 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.Activity.PullActivity;
 import org.openhds.hdsscapture.Activity.PushActivity;
+import org.openhds.hdsscapture.Activity.RemainderActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //Intent intent = new Intent(MainActivity.this, IndividualActivity.class);
-                //startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, RemainderActivity.class);
+                startActivity(intent);
             }
         });
 

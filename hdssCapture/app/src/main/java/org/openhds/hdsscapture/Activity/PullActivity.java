@@ -366,7 +366,7 @@ public class PullActivity extends AppCompatActivity {
                                             if (individual != null) {
                                                 runOnUiThread(new Runnable() {
                                                     public void run() {
-                                                        progress.setMessage("Processing " + counts.incrementAndGet() + " of the Individuals");
+                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the Individuals");
                                                     }
                                                 });
 
@@ -493,7 +493,7 @@ public class PullActivity extends AppCompatActivity {
                                             if (location != null) {
                                                 runOnUiThread(new Runnable() {
                                                     public void run() {
-                                                        progress.setMessage("Processing " + counts.incrementAndGet() + " of the Compounds");
+                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the Compounds");
                                                     }
                                                 });
                                                 locations.add(location);
@@ -623,7 +623,7 @@ public class PullActivity extends AppCompatActivity {
                                             if (residency != null) {
                                                 runOnUiThread(new Runnable() {
                                                     public void run() {
-                                                        progress.setMessage("Processing " + counts.incrementAndGet() + " of the Membership");
+                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the Membership");
                                                     }
                                                 });
                                                 residencies.add(residency);
@@ -739,9 +739,10 @@ public class PullActivity extends AppCompatActivity {
                                 if (relationshipDao != null) {
                                     File unzippedFile = new File(getExternalCacheDir() + File.separator + "relationship.csv");
                                     CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("aIsToB").addColumn("endDate").addColumn("endType")
-                                            .addColumn("extId").addColumn("extIdB").addColumn("fw").addColumn("insertDate")
-                                            .addColumn("startDate").build();
+                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("aIsToB").addColumn("endDate").addColumn("endType").addColumn("extId")
+                                            .addColumn("extIdB").addColumn("fw").addColumn("insertDate").addColumn("lcow").addColumn("mar")
+                                            .addColumn("mrank").addColumn("nchdm").addColumn("nwive").addColumn("polygamous")
+                                            .addColumn("startDate").addColumn("tnbch").build();
                                     MappingIterator<Relationship> iterator = mapper.readerFor(Relationship.class).with(schema).readValues(unzippedFile);
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
@@ -754,7 +755,7 @@ public class PullActivity extends AppCompatActivity {
                                             if (relationship != null) {
                                                 runOnUiThread(new Runnable() {
                                                     public void run() {
-                                                        progress.setMessage("Processing " + counts.incrementAndGet() + " of the Relationship");
+                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the Relationship");
                                                     }
                                                 });
                                                 relationships.add(relationship);
@@ -882,7 +883,7 @@ public class PullActivity extends AppCompatActivity {
                                             if (socialgroup != null) {
                                                 runOnUiThread(new Runnable() {
                                                     public void run() {
-                                                        progress.setMessage("Processing " + counts.incrementAndGet() + " of the Socialgroup");
+                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the Socialgroup");
                                                     }
                                                 });
                                                 socialgroups.add(socialgroup);
@@ -992,8 +993,13 @@ public class PullActivity extends AppCompatActivity {
                                 if (pregnancyDao != null) {
                                     File unzippedFile = new File(getExternalCacheDir() + File.separator + "pregnancy.csv");
                                     CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("extId").addColumn("expectedDeliveryDate").addColumn("fw")
-                                            .addColumn("insertDate").addColumn("outcome").addColumn("recordedDate").addColumn("visitid").build();
+                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("uuid").addColumn("ageOfPregFromPregNotes").addColumn("anc_visits").addColumn("anteNatalClinic").addColumn("attend_you")
+                                            .addColumn("attend_you_other").addColumn("bnet_loc").addColumn("bnet_loc_other").addColumn("bnet_sou").addColumn("bnet_sou_other")
+                                            .addColumn("estimatedAgeOfPreg").addColumn("expectedDeliveryDate").addColumn("extId").addColumn("first_preg").addColumn("first_rec")
+                                            .addColumn("fw").addColumn("healthfacility").addColumn("how_many").addColumn("insertDate").addColumn("lastClinicVisitDate")
+                                            .addColumn("medicineforpregnancy").addColumn("othermedicine").addColumn("outcome").addColumn("outcome_date").addColumn("own_bnet")
+                                            .addColumn("pregnancyNumber").addColumn("recordedDate").addColumn("slp_bednet").addColumn("trt_bednet").addColumn("ttinjection")
+                                            .addColumn("visitid").addColumn("why_no").addColumn("why_no_other").build();
                                     MappingIterator<Pregnancy> iterator = mapper.readerFor(Pregnancy.class).with(schema).readValues(unzippedFile);
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
@@ -1006,7 +1012,7 @@ public class PullActivity extends AppCompatActivity {
                                             if (pregnancy != null) {
                                                 runOnUiThread(new Runnable() {
                                                     public void run() {
-                                                        progress.setMessage("Processing " + counts.incrementAndGet() + " of the Pregnancies");
+                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the Pregnancies");
                                                     }
                                                 });
                                                 pregnancies.add(pregnancy);
@@ -1137,7 +1143,7 @@ public class PullActivity extends AppCompatActivity {
                                             if (demographic != null) {
                                                 runOnUiThread(new Runnable() {
                                                     public void run() {
-                                                        progress.setMessage("Processing " + counts.incrementAndGet() + " of the demographics");
+                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the demographics");
                                                     }
                                                 });
                                                 demographics.add(demographic);

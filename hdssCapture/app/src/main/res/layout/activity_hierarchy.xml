@@ -38,7 +38,7 @@
                 android:id="@+id/spinnerRound"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/Chocolate"
+                android:background="@color/teal_200"
                 android:contentDescription="@string/text_round"
                 android:spinnerMode="dialog"
                 tools:ignore="DuplicateSpeakableTextCheck" />
@@ -53,7 +53,7 @@
                 android:id="@+id/spinnerCountry"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/Chocolate"
+                android:background="@color/teal_200"
                 android:contentDescription="@string/text_country"
                 android:spinnerMode="dialog"
                 tools:ignore="DuplicateSpeakableTextCheck" />
@@ -68,7 +68,8 @@
                 android:id="@+id/spinnerRegion"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/Chocolate"
+                android:textColor="@color/white"
+                android:background="@color/teal_200"
                 android:contentDescription="@string/region"
                 android:spinnerMode="dialog"
                 tools:ignore="DuplicateSpeakableTextCheck" />
@@ -83,7 +84,7 @@
                 android:id="@+id/spinnerDistrict"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/Chocolate"
+                android:background="@color/teal_200"
                 android:contentDescription="@string/region"
                 android:spinnerMode="dialog"
                 tools:ignore="DuplicateSpeakableTextCheck" />
@@ -98,7 +99,7 @@
                 android:id="@+id/spinnerSubdistrict"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/Chocolate"
+                android:background="@color/teal_200"
                 android:contentDescription="@string/region"
                 android:spinnerMode="dialog"
                 tools:ignore="DuplicateSpeakableTextCheck" />
@@ -113,8 +114,8 @@
                 android:id="@+id/spinnerVillage"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/Chocolate"
-                android:contentDescription="@string/region"
+                android:background="@color/teal_200"
+                android:contentDescription="@string/village"
                 android:spinnerMode="dialog"
                 tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -128,7 +129,7 @@
                 android:id="@+id/spinnerCluster"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/Chocolate"
+                android:background="@color/teal_200"
                 android:contentDescription="@string/cluster"
                 android:spinnerMode="dialog"
                 tools:ignore="DuplicateSpeakableTextCheck" />
@@ -157,10 +158,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
+                android:backgroundTint="@color/white"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                app:fabSize="normal"
+                app:fabSize="mini"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="Select Location" />

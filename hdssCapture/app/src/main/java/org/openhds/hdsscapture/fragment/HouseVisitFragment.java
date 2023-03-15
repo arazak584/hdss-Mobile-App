@@ -18,10 +18,12 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.databinding.FragmentHouseVisitBinding;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.Visit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +45,8 @@ public class HouseVisitFragment extends Fragment {
     private Socialgroup socialgroup;
     private Residency residency;
     private Individual individual;
+    private boolean isAllFabsVisible;
+    private FragmentHouseVisitBinding binding;
 
     public HouseVisitFragment() {
         // Required empty public constructor
@@ -63,7 +67,7 @@ public class HouseVisitFragment extends Fragment {
     public static HouseVisitFragment newInstance(Individual individual,Residency residency,Location location,Socialgroup socialgroup) {
         HouseVisitFragment fragment = new HouseVisitFragment();
         Bundle args = new Bundle();
-        args.putParcelable(LOC_LOCATION_IDS, location);;
+        args.putParcelable(LOC_LOCATION_IDS, location);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(INDIVIDUAL_ID, individual);
@@ -89,6 +93,7 @@ public class HouseVisitFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_house_visit, container, false);
+        binding = FragmentHouseVisitBinding.inflate(inflater, container, false);
 
         final TextView compno = view.findViewById(R.id.textView_compextId);
         final TextView compname = view.findViewById(R.id.textView_compname);
@@ -130,6 +135,48 @@ public class HouseVisitFragment extends Fragment {
             }
         });
 
+        binding.addVisit.hide();
+        binding.buttonNewindividual.hide();
+
+        isAllFabsVisible = false;
+
+        binding.addForms.setOnClickListener(v -> {
+
+            if (!isAllFabsVisible) {
+
+                // when isAllFabsVisible becomes
+                // true make all the action name
+                // texts and FABs VISIBLE.
+//                binding.addAdverseFab.show();
+                binding.addVisit.show();
+                binding.buttonNewindividual.show();
+                // make the boolean variable true as
+                // we have set the sub FABs
+                // visibility to GONE
+                isAllFabsVisible = true;
+
+            } else {
+
+                // when isAllFabsVisible becomes
+                // true make all the action name
+                // texts and FABs GONE.
+//                binding.addAdverseFab.hide();
+                binding.addVisit.hide();
+                binding.buttonNewindividual.hide();
+
+                // visibility to GONE
+                isAllFabsVisible = false;
+            }
+        });
+
+        final ExtendedFloatingActionButton addvisit = view.findViewById(R.id.add_visit);
+        addvisit.setOnClickListener(v -> {
+
+            final Visit visit = new Visit();
+
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
+                    DemographicFragment.newInstance(individual,residency,location, socialgroup)).commit();
+        });
 
 
         final ExtendedFloatingActionButton add_individual = view.findViewById(R.id.button_newindividual);
@@ -140,6 +187,8 @@ public class HouseVisitFragment extends Fragment {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
                     IndividualFragment.newInstance(individual,residency,location, socialgroup)).commit();
         });
+
+
 
         return view;
 

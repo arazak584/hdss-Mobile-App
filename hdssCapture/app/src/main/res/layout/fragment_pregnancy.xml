@@ -172,6 +172,445 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/anteNatalClinic"/>
+
+                <Spinner
+                    android:id="@+id/anteNatalClinic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{pregnancy.anteNatalClinic}"
+                    android:onItemSelected="@{pregnancy::setAnteNatalClinic}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="15dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/why_no"/>
+
+                <Spinner
+                    android:id="@+id/why_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{pregnancy.why_no}"
+                    android:onItemSelected="@{pregnancy::setWhy_no}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="15dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/attend_you_other">
+                    android:text="@string/attend_you_other">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        goneUnless="@{pregnancy.why_no==77}"
+                        android:id="@+id/why_no_other"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={pregnancy.why_no_other}"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+             <LinearLayout
+                    goneUnless="@{pregnancy.anteNatalClinic==1}"
+                    android:id="@+id/PREG_LAYOUT"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="15dp"
+                        android:text="@string/anc"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold" />
+
+                 <com.google.android.material.textfield.TextInputLayout
+                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:gravity="start"
+                     android:padding="5dp"
+                     android:hint="@string/ageOfPregFromPregNotes">
+                     android:text="@string/ageOfPregFromPregNotes">
+
+                     <com.google.android.material.textfield.TextInputEditText
+                         android:id="@+id/ageOfPregFromPregNotes"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:text="@={pregnancy.ageOfPregFromPregNotes}"
+                         android:inputType="number"/>
+                 </com.google.android.material.textfield.TextInputLayout>
+
+                 <com.google.android.material.textfield.TextInputLayout
+                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:gravity="start"
+                     android:padding="5dp"
+                     android:hint="@string/estimatedAgeOfPreg">
+                     android:text="@string/estimatedAgeOfPreg">
+
+                     <com.google.android.material.textfield.TextInputEditText
+                         android:id="@+id/estimatedAgeOfPreg"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:text="@={pregnancy.estimatedAgeOfPreg}"
+                         android:inputType="number"/>
+                 </com.google.android.material.textfield.TextInputLayout>
+
+                 <Button
+                     android:id="@+id/button_lastClinicVisitDate"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:text="@string/lastClinicVisitDate"
+                     tools:ignore="DuplicateSpeakableTextCheck"
+                     app:icon="@drawable/ic_baseline_calendar_month_24" />
+
+                 <TextView
+                     android:id="@+id/editText_lastClinicVisitDate"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:autofillHints=""
+                     android:ems="10"
+                     android:minHeight="40dp"
+                     android:text="@={pregnancy.lastClinicVisitDate}"
+                     android:textSize="20sp"
+                     tools:ignore="TextContrastCheck" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:text="@string/attend_you"/>
+
+                    <Spinner
+                        android:id="@+id/attend_you"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        selection="@{pregnancy.attend_you}"
+                        android:onItemSelected="@{pregnancy::setAttend_you}"
+                        android:gravity="left"
+                        android:textColor="#000301"
+                        android:padding="20dp"/>
+
+                 <com.google.android.material.textfield.TextInputLayout
+                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:gravity="start"
+                     android:padding="5dp"
+                     android:hint="@string/attend_you_other">
+                     android:text="@string/attend_you_other">
+
+                     <com.google.android.material.textfield.TextInputEditText
+                         android:id="@+id/attend_you_other"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:text="@={pregnancy.attend_you_other}"
+                         android:inputType="textPersonName|textCapCharacters"/>
+                 </com.google.android.material.textfield.TextInputLayout>
+
+                 <TextView
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:gravity="start"
+                     android:padding="5dp"
+                     android:text="@string/ttinjection"/>
+
+                 <Spinner
+                     android:id="@+id/ttinjection"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     selection="@{pregnancy.ttinjection}"
+                     android:onItemSelected="@{pregnancy::setTtinjection}"
+                     android:gravity="left"
+                     android:textColor="#000301"
+                     android:padding="20dp"/>
+
+                 <com.google.android.material.textfield.TextInputLayout
+                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:gravity="start"
+                     android:padding="5dp"
+                     android:hint="@string/first_rec">
+                     android:text="@string/first_rec">
+
+                     <com.google.android.material.textfield.TextInputEditText
+                         android:id="@+id/first_rec"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:text="@={pregnancy.first_rec}"
+                         android:inputType="number"/>
+                 </com.google.android.material.textfield.TextInputLayout>
+
+                 <com.google.android.material.textfield.TextInputLayout
+                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:gravity="start"
+                     android:padding="5dp"
+                     android:hint="@string/anc_visits">
+                     android:text="@string/anc_visits">
+
+                     <com.google.android.material.textfield.TextInputEditText
+                         android:id="@+id/anc_visits"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:text="@={pregnancy.anc_visits}"
+                         android:inputType="number"/>
+                 </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/own_bnet"/>
+
+                <Spinner
+                    android:id="@+id/own_bnet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{pregnancy.own_bnet}"
+                    android:onItemSelected="@{pregnancy::setOwn_bnet}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="15dp"/>
+
+                <LinearLayout
+                    goneUnless="@{pregnancy.own_bnet==1}"
+                    android:id="@+id/BED_LAYOUT"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="15dp"
+                        android:text="@string/bednet"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorPrimary"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/how_many">
+                        android:text="@string/how_many">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/how_many"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={pregnancy.how_many}"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:text="@string/bnet_sou"/>
+
+                    <Spinner
+                        android:id="@+id/bnet_sou"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        selection="@{pregnancy.bnet_sou}"
+                        android:onItemSelected="@{pregnancy::setBnet_sou}"
+                        android:gravity="left"
+                        android:textColor="#000301"
+                        android:padding="20dp"/>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/attend_you_other">
+                        android:text="@string/attend_you_other">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/bnet_sou_other"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={pregnancy.bnet_sou_other}"
+                            android:inputType="textPersonName|textCapCharacters"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:text="@string/bnet_loc"/>
+
+                    <Spinner
+                        android:id="@+id/bnet_loc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        selection="@{pregnancy.bnet_loc}"
+                        android:onItemSelected="@{pregnancy::setBnet_loc}"
+                        android:gravity="left"
+                        android:textColor="#000301"
+                        android:padding="20dp"/>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/attend_you_other">
+                        android:text="@string/attend_you_other">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/bnet_loc_other"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={pregnancy.bnet_loc_other}"
+                            android:inputType="textCapCharacters"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:text="@string/slp_bednet"/>
+
+                    <Spinner
+                        android:id="@+id/slp_bednet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        selection="@{pregnancy.slp_bednet}"
+                        android:onItemSelected="@{pregnancy::setSlp_bednet}"
+                        android:gravity="left"
+                        android:textColor="#000301"
+                        android:padding="20dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:text="@string/trt_bednet"/>
+
+                    <Spinner
+                        android:id="@+id/trt_bednet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        selection="@{pregnancy.trt_bednet}"
+                        android:onItemSelected="@{pregnancy::setTrt_bednet}"
+                        android:gravity="left"
+                        android:textColor="#000301"
+                        android:padding="20dp"/>
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:text="@string/healthfacility"/>
+
+                <Spinner
+                    android:id="@+id/healthfacility"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{pregnancy.healthfacility}"
+                    android:onItemSelected="@{pregnancy::setHealthfacility}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="20dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:text="@string/medicineforpregnancy"/>
+
+                <Spinner
+                    android:id="@+id/medicineforpregnancy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{pregnancy.medicineforpregnancy}"
+                    android:onItemSelected="@{pregnancy::setMedicineforpregnancy}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="20dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:text="@string/first_preg"/>
+
+                <Spinner
+                    android:id="@+id/first_preg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{pregnancy.first_preg}"
+                    android:onItemSelected="@{pregnancy::setFirst_preg}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="20dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/pregnancyNumber">
+                    android:text="@string/pregnancyNumber">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/pregnancyNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={pregnancy.pregnancyNumber}"
+                        android:inputType="number"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
                     android:text="@string/outcome"/>
 
                 <Spinner
@@ -181,6 +620,25 @@
                     android:gravity="left"
                     android:textColor="#000301"
                     android:padding="10dp"/>
+
+                <Button
+                    android:id="@+id/button_pregnancy_outcome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/outcomeDate"
+                    tools:ignore="DuplicateSpeakableTextCheck"
+                    app:icon="@drawable/ic_baseline_calendar_month_24" />
+
+                <TextView
+                    android:id="@+id/editText_outcomeDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:minHeight="40dp"
+                    android:text="@={pregnancy.outcome_date}"
+                    android:textSize="20sp"
+                    tools:ignore="TextContrastCheck" />
 
                 <TextView
                     android:layout_width="match_parent"
