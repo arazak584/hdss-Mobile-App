@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
 import org.openhds.hdsscapture.R;
@@ -45,7 +46,6 @@ public class HouseVisitFragment extends Fragment {
     private Socialgroup socialgroup;
     private Residency residency;
     private Individual individual;
-    private boolean isAllFabsVisible;
     private FragmentHouseVisitBinding binding;
 
     public HouseVisitFragment() {
@@ -135,39 +135,6 @@ public class HouseVisitFragment extends Fragment {
             }
         });
 
-        binding.addVisit.hide();
-        binding.buttonNewindividual.hide();
-
-        isAllFabsVisible = false;
-
-        binding.addForms.setOnClickListener(v -> {
-
-            if (!isAllFabsVisible) {
-
-                // when isAllFabsVisible becomes
-                // true make all the action name
-                // texts and FABs VISIBLE.
-//                binding.addAdverseFab.show();
-                binding.addVisit.show();
-                binding.buttonNewindividual.show();
-                // make the boolean variable true as
-                // we have set the sub FABs
-                // visibility to GONE
-                isAllFabsVisible = true;
-
-            } else {
-
-                // when isAllFabsVisible becomes
-                // true make all the action name
-                // texts and FABs GONE.
-//                binding.addAdverseFab.hide();
-                binding.addVisit.hide();
-                binding.buttonNewindividual.hide();
-
-                // visibility to GONE
-                isAllFabsVisible = false;
-            }
-        });
 
         final ExtendedFloatingActionButton addvisit = view.findViewById(R.id.add_visit);
         addvisit.setOnClickListener(v -> {
@@ -175,11 +142,11 @@ public class HouseVisitFragment extends Fragment {
             final Visit visit = new Visit();
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                    VisitFragment.newInstance(individual,residency,location, socialgroup,visit)).commit();
+                    VisitFragment.newInstance(individual,residency,location, socialgroup)).commit();
         });
 
 
-        final ExtendedFloatingActionButton add_individual = view.findViewById(R.id.button_newindividual);
+        final FloatingActionButton add_individual = view.findViewById(R.id.button_newindividual);
         add_individual.setOnClickListener(v -> {
 
             final Individual individual = new Individual();

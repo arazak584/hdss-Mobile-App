@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -67,18 +68,16 @@ public class VisitFragment extends Fragment {
      * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
-     * @param visit Parameter 5.
      * @return A new instance of fragment VisitFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static VisitFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup,Visit visit) {
+    public static VisitFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup) {
         VisitFragment fragment = new VisitFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, location);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
-        args.putParcelable(VISIT_ID, visit);
         fragment.setArguments(args);
         return fragment;
     }
@@ -111,6 +110,18 @@ public class VisitFragment extends Fragment {
         compno.setText(location.getExtId());
         compname.setText(location.getLocationName());
         cluster.setText(location.getClusterId());
+
+        Button showDialogButton = binding.getRoot().findViewById(R.id.button_household);
+
+        // Set a click listener on the button for mother
+        showDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show the dialog fragment
+                HouseholdDialogFragment.newInstance(individual, residency, location,socialgroup)
+                        .show(getChildFragmentManager(), "HouseholdDialogFragment");
+            }
+        });
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {

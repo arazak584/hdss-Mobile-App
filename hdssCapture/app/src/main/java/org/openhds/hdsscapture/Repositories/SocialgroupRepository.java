@@ -2,8 +2,6 @@ package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
 
-import androidx.lifecycle.LiveData;
-
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.SocialgroupDao;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -46,11 +44,11 @@ public class SocialgroupRepository {
         return future.get();
     }
 
-    public LiveData<List<Socialgroup>> findByLocationSocial(String id) throws ExecutionException, InterruptedException {
+    public List<Socialgroup> retrieveBySocialgroup(String id) throws ExecutionException, InterruptedException {
 
-        Callable<LiveData<List<Socialgroup>>> callable = () -> dao.retrieveBySocialgroup(id);
+        Callable<List<Socialgroup>> callable = () -> dao.retrieveBySocialgroup(id);
 
-        Future<LiveData<List<Socialgroup>>> future = Executors.newSingleThreadExecutor().submit(callable);
+        Future<List<Socialgroup>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }

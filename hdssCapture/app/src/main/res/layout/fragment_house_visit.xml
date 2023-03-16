@@ -83,7 +83,7 @@
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="80dp"
+            android:layout_marginBottom="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -99,27 +99,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="150dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="80dp"
         android:contentDescription="@string/visit_household"
-        app:layout_constraintBottom_toTopOf="@+id/button_add_individual"
         android:src="@drawable/ic_add"
         android:text="@string/visit_household"
-        app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="ImageContrastCheck" />
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/button_newindividual"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="80dp"
-        android:contentDescription="@string/newindividual"
-        android:src="@drawable/ic_add"
-        android:text="@string/newindividual"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -136,7 +120,7 @@
     </com.google.android.material.bottomappbar.BottomAppBar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/add_forms"
+        android:id="@+id/button_newindividual"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:fabSize="normal"

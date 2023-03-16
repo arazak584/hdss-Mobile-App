@@ -4,7 +4,6 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.SocialgroupRepository;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -26,8 +25,8 @@ public class SocialgroupViewModel extends AndroidViewModel {
         return socialgroupRepository.find(id);
     }
 
-    public LiveData<List<Socialgroup>> findSocialgroup(String id) throws ExecutionException, InterruptedException {
-        return socialgroupRepository.findByLocationSocial(id);
+    public List<Socialgroup> retrieveBySocialgroup(String id) throws ExecutionException, InterruptedException {
+        return socialgroupRepository.retrieveBySocialgroup(id);
     }
 
     public List<Socialgroup> findAll() throws ExecutionException, InterruptedException {

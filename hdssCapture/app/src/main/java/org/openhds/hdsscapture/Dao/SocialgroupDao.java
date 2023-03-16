@@ -1,6 +1,5 @@
 package org.openhds.hdsscapture.Dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -45,8 +44,8 @@ public interface SocialgroupDao {
     @Query("SELECT COUNT(*) FROM socialgroup")
     int count();
 
-    @Query("SELECT socialgroup.* FROM socialgroup " + "INNER JOIN residency ON socialgroup.extId = residency.socialgroup" +
-            " INNER JOIN location on residency.location=location.extId " +
-            " WHERE residency.endType=1 and socialgroup.extId=:id GROUP BY socialgroup.extId ")
-    LiveData<List<Socialgroup>> retrieveBySocialgroup(String id);
+    @Query("SELECT a.*,location FROM socialgroup as a " + "INNER JOIN residency as b ON a.extId = b.socialgroup" +
+            " INNER JOIN location as c on b.location=c.extId " +
+            " WHERE b.endType=1 and b.location=:id GROUP BY a.extId ")
+    List<Socialgroup> retrieveBySocialgroup(String id);
 }
