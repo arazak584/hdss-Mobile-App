@@ -50,7 +50,7 @@ public interface LocationDao {
 
 
     @Query("SELECT a.* FROM location as a " + "INNER JOIN cluster as b ON a.clusterId = b.extId " +
-            " INNER JOIN village as c on b.villageId=c.extId " +
+            " INNER JOIN village as c on b.parent_uuid=c.extId " +
             " LEFT JOIN visit as d on a.extId=d.location where c.name=:id order by a.compno")
     List<Location> retrieveByVillage(String id);
 

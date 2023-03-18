@@ -133,6 +133,7 @@ public class Location extends BaseObservable implements Parcelable {
         }
     }
 
+    @Bindable
     public String getFw() {
         return fw;
     }
@@ -165,6 +166,7 @@ public class Location extends BaseObservable implements Parcelable {
 
     }
 
+    @Bindable
     public String getLocationName() {
         return locationName;
     }
@@ -173,6 +175,7 @@ public class Location extends BaseObservable implements Parcelable {
         this.locationName = locationName;
     }
 
+    @Bindable
     public String getLongitude() {
         return longitude;
     }
@@ -181,6 +184,7 @@ public class Location extends BaseObservable implements Parcelable {
         this.longitude = longitude;
     }
 
+    @Bindable
     public String getLatitude() {
         return latitude;
     }
@@ -189,6 +193,7 @@ public class Location extends BaseObservable implements Parcelable {
         this.latitude = latitude;
     }
 
+    @Bindable
     public String getAccuracy() {
         return accuracy;
     }
@@ -197,6 +202,7 @@ public class Location extends BaseObservable implements Parcelable {
         this.accuracy = accuracy;
     }
 
+    @Bindable
     public Integer getLocationType() {
         return locationType;
     }
@@ -205,8 +211,13 @@ public class Location extends BaseObservable implements Parcelable {
         this.locationType = locationType;
     }
 
+    @Bindable
     public Integer getStatus() {
         return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     protected Location(Parcel in) {

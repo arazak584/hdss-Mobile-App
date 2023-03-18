@@ -29,8 +29,8 @@ public class Cluster extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "area")
     private String area;
 
-    @ColumnInfo(name = "villageId")
-    private String villageId;
+    @ColumnInfo(name = "parent_uuid")
+    private String parent_uuid;
 
     @ColumnInfo(name = "level_uuid")
     private String level_uuid;
@@ -42,7 +42,7 @@ public class Cluster extends BaseObservable implements Parcelable {
     public Cluster(@NotNull String clusterId, String clusterNm, String villageId) {
         this.extId = clusterId;
         this.name = clusterNm;
-        this.villageId = villageId;
+        this.parent_uuid = villageId;
     }
 
     @Bindable
@@ -79,12 +79,12 @@ public class Cluster extends BaseObservable implements Parcelable {
         this.area = area;
     }
 
-    public String getVillageId() {
-        return villageId;
+    public String getParent_uuid() {
+        return parent_uuid;
     }
 
-    public void setVillageId(String villageId) {
-        this.villageId = villageId;
+    public void setParent_uuid(String villageId) {
+        this.parent_uuid = villageId;
     }
 
     public String getLevel_uuid() {
@@ -100,7 +100,7 @@ public class Cluster extends BaseObservable implements Parcelable {
         this.town = in.readString();
         this.name = in.readString();
         this.area = in.readString();
-        this.villageId = in.readString();
+        this.parent_uuid = in.readString();
         this.level_uuid = in.readString();
     }
 
@@ -125,7 +125,7 @@ public class Cluster extends BaseObservable implements Parcelable {
         dest.writeString(this.town);
         dest.writeString(this.name);
         dest.writeString(this.area);
-        dest.writeString(this.villageId);
+        dest.writeString(this.parent_uuid);
         dest.writeString(this.level_uuid);
     }
 

@@ -27,8 +27,8 @@ public class Subdistrict implements Parcelable {
     @ColumnInfo(name = "area")
     private String area;
 
-    @ColumnInfo(name = "districtId")
-    private String districtId;
+    @ColumnInfo(name = "parent_uuid")
+    private String parent_uuid;
 
     @ColumnInfo(name = "level_uuid")
     private String level_uuid;
@@ -40,7 +40,7 @@ public class Subdistrict implements Parcelable {
     public Subdistrict(@NotNull String subdistrictId, String subdistrictNm, String districtId) {
         this.extId = subdistrictId;
         this.name = subdistrictNm;
-        this.districtId = districtId;
+        this.parent_uuid = districtId;
     }
 
     @NotNull
@@ -76,12 +76,12 @@ public class Subdistrict implements Parcelable {
         this.area = area;
     }
 
-    public String getDistrictId() {
-        return districtId;
+    public String getParent_uuid() {
+        return parent_uuid;
     }
 
-    public void setDistrictId(String districtId) {
-        this.districtId = districtId;
+    public void setParent_uuid(String districtId) {
+        this.parent_uuid = districtId;
     }
 
     public String getLevel_uuid() {
@@ -97,7 +97,7 @@ public class Subdistrict implements Parcelable {
         this.town = in.readString();
         this.name = in.readString();
         this.area = in.readString();
-        this.districtId = in.readString();
+        this.parent_uuid = in.readString();
         this.level_uuid = in.readString();
     }
 
@@ -122,7 +122,7 @@ public class Subdistrict implements Parcelable {
         dest.writeString(this.town);
         dest.writeString(this.name);
         dest.writeString(this.area);
-        dest.writeString(this.districtId);
+        dest.writeString(this.parent_uuid);
         dest.writeString(this.level_uuid);
     }
 

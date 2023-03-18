@@ -29,7 +29,7 @@ public interface ClusterDao {
     @Query("SELECT * FROM cluster WHERE extId=:id")
     Cluster retrieve(String id);
 
-    @Query("SELECT * FROM cluster WHERE villageId=:id order by name")
+    @Query("SELECT * FROM cluster WHERE parent_uuid=:id order by name")
     List<Cluster> retrieveByVillageId(String id);
 
     @Query("SELECT * FROM cluster")

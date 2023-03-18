@@ -7,6 +7,7 @@ import org.openhds.hdsscapture.entity.Country;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.District;
 import org.openhds.hdsscapture.entity.Fieldworker;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Pregnancy;
@@ -46,6 +47,9 @@ public interface ApiDao {
 
     @GET("district")
     Call<DataWrapper<District>> getAllDistricts();
+
+    @GET("hierarchy")
+    Call<DataWrapper<Hierarchy>> getAllHierarchy();
 
     @GET("subdistrict")
     Call<DataWrapper<Subdistrict>> getAllSubDistricts();

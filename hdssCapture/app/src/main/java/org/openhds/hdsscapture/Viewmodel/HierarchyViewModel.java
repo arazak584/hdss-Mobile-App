@@ -1,0 +1,61 @@
+package org.openhds.hdsscapture.Viewmodel;
+
+import android.app.Application;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+
+import org.openhds.hdsscapture.Repositories.HierarchyRepository;
+import org.openhds.hdsscapture.entity.Hierarchy;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
+public class HierarchyViewModel extends AndroidViewModel {
+
+    private final HierarchyRepository hierarchyRepository;
+
+
+    public HierarchyViewModel(@NonNull Application application) {
+        super(application);
+        hierarchyRepository = new HierarchyRepository(application);
+    }
+
+    public List<Hierarchy> retrieveLevel1() throws ExecutionException, InterruptedException {
+        return hierarchyRepository.retrieveLevel1();
+    }
+
+    public List<Hierarchy> retrieveLevel2(String id) throws ExecutionException, InterruptedException {
+        return hierarchyRepository.retrieveLevel2(id);
+    }
+
+    public List<Hierarchy> retrieveLevel3(String id) throws ExecutionException, InterruptedException {
+        return hierarchyRepository.retrieveLevel3(id);
+    }
+
+    public List<Hierarchy> retrieveLevel4(String id) throws ExecutionException, InterruptedException {
+        return hierarchyRepository.retrieveLevel4(id);
+    }
+
+    public List<Hierarchy> retrieveLevel5(String id) throws ExecutionException, InterruptedException {
+        return hierarchyRepository.retrieveLevel5(id);
+    }
+
+    public List<Hierarchy> retrieveLevel6(String id) throws ExecutionException, InterruptedException {
+        return hierarchyRepository.retrieveLevel6(id);
+    }
+
+    public List<Hierarchy> retrieveLevel7(String id) throws ExecutionException, InterruptedException {
+        return hierarchyRepository.retrieveLevel7(id);
+    }
+
+
+    public void add(Hierarchy data){
+        hierarchyRepository.create(data);
+    }
+
+    public void add(Hierarchy... data){
+        hierarchyRepository.create(data);
+    }
+
+}

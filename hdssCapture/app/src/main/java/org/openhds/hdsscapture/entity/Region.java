@@ -27,8 +27,8 @@ public class Region implements Parcelable {
     @ColumnInfo(name = "area")
     private String area;
 
-    @ColumnInfo(name = "countryId")
-    private String countryId;
+    @ColumnInfo(name = "parent_uuid")
+    private String parent_uuid;
 
     @ColumnInfo(name = "level_uuid")
     private String level_uuid;
@@ -40,7 +40,7 @@ public class Region implements Parcelable {
     public Region(@NotNull String extId, String name, String countryId) {
         this.extId = extId;
         this.name = name;
-        this.countryId = countryId;
+        this.parent_uuid = countryId;
     }
 
 
@@ -78,12 +78,12 @@ public class Region implements Parcelable {
         this.area = area;
     }
 
-    public String getCountryId() {
-        return countryId;
+    public String getParent_uuid() {
+        return parent_uuid;
     }
 
-    public void setCountryId(String countryId) {
-        this.countryId = countryId;
+    public void setParent_uuid(String countryId) {
+        this.parent_uuid = countryId;
     }
 
     public String getLevel_uuid() {
@@ -99,7 +99,7 @@ public class Region implements Parcelable {
         this.town = in.readString();
         this.name = in.readString();
         this.area = in.readString();
-        this.countryId = in.readString();
+        this.parent_uuid = in.readString();
         this.level_uuid = in.readString();
     }
 
@@ -126,7 +126,7 @@ public class Region implements Parcelable {
         dest.writeString(this.town);
         dest.writeString(this.name);
         dest.writeString(this.area);
-        dest.writeString(this.countryId);
+        dest.writeString(this.parent_uuid);
         dest.writeString(this.level_uuid);
     }
 

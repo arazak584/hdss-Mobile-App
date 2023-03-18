@@ -32,6 +32,7 @@ import org.openhds.hdsscapture.Viewmodel.ClusterViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.CountryViewModel;
 import org.openhds.hdsscapture.Viewmodel.DistrictViewModel;
+import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.RegionViewModel;
 import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
 import org.openhds.hdsscapture.Viewmodel.SubdistrictViewModel;
@@ -41,6 +42,7 @@ import org.openhds.hdsscapture.entity.CodeBook;
 import org.openhds.hdsscapture.entity.Country;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.District;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Pregnancy;
@@ -162,6 +164,16 @@ public class PullActivity extends AppCompatActivity {
                                     District[] districts = response.body().getData().toArray(new District[0]);
                                     districtViewModel.add(districts);
 
+                                    //when region is synched, sync Hierarchy
+                                    progress.setMessage("Updating Hierarchy...");
+                                    final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(PullActivity.this).get(HierarchyViewModel.class);
+                                    Call<DataWrapper<Hierarchy>> c_callable = dao.getAllHierarchy();
+                                    c_callable.enqueue(new Callback<DataWrapper<Hierarchy>>() {
+                                        @Override
+                                        public void onResponse(Call<DataWrapper<Hierarchy>> call, Response<DataWrapper<Hierarchy>> response) {
+                                            Hierarchy[] hierarchies = response.body().getData().toArray(new Hierarchy[0]);
+                                            hierarchyViewModel.add(hierarchies);
+
                                     //when District is synched, sync subdistrict
                                     progress.setMessage("Updating Subdistricts...");
                                     final SubdistrictViewModel subdistrictViewModel = new ViewModelProvider(PullActivity.this).get(SubdistrictViewModel.class);
@@ -257,6 +269,15 @@ public class PullActivity extends AppCompatActivity {
                                         public void onFailure(Call<DataWrapper<Subdistrict>> call, Throwable t) {
                                             progress.dismiss();
                                             textView_SyncHierarchyData.setText("Sync Error!");
+                                            textView_SyncHierarchyData.setTextColor(Color.RED);
+                                        }
+                                    });
+                                }
+
+                                        @Override
+                                        public void onFailure(Call<DataWrapper<Hierarchy>> call, Throwable t) {
+                                            progress.dismiss();
+                                            textView_SyncHierarchyData.setText("Hierarchy Sync Error!");
                                             textView_SyncHierarchyData.setTextColor(Color.RED);
                                         }
                                     });

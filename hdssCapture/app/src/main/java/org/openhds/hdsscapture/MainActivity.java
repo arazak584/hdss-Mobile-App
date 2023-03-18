@@ -8,10 +8,10 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
-import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.Activity.PullActivity;
 import org.openhds.hdsscapture.Activity.PushActivity;
 import org.openhds.hdsscapture.Activity.RemainderActivity;
+import org.openhds.hdsscapture.Activity.SelectionActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(MainActivity.this, SelectionActivity.class);
                 startActivity(intent);
             }
         });

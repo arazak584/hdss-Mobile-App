@@ -10,8 +10,9 @@ import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
-@Entity(tableName = "district")
-public class District implements Parcelable {
+
+@Entity(tableName = "locationhierarchy")
+public class Hierarchy implements Parcelable {
 
     @NotNull
     @PrimaryKey
@@ -33,14 +34,13 @@ public class District implements Parcelable {
     @ColumnInfo(name = "level_uuid")
     private String level_uuid;
 
-    public District() {
+    public Hierarchy() {
     }
 
-    @Ignore
-    public District(@NotNull String districtId, String districtNm, String regionId) {
-        this.extId = districtId;
-        this.name = districtNm;
-        this.parent_uuid = regionId;
+   @Ignore
+    public Hierarchy(@NotNull String extId, String name) {
+        this.extId = extId;
+        this.name = name;
     }
 
 
@@ -81,8 +81,8 @@ public class District implements Parcelable {
         return parent_uuid;
     }
 
-    public void setParent_uuid(String regionId) {
-        this.parent_uuid = regionId;
+    public void setParent_uuid(String parent_uuid) {
+        this.parent_uuid = parent_uuid;
     }
 
     public String getLevel_uuid() {
@@ -93,7 +93,7 @@ public class District implements Parcelable {
         this.level_uuid = level_uuid;
     }
 
-    protected District(Parcel in) {
+    protected Hierarchy(Parcel in) {
         this.extId = in.readString();
         this.town = in.readString();
         this.name = in.readString();
@@ -102,15 +102,15 @@ public class District implements Parcelable {
         this.level_uuid = in.readString();
     }
 
-    public static final Creator<District> CREATOR = new Creator<District>() {
+    public static final Creator<Hierarchy> CREATOR = new Creator<Hierarchy>() {
         @Override
-        public District createFromParcel(Parcel in) {
-            return new District(in);
+        public Hierarchy createFromParcel(Parcel in) {
+            return new Hierarchy(in);
         }
 
         @Override
-        public District[] newArray(int size) {
-            return new District[size];
+        public Hierarchy[] newArray(int size) {
+            return new Hierarchy[size];
         }
     };
 
@@ -131,6 +131,6 @@ public class District implements Parcelable {
 
     @Override
     public String toString() {
-        return name;
+        return  name;
     }
 }

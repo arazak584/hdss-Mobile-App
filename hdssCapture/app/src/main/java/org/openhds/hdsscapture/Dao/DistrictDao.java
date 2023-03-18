@@ -29,7 +29,7 @@ public interface DistrictDao {
     @Query("SELECT * FROM district WHERE extId=:id")
     District retrieve(String id);
 
-    @Query("SELECT * FROM district WHERE regionId=:id")
+    @Query("SELECT * FROM district WHERE parent_uuid=:id")
     List<District> retrieveByRegionId(String id);
 
     @Query("SELECT * FROM district")

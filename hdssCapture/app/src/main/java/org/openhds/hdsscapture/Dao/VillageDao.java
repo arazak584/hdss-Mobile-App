@@ -29,7 +29,7 @@ public interface VillageDao {
     @Query("SELECT * FROM village WHERE extId=:id")
     Village retrieve(String id);
 
-    @Query("SELECT * FROM village WHERE subdistrictId=:id order by name")
+    @Query("SELECT * FROM village WHERE parent_uuid=:id order by name")
     List<Village> retrieveBySubdistrictId(String id);
 
     @Query("SELECT * FROM village")

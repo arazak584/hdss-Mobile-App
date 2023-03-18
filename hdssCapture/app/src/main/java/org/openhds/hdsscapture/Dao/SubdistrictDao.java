@@ -29,7 +29,7 @@ public interface SubdistrictDao {
     @Query("SELECT * FROM subdistrict WHERE extId=:id")
     Subdistrict retrieve(String id);
 
-    @Query("SELECT * FROM subdistrict WHERE districtId=:id order by name")
+    @Query("SELECT * FROM subdistrict WHERE parent_uuid=:id order by name")
     List<Subdistrict> retrieveByDistrictId(String id);
 
     @Query("SELECT * FROM subdistrict")

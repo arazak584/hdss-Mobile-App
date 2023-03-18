@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -26,8 +27,11 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -105,7 +109,11 @@ public class LocationFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentLocationBinding.inflate(inflater, container, false);
         binding.setLocation(location);
-        //View view = inflater.inflate(R.layout.fragment_location, container, false);
+        View view = inflater.inflate(R.layout.fragment_location, container, false);
+
+        TextView textField = view.findViewById(R.id.location_fw);
+        name = getArguments().getString("name");
+        textField.setText(name);
 
         final Intent intent = getActivity().getIntent();
         final Cluster clusterData = intent.getParcelableExtra(HierarchyActivity.CLUSTER_DATA);
@@ -131,6 +139,7 @@ public class LocationFragment extends Fragment {
         loadCodeData(binding.locationtype, codeBookViewModel, "locationType");
 
 
+
         binding.buttonSubmit.setOnClickListener(v -> {
             final LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
 
@@ -145,9 +154,9 @@ public class LocationFragment extends Fragment {
             binding.locationFw.setError(null);
             binding.locationcompno.setError(null);
 
-            /*if (binding.locationInsertDate.getText().toString().isEmpty()) {
+            if (binding.locationInsertDate.getText().toString().isEmpty()) {
                 binding.locationInsertDate.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Calendar.getInstance().getTime()));
-            }*/
+            }
 
 
             if(location.clusterId==null){

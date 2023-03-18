@@ -29,7 +29,7 @@ public interface RegionDao {
     @Query("SELECT * FROM region WHERE extId=:id")
     Region retrieve(String id);
 
-    @Query("SELECT * FROM region WHERE countryId=:id")
+    @Query("SELECT * FROM region WHERE parent_uuid=:id")
     List<Region> retrieveByCountryId(String id);
 
 
