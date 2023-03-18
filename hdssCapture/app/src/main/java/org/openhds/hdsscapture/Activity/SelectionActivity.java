@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
-import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
@@ -306,27 +305,12 @@ public class SelectionActivity extends AppCompatActivity {
                 return;
             }
 
-            Intent intent = new Intent(SelectionActivity.this, MainActivity.class);
-            Bundle extras = new Bundle();
-
-            Hierarchy selectedLevel1 = (Hierarchy) level1Spinner.getSelectedItem();
-            Hierarchy selectedLevel2 = (Hierarchy) level2Spinner.getSelectedItem();
-            Hierarchy selectedLevel3 = (Hierarchy) level3Spinner.getSelectedItem();
-            Hierarchy selectedLevel4 = (Hierarchy) level4Spinner.getSelectedItem();
-            Hierarchy selectedLevel5 = (Hierarchy) level5Spinner.getSelectedItem();
-            Hierarchy selectedLevel6 = (Hierarchy) level6Spinner.getSelectedItem();
 
             username.setError(null);
-            final Intent i = new Intent(this, TestActivity.class);
-            //locationData.setClusterId(clusterData.getClusterId());
-            //i.putExtra(LOCATION_DATA, locationData);
+            final Intent i = new Intent(this, LocationActivity.class);
+
             String usname = username.getText().toString();
             i.putExtra("username", usname);
-            //extras.putParcelable(LOCATION_DATA, selectedLevel1);
-            extras.putParcelable(VILLAGE_DATA, selectedLevel5);
-            extras.putParcelable(CLUSTER_DATA, selectedLevel6);
-            extras.putString("ROUND_NUMBER", String.valueOf(round));
-            extras.putString("USERNAME", username.getText().toString().trim());
             startActivity(i);
         });
 

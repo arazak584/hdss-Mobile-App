@@ -18,6 +18,7 @@ import org.openhds.hdsscapture.fragment.BlankFragment;
 
 public class LocationActivity extends AppCompatActivity {
 
+    public static final String LOCATION_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.LOCATION_DATA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

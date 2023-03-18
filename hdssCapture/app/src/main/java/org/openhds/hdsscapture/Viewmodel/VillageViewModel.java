@@ -33,6 +33,8 @@ public class VillageViewModel extends AndroidViewModel {
         return villageRepository.findAll();
     }
 
+
+
     public void add(Village data){
         villageRepository.create(data);
     }

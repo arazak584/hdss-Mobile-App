@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -8,6 +9,8 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.VillageViewModel;
@@ -19,6 +22,7 @@ import java.util.concurrent.ExecutionException;
 public class RemainderActivity extends AppCompatActivity {
 
     private Village villageData;
+    public static final String VILLAGE_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.VILLAGE_DATA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +34,7 @@ public class RemainderActivity extends AppCompatActivity {
 
         int ccSize = loadVillageData(villageSpinner, villageViewModel);
         if(ccSize > 1) {
-            villageSpinner.setSelection(1);
+            villageSpinner.setSelection(0);
         }
 
         villageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -51,6 +55,14 @@ public class RemainderActivity extends AppCompatActivity {
             }
         });
 
+        final ExtendedFloatingActionButton start = findViewById(R.id.btn_remain_location);
+        start.setOnClickListener(v -> {
+
+            final Intent i = new Intent(this, ListActivity.class);
+
+            i.putExtra(VILLAGE_DATA, villageData);
+            startActivity(i);
+        });
 
     }
 

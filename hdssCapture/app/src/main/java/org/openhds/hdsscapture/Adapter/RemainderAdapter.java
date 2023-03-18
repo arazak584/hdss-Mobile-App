@@ -81,12 +81,12 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
         return locationList.size();
     }
 
-    public void load(String charText, LocationViewModel locationViewModel) {
-
+    public void filter(String charText, LocationViewModel locationViewModel) {
+        locationList.clear();
 
             if(villageData != null)
                 try {
-                    List<Location> list = locationViewModel.retrieveByVillage(villageData.getExtId());
+                    List<Location> list = locationViewModel.retrieveByVillage(villageData.getName());
 
                     if (list != null) {
                         locationList.addAll(list);
@@ -96,6 +96,7 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
 
         notifyDataSetChanged();
     }

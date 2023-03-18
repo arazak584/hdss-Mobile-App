@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.openhds.hdsscapture.Adapter.RemainderAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
+import org.openhds.hdsscapture.databinding.FragmentRemainderBinding;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Village;
 import org.openhds.hdsscapture.entity.Visit;
@@ -32,6 +34,7 @@ public class RemainderFragment extends Fragment {
     private Village villageData;
     private Location location;
     private Visit visit;
+    private FragmentRemainderBinding binding;
 
 
     public RemainderFragment() {
@@ -43,25 +46,23 @@ public class RemainderFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param villageData Parameter 1.
-     * @param location Parameter 2.
      * @return A new instance of fragment RemainderFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static RemainderFragment newInstance(Village villageData, Location location) {
+    public static RemainderFragment newInstance(Village villageData) {
         RemainderFragment fragment = new RemainderFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_VILLAGE_ID, villageData);
-        args.putParcelable(LOC_LOCATION_IDS, location);;
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             villageData = getArguments().getParcelable(ARG_VILLAGE_ID);
-            this.location = getArguments().getParcelable(LOC_LOCATION_IDS);
         }
     }
 
@@ -71,7 +72,7 @@ public class RemainderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_remainder, container, false);
 
-        final RecyclerView recyclerView = view.findViewById(R.id.remainlistview);
+        final RecyclerView recyclerView = view.findViewById(R.id.remainlist);
         final RemainderAdapter adapter = new RemainderAdapter(this, villageData);
         final LocationViewModel locationViewModel = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
 
@@ -82,8 +83,26 @@ public class RemainderFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(adapter);
 
-        //initial loading of location for villages
-        adapter.load("", locationViewModel);
+        //initial loading of cluster locations
+        adapter.filter("", locationViewModel);
+
+        // Locate the EditText in listview_main.xml
+        final SearchView editSearch = view.findViewById(R.id.research);
+        // below line is to call set on query text listener method.
+        editSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // inside on query text change method we are
+                // calling a method to filter our recycler view.
+                adapter.filter(newText, locationViewModel);
+                return false;
+            }
+        });
 
         return view;
     }

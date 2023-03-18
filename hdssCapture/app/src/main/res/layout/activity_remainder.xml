@@ -45,23 +45,26 @@
             android:id="@+id/spinnerRVillage"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/Chocolate"
-            android:contentDescription="@string/region"
+            android:background="@color/teal_200"
+            android:contentDescription="@string/village"
             android:spinnerMode="dialog"
             tools:ignore="DuplicateSpeakableTextCheck"/>
 
 
     </LinearLayout>
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/recontainer_main"
-            android:name="org.openhds.hdsscapture.fragment.RemainderFragment"
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/btn_remain_location"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            tools:layout="@layout/fragment_remainder" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:backgroundTint="@color/white"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="View Remaining Compounds" />
 
     </LinearLayout>
 

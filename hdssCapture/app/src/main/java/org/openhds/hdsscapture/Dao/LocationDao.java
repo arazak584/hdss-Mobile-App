@@ -54,4 +54,5 @@ public interface LocationDao {
             " LEFT JOIN visit as d on a.extId=d.location where c.name=:id order by a.compno")
     List<Location> retrieveByVillage(String id);
 
+
 }

@@ -48,6 +48,7 @@ public class VisitFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
+    public static final String LOCATION_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.LOCATION_DATA";
     private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private static final String VISIT_ID = "VISIT_ID";
@@ -106,10 +107,13 @@ public class VisitFragment extends Fragment {
         final TextView compno = binding.getRoot().findViewById(R.id.textView4_compextId);
         final TextView compname = binding.getRoot().findViewById(R.id.textView4_compname);
         final TextView cluster = binding.getRoot().findViewById(R.id.textView4_clusterId);
+        final TextView compnos = binding.getRoot().findViewById(R.id.visit_Location);
 
         compno.setText(location.getExtId());
         compname.setText(location.getLocationName());
         cluster.setText(location.getClusterId());
+        compnos.setText(location.getExtId());
+
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_household);
 

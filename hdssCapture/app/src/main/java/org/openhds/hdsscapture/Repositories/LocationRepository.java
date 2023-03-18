@@ -5,6 +5,7 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.LocationDao;
 import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Village;
 
 import java.util.List;
 import java.util.concurrent.Callable;
