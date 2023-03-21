@@ -85,7 +85,6 @@ public class PushActivity extends AppCompatActivity {
 
             //WRAP THE DATA
             final DataWrapper<Location> data = new DataWrapper<>(locationList);
-            Toast.makeText(PushActivity.this, "Wrap successful", Toast.LENGTH_SHORT).show();
 
             //SEND THE DATA
             if (data.getData() != null && !data.getData().isEmpty()) {

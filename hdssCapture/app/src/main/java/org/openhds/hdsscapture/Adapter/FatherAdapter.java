@@ -16,6 +16,7 @@ import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.fragment.FatherDialogFragment;
+import org.openhds.hdsscapture.fragment.IndividualFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder> {
+
 
     FatherDialogFragment activity;
     LayoutInflater inflater;
@@ -77,9 +79,11 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
 
         holder.linearLayout.setOnClickListener(v -> {
             activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                    FatherDialogFragment.newInstance(individual, residency, location, socialgroup )).commit();
+                    IndividualFragment.newInstance(individual, residency, location, socialgroup )).commit();
         });
     }
+
+
 
     @Override
     public int getItemCount() {
