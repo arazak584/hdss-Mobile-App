@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    tools:context=".fragment.HouseholdDialogFragment">
+    tools:context=".fragment.PregnancyDialogFragment">
 
     <Button
-        android:id="@+id/button_hhclose"
+        android:id="@+id/button_pregclose"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -17,8 +17,9 @@
         android:textSize="10sp"
         app:icon="@drawable/ic_close" />
 
+
     <LinearLayout
-        android:id="@+id/layout_house"
+        android:id="@+id/linearLayout_preg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -29,10 +30,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select Household"
+            android:text="Pregnancy(s) Without Outcome"
             android:layout_marginTop="50dp"
             android:textAlignment="center"
             android:textSize="20sp" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,7 +42,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textViewhouse_compextId"
+                android:id="@+id/preg_compextId"
                 android:layout_width="0dp"
                 android:textAlignment="center"
                 android:layout_height="wrap_content"
@@ -53,10 +55,10 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/my_recycler_view_house"
+            android:id="@+id/my_recycler_pregnancy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/layout_house"/>
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout_preg"/>
 
     </LinearLayout>
 

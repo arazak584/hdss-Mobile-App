@@ -187,6 +187,7 @@ public class VisitFragment extends Fragment {
         });
 
         loadCodeData(binding.visitcomplete, "yn");
+        loadCodeData(binding.realVisit, "yn");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 

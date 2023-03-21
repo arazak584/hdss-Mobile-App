@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:textSize="12dp"
-                android:textColor="@color/teal_700"/>
+                android:textColor="@color/magenta"/>
 
             <TextView
                 android:id="@+id/father_lname"
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:textSize="12dp"
-                android:textColor="@color/teal_700"/>
+                android:textColor="@color/magenta"/>
 
 
         </LinearLayout>
@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12dp"
-                android:textColor="@color/teal_700"/>
+                android:textColor="@color/magenta"/>
         </LinearLayout>
 
 
@@ -89,7 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="12dp"
-                android:textColor="@color/teal_700"/>
+                android:textColor="@color/magenta"/>
         </LinearLayout>
 
 

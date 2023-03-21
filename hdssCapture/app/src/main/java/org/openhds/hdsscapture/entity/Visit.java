@@ -256,9 +256,10 @@ public class Visit extends BaseObservable implements Parcelable {
         } else {
             final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
             realVisit = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.rgb(255, 0, 255));
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }
 
     }
+
 }

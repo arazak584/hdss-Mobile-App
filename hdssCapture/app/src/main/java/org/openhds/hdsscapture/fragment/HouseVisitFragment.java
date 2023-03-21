@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentHouseVisitBinding;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
@@ -46,6 +48,7 @@ public class HouseVisitFragment extends Fragment {
     private Socialgroup socialgroup;
     private Residency residency;
     private Individual individual;
+    private Pregnancy pregnancy;
     private FragmentHouseVisitBinding binding;
 
     public HouseVisitFragment() {
@@ -92,18 +95,32 @@ public class HouseVisitFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_house_visit, container, false);
+        //View view = inflater.inflate(R.layout.fragment_house_visit, container, false);
         binding = FragmentHouseVisitBinding.inflate(inflater, container, false);
 
-        final TextView compno = view.findViewById(R.id.textView_compextId);
-        final TextView compname = view.findViewById(R.id.textView_compname);
-        final TextView cluster = view.findViewById(R.id.textView_clusterId);
+        final TextView compno = binding.getRoot().findViewById(R.id.textView_compextId);
+        final TextView compname = binding.getRoot().findViewById(R.id.textView_compname);
+        final TextView cluster = binding.getRoot().findViewById(R.id.textView_clusterId);
 
         compno.setText(location.getExtId());
         compname.setText(location.getLocationName());
         cluster.setText(location.getClusterId());
 
-        final RecyclerView recyclerView = view.findViewById(R.id.recyclerView_household);
+        //Button showDialogButton = view.findViewById(R.id.button_pregnant);
+        Button showDialogButton = binding.getRoot().findViewById(R.id.button_pregnant);
+
+        // Set a click listener on the button for mother
+        showDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show the dialog fragment
+                PregnancyDialogFragment.newInstance(individual, residency, location,socialgroup, pregnancy)
+                        .show(getChildFragmentManager(), "PregnancyDialogFragment");
+            }
+        });
+
+
+        final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_household);
         final IndividualViewAdapter adapter = new IndividualViewAdapter(this, residency,location, socialgroup );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
@@ -111,14 +128,14 @@ public class HouseVisitFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 RecyclerView.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
         recyclerView.setAdapter(adapter);
 
         //initial loading of Individuals in locations
         adapter.filter("", individualViewModel);
 
         // Locate the EditText in listview_main.xml
-        final SearchView editSearch = view.findViewById(R.id.individual_search);
+        final SearchView editSearch = binding.getRoot().findViewById(R.id.individual_search);
         // below line is to call set on query text listener method.
         editSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -136,7 +153,7 @@ public class HouseVisitFragment extends Fragment {
         });
 
 
-        final ExtendedFloatingActionButton addvisit = view.findViewById(R.id.add_visit);
+        final ExtendedFloatingActionButton addvisit = binding.getRoot().findViewById(R.id.add_visit);
         addvisit.setOnClickListener(v -> {
 
             final Visit visit = new Visit();
@@ -146,7 +163,7 @@ public class HouseVisitFragment extends Fragment {
         });
 
 
-        final FloatingActionButton add_individual = view.findViewById(R.id.button_newindividual);
+        final FloatingActionButton add_individual = binding.getRoot().findViewById(R.id.button_newindividual);
         add_individual.setOnClickListener(v -> {
 
             final Individual individual = new Individual();
@@ -157,8 +174,11 @@ public class HouseVisitFragment extends Fragment {
 
 
 
+
+        View view = binding.getRoot();
         return view;
 
     }
+
 
 }

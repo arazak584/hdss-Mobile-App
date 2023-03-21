@@ -271,6 +271,27 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="remainder">Select Village to View Remaining Compounds</string>
+    <string name="not_del">Why was child not delivered at health facility</string>
+    <string name="ass_del">Who assisted you during deivery?</string>
+    <string name="how_del">How was the child delivered?</string>
+    <string name="first_nb">Is this your first live birth?</string>
+    <string name="l_birth">How many previous live births have you had?</string>
+    <string name="rec_anc">During the time that you were pregnant, did you receive any Antenatal Care?</string>
+    <string name="why_no_anc">Why, No?</string>
+    <string name="where_anc">Where did you receive the ANC?</string>
+    <string name="whlth_fac">Which health facility?</string>
+    <string name="who_anc">Who attended to you?</string>
+    <string name="month_pg">How many months pregnant were you when you first received Antenatal Care?</string>
+    <string name="num_anc">How many ANC visits did you make before you delivered?</string>
+    <string name="rec_ipt">During the time that you were pregnant, did you receive IPT infront of a nurse?</string>
+    <string name="first_recs">How many months pregnant were you when you first received IPT?</string>
+    <string name="many_ipt">How many times did you take IPT in front of a nurse during the pregnancy?</string>
+    <string name="chd_weight">Was the child weighed at birth?</string>
+    <string name="chd_size">How much did the child weigh (estimated baby size)</string>
+    <string name="weig_hcard">Record weight in kilograms from Health Card</string>
+    <string name="obs">Pregnancy Without Outcome</string>
+    <string name="close">Close</string>
+    <string name="housepresent">Is There Any Household Member Present?</string>
 
 
 </resources>

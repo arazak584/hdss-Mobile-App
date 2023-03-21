@@ -18,18 +18,16 @@ public class Outcome extends BaseObservable {
     @NotNull
     @ColumnInfo(name = "uuid")
     @PrimaryKey
-    private String uuid;
+    public String uuid;
 
     @Expose
-    private String mother;
-    @Expose
-    private String childextId;
+    public String childextId;
 
     @Expose
-    private String preg_uuid;
+    public String preg_uuid;
 
     @Expose
-    private Integer type;
+    public Integer type;
 
     public Outcome(){}
 
@@ -40,14 +38,6 @@ public class Outcome extends BaseObservable {
 
     public void setUuid(@NotNull String uuid) {
         this.uuid = uuid;
-    }
-
-    public String getMother() {
-        return mother;
-    }
-
-    public void setMother(String mother) {
-        this.mother = mother;
     }
 
     public String getChildextId() {

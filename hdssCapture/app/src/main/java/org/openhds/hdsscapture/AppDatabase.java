@@ -90,15 +90,15 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract DemographicDao demographicDao();
     public abstract HierarchyDao hierarchyDao();
 
-    private static AppDatabase instance;
 
-    private static final int NUMBER_OF_THREADS = 6;
+    private static volatile AppDatabase INSTANCE;
+    private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     public static AppDatabase getDatabase(final Context context) {
-        if (instance == null) {
+        if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
-                instance = Room.databaseBuilder(context.getApplicationContext(),
+                INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                 AppDatabase.class, "hdss")
                                 .addCallback(sRoomDatabaseCallback)
                                 .fallbackToDestructiveMigration()
@@ -106,7 +106,7 @@ public abstract class AppDatabase extends RoomDatabase {
             }
         }
         //Return Database
-        return instance;
+        return INSTANCE;
     }
 
     private static final RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {

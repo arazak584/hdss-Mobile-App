@@ -1,10 +1,10 @@
 package org.openhds.hdsscapture.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -77,7 +77,7 @@ public class MotherDialogFragment extends DialogFragment {
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
-        Log.d(TAG, "location: " + location);
+        //Log.d(TAG, "location: " + location);
     }
 
     @Override
@@ -94,6 +94,15 @@ public class MotherDialogFragment extends DialogFragment {
             // Handle the case where location is null
             compno.setText("Error loading location data");
         }
+
+        Button closeButton = view.findViewById(R.id.button_close);
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
 
 
         //Load Mother Data

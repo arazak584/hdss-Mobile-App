@@ -36,4 +36,9 @@ public interface PregnancyDao {
 
     @Query("SELECT * FROM pregnancy WHERE complete=1")
     List<Pregnancy> retrieveToSync();
+
+    @Query("SELECT a.* FROM pregnancy as a " + "INNER JOIN residency as b ON a.extId = b.extId " +
+            " INNER JOIN location as c on b.location=c.extId " +
+            " WHERE endType=1 and outcome=2 and b.location=:id ")
+    List<Pregnancy> retrievePregnancy(String id);
 }

@@ -4,7 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
     tools:context=".fragment.FatherDialogFragment">
+
+    <Button
+        android:id="@+id/button_fclose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/close"
+        android:layout_gravity="center|top"
+        android:textSize="10sp"
+        app:icon="@drawable/ic_close" />
 
     <LinearLayout
         android:id="@+id/layout_manu"
@@ -18,7 +29,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Select Biological Father of Individual"
+            android:text="@string/father_extid"
+            android:layout_marginTop="50dp"
+            android:textAlignment="center"
             android:textSize="20sp" />
 
         <LinearLayout

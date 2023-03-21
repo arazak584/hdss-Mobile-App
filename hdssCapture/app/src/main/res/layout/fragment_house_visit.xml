@@ -11,7 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="10dp"
         tools:ignore="MissingConstraints">
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,7 +49,16 @@
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
+
         </LinearLayout>
+
+        <Button
+            android:id="@+id/button_pregnant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/obs"
+            app:icon="@drawable/ic_baseline_pregnant_woman_24" />
 
         <LinearLayout
             android:id="@+id/layout_individual"
@@ -67,6 +79,9 @@
 
                 <requestFocus />
             </SearchView>
+
+
+
 
 
         </LinearLayout>

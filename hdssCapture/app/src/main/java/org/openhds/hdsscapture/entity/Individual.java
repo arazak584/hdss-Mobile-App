@@ -102,6 +102,7 @@ public class Individual extends BaseObservable implements Parcelable {
 
     public String socialgroup;
 
+
     public Individual(){}
 
     @Ignore

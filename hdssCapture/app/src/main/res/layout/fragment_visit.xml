@@ -10,6 +10,10 @@
             name="visit"
             type="org.openhds.hdsscapture.entity.Visit" />
 
+        <variable
+            name="location"
+            type="org.openhds.hdsscapture.entity.Location" />
+
     </data>
 
     <LinearLayout
@@ -145,7 +149,7 @@
                 android:id="@+id/visit_Location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={visit.location}"
+                android:text="@={location.extId}"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -197,7 +201,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:text="@string/visit_outcome"/>
+            android:text="@string/housepresent"/>
 
         <Spinner
             android:id="@+id/realVisit"
@@ -205,6 +209,8 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:textColor="#000301"
+            selection="@{visit.realVisit}"
+            android:onItemSelected="@{visit::setRealVisit}"
             android:padding="20dp"/>
 
         <TextView

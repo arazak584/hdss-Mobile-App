@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Razak/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_spinner_dropdown_item.xml" value="0.109375" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/drawable-v24/ic_close.xml" value="0.216" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/drawable/rounded_button.xml" value="0.216" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/activity_add_individual.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/activity_hierarchy.xml" value="0.25" />
@@ -19,6 +20,7 @@
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/activity_selection.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/activity_test.xml" value="0.264" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/content_remainder.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/expenses_item.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/father_itemlist.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_blank.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_demographic.xml" value="0.25" />
@@ -31,7 +33,8 @@
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_location.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_mother_dialog.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_pregnancy.xml" value="0.2" />
-        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_prenancyoutcome.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_pregnancy_dialog.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_prenancyoutcome.xml" value="0.2" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_remainder.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_residency.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_visit.xml" value="0.25" />
@@ -42,6 +45,7 @@
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/list_households.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/location_view_items.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/mother_itemlist.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/pregnancy_itemlist.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/remainder_view_items.xml" value="0.25" />
         <entry key="..\:/hdssCapture/app/src/main/res/drawable-v24/border_shape.xml" value="0.216" />
         <entry key="..\:/hdssCapture/app/src/main/res/drawable-v24/ic_baseline_add_24.xml" value="0.216" />

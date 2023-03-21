@@ -283,7 +283,7 @@ public class Location extends BaseObservable implements Parcelable {
         } else {
             final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
             status = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.rgb(0, 114, 133));
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.rgb(255, 0, 255));
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }
 
@@ -300,7 +300,7 @@ public class Location extends BaseObservable implements Parcelable {
         } else {
             final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
             complete = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.rgb(0, 114, 133));
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.rgb(255, 0, 255));
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }
 
@@ -317,7 +317,7 @@ public class Location extends BaseObservable implements Parcelable {
         } else {
             final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
             locationType = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.rgb(0, 114, 133));
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.rgb(255, 0, 255));
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }
 

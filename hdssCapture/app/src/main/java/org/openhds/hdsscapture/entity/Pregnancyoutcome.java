@@ -61,53 +61,53 @@ public class Pregnancyoutcome extends BaseObservable {
     public String fw;
 
     @Expose
-    private Integer b_place;
+    public Integer b_place;
     @Expose
-    private Integer not_del; //Why was child not delivered at health facility
+    public Integer not_del; //Why was child not delivered at health facility
     @Expose
-    private String not_del_other;//Other
+    public String not_del_other;//Other
     @Expose
-    private Integer ass_del;//Who assisted you during deivery?
+    public Integer ass_del;//Who assisted you during deivery?
     @Expose
-    private String ass_del_other;//Other, Specify
+    public String ass_del_other;//Other, Specify
     @Expose
-    private Integer how_del;//How was the child delivered?
+    public Integer how_del;//How was the child delivered?
     @Expose
-    private String how_del_other;//Other, Specify
+    public String how_del_other;//Other, Specify
     @Expose
-    private Integer first_nb;//Is this your first live birth
+    public Integer first_nb;//Is this your first live birth
     @Expose
-    private Integer l_birth;//How many previous live births have you had?
+    public Integer l_birth;//How many previous live births have you had?
     @Expose
-    private Integer rec_anc;//During the time that you were pregnant, did you receive any Antenatal Care?
+    public Integer rec_anc;//During the time that you were pregnant, did you receive any Antenatal Care?
     @Expose
-    private Integer why_no_anc;//Why, No?
+    public Integer why_no_anc;//Why, No?
     @Expose
-    private Integer where_anc;//Where did you receive the ANC?
+    public Integer where_anc;//Where did you receive the ANC?
     @Expose
-    private String where_anc_Other;
+    public String where_anc_Other;
     @Expose
-    private Integer whlth_fac;//Which health facility
+    public Integer whlth_fac;//Which health facility
     @Expose
-    private String whlth_fac_Other;
+    public String whlth_fac_Other;
     @Expose
-    private Integer who_anc;//Who attended to you?
+    public Integer who_anc;//Who attended to you?
     @Expose
-    private Integer month_pg;//How many months pregnant were you when you first received  Antenatal Care?
+    public Integer month_pg;//How many months pregnant were you when you first received  Antenatal Care?
     @Expose
-    private Integer num_anc;//How many ANC visits did you make before you delivered?
+    public Integer num_anc;//How many ANC visits did you make before you delivered?
     @Expose
-    private Integer rec_ipt;//During the time that you were pregnant, did you receive IPT infront of a nurse?
+    public Integer rec_ipt;//During the time that you were pregnant, did you receive IPT infront of a nurse?
     @Expose
-    private Integer first_rec;//How many months pregnant were you when you first received  IPT?
+    public Integer first_rec;//How many months pregnant were you when you first received  IPT?
     @Expose
-    private Integer many_ipt;//How many times did you take IPT in front of a nurse during the pregnancy?
+    public Integer many_ipt;//How many times did you take IPT in front of a nurse during the pregnancy?
     @Expose
-    private Integer chd_weight;//Was the child weighed at birth?
+    public Integer chd_weight;//Was the child weighed at birth?
     @Expose
-    private Integer chd_size;//How much did the child weigh (estimated baby size)
+    public Integer chd_size;//How much did the child weigh (estimated baby size)
     @Expose
-    private Integer weig_hcard;//Record weight in kilograms from Health Card
+    public Integer weig_hcard;//Record weight in kilograms from Health Card
 
     @Expose
     public Integer complete;
@@ -281,12 +281,16 @@ public class Pregnancyoutcome extends BaseObservable {
         this.first_nb = first_nb;
     }
 
-    public Integer getL_birth() {
-        return l_birth;
+    public String getL_birth() {
+        return  l_birth == null ? "" : String.valueOf(l_birth);
     }
 
-    public void setL_birth(Integer l_birth) {
-        this.l_birth = l_birth;
+    public void setL_birth(String l_birth) {
+
+        try {
+            this.l_birth = (l_birth == null) ? null : Integer.valueOf(l_birth);
+        } catch (NumberFormatException e) {
+        }
     }
 
     public Integer getRec_anc() {
@@ -345,20 +349,26 @@ public class Pregnancyoutcome extends BaseObservable {
         this.who_anc = who_anc;
     }
 
-    public Integer getMonth_pg() {
-        return month_pg;
+    public String getMonth_pg() {
+        return  month_pg == null ? "" : String.valueOf(month_pg);
     }
 
-    public void setMonth_pg(Integer month_pg) {
-        this.month_pg = month_pg;
+    public void setMonth_pg(String month_pg) {
+        try {
+            this.month_pg = (month_pg == null) ? null : Integer.valueOf(month_pg);
+        } catch (NumberFormatException e) {
+        }
     }
 
-    public Integer getNum_anc() {
-        return num_anc;
+    public String getNum_anc() {
+        return  num_anc == null ? "" : String.valueOf(num_anc);
     }
 
-    public void setNum_anc(Integer num_anc) {
-        this.num_anc = num_anc;
+    public void setNum_anc(String num_anc) {
+        try {
+            this.num_anc = (num_anc == null) ? null : Integer.valueOf(num_anc);
+        } catch (NumberFormatException e) {
+        }
     }
 
     public Integer getRec_ipt() {
@@ -369,20 +379,26 @@ public class Pregnancyoutcome extends BaseObservable {
         this.rec_ipt = rec_ipt;
     }
 
-    public Integer getFirst_rec() {
-        return first_rec;
+    public String getFirst_rec() {
+        return  first_rec == null ? "" : String.valueOf(first_rec);
     }
 
-    public void setFirst_rec(Integer first_rec) {
-        this.first_rec = first_rec;
+    public void setFirst_rec(String first_rec) {
+        try {
+            this.first_rec = (first_rec == null) ? null : Integer.valueOf(first_rec);
+        } catch (NumberFormatException e) {
+        }
     }
 
-    public Integer getMany_ipt() {
-        return many_ipt;
+    public String getMany_ipt() {
+        return  many_ipt == null ? "" : String.valueOf(many_ipt);
     }
 
-    public void setMany_ipt(Integer many_ipt) {
-        this.many_ipt = many_ipt;
+    public void setMany_ipt(String many_ipt) {
+        try {
+            this.many_ipt = (many_ipt == null) ? null : Integer.valueOf(many_ipt);
+        } catch (NumberFormatException e) {
+        }
     }
 
     public Integer getChd_weight() {
@@ -394,19 +410,25 @@ public class Pregnancyoutcome extends BaseObservable {
     }
 
     public Integer getChd_size() {
-        return chd_size;
+        return  chd_size;
     }
 
     public void setChd_size(Integer chd_size) {
-        this.chd_size = chd_size;
+
+            this.chd_size = chd_size ;
+
     }
 
-    public Integer getWeig_hcard() {
-        return weig_hcard;
+
+    public String getWeig_hcard() {
+        return  weig_hcard == null ? "" : String.valueOf(weig_hcard);
     }
 
-    public void setWeig_hcard(Integer weig_hcard) {
-        this.weig_hcard = weig_hcard;
+    public void setWeig_hcard(String weig_hcard) {
+        try {
+            this.weig_hcard = (weig_hcard == null) ? null : Integer.valueOf(weig_hcard);
+        } catch (NumberFormatException e) {
+        }
     }
 
     public Integer getComplete() {
@@ -451,4 +473,209 @@ public class Pregnancyoutcome extends BaseObservable {
         }
 
     }
+
+    //Why was child not delivered at health facility
+    public void setNot_del(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            not_del = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            not_del = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //Who assisted you during deivery?
+    public void setAss_del(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            ass_del = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            ass_del = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //How was the child delivered?
+    public void setHow_del(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            how_del = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            how_del = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //Is this your first live birth
+    public void setFirst_nb(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            first_nb = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            first_nb = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //Who attended to you?
+    public void setWho_anc(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            who_anc = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            who_anc = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //During the time that you were pregnant, did you receive any Antenatal Care?
+    public void setRec_anc(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            rec_anc = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            rec_anc = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //Why, No?
+    public void setWhy_no_anc(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            why_no_anc = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            why_no_anc = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //Where did you receive the ANC?
+    public void setWhere_anc(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            where_anc = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            where_anc = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //Which health facility
+    public void setWhlth_fac(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            whlth_fac = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            whlth_fac = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //During the time that you were pregnant, did you receive IPT infront of a nurse?
+    public void setRec_ipt(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            rec_ipt = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            rec_ipt = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //During the time that you were pregnant, did you receive IPT infront of a nurse?
+    public void setChd_weight(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            chd_weight = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            chd_weight = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //During the time that you were pregnant, did you receive IPT infront of a nurse?
+    public void setChd_size(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            chd_size = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            chd_size = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
 }

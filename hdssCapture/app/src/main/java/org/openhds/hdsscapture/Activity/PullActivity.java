@@ -1014,11 +1014,11 @@ public class PullActivity extends AppCompatActivity {
                                 if (pregnancyDao != null) {
                                     File unzippedFile = new File(getExternalCacheDir() + File.separator + "pregnancy.csv");
                                     CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("uuid").addColumn("ageOfPregFromPregNotes").addColumn("anc_visits").addColumn("anteNatalClinic").addColumn("attend_you")
+                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("ageOfPregFromPregNotes").addColumn("anc_visits").addColumn("anteNatalClinic").addColumn("attend_you")
                                             .addColumn("attend_you_other").addColumn("bnet_loc").addColumn("bnet_loc_other").addColumn("bnet_sou").addColumn("bnet_sou_other")
                                             .addColumn("estimatedAgeOfPreg").addColumn("expectedDeliveryDate").addColumn("extId").addColumn("first_preg").addColumn("first_rec")
                                             .addColumn("fw").addColumn("healthfacility").addColumn("how_many").addColumn("insertDate").addColumn("lastClinicVisitDate")
-                                            .addColumn("medicineforpregnancy").addColumn("othermedicine").addColumn("outcome").addColumn("outcome_date").addColumn("own_bnet")
+                                            .addColumn("medicineforpregnancy").addColumn("outcome").addColumn("outcome_date").addColumn("own_bnet")
                                             .addColumn("pregnancyNumber").addColumn("recordedDate").addColumn("slp_bednet").addColumn("trt_bednet").addColumn("ttinjection")
                                             .addColumn("visitid").addColumn("why_no").addColumn("why_no_other").build();
                                     MappingIterator<Pregnancy> iterator = mapper.readerFor(Pregnancy.class).with(schema).readValues(unzippedFile);
