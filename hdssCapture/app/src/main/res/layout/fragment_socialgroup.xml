@@ -8,6 +8,10 @@
         <variable
             name="socialgroup"
             type="org.openhds.hdsscapture.entity.Socialgroup" />
+
+        <variable
+            name="individual"
+            type="org.openhds.hdsscapture.entity.Individual" />
     </data>
 
     <LinearLayout
@@ -57,7 +61,7 @@
                     android:id="@+id/fw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@={socialgroup.fw}"
+                    android:text="@={socialgroup.fw_uuid}"
                     android:inputType="textPersonName"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,7 +96,7 @@
                     android:id="@+id/sociagroup_extid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@={socialgroup.extId}"
+                    android:text="@={socialgroup.houseExtId}"
                     android:inputType="textPersonName"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -126,7 +130,7 @@
                     android:id="@+id/head_extid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@={socialgroup.headid}"
+                    android:text="@={socialgroup.individual_uuid}"
                     android:inputType="textPersonName"/>
             </com.google.android.material.textfield.TextInputLayout>
 

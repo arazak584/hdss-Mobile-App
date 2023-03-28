@@ -31,7 +31,6 @@ public class LoginActivity extends AppCompatActivity {
     private ApiDao dao;
     private ProgressDialog progress;
     private Fieldworker fieldworkerData;
-    public static final String FIELDWORKER_DATA = "org.openhds.hdsscapture.activity.LoginActivity.FIELDWORKER_DATA";
 
 
 
@@ -100,9 +99,8 @@ public class LoginActivity extends AppCompatActivity {
             final String myuser = username.getText().toString();
             final String mypass = password.getText().toString();
 
-            Fieldworker fieldworker = null;
             try {
-                fieldworker = fieldworkerViewModel.find(myuser, mypass);
+                fieldworkerData = fieldworkerViewModel.find(myuser, mypass);
 
             } catch (ExecutionException e) {
                 Toast.makeText(this,"Something terrible went wrong", Toast.LENGTH_LONG).show();
@@ -114,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            if(fieldworker == null){
+            if(fieldworkerData == null){
                 username.setError("Invalid user or PIN");
                 Toast.makeText(this,"Please provide a valid user and PIN", Toast.LENGTH_LONG).show();
                 return;
@@ -123,9 +121,10 @@ public class LoginActivity extends AppCompatActivity {
             username.setError(null);
             password.setText(null);
             final Intent i = new Intent(this, MainActivity.class);
-            String name = username.getText().toString();
-            i.putExtra("username", name);
             startActivity(i);
+
+
+
         });
     }
 }

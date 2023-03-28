@@ -9,9 +9,11 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -26,25 +28,25 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-@Entity(tableName = "visit")
+
+@Entity(tableName = "visit",
+        indices = {@Index(value = {"location_uuid","visit_uuid"}, unique = false)})
 public class Visit extends BaseObservable implements Parcelable {
 
-    @SerializedName("extId")
+    @SerializedName("visit_uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "extId")
+    @ColumnInfo(name = "visit_uuid")
     @PrimaryKey
-    public String extId;
+    public String visit_uuid;
 
-    @SerializedName("location")
-    @Expose
-    @ColumnInfo(name = "location")
-    public String location;
+    @ColumnInfo(name = "visitextId")
+    public String visitextId;
 
-    @SerializedName("household")
+    @SerializedName("location_uuid")
     @Expose
-    @ColumnInfo(name = "household")
-    public String household;
+    @ColumnInfo(name = "location_uuid")
+    public String location_uuid;
 
     @SerializedName("roundNumber")
     @Expose
@@ -66,15 +68,13 @@ public class Visit extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "realVisit")
     public Integer realVisit;
 
-    @SerializedName("respondent")
+    @SerializedName("fw_uuid")
     @Expose
-    @ColumnInfo(name = "respondent")
-    public String respondent;
+    @ColumnInfo(name = "fw_uuid")
+    public String fw_uuid;
 
-    @SerializedName("fw")
     @Expose
-    @ColumnInfo(name = "fw")
-    public String fw;
+    public String individual_uuid;
 
     @SerializedName("complete")
     @Expose
@@ -84,47 +84,57 @@ public class Visit extends BaseObservable implements Parcelable {
     public Visit(){}
 
     @Ignore
-    public Visit(@NotNull String extId, String location, String household, String roundNumber, Date insertDate, Date visitDate, Integer realVisit, String respondent, String fw) {
-        this.extId = extId;
-        this.location = location;
-        this.household = household;
+    public Visit(@NotNull String visit_uuid, String visitextId, String location_uuid, String roundNumber, Date insertDate, Date visitDate, Integer realVisit, String individual_uuid, String fw_uuid) {
+        this.visit_uuid = visit_uuid;
+        this.visitextId = visitextId;
+        this.location_uuid = location_uuid;
         this.roundNumber = roundNumber;
         this.insertDate = insertDate;
         this.visitDate = visitDate;
         this.realVisit = realVisit;
-        this.respondent = respondent;
-        this.fw = fw;
-
+        this.individual_uuid = individual_uuid;
+        this.fw_uuid = fw_uuid;
     }
 
     @Ignore
     public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
 
+    @Bindable
     @NotNull
-    public String getExtId() {
-        return extId;
+    public String getVisit_uuid() {
+        return visit_uuid;
     }
 
-    public void setExtId(@NotNull String extId) {
-        this.extId = extId;
+    public void setVisit_uuid(@NotNull String visit_uuid) {
+        this.visit_uuid = visit_uuid;
     }
 
-    public String getLocation() {
-        return location;
+    @Bindable
+    public String getVisitextId() {
+        return visitextId;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setVisitextId(String visitextId) {
+        this.visitextId = visitextId;
     }
 
-    public String getHousehold() {
-        return household;
+    public String getLocation_uuid() {
+        return location_uuid;
     }
 
-    public void setHousehold(String household) {
-        this.household = household;
+    public void setLocation_uuid(String location_uuid) {
+        this.location_uuid = location_uuid;
     }
 
+    public String getFw_uuid() {
+        return fw_uuid;
+    }
+
+    public void setFw_uuid(String fw_uuid) {
+        this.fw_uuid = fw_uuid;
+    }
+
+    @Bindable
     public String getRoundNumber() {
         return roundNumber;
     }
@@ -159,20 +169,12 @@ public class Visit extends BaseObservable implements Parcelable {
         }
     }
 
-    public String getRespondent() {
-        return respondent;
+    public String getIndividual_uuid() {
+        return individual_uuid;
     }
 
-    public void setRespondent(String respondent) {
-        this.respondent = respondent;
-    }
-
-    public String getFw() {
-        return fw;
-    }
-
-    public void setFw(String fw) {
-        this.fw = fw;
+    public void setIndividual_uuid(String individual_uuid) {
+        this.individual_uuid = individual_uuid;
     }
 
     public Integer getComplete() {
@@ -184,15 +186,12 @@ public class Visit extends BaseObservable implements Parcelable {
     }
 
       protected Visit (Parcel in) {
-        this.extId = in.readString();
-        this.location = in.readString();
-        this.household = in.readString();
+        this.visit_uuid = in.readString();
         this.roundNumber = in.readString();
         this.insertDate = (java.util.Date) in.readSerializable();
         this.visitDate = (java.util.Date) in.readSerializable();
         this.realVisit = in.readInt();
-        this.respondent = in.readString();
-        this.fw = in.readString();
+        this.individual_uuid = in.readString();
     }
 
     public static final Creator<Visit> CREATOR = new Creator<Visit>() {
@@ -214,15 +213,12 @@ public class Visit extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.extId);
-        dest.writeString(this.location);
-        dest.writeString(this.household);
+        dest.writeString(this.visit_uuid);
         dest.writeString(this.roundNumber);
         dest.writeSerializable(this.insertDate);
         dest.writeSerializable(this.visitDate);
         dest.writeInt(this.realVisit);
-        dest.writeString(this.respondent);
-        dest.writeString(this.fw);
+        dest.writeString(this.individual_uuid);
 
     }
 

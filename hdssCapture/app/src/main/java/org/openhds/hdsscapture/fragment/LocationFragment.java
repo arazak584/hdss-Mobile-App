@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -20,11 +19,13 @@ import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.databinding.FragmentLocationBinding;
-import org.openhds.hdsscapture.entity.Cluster;
+import org.openhds.hdsscapture.entity.Fieldworker;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.SimpleDateFormat;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -49,13 +51,14 @@ public class LocationFragment extends Fragment {
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private final String TAG = "LOCATION.TAG";
 
-    private Cluster cluster_id;
+    private Hierarchy cluster_id;
     private Location location;
     private Socialgroup socialgroup;
     private Residency residency;
     private Individual individual;
     private String name;
     private FragmentLocationBinding binding;
+    private CaseItem caseItem;
 
     public LocationFragment() {
         // Required empty public constructor
@@ -75,7 +78,7 @@ public class LocationFragment extends Fragment {
      * @return A new instance of fragment LocationFragment.
      */
 
-    public static LocationFragment newInstance(Cluster cluster_id, Location location, Socialgroup socialgroup, Residency residency,Individual individual) {
+    public static LocationFragment newInstance(Hierarchy cluster_id, Location location, Socialgroup socialgroup, Residency residency, Individual individual) {
 
         LocationFragment fragment = new LocationFragment();
         Bundle args = new Bundle();
@@ -109,33 +112,40 @@ public class LocationFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentLocationBinding.inflate(inflater, container, false);
         binding.setLocation(location);
-        View view = inflater.inflate(R.layout.fragment_location, container, false);
 
-        TextView textField = view.findViewById(R.id.location_fw);
-        name = getArguments().getString("name");
-        textField.setText(name);
 
         final Intent intent = getActivity().getIntent();
-        final Cluster clusterData = intent.getParcelableExtra(HierarchyActivity.CLUSTER_DATA);
+        final Hierarchy level6Data = intent.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
+
+        final Intent i = getActivity().getIntent();
+        final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
 
-        if(location.clusterId==null){
-            binding.getLocation().clusterId = clusterData.getExtId();
+        if(location.locationLevel_uuid==null){
+            binding.getLocation().locationLevel_uuid = level6Data.getUuid();
+        }
+
+        if(location.villcode==null){
+            binding.getLocation().villcode = level6Data.getVillcode();
+        }
+
+        if(location.fw_uuid==null){
+            binding.getLocation().fw_uuid = fieldworkerData.getFw_uuid();
         }
 
 
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            // We use a String here, but any type that can be put in a Bundle is supported
-            if (bundle.containsKey(DATE_BUNDLES.INSERTDATE.getBundleKey())) {
-                final String result = bundle.getString((LocationFragment.DATE_BUNDLES.INSERTDATE.getBundleKey()));
-                binding.locationInsertDate.setText(result);
+        // Generate a UUID
+        if(location.location_uuid == null) {
+            String uuid = UUID.randomUUID().toString();
+            String uuidString = uuid.toString().replaceAll("-", "");
+            // Set the ID of the Fieldworker object
+            binding.getLocation().location_uuid = uuidString;
             }
 
-        });
 
         final CodeBookViewModel codeBookViewModel = new ViewModelProvider(this).get(CodeBookViewModel.class);
         loadCodeData(binding.locationstatus, codeBookViewModel, "status");
-        loadCodeData(binding.complete, codeBookViewModel, "yn");
+        loadCodeData(binding.complete, codeBookViewModel, "complete");
         loadCodeData(binding.locationtype, codeBookViewModel, "locationType");
 
 
@@ -144,24 +154,16 @@ public class LocationFragment extends Fragment {
             final LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
 
             final Location location = binding.getLocation();
-            location.setExtId(this.location.getExtId());
+            location.setCompextId(this.location.getCompextId());
 
             boolean isExists = false;
             binding.locationextid.setError(null);
             binding.locationName.setError(null);
-            binding.clusterLocation.setError(null);
-            binding.locationInsertDate.setError(null);
-            binding.locationFw.setError(null);
+
             binding.locationcompno.setError(null);
 
             if (binding.locationInsertDate.getText().toString().isEmpty()) {
                 binding.locationInsertDate.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Calendar.getInstance().getTime()));
-            }
-
-
-            if(location.clusterId==null){
-                isExists = true;
-                binding.clusterLocation.setError("Cluster is Required");
             }
 
             if(location.compno==null){
@@ -170,7 +172,7 @@ public class LocationFragment extends Fragment {
 
             }
 
-            if(location.extId==null){
+            if(location.compextId==null){
                 isExists = true;
                 binding.locationextid.setError("A Valid Compound ID is Required");
             }
@@ -190,8 +192,8 @@ public class LocationFragment extends Fragment {
                         binding.locationcompno.setError("Already Exists");
                     }
                 }
-                if(location.getExtId()!=null && !location.getExtId().equalsIgnoreCase(this.location.getExtId())) {
-                    location1 = locationViewModel.find(location.getExtId());
+                if(location.getCompextId()!=null && !location.getCompextId().equalsIgnoreCase(this.location.getCompextId())) {
+                    location1 = locationViewModel.find(location.getCompextId());
                     if (location1 != null) {
                         isExists = true;
                         binding.locationextid.setError("Already Exists");
@@ -210,8 +212,8 @@ public class LocationFragment extends Fragment {
 
             locationViewModel.add(location);
             Toast.makeText(v.getContext(), "Saved Successfully", Toast.LENGTH_LONG).show();
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                 HouseVisitFragment.newInstance(individual, residency, location, socialgroup )).commit();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                 HouseVisitFragment.newInstance(individual, residency, location, socialgroup)).commit();
 
 
 

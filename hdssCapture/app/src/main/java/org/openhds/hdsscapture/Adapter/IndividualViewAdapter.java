@@ -15,6 +15,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.fragment.HouseVisitFragment;
 import org.openhds.hdsscapture.fragment.IndividualFragment;
 
@@ -31,6 +32,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
     private Socialgroup socialgroup;
     private Residency residency;
     private List<Individual> individualList;
+    private CaseItem caseItem;
 
     public IndividualViewAdapter(HouseVisitFragment activity, Residency residency, Location location, Socialgroup socialgroup) {
         this.activity = activity;
@@ -81,14 +83,14 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         holder.permid.setText(individual.getExtId());
         holder.firstname.setText(individual.getFirstName());
         holder.lastname.setText(individual.getLastName());
-        holder.nickname.setText(individual.getNickName());
+        holder.nickname.setText(individual.getOtherName());
         holder.dob.setText(individual.getDob());
         holder.age.setText(String.valueOf(individual.getAge()));
-        holder.hhid.setText(individual.socialgroup);
+        holder.hhid.setText(individual.houseExtId);
 
         holder.linearLayout.setOnClickListener(v -> {
-            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                    IndividualFragment.newInstance(individual, residency, location, socialgroup )).commit();
+            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    IndividualFragment.newInstance( individual, residency, location, socialgroup,caseItem )).commit();
         });
     }
 
@@ -117,7 +119,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
 
             if(location != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveByLocationId(location.getExtId());
+                    List<Individual> list = individualViewModel.retrieveByLocationId(location.getCompextId());
 
                     if (list != null) {
                         individualList.addAll(list);

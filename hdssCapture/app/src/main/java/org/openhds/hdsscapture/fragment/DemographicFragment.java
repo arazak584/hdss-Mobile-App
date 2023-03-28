@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -22,10 +21,15 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.CaseItem;
+import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -40,14 +44,19 @@ public class DemographicFragment extends Fragment {
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String SOCIAL_ID = "SOCIAL_ID";
-    private final String TAG = "INDIVIDUAL.TAG";
+    private static final String CASE_ID = "CASE_ID";
+    private static final String EVENT_ID = "EVENT_ID";
+    private final String TAG = "DEMOGRAPHIC.TAG";
 
     // TODO: Rename and change types of parameters
     private Location location;
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
-    private FragmentDemographicBinding binding;;
+    private FragmentDemographicBinding binding;
+    private CaseItem caseItem;
+    private EventForm eventForm;
+    private Demographic demographic;
 
     public DemographicFragment() {
         // Required empty public constructor
@@ -61,19 +70,24 @@ public class DemographicFragment extends Fragment {
      * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
+     * @param caseItem Parameter 6.
+     * @param eventForm Parameter 7.
      * @return A new instance of fragment DemographicFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DemographicFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup) {
+    public static DemographicFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup, CaseItem caseItem, EventForm eventForm) {
         DemographicFragment fragment = new DemographicFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, location);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
+        args.putParcelable(CASE_ID, caseItem);
+        args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,6 +97,8 @@ public class DemographicFragment extends Fragment {
             residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
+            caseItem = getArguments().getParcelable(CASE_ID);
+            eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
 
@@ -91,26 +107,30 @@ public class DemographicFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentDemographicBinding.inflate(inflater, container, false);
-        binding.setIndividual(individual);
+        binding.setDemographic(demographic);
 
-        final TextView compno = binding.getRoot().findViewById(R.id.textView2_extid);
-        final TextView compname = binding.getRoot().findViewById(R.id.textView2_firstname);
-        final TextView cluster = binding.getRoot().findViewById(R.id.textView2_lastname);
+        //final TextView compno = binding.getRoot().findViewById(R.id.textView2_extid);
+        //final TextView compname = binding.getRoot().findViewById(R.id.textView2_firstname);
+        //final TextView cluster = binding.getRoot().findViewById(R.id.textView2_lastname);
 
-        compno.setText(location.getExtId());
-        compname.setText(location.getLocationName());
-        cluster.setText(location.getClusterId());
+        //compno.setText(location.getCompno());
+        //compname.setText(location.getLocationName());
+        //cluster.setText(location.villcode);
 
         binding.buttonSaveClose.setOnClickListener(v -> {
             final DemographicViewModel demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
 
             final Demographic demographic = binding.getDemographic();
-            individual.setExtId(this.individual.getExtId());
+            demographic.setIndividual_uuid(this.individual.getIndividual_uuid());
+
+            if (binding.demoInsertDate.getText().toString().isEmpty()) {
+                binding.demoInsertDate.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Calendar.getInstance().getTime()));
+            }
 
             boolean isExists = false;
             binding.demographicExtid.setError(null);
 
-            if(demographic.extId==null){
+            if(demographic.individual_uuid==null){
                 isExists = true;
                 binding.demographicExtid.setError("Individual Id is Required");
             }
@@ -125,7 +145,7 @@ public class DemographicFragment extends Fragment {
         loadCodeData(binding.education, "education");
         loadCodeData(binding.occupation, "occupation");
         loadCodeData(binding.marital, "marital");
-        loadCodeData(binding.demoComplete, "yn");
+        loadCodeData(binding.demoComplete, "complete");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
@@ -137,7 +157,7 @@ public class DemographicFragment extends Fragment {
             save(false, true);
         });
 
-        Handler.colorLayouts(requireContext(), binding.DEMOLAYOUT);
+        Handler.colorLayouts(requireContext(), binding.DEMOGRAPHICLAYOUT);
         View view = binding.getRoot();
         return view;
     }
@@ -156,8 +176,8 @@ public class DemographicFragment extends Fragment {
             viewModel.add(finalData);
         }
         if (close) {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                    HouseVisitFragment.newInstance(individual,residency,location, socialgroup)).commit();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    EventsFragment.newInstance(individual,residency,location, socialgroup, caseItem)).commit();
         }
     }
 

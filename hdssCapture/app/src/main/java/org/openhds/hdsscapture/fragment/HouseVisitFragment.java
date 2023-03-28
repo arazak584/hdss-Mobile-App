@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -14,7 +13,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
@@ -26,7 +24,7 @@ import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.subentity.CaseItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,6 +47,7 @@ public class HouseVisitFragment extends Fragment {
     private Residency residency;
     private Individual individual;
     private Pregnancy pregnancy;
+    private CaseItem caseItem;
     private FragmentHouseVisitBinding binding;
 
     public HouseVisitFragment() {
@@ -60,14 +59,15 @@ public class HouseVisitFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      //* @param cluster_id  Parameter 1.
+     * @param individual Parameter 5.
+     * @param residency Parameter 4.
      * @param location    Parameter 2.
      * @param socialgroup Parameter 3.
-     * @param residency Parameter 4.
-     * @param individual Parameter 5.
+     *
      * @return A new instance of fragment HouseVisitFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HouseVisitFragment newInstance(Individual individual,Residency residency,Location location,Socialgroup socialgroup) {
+    public static HouseVisitFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup) {
         HouseVisitFragment fragment = new HouseVisitFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, location);
@@ -99,14 +99,17 @@ public class HouseVisitFragment extends Fragment {
         binding = FragmentHouseVisitBinding.inflate(inflater, container, false);
 
         final TextView compno = binding.getRoot().findViewById(R.id.textView_compextId);
-        final TextView compname = binding.getRoot().findViewById(R.id.textView_compname);
-        final TextView cluster = binding.getRoot().findViewById(R.id.textView_clusterId);
+        final TextView gps = binding.getRoot().findViewById(R.id.textView_gps);
+        final TextView gpsLat = binding.getRoot().findViewById(R.id.textView_gpsLat);
+        final TextView name = binding.getRoot().findViewById(R.id.textView_compname);
 
-        compno.setText(location.getExtId());
-        compname.setText(location.getLocationName());
-        cluster.setText(location.getClusterId());
+        compno.setText(location.getCompextId());
+        name.setText(location.getLocationName());
+        gpsLat.setText(location.getLatitude());
+        gps.setText(location.getLongitude());
 
-        //Button showDialogButton = view.findViewById(R.id.button_pregnant);
+
+        /*//Button showDialogButton = view.findViewById(R.id.button_pregnant);
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_pregnant);
 
         // Set a click listener on the button for mother
@@ -117,7 +120,7 @@ public class HouseVisitFragment extends Fragment {
                 PregnancyDialogFragment.newInstance(individual, residency, location,socialgroup, pregnancy)
                         .show(getChildFragmentManager(), "PregnancyDialogFragment");
             }
-        });
+        });*/
 
 
         final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_household);
@@ -152,15 +155,15 @@ public class HouseVisitFragment extends Fragment {
             }
         });
 
-
+        /*
         final ExtendedFloatingActionButton addvisit = binding.getRoot().findViewById(R.id.add_visit);
         addvisit.setOnClickListener(v -> {
 
             final Visit visit = new Visit();
 
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                    VisitFragment.newInstance(individual,residency,location, socialgroup)).commit();
-        });
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    PregnancyFragment.newInstance(individual,residency,location, socialgroup,caseItem,eventForm)).commit();
+        });*/
 
 
         final FloatingActionButton add_individual = binding.getRoot().findViewById(R.id.button_newindividual);
@@ -168,8 +171,8 @@ public class HouseVisitFragment extends Fragment {
 
             final Individual individual = new Individual();
 
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                    IndividualFragment.newInstance(individual,residency,location, socialgroup)).commit();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    IndividualFragment.newInstance(individual,residency,location, socialgroup,caseItem)).commit();
         });
 
 

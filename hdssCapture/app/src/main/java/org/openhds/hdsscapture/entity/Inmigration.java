@@ -28,82 +28,52 @@ import java.util.Locale;
 @Entity(tableName = "inmigration")
 public class Inmigration extends BaseObservable implements Parcelable {
 
-    @SerializedName("extId")
+    @SerializedName("img_uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "extId")
+    @ColumnInfo(name = "img_uuid")
     @PrimaryKey
-    public String extId;
+    public String img_uuid;
 
-    @SerializedName("insertDate")
     @Expose
-    @ColumnInfo(name = "insertDate")
+    public String individual_uuid;
+
+    @Expose
     public Date insertDate;
 
-    @SerializedName("migType")
     @Expose
-    @ColumnInfo(name = "migType")
     public Integer migType;
 
-    @SerializedName("reason")
     @Expose
-    @ColumnInfo(name = "reason")
-    public String reason;
+    public Integer reason;
 
-    @SerializedName("origin")
     @Expose
-    @ColumnInfo(name = "origin")
+    public String reason_oth;
+
+    @Expose
     public Integer origin;
 
-    @SerializedName("recordedDate")
     @Expose
-    @ColumnInfo(name = "recordedDate")
     public Date recordedDate;
 
-    @SerializedName("residency_uuid")
     @Expose
-    @ColumnInfo(name = "residency_uuid")
     public String residency_uuid;
 
-    @SerializedName("visitid")
     @Expose
-    @ColumnInfo(name = "visitid")
-    public String visitid;
+    public String visit_uuid;
 
-    @SerializedName("fw")
     @Expose
-    @ColumnInfo(name = "fw")
-    public String fw;
+    public String fw_uuid;
 
     @ColumnInfo(name = "complete")
     public Integer complete;
 
     public Inmigration(){}
 
-    @Ignore
-    public Inmigration(@NotNull String extId, Date insertDate, Integer migType, String reason, Date recordedDate, String residency_uuid, String visitid, Integer origin, String fw) {
-        this.extId = extId;
-        this.insertDate = insertDate;
-        this.migType = migType;
-        this.reason = reason;
-        this.recordedDate = recordedDate;
-        this.residency_uuid = residency_uuid;
-        this.visitid = visitid;
-        this.origin = origin;
-        this.fw = fw;
-    }
 
     @Ignore
     public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
 
-    @NotNull
-    public String getExtId() {
-        return extId;
-    }
-
-    public void setExtId(@NotNull String extId) {
-        this.extId = extId;
-    }
 
     public String getInsertDate() {
         if (insertDate == null) return "SELECT DATE OF VISIT";
@@ -124,14 +94,6 @@ public class Inmigration extends BaseObservable implements Parcelable {
 
     public void setMigType(Integer migType) {
         this.migType = migType;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
     }
 
     public String getRecordedDate() {
@@ -155,12 +117,53 @@ public class Inmigration extends BaseObservable implements Parcelable {
         this.residency_uuid = residency_uuid;
     }
 
-    public String getVisitid() {
-        return visitid;
+    @NotNull
+    public String getImg_uuid() {
+        return img_uuid;
     }
 
-    public void setVisitid(String visitid) {
-        this.visitid = visitid;
+    public void setImg_uuid(@NotNull String img_uuid) {
+        this.img_uuid = img_uuid;
+    }
+
+    public String getIndividual_uuid() {
+        return individual_uuid;
+    }
+
+    public void setIndividual_uuid(String individual_uuid) {
+        this.individual_uuid = individual_uuid;
+    }
+
+    public Integer getReason() {
+        return reason;
+    }
+
+    public void setReason(Integer reason) {
+        this.reason = reason;
+    }
+
+    public String getReason_oth() {
+        return reason_oth;
+    }
+
+    public void setReason_oth(String reason_oth) {
+        this.reason_oth = reason_oth;
+    }
+
+    public String getVisit_uuid() {
+        return visit_uuid;
+    }
+
+    public void setVisit_uuid(String visit_uuid) {
+        this.visit_uuid = visit_uuid;
+    }
+
+    public String getFw_uuid() {
+        return fw_uuid;
+    }
+
+    public void setFw_uuid(String fw_uuid) {
+        this.fw_uuid = fw_uuid;
     }
 
     public Integer getOrigin() {
@@ -171,24 +174,17 @@ public class Inmigration extends BaseObservable implements Parcelable {
         this.origin = origin;
     }
 
-    public String getFw() {
-        return fw;
-    }
-
-    public void setFw(String fw) {
-        this.fw = fw;
-    }
 
     protected Inmigration(Parcel in) {
-        this.extId = in.readString();
+        this.individual_uuid = in.readString();
         this.insertDate = (Date) in.readSerializable();
         this.migType = in.readInt();
-        this.reason = in.readString();
+        this.reason = in.readInt();
         this.recordedDate = (Date) in.readSerializable();
         this.residency_uuid = in.readString();
-        this.visitid = in.readString();
+        this.visit_uuid = in.readString();
         this.origin = in.readInt();
-        this.fw = in.readString();
+        this.fw_uuid = in.readString();
     }
 
     public static final Creator<Inmigration> CREATOR = new Creator<Inmigration>() {
@@ -210,15 +206,15 @@ public class Inmigration extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.extId);
+        dest.writeString(this.individual_uuid);
         dest.writeSerializable(this.insertDate);
         dest.writeInt(this.migType);
-        dest.writeString(this.reason);
+        dest.writeInt(this.reason);
         dest.writeSerializable(this.recordedDate);
         dest.writeString(this.residency_uuid);
-        dest.writeString(this.visitid);
+        dest.writeString(this.visit_uuid);
         dest.writeInt(this.origin);
-        dest.writeString(this.fw);
+        dest.writeString(this.fw_uuid);
     }
 
     //SPINNERS ENTITY COMPLETE FORM FOR SYNC
@@ -232,6 +228,57 @@ public class Inmigration extends BaseObservable implements Parcelable {
         } else {
             final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
             complete = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setReason(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            reason = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            reason = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setMigType(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            migType = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            migType = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setOrigin(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            origin = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            origin = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }

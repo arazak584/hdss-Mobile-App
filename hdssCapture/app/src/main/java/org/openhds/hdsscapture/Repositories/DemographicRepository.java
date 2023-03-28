@@ -51,4 +51,13 @@ public class DemographicRepository {
 
         return future.get();
     }
+
+    public Demographic find(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Demographic> callable = () -> dao.find(id);
+
+        Future<Demographic> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
 }

@@ -96,7 +96,7 @@ public class PregnancyDialogFragment extends DialogFragment {
 
         final TextView compno = view.findViewById(R.id.preg_compextId);
         if (location != null) {
-            compno.setText(location.getExtId());
+            compno.setText(location.getCompno());
         } else {
             // Handle the case where location is null
             compno.setText("Error loading location data");

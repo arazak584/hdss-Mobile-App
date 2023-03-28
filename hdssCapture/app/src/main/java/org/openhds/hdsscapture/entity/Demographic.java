@@ -9,13 +9,11 @@ import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
@@ -29,86 +27,73 @@ import java.util.Locale;
 @Entity(tableName = "demographic")
 public class Demographic extends BaseObservable implements Parcelable {
 
-    @SerializedName("extId")
     @Expose
     @NotNull
-    @ColumnInfo(name = "extId")
     @PrimaryKey
-    public String extId;
+    public String demo_uuid;
 
-    @SerializedName("insertDate")
     @Expose
-    @ColumnInfo(name = "insertDate")
+    public String individual_uuid;
+
+    @Expose
     public Date insertDate;
 
-    @SerializedName("religion")
     @Expose
-    @ColumnInfo(name = "religion")
     public Integer religion;
 
-    @SerializedName("tribe")
     @Expose
-    @ColumnInfo(name = "tribe")
+    public String religion_oth;
+
+    @Expose
     public Integer tribe;
 
-    @SerializedName("education")
     @Expose
-    @ColumnInfo(name = "education")
+    public String tribe_oth;
+
+    @Expose
     public Integer education;
 
-    @SerializedName("marital")
     @Expose
-    @ColumnInfo(name = "marital")
+    public Integer comp_yrs;
+
+    @Expose
     public Integer marital;
 
-    @SerializedName("occupation")
     @Expose
-    @ColumnInfo(name = "occupation")
     public Integer occupation;
 
-    @SerializedName("Phone1")
     @Expose
-    @ColumnInfo(name = "Phone1")
+    public String occupation_oth;
+
+    @Expose
     public String Phone1;
 
-    @SerializedName("phone2")
     @Expose
-    @ColumnInfo(name = "phone2")
     public String phone2;
 
-    @SerializedName("fw")
     @Expose
-    @ColumnInfo(name = "fw")
-    public String fw;
+    public String fw_uuid;
 
-    @SerializedName("complete")
     @Expose
-    @ColumnInfo(name = "complete")
     public Integer complete;
 
     public Demographic(){}
 
-    @Ignore
-    public Demographic (@NotNull String extId,Date insertDate, Integer religion, Integer tribe, Integer education, Integer marital, Integer occupation,String phone1, String phone2, String fw) {
-        this.extId = extId;
-        this.insertDate = insertDate;
-        this.religion = religion;
-        this.tribe = tribe;
-        this.education = education;
-        this.marital = marital;
-        this.occupation = occupation;
-        Phone1 = phone1;
-        this.phone2 = phone2;
-        this.fw = fw;
-    }
-
     @NotNull
-    public String getExtId() {
-        return extId;
+    public String getDemo_uuid() {
+        return demo_uuid;
     }
 
-    public void setExtId(@NotNull String extId) {
-        this.extId = extId;
+    public void setDemo_uuid(@NotNull String demo_uuid) {
+        this.demo_uuid = demo_uuid;
+    }
+
+    public String getIndividual_uuid() {
+        return individual_uuid;
+    }
+
+    public void setIndividual_uuid(String individual_uuid) {
+        this.individual_uuid = individual_uuid;
     }
 
     @Ignore
@@ -117,7 +102,7 @@ public class Demographic extends BaseObservable implements Parcelable {
 
     @Bindable
     public String getInsertDate() {
-        if (insertDate == null) return "SELECT DATE OF VISIT";
+        if (insertDate == null) return "";
         return f.format(insertDate);
     }
 
@@ -178,12 +163,12 @@ public class Demographic extends BaseObservable implements Parcelable {
         this.phone2 = phone2;
     }
 
-    public String getFw() {
-        return fw;
+    public String getFw_uuid() {
+        return fw_uuid;
     }
 
-    public void setFw(String fw) {
-        this.fw = fw;
+    public void setFw_uuid(String fw_uuid) {
+        this.fw_uuid = fw_uuid;
     }
 
     public Integer getOccupation() {
@@ -194,9 +179,40 @@ public class Demographic extends BaseObservable implements Parcelable {
         this.occupation = occupation;
     }
 
+    public String getReligion_oth() {
+        return religion_oth;
+    }
+
+    public void setReligion_oth(String religion_oth) {
+        this.religion_oth = religion_oth;
+    }
+
+    public String getTribe_oth() {
+        return tribe_oth;
+    }
+
+    public void setTribe_oth(String tribe_oth) {
+        this.tribe_oth = tribe_oth;
+    }
+
+    public Integer getComp_yrs() {
+        return comp_yrs;
+    }
+
+    public void setComp_yrs(Integer comp_yrs) {
+        this.comp_yrs = comp_yrs;
+    }
+
+    public String getOccupation_oth() {
+        return occupation_oth;
+    }
+
+    public void setOccupation_oth(String occupation_oth) {
+        this.occupation_oth = occupation_oth;
+    }
 
     protected Demographic(Parcel in) {
-        this.extId = in.readString();
+        this.individual_uuid = in.readString();
         this.insertDate = (Date) in.readSerializable();
         this.marital = in.readInt();
         this.education = in.readInt();
@@ -205,7 +221,7 @@ public class Demographic extends BaseObservable implements Parcelable {
         this.tribe = in.readInt();
         this.Phone1 = in.readString();
         this.phone2 = in.readString();
-        this.fw = in.readString();
+        this.fw_uuid = in.readString();
     }
 
     public static final Creator<Demographic> CREATOR = new Creator<Demographic>() {
@@ -227,7 +243,7 @@ public class Demographic extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.extId);
+        dest.writeString(this.individual_uuid);
         dest.writeSerializable(this.insertDate);
         dest.writeInt(this.marital);
         dest.writeInt(this.education);
@@ -236,7 +252,7 @@ public class Demographic extends BaseObservable implements Parcelable {
         dest.writeInt(this.tribe);
         dest.writeString(this.Phone1);
         dest.writeString(this.phone2);
-        dest.writeString(this.fw);
+        dest.writeString(this.fw_uuid);
     }
 
     //SPINNERS ENTITY TRIBE

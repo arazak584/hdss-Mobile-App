@@ -15,7 +15,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.fragment.IndividualFragment;
+import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.fragment.MotherDialogFragment;
 
 import java.util.ArrayList;
@@ -31,6 +31,7 @@ public class MotherAdapter extends RecyclerView.Adapter<MotherAdapter.ViewHolder
     private Socialgroup socialgroup;
     private Residency residency;
     private List<Individual> individualList;
+    private CaseItem caseItem;
 
     public MotherAdapter(MotherDialogFragment activity, Residency residency, Location location, Socialgroup socialgroup) {
         this.activity = activity;
@@ -77,8 +78,8 @@ public class MotherAdapter extends RecyclerView.Adapter<MotherAdapter.ViewHolder
         holder.lastname.setText(individual.getLastName());
 
         holder.linearLayout.setOnClickListener(v -> {
-            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                    IndividualFragment.newInstance(individual, residency, location, socialgroup )).commit();
+            //activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                   // IndividualFragment.newInstance(individual, residency, location, socialgroup,caseItem )).commit();
         });
     }
 
@@ -107,7 +108,7 @@ public class MotherAdapter extends RecyclerView.Adapter<MotherAdapter.ViewHolder
 
             if(location != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveByMother(location.getExtId());
+                    List<Individual> list = individualViewModel.retrieveByMother(location.getCompextId());
 
                     if (list != null) {
                         individualList.addAll(list);

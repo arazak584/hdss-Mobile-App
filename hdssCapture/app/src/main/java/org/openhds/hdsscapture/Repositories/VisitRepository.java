@@ -42,6 +42,15 @@ public class VisitRepository {
         return future.get();
     }
 
+    public Visit find(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Visit> callable = () -> dao.find(id);
+
+        Future<Visit> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Visit> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Visit>> callable = () -> dao.retrieveToSync();

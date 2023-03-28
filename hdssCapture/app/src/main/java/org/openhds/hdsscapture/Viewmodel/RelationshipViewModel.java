@@ -30,6 +30,10 @@ public class RelationshipViewModel extends AndroidViewModel {
         return relationshipRepository.findToSync();
     }
 
+    public Relationship find(String id) throws ExecutionException, InterruptedException {
+        return relationshipRepository.find(id);
+    }
+
     public void add(Relationship data){ relationshipRepository.create(data);}
 
     public void add(Relationship... data){

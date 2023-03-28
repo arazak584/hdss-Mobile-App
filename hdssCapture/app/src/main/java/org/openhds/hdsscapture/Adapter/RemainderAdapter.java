@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Location;
-import org.openhds.hdsscapture.entity.Village;
 import org.openhds.hdsscapture.fragment.RemainderFragment;
 
 import java.util.ArrayList;
@@ -24,12 +24,12 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
     RemainderFragment activity;
     LayoutInflater inflater;
     private List<Location> locationList;
-    private Village villageData;
+    private Hierarchy level5Data;
 
 
-    public RemainderAdapter(RemainderFragment activity, Village villageData) {
+    public RemainderAdapter(RemainderFragment activity, Hierarchy level5Data) {
         this.activity = activity;
-        this.villageData = villageData;
+        this.level5Data = level5Data;
         locationList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -66,10 +66,10 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
     public void onBindViewHolder(@NonNull RemainderAdapter.ViewHolder holder, int position) {
         final Location location = locationList.get(position);
 
-        holder.extId.setText(location.getExtId());
+        holder.extId.setText(location.getCompextId());
         holder.locationname.setText(location.getLocationName());
         holder.compno.setText(location.getCompno());
-        holder.cluster.setText(location.getClusterId());
+        holder.cluster.setText(location.villcode);
         holder.longitude.setText(location.getLongitude());
         holder.latitude.setText(location.getLatitude());
 
@@ -84,9 +84,9 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
     public void filter(String charText, LocationViewModel locationViewModel) {
         locationList.clear();
 
-            if(villageData != null)
+            if(level5Data != null)
                 try {
-                    List<Location> list = locationViewModel.retrieveByVillage(villageData.getName());
+                    List<Location> list = locationViewModel.retrieveByVillage(level5Data.getName());
 
                     if (list != null) {
                         locationList.addAll(list);

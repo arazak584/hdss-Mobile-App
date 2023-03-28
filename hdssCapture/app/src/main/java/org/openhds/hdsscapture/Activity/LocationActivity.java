@@ -12,44 +12,52 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.entity.Cluster;
-import org.openhds.hdsscapture.entity.Village;
-import org.openhds.hdsscapture.fragment.BlankFragment;
+import org.openhds.hdsscapture.entity.Hierarchy;
+import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
 
 public class LocationActivity extends AppCompatActivity {
 
-    public static final String LOCATION_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.LOCATION_DATA";
+    public static Location TOP_LOCATION = new Location();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
-        final TextView textView_Username = findViewById(R.id.text_Fieldworker);
-        final Intent p = getIntent();
-        String name = p.getStringExtra("username");
-        textView_Username.setText(" "+ name);
-
-
-        final Intent intent = getIntent();
-        final Cluster clusterData = intent.getParcelableExtra(HierarchyActivity.CLUSTER_DATA);
+        final Intent j = getIntent();
+        final Hierarchy level5Data = j.getParcelableExtra(HierarchyActivity.LEVEL5_DATA);
 
         final Intent i = getIntent();
-        final Village villageData = i.getParcelableExtra(HierarchyActivity.VILLAGE_DATA);
+        final Hierarchy level6Data = i.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
 
 
-        final TextView cluster = findViewById(R.id.text_Cluster);
-        cluster.setText(clusterData.getExtId());
+        final TextView level5 = findViewById(R.id.level5);
+        final TextView level6 = findViewById(R.id.level6);
 
-        final TextView villageInfo = findViewById(R.id.text_Village);
-        villageInfo.setText(villageData.getName());
+        if (level5Data != null) {
+            level5.setText(level5Data.getName());
+        } else {
+            // Handle the case where location is null
+            level6.setText("Error loading Village data");
+        }
 
-        loadFragment(BlankFragment.newInstance(clusterData));
+        if (level6Data != null) {
+            level6.setText(level6Data.getVillcode());
+        } else {
+            // Handle the case where location is null
+            level6.setText("Error loading Location data");
+        }
 
-        final ExtendedFloatingActionButton home = findViewById(R.id.homeAction);
+
+
+        loadFragment(ClusterFragment.newInstance(level6Data));
+
+        final ExtendedFloatingActionButton home = findViewById(R.id.home);
         home.setOnClickListener(view -> {
-            loadFragment(BlankFragment.newInstance(clusterData));
+            loadFragment(ClusterFragment.newInstance(level6Data));
         });
+
     }
 
     private void loadFragment(Fragment fragment) {
@@ -58,9 +66,7 @@ public class LocationActivity extends AppCompatActivity {
         // create a FragmentTransaction to begin the transaction and replace the Fragment
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         // replace the FrameLayout with new Fragment
-        fragmentTransaction.replace(R.id.container_main, fragment);
+        fragmentTransaction.replace(R.id.container_cluster, fragment);
         fragmentTransaction.commit(); // save the changes
     }
-
-
 }

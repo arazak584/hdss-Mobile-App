@@ -13,6 +13,7 @@ import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -26,35 +27,37 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@Entity(tableName = "socialgroup")
+@Entity(tableName = "socialgroup",
+        indices = {@Index(value = {"socialgroup_uuid","individual_uuid"}, unique = false)})
 public class Socialgroup extends BaseObservable implements Parcelable {
 
-    @SerializedName("extId")
+    @SerializedName("socialgroup_uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "extId")
+    @ColumnInfo(name = "socialgroup_uuid")
     @PrimaryKey
-    public String extId;
+    public String socialgroup_uuid;
+
+    @ColumnInfo(name = "houseExtId")
+    public String houseExtId;
 
     @SerializedName("groupName")
     @Expose
     @ColumnInfo(name = "groupName")
     public String groupName;
 
-    @SerializedName("headid")
     @Expose
-    @ColumnInfo(name = "headid")
-    public String headid;
+    public String individual_uuid;
 
     @SerializedName("insertDate")
     @Expose
     @ColumnInfo(name = "insertDate")
     public Date insertDate;
 
-    @SerializedName("fw")
+    @SerializedName("fw_uuid")
     @Expose
-    @ColumnInfo(name = "fw")
-    public String fw;
+    @ColumnInfo(name = "fw_uuid")
+    public String fw_uuid;
 
     @SerializedName("groupType")
     @Expose
@@ -69,22 +72,22 @@ public class Socialgroup extends BaseObservable implements Parcelable {
     public Socialgroup(){}
 
     @Ignore
-    public Socialgroup(@NotNull String extId, String groupName, String headid, Date insertDate, String fw, Integer groupType) {
-        this.extId = extId;
+    public Socialgroup(@NotNull String houseExtId, String groupName, String individual_uuid, Date insertDate, String fw_uuid, Integer groupType) {
+        this.houseExtId = houseExtId;
         this.groupName = groupName;
-        this.headid = headid;
+        this.individual_uuid = individual_uuid;
         this.insertDate = insertDate;
-        this.fw = fw;
+        this.fw_uuid = fw_uuid;
         this.groupType = groupType;
     }
 
     @NotNull
-    public String getExtId() {
-        return extId;
+    public String getHouseExtId() {
+        return houseExtId;
     }
 
-    public void setExtId(@NotNull String extId) {
-        this.extId = extId;
+    public void setHouseExtId(@NotNull String houseExtId) {
+        this.houseExtId = houseExtId;
     }
 
 
@@ -96,12 +99,12 @@ public class Socialgroup extends BaseObservable implements Parcelable {
         this.groupName = groupName;
     }
 
-    public String getHeadid() {
-        return headid;
+    public String getIndividual_uuid() {
+        return individual_uuid;
     }
 
-    public void setHeadid(String headid) {
-        this.headid = headid;
+    public void setIndividual_uuid(String individual_uuid) {
+        this.individual_uuid = individual_uuid;
     }
 
     @Ignore
@@ -123,12 +126,21 @@ public class Socialgroup extends BaseObservable implements Parcelable {
             }
     }
 
-    public String getFw() {
-        return fw;
+    @NotNull
+    public String getSocialgroup_uuid() {
+        return socialgroup_uuid;
     }
 
-    public void setFw(String fw) {
-        this.fw = fw;
+    public void setSocialgroup_uuid(@NotNull String socialgroup_uuid) {
+        this.socialgroup_uuid = socialgroup_uuid;
+    }
+
+    public String getFw_uuid() {
+        return fw_uuid;
+    }
+
+    public void setFw_uuid(String fw_uuid) {
+        this.fw_uuid = fw_uuid;
     }
 
     public Integer getGroupType() {
@@ -148,11 +160,11 @@ public class Socialgroup extends BaseObservable implements Parcelable {
     }
 
     protected Socialgroup(Parcel in) {
-        this.extId = in.readString();
+        this.houseExtId = in.readString();
         this.groupName = in.readString();
-        this.headid = in.readString();
+        this.individual_uuid = in.readString();
         this.insertDate = (java.util.Date) in.readSerializable();
-        this.fw = in.readString();
+        this.fw_uuid = in.readString();
         this.groupType = in.readInt();
     }
 
@@ -174,17 +186,17 @@ public class Socialgroup extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.extId);
+        dest.writeString(this.houseExtId);
         dest.writeString(this.groupName);
-        dest.writeString(this.headid);
+        dest.writeString(this.individual_uuid);
         dest.writeSerializable(this.insertDate);
-        dest.writeString(this.fw);
+        dest.writeString(this.fw_uuid);
         dest.writeInt(this.groupType);
     }
 
     @Override
     public String toString() {
-        return extId;
+        return houseExtId;
     }
 
     //SPINNERS ENTITY FOR FAMILY TYPE

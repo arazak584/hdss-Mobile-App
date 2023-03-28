@@ -26,7 +26,15 @@ public class InmigrationViewModel extends AndroidViewModel {
         return inmigrationRepository.findAll();
     }
 
+    public List<Inmigration> findimgToSync() throws ExecutionException, InterruptedException {
+        return inmigrationRepository.findimgToSync();
+    }
+
+    public Inmigration find(String id) throws ExecutionException, InterruptedException {
+        return inmigrationRepository.find(id);
+    }
+
     public void add(Inmigration data){ inmigrationRepository.create(data);}
 
-    //public void add(Death... data){     deathRepository.create(data);  }
+    public void add(Inmigration... data){     inmigrationRepository.create(data);  }
 }

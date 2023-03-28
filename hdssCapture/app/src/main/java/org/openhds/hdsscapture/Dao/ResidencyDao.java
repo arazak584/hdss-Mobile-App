@@ -34,12 +34,15 @@ public interface ResidencyDao {
     @Query("SELECT * FROM residency")
     List<Residency> retrieve();
 
+    @Query("SELECT * FROM residency where individual_uuid=:id")
+    Residency find(String id);
+
     @Query("SELECT * FROM residency WHERE complete=1")
     List<Residency> retrieveToSync();
 
-    @Query("SELECT extId,insertDate,migType,origin,reason,startDate as recordedDate,uuid,visitid FROM residency WHERE complete=1 and startType=1")
+    @Query("SELECT * FROM residency WHERE complete=1 and startType=1")
     List<Residency> retrieveimgToSync();
 
-    @Query("SELECT extId,insertDate,destination,omgreason as reason,endDate as recordedDate,uuid,visitid FROM residency WHERE complete=1 and startType=2")
+    @Query("SELECT * FROM residency WHERE complete=1 and startType=2")
     List<Residency> retrieveomgToSync();
 }

@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
-import org.openhds.hdsscapture.entity.Cluster;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.fragment.BlankFragment;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
 import org.openhds.hdsscapture.fragment.LocationFragment;
 
 import java.util.ArrayList;
@@ -24,19 +24,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
-public class LocationViewAdapter extends RecyclerView.Adapter<LocationViewAdapter.ViewHolder> {
+public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
 
-    BlankFragment activity;
+    ClusterFragment activity;
     LayoutInflater inflater;
     private List<Location> locationList;
-    private Cluster clusterData;
+    private Hierarchy level6Data;
     private Socialgroup socialgroup;
     private Residency residency;
     private Individual individual;
 
-    public LocationViewAdapter(BlankFragment activity, Cluster clusterData) {
+    public LocationAdapter(ClusterFragment activity, Hierarchy level6Data) {
         this.activity = activity;
-        this.clusterData = clusterData;
+        this.level6Data = level6Data;
         locationList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
 
@@ -45,15 +45,13 @@ public class LocationViewAdapter extends RecyclerView.Adapter<LocationViewAdapte
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView extId, locationname, compno, cluster, longitude, latitude;
+        TextView locationname, compno, longitude, latitude;
         LinearLayout linearLayout;
 
         public ViewHolder(View view) {
             super(view);
-            this.extId = view.findViewById(R.id.locationView_extid);
             this.locationname = view.findViewById(R.id.Location_name);
             this.compno = view.findViewById(R.id.location_compno);
-            this.cluster = view.findViewById(R.id.location_cluster);
             this.longitude = view.findViewById(R.id.longitude);
             this.latitude = view.findViewById(R.id.latitude);
             this.linearLayout = view.findViewById(R.id.searchedItem);
@@ -78,16 +76,14 @@ public class LocationViewAdapter extends RecyclerView.Adapter<LocationViewAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Location location = locationList.get(position);
 
-        holder.extId.setText(location.getExtId());
         holder.locationname.setText(location.getLocationName());
         holder.compno.setText(location.getCompno());
-        holder.cluster.setText(location.getClusterId());
         holder.longitude.setText(location.getLongitude());
         holder.latitude.setText(location.getLatitude());
 
         holder.linearLayout.setOnClickListener(v -> {
-            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                    LocationFragment.newInstance(clusterData, location, socialgroup, residency, individual)).commit();
+            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    LocationFragment.newInstance(level6Data, location, socialgroup, residency, individual)).commit();
         });
 
     }
@@ -116,9 +112,9 @@ public class LocationViewAdapter extends RecyclerView.Adapter<LocationViewAdapte
             }
         } else {
 
-            if(clusterData != null)
+            if(level6Data != null)
             try {
-                List<Location> list = locationViewModel.findLocationsOfCluster(clusterData.getExtId());
+                List<Location> list = locationViewModel.findLocationsOfCluster(level6Data.getUuid());
 
                 if (list != null) {
                     locationList.addAll(list);

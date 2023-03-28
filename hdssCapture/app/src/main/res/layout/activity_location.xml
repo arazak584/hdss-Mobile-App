@@ -25,7 +25,7 @@
             android:orientation="horizontal">
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:id="@+id/homeAction"
+                android:id="@+id/home"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
@@ -44,34 +44,26 @@
 
 
                 <TextView
-                    android:id="@+id/text_Village"
+                    android:id="@+id/level5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="@color/magenta"
+                    android:textSize="25sp"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
                     android:textAlignment="center" />
 
-                <TextView
-                    android:id="@+id/text_Cluster"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:textSize="15sp"
-                    android:textColor="@color/magenta"
-                    android:textStyle="bold" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layout_manu1"
-                android:layout_width="200dp"
+                android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
 
                 <TextView
-                    android:id="@+id/text_Fieldworker"
+                    android:id="@+id/level6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="25sp"
@@ -83,20 +75,19 @@
 
 
 
+
         </LinearLayout>
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/container_main"
-            android:name="org.openhds.hdsscapture.fragment.BlankFragment"
+            android:id="@+id/container_cluster"
+            android:name="org.openhds.hdsscapture.fragment.ClusterFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            tools:layout="@layout/fragment_blank" />
+            tools:layout="@layout/fragment_cluster" />
 
     </LinearLayout>
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

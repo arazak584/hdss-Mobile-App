@@ -26,7 +26,7 @@ public interface SocialgroupDao {
     @Update
     void update(Socialgroup socialgroup);
 
-    @Query("SELECT * FROM socialgroup WHERE extid=:id")
+    @Query("SELECT * FROM socialgroup WHERE houseExtId=:id")
     Socialgroup retrieve(String id);
 
     @Query("SELECT * FROM socialgroup WHERE complete=1")
@@ -44,8 +44,8 @@ public interface SocialgroupDao {
     @Query("SELECT COUNT(*) FROM socialgroup")
     int count();
 
-    @Query("SELECT a.*,location FROM socialgroup as a " + "INNER JOIN residency as b ON a.extId = b.socialgroup" +
-            " INNER JOIN location as c on b.location=c.extId " +
-            " WHERE b.endType=1 and b.location=:id GROUP BY a.extId ")
+    @Query("SELECT a.*,compextId FROM socialgroup as a " + "INNER JOIN residency as b ON a.socialgroup_uuid = b.socialgroup_uuid" +
+            " INNER JOIN location as c on b.location_uuid=c.location_uuid " +
+            " WHERE b.endType=1 and c.compextId=:id GROUP BY a.houseExtId ")
     List<Socialgroup> retrieveBySocialgroup(String id);
 }

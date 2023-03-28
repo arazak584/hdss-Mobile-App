@@ -16,8 +16,8 @@ import org.openhds.hdsscapture.Adapter.RemainderAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.databinding.FragmentRemainderBinding;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Location;
-import org.openhds.hdsscapture.entity.Village;
 import org.openhds.hdsscapture.entity.Visit;
 
 /**
@@ -31,7 +31,7 @@ public class RemainderFragment extends Fragment {
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private final String TAG = "LOCATION.TAG";
 
-    private Village villageData;
+    private Hierarchy level5Data;
     private Location location;
     private Visit visit;
     private FragmentRemainderBinding binding;
@@ -45,14 +45,14 @@ public class RemainderFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param villageData Parameter 1.
+     * @param level5Data Parameter 1.
      * @return A new instance of fragment RemainderFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static RemainderFragment newInstance(Village villageData) {
+    public static RemainderFragment newInstance(Hierarchy level5Data) {
         RemainderFragment fragment = new RemainderFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_VILLAGE_ID, villageData);
+        args.putParcelable(ARG_VILLAGE_ID, level5Data);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,7 +62,7 @@ public class RemainderFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            villageData = getArguments().getParcelable(ARG_VILLAGE_ID);
+            level5Data = getArguments().getParcelable(ARG_VILLAGE_ID);
         }
     }
 
@@ -73,7 +73,7 @@ public class RemainderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_remainder, container, false);
 
         final RecyclerView recyclerView = view.findViewById(R.id.remainlist);
-        final RemainderAdapter adapter = new RemainderAdapter(this, villageData);
+        final RemainderAdapter adapter = new RemainderAdapter(this, level5Data);
         final LocationViewModel locationViewModel = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
 
         //recyclerView.setHasFixedSize(true);

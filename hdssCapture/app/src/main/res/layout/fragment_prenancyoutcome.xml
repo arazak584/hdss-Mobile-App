@@ -62,7 +62,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/fw"
-                android:text="@={pregoutcome.fw}"
+                android:text="@={pregoutcome.fw_uuid}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"/>
@@ -108,7 +108,7 @@
                 android:id="@+id/preg_mother"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome.mother}"
+                android:text="@={pregoutcome.mother_uuid}"
                 android:required="true"
                 android:inputType="textPersonName|textCapCharacters"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -134,7 +134,7 @@
                 android:id="@+id/preg_father"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome.father}"
+                android:text="@={pregoutcome.father_uuid}"
                 android:required="true"
                 android:inputType="textPersonName|textCapCharacters"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -152,7 +152,7 @@
                 android:id="@+id/uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome.uuid}"
+                android:text="@={pregoutcome.preg_uuid}"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -169,7 +169,7 @@
                 android:id="@+id/visitid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome.visitid}"
+                android:text="@={pregoutcome.visit_uuid}"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 

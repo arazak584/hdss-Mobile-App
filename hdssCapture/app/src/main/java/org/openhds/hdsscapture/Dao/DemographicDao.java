@@ -41,5 +41,7 @@ public interface DemographicDao {
     @Query("SELECT * FROM demographic WHERE complete=1")
     List<Demographic> retrieveToSync();
 
+    @Query("SELECT * FROM demographic where individual_uuid=:id")
+    Demographic find(String id);
 
 }

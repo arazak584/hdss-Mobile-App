@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -16,63 +15,96 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Viewmodel.ClusterViewModel;
-import org.openhds.hdsscapture.Viewmodel.CountryViewModel;
-import org.openhds.hdsscapture.Viewmodel.DistrictViewModel;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
-import org.openhds.hdsscapture.Viewmodel.RegionViewModel;
+import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
-import org.openhds.hdsscapture.Viewmodel.SubdistrictViewModel;
-import org.openhds.hdsscapture.Viewmodel.VillageViewModel;
-import org.openhds.hdsscapture.entity.Cluster;
-import org.openhds.hdsscapture.entity.Country;
-import org.openhds.hdsscapture.entity.District;
 import org.openhds.hdsscapture.entity.Fieldworker;
-import org.openhds.hdsscapture.entity.Location;
-import org.openhds.hdsscapture.entity.Region;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Round;
-import org.openhds.hdsscapture.entity.Subdistrict;
-import org.openhds.hdsscapture.entity.Village;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class HierarchyActivity extends AppCompatActivity {
 
-    ExtendedFloatingActionButton addfab;
-    private Cluster clusterData;
-    private Village villageData;
-    private Location locationData;
-    public static final String LOCATION_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.LOCATION_DATA";
-    public static final String VILLAGE_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.VILLAGE_DATA";
-    public static final String CLUSTER_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.CLUSTER_DATA";
 
-    Button addlocation;
+    private Round roundData;
+    private Hierarchy level6Data;
+    private Hierarchy level5Data;
+    private Fieldworker fieldworkerData;
+    private ArrayAdapter<Hierarchy> level1Adapter;
+    private ArrayAdapter<Hierarchy> level2Adapter;
+    private ArrayAdapter<Hierarchy> level3Adapter;
+    private ArrayAdapter<Hierarchy> level4Adapter;
+    private ArrayAdapter<Hierarchy> level5Adapter;
+    private ArrayAdapter<Hierarchy> level6Adapter;
 
+    private List<Hierarchy> level1List = new ArrayList<>();
+    private List<Hierarchy> level2List = new ArrayList<>();
+    private List<Hierarchy> level3List = new ArrayList<>();
+    private List<Hierarchy> level4List = new ArrayList<>();
+    private List<Hierarchy> level5List = new ArrayList<>();
+    private List<Hierarchy> level6List = new ArrayList<>();
+
+    public static final String ROUND_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.ROUND_DATA";
+    public static final String LEVEL5_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.LEVEL5_DATA";
+    public static final String LEVEL6_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.LEVEL6_DATA";
+    public static final String FIELDWORKER_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.FIELDWORKER_DATA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hierarchy);
 
-        final CountryViewModel countryViewModel = new ViewModelProvider(this).get(CountryViewModel.class);
-        final RegionViewModel regionViewModel = new ViewModelProvider(this).get(RegionViewModel.class);
-        final DistrictViewModel districtViewModel = new ViewModelProvider(this).get(DistrictViewModel.class);
-        final SubdistrictViewModel subdistrictViewModel = new ViewModelProvider(this).get(SubdistrictViewModel.class);
-        final VillageViewModel villageViewModel = new ViewModelProvider(this).get(VillageViewModel.class);
-        final ClusterViewModel clusterViewModel = new ViewModelProvider(this).get(ClusterViewModel.class);
         final FieldworkerViewModel fieldworkerViewModel = new ViewModelProvider(this).get(FieldworkerViewModel.class);
         final RoundViewModel roundViewModel = new ViewModelProvider(this).get(RoundViewModel.class);
+        final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(this).get(HierarchyViewModel.class);
 
-        final Spinner countrySpinner = findViewById(R.id.spinnerCountry);
-        final Spinner regionSpinner = findViewById(R.id.spinnerRegion);
-        final Spinner districtSpinner = findViewById(R.id.spinnerDistrict);
-        final Spinner subdistrictSpinner = findViewById(R.id.spinnerSubdistrict);
-        final Spinner villageSpinner = findViewById(R.id.spinnerVillage);
-        final Spinner clusterSpinner = findViewById(R.id.spinnerCluster);
-        final Spinner roundSpinner = findViewById(R.id.spinnerRound);
+        final Spinner level1Spinner = findViewById(R.id.spCountry);
+        final Spinner level2Spinner = findViewById(R.id.spRegion);
+        final Spinner level3Spinner = findViewById(R.id.spDistrict);
+        final Spinner level4Spinner = findViewById(R.id.spSubdistrict);
+        final Spinner level5Spinner = findViewById(R.id.spVillage);
+        final Spinner level6Spinner = findViewById(R.id.spCluster);
+        //final Spinner level7Spinner = findViewById(R.id.spCluster);
+        final Spinner roundSpinner = findViewById(R.id.spRound);
 
-        final EditText username = findViewById(R.id.editTextUsername);
+        final EditText username = findViewById(R.id.login_username);
+
+        // set adapters to spinners
+        level1Spinner.setAdapter(level1Adapter);
+        level2Spinner.setAdapter(level2Adapter);
+        level3Spinner.setAdapter(level3Adapter);
+        level4Spinner.setAdapter(level4Adapter);
+        level5Spinner.setAdapter(level5Adapter);
+        level6Spinner.setAdapter(level6Adapter);
+
+        // Initialize adapters
+        level1Adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        level1Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        level1Spinner.setAdapter(level1Adapter);
+
+        level2Adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        level2Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        level2Spinner.setAdapter(level2Adapter);
+
+        level3Adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        level3Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        level3Spinner.setAdapter(level3Adapter);
+
+        level4Adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        level4Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        level4Spinner.setAdapter(level4Adapter);
+
+        level5Adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        level5Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        level5Spinner.setAdapter(level5Adapter);
+
+        level6Adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        level6Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        level6Spinner.setAdapter(level6Adapter);
+
 
         int ccSize = loadRoundData(roundSpinner, roundViewModel);
         if(ccSize > 1) {
@@ -83,8 +115,12 @@ public class HierarchyActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                if(position==0){
+                if(position==0) {
+                    roundData = null;
+                }else
+                {
                     final Round data = (Round) parent.getItemAtPosition(position);
+                    roundData = data;
 
                 }
 
@@ -96,192 +132,205 @@ public class HierarchyActivity extends AppCompatActivity {
             }
         });
 
-        int cSize = loadCountryData(countrySpinner, countryViewModel);
-        if(cSize > 1) {
-            countrySpinner.setSelection(1);
+        // Load level 1 data
+        try {
+            List<Hierarchy> level1Data = hierarchyViewModel.retrieveLevel1();
+            level1Adapter.addAll(level1Data);
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error loading data", Toast.LENGTH_SHORT).show();
         }
 
-        countrySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        // Set listener for level 1 spinner
+        level1Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Hierarchy selectedLevel1 = level1Adapter.getItem(position);
 
-                if(position==0){
-                    callable(regionSpinner, new Region[0]);
-                } else {
-                    final Country data = (Country) parent.getItemAtPosition(position);
-                    int rSize = loadRegionData(regionSpinner, regionViewModel, data.getExtId());
-                    if(rSize > 1) {
-                        regionSpinner.setSelection(1);
-                    }
+                // Load level 2 data
+                if(position==0)
+                try {
+                    List<Hierarchy> level2Data = hierarchyViewModel.retrieveLevel2(selectedLevel1.getUuid());
+                    level2Data.add(0,new Hierarchy("","Select Region"));
+                    level2Adapter.clear();
+                    level2Adapter.addAll(level2Data);
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                    Toast.makeText(HierarchyActivity.this, "Error loading data", Toast.LENGTH_SHORT).show();
                 }
-                callable(districtSpinner, new District[0]);
-                callable(subdistrictSpinner, new Subdistrict[0]);
-                callable(villageSpinner, new Village[0]);
-                callable(clusterSpinner, new Cluster[0]);
-                //callable(locationSpinner, new Location[0]);
 
+                // Reset level 3 spinner
+                level3Adapter.clear();
+                level4Adapter.clear();
+                level5Adapter.clear();
+                level6Adapter.clear();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
-        //Region Filter
-        regionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        // Set listener for level 2 spinner
+        level2Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                if(position==0){
-                    callable(districtSpinner, new District[0]);
-                } else {
-                    final Region data = (Region) parent.getItemAtPosition(position);
-                    loadDistrictData(districtSpinner, districtViewModel, data.getExtId());
-                    if(districtSpinner.getAdapter()!=null && !districtSpinner.getAdapter().isEmpty()){
-                    }
+                Hierarchy selectedLevel2 = level2Adapter.getItem(position);
+                // Load level 3 data
+                try {
+                    List<Hierarchy> level3Data = hierarchyViewModel.retrieveLevel3(selectedLevel2.getUuid());
+                    if(position == 0){ level3Data = null;} else{
+                    level3Data.add(0,new Hierarchy("","Select District"));
+                    level3Adapter.clear();
+                    level3Adapter.addAll(level3Data);}
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                    Toast.makeText(HierarchyActivity.this, "Error loading data", Toast.LENGTH_SHORT).show();
                 }
-                callable(subdistrictSpinner, new Subdistrict[0]);
-                callable(villageSpinner, new Village[0]);
-                callable(clusterSpinner, new Cluster[0]);
-                //callable(locationSpinner, new Location[0]);
 
+                // Reset level 3 spinner
+                level4Adapter.clear();
+                level5Adapter.clear();
+                level6Adapter.clear();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
-        //District
-        districtSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        // Set listener for level 3 spinner
+        level3Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Hierarchy selectedLevel3 = level3Adapter.getItem(position);
 
-                if(position==0){
-                    callable(subdistrictSpinner, new Subdistrict[0]);
-                }else {
-                    final District data = (District) parent.getItemAtPosition(position);
-                    loadSubdistrictData(subdistrictSpinner, subdistrictViewModel, data.getExtId());
+                // Load level 4 data
+                try {
+                    List<Hierarchy> level4Data = hierarchyViewModel.retrieveLevel4(selectedLevel3.getUuid());
+                    if(position == 0){ level4Data = null;} else{
+                    level4Data.add(0,new Hierarchy("","Select SubDistrict"));
+                    level4Adapter.clear();
+                    level4Adapter.addAll(level4Data);}
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                    Toast.makeText(HierarchyActivity.this, "Error loading data", Toast.LENGTH_SHORT).show();
                 }
-                callable(villageSpinner, new Village[0]);
-
+                level5Adapter.clear();
+                level6Adapter.clear();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
-        //SubDistrict Filter
-        subdistrictSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        // Set listener for level 4 spinner
+        level4Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Hierarchy selectedLevel4 = level4Adapter.getItem(position);
 
-                if(position==0){
-                    callable(villageSpinner, new Village[0]);
-                } else {
-                    final Subdistrict data = (Subdistrict) parent.getItemAtPosition(position);
-                    loadVillageData(villageSpinner, villageViewModel, data.getExtId());
+                // Load level 5 data
+                try {
+                    List<Hierarchy> level5Data = hierarchyViewModel.retrieveLevel5(selectedLevel4.getUuid());
+                    if(position == 0){ level5Data = null;} else{
+                    level5Data.add(0,new Hierarchy("","Select Village"));
+                    level5Adapter.clear();
+                    level5Adapter.addAll(level5Data);}
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                    Toast.makeText(HierarchyActivity.this, "Error loading data", Toast.LENGTH_SHORT).show();
                 }
-                callable(clusterSpinner, new Cluster[0]);
-                //callable(locationSpinner, new Location[0]);
-
+                level6Adapter.clear();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
-        //Village Spinner
-        villageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        // Set listener for level 5 spinner
+        level5Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                level5Data = level5Adapter.getItem(position);
 
-                if(position == 0){
-                    villageData = null;
-                    callable(clusterSpinner, new Cluster[0]);
-                }else {
-                    final Village data = (Village) parent.getItemAtPosition(position);
-                    villageData = data;
-                    loadClusterData(clusterSpinner, clusterViewModel, data.getExtId());
-                }
-            }
+                // Load level 6 data
+                try {
+                    List<Hierarchy> level6Data = hierarchyViewModel.retrieveLevel6(level5Data.getUuid());
+                    if(position == 0){ level6Data = null;} else{
+                        level6Data.add(0,new Hierarchy("","Select Cluster"));
+                        level6Adapter.clear();
+                        level6Adapter.addAll(level6Data);}
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        //Cluster Spinner
-        clusterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                if(position == 0){
-                    clusterData = null;
-                    //callable(locationSpinner, new Location[0]);
-                }else {
-                    final Cluster data = (Cluster) parent.getItemAtPosition(position);
-                    clusterData = data;
-                    //loadLocationData(locationSpinner, locationViewModel, data.getClusterId());
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                    Toast.makeText(HierarchyActivity.this, "Error loading data", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
+        // Set listener for level 5 spinner
+        level6Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                level6Data = level6Adapter.getItem(position);
+            }
 
-        final ExtendedFloatingActionButton start = findViewById(R.id.btn_select_location);
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+        final ExtendedFloatingActionButton start = findViewById(R.id.btn_location);
         start.setOnClickListener(v -> {
-            if (clusterData == null || clusterSpinner.getAdapter().isEmpty()) {
+            if (level6Data == null || level6Spinner.getAdapter().isEmpty()) {
                 Toast.makeText(this, "Please Select All Fields", Toast.LENGTH_LONG).show();
                 return;
             }
 
             if(username.getText().toString()==null || username.getText().toString().trim().isEmpty()){
-                username.setError("Invalid username");
-                Toast.makeText(this,"Please provide a valid username", Toast.LENGTH_LONG).show();
+                username.setError("Invalid Username");
+                Toast.makeText(this,"Please provide a valid Username", Toast.LENGTH_LONG).show();
                 return;
             }
 
-
             final String myuser = username.getText().toString();
 
-            Fieldworker fieldworker = null;
             try {
-                fieldworker = fieldworkerViewModel.finds(myuser);
+                fieldworkerData = fieldworkerViewModel.finds(myuser);
 
-            } catch (ExecutionException | InterruptedException e) {
+            } catch (ExecutionException e) {
+                Toast.makeText(this,"Something terrible went wrong", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+                return;
+            } catch (InterruptedException e) {
                 Toast.makeText(this,"Something terrible went wrong", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
                 return;
             }
 
-            if(fieldworker == null){
-                username.setError("Invalid username");
-                Toast.makeText(this,"Please provide a valid username", Toast.LENGTH_LONG).show();
+            if(fieldworkerData == null){
+                username.setError("Invalid Username");
+                Toast.makeText(this,"Please provide a valid Username", Toast.LENGTH_LONG).show();
                 return;
             }
 
-            username.setError(null);
-            final Intent i = new Intent(this, LocationActivity.class);
-            //locationData.setClusterId(clusterData.getClusterId());
-            //i.putExtra(LOCATION_DATA, locationData);
-            String usname = username.getText().toString();
-            i.putExtra("username", usname);
-            i.putExtra(VILLAGE_DATA, villageData);
-            i.putExtra(CLUSTER_DATA, clusterData);
-            startActivity(i);
+            Intent intent = new Intent(HierarchyActivity.this, LocationActivity.class);
+            intent.putExtra(ROUND_DATA, roundData);
+            intent.putExtra(LEVEL5_DATA, level5Data);
+            intent.putExtra(LEVEL6_DATA, level6Data);
+            intent.putExtra(FIELDWORKER_DATA, fieldworkerData);
+            startActivity(intent);
         });
+
+
     }
 
     private <T> void callable(Spinner spinner, T[] array){
@@ -312,102 +361,4 @@ public class HierarchyActivity extends AppCompatActivity {
 
         return listSize;
     }
-
-    private int loadCountryData(Spinner spinner, CountryViewModel viewModel){
-        int listSize = 0;
-        try {
-            List<Country> list = viewModel.findAll();
-            list.add(0,new Country("","Select Country"));
-            if(list!=null && !list.isEmpty()){
-                callable(spinner, list.toArray(new Country[0]));
-                listSize = list.size();
-            }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return listSize;
-    }
-
-    private int loadRegionData(Spinner spinner, RegionViewModel viewModel, String parent_uuid){
-        int listSize = 0;
-        try {
-            List<Region> list = viewModel.findRegionsOfCountry(parent_uuid);
-            list.add(0,new Region("","Select Region",parent_uuid));
-            if(list!=null && !list.isEmpty()){
-                callable(spinner, list.toArray(new Region[0]));
-                listSize = list.size();
-            }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return listSize;
-    }
-
-    private void loadDistrictData(Spinner spinner, DistrictViewModel viewModel, String regionId){
-        try {
-            List<District> list = viewModel.findDistrictsOfRegion(regionId);
-            list.add(0,new District("", "Select District", regionId));
-            if(list!=null && !list.isEmpty()){
-                callable(spinner, list.toArray(new District[0]));
-            }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void loadSubdistrictData(Spinner spinner, SubdistrictViewModel viewModel, String districtId){
-        try {
-            List<Subdistrict> list = viewModel.findSubdistrictsOfDistrict(districtId);
-            list.add(0,new Subdistrict("", "Select Subdistrict", districtId));
-            if(list!=null && !list.isEmpty()){
-                callable(spinner, list.toArray(new Subdistrict[0]));
-            }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void loadVillageData(Spinner spinner, VillageViewModel viewModel, String subdistrictId){
-        try {
-            List<Village> list = viewModel.findVillagesOfSubdistrict(subdistrictId);
-            list.add(0,new Village("", "Select Village", subdistrictId));
-            if(list!=null && !list.isEmpty()){
-                callable(spinner, list.toArray(new Village[0]));
-            }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void loadClusterData(Spinner spinner, ClusterViewModel viewModel, String villageId){
-        try {
-            List<Cluster> list = viewModel.findClustersOfVillage(villageId);
-            list.add(0,new Cluster("","Select Cluster", villageId));
-            if(list!=null && !list.isEmpty()){
-                callable(spinner, list.toArray(new Cluster[0]));
-            }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
 }

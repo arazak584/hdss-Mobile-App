@@ -89,7 +89,7 @@ public class HouseholdDialogFragment extends DialogFragment {
 
         final TextView compno = view.findViewById(R.id.textViewhouse_compextId);
         if (location != null) {
-            compno.setText(location.getExtId());
+            compno.setText(location.getCompno());
         } else {
             // Handle the case where location is null
             compno.setText("Error loading location data");

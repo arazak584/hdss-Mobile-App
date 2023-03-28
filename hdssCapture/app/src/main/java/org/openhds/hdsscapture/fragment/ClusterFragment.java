@@ -14,46 +14,45 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.openhds.hdsscapture.Adapter.LocationViewAdapter;
+import org.openhds.hdsscapture.Adapter.LocationAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
-import org.openhds.hdsscapture.entity.Cluster;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
 /**
-
+ * A simple {@link Fragment} subclass.
+ * Use the {@link ClusterFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BlankFragment extends Fragment {
+public class ClusterFragment extends Fragment {
 
     private static final String ARG_CLUSTER_ID = "ARG_CLUSTER_ID";
-    private Cluster clusterData;
+    private Hierarchy level6Data;
     private Socialgroup socialgroup;
     private Residency residency;
     private Individual individual;
 
 
-    public BlankFragment() {
+    public ClusterFragment() {
         // Required empty public constructor
-
     }
-
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param clusterData Parameter 1.
-     * @return A new instance of fragment BlankFragment.
+     * @param level6Data Parameter 1.
+     * @return A new instance of fragment ClusterFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BlankFragment newInstance(Cluster clusterData) {
-        BlankFragment fragment = new BlankFragment();
+    public static ClusterFragment newInstance(Hierarchy level6Data) {
+        ClusterFragment fragment = new ClusterFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_CLUSTER_ID, clusterData);
+        args.putParcelable(ARG_CLUSTER_ID, level6Data);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,7 +61,7 @@ public class BlankFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            clusterData = getArguments().getParcelable(ARG_CLUSTER_ID);
+            level6Data = getArguments().getParcelable(ARG_CLUSTER_ID);
         }
     }
 
@@ -70,10 +69,10 @@ public class BlankFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_blank, container, false);
+        View view = inflater.inflate(R.layout.fragment_cluster, container, false);
 
-        final RecyclerView recyclerView = view.findViewById(R.id.listview);
-        final LocationViewAdapter adapter = new LocationViewAdapter(this, clusterData);
+        final RecyclerView recyclerView = view.findViewById(R.id.compoundsview);
+        final LocationAdapter adapter = new LocationAdapter(this, level6Data);
         final LocationViewModel locationViewModel = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
 
         //recyclerView.setHasFixedSize(true);
@@ -87,7 +86,7 @@ public class BlankFragment extends Fragment {
         adapter.filter("", locationViewModel);
 
         // Locate the EditText in listview_main.xml
-        final SearchView editSearch = view.findViewById(R.id.search);
+        final SearchView editSearch = view.findViewById(R.id.comp_search);
         // below line is to call set on query text listener method.
         editSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -103,21 +102,16 @@ public class BlankFragment extends Fragment {
                 return false;
             }
         });
-        
 
-        final FloatingActionButton add_location = view.findViewById(R.id.button_add_location);
+        final FloatingActionButton add_location = view.findViewById(R.id.button_new_location);
         add_location.setOnClickListener(v -> {
 
             final Location location = new Location();
 
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                    LocationFragment.newInstance(clusterData, location, socialgroup, residency,individual)).commit();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    LocationFragment.newInstance(level6Data, location, socialgroup, residency,individual)).commit();
         });
-
 
         return view;
     }
-
-
-
 }

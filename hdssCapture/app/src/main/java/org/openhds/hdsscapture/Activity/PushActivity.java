@@ -17,7 +17,9 @@ import org.openhds.hdsscapture.Dao.ApiDao;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
+import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
@@ -26,7 +28,9 @@ import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
@@ -93,7 +97,7 @@ public class PushActivity extends AppCompatActivity {
 
                 for (Location elem : data.getData()) {
                     elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getExtId());
+                    Log.e("PUSH.tag", "Has value " + elem.getCompno());
                 }
 
                 final Call<DataWrapper<Location>> c_callable = dao.sendLocationdata(data);
@@ -349,22 +353,23 @@ public class PushActivity extends AppCompatActivity {
         //PUSH EVENTS DATA (INMIGRATION, OUTMIGRATION, DEATH)
         final Button buttonSendEvent = findViewById(R.id.buttonSendEvent);
         final TextView textViewSendEvent = findViewById(R.id.textViewSendEvent);
-        final ResidencyViewModel residencyViewModel1 = new ViewModelProvider(this).get(ResidencyViewModel.class);
         final DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+        final OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
+        final InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
 
-        final List<Residency> imgResidency = new ArrayList<>();
-        final List<Residency> omgResidency = new ArrayList<>();
+        final List<Inmigration> inmigrations = new ArrayList<>();
+        final List<Outmigration> outmigrations = new ArrayList<>();
         final List<Death> deathList = new ArrayList<>();
         try {
-            imgResidency.addAll(residencyViewModel1.findimgToSync());
-            omgResidency.addAll(residencyViewModel1.findomgToSync());
+            inmigrations.addAll(inmigrationViewModel.findimgToSync());
+            outmigrations.addAll(outmigrationViewModel.findomgToSync());
             deathList.addAll(deathViewModel.findToSync());
             textViewSendEvent.setText(
-                    "Inmigration(" + imgResidency.size() + ")" +
-                            ", Outmigration(" + omgResidency.size() + ")" +
+                    "Inmigration(" + inmigrations.size() + ")" +
+                            ", Outmigration(" + outmigrations.size() + ")" +
                             ", Death(" + deathList.size() + ") to send" );
             textViewSendEvent.setTextColor(Color.rgb(0, 114, 133));
-            if (imgResidency.isEmpty() && omgResidency.isEmpty() && deathList.isEmpty()) {
+            if (inmigrations.isEmpty() && outmigrations.isEmpty() && deathList.isEmpty()) {
                 buttonSendEvent.setEnabled(false);
             }
         } catch (ExecutionException | InterruptedException e) {
@@ -375,30 +380,30 @@ public class PushActivity extends AppCompatActivity {
             progress.setMessage(getResources().getString(R.string.init_syncing));
             progress.show();
 
-            final Residency[][] dA = new Residency[1][1];
-            final Residency[][] dB = new Residency[1][1];
+            final Inmigration[][] dA = new Inmigration[1][1];
+            final Outmigration[][] dB = new Outmigration[1][1];
             final Death[][] dE = new Death[1][1];
 
-            final DataWrapper<Residency> dataImg = new DataWrapper<>(imgResidency);
+            final DataWrapper<Inmigration> dataImg = new DataWrapper<>(inmigrations);
             if (dataImg.getData() != null && !dataImg.getData().isEmpty()) {
                 progress.setMessage("Sending " + dataImg.getData().size() + " Inmigration record(s)...");
 
-                for (Residency elem : dataImg.getData()) {
+                for (Inmigration elem : dataImg.getData()) {
                     elem.complete = 0;
                 }
 
-                final Call<DataWrapper<Residency>> c_callable = dao.sendInmigrationdata(dataImg);
-                c_callable.enqueue(new Callback<DataWrapper<Residency>>() {
+                final Call<DataWrapper<Inmigration>> c_callable = dao.sendInmigrationdata(dataImg);
+                c_callable.enqueue(new Callback<DataWrapper<Inmigration>>() {
                     @Override
-                    public void onResponse(@NonNull Call<DataWrapper<Residency>> call, Response<DataWrapper<Residency>> response) {
+                    public void onResponse(@NonNull Call<DataWrapper<Inmigration>> call, Response<DataWrapper<Inmigration>> response) {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            dA[0] = response.body().getData().toArray(new Residency[0]);
-                            residencyViewModel1.add(dA[0]);
+                            dA[0] = response.body().getData().toArray(new Inmigration[0]);
+                            inmigrationViewModel.add(dA[0]);
                             progress.dismiss();
-                            textViewSendEvent.setText("Inmigration(" + dA[0].length + "of" + imgResidency.size() + ") sent" +
-                                    ", Outmigration(" + omgResidency.size() + ") " +
+                            textViewSendEvent.setText("Inmigration(" + dA[0].length + "of" + inmigrations.size() + ") sent" +
+                                    ", Outmigration(" + outmigrations.size() + ") " +
                                     ", Death(" + deathList.size() + ") to send"
                             );
                             textViewSendEvent.setTextColor(Color.rgb(0, 114, 133));
@@ -407,7 +412,7 @@ public class PushActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<DataWrapper<Residency>> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<DataWrapper<Inmigration>> call, @NonNull Throwable t) {
                         progress.dismiss();
                         Toast.makeText(PushActivity.this, "Failed to send Inmigration Data", Toast.LENGTH_LONG).show();
                         Log.e(TAG, t.getMessage());
@@ -419,33 +424,33 @@ public class PushActivity extends AppCompatActivity {
                 progress.dismiss();
             }
 
-            final DataWrapper<Residency> dataOmg = new DataWrapper<>(omgResidency);
+            final DataWrapper<Outmigration> dataOmg = new DataWrapper<>(outmigrations);
             if (dataOmg.getData() != null && !dataOmg.getData().isEmpty()) {
                 progress.setMessage("Sending " + dataOmg.getData().size() + " Outmigration Data...");
 
-                for (Residency elem : dataOmg.getData()) {
+                for (Outmigration elem : dataOmg.getData()) {
                     elem.complete = 0;
                 }
 
-                final Call<DataWrapper<Residency>> c_callable = dao.sendOutmigrationdata(dataOmg);
-                c_callable.enqueue(new Callback<DataWrapper<Residency>>() {
+                final Call<DataWrapper<Outmigration>> c_callable = dao.sendOutmigrationdata(dataOmg);
+                c_callable.enqueue(new Callback<DataWrapper<Outmigration>>() {
                     @Override
-                    public void onResponse(@NonNull Call<DataWrapper<Residency>> call, Response<DataWrapper<Residency>> response) {
+                    public void onResponse(@NonNull Call<DataWrapper<Outmigration>> call, Response<DataWrapper<Outmigration>> response) {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            dB[0] = response.body().getData().toArray(new Residency[0]);
-                            residencyViewModel1.add(dB[0]);
+                            dB[0] = response.body().getData().toArray(new Outmigration[0]);
+                            outmigrationViewModel.add(dB[0]);
                             progress.dismiss();
-                            textViewSendEvent.setText("Inmigration(" + dA[0].length + " of " + imgResidency.size() + ") sent," +
-                                    ", Outmigration(" + dB[0].length + omgResidency.size() + ") sent"+
+                            textViewSendEvent.setText("Inmigration(" + dA[0].length + " of " + inmigrations.size() + ") sent," +
+                                    ", Outmigration(" + dB[0].length + outmigrations.size() + ") sent"+
                                     " Death(" + " of " + deathList.size() + ") to send"
                             );
                         }
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<DataWrapper<Residency>> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<DataWrapper<Outmigration>> call, @NonNull Throwable t) {
                         progress.dismiss();
                         Toast.makeText(PushActivity.this, "Failed to send Outmigration data ", Toast.LENGTH_LONG).show();
                         Log.e(TAG, t.getMessage());
@@ -476,8 +481,8 @@ public class PushActivity extends AppCompatActivity {
                             dE[0] = response.body().getData().toArray(new Death[0]);
                             deathViewModel.add(dE[0]);
                             progress.dismiss();
-                            textViewSendEvent.setText("Inmigration(" + dA[0].length + " of " + imgResidency.size() + ") sent" +
-                                    ", Outmigration(" + dB[0].length + " of " + omgResidency.size() + ") sent" +
+                            textViewSendEvent.setText("Inmigration(" + dA[0].length + " of " + inmigrations.size() + ") sent" +
+                                    ", Outmigration(" + dB[0].length + " of " + outmigrations.size() + ") sent" +
                                     ", Death(" + dE[0].length + " of " + deathList.size() + ") sent"
                             );
                         }

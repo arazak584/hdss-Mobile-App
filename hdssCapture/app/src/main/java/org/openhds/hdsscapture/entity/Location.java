@@ -27,16 +27,19 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity(tableName = "location",
-indices = {@Index(value = {"extId"}, unique = true)})
+indices = {@Index(value = {"location_uuid"}, unique = true)})
 public class Location extends BaseObservable implements Parcelable {
 
-    @SerializedName("extId")
+    @SerializedName("location_uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "extId")
+    @ColumnInfo(name = "location_uuid")
     @PrimaryKey
-    public String extId;
+    public String location_uuid;
 
+    @Expose
+    @ColumnInfo(name = "compextId")
+    public String compextId;
 
     @SerializedName("compno")
     @Expose
@@ -48,15 +51,15 @@ public class Location extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "insertDate")
     public Date insertDate;
 
-    @SerializedName("fw")
+    @SerializedName("fw_uuid")
     @Expose
-    @ColumnInfo(name = "fw")
-    public String fw;
+    @ColumnInfo(name = "fw_uuid")
+    public String fw_uuid;
 
-    @SerializedName("clusterId")
+    @SerializedName("locationLevel_uuid")
     @Expose
-    @ColumnInfo(name = "clusterId")
-    public String clusterId;
+    @ColumnInfo(name = "locationLevel_uuid")
+    public String locationLevel_uuid;
 
     @SerializedName("longitude")
     @Expose
@@ -87,32 +90,22 @@ public class Location extends BaseObservable implements Parcelable {
     @SerializedName("locationType")
     @Expose
     @ColumnInfo(name = "locationType")
-    public Integer locationType;
+    public Integer locationType=1;
 
-    @SerializedName("complete")
     @Expose
-    @ColumnInfo(name = "complete")
-    public Integer complete;
+    public Integer complete = AppConstants.NA;
+
+    public String villcode;
 
     public Location(){}
 
     @Ignore
-    public Location(@NotNull String extId, String compno, String locationName) {
-        this.extId = extId;
+    public Location(@NotNull String compextId, String compno, String locationName) {
+        this.compextId = compextId;
         this.compno = compno;
         this.locationName = locationName;
     }
 
-
-    @NotNull
-    @Bindable
-    public String getExtId() {
-        return extId;
-    }
-
-    public void setExtId(@NotNull String extId) {
-        this.extId = extId;
-    }
 
     @Ignore
     public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
@@ -134,21 +127,45 @@ public class Location extends BaseObservable implements Parcelable {
     }
 
     @Bindable
-    public String getFw() {
-        return fw;
+    @NotNull
+    public String getLocation_uuid() {
+        return location_uuid;
     }
 
-    public void setFw(String fw) {
-        this.fw = fw;
+    public void setLocation_uuid(@NotNull String location_uuid) {
+        this.location_uuid = location_uuid;
+
+    }
+
+    public String getCompextId() {
+        return compextId;
+    }
+
+    public void setCompextId(String compextId) {
+        this.compextId = compextId;
+        if(villcode != null && compno != null && compno.length()==6){
+            this.compextId = villcode + "00" + compno.substring(2);
+        }else{
+            this.compextId = compextId;
+        }
+    }
+
+    public String getLocationLevel_uuid() {
+        return locationLevel_uuid;
+    }
+
+    public void setLocationLevel_uuid(String locationLevel_uuid) {
+        this.locationLevel_uuid = locationLevel_uuid;
     }
 
     @Bindable
-    public String getClusterId() {
-        return clusterId;
+    @NotNull
+    public String getFw_uuid() {
+        return fw_uuid;
     }
 
-    public void setClusterId(String clusterId) {
-        this.clusterId = clusterId;
+    public void setFw_uuid(String fw_uuid) {
+        this.fw_uuid = fw_uuid;
     }
 
     @Bindable
@@ -158,11 +175,6 @@ public class Location extends BaseObservable implements Parcelable {
 
     public void setCompno(String compno) {
         this.compno = compno;
-        if(clusterId != null && compno != null && compno.length()==6){
-            this.extId = clusterId + "00" + compno.substring(2);
-        }else{
-            this.extId = "";
-        }
 
     }
 
@@ -221,12 +233,12 @@ public class Location extends BaseObservable implements Parcelable {
     }
 
     protected Location(Parcel in) {
-        this.extId = in.readString();
+        this.compextId = in.readString();
         this.locationName = in.readString();
-        this.clusterId = in.readString();
+        this.locationLevel_uuid = in.readString();
         this.compno = in.readString();
         this.insertDate = (java.util.Date) in.readSerializable();
-        this.fw = in.readString();
+        this.fw_uuid = in.readString();
         this.status = in.readInt();
         this.locationType = in.readInt();
         this.longitude = in.readString();
@@ -252,12 +264,12 @@ public class Location extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.extId);
+        dest.writeString(this.compextId);
         dest.writeString(this.locationName);
-        dest.writeString(this.clusterId);
+        dest.writeString(this.locationLevel_uuid);
         dest.writeString(this.compno);
         dest.writeSerializable(this.insertDate);
-        dest.writeString(this.fw);
+        dest.writeString(this.fw_uuid);
         dest.writeInt(this.status);
         dest.writeInt(this.locationType);
         dest.writeString(this.longitude);
@@ -268,7 +280,7 @@ public class Location extends BaseObservable implements Parcelable {
 
     @Override
     public String toString() {
-        return extId;
+        return compextId;
     }
 
 

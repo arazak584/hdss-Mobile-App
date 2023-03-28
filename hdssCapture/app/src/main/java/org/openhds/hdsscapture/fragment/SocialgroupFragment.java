@@ -21,6 +21,8 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.CaseItem;
+import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -45,6 +47,8 @@ public class SocialgroupFragment extends Fragment {
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
+    private static final String CASE_ID = "CASE_ID";
+    private static final String EVENT_ID = "EVENT_ID";
     private final String TAG = "LOCATION.TAG";
 
     //private Cluster cluster_id;
@@ -53,6 +57,8 @@ public class SocialgroupFragment extends Fragment {
     private Residency residency;
     private Individual individual;
     private FragmentSocialgroupBinding binding;
+    private CaseItem caseItem;
+    private EventForm eventForm;
 
     public SocialgroupFragment() {
         // Required empty public constructor
@@ -63,22 +69,25 @@ public class SocialgroupFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      //* @param cluster_id  Parameter 1.
-     * @param location    Parameter 2.
+     * @param location Parameter 1.
+     * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
-     * @param residency Parameter 4.
-     * @param individual Parameter 5.
+     * @param individual Parameter 4.
+     * @param caseItem Parameter 6.
+     * @param eventForm Parameter 7.
      * @return A new instance of fragment SocialgroupFragment.
      */
 
-    public static SocialgroupFragment newInstance( Location location, Socialgroup socialgroup, Residency residency, Individual individual) {
+    public static SocialgroupFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup, CaseItem caseItem, EventForm eventForm) {
 
         SocialgroupFragment fragment = new SocialgroupFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, location);
-        //args.putParcelable(ARG_CLUSTER_IDS, cluster_id);
-        args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(RESIDENCY_ID, residency);
+        args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
+        args.putParcelable(CASE_ID, caseItem);
+        args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
     }
@@ -88,11 +97,12 @@ public class SocialgroupFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            //this.cluster_id = getArguments().getParcelable(ARG_CLUSTER_IDS);
-            this.location = getArguments().getParcelable(LOC_LOCATION_IDS);
-            this.socialgroup = getArguments().getParcelable(SOCIAL_ID);
-            this.residency = getArguments().getParcelable(RESIDENCY_ID);
-            this.individual = getArguments().getParcelable(INDIVIDUAL_ID);
+            location = getArguments().getParcelable(LOC_LOCATION_IDS);
+            residency = getArguments().getParcelable(RESIDENCY_ID);
+            socialgroup = getArguments().getParcelable(SOCIAL_ID);
+            individual = getArguments().getParcelable(INDIVIDUAL_ID);
+            caseItem = getArguments().getParcelable(CASE_ID);
+            eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
 
@@ -101,14 +111,14 @@ public class SocialgroupFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentSocialgroupBinding.inflate(inflater, container, false);
-        View view = inflater.inflate(R.layout.fragment_house_visit, container, false);
+        //View view = inflater.inflate(R.layout.fragment_house_visit, container, false);
         binding.setSocialgroup(socialgroup);
 
         binding.buttonSaveClose.setOnClickListener(v -> {
             final SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
 
             final Socialgroup socialgroup = binding.getSocialgroup();
-            socialgroup.setExtId(this.socialgroup.getExtId());
+            socialgroup.setHouseExtId(this.socialgroup.getHouseExtId());
 
             boolean isExists = false;
             binding.sociagroupExtid.setError(null);
@@ -116,7 +126,7 @@ public class SocialgroupFragment extends Fragment {
             binding.groupName.setError(null);
             binding.headExtid.setError(null);
 
-            if(socialgroup.extId==null){
+            if(socialgroup.houseExtId==null){
                 isExists = true;
                 binding.sociagroupExtid.setError("HouseholdID is Required");
             }
@@ -132,7 +142,7 @@ public class SocialgroupFragment extends Fragment {
                 binding.groupName.setError("Social Group Name is Required");
             }
 
-            if(socialgroup.headid==null){
+            if(socialgroup.individual_uuid==null){
                 isExists = true;
                 binding.headExtid.setError("Head ID is Required");
             }
@@ -151,6 +161,7 @@ public class SocialgroupFragment extends Fragment {
 
         //LOAD SPINNERS
         loadCodeData(binding.selectGroupType, "groupType");
+        //loadCodeData(binding., "complete");
 
         binding.buttonSocialInsertDate.setOnClickListener(v -> {
             final Calendar c = Calendar.getInstance();
@@ -196,8 +207,8 @@ public class SocialgroupFragment extends Fragment {
             viewModel.add(finalData);
         }
         if (close) {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                    HouseVisitFragment.newInstance(individual, residency, location, socialgroup )).commit();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    EventsFragment.newInstance(individual, residency, location, socialgroup, caseItem)).commit();
         }
     }
 

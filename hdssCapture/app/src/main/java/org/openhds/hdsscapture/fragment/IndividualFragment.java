@@ -1,18 +1,20 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Calculators;
@@ -20,10 +22,12 @@ import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentIndividualBinding;
+import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -33,6 +37,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -57,6 +62,7 @@ public class IndividualFragment extends Fragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentIndividualBinding binding;;
+    private CaseItem caseItem;
 
     public IndividualFragment() {
         // Required empty public constructor
@@ -66,16 +72,20 @@ public class IndividualFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param location Parameter 1.
-     * @param residency Parameter 2.
-     * @param socialgroup Parameter 3.
+     *
+
      * @param individual Parameter 4.
+     * @param residency Parameter 2.
+     * @param location Parameter 1.
+     * @param socialgroup Parameter 3.
+     * @param caseItem Parameter 5.
      * @return A new instance of fragment IndividualFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static IndividualFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup) {
+    public static IndividualFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup, CaseItem caseItem) {
         IndividualFragment fragment = new IndividualFragment();
         Bundle args = new Bundle();
+
         args.putParcelable(LOC_LOCATION_IDS, location);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
@@ -83,6 +93,7 @@ public class IndividualFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
 
 
     @Override
@@ -103,19 +114,35 @@ public class IndividualFragment extends Fragment {
         binding = FragmentIndividualBinding.inflate(inflater, container, false);
         binding.setIndividual(individual);
 
-        if (binding.getIndividual().dob!=null) {
-            final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
-            binding.individualAge.setText("" + estimatedAge + " years old");
-            binding.dob.setError(null);
+        final Intent i = getActivity().getIntent();
+        final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
+        String father = getArguments().getString("uuid");
+
+        EditText extIdField = binding.getRoot().findViewById(R.id.father_uuid);
+        //        extIdField.setText(father);
+
+        // Generate a UUID
+        if(individual.individual_uuid == null) {
+            String uuid = UUID.randomUUID().toString();
+            String uuidString = uuid.toString().replaceAll("-", "");
+            // Set the ID of the Fieldworker object
+            binding.getIndividual().individual_uuid = uuidString;
         }
 
-        final TextView compno = binding.getRoot().findViewById(R.id.textView2_compextId);
-        final TextView compname = binding.getRoot().findViewById(R.id.textView2_compname);
-        final TextView cluster = binding.getRoot().findViewById(R.id.textView2_clusterId);
+        if(individual.fw_uuid==null){
+           binding.getIndividual().fw_uuid = fieldworkerData.getFw_uuid();
+        }
 
-        compno.setText(location.getExtId());
-        compname.setText(location.getLocationName());
-        cluster.setText(location.getClusterId());
+        // Generate a extId
+        if(individual.extId == null) {
+
+            int sequenceNumber = 1;
+            // Set the ID of the Fieldworker object
+            binding.getIndividual().extId = location.compextId+String.format("%03d", sequenceNumber);
+            sequenceNumber++;
+        }
+
 
         // Find the button view
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_individual_mother);
@@ -128,8 +155,7 @@ public class IndividualFragment extends Fragment {
                 // Show the dialog fragment
                 MotherDialogFragment.newInstance(individual, residency, location,socialgroup)
                         .show(getChildFragmentManager(), "MotherDialogFragment");
-//                MotherDialogFragment dialogFragment = new MotherDialogFragment();
-//                dialogFragment.show(getChildFragmentManager(), "MotherDialogFragment");
+
             }
         });
 
@@ -142,6 +168,12 @@ public class IndividualFragment extends Fragment {
                         .show(getChildFragmentManager(), "FatherDialogFragment");
             }
         });
+
+        if (binding.getIndividual().dob!=null) {
+            final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
+            binding.individualAge.setText("" + estimatedAge + " years old");
+            binding.dob.setError(null);
+        }
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -207,7 +239,7 @@ public class IndividualFragment extends Fragment {
 
             }
 
-            if(individual.fw==null){
+            if(individual.fw_uuid==null){
                 isExists = true;
                 binding.individualFw.setError("Fieldworker userName is Required");
             }
@@ -232,7 +264,7 @@ public class IndividualFragment extends Fragment {
 
         //LOAD SPINNERS
         loadCodeData(binding.dobAspect, "yn");
-        loadCodeData(binding.individualComplete,  "yn");
+        loadCodeData(binding.individualComplete,  "complete");
         loadCodeData(binding.gender, "gender");
 
 
@@ -257,6 +289,7 @@ public class IndividualFragment extends Fragment {
 
         if (save) {
             Individual finalData = binding.getIndividual();
+            finalData.modified = AppConstants.YES;
 
 
             if (finalData.complete != null) {
@@ -266,10 +299,14 @@ public class IndividualFragment extends Fragment {
             IndividualViewModel viewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
             viewModel.add(finalData);
         }
-        if (close) {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
+        if (save) {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    EventsFragment.newInstance(individual,residency,location, socialgroup,caseItem)).commit();
+        }else {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     HouseVisitFragment.newInstance(individual,residency,location, socialgroup)).commit();
         }
+
     }
 
     @Override

@@ -66,11 +66,11 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
         final Socialgroup socialgroup = socialgroupList.get(position);
 
         holder.name.setText(socialgroup.getGroupName());
-        holder.hhid.setText(socialgroup.getExtId());
+        holder.hhid.setText(socialgroup.getHouseExtId());
 
         holder.linearLayout.setOnClickListener(v -> {
-            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                    HouseholdDialogFragment.newInstance(individual, residency, location, socialgroup )).commit();
+            //activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                   // HouseholdDialogFragment.newInstance(individual, residency, location, socialgroup )).commit();
         });
     }
 
@@ -83,7 +83,7 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
         socialgroupList.clear();
             if(location != null)
                 try {
-                    List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(location.getExtId());
+                    List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(location.getCompextId());
 
                     if (list != null) {
                         socialgroupList.addAll(list);

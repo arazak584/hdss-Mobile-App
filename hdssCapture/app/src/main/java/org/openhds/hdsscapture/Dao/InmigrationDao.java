@@ -15,10 +15,18 @@ public interface InmigrationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create (Inmigration inmigration);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void create(Inmigration... inmigration);
 
     @Query("SELECT * FROM inmigration")
     List<Inmigration> getAll();
 
     @Query("SELECT * FROM inmigration")
     List<Inmigration> retrieve();
+
+    @Query("SELECT * FROM inmigration WHERE complete=1")
+    List<Inmigration> retrieveimgToSync();
+
+    @Query("SELECT * FROM inmigration where individual_uuid=:id")
+    Inmigration find(String id);
 }

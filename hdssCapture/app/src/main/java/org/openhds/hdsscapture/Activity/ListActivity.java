@@ -10,8 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.entity.Village;
-import org.openhds.hdsscapture.fragment.BlankFragment;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.fragment.RemainderFragment;
 
 public class ListActivity extends AppCompatActivity {
@@ -22,12 +21,12 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
 
         final Intent i = getIntent();
-        final Village villageData = i.getParcelableExtra(HierarchyActivity.VILLAGE_DATA);
+        final Hierarchy level5Data = i.getParcelableExtra(RemainderActivity.LEVEL5_DATA);
 
         final TextView villageInfo = findViewById(R.id.text_Villname);
-        villageInfo.setText(villageData.getName());
+        villageInfo.setText(level5Data.getName());
 
-        loadFragment(RemainderFragment.newInstance(villageData));
+        loadFragment(RemainderFragment.newInstance(level5Data));
 
     }
 

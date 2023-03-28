@@ -22,18 +22,18 @@ import java.util.Locale;
 @Entity(tableName = "relationship")
 public class Relationship extends BaseObservable implements Parcelable {
 
-    @SerializedName("uuid")
+    @SerializedName("rel_uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "uuid")
+    @ColumnInfo(name = "rel_uuid")
     @PrimaryKey
-    public String uuid;
+    public String rel_uuid;
 
     @Expose
-    public String extId;
+    public String individual_uuid;
 
     @Expose
-    public String extIdB;
+    public String man_uuid;
 
     @Expose
     public Date startDate;
@@ -54,7 +54,7 @@ public class Relationship extends BaseObservable implements Parcelable {
     public Integer aIsToB;
 
     @Expose
-    public String fw;
+    public String fw_uuid;
 
     @Expose
     public Integer complete;
@@ -77,36 +77,35 @@ public class Relationship extends BaseObservable implements Parcelable {
     public Relationship(){}
 
     @Ignore
-    public Relationship(@NotNull String extId, String extIdB, Date startDate, Date endDate, Date insertDate, String startType, String endType, Integer aIsToB, String fw) {
-        this.extId = extId;
-        this.extIdB = extIdB;
+    public Relationship(@NotNull String individual_uuid, String man_uuid, Date startDate, Date endDate, Date insertDate, String startType, String endType, Integer aIsToB, String fw) {
+        this.individual_uuid = individual_uuid;
+        this.man_uuid = man_uuid;
         this.startDate = startDate;
         this.endDate = endDate;
         this.insertDate = insertDate;
         this.startType = startType;
         this.endType = endType;
         this.aIsToB = aIsToB;
-        this.fw = fw;
+        this.fw_uuid = fw_uuid;
     }
 
     @Ignore
     public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
-    @NotNull
-    public String getExtId() {
-        return extId;
+    public String getIndividual_uuid() {
+        return individual_uuid;
     }
 
-    public void setExtId(@NotNull String extId) {
-        this.extId = extId;
+    public void setIndividual_uuid(String individual_uuid) {
+        this.individual_uuid = individual_uuid;
     }
 
-    public String getExtIdB() {
-        return extIdB;
+    public String getMan_uuid() {
+        return man_uuid;
     }
 
-    public void setExtIdB(String extIdB) {
-        this.extIdB = extIdB;
+    public void setMan_uuid(String man_uuid) {
+        this.man_uuid = man_uuid;
     }
 
     public String getStartDate() {
@@ -172,12 +171,12 @@ public class Relationship extends BaseObservable implements Parcelable {
     }
 
     @NotNull
-    public String getUuid() {
-        return uuid;
+    public String getRel_uuid() {
+        return rel_uuid;
     }
 
-    public void setUuid(@NotNull String uuid) {
-        this.uuid = uuid;
+    public void setRel_uuid(@NotNull String rel_uuid) {
+        this.rel_uuid = rel_uuid;
     }
 
     public Integer getMar() {
@@ -236,24 +235,24 @@ public class Relationship extends BaseObservable implements Parcelable {
         this.mrank = mrank;
     }
 
-    public String getFw() {
-        return fw;
+    public String getFw_uuid() {
+        return fw_uuid;
     }
 
-    public void setFw(String fw) {
-        this.fw = fw;
+    public void setFw_uuid(String fw_uuid) {
+        this.fw_uuid = fw_uuid;
     }
 
     protected Relationship(Parcel in) {
-        this.extId = in.readString();
-        this.extIdB = in.readString();
+        this.individual_uuid = in.readString();
+        this.man_uuid = in.readString();
         this.startDate = (Date) in.readSerializable();
         this.endDate = (Date) in.readSerializable();
         this.insertDate = (Date) in.readSerializable();
         this.startType = in.readString();
         this.endType = in.readString();
         this.aIsToB = in.readInt();
-        this.fw = in.readString();
+        this.fw_uuid = in.readString();
     }
 
     public static final Creator<Relationship> CREATOR = new Creator<Relationship>() {
@@ -275,14 +274,14 @@ public class Relationship extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.extId);
-        dest.writeString(this.extIdB);
+        dest.writeString(this.individual_uuid);
+        dest.writeString(this.man_uuid);
         dest.writeSerializable(this.startDate);
         dest.writeSerializable(this.endDate);
         dest.writeSerializable(this.insertDate);
         dest.writeString(this.startType);
         dest.writeString(this.endType);
         dest.writeInt(this.aIsToB);
-        dest.writeString(this.fw);
+        dest.writeString(this.fw_uuid);
     }
 }

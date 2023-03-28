@@ -1,24 +1,20 @@
 package org.openhds.hdsscapture.Dao;
 
 
-import org.openhds.hdsscapture.entity.Cluster;
 import org.openhds.hdsscapture.entity.CodeBook;
-import org.openhds.hdsscapture.entity.Country;
 import org.openhds.hdsscapture.entity.Death;
-import org.openhds.hdsscapture.entity.District;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
-import org.openhds.hdsscapture.entity.Region;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.Subdistrict;
-import org.openhds.hdsscapture.entity.Village;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
@@ -39,26 +35,8 @@ public interface ApiDao {
     @GET("fieldworker")
     Call<DataWrapper<Fieldworker>> getFw();
 
-    @GET("country")
-    Call<DataWrapper<Country>> getAllCountries();
-
-    @GET("region")
-    Call<DataWrapper<Region>> getAllRegions();
-
-    @GET("district")
-    Call<DataWrapper<District>> getAllDistricts();
-
     @GET("hierarchy")
     Call<DataWrapper<Hierarchy>> getAllHierarchy();
-
-    @GET("subdistrict")
-    Call<DataWrapper<Subdistrict>> getAllSubDistricts();
-
-    @GET("village")
-    Call<DataWrapper<Village>> getAllVillages();
-
-    @GET("cluster")
-    Call<DataWrapper<Cluster>> getAllClusters();
 
     @GET("task/location.zip")
     Call<ResponseBody> downloadLocation();
@@ -97,10 +75,10 @@ public interface ApiDao {
     Call<DataWrapper<Socialgroup>> sendSocialgroupdata(@Body DataWrapper<Socialgroup> dataModal);
 
     @POST("inmigration")
-    Call<DataWrapper<Residency>> sendInmigrationdata(@Body DataWrapper<Residency> dataModal);
+    Call<DataWrapper<Inmigration>> sendInmigrationdata(@Body DataWrapper<Inmigration> dataModal);
 
     @POST("outmigration")
-    Call<DataWrapper<Residency>> sendOutmigrationdata(@Body DataWrapper<Residency> dataModal);
+    Call<DataWrapper<Outmigration>> sendOutmigrationdata(@Body DataWrapper<Outmigration> dataModal);
 
     @POST("death")
     Call<DataWrapper<Death>> sendDeathdata(@Body DataWrapper<Death> dataModal);

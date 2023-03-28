@@ -13,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
 @Entity(tableName = "outcome")
 public class Outcome extends BaseObservable {
 
-    @SerializedName("uuid")
+    @SerializedName("out_uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "uuid")
+    @ColumnInfo(name = "out_uuid")
     @PrimaryKey
-    public String uuid;
+    public String out_uuid;
 
     @Expose
     public String childextId;
@@ -32,12 +32,12 @@ public class Outcome extends BaseObservable {
     public Outcome(){}
 
     @NotNull
-    public String getUuid() {
-        return uuid;
+    public String getOut_uuid() {
+        return out_uuid;
     }
 
-    public void setUuid(@NotNull String uuid) {
-        this.uuid = uuid;
+    public void setOut_uuid(@NotNull String out_uuid) {
+        this.out_uuid = out_uuid;
     }
 
     public String getChildextId() {

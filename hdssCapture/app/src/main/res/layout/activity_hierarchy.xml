@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     tools:context=".Activity.HierarchyActivity">
 
@@ -35,7 +35,7 @@
                 android:text="@string/text_round" />
 
             <Spinner
-                android:id="@+id/spinnerRound"
+                android:id="@+id/spRound"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/teal_200"
@@ -49,8 +49,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/text_country" />
 
-        <Spinner
-                android:id="@+id/spinnerCountry"
+            <Spinner
+                android:id="@+id/spCountry"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/teal_200"
@@ -65,7 +65,7 @@
                 android:text="@string/region" />
 
             <Spinner
-                android:id="@+id/spinnerRegion"
+                android:id="@+id/spRegion"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:textColor="@color/white"
@@ -81,7 +81,7 @@
                 android:text="@string/district" />
 
             <Spinner
-                android:id="@+id/spinnerDistrict"
+                android:id="@+id/spDistrict"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/teal_200"
@@ -96,7 +96,7 @@
                 android:text="@string/subdistrict" />
 
             <Spinner
-                android:id="@+id/spinnerSubdistrict"
+                android:id="@+id/spSubdistrict"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/teal_200"
@@ -111,7 +111,7 @@
                 android:text="@string/village" />
 
             <Spinner
-                android:id="@+id/spinnerVillage"
+                android:id="@+id/spVillage"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/teal_200"
@@ -126,7 +126,7 @@
                 android:text="@string/cluster" />
 
             <Spinner
-                android:id="@+id/spinnerCluster"
+                android:id="@+id/spCluster"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/teal_200"
@@ -134,27 +134,24 @@
                 android:spinnerMode="dialog"
                 tools:ignore="DuplicateSpeakableTextCheck" />
 
-
-            <TextView
-                android:id="@+id/textView"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/username" />
-
-            <EditText
-                android:id="@+id/editTextUsername"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:ems="10"
+                android:gravity="start"
+                android:padding="5dp"
                 android:hint="@string/username"
-                android:inputType="textPersonName|textCapCharacters"
-                android:minHeight="48dp"
-                android:textColorHint="#757575"
-                tools:ignore="DuplicateSpeakableTextCheck" />
+                android:text="@string/username">
 
-               <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:id="@+id/btn_select_location"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/login_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapCharacters"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/btn_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
@@ -172,8 +169,5 @@
         </LinearLayout>
 
     </ScrollView>
-
-
-
 
 </LinearLayout>

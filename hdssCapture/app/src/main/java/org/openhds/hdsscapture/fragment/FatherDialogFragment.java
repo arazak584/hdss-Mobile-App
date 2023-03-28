@@ -23,6 +23,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.CaseItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +44,7 @@ public class FatherDialogFragment extends DialogFragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentFatherDialogBinding binding;
+    private CaseItem caseItem;
 
     public FatherDialogFragment() {
         // Required empty public constructor
@@ -89,7 +91,7 @@ public class FatherDialogFragment extends DialogFragment {
 
         final TextView compno = view.findViewById(R.id.textViewfather_compextId);
         if (location != null) {
-            compno.setText(location.getExtId());
+            compno.setText(location.getCompno());
         } else {
             // Handle the case where location is null
             compno.setText("Error loading location data");
@@ -106,7 +108,7 @@ public class FatherDialogFragment extends DialogFragment {
 
         //Load Father Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_father);
-        final FatherAdapter adapter = new FatherAdapter(this, residency,location, socialgroup );
+        final FatherAdapter adapter = new FatherAdapter(this, residency,location, socialgroup,caseItem );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
         //recyclerView.setHasFixedSize(true);

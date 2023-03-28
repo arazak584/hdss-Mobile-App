@@ -22,6 +22,8 @@ import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.CaseItem;
+import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.util.ArrayList;
@@ -41,13 +43,20 @@ public class PregnancyFragment extends Fragment {
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String SOCIAL_ID = "SOCIAL_ID";
+    private static final String PREGNANCY_ID = "PREGNANCY_ID";
+    private static final String CASE_ID = "CASE_ID";
+    private static final String EVENT_ID = "EVENT_ID";
     private final String TAG = "PREGNANCY.TAG";
 
+    private Pregnancy pregnancy;
     private Location location;
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
-    private FragmentPregnancyBinding binding;;
+    private FragmentPregnancyBinding binding;
+    private EventForm eventForm;
+    private CaseItem caseItem;
+
 
     public PregnancyFragment() {
         // Required empty public constructor
@@ -61,16 +70,20 @@ public class PregnancyFragment extends Fragment {
      * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
+     * @param eventForm Parameter 7.
+     * @param caseItem Parameter 6.
      * @return A new instance of fragment PregnancyFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PregnancyFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup) {
+    public static PregnancyFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup,CaseItem caseItem,EventForm eventForm) {
         PregnancyFragment fragment = new PregnancyFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, location);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
+        args.putParcelable(CASE_ID, caseItem);
+        args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
     }
@@ -83,6 +96,8 @@ public class PregnancyFragment extends Fragment {
             residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
+            caseItem = getArguments().getParcelable(CASE_ID);
+            eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
 
@@ -91,7 +106,7 @@ public class PregnancyFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentPregnancyBinding.inflate(inflater, container, false);
-
+        binding.setPregnancy(pregnancy);
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -126,13 +141,21 @@ public class PregnancyFragment extends Fragment {
             final PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
 
             final Pregnancy pregnancy = binding.getPregnancy();
+            pregnancy.setObs_uuid(this.pregnancy.getObs_uuid());
+
+            boolean isExists = false;
+            binding.pregnancyNumber.setError(null);
+
 
         });
 
         //LOAD SPINNERS
         loadCodeData(binding.anteNatalClinic, "yn");
-        loadCodeData(binding.individualComplete, "yn");
+        loadCodeData(binding.individualComplete, "complete");
         loadCodeData(binding.ttinjection, "yn");
+        loadCodeData(binding.slpBednet, "yn");
+        loadCodeData(binding.firstPreg, "yn");
+        loadCodeData(binding.outcometype, "yn");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
@@ -144,6 +167,7 @@ public class PregnancyFragment extends Fragment {
             save(false, true);
         });
 
+        //binding.setEventname(eventForm.event_name);
         Handler.colorLayouts(requireContext(), binding.PREGNANCYLAYOUT);
         View view = binding.getRoot();
         return view;
@@ -163,8 +187,8 @@ public class PregnancyFragment extends Fragment {
             viewModel.add(finalData);
         }
         if (close) {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                    HouseVisitFragment.newInstance(individual,residency,location, socialgroup)).commit();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    EventsFragment.newInstance(individual,residency,location, socialgroup, caseItem)).commit();
         }
     }
 

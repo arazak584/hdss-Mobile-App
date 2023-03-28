@@ -42,16 +42,16 @@ public interface LocationDao {
     @Query("SELECT * FROM location WHERE complete=1")
     List<Location> retrieveToSync();
 
-    @Query("SELECT * FROM location WHERE clusterId=:id order by extId")
+    @Query("SELECT * FROM location WHERE locationLevel_uuid=:id order by compno")
     List<Location> retrieveByClusterId(String id);
 
-    @Query("SELECT * FROM location WHERE compno LIKE:id OR locationName LIKE:id OR location.extid LIKE:id OR clusterId LIKE:id order by compno")
+    @Query("SELECT * FROM location WHERE compno LIKE:id OR locationName LIKE:id OR compno LIKE:id order by compno")
     List<Location> retrieveBySearch(String id);
 
 
-    @Query("SELECT a.* FROM location as a " + "INNER JOIN cluster as b ON a.clusterId = b.extId " +
-            " INNER JOIN village as c on b.parent_uuid=c.extId " +
-            " LEFT JOIN visit as d on a.extId=d.location where c.name=:id order by a.compno")
+    @Query("SELECT a.* FROM location as a " + "INNER JOIN locationhierarchy as b ON a.locationLevel_uuid = b.uuid " +
+            " INNER JOIN locationhierarchy as c on b.parent_uuid=c.uuid " +
+            " LEFT JOIN visit as d on a.location_uuid=d.location_uuid where c.name=:id and d.location_uuid is null order by a.compno")
     List<Location> retrieveByVillage(String id);
 
 

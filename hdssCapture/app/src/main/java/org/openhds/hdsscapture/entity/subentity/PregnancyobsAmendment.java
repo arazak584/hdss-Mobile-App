@@ -1,15 +1,11 @@
 package org.openhds.hdsscapture.entity.subentity;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
+import java.util.Date;
 
-import com.google.gson.annotations.Expose;
-
-@Entity
 public class PregnancyobsAmendment {
-    @Expose
-    @PrimaryKey
-    public String uuid;
-    @Expose
+
+    public String obs_uuid;
+
     public Integer outcome;
+    public Date outcome_date;
 }

@@ -24,6 +24,9 @@ public interface DeathDao {
     @Query("SELECT * FROM death")
     List<Death> retrieve();
 
+    @Query("SELECT * FROM death where individual_uuid=:id")
+    Death find(String id);
+
     @Query("SELECT * FROM death WHERE complete=1")
     List<Death> retrieveToSync();
 }

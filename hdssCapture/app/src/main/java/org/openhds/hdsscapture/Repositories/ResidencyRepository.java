@@ -52,21 +52,13 @@ public class ResidencyRepository {
         return future.get();
     }
 
-    public List<Residency> findomgToSync() throws ExecutionException, InterruptedException {
+    public Residency find(String id) throws ExecutionException, InterruptedException {
 
-        Callable<List<Residency>> callable = () -> dao.retrieveomgToSync();
+        Callable<Residency> callable = () -> dao.find(id);
 
-        Future<List<Residency>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
-    public List<Residency> findimgToSync() throws ExecutionException, InterruptedException {
-
-        Callable<List<Residency>> callable = () -> dao.retrieveimgToSync();
-
-        Future<List<Residency>> future = Executors.newSingleThreadExecutor().submit(callable);
+        Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }
+
 }

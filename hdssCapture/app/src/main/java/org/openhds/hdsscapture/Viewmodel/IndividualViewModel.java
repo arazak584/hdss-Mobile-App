@@ -4,9 +4,11 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.IndividualRepository;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.subentity.CaseItem;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -54,6 +56,10 @@ public class IndividualViewModel extends AndroidViewModel {
 
     public List<Individual> retrieveByFather(String id) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveByFather(id);
+    }
+
+    public LiveData<List<CaseItem>> retrieveByIndividual(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.retrieveByIndividual(id);
     }
 
 

@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/relationship_fragment">
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -12,9 +12,11 @@
     </data>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    android:id="@+id/RELATIONSHIP_LAYOUT"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".fragment.RelationshipFragment">
 
         <TextView
             android:layout_width="match_parent"
@@ -34,11 +36,10 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".fragment.RelationshipFragment">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <LinearLayout
-                android:id="@+id/RELATIONSHIP_LAYOUT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
@@ -54,8 +55,8 @@
                     android:text="@string/fw">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/fw"
-                        android:text="@={relationship.fw}"
+                        android:id="@+id/rel_fw"
+                        android:text="@={relationship.fw_uuid}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"/>
@@ -94,7 +95,7 @@
                         android:id="@+id/uuid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={relationship.uuid}"
+                        android:text="@={relationship.rel_uuid}"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -108,10 +109,10 @@
                     android:text="@string/ind_extid">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/extid"
+                        android:id="@+id/woman_extid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={relationship.extId}"
+                        android:text="@={relationship.individual_uuid}"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -125,10 +126,10 @@
                     android:text="@string/ind_extid">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/extidB"
+                        android:id="@+id/man_extidB"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={relationship.extIdB}"
+                        android:text="@={relationship.man_uuid}"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -149,7 +150,7 @@
                     android:padding="10dp"/>
 
                 <Button
-                    android:id="@+id/button_residency_startDate"
+                    android:id="@+id/button_rel_startDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/startdate"
@@ -157,7 +158,7 @@
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
-                    android:id="@+id/editText_startDate"
+                    android:id="@+id/rel_startDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints=""
@@ -199,7 +200,7 @@
                     android:padding="10dp"/>
 
                 <Button
-                    android:id="@+id/button_residency_endDate"
+                    android:id="@+id/button_rel_endDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/enddate"
@@ -207,7 +208,7 @@
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
-                    android:id="@+id/editText_endDate"
+                    android:id="@+id/rel_endDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autofillHints=""
@@ -217,18 +218,35 @@
                     android:textSize="20sp"
                     tools:ignore="TextContrastCheck" />
 
-                <Button
-                    android:id="@+id/button_submit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="60dip"
-                    android:text="@string/text_submit"
-                    android:textSize="24sp" />
 
             </LinearLayout>
 
-
         </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/buttonSaveClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="@string/saveclosedata" />
+
+            <Button
+                android:id="@+id/buttonClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="@string/closedata" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </layout>

@@ -60,4 +60,13 @@ public class PregnancyRepository {
 
         return future.get();
     }
+
+    public Pregnancy find(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Pregnancy> callable = () -> dao.find(id);
+
+        Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
 }

@@ -15,8 +15,8 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.fragment.FatherDialogFragment;
-import org.openhds.hdsscapture.fragment.IndividualFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +32,14 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
     private Socialgroup socialgroup;
     private Residency residency;
     private List<Individual> individualList;
+    private CaseItem caseItem;
 
-    public FatherAdapter(FatherDialogFragment activity, Residency residency, Location location, Socialgroup socialgroup) {
+    public FatherAdapter(FatherDialogFragment activity, Residency residency, Location location, Socialgroup socialgroup,CaseItem caseItem) {
         this.activity = activity;
         this.location = location;
         this.residency = residency;
         this.socialgroup = socialgroup;
+        this.caseItem = caseItem;
         individualList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -78,10 +80,11 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
         holder.lastname.setText(individual.getLastName());
 
         holder.linearLayout.setOnClickListener(v -> {
-            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                    IndividualFragment.newInstance(individual, residency, location, socialgroup )).commit();
+
+
         });
     }
+
 
 
 
@@ -110,7 +113,7 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
 
             if(location != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveByFather(location.getExtId());
+                    List<Individual> list = individualViewModel.retrieveByFather(location.getCompextId());
 
                     if (list != null) {
                         individualList.addAll(list);

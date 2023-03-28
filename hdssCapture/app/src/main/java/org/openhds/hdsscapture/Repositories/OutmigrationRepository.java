@@ -28,12 +28,36 @@ public class OutmigrationRepository {
         });
     }
 
+    public void create(Outmigration... data) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            dao.create(data);
+        });
+    }
+
 
     public List<Outmigration> findAll() throws ExecutionException, InterruptedException {
 
         Callable<List<Outmigration>> callable = () -> dao.retrieve();
 
         Future<List<Outmigration>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Outmigration> findomgToSync() throws ExecutionException, InterruptedException {
+
+        Callable<List<Outmigration>> callable = () -> dao.retrieveomgToSync();
+
+        Future<List<Outmigration>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Outmigration find(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Outmigration> callable = () -> dao.find(id);
+
+        Future<Outmigration> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }

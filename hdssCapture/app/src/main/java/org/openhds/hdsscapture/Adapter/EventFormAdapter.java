@@ -1,4 +1,204 @@
 package org.openhds.hdsscapture.Adapter;
 
-public class EventFormAdapter {
+import static org.openhds.hdsscapture.AppConstants.COMPLETE;
+import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS1;
+import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS10;
+import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS2;
+import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS3;
+import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS4;
+import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS6;
+import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS7;
+import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS8;
+import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS9;
+import static org.openhds.hdsscapture.AppConstants.MARKED_COMPLETE;
+import static org.openhds.hdsscapture.AppConstants.MARKED_INCOMPLETE;
+import static org.openhds.hdsscapture.AppConstants.NOT_DONE;
+
+import android.graphics.Color;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Residency;
+import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.subentity.CaseItem;
+import org.openhds.hdsscapture.entity.subqueries.EventForm;
+import org.openhds.hdsscapture.fragment.DeathFragment;
+import org.openhds.hdsscapture.fragment.DemographicFragment;
+import org.openhds.hdsscapture.fragment.EventsFragment;
+import org.openhds.hdsscapture.fragment.InmigrationFragment;
+import org.openhds.hdsscapture.fragment.OutmigrationFragment;
+import org.openhds.hdsscapture.fragment.PregnancyFragment;
+import org.openhds.hdsscapture.fragment.RelationshipFragment;
+import org.openhds.hdsscapture.fragment.ResidencyFragment;
+import org.openhds.hdsscapture.fragment.SocialgroupFragment;
+import org.openhds.hdsscapture.fragment.VisitFragment;
+
+import java.util.List;
+
+public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.ViewHolder> {
+
+    private Location location;
+    private Socialgroup socialgroup;
+    private Residency residency;
+    private Individual individual;
+    private final List<EventForm> eventForms;
+    private CaseItem caseItem;
+    private Visit visit;
+    private final EventsFragment activity;
+
+    public EventFormAdapter(Location location, Socialgroup socialgroup, Residency residency, Individual individual, CaseItem caseItem, List<EventForm> eventForms, EventsFragment activity) {
+        this.location = location;
+        this.socialgroup = socialgroup;
+        this.residency = residency;
+        this.individual = individual;
+        this.eventForms = eventForms;
+        this.caseItem = caseItem;
+        this.activity = activity;
+
+    }
+
+    @NonNull
+    @Override
+    public EventFormAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        View listItem = layoutInflater.inflate(R.layout.list_event_forms, parent, false);
+
+        return new ViewHolder(listItem);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull EventFormAdapter.ViewHolder holder, int position) {
+        final EventForm eventForm = eventForms.get(position);
+        final String status;
+
+        if (eventForm.m_status == COMPLETE) {
+            holder.linearLayout.setBackgroundColor(Color.YELLOW);
+            status = eventForm.complete == COMPLETE ? MARKED_COMPLETE : MARKED_INCOMPLETE;
+        } else if (eventForm.m_status == NOT_COMPLETE) {
+            if (eventForm.complete == COMPLETE) {
+                holder.linearLayout.setBackgroundColor(Color.GREEN);
+                status = MARKED_COMPLETE;
+            } else if (eventForm.complete == null) {
+                holder.linearLayout.setBackgroundColor(Color.RED);
+                status = MARKED_INCOMPLETE;
+            } else {
+                holder.linearLayout.setBackgroundColor(Color.TRANSPARENT);
+                status = NOT_DONE;
+            }
+        } else {
+            holder.linearLayout.setBackgroundColor(Color.TRANSPARENT);
+            status = NOT_DONE;
+        }
+
+        holder.textView_event.setText(eventForm.event_name);
+        holder.textView_form.setText(eventForm.form_name);
+        holder.textView_status.setText(status);
+        holder.linearLayout.setOnClickListener(view -> formFactory(individual, residency, location, socialgroup,caseItem, eventForm));
+
+    }
+
+    private void formFactory(Individual individual,Residency residency,Location location,Socialgroup socialgroup,CaseItem caseItem, EventForm eventForm) {
+        switch (eventForm.event_name) {
+            case EVENT_HDSS1: {
+                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                        ResidencyFragment.newInstance(individual,residency,location,socialgroup, caseItem,eventForm)).commit();
+
+                break;
+            }
+
+            case EVENT_HDSS2: {
+
+                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                        VisitFragment.newInstance(individual,residency,location, socialgroup,visit, caseItem, eventForm)).commit();
+
+                break;
+            }
+
+            case EVENT_HDSS6: {
+
+                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                        DeathFragment.newInstance(individual,residency,location, socialgroup, caseItem, eventForm)).commit();
+
+                break;
+            }
+
+            case EVENT_HDSS3: {
+
+                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                        SocialgroupFragment.newInstance(individual,residency,location, socialgroup,caseItem, eventForm)).commit();
+
+                break;
+            }
+
+            case EVENT_HDSS4: {
+
+                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                        DemographicFragment.newInstance(individual,residency,location, socialgroup,caseItem, eventForm)).commit();
+
+                break;
+            }
+
+            case EVENT_HDSS7: {
+
+                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                        RelationshipFragment.newInstance(individual,residency,location, socialgroup,caseItem, eventForm)).commit();
+
+                break;
+            }
+            case EVENT_HDSS8: {
+
+                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                        OutmigrationFragment.newInstance(individual,residency,location, socialgroup,caseItem, eventForm)).commit();
+
+                break;
+            }
+
+            case EVENT_HDSS9: {
+
+                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                        InmigrationFragment.newInstance(individual,residency,location, socialgroup,caseItem, eventForm)).commit();
+
+                break;
+            }
+
+            case EVENT_HDSS10: {
+
+                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                        PregnancyFragment.newInstance(individual,residency,location, socialgroup,caseItem, eventForm)).commit();
+
+                break;
+            }
+        }
+
+    }
+
+
+
+    @Override
+    public int getItemCount() {
+        return eventForms.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView textView_event, textView_form, textView_status;
+        public LinearLayout linearLayout;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            this.textView_event = itemView.findViewById(R.id.textView_event);
+            this.textView_form = itemView.findViewById(R.id.textView_form);
+            this.textView_status = itemView.findViewById(R.id.textView_status);
+            linearLayout = itemView.findViewById(R.id.linearLayout_eventform);
+        }
+    }
 }

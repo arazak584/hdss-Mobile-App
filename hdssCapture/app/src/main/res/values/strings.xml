@@ -173,7 +173,7 @@
     <string name="inmigration">Inmigration</string>
     <string name="residency_uuid">Residency uuid</string>
     <string name="migration_date">Date of Migration</string>
-    <string name="form_complete">Is the Form complete</string>
+    <string name="form_complete">Is the Form complete &amp; Ready for submission?</string>
     <string name="text_country">Country</string>
     <string name="text_location_note">PLEASE SELECT THE LOCATION OF THE INTERVIEW TO PROCEED</string>
     <string name="text_searchid">Search Using Compound Number or Compound Name</string>
@@ -292,6 +292,17 @@
     <string name="obs">Pregnancy Without Outcome</string>
     <string name="close">Close</string>
     <string name="housepresent">Is There Any Household Member Present?</string>
+    <string name="savecontinuedata"><![CDATA[Save & Continue]]></string>
+    <string name="respondent">Respondent</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="location_uuid">Location UUID</string>
+    <string name="clusteruuid">Cluster uuid</string>
+    <string name="visituuid">Visit Uuid</string>
+    <string name="comp_yrs">Completed Years of Education</string>
+    <string name="villcode">Village Code</string>
+    <string name="resuuid">Residency UUID</string>
+    <string name="savedata">Save Changes</string>
+    <string name="savecondata">Save &amp; Continue</string>
 
 
 </resources>

@@ -26,12 +26,12 @@ import java.util.Locale;
 @Entity(tableName = "pregnancyoutcome")
 public class Pregnancyoutcome extends BaseObservable {
 
-    @SerializedName("uuid")
+    @SerializedName("preg_uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "uuid")
+    @ColumnInfo(name = "preg_uuid")
     @PrimaryKey
-    public String uuid;
+    public String preg_uuid;
 
     @Expose
     public Date insertDate;
@@ -43,22 +43,22 @@ public class Pregnancyoutcome extends BaseObservable {
     public Date outcomeDate;
 
     @Expose
-    public String mother;
+    public String mother_uuid;
 
     @Expose
-    public String father;
+    public String father_uuid;
 
     @Expose
     public String childEverborn;
 
     @Expose
-    public String visitid;
+    public String visit_uuid;
 
     @Expose
     public String NumberofBirths;
 
     @Expose
-    public String fw;
+    public String fw_uuid;
 
     @Expose
     public Integer b_place;
@@ -119,12 +119,44 @@ public class Pregnancyoutcome extends BaseObservable {
     public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
 
     @NotNull
-    public String getUuid() {
-        return uuid;
+    public String getPreg_uuid() {
+        return preg_uuid;
     }
 
-    public void setUuid(@NotNull String uuid) {
-        this.uuid = uuid;
+    public void setPreg_uuid(@NotNull String preg_uuid) {
+        this.preg_uuid = preg_uuid;
+    }
+
+    public String getMother_uuid() {
+        return mother_uuid;
+    }
+
+    public void setMother_uuid(String mother_uuid) {
+        this.mother_uuid = mother_uuid;
+    }
+
+    public String getFather_uuid() {
+        return father_uuid;
+    }
+
+    public void setFather_uuid(String father_uuid) {
+        this.father_uuid = father_uuid;
+    }
+
+    public String getVisit_uuid() {
+        return visit_uuid;
+    }
+
+    public void setVisit_uuid(String visit_uuid) {
+        this.visit_uuid = visit_uuid;
+    }
+
+    public String getFw_uuid() {
+        return fw_uuid;
+    }
+
+    public void setFw_uuid(String fw_uuid) {
+        this.fw_uuid = fw_uuid;
     }
 
     public String getInsertDate() {
@@ -169,21 +201,6 @@ public class Pregnancyoutcome extends BaseObservable {
     }
 
 
-    public String getFather() {
-        return father;
-    }
-
-    public void setFather(String father) {
-        this.father = father;
-    }
-
-    public String getMother() {
-        return mother;
-    }
-
-    public void setMother(String mother) {
-        this.mother = mother;
-    }
 
     public String getChildEverborn() {
         return childEverborn;
@@ -193,28 +210,12 @@ public class Pregnancyoutcome extends BaseObservable {
         this.childEverborn = childEverborn;
     }
 
-    public String getVisitid() {
-        return visitid;
-    }
-
-    public void setVisitid(String visitid) {
-        this.visitid = visitid;
-    }
-
     public String getNumberofBirths() {
         return NumberofBirths;
     }
 
     public void setNumberofBirths(String numberofBirths) {
         NumberofBirths = numberofBirths;
-    }
-
-    public String getFw() {
-        return fw;
-    }
-
-    public void setFw(String fw) {
-        this.fw = fw;
     }
 
     public Integer getB_place() {

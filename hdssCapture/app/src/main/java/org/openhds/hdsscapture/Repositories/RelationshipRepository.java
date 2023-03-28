@@ -51,4 +51,13 @@ public class RelationshipRepository {
 
         return future.get();
     }
+
+    public Relationship find(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Relationship> callable = () -> dao.find(id);
+
+        Future<Relationship> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
 }

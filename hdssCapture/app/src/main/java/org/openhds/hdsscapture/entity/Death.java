@@ -9,13 +9,11 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
@@ -29,140 +27,118 @@ import java.util.Locale;
 @Entity(tableName = "death")
 public class Death extends BaseObservable implements Parcelable {
 
-    @SerializedName("extId")
     @Expose
     @NotNull
-    @ColumnInfo(name = "extId")
     @PrimaryKey
-    public String extId;
+    public String death_uuid;
 
-    @SerializedName("dod")
     @Expose
-    @ColumnInfo(name = "dod")
-    public Date dod;
+    public String individual_uuid;
 
-    @SerializedName("dob")
     @Expose
-    @ColumnInfo(name = "dob")
+    public Date deathDate;
+
+    @Expose
     public Date dob;
 
-    @SerializedName("insertDate")
     @Expose
-    @ColumnInfo(name = "insertDate")
     public Date insertDate;
 
-    @SerializedName("firstName")
     @Expose
-    @ColumnInfo(name = "firstName")
     public String firstName;
 
-    @SerializedName("lastName")
     @Expose
-    @ColumnInfo(name = "lastName")
     public String lastName;
 
-    @SerializedName("gender")
     @Expose
-    @ColumnInfo(name = "gender")
-    public String gender;
+    public Integer gender;
 
-    @SerializedName("location")
     @Expose
-    @ColumnInfo(name = "location")
-    public String location;
+    public String compno;
 
-    @SerializedName("socialgroup")
     @Expose
-    @ColumnInfo(name = "socialgroup")
-    public String socialgroup;
+    public String visit_uuid;
 
-    @SerializedName("visitid")
     @Expose
-    @ColumnInfo(name = "visitid")
-    public String visitid;
+    public Integer deathCause;
 
-    @SerializedName("causeofdeath")
     @Expose
-    @ColumnInfo(name = "causeofdeath")
-    public String causeofdeath;
+    public Integer deathPlace;
 
-    @SerializedName("placeofdeath")
     @Expose
-    @ColumnInfo(name = "placeofdeath")
-    public String placeofdeath;
-
-    @SerializedName("respondent")
-    @Expose
-    @ColumnInfo(name = "respondent")
     public String respondent;
 
-    @SerializedName("Phone1")
     @Expose
-    @ColumnInfo(name = "Phone1")
-    public String Phone1;
+    public String fw_uuid;
 
-    @SerializedName("fw")
     @Expose
-    @ColumnInfo(name = "fw")
-    public String fw;
-
-    @SerializedName("complete")
-    @Expose
-    @ColumnInfo(name = "complete")
     public Integer complete;
+
+    @Expose
+    public String extId;
+
+    @Expose
+    public String househead;
+
+    @Expose
+    public String compname;
+
+    @Expose
+    public String villname;
+
+    @Expose
+    public String villcode;
+
 
     public Death(){}
 
-    @Ignore
-    public Death(@NotNull String extId, Date dod, Date dob, Date insertDate, String firstName, String lastName, String gender, String location, String socialgroup, String visitid, String causeofdeath, String placeofdeath, String respondent, String phone1, String fw) {
-        this.extId = extId;
-        this.dod = dod;
-        this.dob = dob;
-        this.insertDate = insertDate;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gender = gender;
-        this.location = location;
-        this.socialgroup = socialgroup;
-        this.visitid = visitid;
-        this.causeofdeath = causeofdeath;
-        this.placeofdeath = placeofdeath;
-        this.respondent = respondent;
-        Phone1 = phone1;
-        this.fw = fw;
-    }
 
     @Ignore
     public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
 
+
     @NotNull
-    public String getExtId() {
-        return extId;
+    public String getDeath_uuid() {
+        return death_uuid;
     }
 
-    public void setExtId(@NotNull String extId) {
-        this.extId = extId;
+    public void setDeath_uuid(@NotNull String death_uuid) {
+        this.death_uuid = death_uuid;
     }
 
-    public String getDod() {
-        if (dod == null) return "SELECT DATE OF DEATH";
-        return f.format(dod);
+    public String getIndividual_uuid() {
+        return individual_uuid;
     }
 
-    public void setDod(String dod) {
+    public void setIndividual_uuid(String individual_uuid) {
+        this.individual_uuid = individual_uuid;
+    }
+
+    public String getDeathDate() {
+        if (deathDate == null) return "SELECT DATE OF DEATH";
+        return f.format(deathDate);
+    }
+
+    public void setDeathDate(String deathDate) {
         try {
-            this.dod = f.parse(dod);
+            this.deathDate = f.parse(deathDate);
         } catch (ParseException e) {
             System.out.println("DOD Date Error " + e.getMessage());
         }
     }
 
-    public Date getDob() {
-        return dob;
+    public String getDob() {
+        if (dob == null) return "DATE OF Birth";
+        return f.format(dob);
     }
 
-    public void setDob(Date dob) {
-        this.dob = dob;
+    public void setDob(String dob) {
+
+        try {
+            this.dob = f.parse(dob);
+        } catch (ParseException e) {
+            System.out.println("DOB Date Error " + e.getMessage());
+        }
     }
 
     public String getInsertDate() {
@@ -195,51 +171,39 @@ public class Death extends BaseObservable implements Parcelable {
     }
 
     public String getGender() {
-        return gender;
+        return gender == null ? "" : String.valueOf(gender);
     }
 
     public void setGender(String gender) {
-        this.gender = gender;
+
+        try {
+            this.gender = (gender == null) ? null : Integer.valueOf(gender);
+        } catch (NumberFormatException e) {
+        }
     }
 
-    public String getLocation() {
-        return location;
+    public String getVisit_uuid() {
+        return visit_uuid;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setVisit_uuid(String visit_uuid) {
+        this.visit_uuid = visit_uuid;
     }
 
-    public String getSocialgroup() {
-        return socialgroup;
+    public Integer getDeathCause() {
+        return deathCause;
     }
 
-    public void setSocialgroup(String socialgroup) {
-        this.socialgroup = socialgroup;
+    public void setDeathCause(Integer causeofdeath) {
+        this.deathCause = deathCause;
     }
 
-    public String getVisitid() {
-        return visitid;
+    public Integer getDeathPlace() {
+        return deathPlace;
     }
 
-    public void setVisitid(String visitid) {
-        this.visitid = visitid;
-    }
-
-    public String getCauseofdeath() {
-        return causeofdeath;
-    }
-
-    public void setCauseofdeath(String causeofdeath) {
-        this.causeofdeath = causeofdeath;
-    }
-
-    public String getPlaceofdeath() {
-        return placeofdeath;
-    }
-
-    public void setPlaceofdeath(String placeofdeath) {
-        this.placeofdeath = placeofdeath;
+    public void setDeathPlace(Integer deathPlace) {
+        this.deathPlace = deathPlace;
     }
 
     public String getRespondent() {
@@ -250,38 +214,78 @@ public class Death extends BaseObservable implements Parcelable {
         this.respondent = respondent;
     }
 
-    public String getPhone1() {
-        return Phone1;
+    public String getCompno() {
+        return compno;
     }
 
-    public void setPhone1(String phone1) {
-        Phone1 = phone1;
+    public void setCompno(String compno) {
+        this.compno = compno;
     }
 
-    public String getFw() {
-        return fw;
+    public String getExtId() {
+        return extId;
     }
 
-    public void setFw(String fw) {
-        this.fw = fw;
+    public void setExtId(String extId) {
+        this.extId = extId;
+    }
+
+    public String getHousehead() {
+        return househead;
+    }
+
+    public void setHousehead(String househead) {
+        this.househead = househead;
+    }
+
+    public String getCompname() {
+        return compname;
+    }
+
+    public void setCompname(String compname) {
+        this.compname = compname;
+    }
+
+    public String getVillname() {
+        return villname;
+    }
+
+    public void setVillname(String villname) {
+        this.villname = villname;
+    }
+
+    public String getVillcode() {
+        return villcode;
+    }
+
+    public void setVillcode(String villcode) {
+        this.villcode = villcode;
+    }
+
+    public String getFw_uuid() {
+        return fw_uuid;
+    }
+
+    public void setFw_uuid(String fw_uuid) {
+        this.fw_uuid = fw_uuid;
     }
 
     protected Death(Parcel in) {
-        this.extId = in.readString();
-        this.dod = (java.util.Date) in.readSerializable();
+        this.individual_uuid = in.readString();
+        this.deathDate = (java.util.Date) in.readSerializable();
         this.dob = (java.util.Date) in.readSerializable();
         this.insertDate = (java.util.Date) in.readSerializable();
         this.firstName = in.readString();
         this.lastName = in.readString();
-        this.gender = in.readString();
-        this.location = in.readString();
-        this.socialgroup = in.readString();
-        this.visitid = in.readString();
-        this.causeofdeath = in.readString();
-        this.placeofdeath = in.readString();
+        this.gender = in.readInt();
+        this.compno = in.readString();
+        this.compname = in.readString();
+        this.visit_uuid = in.readString();
+        this.deathCause = in.readInt();
+        this.deathPlace = in.readInt();
         this.respondent = in.readString();
-        this.Phone1 = in.readString();
-        this.fw = in.readString();
+        this.househead = in.readString();
+        this.fw_uuid = in.readString();
 
     }
 
@@ -304,21 +308,21 @@ public class Death extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.extId);
-        dest.writeSerializable(this.dod);
+        dest.writeString(this.individual_uuid);
+        dest.writeSerializable(this.deathDate);
         dest.writeSerializable(this.dob);
         dest.writeSerializable(this.insertDate);
         dest.writeString(this.firstName);
         dest.writeString(this.lastName);
-        dest.writeString(this.gender);
-        dest.writeString(this.location);
-        dest.writeString(this.socialgroup);
-        dest.writeString(this.visitid);
-        dest.writeString(this.causeofdeath);
-        dest.writeString(this.placeofdeath);
+        dest.writeInt(this.gender);
+        dest.writeString(this.compno);
+        dest.writeString(this.compname);
+        dest.writeString(this.visit_uuid);
+        dest.writeInt(this.deathCause);
+        dest.writeInt(this.deathPlace);
         dest.writeString(this.respondent);
-        dest.writeString(this.Phone1);
-        dest.writeString(this.fw);
+        dest.writeString(this.househead);
+        dest.writeString(this.fw_uuid);
 
     }
 
@@ -333,6 +337,40 @@ public class Death extends BaseObservable implements Parcelable {
         } else {
             final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
             complete = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY FOR DEATH PLACE
+    public void setDeathPlace(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            deathPlace = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            deathPlace = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY FOR DEATH CAUSE
+    public void setDeathCause(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            deathCause = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            deathCause = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }

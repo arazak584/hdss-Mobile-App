@@ -3,6 +3,8 @@ package org.openhds.hdsscapture.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -12,12 +14,15 @@ import org.jetbrains.annotations.NotNull;
 
 
 @Entity(tableName = "locationhierarchy")
-public class Hierarchy implements Parcelable {
+public class Hierarchy extends BaseObservable implements Parcelable {
 
     @NotNull
     @PrimaryKey
-    @ColumnInfo(name = "extId")
-    private String extId;
+    @ColumnInfo(name = "uuid")
+    private String uuid;
+
+    @ColumnInfo(name = "villcode")
+    private String villcode;
 
     @ColumnInfo(name = "town")
     private String town;
@@ -39,18 +44,28 @@ public class Hierarchy implements Parcelable {
 
    @Ignore
     public Hierarchy(@NotNull String extId, String name) {
-        this.extId = extId;
+        this.villcode = extId;
         this.name = name;
     }
 
 
+    @Bindable
     @NotNull
-    public String getExtId() {
-        return extId;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setExtId(@NotNull String extId) {
-        this.extId = extId;
+    public void setUuid(@NotNull String uuid) {
+        this.uuid = uuid;
+    }
+
+    @Bindable
+    public String getVillcode() {
+        return villcode;
+    }
+
+    public void setVillcode(String villcode) {
+        this.villcode = villcode;
     }
 
     public String getTown() {
@@ -61,6 +76,7 @@ public class Hierarchy implements Parcelable {
         this.town = town;
     }
 
+    @Bindable
     public String getName() {
         return name;
     }
@@ -77,6 +93,7 @@ public class Hierarchy implements Parcelable {
         this.area = area;
     }
 
+    @Bindable
     public String getParent_uuid() {
         return parent_uuid;
     }
@@ -94,7 +111,8 @@ public class Hierarchy implements Parcelable {
     }
 
     protected Hierarchy(Parcel in) {
-        this.extId = in.readString();
+        this.uuid = in.readString();
+        this.villcode = in.readString();
         this.town = in.readString();
         this.name = in.readString();
         this.area = in.readString();
@@ -121,7 +139,8 @@ public class Hierarchy implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.extId);
+        dest.writeString(this.uuid);
+        dest.writeString(this.villcode);
         dest.writeString(this.town);
         dest.writeString(this.name);
         dest.writeString(this.area);

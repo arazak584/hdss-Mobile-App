@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,28 +8,35 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.databinding.FragmentVisitBinding;
+import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Residency;
+import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.subentity.CaseItem;
+import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -44,6 +52,8 @@ public class VisitFragment extends Fragment {
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
+    private CaseItem caseItem;
+    private EventForm eventForm;
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
@@ -52,6 +62,8 @@ public class VisitFragment extends Fragment {
     private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private static final String VISIT_ID = "VISIT_ID";
+    private static final String CASE_ID = "CASE_ID";
+    private static final String EVENT_ID = "EVENT_ID";
     private final String TAG = "VISIT.TAG";
 
 
@@ -69,19 +81,27 @@ public class VisitFragment extends Fragment {
      * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
+     * @param visit Parameter 5.
+     * @param caseItem Parameter 6.
+     * @param eventForm Parameter 7.
      * @return A new instance of fragment VisitFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static VisitFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup) {
+    public static VisitFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup,Visit visit,CaseItem caseItem, EventForm eventForm) {
         VisitFragment fragment = new VisitFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, location);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
+        args.putParcelable(VISIT_ID, visit);
+        args.putParcelable(CASE_ID, caseItem);
+        args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,6 +112,8 @@ public class VisitFragment extends Fragment {
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
             visit = getArguments().getParcelable(VISIT_ID);
+            caseItem = getArguments().getParcelable(CASE_ID);
+            eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
 
@@ -104,16 +126,40 @@ public class VisitFragment extends Fragment {
         binding = FragmentVisitBinding.inflate(inflater, container, false);
         binding.setVisit(visit);
 
-        final TextView compno = binding.getRoot().findViewById(R.id.textView4_compextId);
-        final TextView compname = binding.getRoot().findViewById(R.id.textView4_compname);
-        final TextView cluster = binding.getRoot().findViewById(R.id.textView4_clusterId);
-        final TextView compnos = binding.getRoot().findViewById(R.id.visit_Location);
+        //final TextView compno = binding.getRoot().findViewById(R.id.textView4_compextId);
+        //final TextView compname = binding.getRoot().findViewById(R.id.textView4_compname);
+        //final TextView cluster = binding.getRoot().findViewById(R.id.textView4_clusterId);
 
-        compno.setText(location.getExtId());
-        compname.setText(location.getLocationName());
-        cluster.setText(location.getClusterId());
-        compnos.setText(location.getExtId());
+        //compno.setText(location.getCompextId());
+        //compname.setText(location.getLocationName());
+        //cluster.setText(location.villcode);
 
+        final Intent intent = getActivity().getIntent();
+        final Round roundData = intent.getParcelableExtra(HierarchyActivity.ROUND_DATA);
+
+        final Intent i = getActivity().getIntent();
+        final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
+
+        if(visit.fw_uuid==null){
+            binding.getVisit().fw_uuid = fieldworkerData.getFw_uuid();
+        }
+
+        if(visit.roundNumber==null){
+            binding.getVisit().roundNumber = roundData.getRoundNumber();
+        }
+
+        if(visit.location_uuid==null){
+            binding.getVisit().location_uuid = location.getLocation_uuid();
+        }
+
+        // Generate a UUID
+        if(visit.visit_uuid == null) {
+            String uuid = UUID.randomUUID().toString();
+            String uuidString = uuid.toString().replaceAll("-", "");
+            // Set the ID of the Fieldworker object
+            binding.getVisit().visit_uuid = uuidString;
+        }
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_household);
 
@@ -148,16 +194,19 @@ public class VisitFragment extends Fragment {
             final VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
 
             final Visit visit = binding.getVisit();
-            visit.setExtId(this.visit.getExtId());
+            visit.setVisitextId(this.visit.getVisitextId());
 
             boolean isExists = false;
             binding.visitFw.setError(null);
-            binding.visitLocation.setError(null);
-            binding.socialgroupid.setError(null);
+            binding.visitRespondent.setError(null);
             binding.visitId.setError(null);
             binding.visitInsertDate.setError(null);
 
-            if(visit.extId==null){
+            if (binding.visitInsertDate.getText().toString().isEmpty()) {
+                binding.visitInsertDate.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Calendar.getInstance().getTime()));
+            }
+
+            if(visit.visitextId==null){
                 isExists = true;
                 binding.visitId.setError("Visit Id is Required");
             }
@@ -168,25 +217,20 @@ public class VisitFragment extends Fragment {
 
             }
 
-            if(visit.fw==null){
+            if(visit.fw_uuid==null){
                 isExists = true;
                 binding.visitFw.setError("Fieldworker userName is Required");
             }
 
-            if(visit.location==null){
+            if(visit.location_uuid==null){
                 isExists = true;
-                binding.visitLocation.setError("Location is Required");
-            }
-
-            if(visit.household==null){
-                isExists = true;
-                binding.socialgroupid.setError("Household is Required");
+                binding.visitRespondent.setError("Respondent is Required");
             }
 
 
         });
 
-        loadCodeData(binding.visitcomplete, "yn");
+        loadCodeData(binding.visitcomplete, "complete");
         loadCodeData(binding.realVisit, "yn");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
@@ -218,8 +262,8 @@ public class VisitFragment extends Fragment {
             viewModel.add(finalData);
         }
         if (close) {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
-                    HouseVisitFragment.newInstance(individual,residency,location, socialgroup)).commit();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    EventsFragment.newInstance(individual,residency,location, socialgroup, caseItem)).commit();
         }
     }
 

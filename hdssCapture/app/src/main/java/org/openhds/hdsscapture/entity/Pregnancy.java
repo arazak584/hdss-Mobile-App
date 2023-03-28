@@ -28,20 +28,20 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "pregnancy",
-        indices = {@Index(value = {"extId"}, unique = false)})
+        indices = {@Index(value = {"individual_uuid"}, unique = false)})
 public class Pregnancy extends BaseObservable implements Parcelable {
 
-    @SerializedName("uuid")
+    @SerializedName("obs_uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "uuid")
+    @ColumnInfo(name = "obs_uuid")
     @PrimaryKey
-    public String uuid;
+    public String obs_uuid;
 
-    @SerializedName("extId")
+    @SerializedName("individual_uuid")
     @Expose
-    @ColumnInfo(name = "extId")
-    public String extId;
+    @ColumnInfo(name = "individual_uuid")
+    public String individual_uuid;
 
     @SerializedName("insertDate")
     @Expose
@@ -63,15 +63,15 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "expectedDeliveryDate")
     public Date expectedDeliveryDate;
 
-    @SerializedName("visitid")
+    @SerializedName("visit_uuid")
     @Expose
-    @ColumnInfo(name = "visitid")
-    public String visitid;
+    @ColumnInfo(name = "visit_uuid")
+    public String visit_uuid;
 
-    @SerializedName("fw")
+    @SerializedName("fw_uuid")
     @Expose
-    @ColumnInfo(name = "fw")
-    public String fw;
+    @ColumnInfo(name = "fw_uuid")
+    public String fw_uuid;
     @Expose
     public Integer anteNatalClinic;//Have you been to an ANC clinic?
     @Expose
@@ -133,36 +133,51 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     public Pregnancy(){}
 
     @Ignore
-    public Pregnancy(@NotNull String uuid,String extId, Date insertDate, Integer outcome, Date recordedDate, Date expectedDeliveryDate, String visitid, String fw) {
-        this.uuid = uuid;
-        this.extId = extId;
+    public Pregnancy(@NotNull String obs_uuid,String individual_uuid, Date insertDate, Integer outcome, Date recordedDate, Date expectedDeliveryDate, String visitid, String fw) {
+        this.obs_uuid = obs_uuid;
+        this.individual_uuid = individual_uuid;
         this.insertDate = insertDate;
         this.outcome = outcome;
         this.recordedDate = recordedDate;
         this.expectedDeliveryDate = expectedDeliveryDate;
-        this.visitid = visitid;
-        this.fw = fw;
+        this.visit_uuid = visit_uuid;
+        this.fw_uuid = fw_uuid;
     }
 
     @Ignore
     public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @NotNull
-    public String getUuid() {
-        return uuid;
+    public String getObs_uuid() {
+        return obs_uuid;
     }
 
-    public void setUuid(@NotNull String uuid) {
-        this.uuid = uuid;
+    public void setObs_uuid(@NotNull String obs_uuid) {
+        this.obs_uuid = obs_uuid;
     }
 
-    @NotNull
-    public String getExtId() {
-        return extId;
+    public String getIndividual_uuid() {
+        return individual_uuid;
     }
 
-    public void setExtId(@NotNull String extid) {
-        this.extId = extId;
+    public void setIndividual_uuid(String individual_uuid) {
+        this.individual_uuid = individual_uuid;
+    }
+
+    public String getVisit_uuid() {
+        return visit_uuid;
+    }
+
+    public void setVisit_uuid(String visit_uuid) {
+        this.visit_uuid = visit_uuid;
+    }
+
+    public String getFw_uuid() {
+        return fw_uuid;
+    }
+
+    public void setFw_uuid(String fw_uuid) {
+        this.fw_uuid = fw_uuid;
     }
 
     public String getInsertDate() {
@@ -238,21 +253,6 @@ public class Pregnancy extends BaseObservable implements Parcelable {
         }
     }
 
-    public String getVisitid() {
-        return visitid;
-    }
-
-    public void setVisitid(String visitid) {
-        this.visitid = visitid;
-    }
-
-    public String getFw() {
-        return fw;
-    }
-
-    public void setFw(String fw) {
-        this.fw = fw;
-    }
 
     public Integer getAnteNatalClinic() {
         return anteNatalClinic;
@@ -470,14 +470,11 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     }
 
     protected Pregnancy(Parcel in) {
-        this.uuid = in.readString();
-        this.extId = in.readString();
+
         this.insertDate = (java.util.Date) in.readSerializable();
         this.outcome = in.readInt();
         this.recordedDate = (java.util.Date) in.readSerializable();
         this.expectedDeliveryDate = (java.util.Date) in.readSerializable();
-        this.visitid = in.readString();
-        this.fw = in.readString();
     }
 
     public static final Creator<Pregnancy> CREATOR = new Creator<Pregnancy>() {
@@ -499,14 +496,10 @@ public class Pregnancy extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.uuid);
-        dest.writeString(this.extId);
         dest.writeSerializable(this.insertDate);
         dest.writeInt(this.outcome);
         dest.writeSerializable(this.recordedDate);
         dest.writeSerializable(this.expectedDeliveryDate);
-        dest.writeString(this.visitid);
-        dest.writeString(this.fw);
 
     }
 

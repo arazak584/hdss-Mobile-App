@@ -1,6 +1,7 @@
 package org.openhds.hdsscapture.Dao;
 
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -9,6 +10,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 
 import java.util.List;
@@ -42,44 +44,62 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual")
     List<Individual> retrieve();
 
-    @Query("SELECT * FROM individual WHERE complete=1")
+    @Query("SELECT * FROM individual WHERE modified=1")
     List<Individual> retrieveToSync();
 
-    @Query("SELECT a.*,b.location,b.socialgroup FROM individual as a " + "INNER JOIN residency as b ON a.extId = b.extId " +
-            " INNER JOIN location as c on b.location=c.extId " +
-            " WHERE endType=1 and b.location=:id order by socialgroup")
+    @Query("SELECT a.*,c.compextId,d.houseExtId FROM individual as a " + "INNER JOIN residency as b ON a.individual_uuid = b.individual_uuid " +
+            " INNER JOIN location as c on b.location_uuid=c.location_uuid " +
+            " INNER JOIN socialgroup as d on b.socialgroup_uuid=d.socialgroup_uuid " +
+            " WHERE endType=1 and c.compextId=:id order by houseExtId")
     List<Individual> retrieveByLocationId(String id);
 
-    @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.extId = b.extId" +
-            " WHERE firstName LIKE:id OR lastName LIKE:id OR b.compno LIKE:id")
+    @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.individual_uuid = b.individual_uuid" +
+            " INNER JOIN location as c on b.location_uuid=c.location_uuid " +
+            " WHERE endType!=0 AND " +
+            " (firstName LIKE:id OR lastName LIKE:id OR c.compno LIKE:id)")
     List<Individual> retrieveBySearch(String id);
 
-    @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.extId = b.extId " +
-            " INNER JOIN location as c on b.location=c.extId " +
-            " WHERE endType=1 and gender=2 and b.location=:id and " +
+    @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.individual_uuid = b.individual_uuid " +
+            " INNER JOIN location as c on b.location_uuid=c.location_uuid " +
+            " WHERE endType=1 and gender=2 and c.compextId=:id and " +
             " date('now', '-11 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
     List<Individual> retrieveByMother(String id);
 
     @Query("SELECT a.* FROM individual AS a " +
-            "INNER JOIN residency AS b ON a.extId = b.extId " +
+            "INNER JOIN residency AS b ON a.individual_uuid = b.individual_uuid " +
+            " INNER JOIN location as c on b.location_uuid=c.location_uuid " +
             "WHERE gender = 2 AND endType = 1 AND " +
             "date('now', '-11 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) AND " +
-            "(firstName LIKE :id OR lastName LIKE :id OR b.compno LIKE :id)")
+            "(firstName LIKE :id OR lastName LIKE :id OR c.compno LIKE :id)")
     List<Individual> retrieveByMotherSearch(String id);
 
-    @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.extId = b.extId " +
-            " INNER JOIN location as c on b.location=c.extId " +
-            " WHERE endType=1 and gender=1 and b.location=:id and " +
+    @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.individual_uuid = b.individual_uuid " +
+            " INNER JOIN location as c on b.location_uuid=c.location_uuid " +
+            " WHERE endType=1 and gender=1 and c.compextId=:id and " +
             " date('now', '-11 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
     List<Individual> retrieveByFather(String id);
 
 
     @Query("SELECT a.* FROM individual AS a " +
-            "INNER JOIN residency AS b ON a.extId = b.extId " +
+            "INNER JOIN residency AS b ON a.individual_uuid = b.individual_uuid " +
+            " INNER JOIN location as c on b.location_uuid=c.location_uuid " +
             "WHERE gender = 1 AND endType = 1 AND " +
             "date('now', '-11 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) AND " +
-            "(firstName LIKE :id OR lastName LIKE :id OR b.compno LIKE :id)")
+            "(firstName LIKE :id OR lastName LIKE :id OR c.compno LIKE :id)")
     List<Individual> retrieveByFatherSearch(String id);
+
+    @Query("SELECT a.individual_uuid,extId,dob,age,gender,firstName,lastName,b.location_uuid,residency_uuid,socialgroup_uuid FROM individual AS a " +
+            "INNER JOIN residency AS b ON a.individual_uuid = b.individual_uuid " +
+            " INNER JOIN location as c on b.location_uuid=c.location_uuid " +
+            "WHERE endType != 0 AND " +
+            "(a.individual_uuid=:id)")
+    LiveData<List<CaseItem>> retrieveByIndividual1(String id);
+
+    @Query("SELECT a.individual_uuid,extId,dob,age,gender,firstName,lastName FROM individual AS a " +
+            " Where a.individual_uuid=:id")
+    LiveData<List<CaseItem>> retrieveByIndividual(String id);
+
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Individual> individuals);

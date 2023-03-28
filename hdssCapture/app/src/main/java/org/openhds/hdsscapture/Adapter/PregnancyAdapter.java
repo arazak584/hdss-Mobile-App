@@ -78,7 +78,7 @@ public class PregnancyAdapter extends RecyclerView.Adapter<PregnancyAdapter.View
         holder.lastname.setText(pregnancy.lastName);
 
         holder.linearLayout.setOnClickListener(v -> {
-            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_main,
+            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     PregnancyDialogFragment.newInstance(individual, residency, location, socialgroup,pregnancy )).commit();
         });
     }
@@ -92,7 +92,7 @@ public class PregnancyAdapter extends RecyclerView.Adapter<PregnancyAdapter.View
         pregnancyList.clear();
             if(location != null)
                 try {
-                    List<Pregnancy> list = pregnancyViewModel.retrievePregnancy(location.getExtId());
+                    List<Pregnancy> list = pregnancyViewModel.retrievePregnancy(location.getCompextId());
 
                     if (list != null) {
                         pregnancyList.addAll(list);

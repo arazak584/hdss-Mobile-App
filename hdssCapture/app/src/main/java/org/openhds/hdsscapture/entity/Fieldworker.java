@@ -15,8 +15,8 @@ public class Fieldworker implements Parcelable {
 
     @NotNull
     @PrimaryKey
-    @ColumnInfo(name = "id")
-    public String id;
+    @ColumnInfo(name = "fw_uuid")
+    public String fw_uuid;
 
     @ColumnInfo(name = "username")
     public String username;
@@ -30,9 +30,18 @@ public class Fieldworker implements Parcelable {
     @ColumnInfo(name = "status")
     public Integer status;
 
-    public Fieldworker(@NotNull String id, String username) {
-        this.id = id;
+    public Fieldworker(@NotNull String fw_uuid, String username) {
+        this.fw_uuid = fw_uuid;
         this.username = username;
+    }
+
+    @NotNull
+    public String getFw_uuid() {
+        return fw_uuid;
+    }
+
+    public void setFw_uuid(@NotNull String fw_uuid) {
+        this.fw_uuid = fw_uuid;
     }
 
     @NotNull
@@ -64,6 +73,7 @@ public class Fieldworker implements Parcelable {
     }
 
     protected Fieldworker(Parcel in) {
+        this.fw_uuid = in.readString();
         this.username = in.readString();
         this.password = in.readString();
         this.fullName = in.readString();
@@ -88,6 +98,7 @@ public class Fieldworker implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.fw_uuid);
         dest.writeString(this.username);
         dest.writeString(this.password);
         dest.writeString(this.fullName);

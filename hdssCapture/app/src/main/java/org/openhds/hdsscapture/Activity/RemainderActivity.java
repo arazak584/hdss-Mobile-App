@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,45 +14,52 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Viewmodel.VillageViewModel;
-import org.openhds.hdsscapture.entity.Village;
+import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
+import org.openhds.hdsscapture.entity.Hierarchy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class RemainderActivity extends AppCompatActivity {
 
-    private Village villageData;
-    public static final String VILLAGE_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.VILLAGE_DATA";
-
+    private Hierarchy level5Data;
+    private ArrayAdapter<Hierarchy> level5Adapter;
+    private List<Hierarchy> level5List = new ArrayList<>();
+    public static final String LEVEL5_DATA = "org.openhds.hdsscapture.activity.RemainderActivity.LEVEL5_DATA";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remainder);
 
-        final VillageViewModel villageViewModel = new ViewModelProvider(this).get(VillageViewModel.class);
-        final Spinner villageSpinner = findViewById(R.id.spinnerRVillage);
+        final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(this).get(HierarchyViewModel.class);
+        final Spinner level5Spinner = findViewById(R.id.spinnerRVillage);
+        level5Spinner.setAdapter(level5Adapter);
 
-        int ccSize = loadVillageData(villageSpinner, villageViewModel);
-        if(ccSize > 1) {
-            villageSpinner.setSelection(0);
+        level5Adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        level5Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        level5Spinner.setAdapter(level5Adapter);
+
+        // Load level 1 data
+        try {
+            List<Hierarchy> level5Data = hierarchyViewModel.retrieveLevel7();
+            level5Adapter.addAll(level5Data);
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error loading data", Toast.LENGTH_SHORT).show();
         }
 
-        villageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        // Set listener for level 5 spinner
+        level5Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                level5Data = level5Adapter.getItem(position);
 
-                if(position == 0){
-                    villageData = null;
-                }else {
-                    final Village data = (Village) parent.getItemAtPosition(position);
-                    villageData = data;
-                }
+
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -60,39 +68,10 @@ public class RemainderActivity extends AppCompatActivity {
 
             final Intent i = new Intent(this, ListActivity.class);
 
-            i.putExtra(VILLAGE_DATA, villageData);
+            i.putExtra(LEVEL5_DATA, level5Data);
             startActivity(i);
         });
 
-    }
-
-    private <T> void callable(Spinner spinner, T[] array){
-
-        final ArrayAdapter<T> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, array
-        );
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-
-
-    }
-
-    private int loadVillageData(Spinner spinner, VillageViewModel viewModel){
-        int listSize = 0;
-        try {
-            List<Village> list = viewModel.findAll();
-            list.add(0,new Village("","Select Village"));
-            if(list!=null && !list.isEmpty()){
-                callable(spinner, list.toArray(new Village[0]));
-                listSize = list.size();
-            }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return listSize;
     }
 
 

@@ -30,6 +30,10 @@ public class DemographicViewModel extends AndroidViewModel {
         return demographicRepository.findToSync();
     }
 
+    public Demographic find(String id) throws ExecutionException, InterruptedException {
+        return demographicRepository.find(id);
+    }
+
     public void add(Demographic data){ demographicRepository.create(data);}
 
     public void add(Demographic... data){

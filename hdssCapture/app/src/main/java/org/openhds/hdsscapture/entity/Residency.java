@@ -27,13 +27,13 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "residency",
-indices = {@Index(value = {"extId","location","socialgroup","compno"}, unique = false)})
+indices = {@Index(value = {"residency_uuid","individual_uuid","location_uuid","socialgroup_uuid"}, unique = false)})
 public class Residency extends BaseObservable implements Parcelable {
 
     @Expose
     @NotNull
     @PrimaryKey
-    public String uuid;
+    public String residency_uuid;
 
     @Expose
     public Date insertDate;
@@ -45,16 +45,13 @@ public class Residency extends BaseObservable implements Parcelable {
     public Date endDate;
 
     @Expose
-    public String extId;
+    public String individual_uuid;
 
     @Expose
-    public String location;
+    public String location_uuid;
 
     @Expose
-    public String compno;
-
-    @Expose
-    public String socialgroup;
+    public String socialgroup_uuid;
 
     @Expose
     public Integer endType;
@@ -62,89 +59,47 @@ public class Residency extends BaseObservable implements Parcelable {
     @Expose
     public Integer startType;
 
-    @Expose
-    public String visitid;
 
     @Expose
-    public String fw;
+    public String fw_uuid;
 
     @Expose
-    public Integer migType;
+    private Integer rltn_head;
 
     @Expose
-    public Integer reason;
-
-    @Expose
-    public Integer origin;
-
-    @Expose
-    public Integer destination;
-
-    @Expose
-    public Integer omgreason;
-
-    @Expose
-    public Integer complete;
+    public Integer complete=0;
 
     public Residency(){}
 
     @Ignore
-    public Residency(@NotNull String uuid, Date insertDate, Date startDate, Date endDate, String extId, String location,
-                     String compno, String socialgroup, Integer endType, Integer startType, String visitid, String fw,
-                     Integer migType, Integer reason, Integer origin, Integer destination, Integer omgreason) {
-        this.uuid = uuid;
+    public Residency(@NotNull String residency_uuid, Date insertDate, Date startDate, Date endDate, String individual_uuid, String location_uuid, String socialgroup_uuid, Integer endType, Integer startType, String fw_uuid) {
+        this.residency_uuid = residency_uuid;
         this.insertDate = insertDate;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.extId = extId;
-        this.location = location;
-        this.compno = compno;
-        this.socialgroup = socialgroup;
+        this.individual_uuid = individual_uuid;
+        this.location_uuid = location_uuid;
+        this.socialgroup_uuid = socialgroup_uuid;
         this.endType = endType;
         this.startType = startType;
-        this.visitid = visitid;
-        this.fw = fw;
-        this.migType = migType;
-        this.reason = reason;
-        this.origin = origin;
-        this.destination = destination;
-        this.omgreason = omgreason;
+        this.fw_uuid = fw_uuid;
+
     }
-
-    @Ignore
-
-    public Residency(@NotNull String uuid, Date insertDate, Date startDate, Date endDate, String extId, String location, String socialgroup, Integer endType, Integer startType, String visitid, String fw, Integer migType, Integer reason, Integer origin, Integer destination, Integer omgreason) {
-        this.uuid = uuid;
-        this.insertDate = insertDate;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.extId = extId;
-        this.location = location;
-        this.socialgroup = socialgroup;
-        this.endType = endType;
-        this.startType = startType;
-        this.visitid = visitid;
-        this.fw = fw;
-        this.migType = migType;
-        this.reason = reason;
-        this.origin = origin;
-        this.destination = destination;
-        this.omgreason = omgreason;
-    }
-
 
     @Ignore
     public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
+    @Bindable
     @NotNull
-    public String getUuid() {
-        return uuid;
+    public String getResidency_uuid() {
+        return residency_uuid;
     }
 
-    public void setUuid(@NotNull String uuid) {
-        this.uuid = uuid;
+    public void setResidency_uuid(@NotNull String residency_uuid) {
+        this.residency_uuid = residency_uuid;
     }
 
+    @Bindable
     public String getInsertDate() {
         if (insertDate == null) return "";
         return f.format(insertDate);
@@ -160,6 +115,7 @@ public class Residency extends BaseObservable implements Parcelable {
             }
     }
 
+    @Bindable
     public String getStartDate() {
         if (startDate == null) return "Select Start Date";
         return f.format(startDate);
@@ -175,6 +131,7 @@ public class Residency extends BaseObservable implements Parcelable {
             }
     }
 
+    @Bindable
     public String getEndDate() {
         return f.format(endDate);
     }
@@ -184,39 +141,44 @@ public class Residency extends BaseObservable implements Parcelable {
 
     }
 
-    public String getExtId() {
-        return extId;
+    @Bindable
+    public String getIndividual_uuid() {
+        return individual_uuid;
     }
 
-    public void setExtId(String extId) {
-        this.extId = extId;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getCompno() {
-        return compno;
-    }
-
-    public void setCompno(String compno) {
-        this.compno = compno;
+    public void setIndividual_uuid(String individual_uuid) {
+        this.individual_uuid = individual_uuid;
     }
 
     @Bindable
-    public String getSocialgroup() {
-        return socialgroup;
+    public String getLocation_uuid() {
+        return location_uuid;
     }
 
-    public void setSocialgroup(String socialgroup) {
-        this.socialgroup = socialgroup;
+    public void setLocation_uuid(String location_uuid) {
+        this.location_uuid = location_uuid;
     }
 
+    @Bindable
+    public String getSocialgroup_uuid() {
+        return socialgroup_uuid;
+    }
+
+    public void setSocialgroup_uuid(String socialgroup_uuid) {
+        this.socialgroup_uuid = socialgroup_uuid;
+    }
+
+
+    @Bindable
+    public String getFw_uuid() {
+        return fw_uuid;
+    }
+
+    public void setFw_uuid(String fw_uuid) {
+        this.fw_uuid = fw_uuid;
+    }
+
+    @Bindable
     public Integer getEndType() {
         return endType;
     }
@@ -225,6 +187,7 @@ public class Residency extends BaseObservable implements Parcelable {
         this.endType = endType;
     }
 
+    @Bindable
     public Integer getStartType() {
         return startType;
     }
@@ -233,60 +196,12 @@ public class Residency extends BaseObservable implements Parcelable {
         this.startType = startType;
     }
 
-    public String getVisitid() {
-        return visitid;
+    public Integer getRltn_head() {
+        return rltn_head;
     }
 
-    public void setVisitid(String visitid) {
-        this.visitid = visitid;
-    }
-
-    public String getFw() {
-        return fw;
-    }
-
-    public void setFw(String fw) {
-        this.fw = fw;
-    }
-
-    public Integer getMigType() {
-        return migType;
-    }
-
-    public void setMigType(Integer migType) {
-        this.migType = migType;
-    }
-
-    public Integer getReason() {
-        return reason;
-    }
-
-    public void setReason(Integer reason) {
-        this.reason = reason;
-    }
-
-    public Integer getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(Integer origin) {
-        this.origin = origin;
-    }
-
-    public Integer getDestination() {
-        return destination;
-    }
-
-    public void setDestination(Integer destination) {
-        this.destination = destination;
-    }
-
-    public Integer getOmgreason() {
-        return omgreason;
-    }
-
-    public void setOmgreason(Integer omgreason) {
-        this.omgreason = omgreason;
+    public void setRltn_head(Integer rltn_head) {
+        this.rltn_head = rltn_head;
     }
 
     public Integer getComplete() {
@@ -298,23 +213,18 @@ public class Residency extends BaseObservable implements Parcelable {
     }
 
     protected Residency(Parcel in) {
-        this.uuid = in.readString();
+        this.residency_uuid = in.readString();
         this.insertDate = (java.util.Date) in.readSerializable();
         this.startDate = (java.util.Date) in.readSerializable();
         this.endDate = (java.util.Date) in.readSerializable();
-        this.extId = in.readString();
-        this.location = in.readString();
-        this.compno = in.readString();
-        this.socialgroup = in.readString();
+        this.individual_uuid = in.readString();
+        this.location_uuid = in.readString();
+        this.socialgroup_uuid = in.readString();
         this.endType = in.readInt();
         this.startType = in.readInt();
-        this.visitid = in.readString();
-        this.fw = in.readString();
-        this.migType = in.readInt();
-        this.reason = in.readInt();
-        this.origin = in.readInt();
-        this.destination = in.readInt();
-        this.omgreason = in.readInt();
+        this.rltn_head = in.readInt();
+        this.fw_uuid = in.readString();
+
     }
 
     public static final Creator<Residency> CREATOR = new Creator<Residency>() {
@@ -336,23 +246,18 @@ public class Residency extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.uuid);
+        dest.writeString(this.residency_uuid);
         dest.writeSerializable(this.insertDate);
         dest.writeSerializable(this.startDate);
         dest.writeSerializable(this.endDate);
-        dest.writeString(this.extId);
-        dest.writeString(this.location);
-        dest.writeString(this.compno);
-        dest.writeString(this.socialgroup);
+        dest.writeString(this.individual_uuid);
+        dest.writeString(this.location_uuid);
+        dest.writeString(this.socialgroup_uuid);
         dest.writeInt(this.endType);
         dest.writeInt(this.startType);
-        dest.writeString(this.visitid);
-        dest.writeString(this.fw);
-        dest.writeInt(this.migType);
-        dest.writeInt(this.reason);
-        dest.writeInt(this.origin);
-        dest.writeInt(this.destination);
-        dest.writeInt(this.omgreason);
+        dest.writeInt(this.rltn_head);
+        dest.writeString(this.fw_uuid);
+
     }
 
 

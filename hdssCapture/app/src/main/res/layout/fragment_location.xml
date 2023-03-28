@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/Snow"
     android:id="@+id/location_fragment">
 
     <data>
@@ -61,8 +60,29 @@
                         android:id="@+id/location_fw"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={location.fw}"
+                        android:text="@={location.fw_uuid}"
+                        android:visibility="gone"
                         android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/location_uuid"
+                    android:text="@string/location_uuid">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/location_uuid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={location.location_uuid}"
+                        android:focusable="false"
+                        android:visibility="gone"
                         android:focusableInTouchMode="false"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -91,6 +111,7 @@
                         android:layout_height="wrap_content"
                         android:text="@={location.insertDate}"
                         android:focusable="false"
+                        android:visibility="gone"
                         android:focusableInTouchMode="false"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -102,15 +123,34 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/cluster"
-                    android:text="@string/cluster">
+                    android:hint="@string/clusteruuid"
+                    android:text="@string/clusteruuid">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/cluster_location"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLength="3"
-                        android:text="@={location.clusterId}"
+                        android:text="@={location.locationLevel_uuid}"
+                        android:focusable="false"
+                        android:visibility="gone"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/cluster">
+                    android:text="@string/cluster">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/locationcluster"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={location.villcode}"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:inputType="textPersonName|textCapCharacters"/>
@@ -118,7 +158,7 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -136,7 +176,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -148,14 +188,14 @@
                         android:id="@+id/locationextid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={location.extId}"
+                        android:text="@={location.compextId}"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
@@ -230,10 +270,17 @@
                 <Button
                     android:id="@+id/button_submit"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="60dip"
+                    android:layout_height="match_parent"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:backgroundTint="@color/pakistan_green"
+                    android:layout_gravity="center"
                     android:text="@string/text_submit"
-                    android:textSize="24sp" />
+                    android:textSize="25sp" />
+
 
             </LinearLayout>
         </ScrollView>

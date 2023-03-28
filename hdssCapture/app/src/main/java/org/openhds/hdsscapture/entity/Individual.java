@@ -29,14 +29,17 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "individual",
-indices = {@Index(value = {"extId"}, unique = true)})
+indices = {@Index(value = {"extId","individual_uuid"}, unique = true)})
 public class Individual extends BaseObservable implements Parcelable {
 
-    @SerializedName("extId")
+    @SerializedName("individual_uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "extId")
+    @ColumnInfo(name = "individual_uuid")
     @PrimaryKey
+    public String individual_uuid;
+
+    @ColumnInfo(name = "extId")
     public String extId;
 
     @SerializedName("dob")
@@ -46,7 +49,7 @@ public class Individual extends BaseObservable implements Parcelable {
 
     @Expose
     @ColumnInfo(name = "age")
-    public Integer age;
+    public Integer age = AppConstants.NOSELECT;
 
     @SerializedName("insertDate")
     @Expose
@@ -73,55 +76,65 @@ public class Individual extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "dobAspect")
     public Integer dobAspect;
 
-    @SerializedName("nickName")
+    @SerializedName("otherName")
     @Expose
-    @ColumnInfo(name = "nickName")
-    public String nickName;
+    @ColumnInfo(name = "otherName")
+    public String otherName;
 
-    @SerializedName("mother")
+    @SerializedName("mother_uuid")
     @Expose
-    @ColumnInfo(name = "mother")
-    public String mother;
+    @ColumnInfo(name = "mother_uuid")
+    public String mother_uuid = AppConstants.Mother;
 
-    @SerializedName("father")
+    @SerializedName("father_uuid")
     @Expose
-    @ColumnInfo(name = "father")
-    public String father;
+    @ColumnInfo(name = "father_uuid")
+    public String father_uuid = AppConstants.Father;
 
-    @SerializedName("fw")
+    @SerializedName("fw_uuid")
     @Expose
-    @ColumnInfo(name = "fw")
-    public String fw;
+    @ColumnInfo(name = "fw_uuid")
+    public String fw_uuid;
 
-    @SerializedName("complete")
     @Expose
-    @ColumnInfo(name = "complete")
-    public Integer complete;
+    public Integer complete= AppConstants.COMPLETE;
 
-    public String location;
+    @Expose
+    public Integer modified = AppConstants.NA;// modify status
 
-    public String socialgroup;
+    public String compextId;
+
+    public String houseExtId;
+
 
 
     public Individual(){}
 
     @Ignore
-    public Individual(@NotNull String extId, Date dob, Date insertDate, String firstName, String lastName, Integer gender,  Integer dobAspect, String nickName,  String mother, String father, String fw, Integer complete) {
+    public Individual(@NotNull String individual_uuid, String extId, Date dob, Integer age, Date insertDate, String firstName, String lastName, Integer gender, Integer dobAspect, String otherName, String mother_uuid, String father_uuid, String fw_uuid) {
+        this.individual_uuid = individual_uuid;
         this.extId = extId;
         this.dob = dob;
+        this.age = age;
         this.insertDate = insertDate;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
         this.dobAspect = dobAspect;
-        this.nickName = nickName;
-        this.mother = mother;
-        this.father = father;
-        this.fw = fw;
-        this.complete = complete;
+        this.otherName = otherName;
+        this.mother_uuid = mother_uuid;
+        this.father_uuid = father_uuid;
+        this.fw_uuid = fw_uuid;
     }
 
+    @NotNull
+    public String getIndividual_uuid() {
+        return individual_uuid;
+    }
 
+    public void setIndividual_uuid(@NotNull String individual_uuid) {
+        this.individual_uuid = individual_uuid;
+    }
 
     @NotNull
     public String getExtId() {
@@ -225,38 +238,40 @@ public class Individual extends BaseObservable implements Parcelable {
         this.dobAspect = dobAspect;
     }
 
+    public String getOtherName() {
+        return otherName;
+    }
+
+    public void setOtherName(String otherName) {
+        this.otherName = otherName;
+    }
+
+    public String getMother_uuid() {
+        return mother_uuid;
+    }
+
+    public void setMother_uuid(String mother_uuid) {
+        this.mother_uuid = mother_uuid;
+    }
+
+    public String getFather_uuid() {
+        return father_uuid;
+    }
+
+    public void setFather_uuid(String father_uuid) {
+        this.father_uuid = father_uuid;
+    }
+
+    public String getFw_uuid() {
+        return fw_uuid;
+    }
+
+    public void setFw_uuid(String fw_uuid) {
+        this.fw_uuid = fw_uuid;
+    }
+
     @Bindable
-    public String getNickName() {
-        return nickName;
-    }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
-    }
-
-    public String getMother() {
-        return mother;
-    }
-
-    public void setMother(String mother) {
-        this.mother = mother;
-    }
-
-    public String getFather() {
-        return father;
-    }
-
-    public void setFather(String father) {
-        this.father = father;
-    }
-
-    public String getFw() {
-        return fw;
-    }
-
-    public void setFw(String fw) {
-        this.fw = fw;
-    }
 
     public Integer getComplete() {
         return complete;
@@ -267,19 +282,18 @@ public class Individual extends BaseObservable implements Parcelable {
     }
 
 
-
     protected Individual(Parcel in) {
         this.extId = in.readString();
         this.dob = (java.util.Date) in.readSerializable();
         this.insertDate = (java.util.Date) in.readSerializable();
         this.firstName = in.readString();
         this.lastName = in.readString();
-        this.nickName = in.readString();
+        this.otherName = in.readString();
         this.gender = in.readInt();
         this.dobAspect = in.readInt();
-        this.mother = in.readString();
-        this.father = in.readString();
-        this.fw = in.readString();
+        this.mother_uuid = in.readString();
+        this.father_uuid = in.readString();
+        this.fw_uuid = in.readString();
     }
 
     public static final Creator<Individual> CREATOR = new Creator<Individual>() {
@@ -306,12 +320,12 @@ public class Individual extends BaseObservable implements Parcelable {
         dest.writeSerializable(this.insertDate);
         dest.writeString(this.firstName);
         dest.writeString(this.lastName);
-        dest.writeString(this.nickName);
+        dest.writeString(this.otherName);
         dest.writeInt(this.gender);
         dest.writeInt(this.dobAspect);
-        dest.writeString(this.mother);
-        dest.writeString(this.father);
-        dest.writeString(this.fw);
+        dest.writeString(this.mother_uuid);
+        dest.writeString(this.father_uuid);
+        dest.writeString(this.fw_uuid);
     }
 
     //SPINNERS ENTITY DOB ASPECT
