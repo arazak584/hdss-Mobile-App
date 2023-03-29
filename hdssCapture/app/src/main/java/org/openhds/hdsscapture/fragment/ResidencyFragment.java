@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +12,14 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.databinding.FragmentResidencyBinding;
+import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Location;
 import org.openhds.hdsscapture.entity.Residency;
@@ -104,6 +107,23 @@ public class ResidencyFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentResidencyBinding.inflate(inflater, container, false);
+        binding.setIndividual(individual);
+
+        final Intent i = getActivity().getIntent();
+        final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
+        /*
+        // Generate a UUID
+        if(residency.residency_uuid == null) {
+            String uuid = UUID.randomUUID().toString();
+            String uuidString = uuid.toString().replaceAll("-", "");
+            // Set the ID of the uuid
+            binding.getResidency().residency_uuid = uuidString;
+        }
+
+        if(residency.fw_uuid==null){
+            binding.getResidency().fw_uuid = fieldworkerData.getFw_uuid();
+        }*/
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -153,7 +173,11 @@ public class ResidencyFragment extends Fragment {
         });
 
         //SPINNERS
-        loadCodeData(binding.residencyComplete,  "complete");
+        loadCodeData(binding.residencyComplete,  "yn");
+        loadCodeData(binding.starttype,  "startType");
+        loadCodeData(binding.endtype,  "endType");
+        loadCodeData(binding.rltnHead,  "rltnhead");
+
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 

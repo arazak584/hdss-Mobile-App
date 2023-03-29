@@ -27,6 +27,7 @@ public class AppConstants {
 
 
     public static final String
+            EVENT_MIND00S = "INDIVIDUAL",
             EVENT_HDSS1 = "RESIDENCY REGISTRATION",
             EVENT_HDSS2 = "VISIT REGISTRATION",
             EVENT_HDSS3 = "HOUSEHOLD REGISTRATION",

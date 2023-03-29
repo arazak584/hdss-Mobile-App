@@ -10,6 +10,12 @@
             name="individual"
             type="org.openhds.hdsscapture.entity.Individual" />
 
+        <import type="android.view.View" />
+
+        <variable
+            name="eventname"
+            type="String" />
+
     </data>
 
     <LinearLayout
@@ -19,16 +25,12 @@
         android:orientation="vertical"
         tools:context=".fragment.IndividualFragment">
 
+        <include
+            layout="@layout/individual_summary"
+            bind:individual="@{individual}"
+            bind:eventname="@{eventname}"
+             />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/individual"
-            android:textColor="@color/colorPrimary"
-            android:textSize="30sp"
-            android:textStyle="bold" />
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
@@ -252,6 +254,12 @@
                     android:required="true"
                     android:padding="10dp"/>
 
+                <LinearLayout
+                    goneUnless="@{individual.gender==1}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
                 <Button
                     android:id="@+id/button_individual_mother"
                     android:layout_width="match_parent"
@@ -303,6 +311,8 @@
                         android:required="true"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"

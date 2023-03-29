@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -114,8 +113,9 @@ public class EventsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentEventsBinding.inflate(inflater, container, false);
+        binding.setIndividual(individual);
 
-
+        /*
         final TextView fname = binding.getRoot().findViewById(R.id.textView_fname);
         final TextView lname = binding.getRoot().findViewById(R.id.textView_lname);
         final TextView hhid = binding.getRoot().findViewById(R.id.textView_hhid);
@@ -128,7 +128,7 @@ public class EventsFragment extends Fragment {
         permid.setText(individual.getExtId());
         dob.setText(individual.getDob());
         hhid.setText(individual.houseExtId);
-        age.setText(String.valueOf(individual.getAge()));
+        age.setText(String.valueOf(individual.getAge()));*/
 
         binding.addMenuFab.setOnClickListener(view -> {
 
@@ -233,6 +233,7 @@ public class EventsFragment extends Fragment {
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(adapter);
+
         return view;
 
     }

@@ -25,6 +25,9 @@ public class Handler {
     @BindingAdapter("goneUnless")
     public static void goneUnless(View view, Boolean visible) {
         view.setVisibility(visible ? View.VISIBLE : View.GONE);
+        if(view.isFocusable()) {
+            view.requestFocus();
+        }
     }
 
 

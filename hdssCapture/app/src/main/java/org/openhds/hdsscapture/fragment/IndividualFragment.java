@@ -279,6 +279,7 @@ public class IndividualFragment extends Fragment {
             save(false, true);
         });
 
+        binding.setEventname(AppConstants.EVENT_MIND00S);
         Handler.colorLayouts(requireContext(), binding.INDIVIDUALLAYOUT);
         View view = binding.getRoot();
         return view;
