@@ -144,7 +144,8 @@
                     android:id="@+id/rel_starttype"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/starttype"
+                    selection="@{relationship.aIsToB}"
+                    android:onItemSelected="@{relationship::setAIsToB}"
                     android:gravity="left"
                     android:textColor="#000301"
                     android:padding="10dp"/>
@@ -179,22 +180,8 @@
                     android:id="@+id/rel_endtype"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:entries="@array/endtype"
-                    android:gravity="left"
-                    android:textColor="#000301"
-                    android:padding="10dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:text="@string/relationship"/>
-
-                <Spinner
-                    android:id="@+id/rel_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    selection="@{relationship.endType}"
+                    android:onItemSelected="@{relationship::setEndType}"
                     android:gravity="left"
                     android:textColor="#000301"
                     android:padding="10dp"/>
@@ -217,6 +204,146 @@
                     android:text="@={relationship.endDate}"
                     android:textSize="20sp"
                     tools:ignore="TextContrastCheck" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/mar"/>
+
+                <Spinner
+                    android:id="@+id/mar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{relationship.mar}"
+                    android:onItemSelected="@{relationship::setMar}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="10dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/tnbch">
+                    android:text="@string/tnbch">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tnbch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{Integer.toString(relationship.tnbch)}"
+                        android:inputType="number"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/nchdm">
+                    android:text="@string/nchdm">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/nchdm"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{Integer.toString(relationship.nchdm)}"
+                        android:inputType="number"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/polygamous"/>
+
+                <Spinner
+                    android:id="@+id/polygamous"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{relationship.polygamous}"
+                    android:onItemSelected="@{relationship::setPolygamous}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="10dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/nwive">
+                    android:text="@string/nwive">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/nwive"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{Integer.toString(relationship.nwive)}"
+                        android:inputType="number"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/lcow"/>
+
+                <Spinner
+                    android:id="@+id/lcow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{relationship.lcow}"
+                    android:onItemSelected="@{relationship::setLcow}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="10dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/mrank">
+                    android:text="@string/mrank">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/mrank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{Integer.toString(relationship.mrank)}"
+                        android:inputType="number"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/form_complete"/>
+
+                <Spinner
+                    android:id="@+id/rel_complete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{relationship.complete}"
+                    android:onItemSelected="@{relationship::setComplete}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="15dp"/>
 
 
             </LinearLayout>

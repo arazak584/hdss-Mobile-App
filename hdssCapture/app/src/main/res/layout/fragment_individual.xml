@@ -254,12 +254,6 @@
                     android:required="true"
                     android:padding="10dp"/>
 
-                <LinearLayout
-                    goneUnless="@{individual.gender==1}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
                 <Button
                     android:id="@+id/button_individual_mother"
                     android:layout_width="match_parent"
@@ -311,8 +305,6 @@
                         android:required="true"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
-
-                </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"

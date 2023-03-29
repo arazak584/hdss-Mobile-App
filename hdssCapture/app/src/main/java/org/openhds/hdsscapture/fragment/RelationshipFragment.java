@@ -163,6 +163,14 @@ public class RelationshipFragment extends Fragment {
             }
         });
 
+        //SPINNERS
+        loadCodeData(binding.relComplete,  "yn");
+        loadCodeData(binding.relStarttype,  "relationshipType");
+        loadCodeData(binding.relEndtype,  "relendType");
+        loadCodeData(binding.mar,  "yn");
+        loadCodeData(binding.polygamous,  "yn");
+        loadCodeData(binding.lcow,  "yn");
+
         binding.buttonSaveClose.setOnClickListener(v -> {
 
             save(true, true);

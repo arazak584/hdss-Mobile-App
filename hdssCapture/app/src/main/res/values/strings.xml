@@ -306,6 +306,13 @@
     <string name="closecontinue"><![CDATA[Close & Continue]]></string>
     <string name="version">ARN CAPTURE</string>
     <string name="versions">v2023.0.1</string>
+    <string name="mar">Is this the first marriage of the woman?</string>
+    <string name="tnbch">Total Number of biological children</string>
+    <string name="nchdm">Number of biological children from this marriage</string>
+    <string name="polygamous">Are you in a polygamous marriage?</string>
+    <string name="nwive">Number of wives of husband(including you)</string>
+    <string name="lcow">Does women live in the same household with co-wife(s)</string>
+    <string name="mrank">Woman\'s rank (In current marriage)</string>
 
 
 </resources>

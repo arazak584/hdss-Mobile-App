@@ -1,7 +1,11 @@
 package org.openhds.hdsscapture.entity;
 
+import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
 import androidx.room.ColumnInfo;
@@ -14,6 +18,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,7 +39,7 @@ public class Relationship extends BaseObservable implements Parcelable {
     public String individual_uuid;
 
     @Expose
-    public String man_uuid;
+    public String man_uuid = AppConstants.Father;;
 
     @Expose
     public Date startDate;
@@ -46,10 +51,7 @@ public class Relationship extends BaseObservable implements Parcelable {
     public Date insertDate;
 
     @Expose
-    public String startType;
-
-    @Expose
-    public String endType;
+    public Integer endType  = 1;
 
     @Expose
     public Integer aIsToB;
@@ -58,33 +60,32 @@ public class Relationship extends BaseObservable implements Parcelable {
     public String fw_uuid;
 
     @Expose
-    public Integer complete = AppConstants.NOT_COMPLETE;
+    public Integer complete;
     @Expose
-    private Integer mar;//Is this the first marriage of the woman?
+    public Integer mar;//Is this the first marriage of the woman?
     @Expose
-    private Integer tnbch;//Total Number of biological children
+    public Integer tnbch;//Total Number of biological children
     @Expose
-    private Integer nchdm;//Number of biological children from this marriage
+    public Integer nchdm;//Number of biological children from this marriage
     @Expose
-    private Integer polygamous;//Are you in a polygamous marriage
+    public Integer polygamous;//Are you in a polygamous marriage
     @Expose
-    private Integer nwive;//Number of wives of husband(including you)
+    public Integer nwive;//Number of wives of husband(including you)
     @Expose
-    private Integer lcow;//Does women live in the same household with co-wife(s)
+    public Integer lcow;//Does women live in the same household with co-wife(s)
     @Expose
-    private Integer mrank;//Woman's rank (In current marriage)
+    public Integer mrank;//Woman's rank (In current marriage)
 
 
     public Relationship(){}
 
     @Ignore
-    public Relationship(@NotNull String individual_uuid, String man_uuid, Date startDate, Date endDate, Date insertDate, String startType, String endType, Integer aIsToB, String fw) {
+    public Relationship(@NotNull String individual_uuid, String man_uuid, Date startDate, Date endDate, Date insertDate,Integer endType, Integer aIsToB, String fw) {
         this.individual_uuid = individual_uuid;
         this.man_uuid = man_uuid;
         this.startDate = startDate;
         this.endDate = endDate;
         this.insertDate = insertDate;
-        this.startType = startType;
         this.endType = endType;
         this.aIsToB = aIsToB;
         this.fw_uuid = fw_uuid;
@@ -147,19 +148,11 @@ public class Relationship extends BaseObservable implements Parcelable {
             }
     }
 
-    public String getStartType() {
-        return startType;
-    }
-
-    public void setStartType(String startType) {
-        this.startType = startType;
-    }
-
-    public String getEndType() {
+    public Integer getEndType() {
         return endType;
     }
 
-    public void setEndType(String endType) {
+    public void setEndType(Integer endType) {
         this.endType = endType;
     }
 
@@ -250,8 +243,7 @@ public class Relationship extends BaseObservable implements Parcelable {
         this.startDate = (Date) in.readSerializable();
         this.endDate = (Date) in.readSerializable();
         this.insertDate = (Date) in.readSerializable();
-        this.startType = in.readString();
-        this.endType = in.readString();
+        this.endType = in.readInt();
         this.aIsToB = in.readInt();
         this.fw_uuid = in.readString();
     }
@@ -280,9 +272,110 @@ public class Relationship extends BaseObservable implements Parcelable {
         dest.writeSerializable(this.startDate);
         dest.writeSerializable(this.endDate);
         dest.writeSerializable(this.insertDate);
-        dest.writeString(this.startType);
-        dest.writeString(this.endType);
+        dest.writeInt(this.endType);
         dest.writeInt(this.aIsToB);
         dest.writeString(this.fw_uuid);
     }
+
+    //SPINNERS ENTITY COMPLETE FORM FOR SYNC
+    public void setComplete(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            complete = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            complete = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setEndType(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            endType = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            endType = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setAIsToB(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            aIsToB = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            aIsToB = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+    }
+
+        //SPINNERS ENTITY
+        public void setMar(AdapterView<?> parent, View view, int position, long id) {
+
+            if (position != parent.getSelectedItemPosition()) {
+                parent.setSelection(position);
+            }
+            if (position == 0) {
+                mar = AppConstants.NOSELECT;
+            } else {
+                final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+                mar = kv.codeValue;
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+                ((TextView) parent.getChildAt(0)).setTextSize(20);
+            }
+
+    }
+
+        //SPINNERS ENTITY
+        public void setPolygamous(AdapterView<?> parent, View view, int position, long id) {
+
+            if (position != parent.getSelectedItemPosition()) {
+                parent.setSelection(position);
+            }
+            if (position == 0) {
+                polygamous = AppConstants.NOSELECT;
+            } else {
+                final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+                polygamous = kv.codeValue;
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+                ((TextView) parent.getChildAt(0)).setTextSize(20);
+            }
+
+        }
+
+        //SPINNERS ENTITY
+        public void setLcow(AdapterView<?> parent, View view, int position, long id) {
+
+            if (position != parent.getSelectedItemPosition()) {
+                parent.setSelection(position);
+            }
+            if (position == 0) {
+                lcow = AppConstants.NOSELECT;
+            } else {
+                final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+                lcow = kv.codeValue;
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+                ((TextView) parent.getChildAt(0)).setTextSize(20);
+            }
+
+        }
+
 }
