@@ -264,7 +264,7 @@ public class IndividualFragment extends Fragment {
 
         //LOAD SPINNERS
         loadCodeData(binding.dobAspect, "yn");
-        loadCodeData(binding.individualComplete,  "complete");
+        loadCodeData(binding.individualComplete,  "yn");
         loadCodeData(binding.gender, "gender");
 
 
@@ -289,7 +289,7 @@ public class IndividualFragment extends Fragment {
 
         if (save) {
             Individual finalData = binding.getIndividual();
-            finalData.modified = AppConstants.YES;
+            //finalData.modified = AppConstants.YES;
 
 
             if (finalData.complete != null) {

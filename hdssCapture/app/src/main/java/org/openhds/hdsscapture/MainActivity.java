@@ -11,6 +11,7 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.Activity.PullActivity;
 import org.openhds.hdsscapture.Activity.PushActivity;
 import org.openhds.hdsscapture.Activity.RemainderActivity;
+import org.openhds.hdsscapture.fragment.InfoFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -83,8 +84,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //Intent intent = new Intent(MainActivity.this, HierarchyActivity.class);
-                //startActivity(intent);
+                InfoFragment dialogFragment = new InfoFragment();
+
+                // Show the dialog fragment
+                dialogFragment.show(getSupportFragmentManager(), "InfoFragment");
+
             }
         });
     }

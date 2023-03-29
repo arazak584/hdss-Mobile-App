@@ -10,7 +10,7 @@ public class AppConstants {
     public static final String NOT_DONE="NOT DONE";
     public static final String NOT_VISITED = "NOT VISITED";
 
-    public static final int NOT_COMPLETE = 0, COMPLETE=1, ELIGIBILITY_COMPLETE=2, ELIGIBILITY_ENROLLED=3;
+    public static final int NOT_COMPLETE = 0, COMPLETE=1;
     public static final int NOSELECT = 0;
     public static final String SPINNER_NOSELECT = "--Select an option--";
 

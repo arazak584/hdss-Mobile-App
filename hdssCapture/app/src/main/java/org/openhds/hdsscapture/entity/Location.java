@@ -93,7 +93,7 @@ public class Location extends BaseObservable implements Parcelable {
     public Integer locationType=1;
 
     @Expose
-    public Integer complete = AppConstants.NA;
+    public Integer complete = 0;
 
     public String villcode;
 

@@ -176,6 +176,7 @@ public class Inmigration extends BaseObservable implements Parcelable {
 
 
     protected Inmigration(Parcel in) {
+        this.img_uuid = in.readString();
         this.individual_uuid = in.readString();
         this.insertDate = (Date) in.readSerializable();
         this.migType = in.readInt();
@@ -206,6 +207,7 @@ public class Inmigration extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.img_uuid);
         dest.writeString(this.individual_uuid);
         dest.writeSerializable(this.insertDate);
         dest.writeInt(this.migType);

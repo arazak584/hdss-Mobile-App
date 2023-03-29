@@ -349,7 +349,7 @@
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/pakistan_green"
-                android:text="@string/closedata" />
+                android:text="@string/closecontinue" />
 
         </LinearLayout>
 

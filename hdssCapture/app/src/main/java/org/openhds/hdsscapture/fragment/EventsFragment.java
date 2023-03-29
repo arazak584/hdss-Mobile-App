@@ -244,9 +244,9 @@ public class EventsFragment extends Fragment {
             if (form == null) {
                 form = new Residency();
             }
-            //if (form.complete ==0 ) {
-              //  eventForms.add(new EventForm(AppConstants.EVENT_HDSS1, AppConstants.EVENT_RESIDENCY, form.complete));
-            //}
+            if (form.complete ==0 ) {
+                eventForms.add(new EventForm(AppConstants.EVENT_HDSS1, AppConstants.EVENT_RESIDENCY, form.complete));
+            }
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -279,9 +279,9 @@ public class EventsFragment extends Fragment {
             if (form == null) {
                 form = new Death();
             }
-            //if (form.complete == null ) {
-            //    eventForms.add(new EventForm(AppConstants.EVENT_HDSS6, AppConstants.EVENT_DEATH, form.complete));
-            //}
+            if (form.complete == null ) {
+                eventForms.add(new EventForm(AppConstants.EVENT_HDSS6, AppConstants.EVENT_DEATH, form.complete));
+            }
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

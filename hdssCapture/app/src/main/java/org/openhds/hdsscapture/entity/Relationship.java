@@ -13,6 +13,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
+import org.openhds.hdsscapture.AppConstants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,7 +58,7 @@ public class Relationship extends BaseObservable implements Parcelable {
     public String fw_uuid;
 
     @Expose
-    public Integer complete;
+    public Integer complete = AppConstants.NOT_COMPLETE;
     @Expose
     private Integer mar;//Is this the first marriage of the woman?
     @Expose

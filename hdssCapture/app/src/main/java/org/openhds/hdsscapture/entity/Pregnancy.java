@@ -124,7 +124,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     @SerializedName("complete")
     @Expose
     @ColumnInfo(name = "complete")
-    public Integer complete;
+    public Integer complete = AppConstants.NOT_COMPLETE;
 
     public String firstName;
 

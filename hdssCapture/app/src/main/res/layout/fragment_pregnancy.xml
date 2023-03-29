@@ -97,8 +97,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/ind_uuid">
-                    android:text="@string/ind_uuid">
+                    android:hint="@string/uuid">
+                    android:text="@string/uuid">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/uuid"
@@ -115,8 +115,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/ind_extid">
-                    android:text="@string/ind_extid">
+                    android:hint="@string/ind_uuid">
+                    android:text="@string/ind_uuid">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/extid"

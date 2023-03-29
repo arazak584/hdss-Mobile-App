@@ -1,6 +1,5 @@
 package org.openhds.hdsscapture.Adapter;
 
-import static org.openhds.hdsscapture.AppConstants.COMPLETE;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS1;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS10;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS2;
@@ -10,11 +9,7 @@ import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS6;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS7;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS8;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS9;
-import static org.openhds.hdsscapture.AppConstants.MARKED_COMPLETE;
-import static org.openhds.hdsscapture.AppConstants.MARKED_INCOMPLETE;
-import static org.openhds.hdsscapture.AppConstants.NOT_DONE;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,15 +75,15 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
     public void onBindViewHolder(@NonNull EventFormAdapter.ViewHolder holder, int position) {
         final EventForm eventForm = eventForms.get(position);
         final String status;
-
-        if (eventForm.m_status == COMPLETE) {
+        /*
+        if (eventForm.complete == null ) {
             holder.linearLayout.setBackgroundColor(Color.YELLOW);
             status = eventForm.complete == COMPLETE ? MARKED_COMPLETE : MARKED_INCOMPLETE;
-        } else if (eventForm.m_status == NOT_COMPLETE) {
+        } else if (eventForm.complete == NOT_COMPLETE) {
             if (eventForm.complete == COMPLETE) {
                 holder.linearLayout.setBackgroundColor(Color.GREEN);
                 status = MARKED_COMPLETE;
-            } else if (eventForm.complete == null) {
+            } else if (eventForm.complete == NOT_COMPLETE) {
                 holder.linearLayout.setBackgroundColor(Color.RED);
                 status = MARKED_INCOMPLETE;
             } else {
@@ -98,11 +93,11 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
         } else {
             holder.linearLayout.setBackgroundColor(Color.TRANSPARENT);
             status = NOT_DONE;
-        }
+        }*/
 
         holder.textView_event.setText(eventForm.event_name);
         holder.textView_form.setText(eventForm.form_name);
-        holder.textView_status.setText(status);
+        //holder.textView_status.setText(status);
         holder.linearLayout.setOnClickListener(view -> formFactory(individual, residency, location, socialgroup,caseItem, eventForm));
 
     }

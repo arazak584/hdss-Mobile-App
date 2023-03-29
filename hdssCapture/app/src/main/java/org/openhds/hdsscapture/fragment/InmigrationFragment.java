@@ -107,6 +107,15 @@ public class InmigrationFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentInmigrationBinding.inflate(inflater, container, false);
+        binding.setInmigration(inmigration);
+        /*
+        // Generate a UUID
+        if(inmigration.img_uuid == null) {
+            String uuid = UUID.randomUUID().toString();
+            String uuidString = uuid.toString().replaceAll("-", "");
+            // Set the ID of the uuid
+            binding.getInmigration().img_uuid = uuidString;
+        }*/
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {

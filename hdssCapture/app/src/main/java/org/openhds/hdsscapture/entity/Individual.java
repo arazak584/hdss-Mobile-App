@@ -97,10 +97,10 @@ public class Individual extends BaseObservable implements Parcelable {
     public String fw_uuid;
 
     @Expose
-    public Integer complete= AppConstants.COMPLETE;
+    public Integer complete= 0;
 
-    @Expose
-    public Integer modified = AppConstants.NA;// modify status
+    //@Expose
+    //public Integer modified = AppConstants.NA;// modify status
 
     public String compextId;
 
@@ -294,6 +294,7 @@ public class Individual extends BaseObservable implements Parcelable {
         this.mother_uuid = in.readString();
         this.father_uuid = in.readString();
         this.fw_uuid = in.readString();
+        this.complete = in.readInt();
     }
 
     public static final Creator<Individual> CREATOR = new Creator<Individual>() {
@@ -326,6 +327,7 @@ public class Individual extends BaseObservable implements Parcelable {
         dest.writeString(this.mother_uuid);
         dest.writeString(this.father_uuid);
         dest.writeString(this.fw_uuid);
+        dest.writeInt(this.complete);
     }
 
     //SPINNERS ENTITY DOB ASPECT

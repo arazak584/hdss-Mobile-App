@@ -44,7 +44,7 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual")
     List<Individual> retrieve();
 
-    @Query("SELECT * FROM individual WHERE modified=1")
+    @Query("SELECT * FROM individual WHERE complete=1")
     List<Individual> retrieveToSync();
 
     @Query("SELECT a.*,c.compextId,d.houseExtId FROM individual as a " + "INNER JOIN residency as b ON a.individual_uuid = b.individual_uuid " +
@@ -95,7 +95,7 @@ public interface IndividualDao {
             "(a.individual_uuid=:id)")
     LiveData<List<CaseItem>> retrieveByIndividual1(String id);
 
-    @Query("SELECT a.individual_uuid,extId,dob,age,gender,firstName,lastName FROM individual AS a " +
+    @Query("SELECT a.* FROM individual AS a " +
             " Where a.individual_uuid=:id")
     LiveData<List<CaseItem>> retrieveByIndividual(String id);
 

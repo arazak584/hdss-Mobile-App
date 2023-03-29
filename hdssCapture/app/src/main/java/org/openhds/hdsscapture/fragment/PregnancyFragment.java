@@ -29,6 +29,7 @@ import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -107,6 +108,14 @@ public class PregnancyFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentPregnancyBinding.inflate(inflater, container, false);
         binding.setPregnancy(pregnancy);
+
+        // Generate a UUID
+        if(pregnancy.obs_uuid == null) {
+            String uuid = UUID.randomUUID().toString();
+            String uuidString = uuid.toString().replaceAll("-", "");
+            // Set the ID of the Fieldworker object
+            binding.getPregnancy().obs_uuid = uuidString;
+        }
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
