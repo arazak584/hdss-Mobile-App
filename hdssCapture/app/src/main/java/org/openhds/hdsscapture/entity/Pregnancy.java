@@ -99,7 +99,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     @Expose
     public String bnet_sou_other;//Other, Specify
     @Expose
-    public Integer bnet_loc;//Location of bednet
+    public Integer bnet_loc;//Locations of bednet
     @Expose
     public String bnet_loc_other;//Other, Specify
     @Expose

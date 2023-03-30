@@ -34,7 +34,7 @@ import org.openhds.hdsscapture.entity.CodeBook;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
@@ -319,7 +319,7 @@ public class PullActivity extends AppCompatActivity {
         });
 
 
-        //Sync Zipped Location
+        //Sync Zipped Locations
         final Button button_DownloadLocation = findViewById(R.id.button_SyncLocationData);
         final TextView textView_SyncLocation = findViewById(R.id.textView_SyncLocationData);
         button_DownloadLocation.setOnClickListener(new View.OnClickListener() {
@@ -327,7 +327,7 @@ public class PullActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 progress.show();
-                progress.setMessage("Downloading Location...");
+                progress.setMessage("Downloading Locations...");
                 Call<ResponseBody> call = dao.downloadLocation();
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -376,17 +376,17 @@ public class PullActivity extends AppCompatActivity {
                                     CsvSchema schema = CsvSchema.builder().addColumn("location_uuid").addColumn("accuracy").addColumn("compextId").addColumn("compno")
                                             .addColumn("fw_uuid").addColumn("insertDate").addColumn("latitude").addColumn("locationLevel_uuid").addColumn("locationName")
                                             .addColumn("locationType").addColumn("longitude").addColumn("status").build();
-                                    MappingIterator<Location> iterator = mapper.readerFor(Location.class).with(schema).readValues(unzippedFile);
+                                    MappingIterator<Locations> iterator = mapper.readerFor(Locations.class).with(schema).readValues(unzippedFile);
                                     progress.setCancelable(true);
                                     progress.setCanceledOnTouchOutside(true);
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
                                         int batchSize = 10000;
-                                        List<Location> locations = new ArrayList<>();
+                                        List<Locations> locations = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
-                                            Location location = iterator.next();
+                                            Locations location = iterator.next();
                                             if (location != null) {
                                                 runOnUiThread(new Runnable() {
                                                     public void run() {
@@ -440,7 +440,7 @@ public class PullActivity extends AppCompatActivity {
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         // Show error message
                         progress.dismiss();
-                        textView_SyncLocation.setText("Location Download Error! Retry or Contact Administrator");
+                        textView_SyncLocation.setText("Locations Download Error! Retry or Contact Administrator");
                         textView_SyncLocation.setTextColor(Color.RED);
                     }
 

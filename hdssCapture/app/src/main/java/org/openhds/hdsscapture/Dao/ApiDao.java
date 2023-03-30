@@ -7,7 +7,7 @@ import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
@@ -60,7 +60,7 @@ public interface ApiDao {
     Call<ResponseBody> downloadDemography();
 
     @POST("location")
-    Call<DataWrapper<Location>> sendLocationdata(@Body DataWrapper<Location> dataModal);
+    Call<DataWrapper<Locations>> sendLocationdata(@Body DataWrapper<Locations> dataModal);
 
     @POST("visit")
     Call<DataWrapper<Visit>> sendVisitdata(@Body DataWrapper<Visit> dataModal);

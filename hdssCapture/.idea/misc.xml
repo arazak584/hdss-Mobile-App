@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Razak/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_spinner_dropdown_item.xml" value="0.109375" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/drawable-v24/border_shape.xml" value="0.2185" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/drawable-v24/ic_close.xml" value="0.216" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/drawable/rounded_button.xml" value="0.216" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout-w600dp/list_cases.xml" value="0.34010416666666665" />
@@ -60,6 +61,10 @@
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/pregnancy_itemlist.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/remainder_view_items.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/save_buttons.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/menu/add_form.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/menu/main_menu.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/menu/save_menu.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/menu/search_menu.xml" value="0.25" />
         <entry key="..\:/hdssCapture/app/src/main/res/drawable-v24/border_shape.xml" value="0.216" />
         <entry key="..\:/hdssCapture/app/src/main/res/drawable-v24/ic_baseline_add_24.xml" value="0.216" />
         <entry key="..\:/hdssCapture/app/src/main/res/drawable-v24/ic_close.xml" value="0.2135" />

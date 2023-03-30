@@ -29,7 +29,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "individual",
-indices = {@Index(value = {"extId","individual_uuid"}, unique = true)})
+indices = {@Index(value = {"extId","individual_uuid","firstName","lastName","houseExtId","compextId"}, unique = false)})
 public class Individual extends BaseObservable implements Parcelable {
 
     @SerializedName("individual_uuid")
@@ -97,7 +97,7 @@ public class Individual extends BaseObservable implements Parcelable {
     public String fw_uuid;
 
     @Expose
-    public Integer complete= 0;
+    public Integer complete;
 
     //@Expose
     //public Integer modified = AppConstants.NA;// modify status

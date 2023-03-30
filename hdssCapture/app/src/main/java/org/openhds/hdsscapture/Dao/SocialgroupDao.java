@@ -45,7 +45,7 @@ public interface SocialgroupDao {
     int count();
 
     @Query("SELECT a.*,compextId FROM socialgroup as a " + "INNER JOIN residency as b ON a.socialgroup_uuid = b.socialgroup_uuid" +
-            " INNER JOIN location as c on b.location_uuid=c.location_uuid " +
+            " INNER JOIN Locations as c on b.location_uuid=c.location_uuid " +
             " WHERE b.endType=1 and c.compextId=:id GROUP BY a.houseExtId ")
     List<Socialgroup> retrieveBySocialgroup(String id);
 }

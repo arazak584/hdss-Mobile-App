@@ -20,7 +20,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentHouseVisitBinding;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -42,7 +42,7 @@ public class HouseVisitFragment extends Fragment {
     private final String TAG = "LOCATION.TAG";
 
 
-    private Location location;
+    private Locations locations;
     private Socialgroup socialgroup;
     private Residency residency;
     private Individual individual;
@@ -61,16 +61,16 @@ public class HouseVisitFragment extends Fragment {
      //* @param cluster_id  Parameter 1.
      * @param individual Parameter 5.
      * @param residency Parameter 4.
-     * @param location    Parameter 2.
+     * @param locations    Parameter 2.
      * @param socialgroup Parameter 3.
      *
      * @return A new instance of fragment HouseVisitFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HouseVisitFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup) {
+    public static HouseVisitFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
         HouseVisitFragment fragment = new HouseVisitFragment();
         Bundle args = new Bundle();
-        args.putParcelable(LOC_LOCATION_IDS, location);
+        args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(INDIVIDUAL_ID, individual);
@@ -87,7 +87,7 @@ public class HouseVisitFragment extends Fragment {
             this.socialgroup = getArguments().getParcelable(SOCIAL_ID);
             this.residency = getArguments().getParcelable(RESIDENCY_ID);
             this.individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            this.location = getArguments().getParcelable(LOC_LOCATION_IDS);
+            this.locations = getArguments().getParcelable(LOC_LOCATION_IDS);
         }
     }
 
@@ -103,10 +103,10 @@ public class HouseVisitFragment extends Fragment {
         final TextView gpsLat = binding.getRoot().findViewById(R.id.textView_gpsLat);
         final TextView name = binding.getRoot().findViewById(R.id.textView_compname);
 
-        compno.setText(location.getCompextId());
-        name.setText(location.getLocationName());
-        gpsLat.setText(location.getLatitude());
-        gps.setText(location.getLongitude());
+        compno.setText(locations.getCompextId());
+        name.setText(locations.getLocationName());
+        gpsLat.setText(locations.getLatitude());
+        gps.setText(locations.getLongitude());
 
 
         /*//Button showDialogButton = view.findViewById(R.id.button_pregnant);
@@ -117,14 +117,14 @@ public class HouseVisitFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Show the dialog fragment
-                PregnancyDialogFragment.newInstance(individual, residency, location,socialgroup, pregnancy)
+                PregnancyDialogFragment.newInstance(individual, residency, locations,socialgroup, pregnancy)
                         .show(getChildFragmentManager(), "PregnancyDialogFragment");
             }
         });*/
 
 
         final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_household);
-        final IndividualViewAdapter adapter = new IndividualViewAdapter(this, residency,location, socialgroup );
+        final IndividualViewAdapter adapter = new IndividualViewAdapter(this, residency, locations, socialgroup );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
         //recyclerView.setHasFixedSize(true);
@@ -162,7 +162,7 @@ public class HouseVisitFragment extends Fragment {
             final Visit visit = new Visit();
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    PregnancyFragment.newInstance(individual,residency,location, socialgroup,caseItem,eventForm)).commit();
+                    PregnancyFragment.newInstance(individual,residency,locations, socialgroup,caseItem,eventForm)).commit();
         });*/
 
 
@@ -172,7 +172,7 @@ public class HouseVisitFragment extends Fragment {
             final Individual individual = new Individual();
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    IndividualFragment.newInstance(individual,residency,location, socialgroup,caseItem)).commit();
+                    IndividualFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
         });
 
 

@@ -11,8 +11,8 @@
             type="org.openhds.hdsscapture.entity.Visit" />
 
         <variable
-            name="location"
-            type="org.openhds.hdsscapture.entity.Location" />
+            name="locations"
+            type="org.openhds.hdsscapture.entity.Locations" />
 
     </data>
 

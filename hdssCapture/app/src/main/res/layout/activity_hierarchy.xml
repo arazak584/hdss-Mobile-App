@@ -162,7 +162,7 @@
                 app:fabSize="mini"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:text="Select Location" />
+                android:text="Select Locations" />
 
 
 

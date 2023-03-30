@@ -13,7 +13,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.fragment.ClusterFragment;
@@ -28,7 +28,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     ClusterFragment activity;
     LayoutInflater inflater;
-    private List<Location> locationList;
+    private List<Locations> locationsList;
     private Hierarchy level6Data;
     private Socialgroup socialgroup;
     private Residency residency;
@@ -37,7 +37,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     public LocationAdapter(ClusterFragment activity, Hierarchy level6Data) {
         this.activity = activity;
         this.level6Data = level6Data;
-        locationList = new ArrayList<>();
+        locationsList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
 
 
@@ -74,16 +74,16 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        final Location location = locationList.get(position);
+        final Locations locations = locationsList.get(position);
 
-        holder.locationname.setText(location.getLocationName());
-        holder.compno.setText(location.getCompno());
-        holder.longitude.setText(location.getLongitude());
-        holder.latitude.setText(location.getLatitude());
+        holder.locationname.setText(locations.getLocationName());
+        holder.compno.setText(locations.getCompno());
+        holder.longitude.setText(locations.getLongitude());
+        holder.latitude.setText(locations.getLatitude());
 
         holder.linearLayout.setOnClickListener(v -> {
             activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    LocationFragment.newInstance(level6Data, location, socialgroup, residency, individual)).commit();
+                    LocationFragment.newInstance(level6Data, locations, socialgroup, residency, individual)).commit();
         });
 
     }
@@ -91,19 +91,19 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     @Override
     public int getItemCount() {
 
-        return locationList.size();
+        return locationsList.size();
     }
 
     public void filter(String charText, LocationViewModel locationViewModel) {
-        locationList.clear();
+        locationsList.clear();
         if (charText != null && charText.length() > 2) {
             charText = charText.toLowerCase(Locale.getDefault());
 
             try {
-                List<Location> list = locationViewModel.findBySearch(charText);
+                List<Locations> list = locationViewModel.findBySearch(charText);
 
                 if (list != null) {
-                    locationList.addAll(list);
+                    locationsList.addAll(list);
                 }
             } catch (ExecutionException e) {
                 e.printStackTrace();
@@ -114,10 +114,10 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
             if(level6Data != null)
             try {
-                List<Location> list = locationViewModel.findLocationsOfCluster(level6Data.getUuid());
+                List<Locations> list = locationViewModel.findLocationsOfCluster(level6Data.getUuid());
 
                 if (list != null) {
-                    locationList.addAll(list);
+                    locationsList.addAll(list);
                 }
             } catch (ExecutionException e) {
                 e.printStackTrace();

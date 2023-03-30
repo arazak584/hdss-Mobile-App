@@ -28,7 +28,7 @@ import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Relationship;
@@ -61,7 +61,7 @@ public class EventsFragment extends Fragment {
     private static final String ARG_CASE_ITEM = "ARG_CASE_ITEM";
     private static final String ARG_EVENT_BLOCK_ID = "ARG_EVENT_BLOCK_ID";
 
-    private Location location;
+    private Locations locations;
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
@@ -76,7 +76,7 @@ public class EventsFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param location Parameter 1.
+     * @param locations Parameter 1.
      * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
@@ -84,10 +84,10 @@ public class EventsFragment extends Fragment {
      * @return A new instance of fragment EventsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EventsFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup,CaseItem caseItem) {
+    public static EventsFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem) {
         EventsFragment fragment = new EventsFragment();
         Bundle args = new Bundle();
-        args.putParcelable(ARG_LOC_LOCATION_IDS, location);
+        args.putParcelable(ARG_LOC_LOCATION_IDS, locations);
         args.putParcelable(ARG_RESIDENCY_ID, residency);
         args.putParcelable(ARG_SOCIAL_ID, socialgroup);
         args.putParcelable(ARG_INDIVIDUAL_ID, individual);
@@ -100,7 +100,7 @@ public class EventsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            location = getArguments().getParcelable(ARG_LOC_LOCATION_IDS);
+            locations = getArguments().getParcelable(ARG_LOC_LOCATION_IDS);
             residency = getArguments().getParcelable(ARG_RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(ARG_SOCIAL_ID);
             individual = getArguments().getParcelable(ARG_INDIVIDUAL_ID);
@@ -133,7 +133,7 @@ public class EventsFragment extends Fragment {
         binding.addMenuFab.setOnClickListener(view -> {
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseVisitFragment.newInstance(individual, residency, location, socialgroup)).commit();
+                    HouseVisitFragment.newInstance(individual, residency, locations, socialgroup)).commit();
         });
 
         final SimpleDateFormat f = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
@@ -227,7 +227,7 @@ public class EventsFragment extends Fragment {
         final View view = binding.getRoot();
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView_events);
-        EventFormAdapter adapter = new EventFormAdapter(location, socialgroup,residency, individual,caseItem, eventForms, this);
+        EventFormAdapter adapter = new EventFormAdapter(locations, socialgroup,residency, individual,caseItem, eventForms, this);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 RecyclerView.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
@@ -245,7 +245,7 @@ public class EventsFragment extends Fragment {
             if (form == null) {
                 form = new Residency();
             }
-            if (form.complete ==0 ) {
+            if (form.complete == null ) {
                 eventForms.add(new EventForm(AppConstants.EVENT_HDSS1, AppConstants.EVENT_RESIDENCY, form.complete));
             }
         } catch (ExecutionException e) {

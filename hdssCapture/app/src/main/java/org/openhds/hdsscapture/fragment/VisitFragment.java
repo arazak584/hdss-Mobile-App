@@ -22,7 +22,7 @@ import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.databinding.FragmentVisitBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -48,7 +47,7 @@ public class VisitFragment extends Fragment {
 
     private Visit visit;
     private FragmentVisitBinding binding;
-    private Location location;
+    private Locations locations;
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
@@ -77,7 +76,7 @@ public class VisitFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param location Parameter 1.
+     * @param locations Parameter 1.
      * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
@@ -87,10 +86,10 @@ public class VisitFragment extends Fragment {
      * @return A new instance of fragment VisitFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static VisitFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup,Visit visit,CaseItem caseItem, EventForm eventForm) {
+    public static VisitFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, Visit visit, CaseItem caseItem, EventForm eventForm) {
         VisitFragment fragment = new VisitFragment();
         Bundle args = new Bundle();
-        args.putParcelable(LOC_LOCATION_IDS, location);
+        args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
@@ -107,7 +106,7 @@ public class VisitFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            location = getArguments().getParcelable(LOC_LOCATION_IDS);
+            locations = getArguments().getParcelable(LOC_LOCATION_IDS);
             residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
@@ -130,9 +129,9 @@ public class VisitFragment extends Fragment {
         //final TextView compname = binding.getRoot().findViewById(R.id.textView4_compname);
         //final TextView cluster = binding.getRoot().findViewById(R.id.textView4_clusterId);
 
-        //compno.setText(location.getCompextId());
-        //compname.setText(location.getLocationName());
-        //cluster.setText(location.villcode);
+        //compno.setText(locations.getCompextId());
+        //compname.setText(locations.getLocationName());
+        //cluster.setText(locations.villcode);
 
         final Intent intent = getActivity().getIntent();
         final Round roundData = intent.getParcelableExtra(HierarchyActivity.ROUND_DATA);
@@ -140,7 +139,7 @@ public class VisitFragment extends Fragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
-
+        /*
         if(visit.fw_uuid==null){
             binding.getVisit().fw_uuid = fieldworkerData.getFw_uuid();
         }
@@ -150,7 +149,7 @@ public class VisitFragment extends Fragment {
         }
 
         if(visit.location_uuid==null){
-            binding.getVisit().location_uuid = location.getLocation_uuid();
+            binding.getVisit().location_uuid = locations.getLocation_uuid();
         }
 
         // Generate a UUID
@@ -159,7 +158,7 @@ public class VisitFragment extends Fragment {
             String uuidString = uuid.toString().replaceAll("-", "");
             // Set the ID of the Fieldworker object
             binding.getVisit().visit_uuid = uuidString;
-        }
+        }*/
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_household);
 
@@ -168,7 +167,7 @@ public class VisitFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Show the dialog fragment
-                HouseholdDialogFragment.newInstance(individual, residency, location,socialgroup)
+                HouseholdDialogFragment.newInstance(individual, residency, locations,socialgroup)
                         .show(getChildFragmentManager(), "HouseholdDialogFragment");
             }
         });
@@ -263,7 +262,7 @@ public class VisitFragment extends Fragment {
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency,location, socialgroup, caseItem)).commit();
+                    EventsFragment.newInstance(individual,residency, locations, socialgroup, caseItem)).commit();
         }
     }
 

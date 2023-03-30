@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.entity.Hierarchy;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.fragment.RemainderFragment;
 
 import java.util.ArrayList;
@@ -23,14 +23,14 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
 
     RemainderFragment activity;
     LayoutInflater inflater;
-    private List<Location> locationList;
+    private List<Locations> locationsList;
     private Hierarchy level5Data;
 
 
     public RemainderAdapter(RemainderFragment activity, Hierarchy level5Data) {
         this.activity = activity;
         this.level5Data = level5Data;
-        locationList = new ArrayList<>();
+        locationsList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
 
@@ -64,32 +64,32 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull RemainderAdapter.ViewHolder holder, int position) {
-        final Location location = locationList.get(position);
+        final Locations locations = locationsList.get(position);
 
-        holder.extId.setText(location.getCompextId());
-        holder.locationname.setText(location.getLocationName());
-        holder.compno.setText(location.getCompno());
-        holder.cluster.setText(location.villcode);
-        holder.longitude.setText(location.getLongitude());
-        holder.latitude.setText(location.getLatitude());
+        holder.extId.setText(locations.getCompextId());
+        holder.locationname.setText(locations.getLocationName());
+        holder.compno.setText(locations.getCompno());
+        holder.cluster.setText(locations.villcode);
+        holder.longitude.setText(locations.getLongitude());
+        holder.latitude.setText(locations.getLatitude());
 
     }
 
     @Override
     public int getItemCount() {
 
-        return locationList.size();
+        return locationsList.size();
     }
 
     public void filter(String charText, LocationViewModel locationViewModel) {
-        locationList.clear();
+        locationsList.clear();
 
             if(level5Data != null)
                 try {
-                    List<Location> list = locationViewModel.retrieveByVillage(level5Data.getName());
+                    List<Locations> list = locationViewModel.retrieveByVillage(level5Data.getName());
 
                     if (list != null) {
-                        locationList.addAll(list);
+                        locationsList.addAll(list);
                     }
                 } catch (ExecutionException e) {
                     e.printStackTrace();

@@ -4,7 +4,7 @@ import android.app.Application;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.LocationDao;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -21,69 +21,69 @@ public class LocationRepository {
         dao = db.locationDao();
     }
 
-    public void create(Location... data) {
+    public void create(Locations... data) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             dao.create(data);
         });
     }
 
-    public void create(Location data) {
+    public void create(Locations data) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             dao.create(data);
         });
     }
 
 
-    public Location find(String id) throws ExecutionException, InterruptedException {
+    public Locations find(String id) throws ExecutionException, InterruptedException {
 
-        Callable<Location> callable = () -> dao.retrieve(id.toUpperCase());
+        Callable<Locations> callable = () -> dao.retrieve(id.toUpperCase());
 
-        Future<Location> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
-    public List<Location> findToSync() throws ExecutionException, InterruptedException {
-
-        Callable<List<Location>> callable = () -> dao.retrieveToSync();
-
-        Future<List<Location>> future = Executors.newSingleThreadExecutor().submit(callable);
+        Future<Locations> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }
 
-    public List<Location> findByClusterId(String id) throws ExecutionException, InterruptedException {
+    public List<Locations> findToSync() throws ExecutionException, InterruptedException {
 
-        Callable<List<Location>> callable = () -> dao.retrieveByClusterId(id);
+        Callable<List<Locations>> callable = () -> dao.retrieveToSync();
 
-        Future<List<Location>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
-    public List<Location> retrieveByVillage(String id) throws ExecutionException, InterruptedException {
-
-        Callable<List<Location>> callable = () -> dao.retrieveByVillage(id);
-
-        Future<List<Location>> future = Executors.newSingleThreadExecutor().submit(callable);
+        Future<List<Locations>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }
 
-    public List<Location> findAll() throws ExecutionException, InterruptedException {
+    public List<Locations> findByClusterId(String id) throws ExecutionException, InterruptedException {
 
-        Callable<List<Location>> callable = () -> dao.retrieve();
+        Callable<List<Locations>> callable = () -> dao.retrieveByClusterId(id);
 
-        Future<List<Location>> future = Executors.newSingleThreadExecutor().submit(callable);
+        Future<List<Locations>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }
 
-    public List<Location> findBySearch(String id) throws ExecutionException, InterruptedException {
+    public List<Locations> retrieveByVillage(String id) throws ExecutionException, InterruptedException {
 
-        Callable<List<Location>> callable = () -> dao.retrieveBySearch(id);
+        Callable<List<Locations>> callable = () -> dao.retrieveByVillage(id);
 
-        Future<List<Location>> future = Executors.newSingleThreadExecutor().submit(callable);
+        Future<List<Locations>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Locations> findAll() throws ExecutionException, InterruptedException {
+
+        Callable<List<Locations>> callable = () -> dao.retrieve();
+
+        Future<List<Locations>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Locations> findBySearch(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Locations>> callable = () -> dao.retrieveBySearch(id);
+
+        Future<List<Locations>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }

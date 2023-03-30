@@ -18,7 +18,7 @@ import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.databinding.FragmentRelationshipBinding;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -47,7 +47,7 @@ public class RelationshipFragment extends Fragment {
     private static final String EVENT_ID = "EVENT_ID";
     private final String TAG = "RELATIONSHIP.TAG";
 
-    private Location location;
+    private Locations locations;
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
@@ -64,7 +64,7 @@ public class RelationshipFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param location Parameter 1.
+     * @param locations Parameter 1.
      * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
@@ -73,10 +73,10 @@ public class RelationshipFragment extends Fragment {
      * @return A new instance of fragment RelationshipFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static RelationshipFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup, CaseItem caseItem, EventForm eventForm) {
+    public static RelationshipFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem, EventForm eventForm) {
         RelationshipFragment fragment = new RelationshipFragment();
         Bundle args = new Bundle();
-        args.putParcelable(LOC_LOCATION_IDS, location);
+        args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
@@ -90,7 +90,7 @@ public class RelationshipFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            location = getArguments().getParcelable(LOC_LOCATION_IDS);
+            locations = getArguments().getParcelable(LOC_LOCATION_IDS);
             residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
@@ -201,7 +201,7 @@ public class RelationshipFragment extends Fragment {
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency,location, socialgroup,caseItem)).commit();
+                    EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
         }
 
     }

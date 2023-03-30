@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
@@ -27,15 +27,15 @@ public class MotherAdapter extends RecyclerView.Adapter<MotherAdapter.ViewHolder
 
     MotherDialogFragment activity;
     LayoutInflater inflater;
-    private Location location;
+    private Locations locations;
     private Socialgroup socialgroup;
     private Residency residency;
     private List<Individual> individualList;
     private CaseItem caseItem;
 
-    public MotherAdapter(MotherDialogFragment activity, Residency residency, Location location, Socialgroup socialgroup) {
+    public MotherAdapter(MotherDialogFragment activity, Residency residency, Locations locations, Socialgroup socialgroup) {
         this.activity = activity;
-        this.location = location;
+        this.locations = locations;
         this.residency = residency;
         this.socialgroup = socialgroup;
         individualList = new ArrayList<>();
@@ -79,7 +79,7 @@ public class MotherAdapter extends RecyclerView.Adapter<MotherAdapter.ViewHolder
 
         holder.linearLayout.setOnClickListener(v -> {
             //activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                   // IndividualFragment.newInstance(individual, residency, location, socialgroup,caseItem )).commit();
+                   // IndividualFragment.newInstance(individual, residency, locations, socialgroup,caseItem )).commit();
         });
     }
 
@@ -106,9 +106,9 @@ public class MotherAdapter extends RecyclerView.Adapter<MotherAdapter.ViewHolder
             }
         } else {
 
-            if(location != null)
+            if(locations != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveByMother(location.getCompextId());
+                    List<Individual> list = individualViewModel.retrieveByMother(locations.getCompextId());
 
                     if (list != null) {
                         individualList.addAll(list);

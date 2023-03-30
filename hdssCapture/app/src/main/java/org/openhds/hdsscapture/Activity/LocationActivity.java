@@ -13,12 +13,12 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.entity.Hierarchy;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.fragment.ClusterFragment;
 
 public class LocationActivity extends AppCompatActivity {
 
-    public static Location TOP_LOCATION = new Location();
+    public static Locations topLocations = new Locations();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class LocationActivity extends AppCompatActivity {
             level6.setText(level6Data.getVillcode());
         } else {
             // Handle the case where location is null
-            level6.setText("Error loading Location data");
+            level6.setText("Error loading Locations data");
         }
 
 

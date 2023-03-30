@@ -26,9 +26,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@Entity(tableName = "location",
-indices = {@Index(value = {"location_uuid"}, unique = true)})
-public class Location extends BaseObservable implements Parcelable {
+@Entity(tableName = "locations",
+indices = {@Index(value = {"location_uuid","compextId","compno"}, unique = false)})
+public class Locations extends BaseObservable implements Parcelable {
 
     @SerializedName("location_uuid")
     @Expose
@@ -93,14 +93,14 @@ public class Location extends BaseObservable implements Parcelable {
     public Integer locationType=1;
 
     @Expose
-    public Integer complete = 0;
+    public Integer complete;
 
     public String villcode;
 
-    public Location(){}
+    public Locations(){}
 
     @Ignore
-    public Location(@NotNull String compextId, String compno, String locationName) {
+    public Locations(@NotNull String compextId, String compno, String locationName) {
         this.compextId = compextId;
         this.compno = compno;
         this.locationName = locationName;
@@ -232,7 +232,7 @@ public class Location extends BaseObservable implements Parcelable {
         this.status = status;
     }
 
-    protected Location(Parcel in) {
+    protected Locations(Parcel in) {
         this.compextId = in.readString();
         this.locationName = in.readString();
         this.locationLevel_uuid = in.readString();
@@ -246,15 +246,15 @@ public class Location extends BaseObservable implements Parcelable {
         this.accuracy = in.readString();
     }
 
-    public static final Creator<Location> CREATOR = new Creator<Location>() {
+    public static final Creator<Locations> CREATOR = new Creator<Locations>() {
         @Override
-        public Location createFromParcel(Parcel in) {
-            return new Location(in);
+        public Locations createFromParcel(Parcel in) {
+            return new Locations(in);
         }
 
         @Override
-        public Location[] newArray(int size) {
-            return new Location[size];
+        public Locations[] newArray(int size) {
+            return new Locations[size];
         }
     };
     @Override

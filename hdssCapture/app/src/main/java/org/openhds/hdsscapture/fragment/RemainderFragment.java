@@ -17,7 +17,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.databinding.FragmentRemainderBinding;
 import org.openhds.hdsscapture.entity.Hierarchy;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Visit;
 
 /**
@@ -32,7 +32,7 @@ public class RemainderFragment extends Fragment {
     private final String TAG = "LOCATION.TAG";
 
     private Hierarchy level5Data;
-    private Location location;
+    private Locations locations;
     private Visit visit;
     private FragmentRemainderBinding binding;
 

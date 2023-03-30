@@ -75,7 +75,7 @@ public class Demographic extends BaseObservable implements Parcelable {
     public String fw_uuid;
 
     @Expose
-    public Integer complete = AppConstants.NOT_COMPLETE;
+    public Integer complete;
 
     public Demographic(){}
 

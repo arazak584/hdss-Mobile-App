@@ -4,17 +4,17 @@
     <string name="send">send</string>
     <string name="sync">sync</string>
     <string name="census">census</string>
-    <string name="location">Compound Registration Form</string>
+    <string name="locations">Compound Registration Form</string>
     <string name="visit">Visit Registration Form</string>
     <string name="interviewee">Is the person selected the one you are actually interviewing?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="respond">Name of Respondent</string>
-    <string name="locationtype">Location Type</string>
+    <string name="locationtype">Locations Type</string>
     <string name="rural">Rural</string>
     <string name="urban">Urban</string>
     <string name="see_list">See List</string>
-    <string name="location_hint_lbl">Location External Id</string>
+    <string name="location_hint_lbl">Locations External Id</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -47,7 +47,7 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-    <string name="send_location">Send Location</string>
+    <string name="send_location">Send Locations</string>
     <string name="send_visit">Send Visit</string>
     <string name="send_individual">Send Individual</string>
     <string name="send_residency">Send Residency</string>
@@ -62,7 +62,7 @@
     <string name="send_death">Send Death</string>
 
     <string name="get_hierarchy">Get Hierarchy</string>
-    <string name="get_location">Get Location</string>
+    <string name="get_location">Get Locations</string>
     <string name="get_round">Get Round</string>
     <string name="get_individual">Get Individual</string>
     <string name="get_residency">Get Residency</string>
@@ -92,7 +92,7 @@
     <string name="occupation">Occupation</string>
     <string name="religion">Select Religion</string>
     <string name="resident">Resident</string>
-    <string name="crtlocation">Create Location</string>
+    <string name="crtlocation">Create Locations</string>
     <string name="father_extid">Select Biological Father</string>
     <string name="mother_extid">Select Biological Mother</string>
     <string name="phone">Phone Number of Individual</string>
@@ -105,7 +105,7 @@
     <string name="startdate">Select Start Date</string>
     <string name="endtype">Select End Type</string>
     <string name="enddate">Select End Date</string>
-    <string name="hierarchy">Location Selection</string>
+    <string name="hierarchy">Locations Selection</string>
     <string name="region">Select Region</string>
     <string name="district">Select District</string>
     <string name="subdistrict">Sub District</string>
@@ -113,7 +113,7 @@
     <string name="cluster">Cluster</string>
     <string name="phone2">Extra Phone Number</string>
     <string name="residency">Residency</string>
-    <string name="location_select">Select Location</string>
+    <string name="location_select">Select Locations</string>
     <string name="visitid">Visit ID</string>
     <string name="visit_outcome">Visit Outcome</string>
     <string name="round_select">Select Round</string>
@@ -177,7 +177,7 @@
     <string name="text_country">Country</string>
     <string name="text_location_note">PLEASE SELECT THE LOCATION OF THE INTERVIEW TO PROCEED</string>
     <string name="text_searchid">Search Using Compound Number or Compound Name</string>
-    <string name="text_newlocation">New Location</string>
+    <string name="text_newlocation">New Locations</string>
     <string name="button_home">Home</string>
     <string name="text_location_text">Cluster</string>
     <string name="text_submit"><![CDATA[Save & Continue]]></string>
@@ -257,7 +257,7 @@
     <string name="own_bnet">Do you have a bed net?</string>
     <string name="how_many">How many?</string>
     <string name="bnet_sou">Source of bednet</string>
-    <string name="bnet_loc">Location of bednet</string>
+    <string name="bnet_loc">Locations of bednet</string>
     <string name="slp_bednet">Did you sleep under a bed net last night?</string>
     <string name="trt_bednet">Is the bed net you slept under last night treated?</string>
     <string name="lastClinicVisitDate">Last clinic visit date</string>
@@ -295,7 +295,7 @@
     <string name="savecontinuedata"><![CDATA[Save & Continue]]></string>
     <string name="respondent">Respondent</string>
     <string name="title_activity_test">TestActivity</string>
-    <string name="location_uuid">Location UUID</string>
+    <string name="location_uuid">Locations UUID</string>
     <string name="clusteruuid">Cluster uuid</string>
     <string name="visituuid">Visit Uuid</string>
     <string name="comp_yrs">Completed Years of Education</string>
@@ -313,6 +313,9 @@
     <string name="nwive">Number of wives of husband(including you)</string>
     <string name="lcow">Does women live in the same household with co-wife(s)</string>
     <string name="mrank">Woman\'s rank (In current marriage)</string>
+    <string name="latitude">Latitude</string>
+    <string name="accuracy">Accuracy</string>
+    <string name="gps">Pick Geopoint</string>
 
 
 </resources>

@@ -24,7 +24,7 @@ import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentIndividualBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
@@ -57,7 +57,7 @@ public class IndividualFragment extends Fragment {
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private final String TAG = "INDIVIDUAL.TAG";
 
-    private Location location;
+    private Locations locations;
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
@@ -76,17 +76,17 @@ public class IndividualFragment extends Fragment {
 
      * @param individual Parameter 4.
      * @param residency Parameter 2.
-     * @param location Parameter 1.
+     * @param locations Parameter 1.
      * @param socialgroup Parameter 3.
      * @param caseItem Parameter 5.
      * @return A new instance of fragment IndividualFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static IndividualFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup, CaseItem caseItem) {
+    public static IndividualFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem) {
         IndividualFragment fragment = new IndividualFragment();
         Bundle args = new Bundle();
 
-        args.putParcelable(LOC_LOCATION_IDS, location);
+        args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
@@ -100,7 +100,7 @@ public class IndividualFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            location = getArguments().getParcelable(LOC_LOCATION_IDS);
+            locations = getArguments().getParcelable(LOC_LOCATION_IDS);
             residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
@@ -139,7 +139,7 @@ public class IndividualFragment extends Fragment {
 
             int sequenceNumber = 1;
             // Set the ID of the Fieldworker object
-            binding.getIndividual().extId = location.compextId+String.format("%03d", sequenceNumber);
+            binding.getIndividual().extId = locations.compextId+String.format("%03d", sequenceNumber);
             sequenceNumber++;
         }
 
@@ -153,7 +153,7 @@ public class IndividualFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Show the dialog fragment
-                MotherDialogFragment.newInstance(individual, residency, location,socialgroup)
+                MotherDialogFragment.newInstance(individual, residency, locations,socialgroup)
                         .show(getChildFragmentManager(), "MotherDialogFragment");
 
             }
@@ -164,7 +164,7 @@ public class IndividualFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Show the dialog fragment
-                FatherDialogFragment.newInstance(individual, residency, location,socialgroup)
+                FatherDialogFragment.newInstance(individual, residency, locations,socialgroup)
                         .show(getChildFragmentManager(), "FatherDialogFragment");
             }
         });
@@ -302,10 +302,10 @@ public class IndividualFragment extends Fragment {
         }
         if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency,location, socialgroup,caseItem)).commit();
+                    EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
         }else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseVisitFragment.newInstance(individual,residency,location, socialgroup)).commit();
+                    HouseVisitFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }
 
     }

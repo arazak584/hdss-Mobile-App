@@ -20,7 +20,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentFatherDialogBinding;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
@@ -39,7 +39,7 @@ public class FatherDialogFragment extends DialogFragment {
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private final String TAG = "INDIVIDUAL.TAG";
 
-    private Location location;
+    private Locations locations;
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
@@ -54,17 +54,17 @@ public class FatherDialogFragment extends DialogFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param location Parameter 1.
+     * @param locations Parameter 1.
      * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
      * @return A new instance of fragment FatherDialogFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static FatherDialogFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup) {
+    public static FatherDialogFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
         FatherDialogFragment fragment = new FatherDialogFragment();
         Bundle args = new Bundle();
-        args.putParcelable(LOC_LOCATION_IDS, location);
+        args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
@@ -76,7 +76,7 @@ public class FatherDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            location = getArguments().getParcelable(LOC_LOCATION_IDS);
+            locations = getArguments().getParcelable(LOC_LOCATION_IDS);
             residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
@@ -90,11 +90,11 @@ public class FatherDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_father_dialog, container, false);
 
         final TextView compno = view.findViewById(R.id.textViewfather_compextId);
-        if (location != null) {
-            compno.setText(location.getCompno());
+        if (locations != null) {
+            compno.setText(locations.getCompno());
         } else {
-            // Handle the case where location is null
-            compno.setText("Error loading location data");
+            // Handle the case where locations is null
+            compno.setText("Error loading locations data");
         }
 
         Button closeButton = view.findViewById(R.id.button_fclose);
@@ -108,7 +108,7 @@ public class FatherDialogFragment extends DialogFragment {
 
         //Load Father Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_father);
-        final FatherAdapter adapter = new FatherAdapter(this, residency,location, socialgroup,caseItem );
+        final FatherAdapter adapter = new FatherAdapter(this, residency, locations, socialgroup,caseItem );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
         //recyclerView.setHasFixedSize(true);

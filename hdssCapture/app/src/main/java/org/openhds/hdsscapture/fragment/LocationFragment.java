@@ -1,6 +1,12 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +15,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
@@ -22,7 +34,7 @@ import org.openhds.hdsscapture.databinding.FragmentLocationBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
@@ -52,38 +64,43 @@ public class LocationFragment extends Fragment {
     private final String TAG = "LOCATION.TAG";
 
     private Hierarchy cluster_id;
-    private Location location;
+    private Locations locations;
     private Socialgroup socialgroup;
     private Residency residency;
     private Individual individual;
     private String name;
     private FragmentLocationBinding binding;
     private CaseItem caseItem;
+    boolean isAllFieldsChecked = false;
+
+    private LocationManager locationManager;
+    private Location currentLocation;
+    private static final int REQUEST_LOCATION_PERMISSION = 1;
+
+
 
     public LocationFragment() {
         // Required empty public constructor
     }
-
-
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
      * @param cluster_id  Parameter 1.
-     * @param location    Parameter 2.
+     * @param locations    Parameter 2.
      * @param socialgroup Parameter 3.
      * @param residency Parameter 4.
      * @param individual Parameter 5.
      * @return A new instance of fragment LocationFragment.
      */
 
-    public static LocationFragment newInstance(Hierarchy cluster_id, Location location, Socialgroup socialgroup, Residency residency, Individual individual) {
+    public static LocationFragment newInstance(Hierarchy cluster_id, Locations locations, Socialgroup socialgroup, Residency residency, Individual individual) {
 
         LocationFragment fragment = new LocationFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_CLUSTER_IDS, cluster_id);
-        args.putParcelable(LOC_LOCATION_IDS, location);
+        args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(INDIVIDUAL_ID, individual);
@@ -99,7 +116,7 @@ public class LocationFragment extends Fragment {
         if (getArguments() != null) {
 
             cluster_id = getArguments().getParcelable(ARG_CLUSTER_IDS);
-            location = getArguments().getParcelable(LOC_LOCATION_IDS);
+            locations = getArguments().getParcelable(LOC_LOCATION_IDS);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             residency = getArguments().getParcelable(RESIDENCY_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
@@ -111,7 +128,59 @@ public class LocationFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentLocationBinding.inflate(inflater, container, false);
-        binding.setLocation(location);
+        binding.setLocations(locations);
+
+        // Initialize the LocationManager
+        locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        // Create a location request with maximum accuracy of 10
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(10000); // 10 seconds
+        locationRequest.setFastestInterval(5000); // 5 seconds
+        locationRequest.setSmallestDisplacement(10); // 10 meters
+
+
+
+
+        // Get a reference to the button and set its OnClickListener
+        binding.buttonGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Check for location permissions
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // Permission is not granted, request it
+                    ActivityCompat.requestPermissions(requireActivity(),
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            REQUEST_LOCATION_PERMISSION);
+                } else {
+                    // Permission is granted, start requesting location updates
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+                        @Override
+                        public void onLocationChanged(@NonNull Location location) {
+                            // Update the currentLocation variable with the new location
+                            currentLocation = location;
+
+                            // Display the longitude, latitude, and accuracy values in the TextInputEditText views
+                            TextInputEditText longitudeEditText = requireView().findViewById(R.id.longitude);
+                            longitudeEditText.setText(String.valueOf(currentLocation.getLongitude()));
+
+                            TextInputEditText latitudeEditText = requireView().findViewById(R.id.latitude);
+                            latitudeEditText.setText(String.valueOf(currentLocation.getLatitude()));
+
+                            TextInputEditText accuracyEditText = requireView().findViewById(R.id.accuracy);
+                            accuracyEditText.setText(String.valueOf(currentLocation.getAccuracy()));
+
+                            // Stop receiving location updates
+                            locationManager.removeUpdates(this);
+                        }
+                    });
+                }
+            }
+        });
+
+
 
 
         final Intent intent = getActivity().getIntent();
@@ -121,25 +190,25 @@ public class LocationFragment extends Fragment {
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
 
-        if(location.locationLevel_uuid==null){
-            binding.getLocation().locationLevel_uuid = level6Data.getUuid();
+        if(locations.locationLevel_uuid==null){
+            binding.getLocations().locationLevel_uuid = level6Data.getUuid();
         }
 
-        if(location.villcode==null){
-            binding.getLocation().villcode = level6Data.getVillcode();
+        if(locations.villcode==null){
+            binding.getLocations().villcode = level6Data.getVillcode();
         }
 
-        if(location.fw_uuid==null){
-            binding.getLocation().fw_uuid = fieldworkerData.getFw_uuid();
+        if(locations.fw_uuid==null){
+            binding.getLocations().fw_uuid = fieldworkerData.getFw_uuid();
         }
 
 
         // Generate a UUID
-        if(location.location_uuid == null) {
+        if(locations.location_uuid == null) {
             String uuid = UUID.randomUUID().toString();
             String uuidString = uuid.toString().replaceAll("-", "");
             // Set the ID of the Fieldworker object
-            binding.getLocation().location_uuid = uuidString;
+            binding.getLocations().location_uuid = uuidString;
             }
 
 
@@ -148,53 +217,66 @@ public class LocationFragment extends Fragment {
         loadCodeData(binding.complete, codeBookViewModel, "complete");
         loadCodeData(binding.locationtype, codeBookViewModel, "locationType");
 
-
-
         binding.buttonSubmit.setOnClickListener(v -> {
             final LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
 
-            final Location location = binding.getLocation();
-            location.setCompextId(this.location.getCompextId());
+            final Locations locations = binding.getLocations();
+            locations.setCompextId(this.locations.getCompextId());
 
             boolean isExists = false;
             binding.locationextid.setError(null);
+            binding.locationcluster.setError(null);
             binding.locationName.setError(null);
-
             binding.locationcompno.setError(null);
+            binding.longitude.setError(null);
+            binding.latitude.setError(null);
 
             if (binding.locationInsertDate.getText().toString().isEmpty()) {
                 binding.locationInsertDate.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Calendar.getInstance().getTime()));
             }
 
-            if(location.compno==null){
+            if(locations.compno==null){
                 isExists = true;
-                binding.locationcompno.setError("Structure Number is Required");
+                binding.locationcompno.setError("This Field is Required");
 
             }
 
-            if(location.compextId==null){
+            if(locations.compextId==null){
                 isExists = true;
-                binding.locationextid.setError("A Valid Compound ID is Required");
+                binding.locationextid.setError("This Field is Required");
             }
 
-            if(location.locationName==null){
+            if(locations.locationName==null){
                 isExists = true;
-                binding.locationName.setError("Compound Name is Required");
+                binding.locationName.setError("This Field is Required");
             }
+
+            if(locations.longitude==null){
+                isExists = true;
+                binding.longitude.setError("This Field is Required");
+            }
+
+            if(locations.latitude==null){
+                isExists = true;
+                binding.latitude.setError("This Field is Required");
+            }
+
+            final boolean validateOnComplete = locations.complete == 1;
+            boolean a = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
 
 
             try {
-                Location location1 = null;
-                if(location.getCompno()!=null && !location.getCompno().equalsIgnoreCase(this.location.getCompno())) {
-                    location1 = locationViewModel.find(location.getCompno());
-                    if (location1 != null) {
+                Locations locations1 = null;
+                if(locations.getCompno()!=null && !locations.getCompno().equalsIgnoreCase(this.locations.getCompno())) {
+                    locations1 = locationViewModel.find(locations.getCompno());
+                    if (locations1 != null) {
                         isExists = true;
                         binding.locationcompno.setError("Already Exists");
                     }
                 }
-                if(location.getCompextId()!=null && !location.getCompextId().equalsIgnoreCase(this.location.getCompextId())) {
-                    location1 = locationViewModel.find(location.getCompextId());
-                    if (location1 != null) {
+                if(locations.getCompextId()!=null && !locations.getCompextId().equalsIgnoreCase(this.locations.getCompextId())) {
+                    locations1 = locationViewModel.find(locations.getCompextId());
+                    if (locations1 != null) {
                         isExists = true;
                         binding.locationextid.setError("Already Exists");
                     }
@@ -210,11 +292,10 @@ public class LocationFragment extends Fragment {
                 return;
             }
 
-            locationViewModel.add(location);
+            locationViewModel.add(locations);
             Toast.makeText(v.getContext(), "Saved Successfully", Toast.LENGTH_LONG).show();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                 HouseVisitFragment.newInstance(individual, residency, location, socialgroup)).commit();
-
+                 HouseVisitFragment.newInstance(individual, residency, locations, socialgroup)).commit();
 
 
         });
@@ -223,11 +304,7 @@ public class LocationFragment extends Fragment {
         View v = binding.getRoot();
         return v;
 
-
-
     }
-
-
 
     private <T> void callable(Spinner spinner, T[] array) {
 
@@ -280,5 +357,6 @@ public class LocationFragment extends Fragment {
             return bundleKey;
         }
     }
+
 
 }

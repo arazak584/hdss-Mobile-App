@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.fragment.HouseholdDialogFragment;
@@ -25,14 +25,14 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
 
     HouseholdDialogFragment activity;
     LayoutInflater inflater;
-    private Location location;
+    private Locations locations;
     private List<Socialgroup> socialgroupList;
     private Residency residency;
     private Individual individual;
 
-    public HouseholdAdapter(HouseholdDialogFragment activity, Residency residency, Location location, Individual individual) {
+    public HouseholdAdapter(HouseholdDialogFragment activity, Residency residency, Locations locations, Individual individual) {
         this.activity = activity;
-        this.location = location;
+        this.locations = locations;
         this.residency = residency;
         this.individual = individual;
         socialgroupList = new ArrayList<>();
@@ -70,7 +70,7 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
 
         holder.linearLayout.setOnClickListener(v -> {
             //activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                   // HouseholdDialogFragment.newInstance(individual, residency, location, socialgroup )).commit();
+                   // HouseholdDialogFragment.newInstance(individual, residency, locations, socialgroup )).commit();
         });
     }
 
@@ -81,9 +81,9 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
 
     public void filter(String charText, SocialgroupViewModel socialgroupViewModel) {
         socialgroupList.clear();
-            if(location != null)
+            if(locations != null)
                 try {
-                    List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(location.getCompextId());
+                    List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(locations.getCompextId());
 
                     if (list != null) {
                         socialgroupList.addAll(list);

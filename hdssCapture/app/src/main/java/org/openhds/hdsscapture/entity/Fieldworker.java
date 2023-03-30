@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +31,7 @@ public class Fieldworker implements Parcelable {
     @ColumnInfo(name = "status")
     public Integer status;
 
+    @Ignore
     public Fieldworker(@NotNull String fw_uuid, String username) {
         this.fw_uuid = fw_uuid;
         this.username = username;

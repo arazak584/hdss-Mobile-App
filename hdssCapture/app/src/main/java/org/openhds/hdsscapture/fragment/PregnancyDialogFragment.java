@@ -19,7 +19,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.databinding.FragmentPregnancyDialogBinding;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -39,7 +39,7 @@ public class PregnancyDialogFragment extends DialogFragment {
     private static final String PREGNANCY_ID = "PREGNANCY_ID";
     private final String TAG = "PREGNANCY.TAG";
 
-    private Location location;
+    private Locations locations;
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
@@ -54,7 +54,7 @@ public class PregnancyDialogFragment extends DialogFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param location Parameter 1.
+     * @param locations Parameter 1.
      * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
@@ -62,10 +62,10 @@ public class PregnancyDialogFragment extends DialogFragment {
      * @return A new instance of fragment PregnancyDialogFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PregnancyDialogFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup,Pregnancy pregnancy) {
+    public static PregnancyDialogFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, Pregnancy pregnancy) {
         PregnancyDialogFragment fragment = new PregnancyDialogFragment();
         Bundle args = new Bundle();
-        args.putParcelable(LOC_LOCATION_IDS, location);
+        args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
@@ -80,7 +80,7 @@ public class PregnancyDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            location = getArguments().getParcelable(LOC_LOCATION_IDS);
+            locations = getArguments().getParcelable(LOC_LOCATION_IDS);
             residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
@@ -95,11 +95,11 @@ public class PregnancyDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_pregnancy_dialog, container, false);
 
         final TextView compno = view.findViewById(R.id.preg_compextId);
-        if (location != null) {
-            compno.setText(location.getCompno());
+        if (locations != null) {
+            compno.setText(locations.getCompno());
         } else {
-            // Handle the case where location is null
-            compno.setText("Error loading location data");
+            // Handle the case where locations is null
+            compno.setText("Error loading locations data");
         }
 
         Button closeButton = view.findViewById(R.id.button_pregclose);
@@ -113,7 +113,7 @@ public class PregnancyDialogFragment extends DialogFragment {
 
         //Load Pregnancy Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_pregnancy);
-        final PregnancyAdapter adapter = new PregnancyAdapter(this, individual, residency,location, socialgroup );
+        final PregnancyAdapter adapter = new PregnancyAdapter(this, individual, residency, locations, socialgroup );
         final PregnancyViewModel pregnancyViewModel = new ViewModelProvider(requireActivity()).get(PregnancyViewModel.class);
 
         //recyclerView.setHasFixedSize(true);

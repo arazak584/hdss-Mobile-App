@@ -19,7 +19,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
@@ -106,10 +106,10 @@ public class ClusterFragment extends Fragment {
         final FloatingActionButton add_location = view.findViewById(R.id.button_new_location);
         add_location.setOnClickListener(v -> {
 
-            final Location location = new Location();
+            final Locations locations = new Locations();
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    LocationFragment.newInstance(level6Data, location, socialgroup, residency,individual)).commit();
+                    LocationFragment.newInstance(level6Data, locations, socialgroup, residency,individual)).commit();
         });
 
         return view;

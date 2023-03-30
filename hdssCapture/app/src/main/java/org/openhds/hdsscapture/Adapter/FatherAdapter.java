@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
@@ -28,15 +28,15 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
 
     FatherDialogFragment activity;
     LayoutInflater inflater;
-    private Location location;
+    private Locations locations;
     private Socialgroup socialgroup;
     private Residency residency;
     private List<Individual> individualList;
     private CaseItem caseItem;
 
-    public FatherAdapter(FatherDialogFragment activity, Residency residency, Location location, Socialgroup socialgroup,CaseItem caseItem) {
+    public FatherAdapter(FatherDialogFragment activity, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem) {
         this.activity = activity;
-        this.location = location;
+        this.locations = locations;
         this.residency = residency;
         this.socialgroup = socialgroup;
         this.caseItem = caseItem;
@@ -111,9 +111,9 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
             }
         } else {
 
-            if(location != null)
+            if(locations != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveByFather(location.getCompextId());
+                    List<Individual> list = individualViewModel.retrieveByFather(locations.getCompextId());
 
                     if (list != null) {
                         individualList.addAll(list);

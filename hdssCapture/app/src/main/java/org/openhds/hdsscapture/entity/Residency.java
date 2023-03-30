@@ -67,7 +67,7 @@ public class Residency extends BaseObservable implements Parcelable {
     public Integer rltn_head;
 
     @Expose
-    public Integer complete= 0;
+    public Integer complete;
 
     public Residency(){}
 

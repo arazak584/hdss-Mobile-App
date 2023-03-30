@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.LocationRepository;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -20,35 +20,35 @@ public class LocationViewModel extends AndroidViewModel {
         locationRepository = new LocationRepository(application);
     }
 
-    public Location find(String id) throws ExecutionException, InterruptedException {
+    public Locations find(String id) throws ExecutionException, InterruptedException {
         return locationRepository.find(id);
     }
 
-    public List<Location> findLocationsOfCluster(String id) throws ExecutionException, InterruptedException {
+    public List<Locations> findLocationsOfCluster(String id) throws ExecutionException, InterruptedException {
         return locationRepository.findByClusterId(id);
     }
 
-    public List<Location> retrieveByVillage(String id) throws ExecutionException, InterruptedException {
+    public List<Locations> retrieveByVillage(String id) throws ExecutionException, InterruptedException {
         return locationRepository.retrieveByVillage(id);
     }
 
-    public List<Location> findAll() throws ExecutionException, InterruptedException {
+    public List<Locations> findAll() throws ExecutionException, InterruptedException {
         return locationRepository.findAll();
     }
 
-    public List<Location> findToSync() throws ExecutionException, InterruptedException {
+    public List<Locations> findToSync() throws ExecutionException, InterruptedException {
         return locationRepository.findToSync();
     }
 
-    public List<Location> findBySearch(String id) throws ExecutionException, InterruptedException {
+    public List<Locations> findBySearch(String id) throws ExecutionException, InterruptedException {
         return locationRepository.findBySearch("%" + id + "%");
     }
 
-    public void add(Location data){
+    public void add(Locations data){
         locationRepository.create(data);
     }
 
-    public void add(Location... data){
+    public void add(Locations... data){
         locationRepository.create(data);
     }
 

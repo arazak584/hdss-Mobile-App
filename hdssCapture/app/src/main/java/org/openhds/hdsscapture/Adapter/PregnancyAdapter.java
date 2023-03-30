@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -26,15 +26,15 @@ public class PregnancyAdapter extends RecyclerView.Adapter<PregnancyAdapter.View
 
     PregnancyDialogFragment activity;
     LayoutInflater inflater;
-    private Location location;
+    private Locations locations;
     private Socialgroup socialgroup;
     private Residency residency;
     private List<Pregnancy> pregnancyList;
     private Individual individual;
 
-    public PregnancyAdapter(PregnancyDialogFragment activity,Individual individual, Residency residency, Location location, Socialgroup socialgroup) {
+    public PregnancyAdapter(PregnancyDialogFragment activity, Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
         this.activity = activity;
-        this.location = location;
+        this.locations = locations;
         this.residency = residency;
         this.socialgroup = socialgroup;
         this.individual = individual;
@@ -79,7 +79,7 @@ public class PregnancyAdapter extends RecyclerView.Adapter<PregnancyAdapter.View
 
         holder.linearLayout.setOnClickListener(v -> {
             activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    PregnancyDialogFragment.newInstance(individual, residency, location, socialgroup,pregnancy )).commit();
+                    PregnancyDialogFragment.newInstance(individual, residency, locations, socialgroup,pregnancy )).commit();
         });
     }
 
@@ -90,9 +90,9 @@ public class PregnancyAdapter extends RecyclerView.Adapter<PregnancyAdapter.View
 
     public void filter(String charText, PregnancyViewModel pregnancyViewModel) {
         pregnancyList.clear();
-            if(location != null)
+            if(locations != null)
                 try {
-                    List<Pregnancy> list = pregnancyViewModel.retrievePregnancy(location.getCompextId());
+                    List<Pregnancy> list = pregnancyViewModel.retrievePregnancy(locations.getCompextId());
 
                     if (list != null) {
                         pregnancyList.addAll(list);

@@ -29,7 +29,7 @@ import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
@@ -71,12 +71,12 @@ public class PushActivity extends AppCompatActivity {
         final LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
 
         //GET MODIFIED DATA
-        final List<Location> locationList = new ArrayList<>();
+        final List<Locations> locationsList = new ArrayList<>();
         try {
-            locationList.addAll(locationViewModel.findToSync());
-            textViewSendLocationdata.setText("Location(" + locationList.size() + ") to send");
+            locationsList.addAll(locationViewModel.findToSync());
+            textViewSendLocationdata.setText("Locations(" + locationsList.size() + ") to send");
             textViewSendLocationdata.setTextColor(Color.rgb(0, 114, 133));
-            if (locationList.isEmpty()) {
+            if (locationsList.isEmpty()) {
                 buttonSendLocationdata.setEnabled(false);
             }
         } catch (ExecutionException | InterruptedException e) {
@@ -88,26 +88,26 @@ public class PushActivity extends AppCompatActivity {
             progress.show();
 
             //WRAP THE DATA
-            final DataWrapper<Location> data = new DataWrapper<>(locationList);
+            final DataWrapper<Locations> data = new DataWrapper<>(locationsList);
 
             //SEND THE DATA
             if (data.getData() != null && !data.getData().isEmpty()) {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                for (Location elem : data.getData()) {
+                for (Locations elem : data.getData()) {
                     elem.complete = 0;
                     Log.e("PUSH.tag", "Has value " + elem.getCompno());
                 }
 
-                final Call<DataWrapper<Location>> c_callable = dao.sendLocationdata(data);
-                c_callable.enqueue(new Callback<DataWrapper<Location>>() {
+                final Call<DataWrapper<Locations>> c_callable = dao.sendLocationdata(data);
+                c_callable.enqueue(new Callback<DataWrapper<Locations>>() {
                     @Override
-                    public void onResponse(@NonNull Call<DataWrapper<Location>> call, Response<DataWrapper<Location>> response) {
+                    public void onResponse(@NonNull Call<DataWrapper<Locations>> call, Response<DataWrapper<Locations>> response) {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            Location[] d = response.body().getData().toArray(new Location[0]);
+                            Locations[] d = response.body().getData().toArray(new Locations[0]);
                             locationViewModel.add(d);
                             progress.dismiss();
                             textViewSendLocationdata.setText("Sent " + d.length + " record(s)");
@@ -116,7 +116,7 @@ public class PushActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<DataWrapper<Location>> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<DataWrapper<Locations>> call, @NonNull Throwable t) {
                         progress.dismiss();
                         Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
 

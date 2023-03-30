@@ -19,7 +19,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.databinding.FragmentHouseholdDialogBinding;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Location;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
@@ -36,7 +36,7 @@ public class HouseholdDialogFragment extends DialogFragment {
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private final String TAG = "INDIVIDUAL.TAG";
 
-    private Location location;
+    private Locations locations;
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
@@ -52,17 +52,17 @@ public class HouseholdDialogFragment extends DialogFragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param location Parameter 1.
+     * @param locations Parameter 1.
      * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
      * @return A new instance of fragment HouseholdDialogFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HouseholdDialogFragment newInstance(Individual individual, Residency residency, Location location, Socialgroup socialgroup) {
+    public static HouseholdDialogFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
         HouseholdDialogFragment fragment = new HouseholdDialogFragment();
         Bundle args = new Bundle();
-        args.putParcelable(LOC_LOCATION_IDS, location);
+        args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
@@ -74,7 +74,7 @@ public class HouseholdDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            location = getArguments().getParcelable(LOC_LOCATION_IDS);
+            locations = getArguments().getParcelable(LOC_LOCATION_IDS);
             residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
@@ -88,11 +88,11 @@ public class HouseholdDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_household_dialog, container, false);
 
         final TextView compno = view.findViewById(R.id.textViewhouse_compextId);
-        if (location != null) {
-            compno.setText(location.getCompno());
+        if (locations != null) {
+            compno.setText(locations.getCompno());
         } else {
-            // Handle the case where location is null
-            compno.setText("Error loading location data");
+            // Handle the case where locations is null
+            compno.setText("Error loading locations data");
         }
 
         Button closeButton = view.findViewById(R.id.button_hhclose);
@@ -107,7 +107,7 @@ public class HouseholdDialogFragment extends DialogFragment {
 
         //Load Socialgroup Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_house);
-        final HouseholdAdapter adapter = new HouseholdAdapter(this,residency,location, individual);
+        final HouseholdAdapter adapter = new HouseholdAdapter(this,residency, locations, individual);
         final SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(requireActivity()).get(SocialgroupViewModel.class);
 
         //recyclerView.setHasFixedSize(true);
