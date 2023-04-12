@@ -18,6 +18,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -39,7 +40,7 @@ public class Relationship extends BaseObservable implements Parcelable {
     public String individual_uuid;
 
     @Expose
-    public String man_uuid = AppConstants.Father;;
+    public String man_uuid;
 
     @Expose
     public Date startDate;
@@ -126,6 +127,7 @@ public class Relationship extends BaseObservable implements Parcelable {
     }
 
     public String getEndDate() {
+        if (endDate == null) return "";
         return f.format(endDate);
     }
 
@@ -181,20 +183,26 @@ public class Relationship extends BaseObservable implements Parcelable {
         this.mar = mar;
     }
 
-    public Integer getTnbch() {
-        return tnbch;
+    public String getTnbch() {
+        return tnbch == null ? "" : String.valueOf(tnbch);
     }
 
-    public void setTnbch(Integer tnbch) {
-        this.tnbch = tnbch;
+    public void setTnbch(String tnbch) {
+        try {
+            this.tnbch = (tnbch == null) ? null : Integer.valueOf(tnbch);
+        } catch (NumberFormatException e) {
+        }
     }
 
-    public Integer getNchdm() {
-        return nchdm;
+    public String getNchdm() {
+        return nchdm == null ? "" : String.valueOf(nchdm);
     }
 
-    public void setNchdm(Integer nchdm) {
-        this.nchdm = nchdm;
+    public void setNchdm(String nchdm) {
+        try {
+            this.nchdm = (nchdm == null) ? null : Integer.valueOf(nchdm);
+        } catch (NumberFormatException e) {
+        }
     }
 
     public Integer getPolygamous() {
@@ -205,12 +213,15 @@ public class Relationship extends BaseObservable implements Parcelable {
         this.polygamous = polygamous;
     }
 
-    public Integer getNwive() {
-        return nwive;
+    public String getNwive() {
+        return nwive == null ? "" : String.valueOf(nwive);
     }
 
-    public void setNwive(Integer nwive) {
-        this.nwive = nwive;
+    public void setNwive(String nwive) {
+        try {
+            this.nwive = (nwive == null) ? null : Integer.valueOf(nwive);
+        } catch (NumberFormatException e) {
+        }
     }
 
     public Integer getLcow() {
@@ -221,12 +232,15 @@ public class Relationship extends BaseObservable implements Parcelable {
         this.lcow = lcow;
     }
 
-    public Integer getMrank() {
-        return mrank;
+    public String getMrank() {
+        return mrank == null ? "" : String.valueOf(mrank);
     }
 
-    public void setMrank(Integer mrank) {
-        this.mrank = mrank;
+    public void setMrank(String mrank) {
+        try {
+            this.mrank = (mrank == null) ? null : Integer.valueOf(mrank);
+        } catch (NumberFormatException e) {
+        }
     }
 
     public String getFw_uuid() {
@@ -324,6 +338,7 @@ public class Relationship extends BaseObservable implements Parcelable {
             aIsToB = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
     }
 
@@ -340,6 +355,7 @@ public class Relationship extends BaseObservable implements Parcelable {
                 mar = kv.codeValue;
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
                 ((TextView) parent.getChildAt(0)).setTextSize(20);
+                notifyPropertyChanged(BR._all);
             }
 
     }
@@ -357,6 +373,7 @@ public class Relationship extends BaseObservable implements Parcelable {
                 polygamous = kv.codeValue;
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
                 ((TextView) parent.getChildAt(0)).setTextSize(20);
+                notifyPropertyChanged(BR._all);
             }
 
         }
@@ -374,6 +391,7 @@ public class Relationship extends BaseObservable implements Parcelable {
                 lcow = kv.codeValue;
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
                 ((TextView) parent.getChildAt(0)).setTextSize(20);
+
             }
 
         }

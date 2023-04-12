@@ -24,8 +24,8 @@ public class IndividualViewModel extends AndroidViewModel {
     }
 
 
-    public List<Individual> findAll() throws ExecutionException, InterruptedException {
-        return individualRepository.findAll();
+    public Individual findAll(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.findAll(id);
     }
 
     public List<Individual> retrieveByLocationId(String id) throws ExecutionException, InterruptedException {
@@ -58,8 +58,16 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.retrieveByFather(id);
     }
 
+    public List<Individual> retrieveHOH(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.retrieveHOH(id);
+    }
+
     public LiveData<List<CaseItem>> retrieveByIndividual(String id) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveByIndividual(id);
+    }
+
+    public Individual find(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.find(id);
     }
 
 

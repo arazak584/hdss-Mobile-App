@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -16,6 +16,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.Dialog.FatherDialogFragment;
+import org.openhds.hdsscapture.Dialog.MotherDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Calculators;
 import org.openhds.hdsscapture.Utilities.Handler;
@@ -34,6 +36,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -63,6 +66,8 @@ public class IndividualFragment extends Fragment {
     private Individual individual;
     private FragmentIndividualBinding binding;;
     private CaseItem caseItem;
+    private String motherId;
+
 
     public IndividualFragment() {
         // Required empty public constructor
@@ -117,11 +122,6 @@ public class IndividualFragment extends Fragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
-        String father = getArguments().getString("uuid");
-
-        EditText extIdField = binding.getRoot().findViewById(R.id.father_uuid);
-        //        extIdField.setText(father);
-
         // Generate a UUID
         if(individual.individual_uuid == null) {
             String uuid = UUID.randomUUID().toString();
@@ -134,13 +134,37 @@ public class IndividualFragment extends Fragment {
            binding.getIndividual().fw_uuid = fieldworkerData.getFw_uuid();
         }
 
-        // Generate a extId
-        if(individual.extId == null) {
+        if(individual.insertDate==null){
+            binding.getIndividual().insertDate = new Date();
+        }
 
+        // Generate ID if extId is null
+        if (binding.getIndividual().extId == null) {
+            final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
             int sequenceNumber = 1;
-            // Set the ID of the Fieldworker object
-            binding.getIndividual().extId = locations.compextId+String.format("%03d", sequenceNumber);
-            sequenceNumber++;
+            String id = locations.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
+            while (true) {
+                try {
+                    if (!(individualViewModels.findAll(id) != null)) break;
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } // check if ID already exists in ViewModel
+                sequenceNumber++; // increment sequence number if ID exists
+                id = locations.compextId + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
+            }
+            binding.getIndividual().extId = id; // set the generated ID to the extId property of the Individual object
+        }
+
+        Individual data = binding.getIndividual();
+        if (data == null || data!=null) {
+            if (data.residency_uuid==null){
+
+                String res = UUID.randomUUID().toString();
+                String ress = res.toString().replaceAll("-", "");
+                data.residency_uuid = ress;
+            }
         }
 
 
@@ -155,9 +179,9 @@ public class IndividualFragment extends Fragment {
                 // Show the dialog fragment
                 MotherDialogFragment.newInstance(individual, residency, locations,socialgroup)
                         .show(getChildFragmentManager(), "MotherDialogFragment");
-
             }
         });
+
 
         // Set a click listener on the button for mother
         showDialogButton1.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +198,7 @@ public class IndividualFragment extends Fragment {
             binding.individualAge.setText("" + estimatedAge + " years old");
             binding.dob.setError(null);
         }
+
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -228,6 +253,7 @@ public class IndividualFragment extends Fragment {
             binding.individualLastName.setError(null);
             binding.dob.setError(null);
 
+
             if(individual.extId==null){
                 isExists = true;
                 binding.individualExtid.setError("Individual Id is Required");
@@ -263,9 +289,10 @@ public class IndividualFragment extends Fragment {
         });
 
         //LOAD SPINNERS
-        loadCodeData(binding.dobAspect, "yn");
-        loadCodeData(binding.individualComplete,  "yn");
+        loadCodeData(binding.dobAspect, "complete");
+        loadCodeData(binding.individualComplete,  "complete");
         loadCodeData(binding.gender, "gender");
+        loadCodeData(binding.other,  "complete");
 
 
 
@@ -292,9 +319,12 @@ public class IndividualFragment extends Fragment {
             Individual finalData = binding.getIndividual();
             //finalData.modified = AppConstants.YES;
 
+            final boolean validateOnComplete = true;//finalData.complete == 1;
+            boolean hasErrors = new Handler().hasInvalidInput(binding.INDIVIDUALLAYOUT, validateOnComplete, false);
 
-            if (finalData.complete != null) {
-
+            if (hasErrors) {
+                Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
+                return;
             }
 
             IndividualViewModel viewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
@@ -302,10 +332,10 @@ public class IndividualFragment extends Fragment {
         }
         if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
+                    ResidencyFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
         }else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseVisitFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    HouseMembersFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }
 
     }

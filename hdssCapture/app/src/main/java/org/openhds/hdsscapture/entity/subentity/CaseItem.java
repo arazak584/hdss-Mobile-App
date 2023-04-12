@@ -19,9 +19,6 @@ public class CaseItem implements Parcelable {
     public String residency_uuid;
     public String socialgroup_uuid;
     public String visit_uuid;
-    public String parent_uuid;
-    public String fw_uuid;
-    public String preg_uuid;
     public Integer gender;
 
     protected CaseItem(Parcel in) {
@@ -35,9 +32,6 @@ public class CaseItem implements Parcelable {
         this.residency_uuid = in.readString();
         this.socialgroup_uuid = in.readString();
         this.visit_uuid = in.readString();
-        this.parent_uuid = in.readString();
-        this.fw_uuid = in.readString();
-        this.preg_uuid = in.readString();
         this.gender = in.readInt();
     }
 
@@ -70,9 +64,6 @@ public class CaseItem implements Parcelable {
         dest.writeString(this.residency_uuid);
         dest.writeString(this.socialgroup_uuid);
         dest.writeString(this.visit_uuid);
-        dest.writeString(this.parent_uuid);
-        dest.writeString(this.fw_uuid);
-        dest.writeString(this.preg_uuid);
         dest.writeInt(this.gender);
     }
 

@@ -3,6 +3,7 @@ package org.openhds.hdsscapture.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,7 +17,7 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
-import org.openhds.hdsscapture.fragment.FatherDialogFragment;
+import org.openhds.hdsscapture.Dialog.FatherDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,16 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
     private Residency residency;
     private List<Individual> individualList;
     private CaseItem caseItem;
+
+    public interface FatherSelectionListener {
+        void onFatherSelected(String fatherId);
+    }
+
+    private FatherAdapter.FatherSelectionListener listener;
+
+    public void setFatherSelectionListener(FatherAdapter.FatherSelectionListener listener) {
+        this.listener = listener;
+    }
 
     public FatherAdapter(FatherDialogFragment activity, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem) {
         this.activity = activity;
@@ -79,9 +90,18 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
         holder.firstname.setText(individual.getFirstName());
         holder.lastname.setText(individual.getLastName());
 
-        holder.linearLayout.setOnClickListener(v -> {
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the text field in the IndividualFragment where you want to insert the mother's ID
+                EditText fatherIdField = activity.requireActivity().findViewById(R.id.individual_father);
 
+                // Set the mother's ID in the text field
+                fatherIdField.setText(individual.getIndividual_uuid());
 
+                // Hide the MotherDialogFragment
+                activity.dismiss();
+            }
         });
     }
 

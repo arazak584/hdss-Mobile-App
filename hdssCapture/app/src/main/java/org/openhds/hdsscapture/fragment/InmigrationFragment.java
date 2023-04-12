@@ -1,22 +1,26 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.databinding.FragmentInmigrationBinding;
+import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
@@ -29,7 +33,9 @@ import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -108,34 +114,14 @@ public class InmigrationFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentInmigrationBinding.inflate(inflater, container, false);
         binding.setInmigration(inmigration);
-        /*
-        // Generate a UUID
-        if(inmigration.img_uuid == null) {
-            String uuid = UUID.randomUUID().toString();
-            String uuidString = uuid.toString().replaceAll("-", "");
-            // Set the ID of the uuid
-            binding.getInmigration().img_uuid = uuidString;
-        }*/
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             // We use a String here, but any type that can be put in a Bundle is supported
-            if (bundle.containsKey((InmigrationFragment.DATE_BUNDLES.INSERTDATE.getBundleKey()))) {
-                final String result = bundle.getString(InmigrationFragment.DATE_BUNDLES.INSERTDATE.getBundleKey());
-                binding.imgInsertDate.setText(result);
-
-            }
-
             if (bundle.containsKey((DATE_BUNDLES.RECORDDATE.getBundleKey()))) {
                 final String result = bundle.getString(DATE_BUNDLES.RECORDDATE.getBundleKey());
                 binding.imgDate.setText(result);
             }
-        });
-
-        binding.buttonImgInsertDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(InmigrationFragment.DATE_BUNDLES.INSERTDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
         binding.buttonImgImgDate.setOnClickListener(v -> {
@@ -144,51 +130,52 @@ public class InmigrationFragment extends Fragment {
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
+        final Intent i = getActivity().getIntent();
+        final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
+        InmigrationViewModel viewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
+        try {
+            Inmigration data = viewModel.find(individual.individual_uuid);
+            if (data != null) {
+                Toast.makeText(requireActivity(), "data pulled ", Toast.LENGTH_LONG).show();
+                binding.setInmigration(data);
+            } else {
+                data = new Inmigration();
+
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+
+
+                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.img_uuid = uuidString;
+                data.insertDate = new Date();
+                data.individual_uuid = individual.getIndividual_uuid();
+                if (individual.individual_uuid == residency.individual_uuid && residency.endType==1 && data.complete!=3) {
+                    data.residency_uuid = residency.getResidency_uuid();
+                }
+                data.visit_uuid = socialgroup.getVisit_uuid();
+
+                binding.setInmigration(data);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
         //LOAD SPINNERS
         loadCodeData(binding.reason, "reason");
         loadCodeData(binding.origin, "whereoutside");
         loadCodeData(binding.imgComplete, "complete");
         loadCodeData(binding.migtype, "migType");
 
-        binding.buttonSaveClose.setOnClickListener(v -> {
-            final InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
-
-            final Inmigration inmigration = binding.getInmigration();
-            inmigration.setIndividual_uuid(this.individual.getIndividual_uuid());
-
-            boolean isExists = false;
-            binding.imgExtid.setError(null);
-            binding.imgDate.setError(null);
-            binding.imgVisitid.setError(null);
-
-            if(inmigration.individual_uuid==null){
-                isExists = true;
-                binding.imgExtid.setError("Individual Id is Required");
-            }
-
-            if(inmigration.insertDate==null){
-                isExists = true;
-                binding.imgDate.setError("Date of Inmigration is Required");
-
-            }
-
-            if(inmigration.fw_uuid==null){
-                isExists = true;
-                binding.imgFw.setError("Fieldworker is Required");
-            }
-
-
-
-        });
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
-            save(true, true);
+            save(true, true, viewModel);
         });
 
         binding.buttonClose.setOnClickListener(v -> {
 
-            save(false, true);
+            save(false, true, viewModel);
         });
 
         Handler.colorLayouts(requireContext(), binding.INMIGRATIONLAYOUT);
@@ -197,18 +184,21 @@ public class InmigrationFragment extends Fragment {
         return view;
     }
 
-    private void save(boolean save, boolean close) {
+    private void save(boolean save, boolean close, InmigrationViewModel viewModel) {
 
         if (save) {
             Inmigration finalData = binding.getInmigration();
 
+            final boolean validateOnComplete = true;//finalData.complete == 1;
+            boolean hasErrors = new Handler().hasInvalidInput(binding.INMIGRATIONLAYOUT, validateOnComplete, false);
 
-            if (finalData.complete != null) {
-
+            if (hasErrors) {
+                Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
+                return;
             }
-
-            InmigrationViewModel viewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
             viewModel.add(finalData);
+            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,

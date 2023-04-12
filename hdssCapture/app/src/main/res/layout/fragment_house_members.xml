@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.HouseVisitFragment">
+    tools:context=".fragment.HouseMembersFragment">
 
     <LinearLayout
         android:id="@+id/linearLayout_household"
@@ -13,8 +13,6 @@
         android:orientation="vertical"
         android:padding="10dp"
         tools:ignore="MissingConstraints">
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,31 +37,6 @@
                 android:textSize="15sp"
                 android:textStyle="bold"/>
 
-            <TextView
-                android:id="@+id/textView_gpsLat"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAlignment="textEnd"
-                android:textColor="@color/design_default_color_on_secondary"
-                android:textSize="15sp"
-                android:paddingRight="2dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textView_gps"
-                android:layout_width="0dp"
-                android:paddingLeft="2dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textAlignment="textEnd"
-                android:textColor="@color/design_default_color_on_secondary"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-
-
-
         </LinearLayout>
 
 
@@ -71,32 +44,53 @@
             android:id="@+id/layout_individual"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:orientation="horizontal">
 
-            <SearchView
-                android:id="@+id/individual_search"
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="48dip"
-                android:inputType="textPersonName|textCapCharacters"
-                android:queryHint="@string/text_searchindividual">
+                android:gravity="start"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:hint="@string/text_searchindividual">
+                android:text="@string/text_searchindividual">
 
-                <requestFocus />
-            </SearchView>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/search_indivdual"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapCharacters"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
 
+            <Button
+                android:id="@+id/button_search"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dp"
+                android:text="@string/search" />
 
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/button_individuals"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/individual_select" />
+
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_household"
@@ -105,7 +99,7 @@
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="100dp"
+            android:layout_marginBottom="120dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -114,22 +108,35 @@
 
     </LinearLayout>
 
-
-    <!--
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/add_visit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_marginEnd="0dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="150dp"
         android:contentDescription="@string/visit_household"
         android:src="@drawable/ic_add"
         android:text="@string/visit_household"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="ImageContrastCheck" />-->
+        tools:ignore="ImageContrastCheck" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/add_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="80dp"
+        android:contentDescription="@string/mainmenu"
+        android:src="@drawable/ic_add"
+        android:text="@string/mainmenu"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="ImageContrastCheck" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottom_app_bar"

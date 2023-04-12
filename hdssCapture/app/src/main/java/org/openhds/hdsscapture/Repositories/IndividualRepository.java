@@ -37,14 +37,15 @@ public class IndividualRepository {
     }
 
 
-    public List<Individual> findAll() throws ExecutionException, InterruptedException {
+    public Individual findAll(String id) throws ExecutionException, InterruptedException {
 
-        Callable<List<Individual>> callable = () -> dao.retrieve();
+        Callable<Individual> callable = () -> dao.retrieve(id.toUpperCase());
 
-        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+        Future<Individual> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }
+
 
     public List<Individual> findToSync() throws ExecutionException, InterruptedException {
 
@@ -91,11 +92,18 @@ public class IndividualRepository {
         return future.get();
     }
 
-
-
     public List<Individual> retrieveByFatherSearch(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Individual>> callable = () -> dao.retrieveByFatherSearch(id);
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Individual> retrieveHOH(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.retrieveHOH(id);
 
         Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
 
@@ -116,6 +124,15 @@ public class IndividualRepository {
         Callable<LiveData<List<CaseItem>>> callable = () -> dao.retrieveByIndividual(id);
 
         Future<LiveData<List<CaseItem>>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Individual find(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Individual> callable = () -> dao.find(id);
+
+        Future<Individual> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }

@@ -1,22 +1,26 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.Dialog.ChangeHohFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.databinding.FragmentSocialgroupBinding;
+import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
@@ -25,13 +29,9 @@ import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -75,7 +75,7 @@ public class SocialgroupFragment extends Fragment {
      * @param individual Parameter 4.
      * @param caseItem Parameter 6.
      * @param eventForm Parameter 7.
-     * @return A new instance of fragment SocialgroupFragment.
+     * @return A new instance of fragment HouseholdFragment.
      */
 
     public static SocialgroupFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem, EventForm eventForm) {
@@ -114,68 +114,50 @@ public class SocialgroupFragment extends Fragment {
         //View view = inflater.inflate(R.layout.fragment_house_visit, container, false);
         binding.setSocialgroup(socialgroup);
 
-        binding.buttonSaveClose.setOnClickListener(v -> {
-            final SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+        final Intent i = getActivity().getIntent();
+        final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
-            final Socialgroup socialgroup = binding.getSocialgroup();
-            socialgroup.setHouseExtId(this.socialgroup.getHouseExtId());
+        // Find the button view
+        Button showDialogButton = binding.getRoot().findViewById(R.id.button_change_hoh);
 
-            boolean isExists = false;
-            binding.sociagroupExtid.setError(null);
-            binding.editTextInsertDate.setError(null);
-            binding.groupName.setError(null);
-            binding.headExtid.setError(null);
-
-            if(socialgroup.houseExtId==null){
-                isExists = true;
-                binding.sociagroupExtid.setError("HouseholdID is Required");
+        // Set a click listener on the button for mother
+        showDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show the dialog fragment
+                ChangeHohFragment.newInstance(individual, residency, locations,socialgroup)
+                        .show(getChildFragmentManager(), "ChangeHohFragment");
             }
-
-            if(socialgroup.insertDate==null){
-                isExists = true;
-                binding.editTextInsertDate.setError("Date of visit is Required");
-
-            }
-
-            if(socialgroup.groupName==null){
-                isExists = true;
-                binding.groupName.setError("Social Group Name is Required");
-            }
-
-            if(socialgroup.individual_uuid==null){
-                isExists = true;
-                binding.headExtid.setError("Head ID is Required");
-            }
-
         });
 
+        SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+//        try {
+            Socialgroup data = binding.getSocialgroup();
+            if (data != null) {
+                if (data.visit_uuid==null){
 
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            // We use a String here, but any type that can be put in a Bundle is supported
-            if (bundle.containsKey(SocialgroupFragment.DATE_BUNDLES.INSERTDATE.getBundleKey())) {
-                final String result = bundle.getString((SocialgroupFragment.DATE_BUNDLES.INSERTDATE.getBundleKey()));
-                binding.editTextInsertDate.setText(result);
+                    String visits = UUID.randomUUID().toString();
+                    String visituuid = visits.toString().replaceAll("-", "");
+                    data.visit_uuid = visituuid;
+                }
+
+                if (data.groupName!= null && individual.firstName!= null && "FAKE".equals(data.groupName)){
+
+                    data.groupName = individual.firstName +' '+ individual.lastName;
+                    data.individual_uuid = individual.individual_uuid;
+                }
+
+
+//                binding.setSocialgroup(data);
+
             }
 
-        });
+
 
         //LOAD SPINNERS
         loadCodeData(binding.selectGroupType, "groupType");
-        //loadCodeData(binding., "complete");
+        loadCodeData(binding.residencyComplete, "complete");
 
-        binding.buttonSocialInsertDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            final String curinsertdate = binding.editTextInsertDate.getText().toString();
-            if(curinsertdate!=null){
-                final SimpleDateFormat f = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
-                try {
-                    c.setTime(Objects.requireNonNull(f.parse(curinsertdate)));
-                } catch (ParseException e) {
-                }
-            }
-            DialogFragment newFragment = new DatePickerFragment(SocialgroupFragment.DATE_BUNDLES.INSERTDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
@@ -188,7 +170,7 @@ public class SocialgroupFragment extends Fragment {
         });
 
 
-        Handler.colorLayouts(requireContext(), binding.SOCIALGROUPLAYOUT);
+        Handler.colorLayouts(requireContext(), binding.SOCIALGROUPSLAYOUT);
         View v = binding.getRoot();
         return v;
     }
@@ -208,7 +190,7 @@ public class SocialgroupFragment extends Fragment {
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual, residency, locations, socialgroup, caseItem)).commit();
+                    EventsFragment.newInstance(individual, residency, locations, socialgroup,caseItem)).commit();
         }
     }
 
@@ -249,23 +231,5 @@ public class SocialgroupFragment extends Fragment {
 
     }
 
-    private enum DATE_BUNDLES {
-        INSERTDATE ("INSERTDATE");
 
-        private final String bundleKey;
-
-        DATE_BUNDLES(String bundleKey) {
-            this.bundleKey = bundleKey;
-
-        }
-
-        public String getBundleKey() {
-            return bundleKey;
-        }
-
-        @Override
-        public String toString() {
-            return bundleKey;
-        }
-    }
 }

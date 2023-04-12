@@ -44,7 +44,7 @@ public class OutmigrationRepository {
         return future.get();
     }
 
-    public List<Outmigration> findomgToSync() throws ExecutionException, InterruptedException {
+    public List<Outmigration> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Outmigration>> callable = () -> dao.retrieveomgToSync();
 

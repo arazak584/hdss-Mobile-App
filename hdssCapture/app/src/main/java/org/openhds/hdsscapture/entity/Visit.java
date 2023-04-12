@@ -40,8 +40,8 @@ public class Visit extends BaseObservable implements Parcelable {
     @PrimaryKey
     public String visit_uuid;
 
-    @ColumnInfo(name = "visitextId")
-    public String visitextId;
+    @ColumnInfo(name = "visitExtId")
+    public String visitExtId;
 
     @SerializedName("location_uuid")
     @Expose
@@ -51,7 +51,7 @@ public class Visit extends BaseObservable implements Parcelable {
     @SerializedName("roundNumber")
     @Expose
     @ColumnInfo(name = "roundNumber")
-    public String roundNumber;
+    public Integer roundNumber;
 
     @SerializedName("insertDate")
     @Expose
@@ -73,8 +73,14 @@ public class Visit extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "fw_uuid")
     public String fw_uuid;
 
+    @SerializedName("respondent")
+    @ColumnInfo(name = "respondent")
     @Expose
-    public String individual_uuid;
+    public String respondent;
+
+    @SerializedName("houseExtId")
+    @Expose
+    public String houseExtId;
 
     @SerializedName("complete")
     @Expose
@@ -84,20 +90,19 @@ public class Visit extends BaseObservable implements Parcelable {
     public Visit(){}
 
     @Ignore
-    public Visit(@NotNull String visit_uuid, String visitextId, String location_uuid, String roundNumber, Date insertDate, Date visitDate, Integer realVisit, String individual_uuid, String fw_uuid) {
+    public Visit(@NotNull String visit_uuid, String visitExtId, String location_uuid, Integer roundNumber, Date insertDate, Date visitDate, Integer realVisit, String fw_uuid) {
         this.visit_uuid = visit_uuid;
-        this.visitextId = visitextId;
+        this.visitExtId = visitExtId;
         this.location_uuid = location_uuid;
         this.roundNumber = roundNumber;
         this.insertDate = insertDate;
         this.visitDate = visitDate;
         this.realVisit = realVisit;
-        this.individual_uuid = individual_uuid;
         this.fw_uuid = fw_uuid;
     }
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
+    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @Bindable
     @NotNull
@@ -110,14 +115,16 @@ public class Visit extends BaseObservable implements Parcelable {
     }
 
     @Bindable
-    public String getVisitextId() {
-        return visitextId;
+    public String getVisitExtId() {
+        return visitExtId;
     }
 
-    public void setVisitextId(String visitextId) {
-        this.visitextId = visitextId;
+    public void setVisitExtId(String visitExtId) {
+        this.visitExtId = visitExtId;
+
     }
 
+    @Bindable
     public String getLocation_uuid() {
         return location_uuid;
     }
@@ -126,6 +133,7 @@ public class Visit extends BaseObservable implements Parcelable {
         this.location_uuid = location_uuid;
     }
 
+    @Bindable
     public String getFw_uuid() {
         return fw_uuid;
     }
@@ -135,14 +143,15 @@ public class Visit extends BaseObservable implements Parcelable {
     }
 
     @Bindable
-    public String getRoundNumber() {
+    public Integer getRoundNumber() {
         return roundNumber;
     }
 
-    public void setRoundNumber(String roundNumber) {
+    public void setRoundNumber(Integer roundNumber) {
         this.roundNumber = roundNumber;
     }
 
+    @Bindable
     public String getInsertDate() {
         if (insertDate == null) return "SELECT DATE OF VISIT";
         return f.format(insertDate);
@@ -156,6 +165,7 @@ public class Visit extends BaseObservable implements Parcelable {
         }
     }
 
+    @Bindable
     public String getVisitDate() {
         if (visitDate == null) return "SELECT DATE OF VISIT";
         return f.format(visitDate);
@@ -169,29 +179,34 @@ public class Visit extends BaseObservable implements Parcelable {
         }
     }
 
-    public String getIndividual_uuid() {
-        return individual_uuid;
+    @Bindable
+    public String getRespondent() {
+        return respondent;
     }
 
-    public void setIndividual_uuid(String individual_uuid) {
-        this.individual_uuid = individual_uuid;
+    public void setRespondent(String respondent) {
+        this.respondent = respondent;
     }
 
-    public Integer getComplete() {
-        return complete;
+    @Bindable
+    public String getHouseExtId() {
+        return houseExtId;
     }
 
-    public void setComplete(Integer complete) {
-        this.complete = complete;
+    public void setHouseExtId(String houseExtId) {
+        this.houseExtId = houseExtId;
     }
 
-      protected Visit (Parcel in) {
+    protected Visit (Parcel in) {
+        this.visitExtId = in.readString();
+        this.fw_uuid = in.readString();
         this.visit_uuid = in.readString();
-        this.roundNumber = in.readString();
+        this.roundNumber = in.readInt();
         this.insertDate = (java.util.Date) in.readSerializable();
         this.visitDate = (java.util.Date) in.readSerializable();
         this.realVisit = in.readInt();
-        this.individual_uuid = in.readString();
+        this.respondent = in.readString();
+        this.houseExtId = in.readString();
     }
 
     public static final Creator<Visit> CREATOR = new Creator<Visit>() {
@@ -213,13 +228,15 @@ public class Visit extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.visitExtId);
+        dest.writeString(this.fw_uuid);
         dest.writeString(this.visit_uuid);
-        dest.writeString(this.roundNumber);
+        dest.writeInt(this.roundNumber);
         dest.writeSerializable(this.insertDate);
         dest.writeSerializable(this.visitDate);
         dest.writeInt(this.realVisit);
-        dest.writeString(this.individual_uuid);
-
+        dest.writeString(this.respondent);
+        dest.writeString(this.houseExtId);
     }
 
     //SPINNERS ENTITY COMPLETE FORM FOR SYNC

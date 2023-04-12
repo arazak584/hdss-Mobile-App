@@ -16,7 +16,7 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.fragment.PregnancyDialogFragment;
+import org.openhds.hdsscapture.Dialog.PregnancyDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +79,7 @@ public class PregnancyAdapter extends RecyclerView.Adapter<PregnancyAdapter.View
 
         holder.linearLayout.setOnClickListener(v -> {
             activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    PregnancyDialogFragment.newInstance(individual, residency, locations, socialgroup,pregnancy )).commit();
+                    PregnancyDialogFragment.newInstance(individual, residency, locations, socialgroup )).commit();
         });
     }
 

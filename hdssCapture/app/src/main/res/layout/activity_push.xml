@@ -62,27 +62,131 @@
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/buttonSendEvent"
+            android:id="@+id/buttonSendSocialgroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/send_event"
+            android:text="@string/send_socialgroup"
             app:icon="@drawable/push"/>
 
         <TextView
-            android:id="@+id/textViewSendEvent"
+            android:id="@+id/textViewSendSocialgroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp" />
 
-    <Button
-            android:id="@+id/buttonSendEvents"
+        <Button
+            android:id="@+id/buttonSendResidency"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/send_event"
+            android:text="@string/send_residency"
             app:icon="@drawable/push"/>
 
         <TextView
-            android:id="@+id/textViewSendEvents"
+            android:id="@+id/textViewSendResidency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonSendInmigration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_inmigration"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendInmigration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonSendOutmigration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_outmigration"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendOutmigration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonSendDeath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_death"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendDeath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonSendRelationship"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_relationship"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendRelationship"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonSendPregnancy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_pregnancy"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendPregnancy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonSendOutcome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_outcome"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendOutcome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonSendVpm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_vpm"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendVpm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonSendDemography"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_demography"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendDemography"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp" />

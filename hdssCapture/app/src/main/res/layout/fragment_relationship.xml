@@ -46,6 +46,9 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:visibility="gone"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -83,6 +86,8 @@
                     tools:ignore="TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -100,6 +105,8 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -116,7 +123,17 @@
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+
+                <Button
+                    android:id="@+id/button_partner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/partner"
+                    tools:ignore="DuplicateSpeakableTextCheck" />
+
                 <com.google.android.material.textfield.TextInputLayout
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -187,6 +204,7 @@
                     android:padding="10dp"/>
 
                 <Button
+                    goneUnless="@{relationship.endType!=1}"
                     android:id="@+id/button_rel_endDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -195,6 +213,7 @@
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
+                    goneUnless="@{relationship.endType!=1}"
                     android:id="@+id/rel_endDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -206,6 +225,7 @@
                     tools:ignore="TextContrastCheck" />
 
                 <TextView
+                    goneUnless="@{relationship.aIsToB==2}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -214,6 +234,7 @@
                     android:text="@string/mar"/>
 
                 <Spinner
+                    goneUnless="@{relationship.aIsToB==2}"
                     android:id="@+id/mar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -236,11 +257,12 @@
                         android:id="@+id/tnbch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@{Integer.toString(relationship.tnbch)}"
+                        android:text="@{relationship.tnbch}"
                         android:inputType="number"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{relationship.aIsToB==2}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -253,11 +275,12 @@
                         android:id="@+id/nchdm"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@{Integer.toString(relationship.nchdm)}"
+                        android:text="@{relationship.nchdm}"
                         android:inputType="number"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
+                    goneUnless="@{relationship.aIsToB==2}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -266,6 +289,7 @@
                     android:text="@string/polygamous"/>
 
                 <Spinner
+                    goneUnless="@{relationship.aIsToB==2}"
                     android:id="@+id/polygamous"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -276,6 +300,7 @@
                     android:padding="10dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{relationship.polygamous==1}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -288,11 +313,12 @@
                         android:id="@+id/nwive"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@{Integer.toString(relationship.nwive)}"
+                        android:text="@{relationship.nwive}"
                         android:inputType="number"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
+                    goneUnless="@{relationship.polygamous==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -301,6 +327,7 @@
                     android:text="@string/lcow"/>
 
                 <Spinner
+                    goneUnless="@{relationship.polygamous==1}"
                     android:id="@+id/lcow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -311,6 +338,7 @@
                     android:padding="10dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{relationship.polygamous==1}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -323,7 +351,7 @@
                         android:id="@+id/mrank"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@{Integer.toString(relationship.mrank)}"
+                        android:text="@{relationship.mrank}"
                         android:inputType="number"/>
                 </com.google.android.material.textfield.TextInputLayout>
 

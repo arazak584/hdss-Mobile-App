@@ -52,9 +52,18 @@ public class ResidencyRepository {
         return future.get();
     }
 
-    public Residency find(String id) throws ExecutionException, InterruptedException {
+    public List<Residency> find(String id) throws ExecutionException, InterruptedException {
 
-        Callable<Residency> callable = () -> dao.find(id);
+        Callable<List<Residency>> callable = () -> dao.find(id);
+
+        Future<List<Residency>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Residency findRes(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Residency> callable = () -> dao.findRes(id);
 
         Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
 

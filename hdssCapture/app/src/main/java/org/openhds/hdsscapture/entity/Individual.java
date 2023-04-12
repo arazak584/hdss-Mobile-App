@@ -20,6 +20,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -29,7 +30,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "individual",
-indices = {@Index(value = {"extId","individual_uuid","firstName","lastName","houseExtId","compextId"}, unique = false)})
+indices = {@Index(value = {"individual_uuid","lastName","firstName"}, unique = false)})
 public class Individual extends BaseObservable implements Parcelable {
 
     @SerializedName("individual_uuid")
@@ -39,6 +40,7 @@ public class Individual extends BaseObservable implements Parcelable {
     @PrimaryKey
     public String individual_uuid;
 
+    @Expose
     @ColumnInfo(name = "extId")
     public String extId;
 
@@ -99,13 +101,19 @@ public class Individual extends BaseObservable implements Parcelable {
     @Expose
     public Integer complete;
 
-    //@Expose
-    //public Integer modified = AppConstants.NA;// modify status
+    @Expose
+    public Integer other;
 
+    @Expose
     public String compextId;
-
+    @Expose
     public String houseExtId;
+    @Expose
+    public Integer endType;
 
+    @SerializedName("residency_uuid")
+    @Expose
+    public String residency_uuid;
 
 
     public Individual(){}
@@ -271,8 +279,6 @@ public class Individual extends BaseObservable implements Parcelable {
     }
 
     @Bindable
-
-
     public Integer getComplete() {
         return complete;
     }
@@ -281,6 +287,14 @@ public class Individual extends BaseObservable implements Parcelable {
         this.complete = complete;
     }
 
+    @Bindable
+    public String getResidency_uuid() {
+        return residency_uuid;
+    }
+
+    public void setResidency_uuid(String residency_uuid) {
+        this.residency_uuid = residency_uuid;
+    }
 
     protected Individual(Parcel in) {
         this.extId = in.readString();
@@ -295,6 +309,7 @@ public class Individual extends BaseObservable implements Parcelable {
         this.father_uuid = in.readString();
         this.fw_uuid = in.readString();
         this.complete = in.readInt();
+        this.residency_uuid = in.readString();
     }
 
     public static final Creator<Individual> CREATOR = new Creator<Individual>() {
@@ -328,6 +343,7 @@ public class Individual extends BaseObservable implements Parcelable {
         dest.writeString(this.father_uuid);
         dest.writeString(this.fw_uuid);
         dest.writeInt(this.complete);
+        dest.writeString(this.residency_uuid);
     }
 
     //SPINNERS ENTITY DOB ASPECT
@@ -377,6 +393,24 @@ public class Individual extends BaseObservable implements Parcelable {
             complete = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setOther(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            other = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            other = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }

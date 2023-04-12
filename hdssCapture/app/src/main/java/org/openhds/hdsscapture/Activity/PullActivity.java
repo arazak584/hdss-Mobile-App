@@ -82,7 +82,7 @@ public class PullActivity extends AppCompatActivity {
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
 
-        AppJson api = AppJson.getInstance();
+        AppJson api = AppJson.getInstance(this);
         dao = api.getJsonApi();
 
         /*final Button button_SyncCodeBook = findViewById(R.id.button_SyncCodeBook);
@@ -373,9 +373,9 @@ public class PullActivity extends AppCompatActivity {
                                 if (locationDao != null) {
                                     File unzippedFile = new File(getExternalCacheDir() + File.separator + "location.csv");
                                     CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("location_uuid").addColumn("accuracy").addColumn("compextId").addColumn("compno")
+                                    CsvSchema schema = CsvSchema.builder().addColumn("compextId").addColumn("accuracy").addColumn("compno")
                                             .addColumn("fw_uuid").addColumn("insertDate").addColumn("latitude").addColumn("locationLevel_uuid").addColumn("locationName")
-                                            .addColumn("locationType").addColumn("longitude").addColumn("status").build();
+                                            .addColumn("locationType").addColumn("location_uuid").addColumn("longitude").addColumn("status").build();
                                     MappingIterator<Locations> iterator = mapper.readerFor(Locations.class).with(schema).readValues(unzippedFile);
                                     progress.setCancelable(true);
                                     progress.setCanceledOnTouchOutside(true);
@@ -1025,8 +1025,9 @@ public class PullActivity extends AppCompatActivity {
                                 if (demographicDao != null) {
                                     File unzippedFile = new File(getExternalCacheDir() + File.separator + "demography.csv");
                                     CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("demo_uuid").addColumn("comp_yrs").addColumn("education").addColumn("fw_uuid").addColumn("individual_uuid")
-                                            .addColumn("insertDate").addColumn("marital").addColumn("occupation").addColumn("occupation_oth").addColumn("phone1").addColumn("phone2")
+                                    CsvSchema schema = CsvSchema.builder().addColumn("individual_uuid").addColumn("comp_yrs").addColumn("education").addColumn("fw_uuid")
+                                            .addColumn("insertDate").addColumn("marital").addColumn("occupation").addColumn("occupation_oth")
+                                            .addColumn("phone1").addColumn("phone2")
                                             .addColumn("religion").addColumn("religion_oth").addColumn("tribe").addColumn("tribe_oth").build();
                                     MappingIterator<Demographic> iterator = mapper.readerFor(Demographic.class).with(schema).readValues(unzippedFile);
                                     progress.show();

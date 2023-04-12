@@ -80,7 +80,7 @@
     <string name="ind_q2">INDIVIDUAL CHARACTERISTICS</string>
     <string name="ind_extid">Individual ID</string>
     <string name="ind_name">Name of Individual</string>
-    <string name="ind_nick">Nick Name of Individual</string>
+    <string name="ind_nick">Nick or Other Name of Individual</string>
     <string name="dob">Date of birth actual</string>
     <string name="actual_dob">Date of Birth</string>
     <string name="ind_q4p5">Age</string>
@@ -147,7 +147,7 @@
     <string name="origin">Where is the Individual Migrating from</string>
     <string name="reason">Reason for Inmigration</string>
     <string name="birthplace">Place of Birth</string>
-    <string name="outmigration">Outmigration Form</string>
+    <string name="outmigration">Outmigration</string>
     <string name="destination">Where did the Individual move to</string>
     <string name="outdate">Date of Outmigration</string>
     <string name="reason_out">Reason for Outmigration</string>
@@ -160,7 +160,7 @@
     <string name="grouptype">Social Group Type</string>
     <string name="settings">settings</string>
     <string name="delete">delete</string>
-    <string name="search">Search Individual</string>
+    <string name="search">Search</string>
 
 
     //Expenses
@@ -233,7 +233,7 @@
     <string name="saveclosedata"><![CDATA[Save & Close]]></string>
     <string name="closedata">Close Form</string>
     <string name="get_demography">Get Demography</string>
-    <string name="text_searchindividual">Search Using Name of Individual or Compound Number or Phone Number</string>
+    <string name="text_searchindividual">Search Using Name of Individual or Compound Number</string>
     <string name="name">Name</string>
     <string name="fname">FirstName</string>
     <string name="text_lname">Surname</string>
@@ -316,6 +316,28 @@
     <string name="latitude">Latitude</string>
     <string name="accuracy">Accuracy</string>
     <string name="gps">Pick Geopoint</string>
+    <string name="householdhead">Name of Household Head</string>
+    <string name="incompletenotsaved">CANNOT SAVE, ALL FIELDS ARE REQUIRED</string>
+    <string name="completesaved">Successfully Saved</string>
+    <string name="edit_form">Is it a new compound</string>
+    <string name="send_demography">Send Demography</string>
+    <string name="url">Server URL</string>
+    <string name="link">Enter Server URL</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="AgeAtDeath">Age at Death in Days</string>
+    <string name="adhocforms">Events</string>
+    <string name="item_devt">MEMBERSHIP</string>
+    <string name="loading_lbl">Loading</string>
+    <string name="please_wait_lbl">Please wait</string>
+    <string name="changehh">Change Household</string>
+    <string name="changehoh">Change Head of Household</string>
+    <string name="individual_select">Select Individuals</string>
+    <string name="own_phone">Do you Own a Phone?</string>
+    <string name="rel_partner">Relationship Partner</string>
+    <string name="other_name">Do you have any other Name or Previous Name not Captured on your official documents?</string>
+    <string name="exit_confirmation_title">Exit</string>
+    <string name="exiting_lbl">Are you sure you want to exit?</string>
 
 
 </resources>

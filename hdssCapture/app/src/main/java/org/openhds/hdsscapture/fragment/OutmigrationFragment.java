@@ -1,22 +1,27 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
+import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.databinding.FragmentOutmigrationBinding;
+import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outmigration;
@@ -29,7 +34,9 @@ import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -58,6 +65,7 @@ public class OutmigrationFragment extends Fragment {
     private EventForm eventForm;
     private Outmigration outmigration;
     private Visit visit;
+    private OutmigrationViewModel outmigrationViewModel;
 
     public OutmigrationFragment() {
         // Required empty public constructor
@@ -92,6 +100,7 @@ public class OutmigrationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        outmigrationViewModel = ViewModelProviders.of(this).get(OutmigrationViewModel.class);
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
             residency = getArguments().getParcelable(RESIDENCY_ID);
@@ -111,22 +120,10 @@ public class OutmigrationFragment extends Fragment {
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             // We use a String here, but any type that can be put in a Bundle is supported
-            if (bundle.containsKey((OutmigrationFragment.DATE_BUNDLES.INSERTDATE.getBundleKey()))) {
-                final String result = bundle.getString(OutmigrationFragment.DATE_BUNDLES.INSERTDATE.getBundleKey());
-                binding.omgInsertDate.setText(result);
-
-            }
-
             if (bundle.containsKey((OutmigrationFragment.DATE_BUNDLES.RECORDDATE.getBundleKey()))) {
                 final String result = bundle.getString(OutmigrationFragment.DATE_BUNDLES.RECORDDATE.getBundleKey());
                 binding.omgDate.setText(result);
             }
-        });
-
-        binding.buttonOmgInsertDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(OutmigrationFragment.DATE_BUNDLES.INSERTDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
         binding.buttonOmgImgDate.setOnClickListener(v -> {
@@ -135,50 +132,49 @@ public class OutmigrationFragment extends Fragment {
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
+        final Intent i = getActivity().getIntent();
+        final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
+        OutmigrationViewModel viewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
+        try {
+            Outmigration data = viewModel.find(individual.individual_uuid);
+            if (data != null) {
+                Toast.makeText(requireActivity(), "data pulled ", Toast.LENGTH_LONG).show();
+                binding.setOutmigration(data);
+            } else {
+                data = new Outmigration();
+
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+
+
+                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.omg_uuid = uuidString;
+                data.insertDate = new Date();
+                data.individual_uuid = individual.getIndividual_uuid();
+                data.visit_uuid = socialgroup.getVisit_uuid();
+                data.residency_uuid = residency.getResidency_uuid();
+
+                binding.setOutmigration(data);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
         //LOAD SPINNERS
         loadCodeData(binding.reasonOut, "reason");
         loadCodeData(binding.destination, "whereoutside");
         loadCodeData(binding.imgComplete, "complete");
 
-        binding.buttonSaveClose.setOnClickListener(v -> {
-            final OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
-
-            final Outmigration outmigration = binding.getOutmigration();
-            outmigration.setIndividual_uuid(this.individual.getIndividual_uuid());
-
-            boolean isExists = false;
-            binding.omgExtid.setError(null);
-            binding.omgDate.setError(null);
-            binding.omgVisitid.setError(null);
-
-            if(outmigration.individual_uuid==null){
-                isExists = true;
-                binding.omgExtid.setError("Individual Id is Required");
-            }
-
-            if(outmigration.insertDate==null){
-                isExists = true;
-                binding.omgDate.setError("Date of Outmigration is Required");
-
-            }
-
-            if(outmigration.fw_uuid==null){
-                isExists = true;
-                binding.omgFw.setError("Fieldworker is Required");
-            }
-
-
-
-        });
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
-            save(true, true);
+            save(true, true, viewModel);
         });
 
         binding.buttonClose.setOnClickListener(v -> {
 
-            save(false, true);
+            save(false, true, viewModel);
         });
 
         Handler.colorLayouts(requireContext(), binding.OUTMIGRATIONLAYOUT);
@@ -186,18 +182,21 @@ public class OutmigrationFragment extends Fragment {
         return view;
     }
 
-    private void save(boolean save, boolean close) {
+    private void save(boolean save, boolean close, OutmigrationViewModel viewModel) {
 
         if (save) {
             Outmigration finalData = binding.getOutmigration();
 
+            final boolean validateOnComplete = true;//finalData.complete == 1;
+            boolean hasErrors = new Handler().hasInvalidInput(binding.OUTMIGRATIONLAYOUT, validateOnComplete, false);
 
-            if (finalData.complete != null) {
-
+            if (hasErrors) {
+                Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
+                return;
             }
-
-            OutmigrationViewModel viewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
             viewModel.add(finalData);
+            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
@@ -206,11 +205,6 @@ public class OutmigrationFragment extends Fragment {
 
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
 
     private <T> void callable(Spinner spinner, T[] array) {
 

@@ -2,14 +2,18 @@ package org.openhds.hdsscapture.Adapter;
 
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS1;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS10;
-import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS2;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS3;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS4;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS6;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS7;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS8;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS9;
+import static org.openhds.hdsscapture.AppConstants.MARKED_COMPLETE;
+import static org.openhds.hdsscapture.AppConstants.NOT_DONE;
+import static org.openhds.hdsscapture.AppConstants.UPDATE;
+import static org.openhds.hdsscapture.AppConstants.UPDATED;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +40,6 @@ import org.openhds.hdsscapture.fragment.PregnancyFragment;
 import org.openhds.hdsscapture.fragment.RelationshipFragment;
 import org.openhds.hdsscapture.fragment.ResidencyFragment;
 import org.openhds.hdsscapture.fragment.SocialgroupFragment;
-import org.openhds.hdsscapture.fragment.VisitFragment;
 
 import java.util.List;
 
@@ -75,29 +78,26 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
     public void onBindViewHolder(@NonNull EventFormAdapter.ViewHolder holder, int position) {
         final EventForm eventForm = eventForms.get(position);
         final String status;
-        /*
-        if (eventForm.complete == null ) {
-            holder.linearLayout.setBackgroundColor(Color.YELLOW);
-            status = eventForm.complete == COMPLETE ? MARKED_COMPLETE : MARKED_INCOMPLETE;
-        } else if (eventForm.complete == NOT_COMPLETE) {
-            if (eventForm.complete == COMPLETE) {
-                holder.linearLayout.setBackgroundColor(Color.GREEN);
-                status = MARKED_COMPLETE;
-            } else if (eventForm.complete == NOT_COMPLETE) {
-                holder.linearLayout.setBackgroundColor(Color.RED);
-                status = MARKED_INCOMPLETE;
-            } else {
+
+        if (eventForm.complete == null) {
+            if (eventForm.complete == null ) {
                 holder.linearLayout.setBackgroundColor(Color.TRANSPARENT);
                 status = NOT_DONE;
+            } else if (eventForm.complete == UPDATED) {
+                holder.linearLayout.setBackgroundColor(Color.RED);
+                status = UPDATE;
+            } else {
+                holder.linearLayout.setBackgroundColor(Color.GREEN);
+                status = MARKED_COMPLETE;
             }
         } else {
-            holder.linearLayout.setBackgroundColor(Color.TRANSPARENT);
-            status = NOT_DONE;
-        }*/
+            holder.linearLayout.setBackgroundColor(Color.GREEN);
+            status = MARKED_COMPLETE;
+        }
 
         holder.textView_event.setText(eventForm.event_name);
         holder.textView_form.setText(eventForm.form_name);
-        //holder.textView_status.setText(status);
+        holder.textView_status.setText(status);
         holder.linearLayout.setOnClickListener(view -> formFactory(individual, residency, locations, socialgroup,caseItem, eventForm));
 
     }
@@ -106,15 +106,7 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
         switch (eventForm.event_name) {
             case EVENT_HDSS1: {
                 activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        ResidencyFragment.newInstance(individual,residency, locations,socialgroup, caseItem,eventForm)).commit();
-
-                break;
-            }
-
-            case EVENT_HDSS2: {
-
-                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        VisitFragment.newInstance(individual,residency, locations, socialgroup,visit, caseItem, eventForm)).commit();
+                        ResidencyFragment.newInstance(individual,residency, locations,socialgroup, caseItem)).commit();
 
                 break;
             }

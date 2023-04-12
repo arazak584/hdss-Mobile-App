@@ -1,5 +1,7 @@
 package org.openhds.hdsscapture.Activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -18,7 +20,7 @@ import org.openhds.hdsscapture.fragment.ClusterFragment;
 
 public class LocationActivity extends AppCompatActivity {
 
-    public static Locations topLocations = new Locations();
+    public static Locations TOP_LOCATION = new Locations();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,5 +70,23 @@ public class LocationActivity extends AppCompatActivity {
         // replace the FrameLayout with new Fragment
         fragmentTransaction.replace(R.id.container_cluster, fragment);
         fragmentTransaction.commit(); // save the changes
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.exit_confirmation_title))
+                .setMessage(getString(R.string.exiting_lbl))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        try{
+                            LocationActivity.this.finish();
+                        }
+                        catch(Exception e){}
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), null)
+                .show();
     }
 }

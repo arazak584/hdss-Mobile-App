@@ -3,6 +3,7 @@ package org.openhds.hdsscapture.Dao;
 
 import org.openhds.hdsscapture.entity.CodeBook;
 import org.openhds.hdsscapture.entity.Death;
+import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
@@ -26,74 +27,77 @@ import retrofit2.http.POST;
 
 public interface ApiDao {
 
-    @GET("codebook")
+    @GET("/api/codebook")
     Call<DataWrapper<CodeBook>> getCodeBook();
 
-    @GET("round")
+    @GET("/api/round")
     Call<DataWrapper<Round>> getRound();
 
-    @GET("fieldworker")
+    @GET("/api/fieldworker")
     Call<DataWrapper<Fieldworker>> getFw();
 
-    @GET("hierarchy")
+    @GET("/api/hierarchy")
     Call<DataWrapper<Hierarchy>> getAllHierarchy();
 
-    @GET("task/location.zip")
+    @GET("/api/task/location.zip")
     Call<ResponseBody> downloadLocation();
 
-    @GET("task/residency.zip")
+    @GET("/api/task/residency.zip")
     Call<ResponseBody> downloadResidency();
 
-    @GET("task/socialgroup.zip")
+    @GET("/api/task/socialgroup.zip")
     Call<ResponseBody> downloadSocialgroup();
 
-    @GET("task/relationship.zip")
+    @GET("/api/task/relationship.zip")
     Call<ResponseBody> downloadRelationship();
 
-    @GET("task/pregnancy.zip")
+    @GET("/api/task/pregnancy.zip")
     Call<ResponseBody> downloadPregnancy();
 
-    @GET("task/individual.zip")
+    @GET("/api/task/individual.zip")
     Call<ResponseBody> downloadZipFile();
 
-    @GET("task/demography.zip")
+    @GET("/api/task/demography.zip")
     Call<ResponseBody> downloadDemography();
 
-    @POST("location")
+    @POST("/api/location")
     Call<DataWrapper<Locations>> sendLocationdata(@Body DataWrapper<Locations> dataModal);
 
-    @POST("visit")
+    @POST("/api/visit")
     Call<DataWrapper<Visit>> sendVisitdata(@Body DataWrapper<Visit> dataModal);
 
-    @POST("individual")
+    @POST("/api/individual")
     Call<DataWrapper<Individual>> sendIndividualdata(@Body DataWrapper<Individual> dataModal);
 
-    @POST("residency")
+    @POST("/api/residency")
     Call<DataWrapper<Residency>> sendResidencydata(@Body DataWrapper<Residency> dataModal);
 
-    @POST("socialgroup")
+    @POST("/api/socialgroup")
     Call<DataWrapper<Socialgroup>> sendSocialgroupdata(@Body DataWrapper<Socialgroup> dataModal);
 
-    @POST("inmigration")
+    @POST("/api/inmigration")
     Call<DataWrapper<Inmigration>> sendInmigrationdata(@Body DataWrapper<Inmigration> dataModal);
 
-    @POST("outmigration")
+    @POST("/api/outmigration")
     Call<DataWrapper<Outmigration>> sendOutmigrationdata(@Body DataWrapper<Outmigration> dataModal);
 
-    @POST("death")
+    @POST("/api/death")
     Call<DataWrapper<Death>> sendDeathdata(@Body DataWrapper<Death> dataModal);
 
-    @POST("vpm")
+    @POST("/api/vpm")
     Call<DataWrapper<Death>> sendVpmdata(@Body DataWrapper<Death> dataModal);
 
-    @POST("pregnancy")
+    @POST("/api/pregnancy")
     Call<DataWrapper<Pregnancy>> sendPregnancydata(@Body DataWrapper<Pregnancy> dataModal);
 
-    @POST("relationship")
+    @POST("/api/relationship")
     Call<DataWrapper<Relationship>> sendRelationshipdata(@Body DataWrapper<Relationship> dataModal);
 
-    @POST("outcome")
+    @POST("/api/outcome")
     Call<DataWrapper<Pregnancyoutcome>> sendPregoutcomedata(@Body DataWrapper<Pregnancyoutcome> dataModal);
+
+    @POST("/api/demographic")
+    Call<DataWrapper<Demographic>> sendDemographicdata(@Body DataWrapper<Demographic> dataModal);
 
 
 }

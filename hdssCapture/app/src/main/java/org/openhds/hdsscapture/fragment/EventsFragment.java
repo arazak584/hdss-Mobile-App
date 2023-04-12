@@ -1,5 +1,7 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +22,7 @@ import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
-import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
-import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.databinding.FragmentEventsBinding;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
@@ -34,7 +34,6 @@ import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 
@@ -67,6 +66,7 @@ public class EventsFragment extends Fragment {
     private Individual individual;
     private CaseItem caseItem;
     private FragmentEventsBinding binding;
+    private boolean isAllFabsVisible;
 
     public EventsFragment() {
         // Required empty public constructor
@@ -115,25 +115,11 @@ public class EventsFragment extends Fragment {
         binding = FragmentEventsBinding.inflate(inflater, container, false);
         binding.setIndividual(individual);
 
-        /*
-        final TextView fname = binding.getRoot().findViewById(R.id.textView_fname);
-        final TextView lname = binding.getRoot().findViewById(R.id.textView_lname);
-        final TextView hhid = binding.getRoot().findViewById(R.id.textView_hhid);
-        final TextView permid = binding.getRoot().findViewById(R.id.textView_permid);
-        final TextView dob = binding.getRoot().findViewById(R.id.textView_dob);
-        final TextView age = binding.getRoot().findViewById(R.id.textView_age);
-
-        fname.setText(individual.getFirstName());
-        lname.setText(individual.getLastName());
-        permid.setText(individual.getExtId());
-        dob.setText(individual.getDob());
-        hhid.setText(individual.houseExtId);
-        age.setText(String.valueOf(individual.getAge()));*/
 
         binding.addMenuFab.setOnClickListener(view -> {
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseVisitFragment.newInstance(individual, residency, locations, socialgroup)).commit();
+                    HouseMembersFragment.newInstance(individual, residency, locations, socialgroup)).commit();
         });
 
         final SimpleDateFormat f = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
@@ -178,7 +164,6 @@ public class EventsFragment extends Fragment {
 
                             //Adult Male
                             if (individual.gender==1 && yrs>=12) {
-                                showResidencyForm(eventForms);
                                 showDeathForm(eventForms);
                                 showDemographicForm(eventForms);
                                 showOutmigrationForm(eventForms);
@@ -188,12 +173,12 @@ public class EventsFragment extends Fragment {
 
                             //Adult Female
                             if (individual.gender==2 && yrs>=12) {
-                                showResidencyForm(eventForms);
                                 showDeathForm(eventForms);
                                 showDemographicForm(eventForms);
                                 showRelationshipForm(eventForms);
                                 showOutmigrationForm(eventForms);
                                 showInmigrationForm(eventForms);
+                                showPregnancyForm(eventForms);
                                 showPregnancyForm(eventForms);
 
                             }
@@ -201,7 +186,6 @@ public class EventsFragment extends Fragment {
                             //Child
                             if (yrs <=11) {
 
-                                showResidencyForm(eventForms);
                                 showDeathForm(eventForms);
                                 showDemographicForm(eventForms);
                                 showOutmigrationForm(eventForms);
@@ -211,7 +195,6 @@ public class EventsFragment extends Fragment {
 
                             //Adult
                             if (yrs >= 14) {
-                                showVisitForm(eventForms);
                                 showSocialgroupForm(eventForms);
 
                             }
@@ -236,41 +219,6 @@ public class EventsFragment extends Fragment {
 
         return view;
 
-    }
-
-    private void showResidencyForm(List<EventForm> eventForms) {
-        ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-        try {
-            Residency form = viewModel.find(individual.individual_uuid);
-            if (form == null) {
-                form = new Residency();
-            }
-            if (form.complete == null ) {
-                eventForms.add(new EventForm(AppConstants.EVENT_HDSS1, AppConstants.EVENT_RESIDENCY, form.complete));
-            }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void showVisitForm(List<EventForm> eventForms) {
-        VisitViewModel viewModel = new ViewModelProvider(this).get(VisitViewModel.class);
-        try {
-            Visit form = viewModel.find(individual.individual_uuid);
-            if (form == null) {
-                form = new Visit();
-            }
-            if (form.complete == null ) {
-                eventForms.add(new EventForm(AppConstants.EVENT_HDSS2, AppConstants.EVENT_VISIT, form.complete));
-            }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     private void showDeathForm(List<EventForm> eventForms) {
@@ -314,9 +262,7 @@ public class EventsFragment extends Fragment {
             if (form == null) {
                 form = new Demographic();
             }
-            if (form.complete == null ) {
                 eventForms.add(new EventForm(AppConstants.EVENT_HDSS4, AppConstants.EVENT_DEMO, form.complete));
-            }
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -331,9 +277,8 @@ public class EventsFragment extends Fragment {
             if (form == null) {
                 form = new Relationship();
             }
-            if (form.complete == null ) {
                 eventForms.add(new EventForm(AppConstants.EVENT_HDSS7, AppConstants.EVENT_RELATIONSHIP, form.complete));
-            }
+
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -382,14 +327,32 @@ public class EventsFragment extends Fragment {
             if (form == null) {
                 form = new Pregnancy();
             }
-            if (form.complete == null ) {
+
                 eventForms.add(new EventForm(AppConstants.EVENT_HDSS10, AppConstants.EVENT_OBSERVATION, form.complete));
-            }
+
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public void onBackPressed() {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(getString(R.string.exit_confirmation_title))
+                .setMessage(getString(R.string.exiting_lbl))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        try{
+                            getActivity().finish();
+                        }
+                        catch(Exception e){}
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), null)
+                .show();
     }
 
 }

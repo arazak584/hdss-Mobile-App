@@ -30,7 +30,7 @@ public class Round extends BaseObservable implements Parcelable {
     public String uuid;
 
     @ColumnInfo(name = "roundNumber")
-    public String roundNumber;
+    public Integer roundNumber;
 
     @ColumnInfo(name = "remark")
     public String remark;
@@ -50,7 +50,7 @@ public class Round extends BaseObservable implements Parcelable {
 
 
     @Ignore
-    public Round(@NotNull String roundNumber, String remark) {
+    public Round(@NotNull String uuid, String remark) {
         this.roundNumber = roundNumber;
         this.remark = remark;
     }
@@ -72,11 +72,11 @@ public class Round extends BaseObservable implements Parcelable {
         this.uuid = uuid;
     }
 
-    public String getRoundNumber() {
+    public Integer getRoundNumber() {
         return roundNumber;
     }
 
-    public void setRoundNumber(String roundNumber) {
+    public void setRoundNumber(Integer roundNumber) {
         this.roundNumber = roundNumber;
     }
 
@@ -120,7 +120,7 @@ public class Round extends BaseObservable implements Parcelable {
 
     protected Round(Parcel in) {
         this.uuid = in.readString();
-        this.roundNumber = in.readString();
+        this.roundNumber = in.readInt();
         this.remark = in.readString();
         this.startDate = (Date) in.readSerializable();
         this.endDate = (Date) in.readSerializable();
@@ -146,7 +146,7 @@ public class Round extends BaseObservable implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.uuid);
-        dest.writeString(this.roundNumber);
+        dest.writeInt(this.roundNumber);
         dest.writeString(this.remark);
         dest.writeSerializable(this.startDate);
         dest.writeSerializable(this.endDate);

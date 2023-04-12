@@ -82,7 +82,7 @@ public class Outmigration extends BaseObservable implements Parcelable {
     }
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
+    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @NotNull
     public String getOmg_uuid() {
@@ -103,7 +103,7 @@ public class Outmigration extends BaseObservable implements Parcelable {
     }
 
     public String getInsertDate() {
-        if (insertDate == null) return "SELECT DATE OF VISIT";
+        if (insertDate == null) return "";
         return f.format(insertDate);
     }
 
@@ -140,7 +140,7 @@ public class Outmigration extends BaseObservable implements Parcelable {
     }
 
     public String getRecordedDate() {
-        if (recordedDate == null) return "SELECT DATE OF OUTMIGRATION";
+        if (recordedDate == null) return "";
         return f.format(recordedDate);
     }
 

@@ -15,7 +15,6 @@ public class EventForm implements Parcelable {
     public EventForm(){}
 
     public EventForm(String event_name, String form_name, Integer complete) {
-
         this.event_name = event_name;
         this.form_name = form_name;
         this.complete = complete;
@@ -50,6 +49,9 @@ public class EventForm implements Parcelable {
             return new EventForm[size];
         }
     };
+
+    public EventForm(String eventResidency, int countForms, String eventHdss1, int i, int i1) {
+    }
 
 
     @Override

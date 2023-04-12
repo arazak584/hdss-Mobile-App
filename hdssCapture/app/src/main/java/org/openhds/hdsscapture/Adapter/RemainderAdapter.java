@@ -35,7 +35,7 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView extId, locationname, compno, cluster, longitude, latitude;
+        TextView extId, locationname, compno, longitude, latitude;
         LinearLayout linearLayout;
 
         public ViewHolder(View view) {
@@ -43,7 +43,6 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
             this.extId = view.findViewById(R.id.locationView_rextid);
             this.locationname = view.findViewById(R.id.Location_rname);
             this.compno = view.findViewById(R.id.location_rcompno);
-            this.cluster = view.findViewById(R.id.location_rcluster);
             this.longitude = view.findViewById(R.id.rlongitude);
             this.latitude = view.findViewById(R.id.rlatitude);
             this.linearLayout = view.findViewById(R.id.remainderItem);
@@ -69,7 +68,6 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
         holder.extId.setText(locations.getCompextId());
         holder.locationname.setText(locations.getLocationName());
         holder.compno.setText(locations.getCompno());
-        holder.cluster.setText(locations.villcode);
         holder.longitude.setText(locations.getLongitude());
         holder.latitude.setText(locations.getLatitude());
 

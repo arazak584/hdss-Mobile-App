@@ -17,6 +17,7 @@ import com.google.gson.annotations.Expose;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -30,9 +31,6 @@ public class Demographic extends BaseObservable implements Parcelable {
     @Expose
     @NotNull
     @PrimaryKey
-    public String demo_uuid;
-
-    @Expose
     public String individual_uuid;
 
     @Expose
@@ -66,7 +64,7 @@ public class Demographic extends BaseObservable implements Parcelable {
     public String occupation_oth;
 
     @Expose
-    public String Phone1;
+    public String phone1;
 
     @Expose
     public String phone2;
@@ -77,17 +75,12 @@ public class Demographic extends BaseObservable implements Parcelable {
     @Expose
     public Integer complete;
 
+    @Expose
+    public Integer phone;
+
     public Demographic(){}
 
     @NotNull
-    public String getDemo_uuid() {
-        return demo_uuid;
-    }
-
-    public void setDemo_uuid(@NotNull String demo_uuid) {
-        this.demo_uuid = demo_uuid;
-    }
-
     public String getIndividual_uuid() {
         return individual_uuid;
     }
@@ -148,11 +141,11 @@ public class Demographic extends BaseObservable implements Parcelable {
 
 
     public String getPhone1() {
-        return Phone1;
+        return phone1;
     }
 
     public void setPhone1(String phone1) {
-        this.Phone1 = Phone1;
+        this.phone1 = phone1;
     }
 
     public String getPhone2() {
@@ -195,12 +188,17 @@ public class Demographic extends BaseObservable implements Parcelable {
         this.tribe_oth = tribe_oth;
     }
 
-    public Integer getComp_yrs() {
-        return comp_yrs;
+    @Bindable
+    public String getComp_yrs() {
+        return comp_yrs == null ? "" : String.valueOf(comp_yrs);
     }
 
-    public void setComp_yrs(Integer comp_yrs) {
-        this.comp_yrs = comp_yrs;
+    public void setComp_yrs(String comp_yrs) {
+
+        try {
+            this.comp_yrs = (comp_yrs == null) ? null : Integer.valueOf(comp_yrs);
+        } catch (NumberFormatException e) {
+        }
     }
 
     public String getOccupation_oth() {
@@ -219,7 +217,7 @@ public class Demographic extends BaseObservable implements Parcelable {
         this.occupation = in.readInt();
         this.religion = in.readInt();
         this.tribe = in.readInt();
-        this.Phone1 = in.readString();
+        this.phone1 = in.readString();
         this.phone2 = in.readString();
         this.fw_uuid = in.readString();
     }
@@ -250,7 +248,7 @@ public class Demographic extends BaseObservable implements Parcelable {
         dest.writeInt(this.occupation);
         dest.writeInt(this.religion);
         dest.writeInt(this.tribe);
-        dest.writeString(this.Phone1);
+        dest.writeString(this.phone1);
         dest.writeString(this.phone2);
         dest.writeString(this.fw_uuid);
     }
@@ -268,6 +266,7 @@ public class Demographic extends BaseObservable implements Parcelable {
             tribe = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -285,6 +284,7 @@ public class Demographic extends BaseObservable implements Parcelable {
             religion = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -296,12 +296,13 @@ public class Demographic extends BaseObservable implements Parcelable {
             parent.setSelection(position);
         }
         if (position == 0) {
-            religion = AppConstants.NOSELECT;
+            education = AppConstants.NOSELECT;
         } else {
             final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            religion = kv.codeValue;
+            education = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -319,6 +320,7 @@ public class Demographic extends BaseObservable implements Parcelable {
             occupation = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -353,6 +355,24 @@ public class Demographic extends BaseObservable implements Parcelable {
             complete = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setPhone(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            phone = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            phone = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }

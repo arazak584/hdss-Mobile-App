@@ -15,7 +15,11 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.fragment.HouseholdDialogFragment;
+import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.subentity.CaseItem;
+import org.openhds.hdsscapture.entity.subqueries.EventForm;
+import org.openhds.hdsscapture.fragment.BlankFragment;
+import org.openhds.hdsscapture.fragment.HouseholdFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,18 +27,23 @@ import java.util.concurrent.ExecutionException;
 
 public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.ViewHolder> {
 
-    HouseholdDialogFragment activity;
+    BlankFragment activity;
     LayoutInflater inflater;
     private Locations locations;
     private List<Socialgroup> socialgroupList;
     private Residency residency;
     private Individual individual;
+    private CaseItem caseItem;
+    private EventForm eventForm;
+    private Visit visit;
 
-    public HouseholdAdapter(HouseholdDialogFragment activity, Residency residency, Locations locations, Individual individual) {
+
+    public HouseholdAdapter(BlankFragment activity, Residency residency, Locations locations, Individual individual, Visit visit) {
         this.activity = activity;
         this.locations = locations;
         this.residency = residency;
         this.individual = individual;
+        this.visit = visit;
         socialgroupList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -46,7 +55,7 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
             super(view);
             this.name = view.findViewById(R.id.hhead_name);
             this.hhid = view.findViewById(R.id.hhid_head);
-            this.linearLayout = view.findViewById(R.id.searchedHousehold);
+            this.linearLayout = view.findViewById(R.id.searchHousehold);
         }
     }
 
@@ -69,8 +78,8 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
         holder.hhid.setText(socialgroup.getHouseExtId());
 
         holder.linearLayout.setOnClickListener(v -> {
-            //activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                   // HouseholdDialogFragment.newInstance(individual, residency, locations, socialgroup )).commit();
+            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                   HouseholdFragment.newInstance(individual, residency, locations, socialgroup,caseItem,eventForm)).commit();
         });
     }
 
@@ -79,22 +88,42 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
         return socialgroupList.size();
     }
 
-    public void filter(String charText, SocialgroupViewModel socialgroupViewModel) {
-        socialgroupList.clear();
-            if(locations != null)
-                try {
-                    List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(locations.getCompextId());
+//    public void filter(String charText, SocialgroupViewModel socialgroupViewModel) {
+//        socialgroupList.clear();
+//            if(locations != null)
+//                try {
+//                    List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(locations.getCompextId());
+//
+//                    if (list != null) {
+//                        socialgroupList.addAll(list);
+//                    }
+//                } catch (ExecutionException e) {
+//                    e.printStackTrace();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//
+//
+//        notifyDataSetChanged();
+//    }
 
-                    if (list != null) {
-                        socialgroupList.addAll(list);
-                    }
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+    public void search(SocialgroupViewModel socialgroupViewModel) {
+        socialgroupList.clear();
+        if(locations != null)
+            try {
+                List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(locations.getCompextId());
+
+                if (list != null) {
+                    socialgroupList.addAll(list);
                 }
 
-
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         notifyDataSetChanged();
+        activity.dismissLoadingDialog();
     }
+
 }

@@ -26,8 +26,12 @@ public class ResidencyViewModel extends AndroidViewModel {
         return residencyRepository.findAll();
     }
 
-    public Residency find(String id) throws ExecutionException, InterruptedException {
+    public List<Residency> find(String id) throws ExecutionException, InterruptedException {
         return residencyRepository.find(id);
+    }
+
+    public Residency findRes(String id) throws ExecutionException, InterruptedException {
+        return residencyRepository.findRes(id);
     }
 
     public List<Residency> findToSync() throws ExecutionException, InterruptedException {

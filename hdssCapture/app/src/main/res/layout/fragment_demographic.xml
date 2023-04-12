@@ -81,6 +81,7 @@
                     android:layout_height="wrap_content"
                     android:autofillHints=""
                     android:ems="10"
+                    android:text="@={demographic.insertDate}"
                     android:minHeight="30dp"
                     android:textSize="20sp"
                     tools:ignore="TextContrastCheck" />
@@ -104,7 +105,26 @@
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/own_phone"/>
+
+                <Spinner
+                    android:id="@+id/demo_phone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{demographic.phone}"
+                    android:onItemSelected="@{demographic::setPhone}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="15dp"/>
+
                 <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{demographic.phone==1}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -118,26 +138,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={demographic.phone1}"
-                        android:inputType="number"/>
+                        android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/phone2"
-                    android:text="@string/phone2">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/phone2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={demographic.phone2}"
-                        android:inputType="number"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
 
                 <TextView
                     android:layout_width="match_parent"
@@ -158,6 +160,7 @@
                     android:padding="10dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{demographic.tribe==77}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -193,7 +196,14 @@
                     android:textColor="#000301"
                     android:padding="15dp"/>
 
+            <LinearLayout
+                goneUnless="@{demographic.religion==77}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{demographic.religion==77}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -210,6 +220,8 @@
                         android:inputType="textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+            </LinearLayout>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -225,10 +237,12 @@
                     android:gravity="left"
                     selection="@{demographic.education}"
                     android:onItemSelected="@{demographic::setEducations}"
+                    android:spinnerMode="dialog"
                     android:textColor="#000301"
                     android:padding="15dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{demographic.education!=1}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -241,7 +255,7 @@
                         android:id="@+id/comp_yrs"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@{Integer.toString(demographic.comp_yrs)}"
+                        android:text="@{demographic.comp_yrs}"
                         android:inputType="number"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -260,10 +274,12 @@
                     selection="@{demographic.occupation}"
                     android:onItemSelected="@{demographic::setOccupations}"
                     android:gravity="left"
+                    android:spinnerMode="dropdown"
                     android:textColor="#000301"
                     android:padding="15dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{demographic.occupation==77}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

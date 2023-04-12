@@ -1,22 +1,28 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.Dialog.RelationshipDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.databinding.FragmentRelationshipBinding;
+import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Relationship;
@@ -28,7 +34,9 @@ import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -106,6 +114,18 @@ public class RelationshipFragment extends Fragment {
         binding = FragmentRelationshipBinding.inflate(inflater, container, false);
         binding.setRelationship(relationship);
 
+        Button showDialogButton = binding.getRoot().findViewById(R.id.button_partner);
+
+        // Set a click listener on the button for partner
+        showDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show the dialog fragment
+                RelationshipDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                        .show(getChildFragmentManager(), "RelationshipDialogFragment");
+            }
+        });
+
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             // We use a String here, but any type that can be put in a Bundle is supported
@@ -134,51 +154,50 @@ public class RelationshipFragment extends Fragment {
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
-        binding.buttonSaveClose.setOnClickListener(v -> {
-            final RelationshipViewModel relationshipViewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
+        final Intent i = getActivity().getIntent();
+        final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
-            final Relationship relationship = binding.getRelationship();
-            //relationship.setI(this.individual.getExtId());
+        RelationshipViewModel viewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
+        try {
+            Relationship data = viewModel.find(individual.individual_uuid);
+            if (data != null) {
+                binding.setRelationship(data);
+            } else {
+                data = new Relationship();
 
-            boolean isExists = false;
-            binding.womanExtid.setError(null);
-            binding.manExtidB.setError(null);
-            binding.relStartDate.setError(null);
-            binding.relEndDate.setError(null);
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
 
-            if(relationship.individual_uuid==null){
-                isExists = true;
-                binding.womanExtid.setError("Individual Id is Required");
+
+                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.rel_uuid = uuidString;
+                data.insertDate = new Date();
+                data.individual_uuid = individual.getIndividual_uuid();
+                //data.residency_uuid = residency.residency_uuid;
+                //data.visit_uuid = visit.visit_uuid;
+
+                binding.setRelationship(data);
             }
-
-            if(relationship.man_uuid==null){
-                isExists = true;
-                binding.manExtidB.setError("Individual Id is Required");
-
-            }
-
-            if(relationship.fw_uuid==null){
-                isExists = true;
-                binding.relFw.setError("Date of Death is Required");
-            }
-        });
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
 
         //SPINNERS
-        loadCodeData(binding.relComplete,  "yn");
+        loadCodeData(binding.relComplete,  "complete");
         loadCodeData(binding.relStarttype,  "relationshipType");
         loadCodeData(binding.relEndtype,  "relendType");
-        loadCodeData(binding.mar,  "yn");
-        loadCodeData(binding.polygamous,  "yn");
-        loadCodeData(binding.lcow,  "yn");
+        loadCodeData(binding.mar,  "complete");
+        loadCodeData(binding.polygamous,  "complete");
+        loadCodeData(binding.lcow,  "complete");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
-            save(true, true);
+            save(true, true, viewModel);
         });
 
         binding.buttonClose.setOnClickListener(v -> {
 
-            save(false, true);
+            save(false, true, viewModel);
         });
 
         Handler.colorLayouts(requireContext(), binding.RELATIONSHIPLAYOUT);
@@ -186,18 +205,20 @@ public class RelationshipFragment extends Fragment {
         return view;
     }
 
-    private void save(boolean save, boolean close) {
+    private void save(boolean save, boolean close, RelationshipViewModel viewModel) {
 
         if (save) {
             Relationship finalData = binding.getRelationship();
 
+            final boolean validateOnComplete = true;//finalData.complete == 1;
+            boolean hasErrors = new Handler().hasInvalidInput(binding.RELATIONSHIPLAYOUT, validateOnComplete, false);
 
-            if (finalData.complete != null) {
-
+            if (hasErrors) {
+                Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
+                return;
             }
-
-            RelationshipViewModel viewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
             viewModel.add(finalData);
+            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,

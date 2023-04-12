@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -14,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.Dialog.HouseholdDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
@@ -25,12 +28,13 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
-import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -46,7 +50,6 @@ public class ResidencyFragment extends Fragment {
     private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private static final String CASE_ID = "CASE_ID";
-    private static final String EVENT_ID = "EVENT_ID";
     private final String TAG = "RESIDENCY.TAG";
 
     private Locations locations;
@@ -55,7 +58,6 @@ public class ResidencyFragment extends Fragment {
     private Individual individual;
     private FragmentResidencyBinding binding;;
     private CaseItem caseItem;
-    private EventForm eventForm;
 
 
     public ResidencyFragment() {
@@ -71,19 +73,16 @@ public class ResidencyFragment extends Fragment {
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
      * @param caseItem Parameter 6.
-     * @param eventForm Parameter 7.
      * @return A new instance of fragment ResidencyFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ResidencyFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem, EventForm eventForm) {
+    public static ResidencyFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem) {
         ResidencyFragment fragment = new ResidencyFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
-        args.putParcelable(CASE_ID, caseItem);
-        args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
     }
@@ -97,8 +96,6 @@ public class ResidencyFragment extends Fragment {
             residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            caseItem = getArguments().getParcelable(CASE_ID);
-            eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
 
@@ -108,33 +105,33 @@ public class ResidencyFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentResidencyBinding.inflate(inflater, container, false);
         binding.setIndividual(individual);
+        if(residency != null && residency.endType!=null && residency.endType==2){
+            Residency r = new Residency();
+            binding.setResidency(r);
+        }else {
+            binding.setResidency(residency);
+        }
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
-        /*
-        // Generate a UUID
-        if(residency.residency_uuid == null) {
-            String uuid = UUID.randomUUID().toString();
-            String uuidString = uuid.toString().replaceAll("-", "");
-            // Set the ID of the uuid
-            binding.getResidency().residency_uuid = uuidString;
-        }
+        // Find the button view
+        Button showDialogButton = binding.getRoot().findViewById(R.id.button_change_hh);
 
-        if(residency.fw_uuid==null){
-            binding.getResidency().fw_uuid = fieldworkerData.getFw_uuid();
-        }*/
+        // Set a click listener on the button for mother
+        showDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show the dialog fragment
+                HouseholdDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                        .show(getChildFragmentManager(), "HouseholdDialogFragment");
+            }
+        });
+
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             // We use a String here, but any type that can be put in a Bundle is supported
-            if (bundle.containsKey((ResidencyFragment.DATE_BUNDLES.INSERTDATE.getBundleKey()))) {
-                final String result = bundle.getString(ResidencyFragment.DATE_BUNDLES.INSERTDATE.getBundleKey());
-                binding.residencyInsertDate.setText(result);
-
-            }
-
-
             if (bundle.containsKey((ResidencyFragment.DATE_BUNDLES.STARTDATE.getBundleKey()))) {
                 final String result = bundle.getString(ResidencyFragment.DATE_BUNDLES.STARTDATE.getBundleKey());
                 binding.editTextStartDate.setText(result);
@@ -145,12 +142,6 @@ public class ResidencyFragment extends Fragment {
                 binding.editTextEndDate.setText(result);
             }
 
-        });
-
-        binding.buttonResidencyInsertDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(ResidencyFragment.DATE_BUNDLES.INSERTDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
         binding.buttonResidencyStartDate.setOnClickListener(v -> {
@@ -165,19 +156,59 @@ public class ResidencyFragment extends Fragment {
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
+        ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+        try {
+            Residency data = viewModel.findRes(individual.individual_uuid);
+            if (data != null && data.endType!=2) {
+                binding.setResidency(data);
+            } else {
+                data = new Residency();
+
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+
+                data.residency_uuid = individual.getResidency_uuid();
+                data.fw_uuid = fieldworkerData.getFw_uuid();
+                //data.residency_uuid = uuidString;
+                data.insertDate = new Date();
+                data.individual_uuid = individual.getIndividual_uuid();
+                data.location_uuid = locations.getLocation_uuid();
+                data.socialgroup_uuid = socialgroup.socialgroup_uuid;
+                binding.setResidency(data);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+
         binding.buttonSaveClose.setOnClickListener(v -> {
             final ResidencyViewModel residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
 
             final Residency residency = binding.getResidency();
+            //individual.setExtId(this.individual.getExtId());
+
+            boolean isExists = false;
+            binding.editTextStartDate.setError(null);
+            binding.fw.setError(null);
+
+            if(residency.startDate==null){
+                isExists = true;
+                binding.editTextStartDate.setError("Start Date is Required");
+            }
+
+            if(residency.fw_uuid==null){
+                isExists = true;
+                binding.fw.setError("Fieldworker userName is Required");
+            }
 
         });
 
-        //SPINNERS
-        loadCodeData(binding.residencyComplete,  "yn");
-        loadCodeData(binding.starttype,  "startType");
-        loadCodeData(binding.endtype,  "endType");
-        loadCodeData(binding.rltnHead,  "rltnhead");
-
+        final CodeBookViewModel codeBookViewModel = new ViewModelProvider(this).get(CodeBookViewModel.class);
+        loadCodeData(binding.residencyComplete, codeBookViewModel, "complete");
+        loadCodeData(binding.starttype, codeBookViewModel, "startType");
+        loadCodeData(binding.endtype, codeBookViewModel, "endType");
+        loadCodeData(binding.rltnHead, codeBookViewModel, "rltnhead");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
@@ -189,10 +220,8 @@ public class ResidencyFragment extends Fragment {
             save(false, true);
         });
 
-        binding.setEventname(AppConstants.EVENT_RESIDENCY);
         Handler.colorLayouts(requireContext(), binding.RESIDENCYLAYOUT);
         View view = binding.getRoot();
-
         return view;
     }
 
@@ -201,17 +230,23 @@ public class ResidencyFragment extends Fragment {
         if (save) {
             Residency finalData = binding.getResidency();
 
+            final boolean validateOnComplete = true;//finalData.complete == 1;
+            boolean hasErrors = new Handler().hasInvalidInput(binding.RESIDENCYLAYOUT, validateOnComplete, false);
 
-            if (finalData.complete != null) {
-
+            if (hasErrors) {
+                Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
             }
 
             ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
             viewModel.add(finalData);
+            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
         }
-        if (close) {
+        if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup, caseItem)).commit();
+                    EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
+        }else{
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    IndividualFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
         }
     }
 
@@ -225,8 +260,7 @@ public class ResidencyFragment extends Fragment {
 
     }
 
-    private void loadCodeData(Spinner spinner, final String codeFeature) {
-        final CodeBookViewModel viewModel = new ViewModelProvider(this).get(CodeBookViewModel.class);
+    private void loadCodeData(Spinner spinner, CodeBookViewModel viewModel, final String codeFeature) {
         try {
             List<KeyValuePair> list = viewModel.findCodesOfFeature(codeFeature);
             KeyValuePair kv = new KeyValuePair();

@@ -133,12 +133,18 @@ public class Residency extends BaseObservable implements Parcelable {
 
     @Bindable
     public String getEndDate() {
+        if (endDate == null) return "End Date";
         return f.format(endDate);
     }
 
     public void setEndDate(String endDate) {
         if(endDate == null ) this.endDate=null;
-
+        else
+            try {
+                this.endDate = f.parse(endDate);
+            } catch (ParseException e) {
+                System.out.println("End Date Error " + e.getMessage());
+            }
     }
 
     @Bindable
@@ -291,6 +297,7 @@ public class Residency extends BaseObservable implements Parcelable {
             endType = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            //notifyPropertyChanged(BR._all);
         }
 
     }
@@ -319,14 +326,15 @@ public class Residency extends BaseObservable implements Parcelable {
             parent.setSelection(position);
         }
         if (position == 0) {
-            startType = AppConstants.NOSELECT;
+            rltn_head = AppConstants.NOSELECT;
         } else {
             final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            startType = kv.codeValue;
+            rltn_head = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }
 
     }
+
 
 }

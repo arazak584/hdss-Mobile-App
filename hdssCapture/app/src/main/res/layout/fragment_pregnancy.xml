@@ -198,6 +198,7 @@
                     android:padding="15dp"/>
 
                 <TextView
+                    goneUnless="@{pregnancy.anteNatalClinic==2}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -206,6 +207,7 @@
                     android:text="@string/why_no"/>
 
                 <Spinner
+                    goneUnless="@{pregnancy.anteNatalClinic==2}"
                     android:id="@+id/why_no"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -216,6 +218,7 @@
                     android:padding="15dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{pregnancy.why_no==77}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -225,7 +228,6 @@
                     android:text="@string/attend_you_other">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        goneUnless="@{pregnancy.why_no==77}"
                         android:id="@+id/why_no_other"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -264,6 +266,8 @@
                          android:id="@+id/ageOfPregFromPregNotes"
                          android:layout_width="match_parent"
                          android:layout_height="wrap_content"
+                         android:min="0"
+                         android:max="52"
                          android:text="@={pregnancy.ageOfPregFromPregNotes}"
                          android:inputType="number"/>
                  </com.google.android.material.textfield.TextInputLayout>
@@ -281,6 +285,8 @@
                          android:id="@+id/estimatedAgeOfPreg"
                          android:layout_width="match_parent"
                          android:layout_height="wrap_content"
+                         android:min="0"
+                         android:max="12"
                          android:text="@={pregnancy.estimatedAgeOfPreg}"
                          android:inputType="number"/>
                  </com.google.android.material.textfield.TextInputLayout>
@@ -323,6 +329,7 @@
                         android:padding="20dp"/>
 
                  <com.google.android.material.textfield.TextInputLayout
+                     goneUnless="@{pregnancy.attend_you==77}"
                      style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
@@ -369,6 +376,8 @@
                          android:id="@+id/first_rec"
                          android:layout_width="match_parent"
                          android:layout_height="wrap_content"
+                         android:min="0"
+                         android:max="12"
                          android:text="@={pregnancy.first_rec}"
                          android:inputType="number"/>
                  </com.google.android.material.textfield.TextInputLayout>
@@ -387,6 +396,8 @@
                          android:layout_width="match_parent"
                          android:layout_height="wrap_content"
                          android:text="@={pregnancy.anc_visits}"
+                         android:min="0"
+                         android:max="12"
                          android:inputType="number"/>
                  </com.google.android.material.textfield.TextInputLayout>
 
@@ -440,6 +451,8 @@
                             android:id="@+id/how_many"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:min="1"
+                            android:max="10"
                             android:text="@={pregnancy.how_many}"
                             android:inputType="number"/>
                     </com.google.android.material.textfield.TextInputLayout>
@@ -462,6 +475,7 @@
                         android:padding="20dp"/>
 
                     <com.google.android.material.textfield.TextInputLayout
+                        goneUnless="@{pregnancy.bnet_sou==77}"
                         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -497,6 +511,7 @@
 
 
                     <com.google.android.material.textfield.TextInputLayout
+                        goneUnless="@{pregnancy.bnet_loc==77}"
                         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -602,6 +617,7 @@
                     android:padding="20dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{pregnancy.first_preg==2}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -614,6 +630,8 @@
                         android:id="@+id/pregnancyNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:min="2"
+                        android:max="18"
                         android:text="@={pregnancy.pregnancyNumber}"
                         android:inputType="number"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -629,11 +647,14 @@
                     android:id="@+id/outcometype"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    selection="@{pregnancy.outcome}"
+                    android:onItemSelected="@{pregnancy::setOutcome}"
                     android:gravity="left"
                     android:textColor="#000301"
                     android:padding="10dp"/>
 
                 <Button
+                    goneUnless="@{pregnancy.outcome==1}"
                     android:id="@+id/button_pregnancy_outcome"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -642,6 +663,7 @@
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
+                    goneUnless="@{pregnancy.outcome==1}"
                     android:id="@+id/editText_outcomeDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

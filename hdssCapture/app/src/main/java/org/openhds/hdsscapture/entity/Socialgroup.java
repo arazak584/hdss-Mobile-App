@@ -49,14 +49,16 @@ public class Socialgroup extends BaseObservable implements Parcelable {
     @Expose
     public String individual_uuid;
 
-    @SerializedName("insertDate")
+    @SerializedName("visit_uuid")
     @Expose
-    @ColumnInfo(name = "insertDate")
+    public String visit_uuid;
+
+    @NotNull
+    @Expose
     public Date insertDate;
 
-    @SerializedName("fw_uuid")
+    @NotNull
     @Expose
-    @ColumnInfo(name = "fw_uuid")
     public String fw_uuid;
 
     @SerializedName("groupType")
@@ -159,6 +161,15 @@ public class Socialgroup extends BaseObservable implements Parcelable {
         this.complete = complete;
     }
 
+    @Bindable
+    public String getVisit_uuid() {
+        return visit_uuid;
+    }
+
+    public void setVisit_uuid(String visit_uuid) {
+        this.visit_uuid = visit_uuid;
+    }
+
     protected Socialgroup(Parcel in) {
         this.houseExtId = in.readString();
         this.groupName = in.readString();
@@ -166,6 +177,7 @@ public class Socialgroup extends BaseObservable implements Parcelable {
         this.insertDate = (java.util.Date) in.readSerializable();
         this.fw_uuid = in.readString();
         this.groupType = in.readInt();
+        this.visit_uuid = in.readString();
     }
 
     public static final Creator<Socialgroup> CREATOR = new Creator<Socialgroup>() {
@@ -192,6 +204,7 @@ public class Socialgroup extends BaseObservable implements Parcelable {
         dest.writeSerializable(this.insertDate);
         dest.writeString(this.fw_uuid);
         dest.writeInt(this.groupType);
+        dest.writeString(this.visit_uuid);
     }
 
     @Override

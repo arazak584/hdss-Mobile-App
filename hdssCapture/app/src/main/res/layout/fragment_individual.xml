@@ -25,11 +25,7 @@
         android:orientation="vertical"
         tools:context=".fragment.IndividualFragment">
 
-        <include
-            layout="@layout/individual_summary"
-            bind:individual="@{individual}"
-            bind:eventname="@{eventname}"
-             />
+
 
         <View
             android:layout_width="match_parent"
@@ -49,6 +45,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -62,11 +59,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={individual.fw_uuid}"
-                        android:required="true"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -80,11 +79,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={individual.individual_uuid}"
-                        android:required="true"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
+                    android:visibility="gone"
                     android:id="@+id/button_individual_insertDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -93,6 +94,7 @@
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/individual_insertDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -116,13 +118,35 @@
                     android:text="@string/ind_extid">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:id="@+id/individual_extid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={individual.extId}"
-                        android:required="true"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:inputType="text"
+                    android:hint="@string/resuuid">
+                    android:text="@string/ind_extid">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/res"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={individual.residency_uuid}"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
@@ -160,7 +184,26 @@
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/other_name"/>
+
+                <Spinner
+                    android:id="@+id/other"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{individual.other}"
+                    android:onItemSelected="@{individual::setOther}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="15dp"/>
+
                 <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{individual.other==1}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -176,6 +219,7 @@
                         android:text="@={individual.otherName}"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
+
 
                 <Button
                     android:id="@+id/button_individual_Dob"
@@ -218,6 +262,7 @@
                     android:padding="10dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -276,7 +321,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={individual.mother_uuid}"
-                        android:required="true"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -302,7 +348,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={individual.father_uuid}"
-                        android:required="true"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 

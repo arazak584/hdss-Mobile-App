@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity(tableName = "locations",
-indices = {@Index(value = {"location_uuid","compextId","compno"}, unique = false)})
+indices = {@Index(value = {"location_uuid","compextId","compno"}, unique = true)})
 public class Locations extends BaseObservable implements Parcelable {
 
     @SerializedName("location_uuid")
@@ -92,10 +92,19 @@ public class Locations extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "locationType")
     public Integer locationType=1;
 
+    @SerializedName("complete")
     @Expose
     public Integer complete;
 
+    @Expose
     public String villcode;
+
+    @Expose
+    public String houseExtId;
+
+    @SerializedName("edit")
+    @Expose
+    public Integer edit;
 
     public Locations(){}
 
@@ -232,6 +241,7 @@ public class Locations extends BaseObservable implements Parcelable {
         this.status = status;
     }
 
+
     protected Locations(Parcel in) {
         this.compextId = in.readString();
         this.locationName = in.readString();
@@ -329,6 +339,23 @@ public class Locations extends BaseObservable implements Parcelable {
         } else {
             final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
             locationType = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.rgb(255, 0, 255));
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setEdit(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            edit = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            edit = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.rgb(255, 0, 255));
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }

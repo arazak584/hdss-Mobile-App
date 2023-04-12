@@ -20,6 +20,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -126,8 +127,10 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "complete")
     public Integer complete;
 
+    @Expose
     public String firstName;
 
+    @Expose
     public String lastName;
 
     public Pregnancy(){}
@@ -207,7 +210,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     }
 
     public String getOutcome_date() {
-        if (outcome_date == null) return "SELECT DATE OF OUTCOME";
+        if (outcome_date == null) return "";
         return f.format(outcome_date);
     }
 
@@ -228,7 +231,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     }
 
     public String getRecordedDate() {
-        if (recordedDate == null) return "SELECT DATE OF CONCEPTION";
+        if (recordedDate == null) return "";
         return f.format(recordedDate);
     }
 
@@ -241,7 +244,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     }
 
     public String getExpectedDeliveryDate() {
-        if (expectedDeliveryDate == null) return "SELECT DATE";
+        if (expectedDeliveryDate == null) return "";
         return f.format(expectedDeliveryDate);
     }
 
@@ -249,10 +252,9 @@ public class Pregnancy extends BaseObservable implements Parcelable {
         try {
             this.expectedDeliveryDate = f.parse(expectedDeliveryDate);
         } catch (ParseException e) {
-            System.out.println("Recorded Date Error " + e.getMessage());
         }
-    }
 
+    }
 
     public Integer getAnteNatalClinic() {
         return anteNatalClinic;
@@ -449,7 +451,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
 
     @Bindable
     public String getPregnancyNumber() {
-        return how_many == null ? "" : String.valueOf(pregnancyNumber);
+        return pregnancyNumber == null ? "" : String.valueOf(pregnancyNumber);
     }
 
     public void setPregnancyNumber(String pregnancyNumber) {
@@ -533,6 +535,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             anteNatalClinic = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -550,6 +553,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             attend_you = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -567,6 +571,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             why_no = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -584,6 +589,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             own_bnet = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -602,6 +608,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             bnet_sou = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -619,6 +626,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             bnet_loc = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -636,6 +644,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             slp_bednet = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -653,6 +662,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             trt_bednet = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -670,6 +680,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             healthfacility = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -687,6 +698,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             medicineforpregnancy = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -704,6 +716,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             ttinjection = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -721,6 +734,25 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             first_preg = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setOutcome(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            outcome = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            outcome = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }

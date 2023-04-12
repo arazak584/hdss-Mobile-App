@@ -54,7 +54,7 @@ public class InmigrationRepository {
         return future.get();
     }
 
-    public List<Inmigration> findimgToSync() throws ExecutionException, InterruptedException {
+    public List<Inmigration> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Inmigration>> callable = () -> dao.retrieveimgToSync();
 

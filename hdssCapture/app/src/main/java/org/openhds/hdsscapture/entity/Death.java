@@ -75,6 +75,9 @@ public class Death extends BaseObservable implements Parcelable {
     public Integer complete;
 
     @Expose
+    public Integer vpmcomplete;
+
+    @Expose
     public String extId;
 
     @Expose
@@ -89,12 +92,15 @@ public class Death extends BaseObservable implements Parcelable {
     @Expose
     public String villcode;
 
+    @Expose
+    public Integer AgeAtDeath=0;
+
 
     public Death(){}
 
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
+    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
 
     @NotNull
@@ -115,7 +121,7 @@ public class Death extends BaseObservable implements Parcelable {
     }
 
     public String getDeathDate() {
-        if (deathDate == null) return "SELECT DATE OF DEATH";
+        if (deathDate == null) return "";
         return f.format(deathDate);
     }
 
@@ -128,7 +134,7 @@ public class Death extends BaseObservable implements Parcelable {
     }
 
     public String getDob() {
-        if (dob == null) return "DATE OF Birth";
+        if (dob == null) return "";
         return f.format(dob);
     }
 
@@ -142,7 +148,7 @@ public class Death extends BaseObservable implements Parcelable {
     }
 
     public String getInsertDate() {
-        if (insertDate == null) return "SELECT DATE OF VISIT";
+        if (insertDate == null) return "";
         return f.format(insertDate);
     }
 
@@ -270,6 +276,18 @@ public class Death extends BaseObservable implements Parcelable {
         this.fw_uuid = fw_uuid;
     }
 
+    public String getAgeAtDeath() {
+        return AgeAtDeath == null ? "" : String.valueOf(AgeAtDeath);
+    }
+
+    public void setAgeAtDeath(String AgeAtDeath) {
+
+        try {
+            this.AgeAtDeath = (AgeAtDeath == null) ? null : Integer.valueOf(AgeAtDeath);
+        } catch (NumberFormatException e) {
+        }
+    }
+
     protected Death(Parcel in) {
         this.individual_uuid = in.readString();
         this.deathDate = (java.util.Date) in.readSerializable();
@@ -286,6 +304,7 @@ public class Death extends BaseObservable implements Parcelable {
         this.respondent = in.readString();
         this.househead = in.readString();
         this.fw_uuid = in.readString();
+        this.AgeAtDeath = in.readInt();
 
     }
 
@@ -323,6 +342,7 @@ public class Death extends BaseObservable implements Parcelable {
         dest.writeString(this.respondent);
         dest.writeString(this.househead);
         dest.writeString(this.fw_uuid);
+        dest.writeInt(this.AgeAtDeath);
 
     }
 

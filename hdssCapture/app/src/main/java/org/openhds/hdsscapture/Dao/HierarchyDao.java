@@ -49,7 +49,7 @@ public interface HierarchyDao {
             " on a.parent_uuid=b.uuid where a.level_uuid='hierarchyLevelId6' and a.parent_uuid=:id ")
     List<Hierarchy> retrieveLevel6(String id);
 
-    @Query("SELECT * FROM locationhierarchy where level_uuid='hierarchyLevelId5' ")
+    @Query("SELECT * FROM locationhierarchy where level_uuid='hierarchyLevelId5' order by name")
     List<Hierarchy> retrieveLevel7();
 
 }

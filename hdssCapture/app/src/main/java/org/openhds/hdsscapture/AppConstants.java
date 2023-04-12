@@ -7,16 +7,17 @@ public class AppConstants {
 
     public static final String MARKED_COMPLETE="MARKED AS COMPLETED";
     public static final String MARKED_INCOMPLETE="INCOMPLETE";
-    public static final String NOT_DONE="NOT DONE";
+    public static final String UPDATE="UPDATED";
+    public static final String NOT_DONE="NOT DONE OR UPDATED";
     public static final String NOT_VISITED = "NOT VISITED";
 
-    public static final int NOT_COMPLETE = 0, COMPLETE=1;
+    public static final int NOT_UPDATED = 0, COMPLETE=1, UPDATED=2;
     public static final int NOSELECT = 0;
     public static final String SPINNER_NOSELECT = "--Select an option--";
 
     //public static final int SCREENING=1, ENROLMENT=2, ANCVISIT=3, DELIVERY=4, PNCVISIT=5, ADHOC=6, CLOSEOUT=7;
 
-    public static final String Mother = "Unknown Individual", Father = "Unknown Individual";
+    public static final String Mother = "Unk", Father = "Unk";
 
     public static final int IND1 = 1, IND2 = 2, IND3 = 3;
 
@@ -28,9 +29,10 @@ public class AppConstants {
 
     public static final String
             EVENT_MIND00S = "INDIVIDUAL",
+            EVENT_BASE = "BASELINE",
             EVENT_HDSS1 = "RESIDENCY REGISTRATION",
             EVENT_HDSS2 = "VISIT REGISTRATION",
-            EVENT_HDSS3 = "HOUSEHOLD REGISTRATION",
+            EVENT_HDSS3 = "CHANGE HEAD OF HOUSEHOLD",
             EVENT_HDSS4 = "DEMOGRAPHICS",
             EVENT_HDSS5 = "SOCIO-DEMOGRAPHICS",
             EVENT_HDSS6 = "DEATH REGISTRATION",
@@ -48,7 +50,7 @@ public class AppConstants {
             EVENT_RELATIONSHIP = "RELATIONSHIP REGISTRATION",
             EVENT_OBSERVATION = "PREGNANCY OBSERVATION",
             EVENT_OUTCOME = "PREGNANCY OUTCOME",
-            EVENT_HOUSEHOLD = "HOUSEHOLD REGISTRATION",
+            EVENT_HOUSEHOLD = "CHANGE HEAD OF HOUSEHOLD",
             EVENT_DEATH = "DEATH REGISTRATION",
             EVENT_DEMO = "DEMOGRAPHICS",
             EVENT_OMG = "OUTMIGRATION REGISTRATION",

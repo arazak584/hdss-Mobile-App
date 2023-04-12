@@ -122,7 +122,7 @@
                 android:id="@+id/round"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={visit.roundNumber}"
+                android:text="@{Integer.toString(visit.roundNumber)}"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="textPersonName"/>
@@ -159,17 +159,26 @@
                 android:id="@+id/visit_respondent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={visit.individual_uuid}"
+                android:text="@={visit.respondent}"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/button_household"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/household_select"
-            tools:ignore="DuplicateSpeakableTextCheck"
-            app:icon="@drawable/ic_baseline_person_24" />
+            android:gravity="start"
+            android:padding="5dp"
+            android:hint="@string/socialgroup">
+            android:text="@string/socialgroup">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/socialgroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={visit.houseExtId}"
+                android:inputType="textPersonName"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -185,7 +194,7 @@
                 android:id="@+id/visit_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={visit.visitextId}"
+                android:text="@={visit.visitExtId}"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 

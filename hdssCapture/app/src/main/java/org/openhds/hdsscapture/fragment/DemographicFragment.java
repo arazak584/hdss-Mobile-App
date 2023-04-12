@@ -1,15 +1,18 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
@@ -17,6 +20,7 @@ import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.databinding.FragmentDemographicBinding;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
@@ -25,11 +29,9 @@ import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -117,27 +119,27 @@ public class DemographicFragment extends Fragment {
         //compname.setText(locations.getLocationName());
         //cluster.setText(locations.villcode);
 
-        binding.buttonSaveClose.setOnClickListener(v -> {
-            final DemographicViewModel demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
+        final Intent i = getActivity().getIntent();
+        final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
-            final Demographic demographic = binding.getDemographic();
-            demographic.setIndividual_uuid(this.individual.getIndividual_uuid());
+        DemographicViewModel viewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
+        try {
+            Demographic data = viewModel.find(individual.individual_uuid);
+            if (data != null) {
+                Toast.makeText(requireActivity(), "data pulled ", Toast.LENGTH_LONG).show();
+                binding.setDemographic(data);
+            } else {
+                data = new Demographic();
 
-            if (binding.demoInsertDate.getText().toString().isEmpty()) {
-                binding.demoInsertDate.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Calendar.getInstance().getTime()));
+                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.insertDate = new Date();
+                data.individual_uuid = individual.getIndividual_uuid();
+
+                binding.setDemographic(data);
             }
-
-            boolean isExists = false;
-            binding.demographicExtid.setError(null);
-
-            if(demographic.individual_uuid==null){
-                isExists = true;
-                binding.demographicExtid.setError("Individual Id is Required");
-            }
-
-
-
-        });
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
 
         //LOAD SPINNERS
         loadCodeData(binding.tribe, "tribe");
@@ -146,15 +148,16 @@ public class DemographicFragment extends Fragment {
         loadCodeData(binding.occupation, "occupation");
         loadCodeData(binding.marital, "marital");
         loadCodeData(binding.demoComplete, "complete");
+        loadCodeData(binding.demoPhone, "complete");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
-            save(true, true);
+            save(true, true, viewModel);
         });
 
         binding.buttonClose.setOnClickListener(v -> {
 
-            save(false, true);
+            save(false, true, viewModel);
         });
 
         Handler.colorLayouts(requireContext(), binding.DEMOGRAPHICLAYOUT);
@@ -162,22 +165,25 @@ public class DemographicFragment extends Fragment {
         return view;
     }
 
-    private void save(boolean save, boolean close) {
+    private void save(boolean save, boolean close, DemographicViewModel viewModel) {
 
         if (save) {
             Demographic finalData = binding.getDemographic();
 
+            final boolean validateOnComplete = true;//finalData.complete == 1;
+            boolean hasErrors = new Handler().hasInvalidInput(binding.DEMOGRAPHICLAYOUT, validateOnComplete, false);
 
-            if (finalData.complete != null) {
-
+            if (hasErrors) {
+                Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
+                return;
             }
-
-            DemographicViewModel viewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
             viewModel.add(finalData);
+            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup, caseItem)).commit();
+                    EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
         }
     }
 

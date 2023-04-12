@@ -1,5 +1,8 @@
 package org.openhds.hdsscapture.Adapter;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +19,7 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
-import org.openhds.hdsscapture.fragment.HouseVisitFragment;
+import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 import org.openhds.hdsscapture.fragment.IndividualFragment;
 
 import java.util.ArrayList;
@@ -26,15 +29,17 @@ import java.util.concurrent.ExecutionException;
 
 public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAdapter.ViewHolder> {
 
-    HouseVisitFragment activity;
+    HouseMembersFragment activity;
     LayoutInflater inflater;
     private Locations locations;
     private Socialgroup socialgroup;
     private Residency residency;
     private List<Individual> individualList;
     private CaseItem caseItem;
+    private ProgressDialog progress;
+    private Context context;
 
-    public IndividualViewAdapter(HouseVisitFragment activity, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public IndividualViewAdapter(HouseMembersFragment activity, Residency residency, Locations locations, Socialgroup socialgroup) {
         this.activity = activity;
         this.locations = locations;
         this.residency = residency;
@@ -46,7 +51,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView firstname, lastname, nickname, permid, dob, age, hhid;
+        TextView firstname, lastname, nickname, permid, dob, compno, gender,status;
         LinearLayout linearLayout;
 
         public ViewHolder(View view) {
@@ -56,8 +61,9 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
             this.lastname = view.findViewById(R.id.text_lastname);
             this.nickname = view.findViewById(R.id.text_nickname);
             this.dob = view.findViewById(R.id.text_dob);
-            this.hhid = view.findViewById(R.id.text_hhid);
-            this.age = view.findViewById(R.id.text_age);
+            this.gender = view.findViewById(R.id.text_gender);
+            this.compno = view.findViewById(R.id.text_compno);
+            this.status = view.findViewById(R.id.text_status);
             this.linearLayout = view.findViewById(R.id.searchedIindividual);
         }
     }
@@ -75,6 +81,8 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
 
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Individual individual = individualList.get(position);
@@ -83,10 +91,31 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         holder.permid.setText(individual.getExtId());
         holder.firstname.setText(individual.getFirstName());
         holder.lastname.setText(individual.getLastName());
-        holder.nickname.setText(individual.getOtherName());
         holder.dob.setText(individual.getDob());
-        holder.age.setText(String.valueOf(individual.getAge()));
-        holder.hhid.setText(individual.houseExtId);
+        holder.compno.setText(individual.compextId);
+        //holder.age.setText(String.valueOf(individual.getAge()));
+        String otherName = individual.getOtherName();
+        if (otherName == null || otherName.isEmpty()) {
+            holder.nickname.setText("");
+        } else {
+            holder.nickname.setText("(" + otherName + ")");
+        }
+        Integer gender = individual.gender;
+        if (gender == 1){
+            holder.gender.setText("Male");
+        }else{
+            holder.gender.setText("Female");
+        }
+        Integer status = individual.endType;
+        if (status == 1) {
+            holder.status.setText("(" + "Active" + ")");
+            holder.status.setTextColor(Color.MAGENTA);
+        } else {
+            holder.status.setText("(" + "Outmigrated" + ")");
+            holder.status.setTextColor(Color.RED);
+        }
+
+
 
         holder.linearLayout.setOnClickListener(v -> {
             activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
@@ -99,38 +128,65 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         return individualList.size();
     }
 
-    public void filter(String charText, IndividualViewModel individualViewModel) {
+//    public void filter(String charText, IndividualViewModel individualViewModel) {
+//        individualList.clear();
+//            if(socialgroup != null)
+//                try {
+//                    List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getHouseExtId());
+//
+//                    if (list != null) {
+//                        individualList.addAll(list);
+//                    }
+//                } catch (ExecutionException e) {
+//                    e.printStackTrace();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//        notifyDataSetChanged();
+//    }
+
+    public void search(String searchText, IndividualViewModel individualViewModel) {
+
         individualList.clear();
-        if (charText != null && charText.length() > 4) {
-            charText = charText.toLowerCase(Locale.getDefault());
+        if (searchText != null) {
+            searchText = searchText.toLowerCase(Locale.getDefault());
 
             try {
-                List<Individual> list = individualViewModel.retrieveBySearch(charText);
+                List<Individual> list = individualViewModel.retrieveBySearch(searchText);
 
                 if (list != null) {
                     individualList.addAll(list);
                 }
+
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        } else {
-
-            if(locations != null)
-                try {
-                    List<Individual> list = individualViewModel.retrieveByLocationId(locations.getCompextId());
-
-                    if (list != null) {
-                        individualList.addAll(list);
-                    }
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
         }
         notifyDataSetChanged();
+        activity.dismissLoadingDialog();
     }
+
+    public void pull(IndividualViewModel individualViewModel) {
+        individualList.clear();
+        if(socialgroup != null)
+            try {
+                List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getHouseExtId());
+
+                if (list != null) {
+                    individualList.addAll(list);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        notifyDataSetChanged();
+        activity.dismissLoadingDialog();
+    }
+
+
+
 }

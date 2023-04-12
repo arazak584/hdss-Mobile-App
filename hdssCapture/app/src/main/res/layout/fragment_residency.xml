@@ -29,11 +29,6 @@
         android:orientation="vertical"
         tools:context=".fragment.ResidencyFragment">
 
-        <include
-            layout="@layout/individual_summary"
-            bind:individual="@{individual}"
-            bind:eventname="@{eventname}"
-            />
 
         <View
             android:layout_width="match_parent"
@@ -55,6 +50,9 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
+                android:visibility="gone"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -92,6 +90,8 @@
                 tools:ignore="TextContrastCheck" />
 
             <com.google.android.material.textfield.TextInputLayout
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -109,6 +109,8 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -127,6 +129,8 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -143,8 +147,17 @@
                     android:inputType="textPersonName"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <Button
+                android:id="@+id/button_change_hh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/changehh"
+                tools:ignore="DuplicateSpeakableTextCheck" />
+
 
             <com.google.android.material.textfield.TextInputLayout
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -4,6 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,6 +21,7 @@ import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.entity.Fieldworker;
+import org.openhds.hdsscapture.fragment.UrlFragment;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
 import java.util.concurrent.ExecutionException;
@@ -31,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private ApiDao dao;
     private ProgressDialog progress;
     private Fieldworker fieldworkerData;
+    private AppJson appJson;
 
 
 
@@ -38,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        appJson = AppJson.getInstance(this);
 
         final FieldworkerViewModel fieldworkerViewModel = new ViewModelProvider(this).get(FieldworkerViewModel.class);
 
@@ -47,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         progress = new ProgressDialog(LoginActivity.this);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
-        AppJson api = AppJson.getInstance();
+        AppJson api = AppJson.getInstance(this);
         dao = api.getJsonApi();
 
         final Button button_SyncFw = findViewById(R.id.button_SyncFieldworkerData);
@@ -127,4 +134,33 @@ public class LoginActivity extends AppCompatActivity {
 
         });
     }
+
+    public AppJson getAppJson() {
+        return appJson;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.add_url) { // replace menu_item_id with your actual menu item ID
+            // create and open the dialog fragment
+            UrlFragment dialogFragment = new UrlFragment();
+            dialogFragment.show(getSupportFragmentManager(), "UrlFragment");
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+
 }

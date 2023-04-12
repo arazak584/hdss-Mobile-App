@@ -59,17 +59,18 @@
             </androidx.recyclerview.widget.RecyclerView>
         </LinearLayout>
 
+
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/add_menu_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:layout_margin="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="0dp"
             android:contentDescription="@string/mainmenu"
-            android:src="@drawable/ic_baseline_add_24"
+            android:src="@drawable/ic_add"
             android:text="@string/mainmenu"
             app:fabSize="normal"
+            android:layout_marginBottom="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:ignore="ImageContrastCheck" />

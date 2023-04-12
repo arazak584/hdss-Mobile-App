@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,10 +69,8 @@ public class LocationFragment extends Fragment {
     private Socialgroup socialgroup;
     private Residency residency;
     private Individual individual;
-    private String name;
     private FragmentLocationBinding binding;
     private CaseItem caseItem;
-    boolean isAllFieldsChecked = false;
 
     private LocationManager locationManager;
     private Location currentLocation;
@@ -202,7 +201,6 @@ public class LocationFragment extends Fragment {
             binding.getLocations().fw_uuid = fieldworkerData.getFw_uuid();
         }
 
-
         // Generate a UUID
         if(locations.location_uuid == null) {
             String uuid = UUID.randomUUID().toString();
@@ -215,13 +213,14 @@ public class LocationFragment extends Fragment {
         final CodeBookViewModel codeBookViewModel = new ViewModelProvider(this).get(CodeBookViewModel.class);
         loadCodeData(binding.locationstatus, codeBookViewModel, "status");
         loadCodeData(binding.complete, codeBookViewModel, "complete");
+        loadCodeData(binding.edit, codeBookViewModel, "complete");
         loadCodeData(binding.locationtype, codeBookViewModel, "locationType");
 
         binding.buttonSubmit.setOnClickListener(v -> {
             final LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
 
             final Locations locations = binding.getLocations();
-            locations.setCompextId(this.locations.getCompextId());
+           locations.setCompextId(this.locations.getCompextId());
 
             boolean isExists = false;
             binding.locationextid.setError(null);
@@ -235,50 +234,16 @@ public class LocationFragment extends Fragment {
                 binding.locationInsertDate.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Calendar.getInstance().getTime()));
             }
 
-            if(locations.compno==null){
-                isExists = true;
-                binding.locationcompno.setError("This Field is Required");
-
-            }
-
-            if(locations.compextId==null){
-                isExists = true;
-                binding.locationextid.setError("This Field is Required");
-            }
-
-            if(locations.locationName==null){
-                isExists = true;
-                binding.locationName.setError("This Field is Required");
-            }
-
-            if(locations.longitude==null){
-                isExists = true;
-                binding.longitude.setError("This Field is Required");
-            }
-
-            if(locations.latitude==null){
-                isExists = true;
-                binding.latitude.setError("This Field is Required");
-            }
-
-            final boolean validateOnComplete = locations.complete == 1;
-            boolean a = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
 
 
             try {
                 Locations locations1 = null;
-                if(locations.getCompno()!=null && !locations.getCompno().equalsIgnoreCase(this.locations.getCompno())) {
+                if(locations.getCompno()!=null) {
+                    Log.e("COMPNO","LOCATION IS " + isExists);
                     locations1 = locationViewModel.find(locations.getCompno());
-                    if (locations1 != null) {
+                    if (locations1 != null && this.locations.edit==1) {
                         isExists = true;
                         binding.locationcompno.setError("Already Exists");
-                    }
-                }
-                if(locations.getCompextId()!=null && !locations.getCompextId().equalsIgnoreCase(this.locations.getCompextId())) {
-                    locations1 = locationViewModel.find(locations.getCompextId());
-                    if (locations1 != null) {
-                        isExists = true;
-                        binding.locationextid.setError("Already Exists");
                     }
                 }
 
@@ -292,10 +257,18 @@ public class LocationFragment extends Fragment {
                 return;
             }
 
+            final boolean validateOnComplete = true;//finalData.complete == 1;
+            boolean hasErrors = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
+
+            if (hasErrors) {
+                Toast.makeText(requireContext(), "All Fields Required", Toast.LENGTH_LONG).show();
+                return;
+            }
+
             locationViewModel.add(locations);
             Toast.makeText(v.getContext(), "Saved Successfully", Toast.LENGTH_LONG).show();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                 HouseVisitFragment.newInstance(individual, residency, locations, socialgroup)).commit();
+                 BlankFragment.newInstance(individual, residency, locations, socialgroup)).commit();
 
 
         });

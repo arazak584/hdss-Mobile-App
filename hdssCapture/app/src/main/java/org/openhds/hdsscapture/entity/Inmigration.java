@@ -72,11 +72,11 @@ public class Inmigration extends BaseObservable implements Parcelable {
 
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
+    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
 
     public String getInsertDate() {
-        if (insertDate == null) return "SELECT DATE OF VISIT";
+        if (insertDate == null) return "";
         return f.format(insertDate);
     }
 
@@ -97,7 +97,7 @@ public class Inmigration extends BaseObservable implements Parcelable {
     }
 
     public String getRecordedDate() {
-        if (recordedDate == null) return "SELECT DATE OF INMIGRATION";
+        if (recordedDate == null) return "";
         return f.format(recordedDate);
     }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/socialgroup_fragment">
+    android:id="@+id/socialgroup_fragments">
 
     <data>
 
@@ -42,7 +42,7 @@
 
 
         <LinearLayout
-            android:id="@+id/SOCIALGROUP_LAYOUT"
+            android:id="@+id/SOCIALGROUPS_LAYOUT"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -62,6 +62,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@={socialgroup.fw_uuid}"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:inputType="textPersonName"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -97,8 +99,36 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@={socialgroup.houseExtId}"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:inputType="textPersonName"/>
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/visituuid">
+                android:text="@string/visituuid">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/visituuid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={socialgroup.visit_uuid}"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/button_change_hoh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/changehoh"
+                tools:ignore="DuplicateSpeakableTextCheck" />
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
@@ -131,6 +161,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@={socialgroup.individual_uuid}"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:inputType="textPersonName"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -151,6 +183,24 @@
                 selection="@{socialgroup.groupType}"
                 android:onItemSelected="@{socialgroup::setGroupTypes}"
                 android:padding="20dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/form_complete"/>
+
+            <Spinner
+                android:id="@+id/residency_complete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{socialgroup.complete}"
+                android:onItemSelected="@{socialgroup::setComplete}"
+                android:gravity="left"
+                android:textColor="#000301"
+                android:padding="15dp"/>
 
 
             <LinearLayout

@@ -147,6 +147,12 @@ public class HierarchyActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Hierarchy selectedLevel1 = level1Adapter.getItem(position);
 
+                // Reset level 3 spinner
+                level3Adapter.clear();
+                level4Adapter.clear();
+                level5Adapter.clear();
+                level6Adapter.clear();
+
                 // Load level 2 data
                 if(position==0)
                 try {
@@ -159,11 +165,6 @@ public class HierarchyActivity extends AppCompatActivity {
                     Toast.makeText(HierarchyActivity.this, "Error loading data", Toast.LENGTH_SHORT).show();
                 }
 
-                // Reset level 3 spinner
-                level3Adapter.clear();
-                level4Adapter.clear();
-                level5Adapter.clear();
-                level6Adapter.clear();
             }
 
             @Override
@@ -176,6 +177,11 @@ public class HierarchyActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Hierarchy selectedLevel2 = level2Adapter.getItem(position);
+
+                // Reset level 3 spinner
+                level4Adapter.clear();
+                level5Adapter.clear();
+                level6Adapter.clear();
                 // Load level 3 data
                 try {
                     List<Hierarchy> level3Data = hierarchyViewModel.retrieveLevel3(selectedLevel2.getUuid());
@@ -188,10 +194,7 @@ public class HierarchyActivity extends AppCompatActivity {
                     Toast.makeText(HierarchyActivity.this, "Error loading data", Toast.LENGTH_SHORT).show();
                 }
 
-                // Reset level 3 spinner
-                level4Adapter.clear();
-                level5Adapter.clear();
-                level6Adapter.clear();
+
             }
 
             @Override
@@ -206,6 +209,11 @@ public class HierarchyActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Hierarchy selectedLevel3 = level3Adapter.getItem(position);
 
+                // Reset level 4 spinner and below
+                level4Adapter.clear();
+                level5Adapter.clear();
+                level6Adapter.clear();
+
                 // Load level 4 data
                 try {
                     List<Hierarchy> level4Data = hierarchyViewModel.retrieveLevel4(selectedLevel3.getUuid());
@@ -217,8 +225,7 @@ public class HierarchyActivity extends AppCompatActivity {
                     e.printStackTrace();
                     Toast.makeText(HierarchyActivity.this, "Error loading data", Toast.LENGTH_SHORT).show();
                 }
-                level5Adapter.clear();
-                level6Adapter.clear();
+
             }
 
             @Override
@@ -232,6 +239,9 @@ public class HierarchyActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Hierarchy selectedLevel4 = level4Adapter.getItem(position);
 
+                level5Adapter.clear();
+                level6Adapter.clear();
+
                 // Load level 5 data
                 try {
                     List<Hierarchy> level5Data = hierarchyViewModel.retrieveLevel5(selectedLevel4.getUuid());
@@ -243,7 +253,6 @@ public class HierarchyActivity extends AppCompatActivity {
                     e.printStackTrace();
                     Toast.makeText(HierarchyActivity.this, "Error loading data", Toast.LENGTH_SHORT).show();
                 }
-                level6Adapter.clear();
             }
 
             @Override
@@ -256,6 +265,8 @@ public class HierarchyActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 level5Data = level5Adapter.getItem(position);
+
+                level6Adapter.clear();
 
                 // Load level 6 data
                 try {
@@ -276,7 +287,7 @@ public class HierarchyActivity extends AppCompatActivity {
             }
         });
 
-        // Set listener for level 5 spinner
+        // Set listener for level 6 spinner
         level6Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    tools:context=".fragment.HouseholdDialogFragment">
+    tools:context=".Dialog.HouseholdDialogFragment">
 
     <Button
         android:id="@+id/button_hhclose"

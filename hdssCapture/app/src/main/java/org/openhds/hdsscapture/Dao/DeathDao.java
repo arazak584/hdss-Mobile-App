@@ -29,4 +29,7 @@ public interface DeathDao {
 
     @Query("SELECT * FROM death WHERE complete=1")
     List<Death> retrieveToSync();
+
+    @Query("SELECT * FROM death WHERE vpmcomplete=1")
+    List<Death> retrieveVpmSync();
 }

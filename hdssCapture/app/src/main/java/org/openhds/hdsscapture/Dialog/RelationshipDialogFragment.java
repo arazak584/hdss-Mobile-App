@@ -1,4 +1,4 @@
-package org.openhds.hdsscapture.fragment;
+package org.openhds.hdsscapture.Dialog;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,20 +15,22 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.openhds.hdsscapture.Adapter.MotherAdapter;
+import org.openhds.hdsscapture.Adapter.RelationshipAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.databinding.FragmentRelationshipDialogBinding;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.CaseItem;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link MotherDialogFragment#newInstance} factory method to
+ * Use the {@link RelationshipDialogFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MotherDialogFragment extends DialogFragment {
+public class RelationshipDialogFragment extends DialogFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
@@ -41,8 +43,10 @@ public class MotherDialogFragment extends DialogFragment {
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
+    private FragmentRelationshipDialogBinding binding;
+    private CaseItem caseItem;
 
-    public MotherDialogFragment() {
+    public RelationshipDialogFragment() {
         // Required empty public constructor
     }
 
@@ -54,11 +58,11 @@ public class MotherDialogFragment extends DialogFragment {
      * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
-     * @return A new instance of fragment MotherDialogFragment.
+     * @return A new instance of fragment RelationshipDialogFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MotherDialogFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
-        MotherDialogFragment fragment = new MotherDialogFragment();
+    public static RelationshipDialogFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
+        RelationshipDialogFragment fragment = new RelationshipDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(RESIDENCY_ID, residency);
@@ -77,17 +81,15 @@ public class MotherDialogFragment extends DialogFragment {
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
-        //Log.d(TAG, "locations: " + locations);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_mother_dialog, container, false);
+        View view = inflater.inflate(R.layout.fragment_relationship_dialog, container, false);
 
-
-        final TextView compno = view.findViewById(R.id.textViewmother_compextId);
+        final TextView compno = view.findViewById(R.id.textViewman_compextId);
         if (locations != null) {
             compno.setText(locations.getCompno());
         } else {
@@ -95,7 +97,7 @@ public class MotherDialogFragment extends DialogFragment {
             compno.setText("Error loading locations data");
         }
 
-        Button closeButton = view.findViewById(R.id.button_close);
+        Button closeButton = view.findViewById(R.id.button_rclose);
 
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,11 +106,11 @@ public class MotherDialogFragment extends DialogFragment {
             }
         });
 
-
-        //Load Mother Data
-        final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_mother);
-        final MotherAdapter adapter = new MotherAdapter(this, residency, locations, socialgroup );
+        //Load Father Data
+        final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_relationship);
+        final RelationshipAdapter adapter = new RelationshipAdapter(this, residency, locations, socialgroup,caseItem );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
+
 
         //recyclerView.setHasFixedSize(true);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -121,7 +123,7 @@ public class MotherDialogFragment extends DialogFragment {
         adapter.filter("", individualViewModel);
 
         // Locate the EditText in listview_main.xml
-        final SearchView editSearch = view.findViewById(R.id.mother_search);
+        final SearchView editSearch = view.findViewById(R.id.man_search);
         // below line is to call set on query text listener method.
         editSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -141,6 +143,4 @@ public class MotherDialogFragment extends DialogFragment {
 
         return view;
     }
-
-
 }

@@ -1,5 +1,9 @@
 package org.openhds.hdsscapture;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -8,6 +12,7 @@ import org.openhds.hdsscapture.Dao.ApiDao;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -15,26 +20,21 @@ public class AppJson {
 
     private static volatile AppJson INSTANCE;
 
-    private static final String BASE_URL = "http://ksurvey.org:8080/api/";
+    private static final String DEFAULT_BASE_URL = "http://localhost.org:8080";
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService jsonWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-    private final ApiDao jsonApi;
+    private final Context context;
 
-    private AppJson() {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").setLenient().create();
-
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-        jsonApi = retrofit.create(ApiDao.class);
+    private AppJson(Context context) {
+        this.context = context.getApplicationContext();
     }
 
-    public static AppJson getInstance() {
+    public static AppJson getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (AppJson.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new AppJson();
+                    INSTANCE = new AppJson(context);
                 }
             }
         }
@@ -42,7 +42,37 @@ public class AppJson {
         return INSTANCE;
     }
 
-    public ApiDao getJsonApi() {
-        return jsonApi;
+    private String getBaseUrl() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return preferences.getString("BASE_URL", DEFAULT_BASE_URL);
     }
+
+    public ApiDao getJsonApi() {
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").setLenient().create();
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+        return retrofit.create(ApiDao.class);
+    }
+
+    public void setBaseUrl(String baseUrl) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("BASE_URL", baseUrl);
+        editor.apply();
+    }
+
+    public void updateBaseUrl(String newBaseUrl) {
+        setBaseUrl(newBaseUrl);
+        INSTANCE = new AppJson(context);
+    }
+
+    public Context getAppContext() {
+        return context;
+    }
+
+    OkHttpClient client = new OkHttpClient.Builder()
+            .cache(null)
+            .build();
+
 }
