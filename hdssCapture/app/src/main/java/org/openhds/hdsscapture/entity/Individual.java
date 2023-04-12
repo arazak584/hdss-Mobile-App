@@ -111,11 +111,6 @@ public class Individual extends BaseObservable implements Parcelable {
     @Expose
     public Integer endType;
 
-    @SerializedName("residency_uuid")
-    @Expose
-    public String residency_uuid;
-
-
     public Individual(){}
 
     @Ignore
@@ -287,14 +282,6 @@ public class Individual extends BaseObservable implements Parcelable {
         this.complete = complete;
     }
 
-    @Bindable
-    public String getResidency_uuid() {
-        return residency_uuid;
-    }
-
-    public void setResidency_uuid(String residency_uuid) {
-        this.residency_uuid = residency_uuid;
-    }
 
     protected Individual(Parcel in) {
         this.extId = in.readString();
@@ -309,7 +296,6 @@ public class Individual extends BaseObservable implements Parcelable {
         this.father_uuid = in.readString();
         this.fw_uuid = in.readString();
         this.complete = in.readInt();
-        this.residency_uuid = in.readString();
     }
 
     public static final Creator<Individual> CREATOR = new Creator<Individual>() {
@@ -343,7 +329,6 @@ public class Individual extends BaseObservable implements Parcelable {
         dest.writeString(this.father_uuid);
         dest.writeString(this.fw_uuid);
         dest.writeInt(this.complete);
-        dest.writeString(this.residency_uuid);
     }
 
     //SPINNERS ENTITY DOB ASPECT

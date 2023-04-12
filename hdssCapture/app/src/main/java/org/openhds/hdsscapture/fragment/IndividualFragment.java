@@ -157,16 +157,6 @@ public class IndividualFragment extends Fragment {
             binding.getIndividual().extId = id; // set the generated ID to the extId property of the Individual object
         }
 
-        Individual data = binding.getIndividual();
-        if (data == null || data!=null) {
-            if (data.residency_uuid==null){
-
-                String res = UUID.randomUUID().toString();
-                String ress = res.toString().replaceAll("-", "");
-                data.residency_uuid = ress;
-            }
-        }
-
 
         // Find the button view
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_individual_mother);
