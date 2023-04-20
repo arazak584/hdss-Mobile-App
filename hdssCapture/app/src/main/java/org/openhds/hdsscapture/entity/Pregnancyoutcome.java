@@ -7,6 +7,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -47,7 +48,7 @@ public class Pregnancyoutcome extends BaseObservable {
     public String mother_uuid;
 
     @Expose
-    public String father_uuid;
+    public String father_uuid=AppConstants.Father;
 
     @Expose
     public String visit_uuid;
@@ -84,10 +85,9 @@ public class Pregnancyoutcome extends BaseObservable {
     public Integer where_anc;//Where did you receive the ANC?
     @Expose
     public String where_anc_Other;
+
     @Expose
-    public Integer whlth_fac;//Which health facility
-    @Expose
-    public String whlth_fac_Other;
+    public String whlth_fac;
     @Expose
     public Integer who_anc;//Who attended to you?
     @Expose
@@ -114,7 +114,7 @@ public class Pregnancyoutcome extends BaseObservable {
 
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
+    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @NotNull
     public String getPreg_uuid() {
@@ -158,7 +158,7 @@ public class Pregnancyoutcome extends BaseObservable {
     }
 
     public String getInsertDate() {
-        if (insertDate == null) return "SELECT DATE OF VISIT";
+        if (insertDate == null) return null;
         return f.format(insertDate);
     }
 
@@ -171,7 +171,7 @@ public class Pregnancyoutcome extends BaseObservable {
     }
 
     public String getOutcomeDate() {
-        if (outcomeDate == null) return "SELECT DATE OF OUTCOME";
+        if (outcomeDate == null) return null;
         return f.format(outcomeDate);
     }
 
@@ -185,7 +185,7 @@ public class Pregnancyoutcome extends BaseObservable {
     }
 
     public String getConceptionDate() {
-        if (conceptionDate == null) return "SELECT DATE OF Conception";
+        if (conceptionDate == null) return null;
         return f.format(conceptionDate);
     }
 
@@ -207,6 +207,7 @@ public class Pregnancyoutcome extends BaseObservable {
         if (view.findViewById(checkedId) != null) {
             final String TAG = "" + view.findViewById(checkedId).getTag();
             numberofBirths = Integer.parseInt(TAG);
+            patternSkipper(view);
         }
     }
 
@@ -318,21 +319,14 @@ public class Pregnancyoutcome extends BaseObservable {
         this.where_anc_Other = where_anc_Other;
     }
 
-    public Integer getWhlth_fac() {
+    public String getWhlth_fac() {
         return whlth_fac;
     }
 
-    public void setWhlth_fac(Integer whlth_fac) {
+    public void setWhlth_fac(String whlth_fac) {
         this.whlth_fac = whlth_fac;
     }
 
-    public String getWhlth_fac_Other() {
-        return whlth_fac_Other;
-    }
-
-    public void setWhlth_fac_Other(String whlth_fac_Other) {
-        this.whlth_fac_Other = whlth_fac_Other;
-    }
 
     public Integer getWho_anc() {
         return who_anc;
@@ -446,6 +440,7 @@ public class Pregnancyoutcome extends BaseObservable {
             b_place = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -480,6 +475,7 @@ public class Pregnancyoutcome extends BaseObservable {
             not_del = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -497,6 +493,7 @@ public class Pregnancyoutcome extends BaseObservable {
             ass_del = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -531,6 +528,7 @@ public class Pregnancyoutcome extends BaseObservable {
             first_nb = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -565,6 +563,7 @@ public class Pregnancyoutcome extends BaseObservable {
             rec_anc = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -599,26 +598,12 @@ public class Pregnancyoutcome extends BaseObservable {
             where_anc = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
 
-    //Which health facility
-    public void setWhlth_fac(AdapterView<?> parent, View view, int position, long id) {
 
-        if (position != parent.getSelectedItemPosition()) {
-            parent.setSelection(position);
-        }
-        if (position == 0) {
-            whlth_fac = AppConstants.NOSELECT;
-        } else {
-            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            whlth_fac = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-            ((TextView) parent.getChildAt(0)).setTextSize(20);
-        }
-
-    }
 
     //During the time that you were pregnant, did you receive IPT infront of a nurse?
     public void setRec_ipt(AdapterView<?> parent, View view, int position, long id) {
@@ -669,6 +654,14 @@ public class Pregnancyoutcome extends BaseObservable {
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }
 
+    }
+
+    private void patternSkipper(View view) {
+
+        if (view != null) {
+
+            notifyPropertyChanged(BR._all);
+        }
     }
 
 }

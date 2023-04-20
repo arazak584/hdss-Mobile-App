@@ -166,7 +166,6 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.insertDate = new Date();
                 data.mother_uuid = individual.getIndividual_uuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
-                //data.expectedDeliveryDate = data.recordedDate(9);
 
                 binding.setPregoutcome(data);
             }
@@ -258,6 +257,19 @@ public class PregnancyoutcomeFragment extends Fragment {
         loadCodeData(binding.childFetus2.out2Type, codeBookViewModel, "outcometype");
         loadCodeData(binding.childFetus3.out3Type, codeBookViewModel, "outcometype");
         loadCodeData(binding.childFetus4.out4Type, codeBookViewModel, "outcometype");
+        loadCodeData(binding.birthplace, codeBookViewModel, "birthPlace");
+        loadCodeData(binding.notDel, codeBookViewModel, "notdel");
+        loadCodeData(binding.whyNoAnc, codeBookViewModel, "notdel");
+        loadCodeData(binding.firstNb, codeBookViewModel, "complete");
+        loadCodeData(binding.recAnc, codeBookViewModel, "complete");
+        loadCodeData(binding.recIpt, codeBookViewModel, "complete");
+        loadCodeData(binding.chdWeight, codeBookViewModel, "complete");
+        loadCodeData(binding.assDel, codeBookViewModel, "assist");
+        loadCodeData(binding.howDel, codeBookViewModel, "howdel");
+        loadCodeData(binding.whereAnc, codeBookViewModel, "birthPlace");
+        loadCodeData(binding.whoAnc, codeBookViewModel, "assist");
+        loadCodeData(binding.chdSize, codeBookViewModel, "size");
+        loadCodeData(binding.individualComplete, codeBookViewModel, "complete");
 
 
         binding.buttonSaveClose.setOnClickListener(v -> {

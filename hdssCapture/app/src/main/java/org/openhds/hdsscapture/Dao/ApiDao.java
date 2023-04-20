@@ -9,6 +9,7 @@ import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
@@ -92,8 +93,11 @@ public interface ApiDao {
     @POST("/api/relationship")
     Call<DataWrapper<Relationship>> sendRelationshipdata(@Body DataWrapper<Relationship> dataModal);
 
-    @POST("/api/outcome")
+    @POST("/api/pregoutcome")
     Call<DataWrapper<Pregnancyoutcome>> sendPregoutcomedata(@Body DataWrapper<Pregnancyoutcome> dataModal);
+
+    @POST("/api/outcome")
+    Call<DataWrapper<Outcome>> sendOutcomedata(@Body DataWrapper<Outcome> dataModal);
 
     @POST("/api/socio")
     Call<DataWrapper<HdssSociodemo>> sendSociodata(@Body DataWrapper<HdssSociodemo> dataModal);

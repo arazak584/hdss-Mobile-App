@@ -19,8 +19,8 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
-import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
+import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.databinding.FragmentEventsBinding;
@@ -29,8 +29,8 @@ import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Pregnancy;
+import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -175,6 +175,7 @@ public class EventsFragment extends Fragment {
                                 showDemographicForm(eventForms);
                                 showRelationshipForm(eventForms);
                                 showPregnancyForm(eventForms);
+                                showOutcomeForm(eventForms);
 
                             }
 
@@ -297,11 +298,11 @@ public class EventsFragment extends Fragment {
 
 
     private void showOutcomeForm(List<EventForm> eventForms) {
-        OutcomeViewModel viewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
+        PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         try {
-            Outcome form = viewModel.find(individual.individual_uuid);
+            Pregnancyoutcome form = viewModel.find(individual.individual_uuid);
             if (form == null) {
-                form = new Outcome();
+                form = new Pregnancyoutcome();
             }
 
             eventForms.add(new EventForm(AppConstants.EVENT_HDSS11, AppConstants.EVENT_OUTCOME, form.complete));

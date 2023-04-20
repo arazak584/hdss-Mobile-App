@@ -16,7 +16,6 @@ public class AppConstants {
     public static final int NOSELECT = 0;
     public static final String SPINNER_NOSELECT = "--Select an option--";
 
-    //public static final int SCREENING=1, ENROLMENT=2, ANCVISIT=3, DELIVERY=4, PNCVISIT=5, ADHOC=6, CLOSEOUT=7;
 
     public static final String Mother = "Unk", Father = "Unk", Location ="0000";
 
@@ -43,10 +42,6 @@ public class AppConstants {
             EVENT_HDSS9 = "INMIGRATION REGISTRATION",
             EVENT_HDSS10 = "PREGNANCY OBSERVATION",
             EVENT_HDSS11 = "PREGNANCY OUTCOME",
-            CHILDA = "CHILD 1",
-            CHILDB = "CHILD 2",
-            CHILDC = "CHILD 3",
-            CHILDD = "CHILD 4",
 
             EVENT_RESIDENCY = "MEMBERSHIP REGISTRATION",
             EVENT_VISIT = "VISIT REGISTRATION",
@@ -58,12 +53,7 @@ public class AppConstants {
             EVENT_DEMO = "DEMOGRAPHICS",
             EVENT_DSOCIO = "SOCIO-DEMOGRAPHICS [PROFILE]",
             EVENT_OMG = "OUTMIGRATION REGISTRATION",
-            EVENT_IMG = "INMIGRATION REGISTRATION",
-
-            EVENT_CHILD1= "FIRST CHILD",
-            EVENT_CHILD2 = "SECOND CHILD",
-            EVENT_CHILD3 = "THIRD CHILD",
-            EVENT_CHILD4 = "FOURTH CHILD";
+            EVENT_IMG = "INMIGRATION REGISTRATION";
 
 
 

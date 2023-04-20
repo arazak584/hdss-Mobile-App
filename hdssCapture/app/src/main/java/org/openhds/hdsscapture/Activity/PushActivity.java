@@ -21,6 +21,7 @@ import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
+import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
@@ -32,6 +33,7 @@ import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
@@ -491,7 +493,7 @@ public class PushActivity extends AppCompatActivity {
 
                 for (Pregnancyoutcome elem : data.getData()) {
                     elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getPreg_uuid());
+                    Log.e("PUSH.tag", "Has value " + elem.getMother_uuid());
                 }
 
                 final Call<DataWrapper<Pregnancyoutcome>> c_callable = dao.sendPregoutcomedata(data);
@@ -511,6 +513,70 @@ public class PushActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Pregnancyoutcome>> call, @NonNull Throwable t) {
+                        progress.dismiss();
+                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+                });
+            } else {
+                progress.dismiss();
+            }
+
+        });
+
+        //PUSH Pregnancyoutcomes
+        final Button buttonSendOutcomesdata = findViewById(R.id.buttonSendOutcomes);
+        final TextView textViewSendOutcomesdata = findViewById(R.id.textViewSendOutcomes);
+        final OutcomeViewModel outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
+
+        //GET MODIFIED DATA
+        final List<Outcome> outcomeList = new ArrayList<>();
+        try {
+            outcomeList.addAll(outcomeViewModel.findToSync());
+            textViewSendOutcomesdata.setText("Outcome (" + outcomeList.size() + ") to send");
+            textViewSendOutcomesdata.setTextColor(Color.rgb(0, 114, 133));
+            if (outcomeList.isEmpty()) {
+                buttonSendOutcomesdata.setVisibility(View.GONE);
+                textViewSendOutcomesdata.setVisibility(View.GONE);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        buttonSendOutcomedata.setOnClickListener(v -> {
+            progress.setMessage(getResources().getString(R.string.init_syncing));
+            progress.show();
+
+            //WRAP THE DATA
+            final DataWrapper<Outcome> data = new DataWrapper<>(outcomeList);
+
+            //SEND THE DATA
+            if (data.getData() != null && !data.getData().isEmpty()) {
+
+                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
+
+                for (Outcome elem : data.getData()) {
+                    elem.complete = 0;
+                    Log.e("PUSH.tag", "Has value " + elem.getChilduuid());
+                }
+
+                final Call<DataWrapper<Outcome>> c_callable = dao.sendOutcomedata(data);
+                c_callable.enqueue(new Callback<DataWrapper<Outcome>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DataWrapper<Outcome>> call, Response<DataWrapper<Outcome>> response) {
+                        if (response != null && response.body() != null && response.isSuccessful()
+                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
+
+                            Outcome[] d = response.body().getData().toArray(new Outcome[0]);
+                            outcomeViewModel.add(d);
+                            progress.dismiss();
+                            textViewSendOutcomesdata.setText("Sent " + d.length + " Outcome record(s)");
+                            textViewSendOutcomesdata.setTextColor(Color.rgb(0, 114, 133));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<DataWrapper<Outcome>> call, @NonNull Throwable t) {
                         progress.dismiss();
                         Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
 
