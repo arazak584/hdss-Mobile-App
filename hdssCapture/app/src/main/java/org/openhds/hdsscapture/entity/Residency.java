@@ -67,40 +67,9 @@ public class Residency extends BaseObservable implements Parcelable {
     @Expose
     public Integer rltn_head;
 
-    //Inmigration
-    @Expose
-    public String img_uuid;
-
-    @Expose
-    public Integer migType;
-
-    @Expose
-    public Integer reason;
-
-    @Expose
-    public String reason_oth;
-
-    @Expose
-    public Integer origin;
-
-    @Expose
-    public String visit_uuid;
-
-    //Outmigration
-    @Expose
-    public String omg_uuid;
-
-    @Expose
-    public Integer destination;
-
     @Expose
     public Integer complete;
 
-    @Expose
-    public Integer imgcomplete;
-
-    @Expose
-    public Integer omgcomplete;
 
     @SerializedName("loc")
     @Expose
@@ -250,70 +219,7 @@ public class Residency extends BaseObservable implements Parcelable {
     public void setRltn_head(Integer rltn_head) {
         this.rltn_head = rltn_head;
     }
-    @Bindable
-    public String getImg_uuid() {
-        return img_uuid;
-    }
 
-    public void setImg_uuid(String img_uuid) {
-        this.img_uuid = img_uuid;
-    }
-    @Bindable
-    public Integer getMigType() {
-        return migType;
-    }
-
-    public void setMigType(Integer migType) {
-        this.migType = migType;
-    }
-    @Bindable
-    public Integer getReason() {
-        return reason;
-    }
-
-    public void setReason(Integer reason) {
-        this.reason = reason;
-    }
-    @Bindable
-    public String getReason_oth() {
-        return reason_oth;
-    }
-
-    public void setReason_oth(String reason_oth) {
-        this.reason_oth = reason_oth;
-    }
-    @Bindable
-    public Integer getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(Integer origin) {
-        this.origin = origin;
-    }
-    @Bindable
-    public String getVisit_uuid() {
-        return visit_uuid;
-    }
-
-    public void setVisit_uuid(String visit_uuid) {
-        this.visit_uuid = visit_uuid;
-    }
-    @Bindable
-    public String getOmg_uuid() {
-        return omg_uuid;
-    }
-
-    public void setOmg_uuid(String omg_uuid) {
-        this.omg_uuid = omg_uuid;
-    }
-    @Bindable
-    public Integer getDestination() {
-        return destination;
-    }
-
-    public void setDestination(Integer destination) {
-        this.destination = destination;
-    }
 
     public Integer getComplete() {
         return complete;
@@ -352,12 +258,6 @@ public class Residency extends BaseObservable implements Parcelable {
         this.rltn_head = in.readInt();
         this.fw_uuid = in.readString();
         this.img = in.readInt();
-        this.img_uuid = in.readString();
-        this.migType = in.readInt();
-        this.reason = in.readInt();
-        this.reason_oth = in.readString();
-        this.origin = in.readInt();
-        this.visit_uuid = in.readString();
         this.loc = in.readString();
 
     }
@@ -393,12 +293,6 @@ public class Residency extends BaseObservable implements Parcelable {
         dest.writeInt(this.rltn_head);
         dest.writeString(this.fw_uuid);
         dest.writeInt(this.img);
-        dest.writeString(this.img_uuid);
-        dest.writeInt(this.migType);
-        dest.writeInt(this.reason);
-        dest.writeString(this.reason_oth);
-        dest.writeInt(this.origin);
-        dest.writeString(this.visit_uuid);
         dest.writeString(this.loc);
     }
 
@@ -491,74 +385,6 @@ public class Residency extends BaseObservable implements Parcelable {
 
     }
 
-    //SPINNERS ENTITY
-    public void setReason(AdapterView<?> parent, View view, int position, long id) {
-
-        if (position != parent.getSelectedItemPosition()) {
-            parent.setSelection(position);
-        }
-        if (position == 0) {
-            reason = AppConstants.NOSELECT;
-        } else {
-            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            reason = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-            ((TextView) parent.getChildAt(0)).setTextSize(20);
-            //notifyPropertyChanged(BR._all);
-        }
-
-    }
-
-    //SPINNERS ENTITY
-    public void setMigType(AdapterView<?> parent, View view, int position, long id) {
-
-        if (position != parent.getSelectedItemPosition()) {
-            parent.setSelection(position);
-        }
-        if (position == 0) {
-            migType = AppConstants.NOSELECT;
-        } else {
-            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            migType = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-            ((TextView) parent.getChildAt(0)).setTextSize(20);
-        }
-
-    }
-
-    //SPINNERS ENTITY
-    public void setOrigin(AdapterView<?> parent, View view, int position, long id) {
-
-        if (position != parent.getSelectedItemPosition()) {
-            parent.setSelection(position);
-        }
-        if (position == 0) {
-            origin = AppConstants.NOSELECT;
-        } else {
-            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            origin = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-            ((TextView) parent.getChildAt(0)).setTextSize(20);
-        }
-
-    }
-
-    //SPINNERS ENTITY
-    public void setDestination(AdapterView<?> parent, View view, int position, long id) {
-
-        if (position != parent.getSelectedItemPosition()) {
-            parent.setSelection(position);
-        }
-        if (position == 0) {
-            destination = AppConstants.NOSELECT;
-        } else {
-            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            destination = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-            ((TextView) parent.getChildAt(0)).setTextSize(20);
-        }
-
-    }
 
 
 }

@@ -22,11 +22,18 @@ import org.openhds.hdsscapture.Dialog.MoveInErrorFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
+import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
+import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
-import org.openhds.hdsscapture.databinding.FragmentResidencyBinding;
+import org.openhds.hdsscapture.databinding.FragmentMembershipBinding;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Fieldworker;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
@@ -63,7 +70,7 @@ public class ResidencyFragment extends Fragment {
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
-    private FragmentResidencyBinding binding;
+    private FragmentMembershipBinding binding;
     private CaseItem caseItem;
     private EventForm eventForm;
     private Visit visit;
@@ -116,10 +123,13 @@ public class ResidencyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentResidencyBinding.inflate(inflater, container, false);
+        binding = FragmentMembershipBinding.inflate(inflater, container, false);
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
+        final Intent j = getActivity().getIntent();
+        final Hierarchy level5Data = j.getParcelableExtra(HierarchyActivity.LEVEL5_DATA);
 
         // Find the button view
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_change_hh);
@@ -138,14 +148,19 @@ public class ResidencyFragment extends Fragment {
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             // We use a String here, but any type that can be put in a Bundle is supported
-            if (bundle.containsKey((ResidencyFragment.DATE_BUNDLES.STARTDATE.getBundleKey()))) {
-                final String result = bundle.getString(ResidencyFragment.DATE_BUNDLES.STARTDATE.getBundleKey());
+            if (bundle.containsKey((DATE_BUNDLES.STARTDATE.getBundleKey()))) {
+                final String result = bundle.getString(DATE_BUNDLES.STARTDATE.getBundleKey());
                 binding.editTextStartDate.setText(result);
             }
 
-            if (bundle.containsKey((ResidencyFragment.DATE_BUNDLES.ENDDATE.getBundleKey()))) {
-                final String result = bundle.getString(ResidencyFragment.DATE_BUNDLES.ENDDATE.getBundleKey());
+            if (bundle.containsKey((DATE_BUNDLES.ENDDATE.getBundleKey()))) {
+                final String result = bundle.getString(DATE_BUNDLES.ENDDATE.getBundleKey());
                 binding.editTextEndDate.setText(result);
+            }
+
+            if (bundle.containsKey((DATE_BUNDLES.DEATHDATE.getBundleKey()))) {
+                final String result = bundle.getString(DATE_BUNDLES.DEATHDATE.getBundleKey());
+                binding.dth.dthDeathDate.setText(result);
             }
 
         });
@@ -162,7 +177,16 @@ public class ResidencyFragment extends Fragment {
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
+        binding.dth.buttonDeathDod.setOnClickListener(v -> {
+            final Calendar c = Calendar.getInstance();
+            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.DEATHDATE.getBundleKey(), c);
+            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+        });
+
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+        DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+        InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
+        OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
         try {
             Residency data = viewModel.findRes(individual.individual_uuid);
 
@@ -174,34 +198,20 @@ public class ResidencyFragment extends Fragment {
 
             if (data != null && data.endType!=2) {
                 binding.setResidency(data);
-                data.visit_uuid = socialgroup.getVisit_uuid();
-                data.img_uuid = img_uuid;
-                data.omg_uuid = omg_uuid;
-                data.imgcomplete = 1;
-                data.omgcomplete = 1;
                 data.loc = locations.getLocation_uuid();
-                data.migType = 2;
             } else {
                 data = new Residency();
 
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.toString().replaceAll("-", "");
 
-                data.omg_uuid = omg_uuid;
-                data.img_uuid = img_uuid;
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.residency_uuid = uuidString;
                 data.insertDate = new Date();
                 data.individual_uuid = individual.getIndividual_uuid();
                 data.location_uuid = locations.getLocation_uuid();
                 data.socialgroup_uuid = socialgroup.socialgroup_uuid;
-                data.visit_uuid = socialgroup.getVisit_uuid();
                 data.loc = locations.getLocation_uuid();
-                data.imgcomplete = 1;
-                data.omgcomplete = 1;
-                if (data!=null){
-                    data.migType=2;
-                }
                 if (data!=null){
                     data.startType=1;
                 }
@@ -242,17 +252,102 @@ public class ResidencyFragment extends Fragment {
             e.printStackTrace();
         }
 
+        try {
+            Death data = deathViewModel.find(individual.individual_uuid);
+            if (data != null) {
+//                data.visit_uuid = socialgroup.getVisit_uuid();
+//                data.img_uuid = img_uuid;
+//                data.omg_uuid = omg_uuid;
+                binding.setDeath(data);
+            } else {
+                data = new Death();
 
-        loadCodeData(binding.residencyComplete, "complete");
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.death_uuid = uuidString;
+                data.insertDate = new Date();
+                data.dob = individual.dob;
+                data.firstName = individual.getFirstName();
+                data.lastName = individual.getLastName();
+                data.gender = individual.getGender();
+                data.compno = locations.getCompno();
+                data.extId = individual.getExtId();
+                data.compname = locations.getLocationName();
+                data.individual_uuid = individual.getIndividual_uuid();
+                data.villname = level5Data.getName();
+                data.villcode = level5Data.getVillcode();
+                data.visit_uuid = socialgroup.getVisit_uuid();
+                data.vpmcomplete=1;
+                data.complete = 1;
+
+
+                binding.setDeath(data);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Inmigration data = inmigrationViewModel.find(individual.individual_uuid);
+            if (data != null) {
+                binding.setInmigration(data);
+            } else {
+                data = new Inmigration();
+
+                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.residency_uuid = binding.getResidency().residency_uuid;
+                data.insertDate = new Date();
+                data.individual_uuid = individual.getIndividual_uuid();
+                data.visit_uuid = socialgroup.getVisit_uuid();
+                data.recordedDate = binding.getResidency().endDate;
+                if (data!=null){
+                    data.migType=2;
+                }
+                data.complete = 1;
+
+
+                binding.setInmigration(data);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Outmigration data = outmigrationViewModel.find(individual.individual_uuid);
+            if (data != null) {
+                binding.setOutmigration(data);
+            } else {
+                data = new Outmigration();
+
+                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.residency_uuid = binding.getResidency().residency_uuid;
+                data.insertDate = new Date();
+                data.individual_uuid = individual.getIndividual_uuid();
+                data.visit_uuid = socialgroup.getVisit_uuid();
+                data.recordedDate = binding.getResidency().startDate;
+                data.complete = 1;
+
+
+                binding.setOutmigration(data);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        loadCodeData(binding.membershipComplete, "complete");
         loadCodeData(binding.starttype, "startType");
         loadCodeData(binding.endtype,  "endType");
         loadCodeData(binding.rltnHead,  "rltnhead");
         loadCodeData(binding.residencyImg,  "complete");
-        loadCodeData(binding.reason,  "reason");
-        loadCodeData(binding.origin,  "whereoutside");
-        loadCodeData(binding.migtype,  "migType");
-        loadCodeData(binding.destination,  "whereoutside");
-        loadCodeData(binding.reasonOut,  "reason");
+        loadCodeData(binding.img.reason,  "reason");
+        loadCodeData(binding.omg.reasonOut,  "reason");
+        loadCodeData(binding.img.origin,  "whereoutside");
+        loadCodeData(binding.img.migtype,  "migType");
+        loadCodeData(binding.omg.destination,  "whereoutside");
+        loadCodeData(binding.dth.dthDeathPlace, "deathPlace");
+        loadCodeData(binding.dth.dthDeathCause, "deathCause");
 
 
         binding.buttonSaveClose.setOnClickListener(v -> {
@@ -266,9 +361,89 @@ public class ResidencyFragment extends Fragment {
         });
 
         binding.setEventname(AppConstants.EVENT_RESIDENCY);
-        Handler.colorLayouts(requireContext(), binding.RESIDENCYLAYOUT);
+        Handler.colorLayouts(requireContext(), binding.MAINLAYOUT);
         View view = binding.getRoot();
         return view;
+    }
+
+    private void save(boolean save, boolean close, ResidencyViewModel viewModel, DeathViewModel deathViewModel, InmigrationViewModel inmigrationViewModel,OutmigrationViewModel outmigrationViewModel) {
+
+        if (save) {
+            Residency finalData = binding.getResidency();
+
+            boolean isOmg = false;
+
+            Log.d("DEBUG", "locationExtid: " + binding.locationExtid);
+            Log.d("DEBUG", "currentLoc: " + binding.currentLoc);
+            if (!binding.locationExtid.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim())) {
+                isOmg = true;
+                binding.currentLoc.setError("Move Individual Out of His/Her Previous Compound");
+            }
+            Log.d("DEBUG", "isOmg: " + isOmg);
+
+
+
+            if(isOmg){//if there is an error, do not continue
+                MoveInErrorFragment dialog = MoveInErrorFragment.newInstance(individual,residency,locations,socialgroup);
+                dialog.show(requireActivity().getSupportFragmentManager(), "dialog");
+                return;
+            }
+
+            final boolean validateOnComplete = true;//finalData.complete == 1;
+            boolean hasErrors = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
+
+            if (hasErrors) {
+                Toast.makeText(requireContext(), "All fields are Required", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+
+            if (finalData.individual_uuid != null) {
+
+                if (finalData.endType == 3) {
+
+                    hasErrors = hasErrors || new Handler().hasInvalidInput(binding.dth.MAINLAYOUT, validateOnComplete, false);
+
+                    final Death dth = binding.getDeath();
+                    dth.complete = 1;
+                    deathViewModel.add(dth);
+                }
+
+                if (finalData.startType == 1 && binding.getResidency().img==1) {
+
+                    hasErrors = hasErrors || new Handler().hasInvalidInput(binding.img.MAINLAYOUT, validateOnComplete, false);
+
+                    final Inmigration img = binding.getInmigration();
+                    img.complete = 1;
+                    inmigrationViewModel.add(img);
+
+                }
+
+                if (finalData.endType == 2) {
+
+                    hasErrors = hasErrors || new Handler().hasInvalidInput(binding.omg.MAINLAYOUT, validateOnComplete, false);
+
+                    final Outmigration omg = binding.getOutmigration();
+                    omg.complete = 1;
+                    outmigrationViewModel.add(omg);
+
+                }
+
+
+            }
+            if (hasErrors) {
+                Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            viewModel.add(finalData);
+            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+
+        }
+        if (close) {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
+        }
     }
 
     private void save(boolean save, boolean close, ResidencyViewModel viewModel) {
@@ -295,7 +470,7 @@ public class ResidencyFragment extends Fragment {
             }
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.RESIDENCYLAYOUT, validateOnComplete, false);
+            boolean hasErrors = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
@@ -356,6 +531,7 @@ public class ResidencyFragment extends Fragment {
     private enum DATE_BUNDLES {
         INSERTDATE ("INSERTDATE"),
         STARTDATE ("STARTDATE"),
+        DEATHDATE("DEATHDATE"),
         ENDDATE ("ENDDATE");
 
         private final String bundleKey;

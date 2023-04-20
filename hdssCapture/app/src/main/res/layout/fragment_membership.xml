@@ -340,7 +340,7 @@
                         android:orientation="vertical">
 
                         <include
-                            android:id="@+id/death"
+                            android:id="@+id/dth"
                             layout="@layout/fragment_membership_dth"
                             bind:death="@{death}" />
 
@@ -353,7 +353,7 @@
                         android:orientation="vertical">
 
                         <include
-                            android:id="@+id/inmigration"
+                            android:id="@+id/img"
                             layout="@layout/fragment_membership_img"
                             bind:inmigration="@{inmigration}" />
 
@@ -366,7 +366,7 @@
                         android:orientation="vertical">
 
                         <include
-                            android:id="@+id/outmigration"
+                            android:id="@+id/omg"
                             layout="@layout/fragment_membership_omg"
                             bind:outmigration="@{outmigration}" />
 
@@ -384,7 +384,7 @@
                     android:text="@string/form_complete"/>
 
                 <Spinner
-                    android:id="@+id/individual_complete"
+                    android:id="@+id/membership_complete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     selection="@{residency.complete}"

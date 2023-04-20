@@ -8,8 +8,10 @@ import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outcome;
+import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
@@ -76,10 +78,10 @@ public interface ApiDao {
     Call<DataWrapper<Socialgroup>> sendSocialgroupdata(@Body DataWrapper<Socialgroup> dataModal);
 
     @POST("/api/inmigration")
-    Call<DataWrapper<Residency>> sendInmigrationdata(@Body DataWrapper<Residency> dataModal);
+    Call<DataWrapper<Inmigration>> sendInmigrationdata(@Body DataWrapper<Inmigration> dataModal);
 
     @POST("/api/outmigration")
-    Call<DataWrapper<Residency>> sendOutmigrationdata(@Body DataWrapper<Residency> dataModal);
+    Call<DataWrapper<Outmigration>> sendOutmigrationdata(@Body DataWrapper<Outmigration> dataModal);
 
     @POST("/api/death")
     Call<DataWrapper<Death>> sendDeathdata(@Body DataWrapper<Death> dataModal);

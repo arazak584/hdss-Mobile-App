@@ -180,6 +180,45 @@
             android:layout_height="wrap_content"
             android:textSize="20sp" />
 
+        <Button
+            android:id="@+id/buttonSendResidency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_residency"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendResidency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonSendImg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_inmigration"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendImg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonSendOmg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_outmigration"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendOmg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
 
     </LinearLayout>
 </ScrollView>
