@@ -618,6 +618,7 @@ public class Pregnancyoutcome extends BaseObservable {
             rec_ipt = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }
@@ -635,6 +636,7 @@ public class Pregnancyoutcome extends BaseObservable {
             chd_weight = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }

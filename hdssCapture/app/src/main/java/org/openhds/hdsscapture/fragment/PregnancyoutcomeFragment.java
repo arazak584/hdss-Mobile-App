@@ -175,17 +175,22 @@ public class PregnancyoutcomeFragment extends Fragment {
 
 
         try {
-            Outcome data = outcomeViewModel.find(individual.individual_uuid);
+            final String child_id = individual.individual_uuid + AppConstants.CHILD1 + + eventForm.event_name_id;
+            Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 binding.setPregoutcome1(data);
             } else {
                 data = new Outcome();
 
-                String ch1_uuid = UUID.randomUUID().toString();
-                String child1String = ch1_uuid.toString().replaceAll("-", "");
-                data.uuid = child1String;
+                data.mother_uuid = individual.getIndividual_uuid();
+                data.child_idx = AppConstants.CHILD1;
+
+                data.vis_number = eventForm.event_name_id;
+
+                data.child_screen = data.mother_uuid + data.child_idx;
+                data.uuid = data.child_screen+data.vis_number;
                 data.complete = 1;
-                data.mother_uuid=individual.getIndividual_uuid();
+
 
                 binding.setPregoutcome1(data);
             }
@@ -194,18 +199,21 @@ public class PregnancyoutcomeFragment extends Fragment {
         }
 
         try {
-            Outcome data = outcomeViewModel.find(individual.individual_uuid);
+            final String child_id = individual.individual_uuid + AppConstants.CHILD2 + + eventForm.event_name_id;
+            Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 binding.setPregoutcome2(data);
             } else {
                 data = new Outcome();
 
-                String ch2_uuid = UUID.randomUUID().toString();
-                String child2String = ch2_uuid.toString().replaceAll("-", "");
-                data.uuid = child2String;
-                data.complete = 1;
-                data.mother_uuid=individual.getIndividual_uuid();
+                data.mother_uuid = individual.getIndividual_uuid();
+                data.child_idx = AppConstants.CHILD2;
 
+                data.vis_number = eventForm.event_name_id;
+
+                data.child_screen = data.mother_uuid + data.child_idx;
+                data.uuid = data.child_screen+data.vis_number;
+                data.complete = 1;
 
                 binding.setPregoutcome2(data);
             }
@@ -214,17 +222,21 @@ public class PregnancyoutcomeFragment extends Fragment {
         }
 
         try {
-            Outcome data = outcomeViewModel.find(individual.individual_uuid);
+            final String child_id = individual.individual_uuid + AppConstants.CHILD3 + + eventForm.event_name_id;
+            Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 binding.setPregoutcome3(data);
             } else {
                 data = new Outcome();
 
-                String ch3_uuid = UUID.randomUUID().toString();
-                String child3String = ch3_uuid.toString().replaceAll("-", "");
-                data.uuid = child3String;
+                data.mother_uuid = individual.getIndividual_uuid();
+                data.child_idx = AppConstants.CHILD3;
+
+                data.vis_number = eventForm.event_name_id;
+
+                data.child_screen = data.mother_uuid + data.child_idx;
+                data.uuid = data.child_screen+data.vis_number;
                 data.complete = 1;
-                data.mother_uuid=individual.getIndividual_uuid();
 
                 binding.setPregoutcome3(data);
             }
@@ -233,17 +245,21 @@ public class PregnancyoutcomeFragment extends Fragment {
         }
 
         try {
-            Outcome data = outcomeViewModel.find(individual.individual_uuid);
+            final String child_id = individual.individual_uuid + AppConstants.CHILD4 + + eventForm.event_name_id;
+            Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 binding.setPregoutcome4(data);
             } else {
                 data = new Outcome();
 
-                String ch4_uuid = UUID.randomUUID().toString();
-                String child4String = ch4_uuid.toString().replaceAll("-", "");
-                data.uuid = child4String;
+                data.mother_uuid = individual.getIndividual_uuid();
+                data.child_idx = AppConstants.CHILD4;
+
+                data.vis_number = eventForm.event_name_id;
+
+                data.child_screen = data.mother_uuid + data.child_idx;
+                data.uuid = data.child_screen+data.vis_number;
                 data.complete = 1;
-                data.mother_uuid=individual.getIndividual_uuid();
 
 
                 binding.setPregoutcome4(data);
@@ -309,11 +325,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus1.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome1();
-                    String ch1_uuid = UUID.randomUUID().toString();
-                    String child1String = ch1_uuid.toString().replaceAll("-", "");
-                    inf.uuid = child1String;
                     inf.complete = 1;
-                    inf.mother_uuid=individual.getIndividual_uuid();
                     outcomeViewModel.add(inf);
                 }
 
@@ -322,11 +334,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus2.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome1();
-                    String ch1_uuid = UUID.randomUUID().toString();
-                    String child1String = ch1_uuid.toString().replaceAll("-", "");
-                    inf.uuid = child1String;
                     inf.complete = 1;
-                    inf.mother_uuid=individual.getIndividual_uuid();
                     outcomeViewModel.add(inf);
 
                 }
@@ -336,11 +344,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus3.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome1();
-                    String ch1_uuid = UUID.randomUUID().toString();
-                    String child1String = ch1_uuid.toString().replaceAll("-", "");
-                    inf.uuid = child1String;
                     inf.complete = 1;
-                    inf.mother_uuid=individual.getIndividual_uuid();
                     outcomeViewModel.add(inf);
 
                 }
@@ -350,11 +354,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus4.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome1();
-                    String ch1_uuid = UUID.randomUUID().toString();
-                    String child1String = ch1_uuid.toString().replaceAll("-", "");
-                    inf.uuid = child1String;
                     inf.complete = 1;
-                    inf.mother_uuid=individual.getIndividual_uuid();
                     outcomeViewModel.add(inf);
 
                 }

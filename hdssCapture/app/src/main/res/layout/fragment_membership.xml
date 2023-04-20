@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="individual"
+            type="org.openhds.hdsscapture.entity.Individual" />
+
+        <variable
+            name="residency"
+            type="org.openhds.hdsscapture.entity.Residency" />
+
+        <variable
+            name="inmigration"
+            type="org.openhds.hdsscapture.entity.Inmigration" />
+
+        <variable
+            name="outmigration"
+            type="org.openhds.hdsscapture.entity.Outmigration" />
+
+        <variable
+            name="death"
+            type="org.openhds.hdsscapture.entity.Death" />
+
+        <variable
+            name="eventname"
+            type="String" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".fragment.ResidencyFragment">
+
+        <ScrollView
+            android:id="@+id/MAIN_LAYOUT"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/membership"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/colorPrimaryDark" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/fw"
+                    android:text="@string/fw">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/fw"
+                        android:text="@={residency.fw_uuid}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <Button
+                    android:id="@+id/button_residency_insertDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/visitDate"
+                    tools:ignore="DuplicateSpeakableTextCheck"
+                    app:icon="@drawable/ic_baseline_calendar_month_24" />
+
+                <TextView
+                    android:id="@+id/residency_insertDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:minHeight="40dp"
+                    android:text="@={residency.insertDate}"
+                    android:textSize="20sp"
+                    tools:ignore="TextContrastCheck" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/uuid"
+                    android:text="@string/uuid">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/uuid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={residency.residency_uuid}"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/ind_extid"
+                    android:text="@string/ind_extid">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/extid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={residency.individual_uuid}"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/location_select"
+                    android:text="@string/location_select">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/location_extid"
+                        android:text="@={residency.location_uuid}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/currentLoc"
+                    android:text="@string/currentLoc">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/currentLoc"
+                        android:text="@={residency.loc}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/button_change_hh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/changehh"
+                    tools:ignore="DuplicateSpeakableTextCheck" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/household_select"
+                    android:text="@string/household_select">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/socialgroup_uuid"
+                        android:text="@={residency.socialgroup_uuid}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:text="@string/starttype"/>
+
+                <Spinner
+                    android:id="@+id/starttype"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{residency.startType}"
+                    android:onItemSelected="@{residency::setStartType}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="10dp"/>
+
+                <Button
+                    android:id="@+id/button_residency_startDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/startdate"
+                    tools:ignore="DuplicateSpeakableTextCheck"
+                    app:icon="@drawable/ic_baseline_calendar_month_24" />
+
+                <TextView
+                    android:id="@+id/editText_startDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:minHeight="40dp"
+                    android:text="@={residency.startDate}"
+                    android:textSize="20sp"
+                    tools:ignore="TextContrastCheck" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:text="@string/endtype"/>
+
+                <Spinner
+                    android:id="@+id/endtype"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{residency.endType}"
+                    android:onItemSelected="@{residency::setEndType}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="10dp"/>
+
+                <Button
+                    goneUnless="@{residency.endType==2 || residency.endType==3}"
+                    android:id="@+id/button_residency_endDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/enddate"
+                    tools:ignore="DuplicateSpeakableTextCheck"
+                    app:icon="@drawable/ic_baseline_calendar_month_24" />
+
+                <TextView
+                    goneUnless="@{residency.endType==2 || residency.endType==3}"
+                    android:id="@+id/editText_endDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:minHeight="40dp"
+                    android:text="@={residency.endDate}"
+                    android:textSize="20sp"
+                    tools:ignore="TextContrastCheck" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:text="@string/rltn_head"/>
+
+                <Spinner
+                    android:id="@+id/rltn_head"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    selection="@{residency.rltn_head}"
+                    android:onItemSelected="@{residency::setRltn_head}"
+                    android:textColor="#000301"
+                    android:padding="10dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/new_img"/>
+
+                <Spinner
+                    android:id="@+id/residency_img"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{residency.img}"
+                    android:onItemSelected="@{residency::setImg}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="15dp"/>
+
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        goneUnless="@{residency.endType==3}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <include
+                            android:id="@+id/death"
+                            layout="@layout/fragment_membership_dth"
+                            bind:death="@{death}" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        goneUnless="@{residency.img==1 &amp; residency.startType==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <include
+                            android:id="@+id/inmigration"
+                            layout="@layout/fragment_membership_img"
+                            bind:inmigration="@{inmigration}" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        goneUnless="@{residency.endType==2}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <include
+                            android:id="@+id/outmigration"
+                            layout="@layout/fragment_membership_omg"
+                            bind:outmigration="@{outmigration}" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/form_complete"/>
+
+                <Spinner
+                    android:id="@+id/individual_complete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{residency.complete}"
+                    android:onItemSelected="@{residency::setComplete}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="15dp"/>
+
+            </LinearLayout>
+            </LinearLayout>
+
+
+
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/buttonSaveClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="@string/saveclosedata" />
+
+            <Button
+                android:id="@+id/buttonClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="@string/closedata" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+</layout>

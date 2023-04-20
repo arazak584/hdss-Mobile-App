@@ -27,6 +27,6 @@ OutcomeDao {
     @Query("SELECT * FROM outcome WHERE complete=1")
     List<Outcome> retrieveToSync();
 
-    @Query("SELECT * FROM outcome where mother_uuid=:id")
+    @Query("SELECT * FROM outcome where uuid=:id")
     Outcome find(String id);
 }

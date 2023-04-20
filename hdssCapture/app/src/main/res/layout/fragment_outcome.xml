@@ -560,10 +560,11 @@
                     android:gravity="left"
                     android:textColor="#000301"
                     selection="@{pregoutcome.rec_ipt}"
-                    android:onItemSelected="@{pregoutcome::setRec_anc}"
+                    android:onItemSelected="@{pregoutcome::setRec_ipt}"
                     android:padding="10dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{pregoutcome.rec_ipt==1}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -573,7 +574,7 @@
                     android:text="@string/first_recs">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        goneUnless="@{pregoutcome.rec_ipt==1}"
+
                         android:id="@+id/first_rec"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -634,6 +635,7 @@
                     android:padding="10dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{pregoutcome.chd_weight==1}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -643,7 +645,7 @@
                     android:text="@string/weig_hcard">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        goneUnless="@{pregoutcome.chd_weight==1}"
+
                         android:id="@+id/weig_hcard"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

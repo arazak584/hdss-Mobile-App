@@ -15,7 +15,6 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
-import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 @Entity(tableName = "outcome")
@@ -32,6 +31,15 @@ public class Outcome extends BaseObservable {
     public String childuuid;
 
     @Expose
+    public Integer child_idx;
+
+    @Expose
+    public Integer vis_number;
+
+    @Expose
+    public String child_screen;
+
+    @Expose
     public String mother_uuid;
 
     @Expose
@@ -39,6 +47,8 @@ public class Outcome extends BaseObservable {
 
     @Expose
     public Integer complete;
+
+
 
     public Outcome(){}
 
@@ -96,8 +106,9 @@ public class Outcome extends BaseObservable {
             type = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
+            //notifyPropertyChanged(BR._all);
         }
 
     }
+
 }
