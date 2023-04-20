@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="sociodemo"
+            type="org.openhds.hdsscapture.entity.HdssSociodemo" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/MAIN_LAYOUT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/occupation" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/JOB_SCORRES_SOCIO" />
+
+        <Spinner
+            android:id="@+id/JOB_SCORRES"
+            selection="@{sociodemo.job_scorres}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onItemSelected="@{sociodemo::setJob_scorres}" />
+
+        <LinearLayout
+            goneUnless="@{(sociodemo.job_scorres != 0 &amp;&amp; sociodemo.job_scorres &lt; 16) || sociodemo.job_scorres==66}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_other_text" />
+
+            <EditText
+                android:id="@+id/JOB_OTHR_SPFY_SCORRES"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="@={sociodemo.job_othr_spfy_scorres}"
+                tools:ignore="Autofill,LabelFor" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/PTR_SCORRES_SOCIO" />
+
+        <Spinner
+            android:id="@+id/PTR_SCORRES"
+            selection="@{sociodemo.ptr_scorres}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onItemSelected="@{sociodemo::setPtr_scorres}" />
+
+        <LinearLayout
+            goneUnless="@{(sociodemo.ptr_scorres != 0 &amp;&amp; sociodemo.ptr_scorres &lt; 16) || sociodemo.ptr_scorres==66}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_other_text" />
+
+            <EditText
+                android:id="@+id/PTR_OTHR_SPFY_SCORRES"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="@={sociodemo.ptr_othr_spfy_scorres}"
+                tools:ignore="Autofill,LabelFor" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</layout>

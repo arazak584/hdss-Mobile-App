@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="sociodemo"
+            type="org.openhds.hdsscapture.entity.HdssSociodemo" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/MAIN_LAYOUT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/health_behave" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/SMOKE_OECOCCUR_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/SMOKE_OECOCCUR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setSmoke_oecoccur}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/SMOKE_OECOCCUR_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.smoke_oecoccur==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/SMOKE_OECOCCUR_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.smoke_oecoccur==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.smoke_oecoccur==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <LinearLayout
+            goneUnless="@{sociodemo.smoke_oecoccur==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/SMOKE_IN_OECDOSFRQ_SOCIO" />
+
+            <Spinner
+                android:id="@+id/SMOKE_IN_OECDOSFRQ"
+                selection="@{sociodemo.smoke_in_oecdosfrq}"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:onItemSelected="@{sociodemo::setSmoke_in_oecdosfrq}" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/SMOKE_HHOLD_OECOCCUR_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/SMOKE_HHOLD_OECOCCUR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setSmoke_hhold_oecoccur}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/SMOKE_HHOLD_OECOCCUR_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.smoke_hhold_oecoccur==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/SMOKE_HHOLD_OECOCCUR_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.smoke_hhold_oecoccur==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.smoke_hhold_oecoccur==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <LinearLayout
+            goneUnless="@{sociodemo.smoke_hhold_oecoccur==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/SMOKE_HHOLD_IN_OECDOSFRQ_SOCIO" />
+
+            <Spinner
+                android:id="@+id/SMOKE_HHOLD_IN_OECDOSFRQ"
+                selection="@{sociodemo.smoke_hhold_in_oecdosfrq}"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:onItemSelected="@{sociodemo::setSmoke_hhold_in_oecdosfrq}" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/CHEW_OECOCCUR_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/CHEW_OECOCCUR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setChew_oecoccur}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/CHEW_OECOCCUR_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.chew_oecoccur==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/CHEW_OECOCCUR_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.chew_oecoccur==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.chew_oecoccur==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/CHEW_BNUT_OECOCCUR_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/CHEW_BNUT_OECOCCUR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setChew_bnut_oecoccur}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/CHEW_BNUT_OECOCCUR_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.chew_bnut_oecoccur==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/CHEW_BNUT_OECOCCUR_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.chew_bnut_oecoccur==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.chew_bnut_oecoccur==0}"
+                android:tag="0"/>
+
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/DRINK_OECOCCUR_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/DRINK_OECOCCUR"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setDrink_oecoccur}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/DRINK_OECOCCUR_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.drink_oecoccur==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/DRINK_OECOCCUR_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.drink_oecoccur==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:id="@+id/DRINK_OECOCCUR_7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.drink_oecoccur==7}"
+                android:tag="7"
+                android:text="@string/text_na1" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.drink_oecoccur==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/plan_delivery" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/PD_BIRTH_OHOLOC_SOCIO" />
+
+        <Spinner
+            android:id="@+id/PD_BIRTH_OHOLOC"
+            selection="@{sociodemo.pd_birth_oholoc}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onItemSelected="@{sociodemo::setPd_birth_oholoc}" />
+
+        <LinearLayout
+            goneUnless="@{sociodemo.pd_birth_oholoc==95 || sociodemo.pd_birth_oholoc==96}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_other_text" />
+
+            <EditText
+                android:id="@+id/PD_BIRTH_OTHR_SPFY_OHOLOC"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="@={sociodemo.pd_birth_othr_spfy_oholoc}"
+                tools:ignore="Autofill,LabelFor" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/PD_DM_SCORRES_SOCIO" />
+
+        <Spinner
+            android:id="@+id/PD_DM_SCORRES"
+            selection="@{sociodemo.pd_dm_scorres}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onItemSelected="@{sociodemo::setPd_dm_scorres}" />
+
+        <LinearLayout
+            goneUnless="@{sociodemo.pd_dm_scorres==66}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_other_text" />
+
+            <EditText
+                android:id="@+id/PD_DM_REL_SPFY_SCORRES"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="@={sociodemo.pd_dm_rel_spfy_scorres}"
+                tools:ignore="Autofill,LabelFor" />
+        </LinearLayout>
+    </LinearLayout>
+
+</layout>

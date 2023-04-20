@@ -1,0 +1,831 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="sociodemo"
+            type="org.openhds.hdsscapture.entity.HdssSociodemo" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/MAIN_LAYOUT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/land_asset" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/LAND_FCORRES_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/LAND_FCORRES"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setLand_fcorres}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/LAND_FCORRES_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.land_fcorres==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/LAND_FCORRES_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.land_fcorres==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.land_fcorres==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <LinearLayout
+            goneUnless="@{sociodemo.land_fcorres==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/LAND_USE_FCORRES_SOCIO" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/LAND_USE_FCORRES_1_SOCIO" />
+
+            <RadioGroup
+                android:id="@+id/LAND_USE_FCORRES_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{sociodemo::setLand_use_fcorres_1}"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/LAND_USE_FCORRES_1_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_1==1}"
+                    android:tag="1"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/LAND_USE_FCORRES_1_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_1==2}"
+                    android:tag="2"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_1==0}"
+                    android:tag="0"
+                    android:visibility="invisible" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/LAND_USE_FCORRES_2_SOCIO" />
+
+            <RadioGroup
+                android:id="@+id/LAND_USE_FCORRES_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{sociodemo::setLand_use_fcorres_2}"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/LAND_USE_FCORRES_2_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_2==1}"
+                    android:tag="1"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/LAND_USE_FCORRES_2_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_2==2}"
+                    android:tag="2"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_2==0}"
+                    android:tag="0"
+                    android:visibility="invisible" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/LAND_USE_FCORRES_3_SOCIO" />
+
+            <RadioGroup
+                android:id="@+id/LAND_USE_FCORRES_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{sociodemo::setLand_use_fcorres_3}"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/LAND_USE_FCORRES_3_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_3==1}"
+                    android:tag="1"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/LAND_USE_FCORRES_3_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_3==2}"
+                    android:tag="2"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_3==0}"
+                    android:tag="0"
+                    android:visibility="invisible" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/LAND_USE_FCORRES_4_SOCIO" />
+
+            <RadioGroup
+                android:id="@+id/LAND_USE_FCORRES_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{sociodemo::setLand_use_fcorres_4}"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/LAND_USE_FCORRES_4_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_4==1}"
+                    android:tag="1"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/LAND_USE_FCORRES_4_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_4==2}"
+                    android:tag="2"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_4==0}"
+                    android:tag="0"
+                    android:visibility="invisible" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/LAND_USE_FCORRES_5_SOCIO" />
+
+            <RadioGroup
+                android:id="@+id/LAND_USE_FCORRES_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{sociodemo::setLand_use_fcorres_5}"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/LAND_USE_FCORRES_5_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_5==1}"
+                    android:tag="1"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/LAND_USE_FCORRES_5_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_5==2}"
+                    android:tag="2"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_5==0}"
+                    android:tag="0"
+                    android:visibility="invisible" />
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/LAND_USE_FCORRES_88_SOCIO" />
+
+            <RadioGroup
+                android:id="@+id/LAND_USE_FCORRES_88"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{sociodemo::setLand_use_fcorres_88}"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/LAND_USE_FCORRES_88_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_88==1}"
+                    android:tag="1"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/LAND_USE_FCORRES_88_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_88==2}"
+                    android:tag="2"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.land_use_fcorres_88==0}"
+                    android:tag="0"
+                    android:visibility="invisible" />
+            </RadioGroup>
+
+            <LinearLayout
+                goneUnless="@{sociodemo.land_use_fcorres_88==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ANIMAL_OTHR_FCORRES_SOCIO_SPFY" />
+
+                <EditText
+                    android:id="@+id/LAND_USE_SPFY_FCORRES_88"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:text="@={sociodemo.land_use_spfy_fcorres_88}"
+                    tools:ignore="Autofill,LabelFor" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/LIVESTOCK_FCORRES_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/LIVESTOCK_FCORRES"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setLivestock_fcorres}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/LIVESTOCK_FCORRES_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.livestock_fcorres==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/LIVESTOCK_FCORRES_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.livestock_fcorres==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.livestock_fcorres==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <LinearLayout
+            goneUnless="@{sociodemo.livestock_fcorres==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/CATTLE_FCORRES_SOCIO" />
+
+            <RadioGroup
+                android:id="@+id/CATTLE_FCORRES"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{sociodemo::setCattle_fcorres}"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/CATTLE_FCORRES_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.cattle_fcorres==1}"
+                    android:tag="1"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/CATTLE_FCORRES_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.cattle_fcorres==2}"
+                    android:tag="2"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.cattle_fcorres==0}"
+                    android:tag="0"
+                    android:visibility="invisible" />
+            </RadioGroup>
+
+            <LinearLayout
+                goneUnless="@{sociodemo.cattle_fcorres==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/cattle_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_other" />
+
+                <EditText
+                    android:id="@+id/CATTLE_NUM_FCORRES"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={sociodemo.cattle_num_fcorres}"
+                    tools:ignore="Autofill,LabelFor" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/GOAT_FCORRES_SOCIO" />
+
+            <RadioGroup
+                android:id="@+id/GOAT_FCORRES"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{sociodemo::setGoat_fcorres}"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/GOAT_FCORRES_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.goat_fcorres==1}"
+                    android:tag="1"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/GOAT_FCORRES_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.goat_fcorres==2}"
+                    android:tag="2"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.goat_fcorres==0}"
+                    android:tag="0"
+                    android:visibility="invisible" />
+            </RadioGroup>
+
+            <LinearLayout
+                goneUnless="@{sociodemo.goat_fcorres==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_other" />
+
+                <EditText
+                    android:id="@+id/GOAT_NUM_FCORRES"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={sociodemo.goat_num_fcorres}"
+                    tools:ignore="Autofill,LabelFor" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/SHEEP_FCORRES_SOCIO" />
+
+            <RadioGroup
+                android:id="@+id/SHEEP_FCORRES"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{sociodemo::setSheep_fcorres}"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/SHEEP_FCORRES_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.sheep_fcorres==1}"
+                    android:tag="1"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/SHEEP_FCORRES_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.sheep_fcorres==2}"
+                    android:tag="2"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.sheep_fcorres==0}"
+                    android:tag="0"
+                    android:visibility="invisible" />
+            </RadioGroup>
+
+            <LinearLayout
+                goneUnless="@{sociodemo.sheep_fcorres==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_other" />
+
+                <EditText
+                    android:id="@+id/SHEEP_NUM_FCORRES"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={sociodemo.sheep_num_fcorres}"
+                    tools:ignore="Autofill,LabelFor" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/POULTRY_FCORRES_SOCIO" />
+
+            <RadioGroup
+                android:id="@+id/POULTRY_FCORRES"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{sociodemo::setPoultry_fcorres}"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/POULTRY_FCORRES_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.poultry_fcorres==1}"
+                    android:tag="1"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/POULTRY_FCORRES_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.poultry_fcorres==2}"
+                    android:tag="2"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.poultry_fcorres==0}"
+                    android:tag="0"
+                    android:visibility="invisible" />
+            </RadioGroup>
+
+            <LinearLayout
+                goneUnless="@{sociodemo.poultry_fcorres==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_other" />
+
+                <EditText
+                    android:id="@+id/POULTRY_NUM_FCORRES"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={sociodemo.poultry_num_fcorres}"
+                    tools:ignore="Autofill,LabelFor" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/PIG_FCORRES_SOCIO" />
+
+            <RadioGroup
+                android:id="@+id/PIG_FCORRES"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{sociodemo::setPig_fcorres}"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/PIG_FCORRES_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.pig_fcorres==1}"
+                    android:tag="1"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/PIG_FCORRES_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.pig_fcorres==2}"
+                    android:tag="2"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.pig_fcorres==0}"
+                    android:tag="0"
+                    android:visibility="invisible" />
+            </RadioGroup>
+
+            <LinearLayout
+                goneUnless="@{sociodemo.pig_fcorres==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/pig_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/item_other"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/PIG_NUM_FCORRES"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={sociodemo.pig_num_fcorres}"
+                    tools:ignore="Autofill,LabelFor" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/DONKEY_FCORRES_SOCIO" />
+
+            <RadioGroup
+                android:id="@+id/DONKEY_FCORRES"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{sociodemo::setDonkey_fcorres}"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/DONKEY_FCORRES_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.donkey_fcorres==1}"
+                    android:tag="1"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/DONKEY_FCORRES_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.donkey_fcorres==2}"
+                    android:tag="2"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.donkey_fcorres==0}"
+                    android:tag="0"
+                    android:visibility="invisible" />
+            </RadioGroup>
+
+            <LinearLayout
+                goneUnless="@{sociodemo.donkey_fcorres==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_other" />
+
+                <EditText
+                    android:id="@+id/DONKEY_NUM_FCORRES"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={sociodemo.donkey_num_fcorres}"
+                    tools:ignore="Autofill,LabelFor" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/HORSE_FCORRES_SOCIO" />
+
+            <RadioGroup
+                android:id="@+id/HORSE_FCORRES"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{sociodemo::setHorse_fcorres}"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/HORSE_FCORRES_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.horse_fcorres==1}"
+                    android:tag="1"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/HORSE_FCORRES_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.horse_fcorres==2}"
+                    android:tag="2"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.horse_fcorres==0}"
+                    android:tag="0"
+                    android:visibility="invisible" />
+            </RadioGroup>
+
+            <LinearLayout
+                goneUnless="@{sociodemo.horse_fcorres==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_other" />
+
+                <EditText
+                    android:id="@+id/HORSE_NUM_FCORRES"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={sociodemo.horse_num_fcorres}"
+                    tools:ignore="Autofill,LabelFor" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ANIMAL_OTHR_FCORRES_SOCIO" />
+
+            <RadioGroup
+                android:id="@+id/ANIMAL_OTHR_FCORRES"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{sociodemo::setAnimal_othr_fcorres}"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/ANIMAL_OTHR_FCORRES_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.animal_othr_fcorres==1}"
+                    android:tag="1"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/ANIMAL_OTHR_FCORRES_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.animal_othr_fcorres==2}"
+                    android:tag="2"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.animal_othr_fcorres==0}"
+                    android:tag="0"
+                    android:visibility="invisible" />
+            </RadioGroup>
+
+            <LinearLayout
+                goneUnless="@{sociodemo.animal_othr_fcorres==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_other_88" />
+
+                <EditText
+                    android:id="@+id/ANIMAL_OTHR_SPFY_FCORRES"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:text="@={sociodemo.animal_othr_spfy_fcorres}"
+                    tools:ignore="Autofill,LabelFor" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/item_other_num" />
+
+                <EditText
+                    android:id="@+id/ANIMAL_OTHR_NUM_FCORRES"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={sociodemo.animal_othr_num_fcorres}"
+                    tools:ignore="Autofill,LabelFor" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

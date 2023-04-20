@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="sociodemo"
+            type="org.openhds.hdsscapture.entity.HdssSociodemo" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/MAIN_LAYOUT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/general_info" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/MARITAL_SCORRES_SOCIO" />
+
+        <Spinner
+            android:id="@+id/MARITAL_SCORRES"
+            selection="@{sociodemo.marital_scorres}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onItemSelected="@{sociodemo::setMarital_scorres}" />
+
+        <LinearLayout
+            goneUnless="@{sociodemo.marital_scorres==11}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/MARITAL_AGE_SOCIO" />
+
+            <EditText
+                android:id="@+id/MARITAL_AGE"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Provide best estimate"
+                android:inputType="number"
+                android:text="@={sociodemo.marital_age}" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/RELIGION_SCORRES_SOCIO" />
+
+        <Spinner
+            android:id="@+id/RELIGION_SCORRES"
+            selection="@{sociodemo.religion_scorres}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onItemSelected="@{sociodemo::setReligion_scorres}" />
+
+        <LinearLayout
+            goneUnless="@{sociodemo.religion_scorres==66}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/RELIGION_SPFY_SCORRES_SOCIO" />
+
+            <EditText
+                android:id="@+id/RELIGION_SPFY_SCORRES"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:text="@={sociodemo.religion_spfy_scorres}"
+                tools:ignore="Autofill,LabelFor" />
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/CETHNIC_SOCIO" />
+
+        <Spinner
+            android:id="@+id/CETHNIC"
+            selection="@{sociodemo.cethnic}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onItemSelected="@{sociodemo::setCethnic}" />
+
+        <LinearLayout
+            goneUnless="@{sociodemo.cethnic==66}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/OTHR_TRB_SPFY_CETHNIC_SOCIO" />
+
+            <EditText
+                android:id="@+id/OTHR_TRB_SPFY_CETHNIC"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="@={sociodemo.othr_trb_spfy_cethnic}"
+                tools:ignore="Autofill,LabelFor" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/size_hh" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/HEAD_HH_FCORRES_SOCIO" />
+
+        <Spinner
+            android:id="@+id/HEAD_HH_FCORRES"
+            selection="@{sociodemo.head_hh_fcorres}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onItemSelected="@{sociodemo::setHead_hh_fcorres}" />
+
+        <LinearLayout
+            goneUnless="@{sociodemo.head_hh_fcorres==66}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/HEAD_HH_SPFY_FCORRES_SOCIO" />
+
+            <EditText
+                android:id="@+id/HEAD_HH_SPFY_FCORRES"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:text="@={sociodemo.head_hh_spfy_fcorres}"
+                tools:ignore="Autofill,LabelFor" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/HOUSE_OCC_TOT_FCORRES_SOCIO" />
+
+        <EditText
+            android:id="@+id/HOUSE_OCC_TOT_FCORRES"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"
+            android:text="@={sociodemo.house_occ_tot_fcorres}"
+            tools:ignore="Autofill,LabelFor" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/HOUSE_OCC_LT5_FCORRES_SOCIO" />
+
+        <EditText
+            android:id="@+id/HOUSE_OCC_LT5_FCORRES"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"
+            android:text="@={sociodemo.house_occ_lt5_fcorres}"
+            tools:ignore="Autofill,LabelFor" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/HOUSE_OCC_GE5_FCORRES_SOCIO" />
+
+        <TextView
+            android:id="@+id/HOUSE_OCC_GE5_FCORRES"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:text="@={sociodemo.house_occ_ge5_fcorres}"
+            android:textSize="20sp"
+            tools:ignore="Autofill,LabelFor" />
+    </LinearLayout>
+
+</layout>

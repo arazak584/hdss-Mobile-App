@@ -1,0 +1,778 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="sociodemo"
+            type="org.openhds.hdsscapture.entity.HdssSociodemo" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/MAIN_LAYOUT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/exposure" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOVE_FCORRES_SOCIO" />
+
+        <Spinner
+            android:id="@+id/STOVE_FCORRES"
+            selection="@{sociodemo.stove_fcorres}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onItemSelected="@{sociodemo::setStove_fcorres}" />
+
+        <LinearLayout
+            goneUnless="@{sociodemo.stove_fcorres==66}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_other" />
+
+            <EditText
+                android:id="@+id/STOVE_SPFY_FCORRES"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="@={sociodemo.stove_spfy_fcorres}"
+                tools:ignore="Autofill,LabelFor" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOVE_FUEL_FCORRES_SOCIO" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/STOVE_FUEL_FCORRES_1_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/STOVE_FUEL_FCORRES_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setStove_fuel_fcorres_1}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_1_YES"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_1==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_1_NO"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_1==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_1==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOVE_FUEL_FCORRES_2_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/STOVE_FUEL_FCORRES_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setStove_fuel_fcorres_2}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_2_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_2==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_2_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_2==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_2==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOVE_FUEL_FCORRES_3_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/STOVE_FUEL_FCORRES_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setStove_fuel_fcorres_3}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_3_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_3==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_3_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_3==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_3==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOVE_FUEL_FCORRES_4_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/STOVE_FUEL_FCORRES_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setStove_fuel_fcorres_4}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_4_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_4==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_4_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_4==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_4==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOVE_FUEL_FCORRES_5_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/STOVE_FUEL_FCORRES_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setStove_fuel_fcorres_5}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_5_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_5==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_5_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_5==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_5==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOVE_FUEL_FCORRES_6_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/STOVE_FUEL_FCORRES_6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setStove_fuel_fcorres_6}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_6_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_6==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_6_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_6==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_6==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOVE_FUEL_FCORRES_7_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/STOVE_FUEL_FCORRES_7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setStove_fuel_fcorres_7}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_7_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_7==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_7_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_7==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_7==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOVE_FUEL_FCORRES_8_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/STOVE_FUEL_FCORRES_8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setStove_fuel_fcorres_8}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_8_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_8==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_8_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_8==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_8==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOVE_FUEL_FCORRES_9_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/STOVE_FUEL_FCORRES_9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setStove_fuel_fcorres_9}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_9_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_9==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_9_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_9==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_9==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOVE_FUEL_FCORRES_10_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/STOVE_FUEL_FCORRES_10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setStove_fuel_fcorres_10}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_10_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_10==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_10_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_10==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_10==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOVE_FUEL_FCORRES_11_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/STOVE_FUEL_FCORRES_11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setStove_fuel_fcorres_11}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_11_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_11==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_11_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_11==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_11==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOVE_FUEL_FCORRES_12_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/STOVE_FUEL_FCORRES_12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setStove_fuel_fcorres_12}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_12_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_12==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_12_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_12==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_12==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOVE_FUEL_FCORRES_13_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/STOVE_FUEL_FCORRES_13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setStove_fuel_fcorres_13}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_13_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_13==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_13_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_13==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_13==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOVE_FUEL_FCORRES_14_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/STOVE_FUEL_FCORRES_14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setStove_fuel_fcorres_14}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_14_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_14==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_14_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_14==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_14==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/STOVE_FUEL_FCORRES_88_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/STOVE_FUEL_FCORRES_88"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setStove_fuel_fcorres_88}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_88_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_88==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/STOVE_FUEL_FCORRES_88_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_88==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.stove_fuel_fcorres_88==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <LinearLayout
+            goneUnless="@{sociodemo.stove_fuel_fcorres_88==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/item_other_text" />
+
+            <EditText
+                android:id="@+id/STOVE_FUEL_SPFY_FCORRES_88"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="@={sociodemo.stove_fuel_spfy_fcorres_88}"
+                tools:ignore="Autofill,LabelFor" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/COOKING_INSIDE_FCORRES_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/COOKING_INSIDE_FCORRES"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setCooking_inside_fcorres}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/COOKING_INSIDE_FCORRES_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.cooking_inside_fcorres==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/COOKING_INSIDE_FCORRES_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.cooking_inside_fcorres==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.cooking_inside_fcorres==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+
+        <LinearLayout
+            goneUnless="@{sociodemo.cooking_inside_fcorres==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/COOKING_ROOM_FCORRES_SOCIO" />
+
+            <RadioGroup
+                android:id="@+id/COOKING_ROOM_FCORRES"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{sociodemo::setCooking_room_fcorres}"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/COOKING_ROOM_FCORRES_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.cooking_room_fcorres==1}"
+                    android:tag="1"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/COOKING_ROOM_FCORRES_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.cooking_room_fcorres==2}"
+                    android:tag="2"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:visibility="invisible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.cooking_room_fcorres==0}"
+                    android:tag="0"/>
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/COOKING_LOC_FCORRES_SOCIO" />
+
+        <Spinner
+            android:id="@+id/COOKING_LOC_FCORRES"
+            selection="@{sociodemo.cooking_loc_fcorres}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onItemSelected="@{sociodemo::setCooking_loc_fcorres}" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/COOKING_VENT_FCORRES_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/COOKING_VENT_FCORRES"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setCooking_vent_fcorres}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/COOKING_VENT_FCORRES_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.cooking_vent_fcorres==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/COOKING_VENT_FCORRES_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.cooking_vent_fcorres==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:id="@+id/COOKING_VENT_FCORRES_77"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.cooking_vent_fcorres==9}"
+                android:tag="9"
+                android:text="@string/text_na" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.cooking_vent_fcorres==0}"
+                android:tag="0"/>
+
+        </RadioGroup>
+    </LinearLayout>
+
+</layout>

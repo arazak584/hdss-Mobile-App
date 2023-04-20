@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="sociodemo"
+            type="org.openhds.hdsscapture.entity.HdssSociodemo" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/MAIN_LAYOUT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/MNH03_FORM_COMMENTS_YN_PROC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/text_CONYN_COVAL_YN" />
+
+        <RadioGroup
+            android:id="@+id/MNH03_FORM_COMMENTS_YN"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onCheckedChanged="@{sociodemo::setMnh03_form_comments_yn}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/MNH03_FORM_COMMENTS_Y"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.form_comments_yn==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/MNH03_FORM_COMMENTS_N"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.form_comments_yn==2}"
+                android:tag="2"
+                android:text="@string/no" />
+        </RadioGroup>
+
+        <LinearLayout
+            goneUnless="@{sociodemo.form_comments_yn==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/MNH03_FORM_COMMENTS_TXT"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="@string/text_CONYN_COVAL"
+                android:inputType="textMultiLine"
+                android:text="@={sociodemo.form_comments_txt}"
+                tools:ignore="TextContrastCheck" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="@string/form_complete"/>
+
+        <Spinner
+            android:id="@+id/socio_complete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            selection="@{sociodemo.complete}"
+            android:onItemSelected="@{sociodemo::setComplete}"
+            android:gravity="left"
+            android:textColor="#000301"
+            android:padding="15dp"/>
+
+    </LinearLayout>
+
+</layout>

@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="sociodemo"
+            type="org.openhds.hdsscapture.entity.HdssSociodemo" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/MAIN_LAYOUT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/drink_water" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/H2O_FCORRES_SOCIO" />
+
+        <Spinner
+            android:id="@+id/H2O_FCORRES"
+            selection="@{sociodemo.h2o_fcorres}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onItemSelected="@{sociodemo::setH2o_fcorres}" />
+
+        <LinearLayout
+            goneUnless="@{sociodemo.h2o_fcorres==66}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/H2O_SPFY_FCORRES_SOCIO" />
+
+            <EditText
+                android:id="@+id/H2O_SPFY_FCORRES"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:text="@={sociodemo.h2o_spfy_fcorres}"
+                tools:ignore="Autofill,LabelFor" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/H2O_DIST_FCORRES_SOCIO" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/H2O_DIST_FCORRES"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:ems="5"
+                android:inputType="number"
+                android:text="@={sociodemo.h2o_dist_fcorres}"
+                tools:ignore="Autofill,LabelFor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/meters" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/H2O_HOURS_FCORRES_SOCIO" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/H2O_HOURS_FCORRES"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:ems="4"
+                android:inputType="number"
+                android:text="@={sociodemo.h2o_hours_fcorres}"
+                tools:ignore="Autofill,LabelFor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_hrs" />
+
+            <EditText
+                android:id="@+id/H2O_MINS_FCORRES"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:ems="4"
+                android:inputType="number"
+                android:text="@={sociodemo.h2o_mins_fcorres}"
+                tools:ignore="Autofill,LabelFor" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_min" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/H2O_PREP_FCORRES_SOCIO" />
+
+        <RadioGroup
+            android:id="@+id/H2O_PREP_FCORRES"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setH2o_prep_fcorres}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/H2O_PREP_FCORRES_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.h2o_prep_fcorres==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/H2O_PREP_FCORRES_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.h2o_prep_fcorres==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.h2o_prep_fcorres==0}"
+                android:tag="0"/>
+        </RadioGroup>
+
+        <LinearLayout
+            goneUnless="@{sociodemo.h2o_prep_fcorres==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/H2O_PREP_SPFY_FCORRES_SOCIO" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/H2O_PREP_SPFY_FCORRES_1_SOCIO"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/H2O_PREP_SPFY_FCORRES_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{sociodemo::setH2o_prep_spfy_fcorres_1}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/H2O_PREP_SPFY_FCORRES_1_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.h2o_prep_spfy_fcorres_1==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/H2O_PREP_SPFY_FCORRES_1_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.h2o_prep_spfy_fcorres_1==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.h2o_prep_spfy_fcorres_1==0}"
+                            android:tag="0"
+                            android:visibility="invisible" />
+
+                    </RadioGroup>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/H2O_PREP_SPFY_FCORRES_2_SOCIO"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/H2O_PREP_SPFY_FCORRES_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{sociodemo::setH2o_prep_spfy_fcorres_2}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/H2O_PREP_SPFY_FCORRES_2_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.h2o_prep_spfy_fcorres_2==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/H2O_PREP_SPFY_FCORRES_2_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.h2o_prep_spfy_fcorres_2==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.h2o_prep_spfy_fcorres_2==0}"
+                            android:tag="0"
+                            android:visibility="invisible" />
+                    </RadioGroup>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/H2O_PREP_SPFY_FCORRES_3_SOCIO"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/H2O_PREP_SPFY_FCORRES_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{sociodemo::setH2o_prep_spfy_fcorres_3}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/H2O_PREP_SPFY_FCORRES_3_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.h2o_prep_spfy_fcorres_3==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/H2O_PREP_SPFY_FCORRES_3_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.h2o_prep_spfy_fcorres_3==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.h2o_prep_spfy_fcorres_3==0}"
+                            android:tag="0"
+                            android:visibility="invisible" />
+                    </RadioGroup>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/H2O_PREP_SPFY_FCORRES_4_SOCIO"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/H2O_PREP_SPFY_FCORRES_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{sociodemo::setH2o_prep_spfy_fcorres_4}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/H2O_PREP_SPFY_FCORRES_4_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.h2o_prep_spfy_fcorres_4==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/H2O_PREP_SPFY_FCORRES_4_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.h2o_prep_spfy_fcorres_4==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.h2o_prep_spfy_fcorres_4==0}"
+                            android:tag="0"
+                            android:visibility="invisible" />
+                    </RadioGroup>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/H2O_PREP_SPFY_FCORRES_5_SOCIO"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/H2O_PREP_SPFY_FCORRES_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{sociodemo::setH2o_prep_spfy_fcorres_5}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/H2O_PREP_SPFY_FCORRES_5_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.h2o_prep_spfy_fcorres_5==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/H2O_PREP_SPFY_FCORRES_5_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.h2o_prep_spfy_fcorres_5==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.h2o_prep_spfy_fcorres_5==0}"
+                            android:tag="0"
+                            android:visibility="invisible" />
+                    </RadioGroup>
+
+                </TableRow>
+            </TableLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/toilet_facility" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/TOILET_FCORRES_SOCIO" />
+
+        <Spinner
+            android:id="@+id/TOILET_FCORRES"
+            selection="@{sociodemo.toilet_fcorres}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onItemSelected="@{sociodemo::setToilet_fcorres}" />
+
+        <LinearLayout
+            goneUnless="@{sociodemo.toilet_fcorres!=22}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                goneUnless="@{sociodemo.toilet_fcorres==66}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/TOILET_SPFY_FCORRES_SOCIO" />
+
+                <EditText
+                    android:id="@+id/TOILET_SPFY_FCORRES"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:text="@={sociodemo.toilet_spfy_fcorres}"
+                    tools:ignore="Autofill,LabelFor" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/TOILET_LOC_FCORRES_SOCIO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/TOILET_LOC_FCORRES_SOCIO"
+                tools:ignore="TooManyViews" />
+
+            <Spinner
+                android:id="@+id/TOILET_LOC_FCORRES"
+                selection="@{sociodemo.toilet_loc_fcorres}"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:onItemSelected="@{sociodemo::setToilet_loc_fcorres}" />
+
+            <LinearLayout
+                goneUnless="@{sociodemo.toilet_loc_fcorres==66}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/TOILET_LOC_SPFY_FCORRES_SOCIO" />
+
+                <EditText
+                    android:id="@+id/TOILET_LOC_SPFY_FCORRES"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="text"
+                    android:text="@={sociodemo.toilet_loc_spfy_fcorres}"
+                    tools:ignore="Autofill,LabelFor" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/TOILET_SHARE_FCORRES_SOCIO" />
+
+            <RadioGroup
+                android:id="@+id/TOILET_SHARE_FCORRES"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onCheckedChanged="@{sociodemo::setToilet_share_fcorres}"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/TOILET_SHARE_FCORRES_SOCIO_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.toilet_share_fcorres==1}"
+                    android:tag="1"
+                    android:text="@string/yes" />
+
+                <RadioButton
+                    android:id="@+id/TOILET_SHARE_FCORRES_SOCIO_0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.toilet_share_fcorres==2}"
+                    android:tag="2"
+                    android:text="@string/no" />
+
+                <RadioButton
+                    android:visibility="invisible"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="@{sociodemo.toilet_share_fcorres==0}"
+                    android:tag="0"/>
+            </RadioGroup>
+
+            <LinearLayout
+                goneUnless="@{sociodemo.toilet_share_fcorres==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/TOILET_SHARE_NUM_FCORRES_SOCIO" />
+
+                <Spinner
+                    android:id="@+id/TOILET_SHARE_NUM_FCORRES"
+                    selection="@{sociodemo.toilet_share_num_fcorres}"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:onItemSelected="@{sociodemo::setToilet_share_num_fcorres}" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/hh_asset" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/EXT_WALL_FCORRES_SOCIO" />
+
+        <Spinner
+            android:id="@+id/EXT_WALL_FCORRES"
+            selection="@{sociodemo.ext_wall_fcorres}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onItemSelected="@{sociodemo::setExt_wall_fcorres}" />
+
+        <LinearLayout
+            goneUnless="@{sociodemo.ext_wall_fcorres==66}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/EXT_WALL_SPFY_FCORRES_SOCIO" />
+
+            <EditText
+                android:id="@+id/EXT_WALL_SPFY_FCORRES"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="@={sociodemo.ext_wall_spfy_fcorres}"
+                tools:ignore="Autofill,LabelFor" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/FLOOR_FCORRES_SOCIO" />
+
+        <Spinner
+            android:id="@+id/FLOOR_FCORRES"
+            selection="@{sociodemo.floor_fcorres}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onItemSelected="@{sociodemo::setFloor_fcorres}" />
+
+        <LinearLayout
+            goneUnless="@{sociodemo.floor_fcorres==66}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/FLOOR_SPFY_FCORRES_SOCIO" />
+
+            <EditText
+                android:id="@+id/FLOOR_SPFY_FCORRES"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="@={sociodemo.floor_spfy_fcorres}"
+                tools:ignore="Autofill,LabelFor" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ROOF_FCORRES_SOCIO" />
+
+        <Spinner
+            android:id="@+id/ROOF_FCORRES"
+            selection="@{sociodemo.roof_fcorres}"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:onItemSelected="@{sociodemo::setRoof_fcorres}" />
+
+        <LinearLayout
+            goneUnless="@{sociodemo.roof_fcorres==66}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ROOF_SPFY_FCORRES_SOCIO" />
+
+            <EditText
+                android:id="@+id/ROOF_SPFY_FCORRES"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:inputType="text"
+                android:text="@={sociodemo.roof_spfy_fcorres}"
+                tools:ignore="Autofill,LabelFor" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>
