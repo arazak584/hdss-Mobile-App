@@ -13,7 +13,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.R;
 
 /**
@@ -52,7 +51,6 @@ public class UrlFragment extends DialogFragment {
                         if (urlUpdatedListener != null) {
                             urlUpdatedListener.onUrlUpdated(newUrl);
                         }
-                        AppJson.getInstance(getActivity()).updateBaseUrl(newUrl);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -76,3 +74,4 @@ public class UrlFragment extends DialogFragment {
         editor.apply();
     }
 }
+

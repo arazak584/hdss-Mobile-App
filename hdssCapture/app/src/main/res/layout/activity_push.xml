@@ -74,57 +74,6 @@
             android:layout_height="wrap_content"
             android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/buttonSendResidency"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/send_residency"
-            app:icon="@drawable/push"/>
-
-        <TextView
-            android:id="@+id/textViewSendResidency"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
-
-        <Button
-            android:id="@+id/buttonSendInmigration"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/send_inmigration"
-            app:icon="@drawable/push"/>
-
-        <TextView
-            android:id="@+id/textViewSendInmigration"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
-
-        <Button
-            android:id="@+id/buttonSendOutmigration"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/send_outmigration"
-            app:icon="@drawable/push"/>
-
-        <TextView
-            android:id="@+id/textViewSendOutmigration"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
-
-        <Button
-            android:id="@+id/buttonSendDeath"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/send_death"
-            app:icon="@drawable/push"/>
-
-        <TextView
-            android:id="@+id/textViewSendDeath"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
 
         <Button
             android:id="@+id/buttonSendRelationship"
@@ -165,18 +114,6 @@
             android:layout_height="wrap_content"
             android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/buttonSendVpm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/send_vpm"
-            app:icon="@drawable/push"/>
-
-        <TextView
-            android:id="@+id/textViewSendVpm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
 
         <Button
             android:id="@+id/buttonSendDemography"
@@ -187,6 +124,45 @@
 
         <TextView
             android:id="@+id/textViewSendDemography"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonSendEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_death"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonSendEvents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_event"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendEvents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonSendSocio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_profile"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendSocio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp" />

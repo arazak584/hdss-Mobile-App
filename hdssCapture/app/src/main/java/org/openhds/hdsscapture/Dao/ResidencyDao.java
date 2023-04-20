@@ -44,4 +44,13 @@ public interface ResidencyDao {
     @Query("SELECT * FROM residency WHERE complete=1")
     List<Residency> retrieveToSync();
 
+    @Query("SELECT * FROM residency WHERE omgcomplete=1 and destination IS NOT NULL")
+    List<Residency> retrieveOmgSync();
+
+    @Query("SELECT * FROM residency WHERE imgcomplete=1 and origin IS NOT NULL")
+    List<Residency> retrieveImgSync();
+
+    @Query("SELECT * FROM residency WHERE residency_uuid=:id AND location_uuid!=loc")
+    Residency fetch(String id);
+
 }

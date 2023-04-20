@@ -21,7 +21,7 @@ public interface VisitDao {
     @Query("SELECT * FROM visit")
     List<Visit> getAll();
 
-    @Query("SELECT * FROM visit where location_uuid=:id")
+    @Query("SELECT * FROM visit where houseExtId=:id")
     Visit find(String id);
 
 

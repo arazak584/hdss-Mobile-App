@@ -32,12 +32,10 @@ import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -119,7 +117,6 @@ public class DeathFragment extends Fragment {
         binding.setDeath(death);
         binding.setIndividual(individual);
         binding.setSocialgroup(socialgroup);
-        binding.setResidency(residency);
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
@@ -151,11 +148,6 @@ public class DeathFragment extends Fragment {
             } else {
                 data = new Death();
 
-                final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-
-                int addedDays = 0;
-                final int yrs = data.AgeAtDeath + (int) addedDays;
-
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.toString().replaceAll("-", "");
 
@@ -174,8 +166,7 @@ public class DeathFragment extends Fragment {
                 data.villname = level5Data.getName();
                 data.villcode = level5Data.getVillcode();
                 data.visit_uuid = socialgroup.getVisit_uuid();
-                data.AgeAtDeath = yrs;
-                data.vpmcomplete = 1 ;
+                data.vpmcomplete=1;
 
                 binding.setDeath(data);
             }
@@ -187,8 +178,6 @@ public class DeathFragment extends Fragment {
         loadCodeData(binding.dthcomplete, "complete");
         loadCodeData(binding.dthDeathPlace, "deathPlace");
         loadCodeData(binding.dthDeathCause, "deathCause");
-        loadCodeData(binding.endtype, "endType");
-
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
@@ -209,7 +198,6 @@ public class DeathFragment extends Fragment {
 
         if (save) {
             Death finalData = binding.getDeath();
-
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.DEATHLAYOUT, validateOnComplete, false);

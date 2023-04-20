@@ -30,6 +30,7 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
+import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -66,7 +67,7 @@ public class IndividualFragment extends Fragment {
     private Individual individual;
     private FragmentIndividualBinding binding;;
     private CaseItem caseItem;
-    private String motherId;
+    private EventForm eventForm;
 
 
     public IndividualFragment() {
@@ -322,7 +323,7 @@ public class IndividualFragment extends Fragment {
         }
         if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    ResidencyFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
+                    ResidencyFragment.newInstance(individual,residency, locations, socialgroup,caseItem,eventForm)).commit();
         }else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     HouseMembersFragment.newInstance(individual,residency, locations, socialgroup)).commit();

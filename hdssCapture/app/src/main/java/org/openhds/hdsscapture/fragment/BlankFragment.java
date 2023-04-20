@@ -116,15 +116,19 @@ public class BlankFragment extends Fragment {
         gpsLat.setText(locations.getLatitude());
         gps.setText(locations.getLongitude());
 
+
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_pregnancy);
 
-        // Set a click listener on the button for mother
+        // Set a click listener on the button for pregnancies
         showDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 // Show the dialog fragment
                 PregnancyDialogFragment.newInstance(individual, residency, locations,socialgroup)
                         .show(getChildFragmentManager(), "PregnancyDialogFragment");
+
             }
         });
 
@@ -158,10 +162,14 @@ public class BlankFragment extends Fragment {
             }
 
             public void showLoadingDialog() {
+
                 if (progress == null) {
                     progress = new ProgressDialog(requireContext());
-                    progress.setTitle(getString(R.string.loading_lbl));
-                    progress.setMessage(getString(R.string.please_wait_lbl));
+                    //progress.setTitle(getString(R.string.loading_lbl));
+                    //progress.setProgressStyle();
+                    progress.setMessage("Loading...");
+                    //progress.setMessage("Loading...");
+                    progress.setCancelable(false);
                 }
                 progress.show();
             }
@@ -194,6 +202,8 @@ public class BlankFragment extends Fragment {
             progress.dismiss();
         }
     }
+
+
 
     public void onBackPressed() {
         new AlertDialog.Builder(getActivity())

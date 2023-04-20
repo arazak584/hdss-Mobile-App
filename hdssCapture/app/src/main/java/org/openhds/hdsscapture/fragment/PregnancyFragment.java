@@ -115,14 +115,7 @@ public class PregnancyFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentPregnancyBinding.inflate(inflater, container, false);
         binding.setPregnancy(pregnancy);
-        /*
-        // Generate a UUID
-        if(pregnancy.obs_uuid == null) {
-            String uuid = UUID.randomUUID().toString();
-            String uuidString = uuid.toString().replaceAll("-", "");
-            // Set the ID of the Fieldworker object
-            binding.getPregnancy().obs_uuid = uuidString;
-        }*/
+
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -140,6 +133,11 @@ public class PregnancyFragment extends Fragment {
             if (bundle.containsKey((PregnancyFragment.DATE_BUNDLES.CLINICDATE.getBundleKey()))) {
                 final String result = bundle.getString(PregnancyFragment.DATE_BUNDLES.CLINICDATE.getBundleKey());
                 binding.editTextLastClinicVisitDate.setText(result);
+            }
+
+            if (bundle.containsKey((PregnancyFragment.DATE_BUNDLES.EXPECTDATE.getBundleKey()))) {
+                final String result = bundle.getString(PregnancyFragment.DATE_BUNDLES.EXPECTDATE.getBundleKey());
+                binding.expectedDelivery.setText(result);
             }
 
         });
@@ -162,13 +160,19 @@ public class PregnancyFragment extends Fragment {
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
+        binding.buttonPregExpectDate.setOnClickListener(v -> {
+            final Calendar c = Calendar.getInstance();
+            DialogFragment newFragment = new DatePickerFragment(PregnancyFragment.DATE_BUNDLES.EXPECTDATE.getBundleKey(), c);
+            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+        });
+
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
         PregnancyViewModel viewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         try {
             Pregnancy data = viewModel.find(individual.individual_uuid);
-            if (data != null) {
+            if (data != null && data.extra!=2) {
                 binding.setPregnancy(data);
             } else {
                 data = new Pregnancy();
@@ -206,6 +210,7 @@ public class PregnancyFragment extends Fragment {
         loadCodeData(binding.trtBednet, "complete");
         loadCodeData(binding.healthfacility, "complete");
         loadCodeData(binding.medicineforpregnancy, "complete");
+        loadCodeData(binding.medicineforpregnancy, "complete");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
@@ -233,6 +238,7 @@ public class PregnancyFragment extends Fragment {
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
+                return;
             }
             viewModel.add(finalData);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
@@ -283,6 +289,7 @@ public class PregnancyFragment extends Fragment {
     private enum DATE_BUNDLES {
         OUTCOMEDATE ("OUTCOMEDATE"),
         RECORDDATE ("RECORDDATE"),
+        EXPECTDATE ("EXPECTDATE"),
         CLINICDATE ("CLINICDATE");
 
         private final String bundleKey;

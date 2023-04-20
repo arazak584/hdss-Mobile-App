@@ -1,5 +1,10 @@
 package org.openhds.hdsscapture.entity;
 
+import android.graphics.Color;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.TextView;
+
 import androidx.databinding.BaseObservable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -9,51 +14,57 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
+import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
+import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 @Entity(tableName = "outcome")
 public class Outcome extends BaseObservable {
 
-    @SerializedName("out_uuid")
+    @SerializedName("uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "out_uuid")
+    @ColumnInfo(name = "uuid")
     @PrimaryKey
-    public String out_uuid;
+    public String uuid;
 
     @Expose
-    public String childextId;
+    public String childuuid;
 
     @Expose
-    public String preg_uuid;
+    public String mother_uuid;
 
     @Expose
     public Integer type;
 
+    @Expose
+    public Integer complete;
+
     public Outcome(){}
 
     @NotNull
-    public String getOut_uuid() {
-        return out_uuid;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setOut_uuid(@NotNull String out_uuid) {
-        this.out_uuid = out_uuid;
+    public void setUuid(@NotNull String uuid) {
+        this.uuid = uuid;
     }
 
-    public String getChildextId() {
-        return childextId;
+    public String getChilduuid() {
+        return childuuid;
     }
 
-    public void setChildextId(String childextId) {
-        this.childextId = childextId;
+    public void setChilduuid(String childuuid) {
+        this.childuuid = childuuid;
     }
 
-    public String getPreg_uuid() {
-        return preg_uuid;
+    public String getMother_uuid() {
+        return mother_uuid;
     }
 
-    public void setPreg_uuid(String preg_uuid) {
-        this.preg_uuid = preg_uuid;
+    public void setMother_uuid(String mother_uuid) {
+        this.mother_uuid = mother_uuid;
     }
 
     public Integer getType() {
@@ -62,5 +73,31 @@ public class Outcome extends BaseObservable {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public Integer getComplete() {
+        return complete;
+    }
+
+    public void setComplete(Integer complete) {
+        this.complete = complete;
+    }
+
+    //SPINNERS ENTITY
+    public void setType(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            type = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            type = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
+        }
+
     }
 }

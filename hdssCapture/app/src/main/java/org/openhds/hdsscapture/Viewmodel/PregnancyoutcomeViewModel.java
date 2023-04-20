@@ -30,6 +30,10 @@ public class PregnancyoutcomeViewModel extends AndroidViewModel {
         return pregnancyoutcomeRepository.findToSync();
     }
 
+    public Pregnancyoutcome find(String id) throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.find(id);
+    }
+
     public void add(Pregnancyoutcome data){ pregnancyoutcomeRepository.create(data);}
 
     public void add(Pregnancyoutcome... data){ pregnancyoutcomeRepository.create(data);  }

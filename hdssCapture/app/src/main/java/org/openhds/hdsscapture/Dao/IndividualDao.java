@@ -44,7 +44,7 @@ public interface IndividualDao {
 
     @Query("SELECT a.*,d.houseExtId,b.endType FROM individual as a " + "INNER JOIN residency as b ON a.individual_uuid = b.individual_uuid " +
             " INNER JOIN socialgroup as d on b.socialgroup_uuid=d.socialgroup_uuid " +
-            " WHERE b.endType=1 and firstName!='FAKE' and d.houseExtId=:id order by houseExtId")
+            " WHERE b.endType=1 and firstName!='FAKE' and d.houseExtId=:id order by dob")
     List<Individual> retrieveByLocationId(String id);
 
     @Query("SELECT a.*,compno,c.compextId,firstName || ' ' || lastName as fullName,b.endType FROM individual as a " + "INNER JOIN residency as b ON a.individual_uuid = b.individual_uuid" +

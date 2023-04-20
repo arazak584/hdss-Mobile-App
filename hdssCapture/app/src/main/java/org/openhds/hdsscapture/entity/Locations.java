@@ -39,7 +39,7 @@ public class Locations extends BaseObservable implements Parcelable {
 
     @Expose
     @ColumnInfo(name = "compextId")
-    public String compextId;
+    public String compextId=AppConstants.Location;
 
     @SerializedName("compno")
     @Expose
@@ -240,7 +240,6 @@ public class Locations extends BaseObservable implements Parcelable {
     public void setStatus(Integer status) {
         this.status = status;
     }
-
 
     protected Locations(Parcel in) {
         this.compextId = in.readString();

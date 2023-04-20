@@ -133,6 +133,9 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     @Expose
     public String lastName;
 
+    @Expose
+    public Integer extra;
+
     public Pregnancy(){}
 
     @Ignore
@@ -184,7 +187,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     }
 
     public String getInsertDate() {
-        if (insertDate == null) return "SELECT DATE OF VISIT";
+        if (insertDate == null) return null;
         return f.format(insertDate);
     }
 
@@ -197,7 +200,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     }
 
     public String getLastClinicVisitDate() {
-        if (lastClinicVisitDate == null) return "SELECT DATE OF VISIT";
+        if (lastClinicVisitDate == null) return null;
         return f.format(lastClinicVisitDate);
     }
 
@@ -210,7 +213,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     }
 
     public String getOutcome_date() {
-        if (outcome_date == null) return "";
+        if (outcome_date == null) return null;
         return f.format(outcome_date);
     }
 
@@ -231,7 +234,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     }
 
     public String getRecordedDate() {
-        if (recordedDate == null) return "";
+        if (recordedDate == null) return null;
         return f.format(recordedDate);
     }
 
@@ -244,7 +247,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     }
 
     public String getExpectedDeliveryDate() {
-        if (expectedDeliveryDate == null) return "";
+        if (expectedDeliveryDate == null) return null;
         return f.format(expectedDeliveryDate);
     }
 
@@ -471,6 +474,14 @@ public class Pregnancy extends BaseObservable implements Parcelable {
         this.complete = complete;
     }
 
+    public Integer getExtra() {
+        return extra;
+    }
+
+    public void setExtra(Integer extra) {
+        this.extra = extra;
+    }
+
     protected Pregnancy(Parcel in) {
 
         this.insertDate = (java.util.Date) in.readSerializable();
@@ -516,6 +527,23 @@ public class Pregnancy extends BaseObservable implements Parcelable {
         } else {
             final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
             complete = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setExtra(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            extra = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            extra = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }

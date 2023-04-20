@@ -15,6 +15,13 @@
             type="org.openhds.hdsscapture.entity.Individual" />
 
         <variable
+            name="socialgroup"
+            type="org.openhds.hdsscapture.entity.Socialgroup" />
+
+        <import type="android.view.View" />
+
+
+        <variable
             name="eventname"
             type="String" />
 
@@ -28,6 +35,16 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:context=".fragment.ResidencyFragment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/membership"
+            android:textColor="@color/colorPrimary"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
 
         <View
@@ -51,8 +68,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:visibility="gone"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,6 +77,8 @@
                 android:text="@string/fw">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:id="@+id/fw"
                     android:text="@={residency.fw_uuid}"
                     android:layout_width="match_parent"
@@ -90,17 +107,17 @@
                 tools:ignore="TextContrastCheck" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:focusable="false"
-                android:focusableInTouchMode="false"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/uuid">
+                android:hint="@string/uuid"
                 android:text="@string/uuid">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:id="@+id/uuid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -109,17 +126,17 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:focusable="false"
-                android:focusableInTouchMode="false"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/ind_extid">
+                android:hint="@string/ind_extid"
                 android:text="@string/ind_extid">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:id="@+id/extid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -129,19 +146,38 @@
 
 
             <com.google.android.material.textfield.TextInputLayout
-                android:focusable="false"
-                android:focusableInTouchMode="false"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/location_select">
+                android:hint="@string/location_select"
                 android:text="@string/location_select">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:id="@+id/location_extid"
                     android:text="@={residency.location_uuid}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/currentLoc"
+                android:text="@string/currentLoc">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:id="@+id/currentLoc"
+                    android:text="@={residency.loc}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"/>
@@ -163,11 +199,11 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/household_select">
+                android:hint="@string/household_select"
                 android:text="@string/household_select">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/socialgroup"
+                    android:id="@+id/socialgroup_uuid"
                     android:text="@={residency.socialgroup_uuid}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -229,6 +265,7 @@
                 android:padding="10dp"/>
 
             <Button
+                goneUnless="@{residency.endType==2 || residency.endType==3}"
                 android:id="@+id/button_residency_endDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -237,6 +274,7 @@
                 app:icon="@drawable/ic_baseline_calendar_month_24" />
 
             <TextView
+                goneUnless="@{residency.endType==2 || residency.endType==3}"
                 android:id="@+id/editText_endDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -263,6 +301,244 @@
                 android:onItemSelected="@{residency::setRltn_head}"
                 android:textColor="#000301"
                 android:padding="10dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/new_img"/>
+
+            <Spinner
+                android:id="@+id/residency_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{residency.img}"
+                android:onItemSelected="@{residency::setImg}"
+                android:gravity="left"
+                android:textColor="#000301"
+                android:padding="15dp"/>
+
+        <LinearLayout
+            goneUnless="@{residency.img==1 &amp; residency.startType==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Inmigration"
+                android:textColor="@color/colorPrimary"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:visibility="gone"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:inputType="text"
+                android:hint="@string/uuid">
+                android:text="@string/ind_extid">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/img_uuid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={residency.residency_uuid}"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:visibility="gone"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/visitid">
+                android:text="@string/household_select">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/img_visitid"
+                    android:text="@={residency.visit_uuid}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:text="@string/migtype"/>
+
+            <Spinner
+                android:id="@+id/migtype"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                selection="@{residency.migType}"
+                android:onItemSelected="@{residency::setMigType}"
+                android:textColor="#000301"
+                android:padding="20dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:text="@string/origin"/>
+
+            <Spinner
+                android:id="@+id/origin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                selection="@{residency.origin}"
+                android:onItemSelected="@{residency::setOrigin}"
+                android:textColor="#000301"
+                android:padding="20dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:text="@string/reason"/>
+
+            <Spinner
+                android:id="@+id/reason"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                selection="@{residency.reason}"
+                android:onItemSelected="@{residency::setReason}"
+                android:textColor="#000301"
+                android:padding="20dp"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                goneUnless="@{residency.reason==77}"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/attend_you_other"
+                android:text="@string/attend_you_other">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/other_reason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={residency.reason_oth}"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            goneUnless="@{residency.endType==2}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="Outmigration"
+                android:textColor="@color/colorPrimary"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:visibility="gone"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:inputType="text"
+                android:hint="@string/uuid"
+                android:text="@string/ind_extid">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/omg_uuid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={residency.omg_uuid}"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:text="@string/destination"/>
+
+            <Spinner
+                android:id="@+id/destination"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                selection="@{residency.destination}"
+                android:onItemSelected="@{residency::setDestination}"
+                android:textColor="#000301"
+                android:padding="20dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:text="@string/reason_out"/>
+
+            <Spinner
+                android:id="@+id/reason_out"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                selection="@{residency.reason}"
+                android:onItemSelected="@{residency::setReason}"
+                android:textColor="#000301"
+                android:padding="20dp"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                goneUnless="@{residency.reason==77}"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/attend_you_other"
+                android:text="@string/attend_you_other">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/other_omgreason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={residency.reason_oth}"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"

@@ -265,7 +265,7 @@
                     android:gravity="start"
                     android:padding="5dp"
                     android:textColor="@color/black"
-                    android:text="@string/occupation"/>
+                    android:text="@string/occupations"/>
 
                 <Spinner
                     android:id="@+id/occupation"

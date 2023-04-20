@@ -70,4 +70,31 @@ public class ResidencyRepository {
         return future.get();
     }
 
+    public List<Residency> findOmgSync() throws ExecutionException, InterruptedException {
+
+        Callable<List<Residency>> callable = () -> dao.retrieveOmgSync();
+
+        Future<List<Residency>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Residency> findImgSync() throws ExecutionException, InterruptedException {
+
+        Callable<List<Residency>> callable = () -> dao.retrieveImgSync();
+
+        Future<List<Residency>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Residency fetch(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Residency> callable = () -> dao.fetch(id.toUpperCase());
+
+        Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
 }

@@ -18,18 +18,18 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
-import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
-import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
+import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
+import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.databinding.FragmentEventsBinding;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Outmigration;
+import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
@@ -166,8 +166,6 @@ public class EventsFragment extends Fragment {
                             if (individual.gender==1 && yrs>=12) {
                                 showDeathForm(eventForms);
                                 showDemographicForm(eventForms);
-                                showOutmigrationForm(eventForms);
-                                showInmigrationForm(eventForms);
 
                             }
 
@@ -176,9 +174,6 @@ public class EventsFragment extends Fragment {
                                 showDeathForm(eventForms);
                                 showDemographicForm(eventForms);
                                 showRelationshipForm(eventForms);
-                                showOutmigrationForm(eventForms);
-                                showInmigrationForm(eventForms);
-                                showPregnancyForm(eventForms);
                                 showPregnancyForm(eventForms);
 
                             }
@@ -188,15 +183,13 @@ public class EventsFragment extends Fragment {
 
                                 showDeathForm(eventForms);
                                 showDemographicForm(eventForms);
-                                showOutmigrationForm(eventForms);
-                                showInmigrationForm(eventForms);
 
                             }
 
                             //Adult
                             if (yrs >= 14) {
                                 showSocialgroupForm(eventForms);
-
+                                showSocioForm(eventForms);
                             }
 
                             }
@@ -255,6 +248,7 @@ public class EventsFragment extends Fragment {
         }
     }
 
+
     private void showDemographicForm(List<EventForm> eventForms) {
         DemographicViewModel viewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
         try {
@@ -263,6 +257,21 @@ public class EventsFragment extends Fragment {
                 form = new Demographic();
             }
                 eventForms.add(new EventForm(AppConstants.EVENT_HDSS4, AppConstants.EVENT_DEMO, form.complete));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showSocioForm(List<EventForm> eventForms) {
+        HdssSociodemoViewModel viewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
+        try {
+            HdssSociodemo form = viewModel.find(individual.individual_uuid);
+            if (form == null) {
+                form = new HdssSociodemo();
+            }
+            eventForms.add(new EventForm(AppConstants.EVENT_SOCIO, AppConstants.EVENT_DSOCIO, form.complete));
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -286,16 +295,17 @@ public class EventsFragment extends Fragment {
         }
     }
 
-    private void showOutmigrationForm(List<EventForm> eventForms) {
-        OutmigrationViewModel viewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
+
+    private void showOutcomeForm(List<EventForm> eventForms) {
+        OutcomeViewModel viewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
         try {
-            Outmigration form = viewModel.find(individual.individual_uuid);
+            Outcome form = viewModel.find(individual.individual_uuid);
             if (form == null) {
-                form = new Outmigration();
+                form = new Outcome();
             }
-            if (form.complete == null ) {
-                eventForms.add(new EventForm(AppConstants.EVENT_HDSS8, AppConstants.EVENT_OMG, form.complete));
-            }
+
+            eventForms.add(new EventForm(AppConstants.EVENT_HDSS11, AppConstants.EVENT_OUTCOME, form.complete));
+
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -303,22 +313,6 @@ public class EventsFragment extends Fragment {
         }
     }
 
-    private void showInmigrationForm(List<EventForm> eventForms) {
-        InmigrationViewModel viewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
-        try {
-            Inmigration form = viewModel.find(individual.individual_uuid);
-            if (form == null) {
-                form = new Inmigration();
-            }
-            if (form.complete == null ) {
-                eventForms.add(new EventForm(AppConstants.EVENT_HDSS9, AppConstants.EVENT_IMG, form.complete));
-            }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void showPregnancyForm(List<EventForm> eventForms) {
         PregnancyViewModel viewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);

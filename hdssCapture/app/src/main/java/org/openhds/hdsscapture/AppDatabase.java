@@ -13,10 +13,12 @@ import org.openhds.hdsscapture.Dao.CodeBookDao;
 import org.openhds.hdsscapture.Dao.DeathDao;
 import org.openhds.hdsscapture.Dao.DemographicDao;
 import org.openhds.hdsscapture.Dao.FieldworkerDao;
+import org.openhds.hdsscapture.Dao.HdssSociodemoDao;
 import org.openhds.hdsscapture.Dao.HierarchyDao;
 import org.openhds.hdsscapture.Dao.IndividualDao;
 import org.openhds.hdsscapture.Dao.InmigrationDao;
 import org.openhds.hdsscapture.Dao.LocationDao;
+import org.openhds.hdsscapture.Dao.OutcomeDao;
 import org.openhds.hdsscapture.Dao.OutmigrationDao;
 import org.openhds.hdsscapture.Dao.PregnancyDao;
 import org.openhds.hdsscapture.Dao.PregnancyoutcomeDao;
@@ -30,10 +32,12 @@ import org.openhds.hdsscapture.entity.CodeBook;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Fieldworker;
+import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
@@ -49,7 +53,7 @@ import java.util.concurrent.Executors;
 @Database(  entities = {
         Relationship.class, Locations.class, Residency.class, Pregnancyoutcome.class, Individual.class, Round.class, Demographic.class,
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
-        Fieldworker.class, Inmigration.class
+        Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class
         }, version = 1, exportSchema = true)
 
 @TypeConverters({Converter.class})
@@ -71,6 +75,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract RoundDao roundDao();
     public abstract DemographicDao demographicDao();
     public abstract HierarchyDao hierarchyDao();
+    public abstract HdssSociodemoDao hdssSociodemoDao();
+    public abstract OutcomeDao outcomeDao();
 
 
     private static volatile AppDatabase INSTANCE;

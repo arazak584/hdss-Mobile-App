@@ -26,4 +26,7 @@ PregnancyoutcomeDao {
 
     @Query("SELECT * FROM pregnancyoutcome WHERE complete=1")
     List<Pregnancyoutcome> retrieveToSync();
+
+    @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id")
+    Pregnancyoutcome find(String id);
 }

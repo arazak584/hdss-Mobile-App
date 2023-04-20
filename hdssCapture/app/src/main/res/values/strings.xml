@@ -89,7 +89,7 @@
     <string name="tribe_other">Other ethnicity specified</string>
     <string name="save">Save Record</string>
     <string name="individualOLD">Individual</string>
-    <string name="occupation">Occupation</string>
+    <string name="occupations">Occupation</string>
     <string name="religion">Select Religion</string>
     <string name="resident">Resident</string>
     <string name="crtlocation">Create Locations</string>
@@ -216,7 +216,7 @@
     <string name="inmigrationsec">SECTION B: INMIGRATION</string>
     <string name="relationship">RELATIONSHIP</string>
     <string name="expectedDelivery">Expected Delivery Date</string>
-    <string name="childextid">Child Permid</string>
+    <string name="childextid">Child UUID</string>
     <string name="type">Outcome Type</string>
     <string name="childeverborn">Number of Outcomes</string>
     <string name="livebirth">Number of Live Birth</string>
@@ -338,6 +338,190 @@
     <string name="other_name">Do you have any other Name or Previous Name not Captured on your official documents?</string>
     <string name="exit_confirmation_title">Exit</string>
     <string name="exiting_lbl">Are you sure you want to exit?</string>
+    <string name="new_img">Did you Just Move the Individual from a Previous Location to Current Location?</string>
+    <string name="currentLoc">Current Location</string>
+    <string name="moveout">Move Individual Out of His/Her Previous Loation Before Moving the person Into Current Location</string>
 
+
+    <!-- SOCIODEMOGRAPHIC FORM TEXT Adoma -->
+    <string name="Instruct_socio"><b>Instructions: This form should be completed to collect sociodemographic information for the household.</b></string>
+    <string name="intro_section">SECTION A INTRODUCTION</string>
+    <string name="GA_VISIT_SOCIO">A1 Gestational age at time of visit</string>
+    <string name="SUBJID_SOCIO">A2 MNH Participant ID:</string>
+    <string name="SD_OBSSTDAT_SOCIO">A3 Interview Date:</string>
+    <string name="SD_OBSLOC_SOCIO">A4 Screening Location</string>
+    <string name="SD_FAC_SPFY_OBSLOC_SOCIO">A5 Specify Other Location</string>
+
+    <string name="general_info"><b> SECTION B General Information</b></string>
+    <string name="MARITAL_SCORRES_SOCIO">B1 What is your marital status?</string>
+    <string name="MARITAL_AGE_SOCIO">B1a If married, age at time of marriage?</string>
+    <string name="RELIGION_SCORRES_SOCIO">B2 What is your religion?</string>
+    <string name="RELIGION_SPFY_SCORRES_SOCIO">B2a Specify Other religion</string>
+    <string name="CETHNIC_SOCIO">B3 What is your ethnicity?</string>
+    <string name="NTH_TRB_SPFY_CETHNIC_SOCIO">B3a Other Northern Tribe</string>
+    <string name="OTHR_TRB_SPFY_CETHNIC_SOCIO">B3b Other Ethnicity/Tribe</string>
+
+    <string name="size_hh"><b>SECTION C Size of Household</b></string>
+    <string name="HEAD_HH_FCORRES_SOCIO">C1 Who is the head of your household\?</string>
+    <string name="HEAD_HH_SPFY_FCORRES_SOCIO">C1a Other Specify</string>
+    <string name="HOUSE_OCC_TOT_FCORRES_SOCIO">C2 What is the total number of people living in your household\? This is defined as the number of people who typically sleep under the same roof as you, including yourself.</string>
+    <string name="HOUSE_OCC_LT5_FCORRES_SOCIO">C2a Of the total number of people living in your household, how many are children under the age 5\? That is, how many children less than 5 years of age typically sleep under the same roof as you\?</string>
+    <string name="HOUSE_OCC_GE5_FCORRES_SOCIO">C2b Of the total number of people living in your household (including yourself), how many are 5 years of age or older\? That is, how many people 5 years of age or older typically sleep under the same roof as you\?</string>
+
+    <string name="drink_water"><b>SECTION D Household Assets: Drinking Water</b></string>
+    <string name="H2O_FCORRES_SOCIO">D1 What is the main source of drinking water for members of your household\?</string>
+    <string name="H2O_SPFY_FCORRES_SOCIO">D1a Other Specify</string>
+    <string name="H2O_DIST_FCORRES_SOCIO">D2 How far away is this source of drinking water</string>
+    <string name="H2O_HOURS_FCORRES_SOCIO">D3 How long does it take to get water and come back</string>
+    <string name="H2O_PREP_FCORRES_SOCIO">D4 Do you do anything to this water before you drink it\?</string>
+    <string name="H2O_PREP_SPFY_FCORRES_SOCIO">D5 What do you usually do to this water before you drink it\?</string>
+    <string name="H2O_PREP_SPFY_FCORRES_1_SOCIO">D5a Boil</string>
+    <string name="H2O_PREP_SPFY_FCORRES_2_SOCIO">D5b Chlorine</string>
+    <string name="H2O_PREP_SPFY_FCORRES_3_SOCIO">D5c Alum</string>
+    <string name="H2O_PREP_SPFY_FCORRES_4_SOCIO">D5d Filter</string>
+    <string name="H2O_PREP_SPFY_FCORRES_5_SOCIO">D5e Water Purification Tablet</string>
+
+    <string name="toilet_facility"><b>SECTION E Household Assets: Toilet Facilities</b></string>
+    <string name="TOILET_FCORRES_SOCIO">E1 What kind of toilet facility do members of your household usually use\?</string>
+    <string name="TOILET_SPFY_FCORRES_SOCIO">E1o Other, specify</string>
+    <string name="TOILET_LOC_FCORRES_SOCIO">E2 Where is the toilet facility located\?</string>
+    <string name="TOILET_LOC_SPFY_FCORRES_SOCIO">E2o Other, specify</string>
+    <string name="TOILET_SHARE_FCORRES_SOCIO">E3 Do you share this toilet with other households\?</string>
+    <string name="TOILET_SHARE_NUM_FCORRES_SOCIO">E3o Specify the number of other households that share this toilet\?</string>
+
+    <string name="hh_asset"><b>SECTION F Household Assets: Building Structure and Materials</b></string>
+    <string name="EXT_WALL_FCORRES_SOCIO">F1 What is the main building material of your household\'s exterior walls\?</string>
+    <string name="EXT_WALL_SPFY_FCORRES_SOCIO">F1o Other Specify</string>
+    <string name="FLOOR_FCORRES_SOCIO">F2 What is the main building material of your household\'s floor\?</string>
+    <string name="FLOOR_SPFY_FCORRES_SOCIO">F2o Other Specify</string>
+    <string name="ROOF_FCORRES_SOCIO">F3 What is the main building material of your household\'s roof\?</string>
+    <string name="ROOF_SPFY_FCORRES_SOCIO">F3o Other Specify</string>
+
+    <string name="hh_amenities"><b>SECTION G Household Assets: Amenities</b></string>
+    <string name="amenities">G1 Does your household have any of following amenities\?</string>
+    <string name="ELECTRICITY_FCORRES_SOCIO">G1a Electricity</string>
+    <string name="SOLAR_FCORRES_SOCIO">G1b Solar panels</string>
+    <string name="INTERNET_FCORRES_SOCIO">G1c Internet access</string>
+    <string name="LANDLINE_FCORRES_SOCIO">G1d Non-mobile phone</string>
+    <string name="MOBILE_FCORRES_SOCIO">G2 Does your household have a mobile telephone\?</string>
+    <string name="MOBILE_NUM_FCORRES_SOCIO">G2o Specify No.</string>
+    <string name="MOBILE_ACCESS_FCORRES_SOCIO">G3 Do you have access to a mobile phone\?</string>
+    <string name="mobile_yes1">G3a Yes, I have my own mobile phone</string>
+    <string name="mobile_yes2">G3b Yes, but I share the mobile phone with other people</string>
+    <string name="mobile_no">G3c No, I do not have access to a mobile phone</string>
+    <string name="any_items">G4 Do you or any member of your household own any of the following items\?</string>
+    <string name="item_other">Specify number</string>
+    <string name="item_other_text">Specify</string>
+    <string name="item_other_88">Specify other</string>
+    <string name="item_other_num">Specify number of other</string>
+    <string name="RADIO_FCORRES_SOCIO">G4a Radio</string>
+    <string name="TV_FCORRES_SOCIO">G4b Television</string>
+    <string name="FRIDGE_FCORRES_SOCIO">G4c Refrigerator</string>
+    <string name="COMPUTER_FCORRES_SOCIO">G4d Computer</string>
+    <string name="WATCH_FCORRES_SOCIO">G4e Watch</string>
+    <string name="BIKE_FCORRES_SOCIO">G4f Bicycle</string>
+    <string name="MOTORCYCLE_FCORRES_SOCIO">G4g Motorcycle or moto scooter</string>
+    <string name="CAR_FCORRES_SOCIO">G4h Car or truck</string>
+    <string name="BOAT_FCORRES_SOCIO">G4i Boat with motor</string>
+    <string name="CART_FCORRES_SOCIO">G4j Animal drawn cart</string>
+    <string name="PLOUGH_FCORRES_SOCIO">G4k Plough</string>
+    <string name="FOAM_MATT_FCORRES_SOCIO">G4l Foam mattress</string>
+    <string name="STRAW_MATT_FCORRES_SOCIO">G4m Straw mattress</string>
+    <string name="SPRING_MATT_FCORRES_SOCIO">G4n Spring mattress</string>
+    <string name="SOFA_FCORRES_SOCIO">G4o Sofa</string>
+    <string name="LANTERN_FCORRES_SOCIO">G4p Lantern</string>
+    <string name="SEW_FCORRES_SOCIO">G4q Sewing machine</string>
+    <string name="WASH_FCORRES_SOCIO">G4r Washing machine</string>
+    <string name="BLENDER_FCORRES_SOCIO">G4s Blender</string>
+    <string name="MOSQUITO_NET_FCORRES_SOCIO">G4t Mosquito nets</string>
+    <string name="TRICYCLES_FCORRES_SOCIO">G4u Tricycle (motor king/pragia)</string>
+    <string name="TABLES_FCORRES_SOCIO">G4v Tables</string>
+    <string name="CABINETS_FCORRES_SOCIO">G4w Cabinets/cupboards</string>
+    <string name="SAT_DISH_FCORRES_SOCIO">G4x Satellite dish</string>
+    <string name="DVD_CD_FCORRES_SOCIO">G4y DVD/CD player</string>
+    <string name="AIRCON_FCORRES_SOCIO">G4z Air conditioner</string>
+    <string name="TRACTOR_FCORRES_SOCIO">G4aa Tractor</string>
+    <string name="OWN_RENT_SCORRES_SOCIO">G5 Do you own or rent the house you live in, or have another type of arrangement, such as "perching"\?</string>
+    <string name="HOUSE_ROOMS_FCORRES_SOCIO">G6 Specify how many rooms in this household are available for sleeping</string>
+    <string name="HOUSE_ROOM_CHILD_FCORRES_SOCIO">G7 Does the household have a separate sleeping room for children\?</string>
+
+    <string name="land_asset"><b>SECTION H Household Assets: Land and Livestock</b></string>
+    <string name="LAND_FCORRES_SOCIO">H1 Does your household own any agricultural land\?</string>
+    <string name="LAND_USE_FCORRES_SOCIO">H2 How is land currently used\?</string>
+    <string name="LAND_USE_FCORRES_1_SOCIO">H2a Homestead use</string>
+    <string name="LAND_USE_FCORRES_2_SOCIO">H2b Cultivation</string>
+    <string name="LAND_USE_FCORRES_3_SOCIO">H2c Pasture or grazing </string>
+    <string name="LAND_USE_FCORRES_4_SOCIO">H2d Rented</string>
+    <string name="LAND_USE_FCORRES_5_SOCIO">H3e Left fallow</string>
+    <string name="LAND_USE_FCORRES_88_SOCIO">H2o Other</string>
+    <string name="LIVESTOCK_FCORRES_SOCIO">H3 Does your household own any livestock, herds, farm animals/poultry\?</string>
+    <string name="CATTLE_FCORRES_SOCIO">H3a.Cattle</string>
+    <string name="GOAT_FCORRES_SOCIO">H3b.Goat</string>
+    <string name="SHEEP_FCORRES_SOCIO">H3c.Sheep</string>
+    <string name="POULTRY_FCORRES_SOCIO">H3d.Poultry</string>
+    <string name="PIG_FCORRES_SOCIO">H3e.Pigs</string>
+    <string name="DONKEY_FCORRES_SOCIO">H3f.Donkey</string>
+    <string name="HORSE_FCORRES_SOCIO">H3g.Horse</string>
+    <string name="ANIMAL_OTHR_FCORRES_SOCIO">H3o Other</string>
+    <string name="ANIMAL_OTHR_FCORRES_SOCIO_SPFY">H3os Other->Specify</string>
+
+    <string name="occupation"><b>SECTION I Occupation</b></string>
+    <string name="JOB_SCORRES_SOCIO">I1 What is your main occupation\? That is, what is the main kind of work that you do to generate income\?</string>
+    <string name="PTR_SCORRES_SOCIO">I2 What is your partner\'s main occupation\? That is, what is the main kind of work that your partner does for income generation\?</string>
+
+    <string name="exposure"><b>SECTION J Exposure to Household Air Pollution</b></string>
+    <string name="STOVE_FCORRES_SOCIO">J1 What type of cookstove is mainly used for cooking in your household\?</string>
+    <string name="STOVE_FUEL_FCORRES_SOCIO">J2 What type of fuel or energy source is used in this cookstove\?</string>
+    <string name="STOVE_FUEL_FCORRES_1_SOCIO">J2a Electricity</string>
+    <string name="STOVE_FUEL_FCORRES_2_SOCIO">J2b Solar energy</string>
+    <string name="STOVE_FUEL_FCORRES_3_SOCIO">J2c Alcohol/ethanol</string>
+    <string name="STOVE_FUEL_FCORRES_4_SOCIO">J2d Gasoline/diesel</string>
+    <string name="STOVE_FUEL_FCORRES_5_SOCIO">J2e Kerosene/paraffin</string>
+    <string name="STOVE_FUEL_FCORRES_6_SOCIO">J2f Coal/lignite</string>
+    <string name="STOVE_FUEL_FCORRES_7_SOCIO">J2g Charcoal</string>
+    <string name="STOVE_FUEL_FCORRES_8_SOCIO">J2h Wood</string>
+    <string name="STOVE_FUEL_FCORRES_9_SOCIO">J2i Straw/shrubs/grass</string>
+    <string name="STOVE_FUEL_FCORRES_10_SOCIO">J2j Agricultural crop</string>
+    <string name="STOVE_FUEL_FCORRES_11_SOCIO">J2k Animal dung/waste</string>
+    <string name="STOVE_FUEL_FCORRES_12_SOCIO">K2l Processed biomass (pellets) or woodchips</string>
+    <string name="STOVE_FUEL_FCORRES_13_SOCIO">J2m Garbage/plastic</string>
+    <string name="STOVE_FUEL_FCORRES_14_SOCIO">J2n Sawdust</string>
+    <string name="STOVE_FUEL_FCORRES_88_SOCIO">J2o Other</string>
+    <string name="STOVE_FUEL_FCORRES_88_SOCIO_SPFY">J2os Other->Specify</string>
+    <string name="COOKING_INSIDE_FCORRES_SOCIO">J3 Is cooking usually done inside the house\?</string>
+    <string name="COOKING_ROOM_FCORRES_SOCIO">J3a If yes Do you have a separate room which is used as a kitchen\?</string>
+    <string name="COOKING_LOC_FCORRES_SOCIO">J3b Where is cooking usually done\?</string>
+    <string name="COOKING_VENT_FCORRES_SOCIO">J4 Are there windows or doors for ventilation in the room that is usually used for cooking\?</string>
+
+    <string name="health_behave"><b>SECTION K Health Behaviors</b></string>
+    <string name="SMOKE_OECOCCUR_SOCIO">K1 Do you smoke cigarettes/cigars/a pipe\?</string>
+    <string name="SMOKE_IN_OECDOSFRQ_SOCIO">K2 How often do you smoke inside the house\?</string>
+    <string name="SMOKE_HHOLD_OECOCCUR_SOCIO">K3 Do any other members of your household smoke cigarettes/cigars/a pipe\?</string>
+    <string name="SMOKE_HHOLD_IN_OECDOSFRQ_SOCIO">K4 How often do other members of your household smoke inside the house\?</string>
+    <string name="CHEW_OECOCCUR_SOCIO"> K5 In the last month, did you chew tobacco\?</string>
+    <string name="CHEW_BNUT_OECOCCUR_SOCIO">K6 In the last month, did you chew betel nut\?</string>
+    <string name="DRINK_OECOCCUR_SOCIO">K7 In the last month, did you have any kind of drink containing alcohol\?</string>
+
+    <string name="plan_delivery"><b>SECTION L Plans for Delivery</b></string>
+    <string name="PD_BIRTH_OHOLOC_SOCIO">L1 Where does the participant plan to give birth\?</string>
+    <string name="PD_DM_SCORRES_SOCIO">L2 In the participant\'s household, who usually makes the decision about where she will give birth\?</string>
+    <string name="profile">SOCIO-DEMOGRAPHIC (PROFILE)</string>
+    <string name="meters">meters</string>
+    <string name="text_min">Minutes</string>
+    <string name="text_hrs">Hours</string>
+    <string name="text_na">N/A</string>
+    <string name="text_na1">Refuse to answer</string>
+    <string name="text_CONYN_COVAL">Optional additional comments:</string>
+    <string name="text_CONYN_COVAL_YN">Are there any comments to add\?:</string>
+    <string name="send_profile">SEND SES</string>
+    <string name="extra">Is there an additional pregnancy to pick?</string>
+    <string name="preguuid">Pregnancy UUID</string>
+    <string name="select_child">Select Child</string>
+    <string name="text_1">1</string>
+    <string name="text_2">2</string>
+    <string name="text_3">3</string>
+    <string name="text_4">4</string>
+
+    //SocioDemo End
 
 </resources>

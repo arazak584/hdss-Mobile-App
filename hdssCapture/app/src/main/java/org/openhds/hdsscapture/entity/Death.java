@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -21,6 +22,7 @@ import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -30,10 +32,10 @@ public class Death extends BaseObservable implements Parcelable {
     @Expose
     @NotNull
     @PrimaryKey
-    public String death_uuid;
+    public String individual_uuid;
 
     @Expose
-    public String individual_uuid;
+    public String death_uuid;
 
     @Expose
     public Date deathDate;
@@ -112,6 +114,7 @@ public class Death extends BaseObservable implements Parcelable {
         this.death_uuid = death_uuid;
     }
 
+    @NonNull
     public String getIndividual_uuid() {
         return individual_uuid;
     }
@@ -148,7 +151,7 @@ public class Death extends BaseObservable implements Parcelable {
     }
 
     public String getInsertDate() {
-        if (insertDate == null) return "";
+        if (insertDate == null) return null;
         return f.format(insertDate);
     }
 
@@ -276,20 +279,30 @@ public class Death extends BaseObservable implements Parcelable {
         this.fw_uuid = fw_uuid;
     }
 
-    public String getAgeAtDeath() {
-        return AgeAtDeath == null ? "" : String.valueOf(AgeAtDeath);
+    public Integer getAgeAtDeath() {
+
+        if (dob == null && deathDate==null) {
+            return 0;
+        }
+        Calendar dobCalendar = Calendar.getInstance();
+        Calendar dodCalendar = Calendar.getInstance();
+        dobCalendar.setTime(dob);
+        dodCalendar.setTime(deathDate);
+        Calendar nowCalendar = Calendar.getInstance();
+        int AgeAtDeath = dodCalendar.get(Calendar.YEAR) - dobCalendar.get(Calendar.YEAR);
+        if (dodCalendar.get(Calendar.DAY_OF_YEAR) < dobCalendar.get(Calendar.DAY_OF_YEAR)) {
+            AgeAtDeath--;
+        }
+        return AgeAtDeath;
     }
 
-    public void setAgeAtDeath(String AgeAtDeath) {
-
-        try {
-            this.AgeAtDeath = (AgeAtDeath == null) ? null : Integer.valueOf(AgeAtDeath);
-        } catch (NumberFormatException e) {
-        }
+    public void setAgeAtDeath(Integer ageAtDeath) {
+        AgeAtDeath = ageAtDeath;
     }
 
     protected Death(Parcel in) {
         this.individual_uuid = in.readString();
+        this.extId = in.readString();
         this.deathDate = (java.util.Date) in.readSerializable();
         this.dob = (java.util.Date) in.readSerializable();
         this.insertDate = (java.util.Date) in.readSerializable();
@@ -328,6 +341,7 @@ public class Death extends BaseObservable implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.individual_uuid);
+        dest.writeString(this.extId);
         dest.writeSerializable(this.deathDate);
         dest.writeSerializable(this.dob);
         dest.writeSerializable(this.insertDate);

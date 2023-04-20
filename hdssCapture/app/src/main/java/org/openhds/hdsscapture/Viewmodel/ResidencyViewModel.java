@@ -38,6 +38,18 @@ public class ResidencyViewModel extends AndroidViewModel {
         return residencyRepository.findToSync();
     }
 
+    public List<Residency> findOmgSync() throws ExecutionException, InterruptedException {
+        return residencyRepository.findOmgSync();
+    }
+
+    public List<Residency> findImgSync() throws ExecutionException, InterruptedException {
+        return residencyRepository.findImgSync();
+    }
+
+    public Residency fetch(String id) throws ExecutionException, InterruptedException {
+        return residencyRepository.fetch(id);
+    }
+
 
 
     public void add(Residency data){ residencyRepository.create(data);}

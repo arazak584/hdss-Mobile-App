@@ -25,9 +25,11 @@ public class AppJson {
     public static final ExecutorService jsonWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     private final Context context;
+    private Retrofit retrofit;
 
     private AppJson(Context context) {
         this.context = context.getApplicationContext();
+        refreshRetrofit();
     }
 
     public static AppJson getInstance(Context context) {
@@ -42,16 +44,16 @@ public class AppJson {
         return INSTANCE;
     }
 
-    private String getBaseUrl() {
+    public String getBaseUrl() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.getString("BASE_URL", DEFAULT_BASE_URL);
     }
 
     public ApiDao getJsonApi() {
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").setLenient().create();
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
+        if (retrofit == null) {
+            refreshRetrofit();
+        }
         return retrofit.create(ApiDao.class);
     }
 
@@ -60,19 +62,32 @@ public class AppJson {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("BASE_URL", baseUrl);
         editor.apply();
+        refreshRetrofit();
+    }
+
+    public static void resetInstance() {
+        INSTANCE = null;
     }
 
     public void updateBaseUrl(String newBaseUrl) {
         setBaseUrl(newBaseUrl);
-        INSTANCE = new AppJson(context);
+        resetInstance();
+        INSTANCE = new AppJson(context); // Update INSTANCE to reference the new instance
+    }
+
+    public void refreshRetrofit() {
+        retrofit = new Retrofit.Builder()
+                .baseUrl(getBaseUrl())
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setDateFormat("yyyy-MM-dd").setLenient().create()))
+                .client(new OkHttpClient.Builder()
+                        .cache(null)
+                        .build())
+                .build();
     }
 
     public Context getAppContext() {
         return context;
     }
 
-    OkHttpClient client = new OkHttpClient.Builder()
-            .cache(null)
-            .build();
-
 }
+

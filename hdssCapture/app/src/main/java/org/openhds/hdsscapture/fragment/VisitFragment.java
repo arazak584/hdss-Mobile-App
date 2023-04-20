@@ -128,9 +128,9 @@ public class VisitFragment extends Fragment {
 
         VisitViewModel viewModel = new ViewModelProvider(this).get(VisitViewModel.class);
         try {
-            Visit data = viewModel.find(socialgroup.visit_uuid);
+            Visit data = viewModel.find(socialgroup.houseExtId);
             if (data != null) {
-                Toast.makeText(requireActivity(), "data pulled ", Toast.LENGTH_LONG).show();
+                data.visitDate = new Date();
                 binding.setVisit(data);
             } else {
                 data = new Visit();
@@ -145,6 +145,7 @@ public class VisitFragment extends Fragment {
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.insertDate = new Date();
                 data.visitDate = new Date();
+                data.complete = 1;
                 data.houseExtId = socialgroup.houseExtId;
                 if(roundData.roundNumber < 10) {
                     data.visitExtId = data.houseExtId + "00" + roundData.getRoundNumber();

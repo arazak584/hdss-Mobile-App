@@ -183,12 +183,12 @@ public class HouseMembersFragment extends Fragment {
                     BlankFragment.newInstance(individual,residency,locations, socialgroup)).commit();
         });
 
-        final ExtendedFloatingActionButton addvisit = binding.getRoot().findViewById(R.id.add_visit);
-        addvisit.setOnClickListener(v -> {
-
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    VisitFragment.newInstance(individual,residency,locations, socialgroup)).commit();
-        });
+//        final ExtendedFloatingActionButton addvisit = binding.getRoot().findViewById(R.id.add_visit);
+//        addvisit.setOnClickListener(v -> {
+//
+//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                    VisitFragment.newInstance(individual,residency,locations, socialgroup)).commit();
+//        });
 
 
         final FloatingActionButton add_individual = binding.getRoot().findViewById(R.id.button_newindividual);

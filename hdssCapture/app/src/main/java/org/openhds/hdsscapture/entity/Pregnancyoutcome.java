@@ -3,6 +3,7 @@ package org.openhds.hdsscapture.entity;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
@@ -49,13 +50,10 @@ public class Pregnancyoutcome extends BaseObservable {
     public String father_uuid;
 
     @Expose
-    public String childEverborn;
-
-    @Expose
     public String visit_uuid;
 
     @Expose
-    public String NumberofBirths;
+    public Integer numberofBirths;
 
     @Expose
     public String fw_uuid;
@@ -202,20 +200,14 @@ public class Pregnancyoutcome extends BaseObservable {
 
 
 
-    public String getChildEverborn() {
-        return childEverborn;
-    }
-
-    public void setChildEverborn(String childEverborn) {
-        this.childEverborn = childEverborn;
-    }
-
-    public String getNumberofBirths() {
-        return NumberofBirths;
-    }
-
-    public void setNumberofBirths(String numberofBirths) {
-        NumberofBirths = numberofBirths;
+    public void setNumberofBirths(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            numberofBirths = Integer.parseInt(TAG);
+        }
     }
 
     public Integer getB_place() {

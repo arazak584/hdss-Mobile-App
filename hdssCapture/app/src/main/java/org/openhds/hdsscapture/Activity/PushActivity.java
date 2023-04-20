@@ -18,10 +18,9 @@ import org.openhds.hdsscapture.Dao.ApiDao;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
+import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
-import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
-import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
@@ -30,10 +29,9 @@ import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
@@ -327,334 +325,6 @@ public class PushActivity extends AppCompatActivity {
         });
 
 
-        //PUSH Residency
-        final Button buttonSendResidencydata = findViewById(R.id.buttonSendResidency);
-        final TextView textViewSendResidencydata = findViewById(R.id.textViewSendResidency);
-        final ResidencyViewModel residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-
-        //GET MODIFIED DATA
-        final List<Residency> residencyList = new ArrayList<>();
-        try {
-            residencyList.addAll(residencyViewModel.findToSync());
-            textViewSendResidencydata.setText("Residency (" + residencyList.size() + ") to send");
-            textViewSendResidencydata.setTextColor(Color.rgb(0, 114, 133));
-            if (residencyList.isEmpty()) {
-                buttonSendResidencydata.setVisibility(View.GONE);
-                textViewSendResidencydata.setVisibility(View.GONE);
-            }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        buttonSendResidencydata.setOnClickListener(v -> {
-            progress.setMessage(getResources().getString(R.string.init_syncing));
-            progress.show();
-
-            //WRAP THE DATA
-            final DataWrapper<Residency> data = new DataWrapper<>(residencyList);
-
-            //SEND THE DATA
-            if (data.getData() != null && !data.getData().isEmpty()) {
-
-                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-
-                for (Residency elem : data.getData()) {
-                    elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getResidency_uuid());
-                }
-
-                final Call<DataWrapper<Residency>> c_callable = dao.sendResidencydata(data);
-                c_callable.enqueue(new Callback<DataWrapper<Residency>>() {
-                    @Override
-                    public void onResponse(@NonNull Call<DataWrapper<Residency>> call, Response<DataWrapper<Residency>> response) {
-                        if (response != null && response.body() != null && response.isSuccessful()
-                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-
-                            Residency[] d = response.body().getData().toArray(new Residency[0]);
-                            residencyViewModel.add(d);
-                            progress.dismiss();
-                            textViewSendResidencydata.setText("Sent " + d.length + " Residency record(s)");
-                            textViewSendResidencydata.setTextColor(Color.rgb(0, 114, 133));
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<DataWrapper<Residency>> call, @NonNull Throwable t) {
-                        progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
-
-                    }
-                });
-            } else {
-                progress.dismiss();
-            }
-
-        });
-
-
-
-        //PUSH Inmigration
-        final Button buttonSendInmigrationdata = findViewById(R.id.buttonSendInmigration);
-        final TextView textViewSendInmigrationdata = findViewById(R.id.textViewSendInmigration);
-        final InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
-
-        //GET MODIFIED DATA
-        final List<Inmigration> inmigrationList = new ArrayList<>();
-        try {
-            inmigrationList.addAll(inmigrationViewModel.findToSync());
-            textViewSendInmigrationdata.setText("Inmigration (" + inmigrationList.size() + ") to send");
-            textViewSendInmigrationdata.setTextColor(Color.rgb(0, 114, 133));
-            if (inmigrationList.isEmpty()) {
-                buttonSendInmigrationdata.setVisibility(View.GONE);
-                textViewSendInmigrationdata.setVisibility(View.GONE);
-            }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        buttonSendInmigrationdata.setOnClickListener(v -> {
-            progress.setMessage(getResources().getString(R.string.init_syncing));
-            progress.show();
-
-            //WRAP THE DATA
-            final DataWrapper<Inmigration> data = new DataWrapper<>(inmigrationList);
-
-            //SEND THE DATA
-            if (data.getData() != null && !data.getData().isEmpty()) {
-
-                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-
-                for (Inmigration elem : data.getData()) {
-                    elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getResidency_uuid());
-                }
-
-                final Call<DataWrapper<Inmigration>> c_callable = dao.sendInmigrationdata(data);
-                c_callable.enqueue(new Callback<DataWrapper<Inmigration>>() {
-                    @Override
-                    public void onResponse(@NonNull Call<DataWrapper<Inmigration>> call, Response<DataWrapper<Inmigration>> response) {
-                        if (response != null && response.body() != null && response.isSuccessful()
-                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-
-                            Inmigration[] d = response.body().getData().toArray(new Inmigration[0]);
-                            inmigrationViewModel.add(d);
-                            progress.dismiss();
-                            textViewSendInmigrationdata.setText("Sent " + d.length + " Inmigration record(s)");
-                            textViewSendInmigrationdata.setTextColor(Color.rgb(0, 114, 133));
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<DataWrapper<Inmigration>> call, @NonNull Throwable t) {
-                        progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
-
-                    }
-                });
-            } else {
-                progress.dismiss();
-            }
-
-        });
-
-
-
-        //PUSH Outmigration
-        final Button buttonSendOutmigrationdata = findViewById(R.id.buttonSendOutmigration);
-        final TextView textViewSendOutmigrationdata = findViewById(R.id.textViewSendOutmigration);
-        final OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
-
-        //GET MODIFIED DATA
-        final List<Outmigration> outmigrationList = new ArrayList<>();
-        try {
-            outmigrationList.addAll(outmigrationViewModel.findToSync());
-            textViewSendOutmigrationdata.setText("Outmigration (" + outmigrationList.size() + ") to send");
-            textViewSendOutmigrationdata.setTextColor(Color.rgb(0, 114, 133));
-            if (outmigrationList.isEmpty()) {
-                buttonSendOutmigrationdata.setVisibility(View.GONE);
-                textViewSendOutmigrationdata.setVisibility(View.GONE);
-            }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        buttonSendOutmigrationdata.setOnClickListener(v -> {
-            progress.setMessage(getResources().getString(R.string.init_syncing));
-            progress.show();
-
-            //WRAP THE DATA
-            final DataWrapper<Outmigration> data = new DataWrapper<>(outmigrationList);
-
-            //SEND THE DATA
-            if (data.getData() != null && !data.getData().isEmpty()) {
-
-                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-
-                for (Outmigration elem : data.getData()) {
-                    elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getResidency_uuid());
-                }
-
-                final Call<DataWrapper<Outmigration>> c_callable = dao.sendOutmigrationdata(data);
-                c_callable.enqueue(new Callback<DataWrapper<Outmigration>>() {
-                    @Override
-                    public void onResponse(@NonNull Call<DataWrapper<Outmigration>> call, Response<DataWrapper<Outmigration>> response) {
-                        if (response != null && response.body() != null && response.isSuccessful()
-                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-
-                            Outmigration[] d = response.body().getData().toArray(new Outmigration[0]);
-                            outmigrationViewModel.add(d);
-                            progress.dismiss();
-                            textViewSendOutmigrationdata.setText("Sent " + d.length + " Outmigration record(s)");
-                            textViewSendOutmigrationdata.setTextColor(Color.rgb(0, 114, 133));
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<DataWrapper<Outmigration>> call, @NonNull Throwable t) {
-                        progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
-
-                    }
-                });
-            } else {
-                progress.dismiss();
-            }
-
-        });
-
-
-        //PUSH Death
-        final Button buttonSendDeathdata = findViewById(R.id.buttonSendDeath);
-        final TextView textViewSendDeathdata = findViewById(R.id.textViewSendDeath);
-        final DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
-
-        //GET MODIFIED DATA
-        final List<Death> deathList = new ArrayList<>();
-        try {
-            deathList.addAll(deathViewModel.findToSync());
-            textViewSendDeathdata.setText("Death (" + deathList.size() + ") to send");
-            textViewSendDeathdata.setTextColor(Color.rgb(0, 114, 133));
-            if (deathList.isEmpty()) {
-                buttonSendDeathdata.setVisibility(View.GONE);
-                textViewSendDeathdata.setVisibility(View.GONE);
-            }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        buttonSendDeathdata.setOnClickListener(v -> {
-            progress.setMessage(getResources().getString(R.string.init_syncing));
-            progress.show();
-
-            //WRAP THE DATA
-            final DataWrapper<Death> data = new DataWrapper<>(deathList);
-
-            //SEND THE DATA
-            if (data.getData() != null && !data.getData().isEmpty()) {
-
-                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-
-                for (Death elem : data.getData()) {
-                    elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getIndividual_uuid());
-                }
-
-                final Call<DataWrapper<Death>> c_callable = dao.sendDeathdata(data);
-                c_callable.enqueue(new Callback<DataWrapper<Death>>() {
-                    @Override
-                    public void onResponse(@NonNull Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
-                        if (response != null && response.body() != null && response.isSuccessful()
-                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-
-                            Death[] d = response.body().getData().toArray(new Death[0]);
-                            deathViewModel.add(d);
-                            progress.dismiss();
-                            textViewSendDeathdata.setText("Sent " + d.length + " Death record(s)");
-                            textViewSendDeathdata.setTextColor(Color.rgb(0, 114, 133));
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<DataWrapper<Death>> call, @NonNull Throwable t) {
-                        progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
-
-                    }
-                });
-            } else {
-                progress.dismiss();
-            }
-
-        });
-
-
-        //PUSH Vpm
-        final Button buttonSendVpmdata = findViewById(R.id.buttonSendVpm);
-        final TextView textViewSendVpmdata = findViewById(R.id.textViewSendVpm);
-        final DeathViewModel vpm = new ViewModelProvider(this).get(DeathViewModel.class);
-
-        //GET MODIFIED DATA
-        final List<Death> vpmList = new ArrayList<>();
-        try {
-            vpmList.addAll(vpm.retrieveVpmSync());
-            textViewSendVpmdata.setText("Vpm (" + vpmList.size() + ") to send");
-            textViewSendVpmdata.setTextColor(Color.rgb(0, 114, 133));
-            if (vpmList.isEmpty()) {
-                buttonSendVpmdata.setVisibility(View.GONE);
-                textViewSendVpmdata.setVisibility(View.GONE);
-            }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        buttonSendVpmdata.setOnClickListener(v -> {
-            progress.setMessage(getResources().getString(R.string.init_syncing));
-            progress.show();
-
-            //WRAP THE DATA
-            final DataWrapper<Death> data = new DataWrapper<>(vpmList);
-
-            //SEND THE DATA
-            if (data.getData() != null && !data.getData().isEmpty()) {
-
-                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-
-                for (Death elem : data.getData()) {
-                    elem.vpmcomplete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getExtId());
-                }
-
-                final Call<DataWrapper<Death>> c_callable = dao.sendVpmdata(data);
-                c_callable.enqueue(new Callback<DataWrapper<Death>>() {
-                    @Override
-                    public void onResponse(@NonNull Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
-                        if (response != null && response.body() != null && response.isSuccessful()
-                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-
-                            Death[] d = response.body().getData().toArray(new Death[0]);
-                            vpm.add(d);
-                            progress.dismiss();
-                            textViewSendVpmdata.setText("Sent " + d.length + " Vpm record(s)");
-                            textViewSendVpmdata.setTextColor(Color.rgb(0, 114, 133));
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<DataWrapper<Death>> call, @NonNull Throwable t) {
-                        progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
-
-                    }
-                });
-            } else {
-                progress.dismiss();
-            }
-
-        });
-
-
-
         //PUSH Relationship
         final Button buttonSendRelationshipdata = findViewById(R.id.buttonSendRelationship);
         final TextView textViewSendRelationshipdata = findViewById(R.id.textViewSendRelationship);
@@ -909,6 +579,352 @@ public class PushActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Call<DataWrapper<Demographic>> call, @NonNull Throwable t) {
                         progress.dismiss();
                         Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+                });
+            } else {
+                progress.dismiss();
+            }
+
+        });
+
+
+
+        //PUSH DEATH DATA (DEATH, VPM)
+        final Button buttonSendEnd = findViewById(R.id.buttonSendEnd);
+        final TextView textViewSendEnd = findViewById(R.id.textViewSendEnd);
+
+        final DeathViewModel death = new ViewModelProvider(this).get(DeathViewModel.class);
+        final DeathViewModel vpms = new ViewModelProvider(this).get(DeathViewModel.class);
+
+        final List<Death> listDeath = new ArrayList<>();
+        final List<Death> listVpm = new ArrayList<>();
+
+        try {
+            listDeath.addAll(death.findToSync());
+            listVpm.addAll(vpms.retrieveVpmSync());
+
+            textViewSendEnd.setText(
+                    "Death (" + listDeath.size() + ")" +
+                            ", VPM(" + listVpm.size() + ")" +
+                            " to send"
+            );
+            if (listDeath.isEmpty() && listVpm.isEmpty()) {
+                buttonSendEnd.setVisibility(View.GONE);
+                textViewSendEnd.setVisibility(View.GONE);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        buttonSendEnd.setOnClickListener(v -> {
+            progress.setMessage(getResources().getString(R.string.init_syncing));
+            progress.show();
+
+            final Death[][] d23 = new Death[1][1];
+            final Death[][] d24 = new Death[1][1];
+
+            final DataWrapper<Death> dataDeath = new DataWrapper<>(listDeath);
+            if (dataDeath.getData() != null && !dataDeath.getData().isEmpty()) {
+                progress.setMessage("Sending " + dataDeath.getData().size() + " of Death record(s)...");
+
+                for (Death elem : dataDeath.getData()) {
+                    elem.complete = 0;
+                }
+
+                final Call<DataWrapper<Death>> c_callable = dao.sendDeathdata(dataDeath);
+                c_callable.enqueue(new Callback<DataWrapper<Death>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
+                        if (response != null && response.body() != null && response.isSuccessful()
+                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
+
+                            d23[0] = response.body().getData().toArray(new Death[0]);
+                            death.add(d23[0]);
+                            progress.dismiss();
+                            textViewSendEnd.setText(
+                                    "Deaht(" + d23[0].length + " of " + listDeath.size() + ")" +
+                                            ", VPM(" + d24[0].length + " of " + listVpm.size() + ")" +
+                                            " sent"
+                            );
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<DataWrapper<Death>> call, @NonNull Throwable t) {
+                        progress.dismiss();
+                        Toast.makeText(PushActivity.this, "Failed to send Death data", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, t.getMessage());
+
+                    }
+                });
+
+            } else {
+                progress.dismiss();
+            }
+
+            final DataWrapper<Death> dataMnh24 = new DataWrapper<>(listVpm);
+            if (dataMnh24.getData() != null && !dataMnh24.getData().isEmpty()) {
+                progress.setMessage("Sending " + dataMnh24.getData().size() + " VPM record(s)...");
+
+                for (Death ele : dataMnh24.getData()) {
+                    ele.vpmcomplete = 0;
+                }
+
+                final Call<DataWrapper<Death>> c_callable = dao.sendVpmdata(dataMnh24);
+                c_callable.enqueue(new Callback<DataWrapper<Death>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
+                        if (response != null && response.body() != null && response.isSuccessful()
+                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
+
+                            d24[0] = response.body().getData().toArray(new Death[0]);
+                            vpms.add(d24[0]);
+                            progress.dismiss();
+                            textViewSendEnd.setText(
+                                    "Death(" + d23[0].length + " of " + listDeath.size() + ")" +
+                                            ", VPM(" + d24[0].length + " of " + listVpm.size() + ")" +
+                                            " sent"
+                            );
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<DataWrapper<Death>> call, @NonNull Throwable t) {
+                        progress.dismiss();
+                        Toast.makeText(PushActivity.this, "Failed to send VPM", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, t.getMessage());
+
+                    }
+                });
+
+            } else {
+                progress.dismiss();
+            }
+
+
+        });
+
+
+        //PUSH END DATA (Residency, Outmigration)
+        final Button buttonSendEvents = findViewById(R.id.buttonSendEvents);
+        final TextView textViewSendEvents = findViewById(R.id.textViewSendEvents);
+
+        final ResidencyViewModel residency = new ViewModelProvider(this).get(ResidencyViewModel.class);
+        final ResidencyViewModel outmigration = new ViewModelProvider(this).get(ResidencyViewModel.class);
+        final ResidencyViewModel inmigration = new ViewModelProvider(this).get(ResidencyViewModel.class);
+
+        final List<Residency> listResidency = new ArrayList<>();
+        final List<Residency> listOutmigration = new ArrayList<>();
+        final List<Residency> listInmigration = new ArrayList<>();
+
+        try {
+            listResidency.addAll(residency.findToSync());
+            listOutmigration.addAll(outmigration.findOmgSync());
+            listInmigration.addAll(inmigration.findImgSync());
+
+            textViewSendEvents.setText(
+                    "Residency (" + listResidency.size() + ")" +
+                            ", Outmigration(" + listOutmigration.size() + ")" +
+                            ", Inmigration(" + listInmigration.size() + ")" +
+                            " to send"
+            );
+            if (listResidency.isEmpty() && listOutmigration.isEmpty() && listInmigration.isEmpty()) {
+                buttonSendEvents.setVisibility(View.GONE);
+                textViewSendEvents.setVisibility(View.GONE);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        buttonSendEvents.setOnClickListener(v -> {
+            progress.setMessage(getResources().getString(R.string.init_syncing));
+            progress.show();
+
+            final Residency[][] d01 = new Residency[1][1];
+            final Residency[][] d02 = new Residency[1][1];
+            final Residency[][] d03 = new Residency[1][1];
+
+            final DataWrapper<Residency> dataResidency = new DataWrapper<>(listResidency);
+            if (dataResidency.getData() != null && !dataResidency.getData().isEmpty()) {
+                progress.setMessage("Sending " + dataResidency.getData().size() + " of Membership record(s)...");
+
+                for (Residency elem : dataResidency.getData()) {
+                    elem.complete = 0;
+                }
+
+                final Call<DataWrapper<Residency>> c_callable = dao.sendResidencydata(dataResidency);
+                c_callable.enqueue(new Callback<DataWrapper<Residency>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DataWrapper<Residency>> call, Response<DataWrapper<Residency>> response) {
+                        if (response != null && response.body() != null && response.isSuccessful()
+                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
+
+                            d01[0] = response.body().getData().toArray(new Residency[0]);
+                            residency.add(d01[0]);
+                            progress.dismiss();
+                            textViewSendEvents.setText(
+                                    "Membership(" + d01[0].length + " of " + listResidency.size() + ")" +
+                                            ", Outmigration(" + d02[0].length + " of " + listOutmigration.size() + ")" +
+                                            ", Inmigration(" + d03[0].length + " of " + listInmigration.size() + ")" +
+                                            " sent"
+                            );
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<DataWrapper<Residency>> call, @NonNull Throwable t) {
+                        progress.dismiss();
+                        Toast.makeText(PushActivity.this, "Failed to send Residency data", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, t.getMessage());
+
+                    }
+                });
+
+            } else {
+                progress.dismiss();
+            }
+
+            final DataWrapper<Residency> dataOutmigration = new DataWrapper<>(listOutmigration);
+            if (dataOutmigration.getData() != null && !dataOutmigration.getData().isEmpty()) {
+                progress.setMessage("Sending " + dataOutmigration.getData().size() + " Outmigration record(s)...");
+
+                for (Residency ele : dataOutmigration.getData()) {
+                    ele.omgcomplete = 0;
+                }
+
+                final Call<DataWrapper<Residency>> c_callable = dao.sendOutmigrationdata(dataOutmigration);
+                c_callable.enqueue(new Callback<DataWrapper<Residency>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DataWrapper<Residency>> call, Response<DataWrapper<Residency>> response) {
+                        if (response != null && response.body() != null && response.isSuccessful()
+                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
+
+                            d02[0] = response.body().getData().toArray(new Residency[0]);
+                            outmigration.add(d02[0]);
+                            progress.dismiss();
+                            textViewSendEvents.setText(
+                                    "Membership(" + d01[0].length + " of " + listResidency.size() + ")" +
+                                            ", Outmigration(" + d02[0].length + " of " + listOutmigration.size() + ")" +
+                                            ", Inmigration(" + d03[0].length + " of " + listInmigration.size() + ")" +
+                                            " sent"
+                            );
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<DataWrapper<Residency>> call, @NonNull Throwable t) {
+                        progress.dismiss();
+                        Toast.makeText(PushActivity.this, "Failed to send Outmigration", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, t.getMessage());
+
+                    }
+                });
+
+            } else {
+                progress.dismiss();
+            }
+
+            final DataWrapper<Residency> dataInmigration = new DataWrapper<>(listInmigration);
+            if (dataInmigration.getData() != null && !dataInmigration.getData().isEmpty()) {
+                progress.setMessage("Sending " + dataInmigration.getData().size() + " Inmigration record(s)...");
+
+                for (Residency eles : dataInmigration.getData()) {
+                    eles.imgcomplete = 0;
+                }
+
+                final Call<DataWrapper<Residency>> c_callable = dao.sendInmigrationdata(dataInmigration);
+                c_callable.enqueue(new Callback<DataWrapper<Residency>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DataWrapper<Residency>> call, Response<DataWrapper<Residency>> response) {
+                        if (response != null && response.body() != null && response.isSuccessful()
+                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
+
+                            d03[0] = response.body().getData().toArray(new Residency[0]);
+                            inmigration.add(d03[0]);
+                            progress.dismiss();
+                            textViewSendEvents.setText(
+                                    "Membership(" + d01[0].length + " of " + listResidency.size() + ")" +
+                                            ", Outmigration(" + d02[0].length + " of " + listOutmigration.size() + ")" +
+                                            ", Inmigration(" + d03[0].length + " of " + listInmigration.size() + ")" +
+                                            " sent"
+                            );
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<DataWrapper<Residency>> call, @NonNull Throwable t) {
+                        progress.dismiss();
+                        Toast.makeText(PushActivity.this, "Failed to send Inmigration", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, t.getMessage());
+
+                    }
+                });
+
+            } else {
+                progress.dismiss();
+            }
+
+
+        });
+
+
+
+        //PUSH SES DATA
+        final Button buttonSendSocio = findViewById(R.id.buttonSendSocio);
+        final TextView textViewSendSocio = findViewById(R.id.textViewSendSocio);
+        final HdssSociodemoViewModel hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
+
+        //GET MODIFIED DATA
+        final List<HdssSociodemo> hdssSociodemoList = new ArrayList<>();
+        try {
+            hdssSociodemoList.addAll(hdssSociodemoViewModel.findToSync());
+            textViewSendSocio.setText("Visit(" + hdssSociodemoList.size() + ") to send");
+            textViewSendSocio.setTextColor(Color.rgb(0, 114, 133));
+            if (hdssSociodemoList.isEmpty()) {
+                buttonSendSocio.setVisibility(View.GONE);
+                textViewSendSocio.setVisibility(View.GONE);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        buttonSendSocio.setOnClickListener(v -> {
+            progress.setMessage(getResources().getString(R.string.init_syncing));
+            progress.show();
+
+            //WRAP THE DATA
+            final DataWrapper<HdssSociodemo> data = new DataWrapper<>(hdssSociodemoList);
+
+            //SEND THE DATA
+            if (data.getData() != null && !data.getData().isEmpty()) {
+
+                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
+
+                for (HdssSociodemo elem : data.getData()) {
+                    elem.complete = 0;
+                }
+
+                final Call<DataWrapper<HdssSociodemo>> c_callable = dao.sendSociodata(data);
+                c_callable.enqueue(new Callback<DataWrapper<HdssSociodemo>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DataWrapper<HdssSociodemo>> call, Response<DataWrapper<HdssSociodemo>> response) {
+                        if (response != null && response.body() != null && response.isSuccessful()
+                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
+
+                            HdssSociodemo[] d = response.body().getData().toArray(new HdssSociodemo[0]);
+                            hdssSociodemoViewModel.add(d);
+                            progress.dismiss();
+                            textViewSendSocio.setText("Sent " + d.length + " record(s)");
+                            textViewSendSocio.setTextColor(Color.rgb(0, 114, 133));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<DataWrapper<HdssSociodemo>> call, @NonNull Throwable t) {
+                        progress.dismiss();
+                        Toast.makeText(PushActivity.this, "Failed to send SES Data", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, t.getMessage());
 
                     }
                 });

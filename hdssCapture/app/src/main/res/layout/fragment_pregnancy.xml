@@ -151,16 +151,32 @@
                     tools:ignore="DuplicateSpeakableTextCheck"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
-                <TextView
-                    android:id="@+id/editText_recordedDate"
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints=""
-                    android:ems="10"
-                    android:minHeight="40dp"
-                    android:text="@={pregnancy.recordedDate}"
-                    android:textSize="20sp"
-                    tools:ignore="TextContrastCheck" />
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/conception">
+                    android:text="@string/conception">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editText_recordedDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={pregnancy.recordedDate}"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/button_preg_expectDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/expectedDelivery"
+                    tools:ignore="DuplicateSpeakableTextCheck"
+                    app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
@@ -175,6 +191,8 @@
                         android:id="@+id/expectedDelivery"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:text="@={pregnancy.expectedDeliveryDate}"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -673,6 +691,24 @@
                     android:text="@={pregnancy.outcome_date}"
                     android:textSize="20sp"
                     tools:ignore="TextContrastCheck" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/extra"/>
+
+                <Spinner
+                    android:id="@+id/extra"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{pregnancy.extra}"
+                    android:onItemSelected="@{pregnancy::setExtra}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="15dp"/>
 
                 <TextView
                     android:layout_width="match_parent"

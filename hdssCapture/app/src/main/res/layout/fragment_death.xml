@@ -15,10 +15,6 @@
             type="org.openhds.hdsscapture.entity.Death" />
 
         <variable
-            name="residency"
-            type="org.openhds.hdsscapture.entity.Residency" />
-
-        <variable
             name="socialgroup"
             type="org.openhds.hdsscapture.entity.Socialgroup" />
 
@@ -299,26 +295,6 @@
                     android:inputType="textPersonName"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:padding="5dp"
-                android:hint="@string/AgeAtDeath"
-                android:text="@string/AgeAtDeath">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:id="@+id/AgeAtDeath"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@={death.AgeAtDeath}"
-                    android:inputType="textPersonName"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -449,36 +425,6 @@
                     android:inputType="textPersonName|textCapCharacters"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:padding="5dp"
-                android:text="@string/endtype"/>
-
-            <Spinner
-                android:visibility="gone"
-                android:id="@+id/endtype"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                selection="@{residency.endType}"
-                android:onItemSelected="@{residency::setEndType}"
-                android:gravity="left"
-                android:textColor="#000301"
-                android:padding="10dp"/>
-
-            <TextView
-                android:visibility="gone"
-                android:id="@+id/editText_endDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:ems="10"
-                android:minHeight="40dp"
-                android:text="@={residency.endDate}"
-                android:textSize="20sp"
-                tools:ignore="TextContrastCheck" />
 
             <TextView
                 android:layout_width="match_parent"

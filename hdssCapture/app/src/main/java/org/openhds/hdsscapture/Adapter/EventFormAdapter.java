@@ -1,15 +1,17 @@
 package org.openhds.hdsscapture.Adapter;
 
+import static org.openhds.hdsscapture.AppConstants.COMPLETE;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS1;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS10;
+import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS11;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS3;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS4;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS6;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS7;
-import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS8;
-import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS9;
+import static org.openhds.hdsscapture.AppConstants.EVENT_SOCIO;
 import static org.openhds.hdsscapture.AppConstants.MARKED_COMPLETE;
 import static org.openhds.hdsscapture.AppConstants.NOT_DONE;
+import static org.openhds.hdsscapture.AppConstants.SUBMITTED;
 import static org.openhds.hdsscapture.AppConstants.UPDATE;
 import static org.openhds.hdsscapture.AppConstants.UPDATED;
 
@@ -25,7 +27,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
@@ -34,12 +38,12 @@ import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.fragment.DeathFragment;
 import org.openhds.hdsscapture.fragment.DemographicFragment;
 import org.openhds.hdsscapture.fragment.EventsFragment;
-import org.openhds.hdsscapture.fragment.InmigrationFragment;
-import org.openhds.hdsscapture.fragment.OutmigrationFragment;
 import org.openhds.hdsscapture.fragment.PregnancyFragment;
+import org.openhds.hdsscapture.fragment.PregnancyoutcomeFragment;
 import org.openhds.hdsscapture.fragment.RelationshipFragment;
 import org.openhds.hdsscapture.fragment.ResidencyFragment;
 import org.openhds.hdsscapture.fragment.SocialgroupFragment;
+import org.openhds.hdsscapture.fragment.SocioFragment;
 
 import java.util.List;
 
@@ -53,6 +57,8 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
     private CaseItem caseItem;
     private Visit visit;
     private final EventsFragment activity;
+    private Inmigration inmigration;
+    private Outmigration outmigration;
 
     public EventFormAdapter(Locations locations, Socialgroup socialgroup, Residency residency, Individual individual, CaseItem caseItem, List<EventForm> eventForms, EventsFragment activity) {
         this.locations = locations;
@@ -79,21 +85,25 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
         final EventForm eventForm = eventForms.get(position);
         final String status;
 
-        if (eventForm.complete == null) {
             if (eventForm.complete == null ) {
                 holder.linearLayout.setBackgroundColor(Color.TRANSPARENT);
+                 status = NOT_DONE;
+            } else if (eventForm.complete != null) {
+                if (eventForm.complete == COMPLETE ) {
+                    holder.linearLayout.setBackgroundColor(Color.GREEN);
+                    status = MARKED_COMPLETE;
+                } else if (eventForm.complete == UPDATED) {
+                    holder.linearLayout.setBackgroundColor(Color.YELLOW);
+                    status = UPDATE;
+                }else {
+                    holder.linearLayout.setBackgroundColor(Color.MAGENTA);
+                    status = SUBMITTED;
+                }
+            }else {
+                holder.linearLayout.setBackgroundColor(Color.TRANSPARENT);
                 status = NOT_DONE;
-            } else if (eventForm.complete == UPDATED) {
-                holder.linearLayout.setBackgroundColor(Color.RED);
-                status = UPDATE;
-            } else {
-                holder.linearLayout.setBackgroundColor(Color.GREEN);
-                status = MARKED_COMPLETE;
             }
-        } else {
-            holder.linearLayout.setBackgroundColor(Color.GREEN);
-            status = MARKED_COMPLETE;
-        }
+
 
         holder.textView_event.setText(eventForm.event_name);
         holder.textView_form.setText(eventForm.form_name);
@@ -106,7 +116,7 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
         switch (eventForm.event_name) {
             case EVENT_HDSS1: {
                 activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        ResidencyFragment.newInstance(individual,residency, locations,socialgroup, caseItem)).commit();
+                        ResidencyFragment.newInstance(individual,residency, locations,socialgroup,caseItem,eventForm)).commit();
 
                 break;
             }
@@ -142,26 +152,28 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
 
                 break;
             }
-            case EVENT_HDSS8: {
 
-                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        OutmigrationFragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
-
-                break;
-            }
-
-            case EVENT_HDSS9: {
-
-                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        InmigrationFragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
-
-                break;
-            }
 
             case EVENT_HDSS10: {
 
                 activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                         PregnancyFragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
+
+                break;
+            }
+
+            case EVENT_SOCIO: {
+
+                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                        SocioFragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
+
+                break;
+            }
+
+            case EVENT_HDSS11: {
+
+                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                        PregnancyoutcomeFragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
 
                 break;
             }

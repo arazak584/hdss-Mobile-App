@@ -117,7 +117,6 @@ public class HouseholdFragment extends Fragment {
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
         SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-//        try {
             Socialgroup data = binding.getSocialgroup();
             if (data != null) {
                 if (data.visit_uuid==null){
@@ -170,7 +169,7 @@ public class HouseholdFragment extends Fragment {
         }
         if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseMembersFragment.newInstance(individual, residency, locations, socialgroup)).commit();
+                    VisitFragment.newInstance(individual, residency, locations, socialgroup)).commit();
         }else{
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     BlankFragment.newInstance(individual, residency, locations, socialgroup)).commit();

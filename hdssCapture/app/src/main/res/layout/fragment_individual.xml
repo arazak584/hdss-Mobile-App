@@ -133,27 +133,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:inputType="text"
-                    android:hint="@string/resuuid">
-                    android:text="@string/ind_extid">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:id="@+id/res"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={individual.residency_uuid}"
-                        android:inputType="textPersonName"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
                     android:hint="@string/firstname">
                     android:text="@string/firstname">
 
