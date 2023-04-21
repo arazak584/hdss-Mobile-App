@@ -109,6 +109,7 @@ public class PregnancyDialogFragment extends DialogFragment {
             }
         });
 
+
         //Load Pregnancy Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_pregnancy);
         final PregnancyAdapter adapter = new PregnancyAdapter(this, individual, residency, locations, socialgroup );

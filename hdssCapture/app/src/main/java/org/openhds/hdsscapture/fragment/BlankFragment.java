@@ -106,6 +106,7 @@ public class BlankFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentBlankBinding.inflate(inflater, container, false);
 
+
         final TextView compno = binding.getRoot().findViewById(R.id.textView_compound);
         final TextView gps = binding.getRoot().findViewById(R.id.gpsLng);
         final TextView gpsLat = binding.getRoot().findViewById(R.id.gpsLat);
