@@ -202,8 +202,8 @@ public class PregnancyFragment extends Fragment {
         loadCodeData(binding.slpBednet, "complete");
         loadCodeData(binding.firstPreg, "complete");
         loadCodeData(binding.outcometype, "complete");
-        loadCodeData(binding.whyNo, "whyNo");
-        loadCodeData(binding.attendYou, "attendYou");
+        loadCodeData(binding.whyNo, "notdel");
+        loadCodeData(binding.attendYou, "assist");
         loadCodeData(binding.ownBnet, "complete");
         loadCodeData(binding.bnetSou, "bnetSou");
         loadCodeData(binding.bnetLoc, "bnetLoc");

@@ -24,6 +24,7 @@ import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.databinding.FragmentOutcomeBinding;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
@@ -179,6 +180,16 @@ public class PregnancyoutcomeFragment extends Fragment {
                 binding.editTextConception.setText(result);
             }
 
+            if (bundle.containsKey((PregnancyoutcomeFragment.DATE_BUNDLES.DOD.getBundleKey()))) {
+                final String result = bundle.getString(PregnancyoutcomeFragment.DATE_BUNDLES.DOD.getBundleKey());
+                binding.vpm.dthDeathDate.setText(result);
+            }
+
+            if (bundle.containsKey((PregnancyoutcomeFragment.DATE_BUNDLES.DOB.getBundleKey()))) {
+                final String result = bundle.getString(PregnancyoutcomeFragment.DATE_BUNDLES.DOB.getBundleKey());
+                binding.vpm.dthDob.setText(result);
+            }
+
         });
 
         binding.buttonOutcomeStartDate.setOnClickListener(v -> {
@@ -190,6 +201,18 @@ public class PregnancyoutcomeFragment extends Fragment {
         binding.buttonOutcomeConception.setOnClickListener(v -> {
             final Calendar c = Calendar.getInstance();
             DialogFragment newFragment = new DatePickerFragment(PregnancyoutcomeFragment.DATE_BUNDLES.CONCEPTION.getBundleKey(), c);
+            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+        });
+
+        binding.vpm.buttonDeathDod.setOnClickListener(v -> {
+            final Calendar c = Calendar.getInstance();
+            DialogFragment newFragment = new DatePickerFragment(PregnancyoutcomeFragment.DATE_BUNDLES.DOD.getBundleKey(), c);
+            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+        });
+
+        binding.vpm.buttonDeathDob.setOnClickListener(v -> {
+            final Calendar c = Calendar.getInstance();
+            DialogFragment newFragment = new DatePickerFragment(PregnancyoutcomeFragment.DATE_BUNDLES.DOB.getBundleKey(), c);
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
@@ -321,6 +344,39 @@ public class PregnancyoutcomeFragment extends Fragment {
             e.printStackTrace();
         }
 
+        try {
+            Death data = deathViewModel.find(individual.individual_uuid);
+            if (data != null) {
+                binding.setDeath(data);
+            } else {
+                data = new Death();
+
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.death_uuid = uuidString;
+                data.insertDate = new Date();
+                data.firstName = "Still";
+                data.lastName = "Birth";
+                data.gender = 3;
+                data.compno = locations.getCompno();
+                data.extId = individual.getExtId();
+                data.compname = locations.getLocationName();
+                data.individual_uuid = individual.getIndividual_uuid();
+                data.villname = level5Data.getName();
+                data.villcode = level5Data.getVillcode();
+                data.visit_uuid = socialgroup.getVisit_uuid();
+                data.respondent = individual.getFirstName() +" "+ individual.getLastName();
+                data.househead = individual.getFirstName() +" "+ individual.getLastName();
+                data.deathCause = 77;
+                data.vpmcomplete=1;
+
+                binding.setDeath(data);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
         final CodeBookViewModel codeBookViewModel = new ViewModelProvider(this).get(CodeBookViewModel.class);
         loadCodeData(binding.childFetus1.out1Type, codeBookViewModel, "outcometype");
@@ -340,16 +396,19 @@ public class PregnancyoutcomeFragment extends Fragment {
         loadCodeData(binding.whoAnc, codeBookViewModel, "assist");
         loadCodeData(binding.chdSize, codeBookViewModel, "size");
         loadCodeData(binding.individualComplete, codeBookViewModel, "complete");
+        loadCodeData(binding.stillbirth, codeBookViewModel, "complete");
+        loadCodeData(binding.vpm.dthDeathPlace, codeBookViewModel, "deathPlace");
+        loadCodeData(binding.vpm.dthDeathCause, codeBookViewModel, "deathCause");
 
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
-            save(true, true, viewModel, outcomeViewModel);
+            save(true, true, viewModel, outcomeViewModel,deathViewModel);
         });
 
         binding.buttonClose.setOnClickListener(v -> {
 
-            save(false, true, viewModel, outcomeViewModel);
+            save(false, true, viewModel, outcomeViewModel,deathViewModel);
         });
 
         binding.setEventname(eventForm.event_name);
@@ -358,7 +417,7 @@ public class PregnancyoutcomeFragment extends Fragment {
         return view;
     }
 
-    private void save(boolean save, boolean close, PregnancyoutcomeViewModel viewModel, OutcomeViewModel outcomeViewModel) {
+    private void save(boolean save, boolean close, PregnancyoutcomeViewModel viewModel, OutcomeViewModel outcomeViewModel,DeathViewModel deathViewModel) {
 
         if (save) {
             Pregnancyoutcome finalData = binding.getPregoutcome();
@@ -410,6 +469,16 @@ public class PregnancyoutcomeFragment extends Fragment {
                     final Outcome inf = binding.getPregoutcome4();
                     inf.complete = 1;
                     outcomeViewModel.add(inf);
+
+                }
+
+                if (finalData.stillbirth == 1) {
+
+                    hasErrors = hasErrors || new Handler().hasInvalidInput(binding.vpm.OUTCOMELAYOUT, validateOnComplete, false);
+
+                    final Death vpm = binding.getDeath();
+                    vpm.vpmcomplete = 1;
+                    deathViewModel.add(vpm);
 
                 }
 
@@ -467,6 +536,8 @@ public class PregnancyoutcomeFragment extends Fragment {
 
     private enum DATE_BUNDLES {
         CONCEPTION ("CONCEPTION"),
+        DOB ("DOB"),
+        DOD ("DOD"),
         RECORDDATE ("RECORDDATE");
 
         private final String bundleKey;

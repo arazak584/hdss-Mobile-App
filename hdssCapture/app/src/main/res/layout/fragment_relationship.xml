@@ -86,8 +86,7 @@
                     tools:ignore="TextContrastCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
+                    android:visibility="gone"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -97,6 +96,8 @@
                     android:text="@string/uuid">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:id="@+id/uuid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -132,8 +133,6 @@
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -143,6 +142,8 @@
                     android:text="@string/ind_extid">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:id="@+id/man_extidB"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

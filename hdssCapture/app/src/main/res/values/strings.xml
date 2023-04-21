@@ -522,6 +522,8 @@
     <string name="text_3">3</string>
     <string name="text_4">4</string>
     <string name="selectchild">SELECT CHILD</string>
+    <string name="stillbirth">Was StillBirth Recorded as part of the Outcomes?</string>
+    <string name="stillbirthplace">Where did the Still Birth Occur?</string>
 
     //SocioDemo End
 

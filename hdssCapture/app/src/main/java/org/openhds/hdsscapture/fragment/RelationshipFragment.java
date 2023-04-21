@@ -210,8 +210,20 @@ public class RelationshipFragment extends Fragment {
         if (save) {
             Relationship finalData = binding.getRelationship();
 
+            boolean val = false;
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.RELATIONSHIPLAYOUT, validateOnComplete, false);
+
+            if (!binding.tnbch.getText().toString().trim().isEmpty() && !binding.nchdm.getText().toString().trim().isEmpty()) {
+                int totalBiolChildren = Integer.parseInt(binding.tnbch.getText().toString().trim());
+                int childrenFromMarriage = Integer.parseInt(binding.nchdm.getText().toString().trim());
+                if (totalBiolChildren < childrenFromMarriage) {
+                    val = true;
+                    binding.nchdm.setError("Number of Biological Children Cannot be Less Children from this Marriage");
+                    return;
+                }
+            }
+
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();

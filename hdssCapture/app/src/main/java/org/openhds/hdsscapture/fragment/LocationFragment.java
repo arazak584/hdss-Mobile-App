@@ -193,7 +193,7 @@ public class LocationFragment extends Fragment {
             binding.getLocations().locationLevel_uuid = level6Data.getUuid();
         }
 
-        if(locations.villcode==null){
+        if(locations.compno==null){
             binding.getLocations().villcode = level6Data.getVillcode();
         }
 

@@ -236,7 +236,7 @@
                     android:padding="15dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    goneUnless="@{pregnancy.why_no==77}"
+                    goneUnless="@{pregnancy.why_no==15}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

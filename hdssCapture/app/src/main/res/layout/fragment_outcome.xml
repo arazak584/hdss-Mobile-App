@@ -696,6 +696,23 @@
                     android:textSize="20sp"
                     tools:ignore="TextContrastCheck" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:text="@string/stillbirth"/>
+
+                <Spinner
+                    android:id="@+id/stillbirth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    selection="@{pregoutcome.stillbirth}"
+                    android:onItemSelected="@{pregoutcome::setStillbirth}"
+                    android:padding="10dp"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -750,6 +767,19 @@
                             android:id="@+id/child_fetus4"
                             layout="@layout/fragment_outcome4"
                             bind:pregoutcome4="@{pregoutcome4}" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        goneUnless="@{pregoutcome.stillbirth==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <include
+                            android:id="@+id/vpm"
+                            layout="@layout/fragment_outcome_sbth"
+                            bind:death="@{death}" />
 
                     </LinearLayout>
 

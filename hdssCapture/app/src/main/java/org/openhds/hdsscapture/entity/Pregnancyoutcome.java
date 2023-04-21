@@ -106,6 +106,8 @@ public class Pregnancyoutcome extends BaseObservable {
     public Integer chd_size;//How much did the child weigh (estimated baby size)
     @Expose
     public Integer weig_hcard;//Record weight in kilograms from Health Card
+    @Expose
+    public Integer stillbirth;
 
     @Expose
     public Integer complete;
@@ -634,6 +636,24 @@ public class Pregnancyoutcome extends BaseObservable {
         } else {
             final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
             chd_weight = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
+        }
+
+    }
+
+    //Still Birth
+    public void setStillbirth(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            stillbirth = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            stillbirth = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);

@@ -112,7 +112,7 @@ public class Relationship extends BaseObservable implements Parcelable {
     }
 
     public String getStartDate() {
-        if (startDate == null) return "Select Start Date";
+        if (startDate == null) return null;
         return f.format(startDate);
     }
 
@@ -136,7 +136,7 @@ public class Relationship extends BaseObservable implements Parcelable {
     }
 
     public String getInsertDate() {
-        if (insertDate == null) return "";
+        if (insertDate == null) return null;
         return f.format(insertDate);
     }
 
@@ -188,21 +188,26 @@ public class Relationship extends BaseObservable implements Parcelable {
     }
 
     public void setTnbch(String tnbch) {
-        try {
-            this.tnbch = (tnbch == null) ? null : Integer.valueOf(tnbch);
-        } catch (NumberFormatException e) {
-        }
+        if (tnbch == null) this.tnbch = null;
+        else
+            try {
+                this.tnbch = Integer.valueOf(tnbch);
+            } catch (NumberFormatException e) {
+            }
     }
+
 
     public String getNchdm() {
         return nchdm == null ? "" : String.valueOf(nchdm);
     }
 
     public void setNchdm(String nchdm) {
-        try {
-            this.nchdm = (nchdm == null) ? null : Integer.valueOf(nchdm);
-        } catch (NumberFormatException e) {
-        }
+        if (nchdm == null) this.nchdm = null;
+        else
+            try {
+                this.nchdm = Integer.valueOf(nchdm);
+            } catch (NumberFormatException e) {
+            }
     }
 
     public Integer getPolygamous() {
@@ -260,6 +265,14 @@ public class Relationship extends BaseObservable implements Parcelable {
         this.endType = in.readInt();
         this.aIsToB = in.readInt();
         this.fw_uuid = in.readString();
+        this.mar = in.readInt();
+        this.tnbch = in.readInt();
+        this.nchdm = in.readInt();
+        this.polygamous = in.readInt();
+        this.nwive = in.readInt();
+        this.lcow = in.readInt();
+        this.mrank = in.readInt();
+
     }
 
     public static final Creator<Relationship> CREATOR = new Creator<Relationship>() {
@@ -289,6 +302,14 @@ public class Relationship extends BaseObservable implements Parcelable {
         dest.writeInt(this.endType);
         dest.writeInt(this.aIsToB);
         dest.writeString(this.fw_uuid);
+        dest.writeInt(this.mar);
+        dest.writeInt(this.tnbch);
+        dest.writeInt(this.nchdm);
+        dest.writeInt(this.polygamous);
+        dest.writeInt(this.nwive);
+        dest.writeInt(this.lcow);
+        dest.writeInt(this.mrank);
+
     }
 
     //SPINNERS ENTITY COMPLETE FORM FOR SYNC
