@@ -153,7 +153,7 @@ public class Individual extends BaseObservable implements Parcelable {
 
     @Bindable
     public String getDob() {
-        if (dob == null) return "SELECT DATE";
+        if (dob == null) return null;
         return f.format(dob);
     }
 

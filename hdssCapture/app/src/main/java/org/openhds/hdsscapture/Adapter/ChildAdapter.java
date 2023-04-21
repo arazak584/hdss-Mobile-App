@@ -33,6 +33,8 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ViewHolder> 
     private List<Individual> individualList;
     private CaseItem caseItem;
 
+    boolean isFirstField = true;
+
     public interface ChildSelectionListener {
         void onChildSelected(String childId);
     }
@@ -42,6 +44,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ViewHolder> 
     public void setChildSelectionListener(ChildAdapter.ChildSelectionListener listener) {
         this.listener = listener;
     }
+
 
 
     public ChildAdapter(ChildDialogFragment activity, Residency residency, Locations locations,Socialgroup socialgroup, Individual individual) {
@@ -56,6 +59,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ViewHolder> 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView lname,fname, dob;
         LinearLayout linearLayout;
+        static int fieldToUpdate = 1;
         public ViewHolder(View view) {
             super(view);
             this.lname = view.findViewById(R.id.f_name);
@@ -63,6 +67,15 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ViewHolder> 
             this.dob = view.findViewById(R.id.chd_dob);
             this.linearLayout = view.findViewById(R.id.searchChild);
         }
+
+        public int getFieldToUpdate() {
+            return fieldToUpdate;
+        }
+
+        public void setFieldToUpdate(int fieldToUpdate) {
+            this.fieldToUpdate = fieldToUpdate;
+        }
+
     }
 
     @NonNull
@@ -88,54 +101,41 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 // Get the text field in the IndividualFragment where you want to insert the mother's ID
-                EditText childIdField = activity.requireActivity().findViewById(R.id.out1_child_extid);
+                EditText childIdField = null;
+                switch (holder.fieldToUpdate) {
+                    case 1:
+                        childIdField = activity.requireActivity().findViewById(R.id.out1_child_extid);
+                        break;
+                    case 2:
+                        childIdField = activity.requireActivity().findViewById(R.id.out2_child_extid);
+                        break;
+                    case 3:
+                        childIdField = activity.requireActivity().findViewById(R.id.out3_child_extid);
+                        break;
+                    case 4:
+                        childIdField = activity.requireActivity().findViewById(R.id.out4_child_extid);
+                        break;
+                }
 
                 // Set the mother's ID in the text field
                 childIdField.setText(individual.getIndividual_uuid());
+
+                // Increment the flag to update the next field on the next click
+                int nextFieldToUpdate = holder.fieldToUpdate + 1;
+
+                // Reset the flag to 1 if it exceeds 4
+                if (nextFieldToUpdate > 4) {
+                    nextFieldToUpdate = 1;
+                }
+
+                holder.fieldToUpdate = nextFieldToUpdate;
 
                 activity.dismiss();
             }
         });
 
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get the text field in the IndividualFragment where you want to insert the mother's ID
-                EditText childIdField = activity.requireActivity().findViewById(R.id.out2_child_extid);
-
-                // Set the mother's ID in the text field
-                childIdField.setText(individual.getIndividual_uuid());
-
-                activity.dismiss();
-            }
-        });
-
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get the text field in the IndividualFragment where you want to insert the mother's ID
-                EditText childIdField = activity.requireActivity().findViewById(R.id.out3_child_extid);
-
-                // Set the mother's ID in the text field
-                childIdField.setText(individual.getIndividual_uuid());
-
-                activity.dismiss();
-            }
-        });
-
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get the text field in the IndividualFragment where you want to insert the mother's ID
-                EditText childIdField = activity.requireActivity().findViewById(R.id.out4_child_extid);
-
-                // Set the mother's ID in the text field
-                childIdField.setText(individual.getIndividual_uuid());
-
-                activity.dismiss();
-            }
-        });
     }
+
 
     @Override
     public int getItemCount() {
