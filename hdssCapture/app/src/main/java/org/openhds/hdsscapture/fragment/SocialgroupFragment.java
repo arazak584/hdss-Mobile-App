@@ -131,8 +131,8 @@ public class SocialgroupFragment extends Fragment {
         });
 
         SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-//        try {
-            Socialgroup data = binding.getSocialgroup();
+       try {
+            Socialgroup data = viewModel.find(socialgroup.houseExtId);
             if (data != null) {
                 if (data.visit_uuid==null){
 
@@ -148,9 +148,12 @@ public class SocialgroupFragment extends Fragment {
                 }
 
 
-//                binding.setSocialgroup(data);
+                binding.setSocialgroup(data);
 
             }
+           } catch (ExecutionException | InterruptedException e) {
+               e.printStackTrace();
+           }
 
 
 

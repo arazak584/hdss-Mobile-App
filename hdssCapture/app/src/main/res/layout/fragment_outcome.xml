@@ -11,6 +11,10 @@
             type="org.openhds.hdsscapture.entity.Individual" />
 
         <variable
+            name="death"
+            type="org.openhds.hdsscapture.entity.Death" />
+
+        <variable
             name="pregoutcome"
             type="org.openhds.hdsscapture.entity.Pregnancyoutcome" />
 

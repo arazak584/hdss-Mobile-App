@@ -140,7 +140,7 @@ public class Outmigration extends BaseObservable implements Parcelable {
     }
 
     public String getRecordedDate() {
-        if (recordedDate == null) return "";
+        if (recordedDate == null) return null;
         return f.format(recordedDate);
     }
 

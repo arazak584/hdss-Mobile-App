@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -15,13 +16,16 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.Dialog.ChildDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.databinding.FragmentOutcomeBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outcome;
@@ -116,6 +120,51 @@ public class PregnancyoutcomeFragment extends Fragment {
         binding = FragmentOutcomeBinding.inflate(inflater, container, false);
         binding.setIndividual(individual);
 
+        // Find the button view
+        Button showDialogButton = binding.getRoot().findViewById(R.id.button_out1_uuid);
+        Button showDialogButton1 = binding.getRoot().findViewById(R.id.button_out2_uuid);
+        Button showDialogButton2 = binding.getRoot().findViewById(R.id.button_out3_uuid);
+        Button showDialogButton3 = binding.getRoot().findViewById(R.id.button_out4_uuid);
+
+        // Set a click listener on the button for mother
+        showDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show the dialog fragment
+                ChildDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                        .show(getChildFragmentManager(), "ChildDialogFragment");
+            }
+        });
+
+
+        // Set a click listener on the button for mother
+        showDialogButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show the dialog fragment
+                ChildDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                        .show(getChildFragmentManager(), "ChildDialogFragment");
+            }
+        });
+
+        showDialogButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show the dialog fragment
+                ChildDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                        .show(getChildFragmentManager(), "ChildDialogFragment");
+            }
+        });
+
+        showDialogButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show the dialog fragment
+                ChildDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                        .show(getChildFragmentManager(), "ChildDialogFragment");
+            }
+        });
+
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -147,8 +196,12 @@ public class PregnancyoutcomeFragment extends Fragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
+        final Intent j = getActivity().getIntent();
+        final Hierarchy level5Data = j.getParcelableExtra(HierarchyActivity.LEVEL5_DATA);
+
         PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         OutcomeViewModel outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
+        DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         try {
             Pregnancyoutcome data = viewModel.find(individual.individual_uuid);
             if (data != null) {
@@ -268,6 +321,7 @@ public class PregnancyoutcomeFragment extends Fragment {
             e.printStackTrace();
         }
 
+
         final CodeBookViewModel codeBookViewModel = new ViewModelProvider(this).get(CodeBookViewModel.class);
         loadCodeData(binding.childFetus1.out1Type, codeBookViewModel, "outcometype");
         loadCodeData(binding.childFetus2.out2Type, codeBookViewModel, "outcometype");
@@ -333,7 +387,7 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus2.OUTCOMELAYOUT, validateOnComplete, false);
 
-                    final Outcome inf = binding.getPregoutcome1();
+                    final Outcome inf = binding.getPregoutcome2();
                     inf.complete = 1;
                     outcomeViewModel.add(inf);
 
@@ -343,7 +397,7 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus3.OUTCOMELAYOUT, validateOnComplete, false);
 
-                    final Outcome inf = binding.getPregoutcome1();
+                    final Outcome inf = binding.getPregoutcome3();
                     inf.complete = 1;
                     outcomeViewModel.add(inf);
 
@@ -353,7 +407,7 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus4.OUTCOMELAYOUT, validateOnComplete, false);
 
-                    final Outcome inf = binding.getPregoutcome1();
+                    final Outcome inf = binding.getPregoutcome4();
                     inf.complete = 1;
                     outcomeViewModel.add(inf);
 

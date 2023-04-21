@@ -925,7 +925,7 @@ public class PushActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        buttonSendRes.setOnClickListener(v -> {
+        buttonSendImg.setOnClickListener(v -> {
             progress.setMessage(getResources().getString(R.string.init_syncing));
             progress.show();
 
@@ -971,7 +971,7 @@ public class PushActivity extends AppCompatActivity {
         });
 
 
-        //PUSH Inmigration
+        //PUSH Outmigration
         final Button buttonSendOmg = findViewById(R.id.buttonSendOmg);
         final TextView textViewSendOmg = findViewById(R.id.textViewSendOmg);
         final OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
@@ -990,7 +990,7 @@ public class PushActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        buttonSendRes.setOnClickListener(v -> {
+        buttonSendOmg.setOnClickListener(v -> {
             progress.setMessage(getResources().getString(R.string.init_syncing));
             progress.show();
 

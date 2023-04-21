@@ -197,8 +197,6 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -208,6 +206,8 @@
                     android:text="@string/household_select">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:id="@+id/socialgroup_uuid"
                         android:text="@={residency.socialgroup_uuid}"
                         android:layout_width="match_parent"
@@ -278,17 +278,24 @@
                     tools:ignore="DuplicateSpeakableTextCheck"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
-                <TextView
+                <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{residency.endType==2 || residency.endType==3}"
-                    android:id="@+id/editText_endDate"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints=""
-                    android:ems="10"
-                    android:minHeight="40dp"
-                    android:text="@={residency.endDate}"
-                    android:textSize="20sp"
-                    tools:ignore="TextContrastCheck" />
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/enddate"
+                    android:text="@string/enddate">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/editText_endDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={residency.endDate}"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="match_parent"

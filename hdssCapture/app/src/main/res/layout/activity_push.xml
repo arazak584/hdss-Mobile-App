@@ -155,19 +155,6 @@
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/buttonSendEvents"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/send_event"
-            app:icon="@drawable/push"/>
-
-        <TextView
-            android:id="@+id/textViewSendEvents"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
-
-        <Button
             android:id="@+id/buttonSendSocio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

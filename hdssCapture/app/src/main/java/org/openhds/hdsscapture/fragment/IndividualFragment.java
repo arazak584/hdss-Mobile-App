@@ -323,7 +323,7 @@ public class IndividualFragment extends Fragment {
         }
         if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    ResidencyFragment.newInstance(individual,residency, locations, socialgroup,caseItem,eventForm)).commit();
+                    EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
         }else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     HouseMembersFragment.newInstance(individual,residency, locations, socialgroup)).commit();

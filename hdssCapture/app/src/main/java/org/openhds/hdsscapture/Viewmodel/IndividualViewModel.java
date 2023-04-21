@@ -32,6 +32,10 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.retrieveByLocationId(id);
     }
 
+    public List<Individual> retrieveChild(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.retrieveChild(id);
+    }
+
     public List<Individual> retrieveByMother(String id) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveByMother(id);
     }

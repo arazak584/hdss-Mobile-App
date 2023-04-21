@@ -2,7 +2,6 @@ package org.openhds.hdsscapture.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -163,6 +162,16 @@ public class ResidencyFragment extends Fragment {
                 binding.dth.dthDeathDate.setText(result);
             }
 
+            if (bundle.containsKey((DATE_BUNDLES.IMGDATE.getBundleKey()))) {
+                final String result = bundle.getString(DATE_BUNDLES.IMGDATE.getBundleKey());
+                binding.img.imgDate.setText(result);
+            }
+
+            if (bundle.containsKey((DATE_BUNDLES.OMGDATE.getBundleKey()))) {
+                final String result = bundle.getString(DATE_BUNDLES.OMGDATE.getBundleKey());
+                binding.omg.omgDate.setText(result);
+            }
+
         });
 
         binding.buttonResidencyStartDate.setOnClickListener(v -> {
@@ -180,6 +189,18 @@ public class ResidencyFragment extends Fragment {
         binding.dth.buttonDeathDod.setOnClickListener(v -> {
             final Calendar c = Calendar.getInstance();
             DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.DEATHDATE.getBundleKey(), c);
+            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+        });
+
+        binding.img.buttonImgImgDate.setOnClickListener(v -> {
+            final Calendar c = Calendar.getInstance();
+            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.IMGDATE.getBundleKey(), c);
+            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+        });
+
+        binding.omg.buttonOmgImgDate.setOnClickListener(v -> {
+            final Calendar c = Calendar.getInstance();
+            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.OMGDATE.getBundleKey(), c);
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
@@ -278,6 +299,7 @@ public class ResidencyFragment extends Fragment {
                 data.villname = level5Data.getName();
                 data.villcode = level5Data.getVillcode();
                 data.visit_uuid = socialgroup.getVisit_uuid();
+                data.deathDate = binding.getResidency().endDate;
                 data.vpmcomplete=1;
                 data.complete = 1;
 
@@ -295,12 +317,16 @@ public class ResidencyFragment extends Fragment {
             } else {
                 data = new Inmigration();
 
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+
+                data.img_uuid=uuidString;
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.residency_uuid = binding.getResidency().residency_uuid;
                 data.insertDate = new Date();
                 data.individual_uuid = individual.getIndividual_uuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
-                data.recordedDate = binding.getResidency().endDate;
+                data.recordedDate = binding.getResidency().startDate;
                 if (data!=null){
                     data.migType=2;
                 }
@@ -320,12 +346,16 @@ public class ResidencyFragment extends Fragment {
             } else {
                 data = new Outmigration();
 
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+
+                data.omg_uuid=uuidString;
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.residency_uuid = binding.getResidency().residency_uuid;
                 data.insertDate = new Date();
                 data.individual_uuid = individual.getIndividual_uuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
-                data.recordedDate = binding.getResidency().startDate;
+                data.recordedDate = binding.getResidency().endDate;
                 data.complete = 1;
 
 
@@ -352,12 +382,12 @@ public class ResidencyFragment extends Fragment {
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
-            save(true, true, viewModel);
+            save(true, true, viewModel, deathViewModel,inmigrationViewModel,outmigrationViewModel);
         });
 
         binding.buttonClose.setOnClickListener(v -> {
 
-            save(false, true, viewModel);
+            save(false, true, viewModel, deathViewModel,inmigrationViewModel,outmigrationViewModel);
         });
 
         binding.setEventname(AppConstants.EVENT_RESIDENCY);
@@ -372,22 +402,24 @@ public class ResidencyFragment extends Fragment {
             Residency finalData = binding.getResidency();
 
             boolean isOmg = false;
+            boolean dthdate = false;
+            boolean imgdate = false;
+            boolean omgdate = false;
 
-            Log.d("DEBUG", "locationExtid: " + binding.locationExtid);
-            Log.d("DEBUG", "currentLoc: " + binding.currentLoc);
+
+            //Log.d("DEBUG", "locationExtid: " + binding.locationExtid);
+            //Log.d("DEBUG", "currentLoc: " + binding.currentLoc);
             if (!binding.locationExtid.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim())) {
                 isOmg = true;
                 binding.currentLoc.setError("Move Individual Out of His/Her Previous Compound");
             }
-            Log.d("DEBUG", "isOmg: " + isOmg);
-
-
 
             if(isOmg){//if there is an error, do not continue
                 MoveInErrorFragment dialog = MoveInErrorFragment.newInstance(individual,residency,locations,socialgroup);
                 dialog.show(requireActivity().getSupportFragmentManager(), "dialog");
                 return;
             }
+
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
@@ -402,7 +434,16 @@ public class ResidencyFragment extends Fragment {
 
                 if (finalData.endType == 3) {
 
+
+
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.dth.MAINLAYOUT, validateOnComplete, false);
+
+                    if (!binding.editTextEndDate.getText().toString().trim().equals(binding.dth.dthDeathDate.getText().toString().trim())) {
+                        dthdate = true;
+                        binding.dth.dthDeathDate.setError("End Date Not Equal to Date of Death");
+                        Toast.makeText(getActivity(), "End Date Not Equal to Date of Death", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
                     final Death dth = binding.getDeath();
                     dth.complete = 1;
@@ -413,6 +454,13 @@ public class ResidencyFragment extends Fragment {
 
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.img.MAINLAYOUT, validateOnComplete, false);
 
+                    if (!binding.editTextStartDate.getText().toString().trim().equals(binding.img.imgDate.getText().toString().trim())) {
+                        imgdate = true;
+                        binding.img.imgDate.setError("Migration Date Not Equal to Start Date");
+                        Toast.makeText(getActivity(), "Migration Date Not Equal to Start Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     final Inmigration img = binding.getInmigration();
                     img.complete = 1;
                     inmigrationViewModel.add(img);
@@ -422,6 +470,13 @@ public class ResidencyFragment extends Fragment {
                 if (finalData.endType == 2) {
 
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.omg.MAINLAYOUT, validateOnComplete, false);
+
+                    if (!binding.editTextEndDate.getText().toString().trim().equals(binding.omg.omgDate.getText().toString().trim())) {
+                        omgdate = true;
+                        binding.dth.dthDeathDate.setError("End Date Not Equal to Date of Outmigration");
+                        Toast.makeText(getActivity(), "End Date Not Equal to Date of Outmigration", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
                     final Outmigration omg = binding.getOutmigration();
                     omg.complete = 1;
@@ -446,50 +501,6 @@ public class ResidencyFragment extends Fragment {
         }
     }
 
-    private void save(boolean save, boolean close, ResidencyViewModel viewModel) {
-
-        if (save) {
-            Residency finalData = binding.getResidency();
-
-            boolean isOmg = false;
-
-            Log.d("DEBUG", "locationExtid: " + binding.locationExtid);
-            Log.d("DEBUG", "currentLoc: " + binding.currentLoc);
-            if (!binding.locationExtid.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim())) {
-                isOmg = true;
-                binding.currentLoc.setError("Move Individual Out of His/Her Previous Compound");
-            }
-            Log.d("DEBUG", "isOmg: " + isOmg);
-
-
-
-            if(isOmg){//if there is an error, do not continue
-                MoveInErrorFragment dialog = MoveInErrorFragment.newInstance(individual,residency,locations,socialgroup);
-                dialog.show(requireActivity().getSupportFragmentManager(), "dialog");
-                return;
-            }
-
-            final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
-
-            if (hasErrors) {
-                Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
-                return;
-            }
-
-
-            viewModel.add(finalData);
-            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
-        }
-
-        if (save) {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
-        }else{
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    IndividualFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
-        }
-    }
 
     @Override
     public void onDestroyView() {
@@ -532,6 +543,8 @@ public class ResidencyFragment extends Fragment {
         INSERTDATE ("INSERTDATE"),
         STARTDATE ("STARTDATE"),
         DEATHDATE("DEATHDATE"),
+        IMGDATE("IMGDATE"),
+        OMGDATE("OMGDATE"),
         ENDDATE ("ENDDATE");
 
         private final String bundleKey;

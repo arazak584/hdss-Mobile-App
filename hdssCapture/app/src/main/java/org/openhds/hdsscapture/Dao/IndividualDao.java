@@ -102,6 +102,12 @@ public interface IndividualDao {
             " date('now', '-13 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
     List<Individual> retrieveHOH(String id);
 
+    @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.individual_uuid = b.individual_uuid " +
+            " INNER JOIN socialgroup as d on b.socialgroup_uuid=d.socialgroup_uuid " +
+            " WHERE b.endType=1 and d.houseExtId=:id and " +
+            " date('now', '-5 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
+    List<Individual> retrieveChild(String id);
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Individual> individuals);

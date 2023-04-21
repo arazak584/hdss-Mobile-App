@@ -84,7 +84,7 @@
 
         <Button
             goneUnless="@{pregoutcome4.type==1}"
-            android:id="@+id/button_out2_uuid"
+            android:id="@+id/button_out4_uuid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/select_child" />

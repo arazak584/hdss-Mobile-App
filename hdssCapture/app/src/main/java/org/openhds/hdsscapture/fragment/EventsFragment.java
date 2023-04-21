@@ -16,15 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.openhds.hdsscapture.Adapter.EventFormAdapter;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
+import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.databinding.FragmentEventsBinding;
-import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
@@ -164,26 +163,26 @@ public class EventsFragment extends Fragment {
 
                             //Adult Male
                             if (individual.gender==1 && yrs>=12) {
-                                showDeathForm(eventForms);
                                 showDemographicForm(eventForms);
+                                showResidencyForm(eventForms);
 
                             }
 
                             //Adult Female
                             if (individual.gender==2 && yrs>=12) {
-                                showDeathForm(eventForms);
                                 showDemographicForm(eventForms);
                                 showRelationshipForm(eventForms);
                                 showPregnancyForm(eventForms);
                                 showOutcomeForm(eventForms);
+                                showResidencyForm(eventForms);
 
                             }
 
                             //Child
                             if (yrs <=11) {
 
-                                showDeathForm(eventForms);
                                 showDemographicForm(eventForms);
+                                showResidencyForm(eventForms);
 
                             }
 
@@ -215,33 +214,16 @@ public class EventsFragment extends Fragment {
 
     }
 
-    private void showDeathForm(List<EventForm> eventForms) {
-        DeathViewModel viewModel = new ViewModelProvider(this).get(DeathViewModel.class);
-        try {
-            Death form = viewModel.find(individual.individual_uuid);
-            if (form == null) {
-                form = new Death();
-            }
-            if (form.complete == null ) {
-                eventForms.add(new EventForm(AppConstants.EVENT_HDSS6, AppConstants.EVENT_DEATH, form.complete));
-            }
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void showSocialgroupForm(List<EventForm> eventForms) {
         SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
         try {
-            Socialgroup form = viewModel.find(individual.individual_uuid);
+            Socialgroup form = viewModel.find(socialgroup.socialgroup_uuid);
             if (form == null) {
                 form = new Socialgroup();
             }
-            if (form.complete == null ) {
+
                 eventForms.add(new EventForm(AppConstants.EVENT_HDSS3, AppConstants.EVENT_HOUSEHOLD, form.complete));
-            }
+
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -288,6 +270,22 @@ public class EventsFragment extends Fragment {
                 form = new Relationship();
             }
                 eventForms.add(new EventForm(AppConstants.EVENT_HDSS7, AppConstants.EVENT_RELATIONSHIP, form.complete));
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showResidencyForm(List<EventForm> eventForms) {
+        ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+        try {
+            Residency form = viewModel.findRes(individual.individual_uuid);
+            if (form == null) {
+                form = new Residency();
+            }
+            eventForms.add(new EventForm(AppConstants.EVENT_HDSS1, AppConstants.EVENT_RESIDENCY, form.complete));
 
         } catch (ExecutionException e) {
             e.printStackTrace();
