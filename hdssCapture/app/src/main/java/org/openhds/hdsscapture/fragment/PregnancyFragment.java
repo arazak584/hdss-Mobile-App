@@ -30,6 +30,7 @@ import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -172,7 +173,7 @@ public class PregnancyFragment extends Fragment {
         PregnancyViewModel viewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         try {
             Pregnancy data = viewModel.find(individual.individual_uuid);
-            if (data != null && data.extra!=2) {
+            if (data != null && data.extra==2) {
                 binding.setPregnancy(data);
             } else {
                 data = new Pregnancy();
@@ -187,6 +188,7 @@ public class PregnancyFragment extends Fragment {
                 data.insertDate = new Date();
                 data.individual_uuid = individual.getIndividual_uuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
+                data.complete = 1;
                 //data.expectedDeliveryDate = data.recordedDate(9);
 
                 binding.setPregnancy(data);
@@ -211,6 +213,7 @@ public class PregnancyFragment extends Fragment {
         loadCodeData(binding.healthfacility, "complete");
         loadCodeData(binding.medicineforpregnancy, "complete");
         loadCodeData(binding.medicineforpregnancy, "complete");
+        loadCodeData(binding.extra, "complete");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
@@ -232,6 +235,55 @@ public class PregnancyFragment extends Fragment {
 
         if (save) {
             Pregnancy finalData = binding.getPregnancy();
+
+            try {
+                if (!binding.editTextRecordedDate.getText().toString().trim().isEmpty() && !binding.expectedDelivery.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date stdate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
+                    Date edate = f.parse(binding.expectedDelivery.getText().toString().trim());
+                    if (stdate.after(currentDate)) {
+                        binding.editTextRecordedDate.setError("Date of Conception Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date of Conception Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (edate.before(stdate)) {
+                        binding.expectedDelivery.setError("Delivery Date Cannot Be Less than Conception Date");
+                        Toast.makeText(getActivity(), "Delivery Date Cannot Be Less than Conception Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.expectedDelivery.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+
+            try {
+                if (!binding.editTextRecordedDate.getText().toString().trim().isEmpty() && !binding.editTextOutcomeDate.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date stdate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
+                    Date edate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                    if (edate.after(currentDate)) {
+                        binding.editTextOutcomeDate.setError("Date of Outcome Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date of Outcome Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (edate.before(stdate)) {
+                        binding.expectedDelivery.setError("Delivery Date Cannot Be Less than Conception Date");
+                        Toast.makeText(getActivity(), "Delivery Date Cannot Be Less than Conception Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.editTextOutcomeDate.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.PREGNANCYLAYOUT, validateOnComplete, false);

@@ -383,23 +383,21 @@
                     android:onItemSelected="@{pregoutcome::setFirst_nb}"
                     android:padding="10dp"/>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+
+                <TextView
+                    goneUnless="@{pregoutcome.first_nb==2}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/l_birth"
-                    android:text="@string/l_birth">
+                    android:text="@string/l_birth" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        goneUnless="@{pregoutcome.first_nb==2}"
-                        android:id="@+id/l_birth"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={pregoutcome.l_birth}"
-                        android:inputType="number"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    goneUnless="@{pregoutcome.first_nb==2}"
+                    android:id="@+id/l_birth"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={pregoutcome.l_birth}" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -512,41 +510,35 @@
                     android:onItemSelected="@{pregoutcome::setWho_anc}"
                     android:padding="10dp"/>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                <TextView
+                    goneUnless="@{pregoutcome.rec_anc==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/month_pg"
-                    android:text="@string/month_pg">
+                    android:text="@string/month_pg" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        goneUnless="@{pregoutcome.rec_anc==1}"
-                        android:id="@+id/month_pg"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={pregoutcome.month_pg}"
-                        android:inputType="number"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    goneUnless="@{pregoutcome.rec_anc==1}"
+                    android:id="@+id/month_pg"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={pregoutcome.month_pg}" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                <TextView
+                    goneUnless="@{pregoutcome.rec_anc==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/num_anc"
-                    android:text="@string/num_anc">
+                    android:text="@string/num_anc" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        goneUnless="@{pregoutcome.rec_anc==1}"
-                        android:id="@+id/num_anc"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={pregoutcome.num_anc}"
-                        android:inputType="number"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    goneUnless="@{pregoutcome.rec_anc==1}"
+                    android:id="@+id/num_anc"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={pregoutcome.num_anc}" />
 
                 <TextView
                     goneUnless="@{pregoutcome.rec_anc==1}"
@@ -567,42 +559,37 @@
                     android:onItemSelected="@{pregoutcome::setRec_ipt}"
                     android:padding="10dp"/>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    goneUnless="@{pregoutcome.rec_ipt==1}"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+
+                <TextView
+                    goneUnless="@{pregoutcome.rec_anc==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/first_recs"
-                    android:text="@string/first_recs">
+                    android:text="@string/first_rec" />
 
-                    <com.google.android.material.textfield.TextInputEditText
+                <EditText
+                    goneUnless="@{pregoutcome.rec_anc==1}"
+                    android:id="@+id/first_rec"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={pregoutcome.first_rec}" />
 
-                        android:id="@+id/first_rec"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={pregoutcome.first_rec}"
-                        android:inputType="number"/>
-                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                <TextView
+                    goneUnless="@{pregoutcome.rec_anc==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/many_ipt"
-                    android:text="@string/many_ipt">
+                    android:text="@string/many_ipt" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        goneUnless="@{pregoutcome.rec_ipt==1}"
-                        android:id="@+id/many_ipt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={pregoutcome.many_ipt}"
-                        android:inputType="number"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    goneUnless="@{pregoutcome.rec_anc==1}"
+                    android:id="@+id/many_ipt"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={pregoutcome.many_ipt}" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -638,24 +625,20 @@
                     android:onItemSelected="@{pregoutcome::setChd_size}"
                     android:padding="10dp"/>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <TextView
                     goneUnless="@{pregoutcome.chd_weight==1}"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/weig_hcard"
-                    android:text="@string/weig_hcard">
+                    android:text="@string/weig_hcard" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-
-                        android:id="@+id/weig_hcard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={pregoutcome.weig_hcard}"
-                        android:inputType="numberDecimal"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    goneUnless="@{pregoutcome.chd_weight==1}"
+                    android:id="@+id/weig_hcard"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="numberDecimal"
+                    android:text="@={pregoutcome.weig_hcard}" />
 
                 <Button
                     android:id="@+id/button_outcome_conception"

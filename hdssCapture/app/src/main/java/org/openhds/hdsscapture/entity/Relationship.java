@@ -43,6 +43,9 @@ public class Relationship extends BaseObservable implements Parcelable {
     public String man_uuid;
 
     @Expose
+    public Date dob;
+
+    @Expose
     public Date startDate;
 
     @Expose
@@ -109,6 +112,19 @@ public class Relationship extends BaseObservable implements Parcelable {
 
     public void setMan_uuid(String man_uuid) {
         this.man_uuid = man_uuid;
+    }
+
+    public String getDob() {
+        if (dob == null) return null;
+        return f.format(dob);
+    }
+
+    public void setDob(String dob) {
+        try {
+            this.dob = f.parse(dob);
+        } catch (ParseException e) {
+            System.out.println("Dob error " + e.getMessage());
+        }
     }
 
     public String getStartDate() {
@@ -342,6 +358,7 @@ public class Relationship extends BaseObservable implements Parcelable {
             endType = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }

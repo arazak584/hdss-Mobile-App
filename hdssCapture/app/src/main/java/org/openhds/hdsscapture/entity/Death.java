@@ -80,6 +80,9 @@ public class Death extends BaseObservable implements Parcelable {
     public Integer vpmcomplete;
 
     @Expose
+    public Integer edit;
+
+    @Expose
     public String extId;
 
     @Expose

@@ -271,43 +271,31 @@
                         android:textColor="@color/colorPrimary"
                         android:textStyle="bold" />
 
-                 <com.google.android.material.textfield.TextInputLayout
-                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                 <TextView
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
-                     android:gravity="start"
-                     android:padding="5dp"
-                     android:hint="@string/ageOfPregFromPregNotes">
-                     android:text="@string/ageOfPregFromPregNotes">
+                     android:text="@string/ageOfPregFromPregNotes" />
 
-                     <com.google.android.material.textfield.TextInputEditText
-                         android:id="@+id/ageOfPregFromPregNotes"
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:min="0"
-                         android:max="52"
-                         android:text="@={pregnancy.ageOfPregFromPregNotes}"
-                         android:inputType="number"/>
-                 </com.google.android.material.textfield.TextInputLayout>
+                 <EditText
+                     android:id="@+id/ageOfPregFromPregNotes"
+                     android:layout_width="match_parent"
+                     android:layout_height="50dp"
+                     android:ems="10"
+                     android:inputType="number"
+                     android:text="@={pregnancy.ageOfPregFromPregNotes}" />
 
-                 <com.google.android.material.textfield.TextInputLayout
-                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                 <TextView
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
-                     android:gravity="start"
-                     android:padding="5dp"
-                     android:hint="@string/estimatedAgeOfPreg">
-                     android:text="@string/estimatedAgeOfPreg">
+                     android:text="@string/estimatedAgeOfPreg" />
 
-                     <com.google.android.material.textfield.TextInputEditText
-                         android:id="@+id/estimatedAgeOfPreg"
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:min="0"
-                         android:max="12"
-                         android:text="@={pregnancy.estimatedAgeOfPreg}"
-                         android:inputType="number"/>
-                 </com.google.android.material.textfield.TextInputLayout>
+                 <EditText
+                     android:id="@+id/estimatedAgeOfPreg"
+                     android:layout_width="match_parent"
+                     android:layout_height="50dp"
+                     android:ems="10"
+                     android:inputType="number"
+                     android:text="@={pregnancy.estimatedAgeOfPreg}" />
 
                  <Button
                      android:id="@+id/button_lastClinicVisitDate"
@@ -381,43 +369,32 @@
                      android:textColor="#000301"
                      android:padding="20dp"/>
 
-                 <com.google.android.material.textfield.TextInputLayout
-                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+
+                 <TextView
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
-                     android:gravity="start"
-                     android:padding="5dp"
-                     android:hint="@string/first_rec">
-                     android:text="@string/first_rec">
+                     android:text="@string/first_rec" />
 
-                     <com.google.android.material.textfield.TextInputEditText
-                         android:id="@+id/first_rec"
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:min="0"
-                         android:max="12"
-                         android:text="@={pregnancy.first_rec}"
-                         android:inputType="number"/>
-                 </com.google.android.material.textfield.TextInputLayout>
+                 <EditText
+                     android:id="@+id/first_rec"
+                     android:layout_width="match_parent"
+                     android:layout_height="50dp"
+                     android:ems="10"
+                     android:inputType="number"
+                     android:text="@={pregnancy.first_rec}" />
 
-                 <com.google.android.material.textfield.TextInputLayout
-                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                 <TextView
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
-                     android:gravity="start"
-                     android:padding="5dp"
-                     android:hint="@string/anc_visits">
-                     android:text="@string/anc_visits">
+                     android:text="@string/anc_visits" />
 
-                     <com.google.android.material.textfield.TextInputEditText
-                         android:id="@+id/anc_visits"
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content"
-                         android:text="@={pregnancy.anc_visits}"
-                         android:min="0"
-                         android:max="12"
-                         android:inputType="number"/>
-                 </com.google.android.material.textfield.TextInputLayout>
+                 <EditText
+                     android:id="@+id/anc_visits"
+                     android:layout_width="match_parent"
+                     android:layout_height="50dp"
+                     android:ems="10"
+                     android:inputType="number"
+                     android:text="@={pregnancy.anc_visits}" />
 
                 </LinearLayout>
 
@@ -456,24 +433,18 @@
                         android:textColor="@color/colorPrimary"
                         android:textStyle="bold" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:hint="@string/how_many">
-                        android:text="@string/how_many">
+                        android:text="@string/how_many" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/how_many"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:min="1"
-                            android:max="10"
-                            android:text="@={pregnancy.how_many}"
-                            android:inputType="number"/>
-                    </com.google.android.material.textfield.TextInputLayout>
+                    <EditText
+                        android:id="@+id/how_many"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:ems="10"
+                        android:inputType="number"
+                        android:text="@={pregnancy.how_many}" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -634,25 +605,21 @@
                     android:textColor="#000301"
                     android:padding="20dp"/>
 
-                <com.google.android.material.textfield.TextInputLayout
+
+                <TextView
                     goneUnless="@{pregnancy.first_preg==2}"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/pregnancyNumber">
-                    android:text="@string/pregnancyNumber">
+                    android:text="@string/pregnancyNumber" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/pregnancyNumber"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:min="2"
-                        android:max="18"
-                        android:text="@={pregnancy.pregnancyNumber}"
-                        android:inputType="number"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    goneUnless="@{pregnancy.first_preg==2}"
+                    android:id="@+id/pregnancyNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={pregnancy.how_many}" />
 
                 <TextView
                     android:layout_width="match_parent"

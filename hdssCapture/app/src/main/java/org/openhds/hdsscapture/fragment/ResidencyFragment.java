@@ -2,6 +2,7 @@ package org.openhds.hdsscapture.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -220,6 +222,7 @@ public class ResidencyFragment extends Fragment {
             if (data != null && data.endType!=2) {
                 binding.setResidency(data);
                 data.loc = locations.getLocation_uuid();
+                data.dobs = individual.dob;
             } else {
                 data = new Residency();
 
@@ -233,7 +236,9 @@ public class ResidencyFragment extends Fragment {
                 data.location_uuid = locations.getLocation_uuid();
                 data.socialgroup_uuid = socialgroup.socialgroup_uuid;
                 data.loc = locations.getLocation_uuid();
-                if (data!=null){
+                data.complete = 1;
+                data.dobs = individual.dob;
+                if (data != null){
                     data.startType=1;
                 }
                 if (data!=null){
@@ -241,30 +246,31 @@ public class ResidencyFragment extends Fragment {
                 }
                 if (data != null && data.endDate != null) {
                     try {
-                        // Create a SimpleDateFormat object with the desired date format
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
                         // Parse the endDate into a Date object
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                         Date endDate = sdf.parse(String.valueOf(data.endDate));
 
-                        // Create a Calendar object and set it to the endDate
+                        // Add one day to the endDate
                         Calendar cal = Calendar.getInstance();
                         cal.setTime(endDate);
-
-                        // Add one day to the Calendar object
                         cal.add(Calendar.DAY_OF_MONTH, 1);
+                        Log.d("TAG", "Formatted End Date: " + endDate);
 
-                        // Get the new date and format it as a String
+                        // Format the startDate as a string
                         Date startDate = cal.getTime();
-                        Date startDateString = sdf.parse(String.valueOf(startDate));
-
+                        String startDateString = sdf.format(startDate);
+                        Log.d("TAG", "Formatted Start Date: " + startDateString);
                         // Set the startDate of the data object
-                        data.startDate = startDateString;
+                        data.startDate = startDate;
 
+                        // Set the text of the TextView to the formatted startDate
+                        binding.editTextStartDate.setText(startDateString);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                 }
+
+
 
 
                 binding.setResidency(data);
@@ -405,6 +411,7 @@ public class ResidencyFragment extends Fragment {
             boolean dthdate = false;
             boolean imgdate = false;
             boolean omgdate = false;
+            boolean sdate = false;
 
 
             //Log.d("DEBUG", "locationExtid: " + binding.locationExtid);
@@ -419,6 +426,57 @@ public class ResidencyFragment extends Fragment {
                 dialog.show(requireActivity().getSupportFragmentManager(), "dialog");
                 return;
             }
+
+
+
+            //Date Validations
+
+            try {
+                if (!binding.currentdob.getText().toString().trim().isEmpty() && !binding.editTextStartDate.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
+                    Date edate = f.parse(binding.currentdob.getText().toString().trim());
+                    if (edate.after(stdate)) {
+                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Date of Birth");
+                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Date of Birth", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.editTextStartDate.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+
+            try {
+                if (!binding.editTextEndDate.getText().toString().trim().isEmpty() && !binding.editTextStartDate.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
+                    Date edate = f.parse(binding.editTextEndDate.getText().toString().trim());
+                    if (edate.after(currentDate)) {
+                        binding.editTextEndDate.setError("End Date Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "End Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (edate.before(stdate)) {
+                        binding.editTextEndDate.setError("End Date Cannot Be Less than Start Date");
+                        Toast.makeText(getActivity(), "End Date Cannot Be Less than Start Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.editTextEndDate.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+
+
 
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
@@ -473,7 +531,7 @@ public class ResidencyFragment extends Fragment {
 
                     if (!binding.editTextEndDate.getText().toString().trim().equals(binding.omg.omgDate.getText().toString().trim())) {
                         omgdate = true;
-                        binding.dth.dthDeathDate.setError("End Date Not Equal to Date of Outmigration");
+                        binding.omg.omgDate.setError("End Date Not Equal to Date of Outmigration");
                         Toast.makeText(getActivity(), "End Date Not Equal to Date of Outmigration", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -495,9 +553,12 @@ public class ResidencyFragment extends Fragment {
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
         }
-        if (close) {
+        if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
+        }else {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    IndividualFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
         }
     }
 

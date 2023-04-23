@@ -6,8 +6,10 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -17,6 +19,11 @@ import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 @Entity(tableName = "outcome")
 public class Outcome extends BaseObservable {
@@ -47,11 +54,31 @@ public class Outcome extends BaseObservable {
     public Integer type;
 
     @Expose
+    public Date dob;
+
+    @Expose
     public Integer complete;
 
 
 
     public Outcome(){}
+
+    @Ignore
+    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+
+    @Bindable
+    public String getDob() {
+        if (dob == null) return null;
+        return f.format(dob);
+    }
+
+    public void setDob(String dob) {
+        try {
+            this.dob = f.parse(dob);
+        } catch (ParseException e) {
+            System.out.println("Dob error " + e.getMessage());
+        }
+    }
 
     @NotNull
     public String getUuid() {

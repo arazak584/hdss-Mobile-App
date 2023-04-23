@@ -174,6 +174,7 @@ public class EventsFragment extends Fragment {
                                 showRelationshipForm(eventForms);
                                 showPregnancyForm(eventForms);
                                 showOutcomeForm(eventForms);
+                                showOutcome1Form(eventForms);
                                 showResidencyForm(eventForms);
 
                             }
@@ -304,6 +305,23 @@ public class EventsFragment extends Fragment {
             }
 
             eventForms.add(new EventForm(AppConstants.EVENT_HDSS11, AppConstants.EVENT_OUTCOME, form.complete));
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showOutcome1Form(List<EventForm> eventForms) {
+        PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
+        try {
+            Pregnancyoutcome form = viewModel.find(individual.individual_uuid);
+            if (form == null) {
+                form = new Pregnancyoutcome();
+            }
+
+            eventForms.add(new EventForm(AppConstants.EVENT_HDSS12, AppConstants.EVENT_OUTCOMES, form.complete));
 
         } catch (ExecutionException e) {
             e.printStackTrace();

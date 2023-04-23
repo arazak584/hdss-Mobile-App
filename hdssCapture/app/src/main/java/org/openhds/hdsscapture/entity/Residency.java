@@ -47,6 +47,9 @@ public class Residency extends BaseObservable implements Parcelable {
     public Date endDate;
 
     @Expose
+    public Date dobs;
+
+    @Expose
     public String individual_uuid;
 
     @Expose
@@ -138,6 +141,19 @@ public class Residency extends BaseObservable implements Parcelable {
             } catch (ParseException e) {
                 System.out.println("Start Date Error " + e.getMessage());
             }
+    }
+
+    public String getDobs() {
+        if (dobs == null) return null;
+        return f.format(dobs);
+    }
+
+    public void setDobs(String dobs) {
+        try {
+            this.dobs = f.parse(dobs);
+        } catch (ParseException e) {
+            System.out.println("Dob error " + e.getMessage());
+        }
     }
 
     @Bindable

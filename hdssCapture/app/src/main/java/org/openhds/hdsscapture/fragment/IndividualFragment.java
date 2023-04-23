@@ -308,10 +308,28 @@ public class IndividualFragment extends Fragment {
 
         if (save) {
             Individual finalData = binding.getIndividual();
-            //finalData.modified = AppConstants.YES;
+            boolean sdate = false;
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.INDIVIDUALLAYOUT, validateOnComplete, false);
+
+            try {
+                if (!binding.dob.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date stdate = f.parse(binding.dob.getText().toString().trim());
+                    if (stdate.after(currentDate)) {
+                        binding.dob.setError("Date of Birth Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date of Birth Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.dob.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();

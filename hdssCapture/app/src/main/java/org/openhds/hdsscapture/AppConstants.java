@@ -7,7 +7,7 @@ public class AppConstants {
 
     public static final String MARKED_COMPLETE="MARKED AS COMPLETED";
     public static final String MARKED_INCOMPLETE="INCOMPLETE";
-    public static final String UPDATE="VISITED";
+    public static final String UPDATE="NO MODIFICATION";
     public static final String NOT_DONE="NOT DONE OR UPDATED";
     public static final String SUBMITTED="SUBMITTED";
     public static final String NOT_VISITED = "NOT VISITED";
@@ -23,6 +23,7 @@ public class AppConstants {
 
     public static final int CHILD =1;
     public static final int CHILD1 = 1, CHILD2 = 2, CHILD3 = 3, CHILD4 = 4;
+    public static final int CHILD5 = 5, CHILD6 = 6, CHILD7 = 7, CHILD8 = 8;
     public static final int RES1 = 1, RES2 = 2;
     public static final int PREG1 = 1, PREG2 = 2,PREG3 = 3;
 
@@ -42,12 +43,14 @@ public class AppConstants {
             EVENT_HDSS9 = "INMIGRATION REGISTRATION",
             EVENT_HDSS10 = "PREGNANCY OBSERVATION",
             EVENT_HDSS11 = "PREGNANCY OUTCOME",
+            EVENT_HDSS12 = "PREGNANCY OUTCOME [EXTRA]",
 
             EVENT_RESIDENCY = "MEMBERSHIP REGISTRATION",
             EVENT_VISIT = "VISIT REGISTRATION",
             EVENT_RELATIONSHIP = "RELATIONSHIP REGISTRATION",
             EVENT_OBSERVATION = "PREGNANCY OBSERVATION",
             EVENT_OUTCOME = "PREGNANCY OUTCOME",
+            EVENT_OUTCOMES = "PREGNANCY OUTCOME [EXTRA]",
             EVENT_HOUSEHOLD = "CHANGE HEAD OF HOUSEHOLD",
             EVENT_DEATH = "DEATH REGISTRATION",
             EVENT_DEMO = "DEMOGRAPHICS",

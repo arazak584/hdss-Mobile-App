@@ -134,6 +134,7 @@ public class DemographicFragment extends Fragment {
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.insertDate = new Date();
                 data.individual_uuid = individual.getIndividual_uuid();
+                data.complete = 1;
 
                 binding.setDemographic(data);
             }

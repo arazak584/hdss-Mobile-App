@@ -191,6 +191,7 @@
             android:padding="20dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
+            goneUnless="@{inmigration.reason==77}"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

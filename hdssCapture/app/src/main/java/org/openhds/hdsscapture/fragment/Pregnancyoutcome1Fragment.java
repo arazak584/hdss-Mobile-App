@@ -49,10 +49,10 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link PregnancyoutcomeFragment#newInstance} factory method to
+ * Use the {@link Pregnancyoutcome1Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PregnancyoutcomeFragment extends Fragment {
+public class Pregnancyoutcome1Fragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
@@ -72,7 +72,7 @@ public class PregnancyoutcomeFragment extends Fragment {
     private EventForm eventForm;
     private CaseItem caseItem;
 
-    public PregnancyoutcomeFragment() {
+    public Pregnancyoutcome1Fragment() {
         // Required empty public constructor
     }
 
@@ -89,8 +89,8 @@ public class PregnancyoutcomeFragment extends Fragment {
      * @return A new instance of fragment PregnancyoutcomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PregnancyoutcomeFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem, EventForm eventForm) {
-        PregnancyoutcomeFragment fragment = new PregnancyoutcomeFragment();
+    public static Pregnancyoutcome1Fragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem, EventForm eventForm) {
+        Pregnancyoutcome1Fragment fragment = new Pregnancyoutcome1Fragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(RESIDENCY_ID, residency);
@@ -174,23 +174,23 @@ public class PregnancyoutcomeFragment extends Fragment {
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             // We use a String here, but any type that can be put in a Bundle is supported
-            if (bundle.containsKey((PregnancyoutcomeFragment.DATE_BUNDLES.RECORDDATE.getBundleKey()))) {
-                final String result = bundle.getString(PregnancyoutcomeFragment.DATE_BUNDLES.RECORDDATE.getBundleKey());
+            if (bundle.containsKey((DATE_BUNDLES.RECORDDATE.getBundleKey()))) {
+                final String result = bundle.getString(DATE_BUNDLES.RECORDDATE.getBundleKey());
                 binding.editTextOutcomeDate.setText(result);
             }
 
-            if (bundle.containsKey((PregnancyoutcomeFragment.DATE_BUNDLES.CONCEPTION.getBundleKey()))) {
-                final String result = bundle.getString(PregnancyoutcomeFragment.DATE_BUNDLES.CONCEPTION.getBundleKey());
+            if (bundle.containsKey((DATE_BUNDLES.CONCEPTION.getBundleKey()))) {
+                final String result = bundle.getString(DATE_BUNDLES.CONCEPTION.getBundleKey());
                 binding.editTextConception.setText(result);
             }
 
-            if (bundle.containsKey((PregnancyoutcomeFragment.DATE_BUNDLES.DOD.getBundleKey()))) {
-                final String result = bundle.getString(PregnancyoutcomeFragment.DATE_BUNDLES.DOD.getBundleKey());
+            if (bundle.containsKey((DATE_BUNDLES.DOD.getBundleKey()))) {
+                final String result = bundle.getString(DATE_BUNDLES.DOD.getBundleKey());
                 binding.vpm.dthDeathDate.setText(result);
             }
 
-            if (bundle.containsKey((PregnancyoutcomeFragment.DATE_BUNDLES.DOB.getBundleKey()))) {
-                final String result = bundle.getString(PregnancyoutcomeFragment.DATE_BUNDLES.DOB.getBundleKey());
+            if (bundle.containsKey((DATE_BUNDLES.DOB.getBundleKey()))) {
+                final String result = bundle.getString(DATE_BUNDLES.DOB.getBundleKey());
                 binding.vpm.dthDob.setText(result);
             }
 
@@ -198,25 +198,25 @@ public class PregnancyoutcomeFragment extends Fragment {
 
         binding.buttonOutcomeStartDate.setOnClickListener(v -> {
             final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(PregnancyoutcomeFragment.DATE_BUNDLES.RECORDDATE.getBundleKey(), c);
+            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.RECORDDATE.getBundleKey(), c);
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
         binding.buttonOutcomeConception.setOnClickListener(v -> {
             final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(PregnancyoutcomeFragment.DATE_BUNDLES.CONCEPTION.getBundleKey(), c);
+            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.CONCEPTION.getBundleKey(), c);
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
         binding.vpm.buttonDeathDod.setOnClickListener(v -> {
             final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(PregnancyoutcomeFragment.DATE_BUNDLES.DOD.getBundleKey(), c);
+            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.DOD.getBundleKey(), c);
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
         binding.vpm.buttonDeathDob.setOnClickListener(v -> {
             final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(PregnancyoutcomeFragment.DATE_BUNDLES.DOB.getBundleKey(), c);
+            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.DOB.getBundleKey(), c);
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
@@ -231,7 +231,7 @@ public class PregnancyoutcomeFragment extends Fragment {
         DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         try {
             Pregnancyoutcome data = viewModel.find(individual.individual_uuid);
-            if (data != null && data.extra==null) {
+            if (data != null && data.extra!=null) {
                 binding.setPregoutcome(data);
             } else {
                 data = new Pregnancyoutcome();
@@ -244,6 +244,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.preg_uuid = uuidString;
                 data.insertDate = new Date();
+                data.extra =1;
                 data.mother_uuid = individual.getIndividual_uuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
@@ -256,7 +257,7 @@ public class PregnancyoutcomeFragment extends Fragment {
 
 
         try {
-            final String child_id = individual.individual_uuid + AppConstants.CHILD1 + eventForm.event_name_id + roundData.roundNumber;
+            final String child_id = individual.individual_uuid + AppConstants.CHILD4 + + eventForm.event_name_id + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 binding.setPregoutcome1(data);
@@ -264,7 +265,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data = new Outcome();
 
                 data.mother_uuid = individual.getIndividual_uuid();
-                data.child_idx = AppConstants.CHILD1;
+                data.child_idx = AppConstants.CHILD4;
 
                 data.vis_number = eventForm.event_name_id;
 
@@ -280,7 +281,7 @@ public class PregnancyoutcomeFragment extends Fragment {
         }
 
         try {
-            final String child_id = individual.individual_uuid + AppConstants.CHILD2 + eventForm.event_name_id + roundData.roundNumber;
+            final String child_id = individual.individual_uuid + AppConstants.CHILD5 + eventForm.event_name_id + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 binding.setPregoutcome2(data);
@@ -288,7 +289,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data = new Outcome();
 
                 data.mother_uuid = individual.getIndividual_uuid();
-                data.child_idx = AppConstants.CHILD2;
+                data.child_idx = AppConstants.CHILD5;
 
                 data.vis_number = eventForm.event_name_id;
 
@@ -303,7 +304,7 @@ public class PregnancyoutcomeFragment extends Fragment {
         }
 
         try {
-            final String child_id = individual.individual_uuid + AppConstants.CHILD3 + eventForm.event_name_id + roundData.roundNumber;
+            final String child_id = individual.individual_uuid + AppConstants.CHILD6 + eventForm.event_name_id + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 binding.setPregoutcome3(data);
@@ -311,7 +312,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data = new Outcome();
 
                 data.mother_uuid = individual.getIndividual_uuid();
-                data.child_idx = AppConstants.CHILD3;
+                data.child_idx = AppConstants.CHILD6;
 
                 data.vis_number = eventForm.event_name_id;
 
@@ -326,7 +327,7 @@ public class PregnancyoutcomeFragment extends Fragment {
         }
 
         try {
-            final String child_id = individual.individual_uuid + AppConstants.CHILD4 + eventForm.event_name_id + roundData.roundNumber;
+            final String child_id = individual.individual_uuid + AppConstants.CHILD7 + eventForm.event_name_id + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 binding.setPregoutcome4(data);
@@ -334,7 +335,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data = new Outcome();
 
                 data.mother_uuid = individual.getIndividual_uuid();
-                data.child_idx = AppConstants.CHILD4;
+                data.child_idx = AppConstants.CHILD7;
 
                 data.vis_number = eventForm.event_name_id;
 
@@ -351,7 +352,7 @@ public class PregnancyoutcomeFragment extends Fragment {
 
         try {
             Death data = deathViewModel.find(individual.individual_uuid);
-            if (data != null) {
+            if (data != null && data.edit==1) {
                 binding.setDeath(data);
             } else {
                 data = new Death();
@@ -375,6 +376,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.househead = individual.getFirstName() +" "+ individual.getLastName();
                 data.deathCause = 77;
                 data.vpmcomplete=1;
+                data.edit=1;
 
                 binding.setDeath(data);
             }

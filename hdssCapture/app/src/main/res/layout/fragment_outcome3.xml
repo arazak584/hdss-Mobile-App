@@ -109,6 +109,26 @@
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            goneUnless="@{pregoutcome3.type==1}"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:hint="@string/actual_dob">
+            android:text="@string/actual_dob">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/out3_child_dob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={pregoutcome3.dob}"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:inputType="textPersonName"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
 
 </layout>

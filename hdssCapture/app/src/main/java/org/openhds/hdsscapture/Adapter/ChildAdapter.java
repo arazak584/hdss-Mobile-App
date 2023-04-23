@@ -102,23 +102,29 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ViewHolder> 
             public void onClick(View v) {
                 // Get the text field in the IndividualFragment where you want to insert the mother's ID
                 EditText childIdField = null;
+                EditText childIdDOB = null;
                 switch (holder.fieldToUpdate) {
                     case 1:
                         childIdField = activity.requireActivity().findViewById(R.id.out1_child_extid);
+                        childIdDOB = activity.requireActivity().findViewById(R.id.out1_child_dob);
                         break;
                     case 2:
                         childIdField = activity.requireActivity().findViewById(R.id.out2_child_extid);
+                        childIdDOB = activity.requireActivity().findViewById(R.id.out2_child_dob);
                         break;
                     case 3:
                         childIdField = activity.requireActivity().findViewById(R.id.out3_child_extid);
+                        childIdDOB = activity.requireActivity().findViewById(R.id.out3_child_dob);
                         break;
                     case 4:
                         childIdField = activity.requireActivity().findViewById(R.id.out4_child_extid);
+                        childIdDOB = activity.requireActivity().findViewById(R.id.out4_child_dob);
                         break;
                 }
 
                 // Set the mother's ID in the text field
                 childIdField.setText(individual.getIndividual_uuid());
+                childIdDOB.setText(individual.getDob());
 
                 // Increment the flag to update the next field on the next click
                 int nextFieldToUpdate = holder.fieldToUpdate + 1;

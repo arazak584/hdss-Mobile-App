@@ -110,6 +110,9 @@ public class Pregnancyoutcome extends BaseObservable {
     public Integer stillbirth;
 
     @Expose
+    public Integer extra;
+
+    @Expose
     public Integer complete;
 
     public Pregnancyoutcome(){}
