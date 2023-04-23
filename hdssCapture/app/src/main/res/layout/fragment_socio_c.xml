@@ -2070,7 +2070,7 @@
             android:onItemSelected="@{sociodemo::setOwn_rent_scorres}" />
 
         <LinearLayout
-            goneUnless="@{sociodemo.own_rent_scorres==66}"
+            goneUnless="@{sociodemo.own_rent_scorres==77}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">

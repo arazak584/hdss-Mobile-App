@@ -34,7 +34,7 @@
             android:onItemSelected="@{sociodemo::setJob_scorres}" />
 
         <LinearLayout
-            goneUnless="@{(sociodemo.job_scorres != 0 &amp;&amp; sociodemo.job_scorres &lt; 16) || sociodemo.job_scorres==66}"
+            goneUnless="@{(sociodemo.job_scorres != 0 &amp;&amp; sociodemo.job_scorres &lt; 16) || sociodemo.job_scorres==77}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -69,7 +69,7 @@
             android:onItemSelected="@{sociodemo::setPtr_scorres}" />
 
         <LinearLayout
-            goneUnless="@{(sociodemo.ptr_scorres != 0 &amp;&amp; sociodemo.ptr_scorres &lt; 16) || sociodemo.ptr_scorres==66}"
+            goneUnless="@{(sociodemo.ptr_scorres != 0 &amp;&amp; sociodemo.ptr_scorres &lt; 16) || sociodemo.ptr_scorres==77}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">

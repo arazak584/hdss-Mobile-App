@@ -113,9 +113,9 @@ public class SocioFragment extends Fragment {
 
 
         HdssSociodemoViewModel viewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
-        binding.setIndividual(individual);
+
         try {
-            HdssSociodemo data = viewModel.find(individual.individual_uuid);
+            HdssSociodemo data = viewModel.find(socialgroup.socialgroup_uuid);
             if (data != null) {
                 binding.setSociodemo(data);
             } else {

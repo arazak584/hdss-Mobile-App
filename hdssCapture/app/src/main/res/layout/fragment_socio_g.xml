@@ -306,7 +306,7 @@
             android:onItemSelected="@{sociodemo::setPd_dm_scorres}" />
 
         <LinearLayout
-            goneUnless="@{sociodemo.pd_dm_scorres==66}"
+            goneUnless="@{sociodemo.pd_dm_scorres==77}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">

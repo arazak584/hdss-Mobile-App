@@ -81,7 +81,7 @@ public class PushActivity extends AppCompatActivity {
         final List<Locations> locationsList = new ArrayList<>();
         try {
             locationsList.addAll(locationViewModel.findToSync());
-            textViewSendLocationdata.setText("Locations(" + locationsList.size() + ") to send");
+            buttonSendLocationdata.setText("Locations(" + locationsList.size() + ") to send");
             textViewSendLocationdata.setTextColor(Color.rgb(0, 114, 133));
             if (locationsList.isEmpty()) {
                 buttonSendLocationdata.setVisibility(View.GONE);
@@ -146,7 +146,7 @@ public class PushActivity extends AppCompatActivity {
         final List<Visit> visitList = new ArrayList<>();
         try {
             visitList.addAll(visitViewModel.findToSync());
-            textViewSendVisit.setText("Visit(" + visitList.size() + ") to send");
+            buttonSendVisit.setText("Visit(" + visitList.size() + ") to send");
             textViewSendVisit.setTextColor(Color.rgb(0, 114, 133));
             if (visitList.isEmpty()) {
                 buttonSendVisit.setVisibility(View.GONE);
@@ -210,7 +210,7 @@ public class PushActivity extends AppCompatActivity {
         final List<Individual> individualList = new ArrayList<>();
         try {
             individualList.addAll(individualViewModel.findToSync());
-            textViewSendIndividualdata.setText("Individuals(" + individualList.size() + ") to send");
+            buttonSendIndividualdata.setText("Individuals(" + individualList.size() + ") to send");
             textViewSendIndividualdata.setTextColor(Color.rgb(0, 114, 133));
             if (individualList.isEmpty()) {
                 buttonSendIndividualdata.setVisibility(View.GONE);
@@ -275,7 +275,7 @@ public class PushActivity extends AppCompatActivity {
         final List<Socialgroup> socialgroupList = new ArrayList<>();
         try {
             socialgroupList.addAll(socialgroupViewModel.findToSync());
-            textViewSendSocialgroupdata.setText("Socialgroup (" + individualList.size() + ") to send");
+            buttonSendSocialgroupdata.setText("Socialgroup (" + individualList.size() + ") to send");
             textViewSendSocialgroupdata.setTextColor(Color.rgb(0, 114, 133));
             if (socialgroupList.isEmpty()) {
                 buttonSendSocialgroupdata.setVisibility(View.GONE);
@@ -340,7 +340,7 @@ public class PushActivity extends AppCompatActivity {
         final List<Relationship> relationshipList = new ArrayList<>();
         try {
             relationshipList.addAll(relationshipViewModel.findToSync());
-            textViewSendRelationshipdata.setText("Relationship (" + relationshipList.size() + ") to send");
+            buttonSendRelationshipdata.setText("Relationship (" + relationshipList.size() + ") to send");
             textViewSendRelationshipdata.setTextColor(Color.rgb(0, 114, 133));
             if (relationshipList.isEmpty()) {
                 buttonSendRelationshipdata.setVisibility(View.GONE);
@@ -406,7 +406,7 @@ public class PushActivity extends AppCompatActivity {
         final List<Pregnancy> pregnancyList = new ArrayList<>();
         try {
             pregnancyList.addAll(pregnancyViewModel.findToSync());
-            textViewSendPregnancydata.setText("Pregnancy (" + pregnancyList.size() + ") to send");
+            buttonSendPregnancydata.setText("Pregnancy (" + pregnancyList.size() + ") to send");
             textViewSendPregnancydata.setTextColor(Color.rgb(0, 114, 133));
             if (pregnancyList.isEmpty()) {
                 buttonSendPregnancydata.setVisibility(View.GONE);
@@ -443,7 +443,7 @@ public class PushActivity extends AppCompatActivity {
                             Pregnancy[] d = response.body().getData().toArray(new Pregnancy[0]);
                             pregnancyViewModel.add(d);
                             progress.dismiss();
-                            textViewSendPregnancydata.setText("Sent " + d.length + " Relationship record(s)");
+                            textViewSendPregnancydata.setText("Sent " + d.length + " Pregnancy record(s)");
                             textViewSendPregnancydata.setTextColor(Color.rgb(0, 114, 133));
                         }
                     }
@@ -473,7 +473,7 @@ public class PushActivity extends AppCompatActivity {
         final List<Pregnancyoutcome> pregnancyoutcomeList = new ArrayList<>();
         try {
             pregnancyoutcomeList.addAll(pregnancyoutcomeViewModel.findToSync());
-            textViewSendOutcomedata.setText("Outcome (" + pregnancyoutcomeList.size() + ") to send");
+            buttonSendOutcomedata.setText("Pregnancy Outcome (" + pregnancyoutcomeList.size() + ") to send");
             textViewSendOutcomedata.setTextColor(Color.rgb(0, 114, 133));
             if (pregnancyoutcomeList.isEmpty()) {
                 buttonSendOutcomedata.setVisibility(View.GONE);
@@ -510,7 +510,7 @@ public class PushActivity extends AppCompatActivity {
                             Pregnancyoutcome[] d = response.body().getData().toArray(new Pregnancyoutcome[0]);
                             pregnancyoutcomeViewModel.add(d);
                             progress.dismiss();
-                            textViewSendOutcomedata.setText("Sent " + d.length + " Outcome record(s)");
+                            textViewSendOutcomedata.setText("Sent " + d.length + " Pregnancy Outcome record(s)");
                             textViewSendOutcomedata.setTextColor(Color.rgb(0, 114, 133));
                         }
                     }
@@ -537,7 +537,7 @@ public class PushActivity extends AppCompatActivity {
         final List<Outcome> outcomeList = new ArrayList<>();
         try {
             outcomeList.addAll(outcomeViewModel.findToSync());
-            textViewSendOutcomesdata.setText("Outcome (" + outcomeList.size() + ") to send");
+            buttonSendOutcomesdata.setText("Outcome (" + outcomeList.size() + ") to send");
             textViewSendOutcomesdata.setTextColor(Color.rgb(0, 114, 133));
             if (outcomeList.isEmpty()) {
                 buttonSendOutcomesdata.setVisibility(View.GONE);
@@ -603,7 +603,7 @@ public class PushActivity extends AppCompatActivity {
         final List<Demographic> demographicList = new ArrayList<>();
         try {
             demographicList.addAll(demographicViewModel.findToSync());
-            textViewSendDemographicdata.setText("Demographic (" + demographicList.size() + ") to send");
+            buttonSendDemographicdata.setText("Demographic (" + demographicList.size() + ") to send");
             textViewSendDemographicdata.setTextColor(Color.rgb(0, 114, 133));
             if (demographicList.isEmpty()) {
                 buttonSendDemographicdata.setVisibility(View.GONE);
@@ -674,7 +674,7 @@ public class PushActivity extends AppCompatActivity {
             listDeath.addAll(death.findToSync());
             listVpm.addAll(vpms.retrieveVpmSync());
 
-            textViewSendEnd.setText(
+            buttonSendEnd.setText(
                     "Death (" + listDeath.size() + ")" +
                             ", VPM(" + listVpm.size() + ")" +
                             " to send"
@@ -784,7 +784,7 @@ public class PushActivity extends AppCompatActivity {
         final List<HdssSociodemo> hdssSociodemoList = new ArrayList<>();
         try {
             hdssSociodemoList.addAll(hdssSociodemoViewModel.findToSync());
-            textViewSendSocio.setText("Visit(" + hdssSociodemoList.size() + ") to send");
+            buttonSendSocio.setText("Profiles[SES] (" + hdssSociodemoList.size() + ") to send");
             textViewSendSocio.setTextColor(Color.rgb(0, 114, 133));
             if (hdssSociodemoList.isEmpty()) {
                 buttonSendSocio.setVisibility(View.GONE);
@@ -850,7 +850,7 @@ public class PushActivity extends AppCompatActivity {
         final List<Residency> residencyList = new ArrayList<>();
         try {
             residencyList.addAll(residencyViewModel.findToSync());
-            textViewSendRes.setText("Residency (" + residencyList.size() + ") to send");
+            buttonSendRes.setText("Residency (" + residencyList.size() + ") to send");
             textViewSendRes.setTextColor(Color.rgb(0, 114, 133));
             if (residencyList.isEmpty()) {
                 buttonSendRes.setVisibility(View.GONE);

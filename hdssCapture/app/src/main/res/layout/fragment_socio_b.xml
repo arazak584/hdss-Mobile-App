@@ -34,7 +34,7 @@
             android:onItemSelected="@{sociodemo::setH2o_fcorres}" />
 
         <LinearLayout
-            goneUnless="@{sociodemo.h2o_fcorres==66}"
+            goneUnless="@{sociodemo.h2o_fcorres==77}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -415,7 +415,7 @@
             android:orientation="vertical">
 
             <LinearLayout
-                goneUnless="@{sociodemo.toilet_fcorres==66}"
+                goneUnless="@{sociodemo.toilet_fcorres==77}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -450,7 +450,7 @@
                 android:onItemSelected="@{sociodemo::setToilet_loc_fcorres}" />
 
             <LinearLayout
-                goneUnless="@{sociodemo.toilet_loc_fcorres==66}"
+                goneUnless="@{sociodemo.toilet_loc_fcorres==77}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -545,7 +545,7 @@
             android:onItemSelected="@{sociodemo::setExt_wall_fcorres}" />
 
         <LinearLayout
-            goneUnless="@{sociodemo.ext_wall_fcorres==66}"
+            goneUnless="@{sociodemo.ext_wall_fcorres==77}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -578,7 +578,7 @@
             android:onItemSelected="@{sociodemo::setFloor_fcorres}" />
 
         <LinearLayout
-            goneUnless="@{sociodemo.floor_fcorres==66}"
+            goneUnless="@{sociodemo.floor_fcorres==77}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -611,7 +611,7 @@
             android:onItemSelected="@{sociodemo::setRoof_fcorres}" />
 
         <LinearLayout
-            goneUnless="@{sociodemo.roof_fcorres==66}"
+            goneUnless="@{sociodemo.roof_fcorres==77}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
