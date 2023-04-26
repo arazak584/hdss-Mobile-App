@@ -240,6 +240,10 @@ public class ResidencyFragment extends Fragment {
                 data.loc = locations.getLocation_uuid();
                 data.complete = 1;
                 data.dobs = individual.dob;
+
+//                if (res != null) {
+//                    data.startDate = binding.getRes().endDate;
+//                }
                 if (data != null){
                     data.startType=1;
                 }
