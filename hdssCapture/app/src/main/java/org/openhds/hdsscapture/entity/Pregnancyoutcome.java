@@ -647,21 +647,17 @@ public class Pregnancyoutcome extends BaseObservable {
     }
 
     //Still Birth
-    public void setStillbirth(AdapterView<?> parent, View view, int position, long id) {
 
-        if (position != parent.getSelectedItemPosition()) {
-            parent.setSelection(position);
+    public void setStillbirth(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
         }
-        if (position == 0) {
-            stillbirth = AppConstants.NOSELECT;
-        } else {
-            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            stillbirth = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-            ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
-        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            stillbirth = Integer.parseInt(TAG);
 
+            patternSkipper(view);
+        }
     }
 
     //During the time that you were pregnant, did you receive IPT infront of a nurse?

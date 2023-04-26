@@ -21,8 +21,12 @@ public class HdssSociodemoViewModel extends AndroidViewModel {
         hdssSociodemoRepository = new HdssSociodemoRepository(application);
     }
 
-    public HdssSociodemo find(String id) throws ExecutionException, InterruptedException {
+    public List<HdssSociodemo> find(String id) throws ExecutionException, InterruptedException {
         return hdssSociodemoRepository.find(id);
+    }
+
+    public HdssSociodemo findses(String id) throws ExecutionException, InterruptedException {
+        return hdssSociodemoRepository.findses(id);
     }
 
     public List<HdssSociodemo> findToSync() throws ExecutionException, InterruptedException {

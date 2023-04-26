@@ -51,6 +51,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -68,6 +69,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
+                    android:visibility="gone"
                     android:id="@+id/button_demo_insertDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -76,6 +78,7 @@
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/demo_insertDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -241,23 +244,20 @@
                     android:textColor="#000301"
                     android:padding="15dp"/>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <TextView
                     goneUnless="@{demographic.education!=1}"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/comp_yrs"
-                    android:text="@string/comp_yrs">
+                    android:text="@string/comp_yrs" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/comp_yrs"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@{demographic.comp_yrs}"
-                        android:inputType="number"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    goneUnless="@{demographic.education!=1}"
+                    android:id="@+id/comp_yrs"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={demographic.comp_yrs}" />
 
                 <TextView
                     android:layout_width="match_parent"

@@ -29,9 +29,18 @@ public class HdssSociodemoRepository {
         AppDatabase.databaseWriteExecutor.execute(() -> dao.create(s));
     }
 
-    public HdssSociodemo find(String id) throws ExecutionException, InterruptedException {
+    public List<HdssSociodemo> find(String id) throws ExecutionException, InterruptedException {
 
-        Callable<HdssSociodemo> callable = () -> dao.retrieve(id);
+        Callable<List<HdssSociodemo>> callable = () -> dao.retrieve(id);
+
+        Future<List<HdssSociodemo>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public HdssSociodemo findses(String id) throws ExecutionException, InterruptedException {
+
+        Callable<HdssSociodemo> callable = () -> dao.findses(id);
 
         Future<HdssSociodemo> future = Executors.newSingleThreadExecutor().submit(callable);
 

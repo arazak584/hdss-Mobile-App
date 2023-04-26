@@ -284,6 +284,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/mother_extid"
                     tools:ignore="DuplicateSpeakableTextCheck"
+                    android:backgroundTint="@color/black"
+                    android:textColor="@color/white"
                     app:icon="@drawable/ic_baseline_pregnant_woman_24" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -310,6 +312,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/father_extid"
+                    android:backgroundTint="@color/black"
+                    android:textColor="@color/white"
                     tools:ignore="DuplicateSpeakableTextCheck"
                     app:icon="@drawable/ic_baseline_person_24" />
 
@@ -367,7 +371,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/pakistan_green"
                 android:text="@string/savecontinuedata" />
 
             <Button
@@ -376,7 +379,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/pakistan_green"
                 android:text="@string/closecontinue" />
 
         </LinearLayout>

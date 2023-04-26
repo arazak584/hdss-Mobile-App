@@ -56,6 +56,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -73,6 +74,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
+                    android:visibility="gone"
                     android:id="@+id/button_preg_insertDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -81,6 +83,7 @@
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/pregnancy_insertDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -165,8 +168,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={pregnancy.recordedDate}"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -191,8 +192,6 @@
                         android:id="@+id/expectedDelivery"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
                         android:text="@={pregnancy.expectedDeliveryDate}"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
@@ -305,16 +304,13 @@
                      tools:ignore="DuplicateSpeakableTextCheck"
                      app:icon="@drawable/ic_baseline_calendar_month_24" />
 
-                 <TextView
+                 <EditText
                      android:id="@+id/editText_lastClinicVisitDate"
                      android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:autofillHints=""
+                     android:layout_height="50dp"
                      android:ems="10"
-                     android:minHeight="40dp"
-                     android:text="@={pregnancy.lastClinicVisitDate}"
-                     android:textSize="20sp"
-                     tools:ignore="TextContrastCheck" />
+                     android:inputType="date"
+                     android:text="@={pregnancy.lastClinicVisitDate}" />
 
 
                     <TextView

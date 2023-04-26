@@ -51,6 +51,25 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
+            android:hint="@string/preguuid">
+            android:text="@string/preguuid">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/preg4_uuid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={pregoutcome4.preg_uuid}"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:inputType="textPersonName"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
             android:hint="@string/motherid">
             android:text="@string/motherid">
 
@@ -87,6 +106,8 @@
             android:id="@+id/button_out4_uuid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/black"
+            android:textColor="@color/white"
             android:text="@string/select_child" />
 
         <com.google.android.material.textfield.TextInputLayout

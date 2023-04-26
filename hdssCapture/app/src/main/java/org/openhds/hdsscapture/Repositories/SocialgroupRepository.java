@@ -44,6 +44,15 @@ public class SocialgroupRepository {
         return future.get();
     }
 
+    public List<Socialgroup> findhse(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Socialgroup>> callable = () -> dao.findhse(id);
+
+        Future<List<Socialgroup>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Socialgroup> retrieveBySocialgroup(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Socialgroup>> callable = () -> dao.retrieveBySocialgroup(id);

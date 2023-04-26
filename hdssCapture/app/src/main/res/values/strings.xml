@@ -524,6 +524,9 @@
     <string name="selectchild">SELECT CHILD</string>
     <string name="stillbirth">Was StillBirth Recorded as part of the Outcomes?</string>
     <string name="stillbirthplace">Where did the Still Birth Occur?</string>
+    <string name="item_preg">PREGNANY OUTCOME</string>
+    <string name="item_ses">SES [PROFILE]</string>
+    <string name="server_setup">Server Setup</string>
 
     //SocioDemo End
 

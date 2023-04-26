@@ -34,6 +34,7 @@
             android:background="@color/colorPrimaryDark" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:visibility="gone"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,6 +52,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
+            android:visibility="gone"
             android:id="@+id/button_img_insertDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,6 +61,7 @@
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/img_insertDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -71,6 +74,7 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
+            android:visibility="gone"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -89,6 +93,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:visibility="gone"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -106,6 +111,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:visibility="gone"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -123,6 +129,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:visibility="gone"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

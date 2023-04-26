@@ -15,72 +15,45 @@ import org.openhds.hdsscapture.fragment.InfoFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnupdate, btnpush, btnpull, btncensus, btnamendment, btninfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //final TextView textView_Username = findViewById(R.id.text_fieldextid);
-        //final Intent intent = getIntent();
-        //String name = intent.getStringExtra("username");
-        //Toast.makeText(MainActivity.this, "User Name "+name, Toast.LENGTH_LONG).show();
-        //textView_Username.setText("Welcome " + name);
 
-        btnupdate=findViewById(R.id.btnupdate);
-        btnpush=findViewById(R.id.btnpush);
-        btnpull=findViewById(R.id.btnpull);
-        btncensus=findViewById(R.id.btncensus);
-        btnamendment=findViewById(R.id.btnamendment);
-        btninfo=findViewById(R.id.btninfo);
-
-        btnupdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(MainActivity.this, HierarchyActivity.class);
-                startActivity(intent);
-            }
+        final Button update = findViewById(R.id.btnupdate);
+        update.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(),HierarchyActivity.class);
+            startActivity(i);
         });
 
-        btnpush.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(MainActivity.this, PushActivity.class);
-                startActivity(intent);
-            }
+        final Button send = findViewById(R.id.btnpush);
+        send.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(),PushActivity.class);
+            startActivity(i);
         });
 
-        btnpull.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(MainActivity.this, PullActivity.class);
-                startActivity(intent);
-            }
+        final Button pull = findViewById(R.id.btnpull);
+        pull.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(),PullActivity.class);
+            startActivity(i);
         });
 
-        btncensus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(MainActivity.this, RemainderActivity.class);
-                startActivity(intent);
-            }
+        final Button remainder = findViewById(R.id.btncensus);
+        remainder.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(),RemainderActivity.class);
+            startActivity(i);
         });
 
-        btnamendment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //Intent intent = new Intent(MainActivity.this, Expenseslist.class);
-                //startActivity(intent);
-            }
+        final Button control = findViewById(R.id.btnamendment);
+        control.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(),RemainderActivity.class);
+            startActivity(i);
         });
 
-        btninfo.setOnClickListener(new View.OnClickListener() {
+        final Button info = findViewById(R.id.btninfo);
+        info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

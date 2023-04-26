@@ -29,6 +29,10 @@ public class SocialgroupViewModel extends AndroidViewModel {
         return socialgroupRepository.retrieveBySocialgroup(id);
     }
 
+    public List<Socialgroup> findhse(String id) throws ExecutionException, InterruptedException {
+        return socialgroupRepository.findhse(id);
+    }
+
     public List<Socialgroup> findAll() throws ExecutionException, InterruptedException {
         return socialgroupRepository.findAll();
     }

@@ -51,6 +51,9 @@ public class Outcome extends BaseObservable {
     public String mother_uuid;
 
     @Expose
+    public String preg_uuid;
+
+    @Expose
     public Integer type;
 
     @Expose
@@ -119,6 +122,14 @@ public class Outcome extends BaseObservable {
 
     public void setComplete(Integer complete) {
         this.complete = complete;
+    }
+
+    public String getPreg_uuid() {
+        return preg_uuid;
+    }
+
+    public void setPreg_uuid(String preg_uuid) {
+        this.preg_uuid = preg_uuid;
     }
 
     //SPINNERS ENTITY

@@ -29,6 +29,9 @@ public interface SocialgroupDao {
     @Query("SELECT * FROM socialgroup WHERE houseExtId=:id")
     Socialgroup retrieve(String id);
 
+    @Query("SELECT * FROM socialgroup WHERE houseExtId=:id")
+    List<Socialgroup> findhse(String id);
+
     @Query("SELECT * FROM socialgroup WHERE complete=1")
     List<Socialgroup> retrieveToSync();
 

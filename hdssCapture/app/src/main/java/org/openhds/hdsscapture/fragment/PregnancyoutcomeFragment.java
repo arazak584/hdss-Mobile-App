@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.ChildDialogFragment;
+import org.openhds.hdsscapture.Dialog.FatherOutcomeDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
@@ -38,6 +39,7 @@ import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -124,6 +126,18 @@ public class PregnancyoutcomeFragment extends Fragment {
 
         final Intent intent = getActivity().getIntent();
         final Round roundData = intent.getParcelableExtra(HierarchyActivity.ROUND_DATA);
+
+        Button showDialogButtons = binding.getRoot().findViewById(R.id.button_outcome_father);
+
+        // Set a click listener on the button for mother
+        showDialogButtons.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show the dialog fragment
+                FatherOutcomeDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                        .show(getChildFragmentManager(), "FatherOutcomeDialogFragment");
+            }
+        });
 
         // Find the button view
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_out1_uuid);
@@ -271,6 +285,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber();
                 data.complete = 1;
+                data.preg_uuid = binding.getPregoutcome().preg_uuid;
 
 
                 binding.setPregoutcome1(data);
@@ -295,6 +310,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber();
                 data.complete = 1;
+                data.preg_uuid = binding.getPregoutcome().preg_uuid;
 
                 binding.setPregoutcome2(data);
             }
@@ -318,6 +334,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber();
                 data.complete = 1;
+                data.preg_uuid = binding.getPregoutcome().preg_uuid;
 
                 binding.setPregoutcome3(data);
             }
@@ -341,6 +358,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber() ;
                 data.complete = 1;
+                data.preg_uuid = binding.getPregoutcome().preg_uuid;
 
 
                 binding.setPregoutcome4(data);
@@ -401,7 +419,6 @@ public class PregnancyoutcomeFragment extends Fragment {
         loadCodeData(binding.whoAnc, codeBookViewModel, "assist");
         loadCodeData(binding.chdSize, codeBookViewModel, "size");
         loadCodeData(binding.individualComplete, codeBookViewModel, "complete");
-        loadCodeData(binding.stillbirth, codeBookViewModel, "complete");
         loadCodeData(binding.vpm.dthDeathPlace, codeBookViewModel, "deathPlace");
         loadCodeData(binding.vpm.dthDeathCause, codeBookViewModel, "deathCause");
 
@@ -427,6 +444,30 @@ public class PregnancyoutcomeFragment extends Fragment {
         if (save) {
             Pregnancyoutcome finalData = binding.getPregoutcome();
 
+            try {
+                if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date stdate = f.parse(binding.editTextConception.getText().toString().trim());
+                    Date edate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                    if (edate.after(currentDate)) {
+                        binding.editTextOutcomeDate.setError("Date of Delivery Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date of Delivery Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (edate.before(stdate)) {
+                        binding.editTextConception.setError("Delivery Date Cannot Be Less than Conception Date");
+                        Toast.makeText(getActivity(), "Delivery Date Cannot Be Less than Conception Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.editTextConception.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.OUTCOMELAYOUT, validateOnComplete, false);
 
@@ -440,6 +481,31 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 if (finalData.numberofBirths >= 1) {
 
+
+                    try {
+                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.childFetus1.out1ChildDob.getText().toString().trim().isEmpty()) {
+                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                            Date stdate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                            Date edate = f.parse(binding.childFetus1.out1ChildDob.getText().toString().trim());
+                            if (edate.after(stdate)) {
+                                binding.childFetus1.out1ChildDob.setError("Date of Outcome Not Equal to Date of Birth");
+                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            if (edate.before(stdate)) {
+                                binding.childFetus1.out1ChildDob.setError("Date of Outcome Not Equal to Date of Birth");
+                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            // clear error if validation passes
+                            binding.childFetus1.out1ChildDob.setError(null);
+                        }
+                    } catch (ParseException e) {
+                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+
+
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus1.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome1();
@@ -448,6 +514,29 @@ public class PregnancyoutcomeFragment extends Fragment {
                 }
 
                 if (finalData.numberofBirths >= 2) {
+
+                    try {
+                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.childFetus2.out2ChildDob.getText().toString().trim().isEmpty()) {
+                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                            Date stdate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                            Date edate = f.parse(binding.childFetus2.out2ChildDob.getText().toString().trim());
+                            if (edate.after(stdate)) {
+                                binding.childFetus2.out2ChildDob.setError("Date of Outcome Not Equal to Date of Birth");
+                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            if (edate.before(stdate)) {
+                                binding.childFetus2.out2ChildDob.setError("Date of Outcome Not Equal to Date of Birth");
+                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            // clear error if validation passes
+                            binding.childFetus2.out2ChildDob.setError(null);
+                        }
+                    } catch (ParseException e) {
+                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
 
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus2.OUTCOMELAYOUT, validateOnComplete, false);
 
@@ -459,6 +548,29 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 if (finalData.numberofBirths >= 3) {
 
+                    try {
+                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.childFetus3.out3ChildDob.getText().toString().trim().isEmpty()) {
+                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                            Date stdate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                            Date edate = f.parse(binding.childFetus3.out3ChildDob.getText().toString().trim());
+                            if (edate.after(stdate)) {
+                                binding.childFetus3.out3ChildDob.setError("Date of Outcome Not Equal to Date of Birth");
+                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            if (edate.before(stdate)) {
+                                binding.childFetus3.out3ChildDob.setError("Date of Outcome Not Equal to Date of Birth");
+                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            // clear error if validation passes
+                            binding.childFetus3.out3ChildDob.setError(null);
+                        }
+                    } catch (ParseException e) {
+                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus3.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome3();
@@ -469,6 +581,29 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 if (finalData.numberofBirths >= 4) {
 
+                    try {
+                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.childFetus4.out4ChildDob.getText().toString().trim().isEmpty()) {
+                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                            Date stdate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                            Date edate = f.parse(binding.childFetus4.out4ChildDob.getText().toString().trim());
+                            if (edate.after(stdate)) {
+                                binding.childFetus4.out4ChildDob.setError("Date of Outcome Not Equal to Date of Birth");
+                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            if (edate.before(stdate)) {
+                                binding.childFetus4.out4ChildDob.setError("Date of Outcome Not Equal to Date of Birth");
+                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            // clear error if validation passes
+                            binding.childFetus4.out4ChildDob.setError(null);
+                        }
+                    } catch (ParseException e) {
+                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus4.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome4();
@@ -478,6 +613,42 @@ public class PregnancyoutcomeFragment extends Fragment {
                 }
 
                 if (finalData.stillbirth == 1) {
+
+                    try {
+                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.vpm.dthDob.getText().toString().trim().isEmpty()
+                                && !binding.vpm.dthDeathDate.getText().toString().trim().isEmpty()) {
+                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                            Date stdate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                            Date dob = f.parse(binding.vpm.dthDob.getText().toString().trim());
+                            Date edate = f.parse(binding.vpm.dthDeathDate.getText().toString().trim());
+                            if (!edate.equals(stdate)) {
+                                binding.vpm.dthDeathDate.setError("Date of Outcome Not Equal to Date of Birth");
+                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            if (!dob.equals(stdate)) {
+                                binding.vpm.dthDob.setError("Date of Outcome Not Equal to Date of Birth");
+                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            // clear error if validation passes
+                            binding.vpm.dthDob.setError(null);
+                        }
+                    } catch (ParseException e) {
+                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+
+                    boolean end = false;
+
+                    if (!binding.childFetus1.out1Type.toString().trim().equals(2) || !binding.childFetus2.out2Type.toString().trim().equals(2)
+                            || !binding.childFetus3.out3Type.toString().trim().equals(2) || !binding.childFetus4.out4Type.toString().trim().equals(2)
+                    && binding.stillbirth.toString().trim().equals(1)) {
+                        end = true;
+                        binding.vpm.dthHousehead.setError("None of of the Outcomes is a Still Birth");
+                        Toast.makeText(getActivity(), "None of of the Outcomes is a Still Birth", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.vpm.OUTCOMELAYOUT, validateOnComplete, false);
 

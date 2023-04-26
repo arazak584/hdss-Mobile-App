@@ -207,6 +207,7 @@ public class ResidencyFragment extends Fragment {
         });
 
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+        ResidencyViewModel res = new ViewModelProvider(this).get(ResidencyViewModel.class);
         DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
         OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
@@ -223,6 +224,7 @@ public class ResidencyFragment extends Fragment {
                 binding.setResidency(data);
                 data.loc = locations.getLocation_uuid();
                 data.dobs = individual.dob;
+                data.img = 2;
             } else {
                 data = new Residency();
 
@@ -371,6 +373,15 @@ public class ResidencyFragment extends Fragment {
             e.printStackTrace();
         }
 
+        try {
+            Residency data = res.findRes(individual.individual_uuid);
+            if (data != null) {
+                binding.setRes(data);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
         loadCodeData(binding.membershipComplete, "complete");
         loadCodeData(binding.starttype, "startType");
@@ -440,6 +451,31 @@ public class ResidencyFragment extends Fragment {
                     if (edate.after(stdate)) {
                         binding.editTextStartDate.setError("Start Date Cannot Be Less than Date of Birth");
                         Toast.makeText(getActivity(), "Start Date Cannot Be Less than Date of Birth", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.editTextStartDate.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+
+            try {
+                if (!binding.editTextStartDate.getText().toString().trim().isEmpty() && !binding.res.resEndDate.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
+                    Date edate = f.parse(binding.res.resEndDate.getText().toString().trim());
+                    if (edate.after(stdate)) {
+                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Previous End Date" + edate);
+                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Previous End Date" + edate, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (edate.equals(stdate)) {
+                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Previous End Date" + edate);
+                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Previous End Date" + edate, Toast.LENGTH_SHORT).show();
                         return;
                     }
                     // clear error if validation passes

@@ -27,7 +27,10 @@ public interface HdssSociodemoDao {
     void delete(HdssSociodemo s);
 
     @Query("SELECT * FROM sociodemo WHERE socialgroup_uuid=:id")
-    HdssSociodemo retrieve(String id);
+    List<HdssSociodemo> retrieve(String id);
+
+    @Query("SELECT * FROM sociodemo WHERE socialgroup_uuid=:id")
+   HdssSociodemo findses(String id);
 
     @Query("SELECT * FROM sociodemo WHERE complete=1")
     List<HdssSociodemo> retrieveToSync();

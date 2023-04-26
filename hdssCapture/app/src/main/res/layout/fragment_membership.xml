@@ -15,6 +15,10 @@
             type="org.openhds.hdsscapture.entity.Residency" />
 
         <variable
+            name="res"
+            type="org.openhds.hdsscapture.entity.Residency" />
+
+        <variable
             name="inmigration"
             type="org.openhds.hdsscapture.entity.Inmigration" />
 
@@ -70,6 +74,11 @@
                     android:layout_height="2dp"
                     android:layout_margin="5dp"
                     android:background="@color/colorPrimaryDark" />
+
+                <include
+                    android:id="@+id/res"
+                    layout="@layout/fragment_membership_edate"
+                    bind:res="@{res}" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
@@ -267,16 +276,14 @@
                     tools:ignore="DuplicateSpeakableTextCheck"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
-                <TextView
+                <EditText
                     android:id="@+id/editText_startDate"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints=""
+                    android:layout_height="50dp"
                     android:ems="10"
-                    android:minHeight="40dp"
-                    android:text="@={residency.startDate}"
-                    android:textSize="20sp"
-                    tools:ignore="TextContrastCheck" />
+                    android:inputType="number"
+                    android:text="@={residency.startDate}" />
+
 
                 <TextView
                     android:layout_width="match_parent"
