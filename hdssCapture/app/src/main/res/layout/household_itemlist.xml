@@ -33,8 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
-                android:textSize="12dp"
-                android:textColor="@color/magenta"/>
+                android:textSize="12dp"/>
 
         </LinearLayout>
 
@@ -56,8 +55,7 @@
                 android:id="@+id/hhid_head"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:textColor="@color/magenta"/>
+                android:textSize="12dp"/>
         </LinearLayout>
 
 

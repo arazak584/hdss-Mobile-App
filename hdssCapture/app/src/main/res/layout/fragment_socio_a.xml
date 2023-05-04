@@ -35,7 +35,7 @@
             android:onItemSelected="@{sociodemo::setMarital_scorres}" />
 
         <LinearLayout
-            goneUnless="@{sociodemo.marital_scorres==11}"
+            goneUnless="@{sociodemo.marital_scorres==1}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -48,7 +48,7 @@
             <EditText
                 android:id="@+id/MARITAL_AGE"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:ems="10"
                 android:hint="Provide best estimate"
                 android:inputType="number"
@@ -69,7 +69,7 @@
             android:onItemSelected="@{sociodemo::setReligion_scorres}" />
 
         <LinearLayout
-            goneUnless="@{sociodemo.religion_scorres==66}"
+            goneUnless="@{sociodemo.religion_scorres==77}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -103,7 +103,7 @@
             android:onItemSelected="@{sociodemo::setCethnic}" />
 
         <LinearLayout
-            goneUnless="@{sociodemo.cethnic==66}"
+            goneUnless="@{sociodemo.cethnic==77}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -141,7 +141,7 @@
             android:onItemSelected="@{sociodemo::setHead_hh_fcorres}" />
 
         <LinearLayout
-            goneUnless="@{sociodemo.head_hh_fcorres==66}"
+            goneUnless="@{sociodemo.head_hh_fcorres==77}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">

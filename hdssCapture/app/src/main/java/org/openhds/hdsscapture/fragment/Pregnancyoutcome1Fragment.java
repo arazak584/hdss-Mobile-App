@@ -244,7 +244,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         OutcomeViewModel outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
         DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         try {
-            Pregnancyoutcome data = viewModel.find(individual.individual_uuid);
+            Pregnancyoutcome data = viewModel.findout(individual.individual_uuid);
             if (data != null && data.extra!=null) {
                 binding.setPregoutcome(data);
             } else {

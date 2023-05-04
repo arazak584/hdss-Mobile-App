@@ -2,22 +2,18 @@ package org.openhds.hdsscapture.entity;
 
 
 import android.graphics.Color;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
@@ -31,75 +27,47 @@ import java.util.Locale;
 
 @Entity(tableName = "visit",
         indices = {@Index(value = {"location_uuid","visit_uuid"}, unique = false)})
-public class Visit extends BaseObservable implements Parcelable {
+public class Visit extends BaseObservable {
 
-    @SerializedName("visit_uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "visit_uuid")
     @PrimaryKey
-    public String visit_uuid;
-
-    @ColumnInfo(name = "visitExtId")
     public String visitExtId;
 
-    @SerializedName("location_uuid")
     @Expose
-    @ColumnInfo(name = "location_uuid")
+    public String visit_uuid;
+
+    @Expose
     public String location_uuid;
 
-    @SerializedName("roundNumber")
     @Expose
-    @ColumnInfo(name = "roundNumber")
     public Integer roundNumber;
 
-    @SerializedName("insertDate")
     @Expose
-    @ColumnInfo(name = "insertDate")
     public Date insertDate;
 
-    @SerializedName("visitDate")
     @Expose
-    @ColumnInfo(name = "visitDate")
     public Date visitDate;
 
-    @SerializedName("realVisit")
     @Expose
-    @ColumnInfo(name = "realVisit")
     public Integer realVisit;
 
-    @SerializedName("fw_uuid")
     @Expose
-    @ColumnInfo(name = "fw_uuid")
     public String fw_uuid;
 
-    @SerializedName("respondent")
-    @ColumnInfo(name = "respondent")
     @Expose
     public String respondent;
 
-    @SerializedName("houseExtId")
     @Expose
     public String houseExtId;
 
-    @SerializedName("complete")
     @Expose
-    @ColumnInfo(name = "complete")
+    public String socialgroup_uuid;
+
+    @Expose
     public Integer complete;
 
     public Visit(){}
-
-    @Ignore
-    public Visit(@NotNull String visit_uuid, String visitExtId, String location_uuid, Integer roundNumber, Date insertDate, Date visitDate, Integer realVisit, String fw_uuid) {
-        this.visit_uuid = visit_uuid;
-        this.visitExtId = visitExtId;
-        this.location_uuid = location_uuid;
-        this.roundNumber = roundNumber;
-        this.insertDate = insertDate;
-        this.visitDate = visitDate;
-        this.realVisit = realVisit;
-        this.fw_uuid = fw_uuid;
-    }
 
     @Ignore
     public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -197,46 +165,22 @@ public class Visit extends BaseObservable implements Parcelable {
         this.houseExtId = houseExtId;
     }
 
-    protected Visit (Parcel in) {
-        this.visitExtId = in.readString();
-        this.fw_uuid = in.readString();
-        this.visit_uuid = in.readString();
-        this.roundNumber = in.readInt();
-        this.insertDate = (java.util.Date) in.readSerializable();
-        this.visitDate = (java.util.Date) in.readSerializable();
-        this.realVisit = in.readInt();
-        this.respondent = in.readString();
-        this.houseExtId = in.readString();
+    @Bindable
+    public String getSocialgroup_uuid() {
+        return socialgroup_uuid;
     }
 
-    public static final Creator<Visit> CREATOR = new Creator<Visit>() {
-        @Override
-        public Visit createFromParcel(Parcel in) {
-            return new Visit(in);
-        }
-
-        @Override
-        public Visit[] newArray(int size) {
-            return new Visit[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public void setSocialgroup_uuid(String socialgroup_uuid) {
+        this.socialgroup_uuid = socialgroup_uuid;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.visitExtId);
-        dest.writeString(this.fw_uuid);
-        dest.writeString(this.visit_uuid);
-        dest.writeInt(this.roundNumber);
-        dest.writeSerializable(this.insertDate);
-        dest.writeSerializable(this.visitDate);
-        dest.writeInt(this.realVisit);
-        dest.writeString(this.respondent);
-        dest.writeString(this.houseExtId);
+    @Bindable
+    public Integer getRealVisit() {
+        return realVisit;
+    }
+
+    public void setRealVisit(Integer realVisit) {
+        this.realVisit = realVisit;
     }
 
     //SPINNERS ENTITY COMPLETE FORM FOR SYNC

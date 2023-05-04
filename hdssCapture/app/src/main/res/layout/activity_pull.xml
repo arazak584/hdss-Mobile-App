@@ -117,6 +117,19 @@
             android:layout_height="wrap_content"
             android:textSize="15sp" />
 
+        <Button
+            android:id="@+id/button_SyncSes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/get_ses"
+            app:icon="@drawable/pull"/>
+
+        <TextView
+            android:id="@+id/textView_SyncSes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp" />
+
 
 
 

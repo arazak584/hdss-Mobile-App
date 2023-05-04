@@ -527,6 +527,10 @@
     <string name="item_preg">PREGNANY OUTCOME</string>
     <string name="item_ses">SES [PROFILE]</string>
     <string name="server_setup">Server Setup</string>
+    <string name="site">Site</string>
+    <string name="gh">Do you have Ghana Card?</string>
+    <string name="ghanacard">Enter Ghana Card Number</string>
+    <string name="get_ses">GET SES [PROFILE]</string>
 
     //SocioDemo End
 

@@ -6,10 +6,5 @@
     android:title="@string/action_settings"
     app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/server_url"
-        android:title="@string/server_setup"
-        app:showAsAction="never"/>
-
 
 </menu>

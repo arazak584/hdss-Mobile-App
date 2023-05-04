@@ -26,7 +26,7 @@ public interface SocialgroupDao {
     @Update
     void update(Socialgroup socialgroup);
 
-    @Query("SELECT * FROM socialgroup WHERE houseExtId=:id")
+    @Query("SELECT * FROM socialgroup WHERE socialgroup_uuid=:id")
     Socialgroup retrieve(String id);
 
     @Query("SELECT * FROM socialgroup WHERE houseExtId=:id")

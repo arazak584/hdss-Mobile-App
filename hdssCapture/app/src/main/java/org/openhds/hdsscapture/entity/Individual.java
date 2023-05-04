@@ -44,6 +44,10 @@ public class Individual extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "extId")
     public String extId;
 
+    @Expose
+    @ColumnInfo(name = "ghanacard")
+    public String ghanacard;
+
     @SerializedName("dob")
     @Expose
     @ColumnInfo(name = "dob")
@@ -101,7 +105,9 @@ public class Individual extends BaseObservable implements Parcelable {
     @Expose
     public Integer complete;
 
+    @SerializedName("other")
     @Expose
+    @ColumnInfo(name = "other")
     public Integer other;
 
     @Expose
@@ -110,6 +116,10 @@ public class Individual extends BaseObservable implements Parcelable {
     public String houseExtId;
     @Expose
     public Integer endType;
+    @SerializedName("gh")
+    @Expose
+    @ColumnInfo(name = "gh")
+    public Integer gh;
 
     public Individual(){}
 
@@ -282,6 +292,30 @@ public class Individual extends BaseObservable implements Parcelable {
         this.complete = complete;
     }
 
+    @Bindable
+    public String getGhanacard() {
+        return ghanacard;
+    }
+
+    public void setGhanacard(String ghanacard) {
+        this.ghanacard = ghanacard;
+    }
+
+    public Integer getOther() {
+        return other;
+    }
+
+    public void setOther(Integer other) {
+        this.other = other;
+    }
+
+    public Integer getGh() {
+        return gh;
+    }
+
+    public void setGh(Integer gh) {
+        this.gh = gh;
+    }
 
     protected Individual(Parcel in) {
         this.extId = in.readString();
@@ -296,6 +330,9 @@ public class Individual extends BaseObservable implements Parcelable {
         this.father_uuid = in.readString();
         this.fw_uuid = in.readString();
         this.complete = in.readInt();
+        this.ghanacard = in.readString();
+        this.gh = in.readInt();
+        this.other = in.readInt();
     }
 
     public static final Creator<Individual> CREATOR = new Creator<Individual>() {
@@ -329,6 +366,9 @@ public class Individual extends BaseObservable implements Parcelable {
         dest.writeString(this.father_uuid);
         dest.writeString(this.fw_uuid);
         dest.writeInt(this.complete);
+        dest.writeString(this.ghanacard);
+        dest.writeInt(this.gh);
+        dest.writeInt(this.other);
     }
 
     //SPINNERS ENTITY DOB ASPECT
@@ -393,6 +433,24 @@ public class Individual extends BaseObservable implements Parcelable {
         } else {
             final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
             other = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setGh(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            gh = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            gh = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);

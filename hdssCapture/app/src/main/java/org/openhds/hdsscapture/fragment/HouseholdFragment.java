@@ -72,12 +72,10 @@ public class HouseholdFragment extends Fragment {
      * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
-     * @param caseItem Parameter 6.
-     * @param eventForm Parameter 7.
      * @return A new instance of fragment HouseholdFragment.
      */
 
-    public static HouseholdFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem, EventForm eventForm) {
+    public static HouseholdFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
 
         HouseholdFragment fragment = new HouseholdFragment();
         Bundle args = new Bundle();
@@ -85,8 +83,6 @@ public class HouseholdFragment extends Fragment {
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
-        args.putParcelable(CASE_ID, caseItem);
-        args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
     }
@@ -124,7 +120,7 @@ public class HouseholdFragment extends Fragment {
                     String visits = UUID.randomUUID().toString();
                     String visituuid = visits.toString().replaceAll("-", "");
                     data.visit_uuid = visituuid;
-                    data.complete = 1;
+                    //data.complete = 1;
                 }
 
 

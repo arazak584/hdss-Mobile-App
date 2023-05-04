@@ -46,7 +46,7 @@ public class InfoFragment extends DialogFragment {
         buttonUrl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.parse("https://www.example.com"); // replace with your URL
+                Uri uri = Uri.parse("https://github.com/arazak584/hdss_apk/blob/main/app-hdss_v2023_1.apk"); // replace with your URL
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             }

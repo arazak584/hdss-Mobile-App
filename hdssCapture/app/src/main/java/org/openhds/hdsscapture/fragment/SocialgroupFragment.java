@@ -31,7 +31,6 @@ import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -132,21 +131,14 @@ public class SocialgroupFragment extends Fragment {
 
         SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
        try {
-            Socialgroup data = viewModel.find(socialgroup.houseExtId);
+            Socialgroup data = viewModel.find(socialgroup.socialgroup_uuid);
             if (data != null) {
-                if (data.visit_uuid==null){
-
-                    String visits = UUID.randomUUID().toString();
-                    String visituuid = visits.toString().replaceAll("-", "");
-                    data.visit_uuid = visituuid;
-                }
 
                 if (data.groupName!= null && individual.firstName!= null && "FAKE".equals(data.groupName)){
 
                     data.groupName = individual.firstName +' '+ individual.lastName;
                     data.individual_uuid = individual.individual_uuid;
                 }
-
 
                 binding.setSocialgroup(data);
 

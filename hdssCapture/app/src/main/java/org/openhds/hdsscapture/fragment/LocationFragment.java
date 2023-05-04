@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -142,6 +143,9 @@ public class LocationFragment extends Fragment {
 
 
 
+        // Get a reference to the progress bar view
+        ProgressBar progressBar = binding.getRoot().findViewById(R.id.progress_bar);
+
         // Get a reference to the button and set its OnClickListener
         binding.buttonGps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,7 +158,8 @@ public class LocationFragment extends Fragment {
                             new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                             REQUEST_LOCATION_PERMISSION);
                 } else {
-                    // Permission is granted, start requesting location updates
+                    // Permission is granted, show the progress bar and start requesting location updates
+                    progressBar.setVisibility(View.VISIBLE);
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
                         @Override
                         public void onLocationChanged(@NonNull Location location) {
@@ -171,13 +176,17 @@ public class LocationFragment extends Fragment {
                             TextInputEditText accuracyEditText = requireView().findViewById(R.id.accuracy);
                             accuracyEditText.setText(String.valueOf(currentLocation.getAccuracy()));
 
-                            // Stop receiving location updates
-                            locationManager.removeUpdates(this);
+                            // Check if the accuracy is less than or equal to 10 meters, dismiss the progress bar, and stop requesting location updates
+                            if (currentLocation.getAccuracy() <= 10) {
+                                progressBar.setVisibility(View.GONE);
+                                locationManager.removeUpdates(this);
+                            }
                         }
                     });
                 }
             }
         });
+
 
 
 
@@ -215,6 +224,7 @@ public class LocationFragment extends Fragment {
         loadCodeData(binding.complete, codeBookViewModel, "complete");
         loadCodeData(binding.edit, codeBookViewModel, "complete");
         loadCodeData(binding.locationtype, codeBookViewModel, "locationType");
+        loadCodeData(binding.site, codeBookViewModel, "site");
 
         binding.buttonSubmit.setOnClickListener(v -> {
             final LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
@@ -232,6 +242,25 @@ public class LocationFragment extends Fragment {
 
             if (binding.locationInsertDate.getText().toString().isEmpty()) {
                 binding.locationInsertDate.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Calendar.getInstance().getTime()));
+            }
+
+            boolean val = false;
+
+            if (!binding.locationcompno.getText().toString().trim().isEmpty()) {
+                String comp = binding.locationcompno.getText().toString().trim();
+                if (binding.getLocations().site == 1 && comp.length() != 6) {
+                    val = true;
+                    binding.locationcompno.setError("Must be 6 Character Length");
+                    return;
+                }else if (binding.getLocations().site == 2 && comp.length() != 6) {
+                    val = true;
+                    binding.locationcompno.setError("Must be 6 Character Length");
+                    return;
+                }else if (binding.getLocations().site == 3 && comp.length() != 7) {
+                    val = true;
+                    binding.locationcompno.setError("Must be 7 Character Length");
+                    return;
+                }
             }
 
 

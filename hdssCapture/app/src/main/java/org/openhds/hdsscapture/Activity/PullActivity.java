@@ -19,6 +19,7 @@ import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.Dao.ApiDao;
 import org.openhds.hdsscapture.Dao.DemographicDao;
+import org.openhds.hdsscapture.Dao.HdssSociodemoDao;
 import org.openhds.hdsscapture.Dao.IndividualDao;
 import org.openhds.hdsscapture.Dao.LocationDao;
 import org.openhds.hdsscapture.Dao.PregnancyDao;
@@ -32,6 +33,7 @@ import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
 import org.openhds.hdsscapture.entity.CodeBook;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
@@ -70,6 +72,7 @@ public class PullActivity extends AppCompatActivity {
     private SocialgroupDao socialgroupDao;
     private PregnancyDao pregnancyDao;
     private DemographicDao demographicDao;
+    private HdssSociodemoDao hdssSociodemoDao;
     ProgressBar progressBar;
 
     @Override
@@ -248,7 +251,7 @@ public class PullActivity extends AppCompatActivity {
                                     File unzippedFile = new File(getExternalCacheDir() + File.separator + "individual.csv");
                                     CsvMapper mapper = new CsvMapper();
                                     CsvSchema schema = CsvSchema.builder().addColumn("individual_uuid").addColumn("dob").addColumn("dobAspect").addColumn("extId")
-                                            .addColumn("father_uuid").addColumn("firstName").addColumn("fw_uuid").addColumn("gender").addColumn("insertDate")
+                                            .addColumn("father_uuid").addColumn("firstName").addColumn("fw_uuid").addColumn("gender").addColumn("ghanacard").addColumn("insertDate")
                                             .addColumn("lastName").addColumn("mother_uuid").addColumn("otherName").build();
                                     MappingIterator<Individual> iterator = mapper.readerFor(Individual.class).with(schema).readValues(unzippedFile);
                                     progress.show();
@@ -1088,6 +1091,195 @@ public class PullActivity extends AppCompatActivity {
                         progress.dismiss();
                         textView_SyncDemography.setText("Demography Download Error! Retry or Contact Administrator");
                         textView_SyncDemography.setTextColor(Color.RED);
+                    }
+
+
+                });
+
+
+            }
+
+        });
+
+
+        //Sync Zipped SES
+        final Button button_DownloadSes = findViewById(R.id.button_SyncSes);
+        final TextView textView_SyncSes = findViewById(R.id.textView_SyncSes);
+        button_DownloadSes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progress.show();
+                progress.setMessage("Downloading SES...");
+                Call<ResponseBody> call = dao.downloadSes();
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        //progress.show();
+                        if (response.isSuccessful()) {
+                            progress.setMessage("Contacting Server...");
+                            try {
+                                // Read the response body into a file
+                                progress.setMessage("Downloading SES Zip File...");
+                                InputStream inputStream = response.body().byteStream();
+                                File file = new File(getExternalCacheDir(), "ses.zip");
+                                if (file.exists()) {
+                                    file.delete();
+                                }
+                                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                                fileOutputStream.write(response.body().bytes());
+                                fileOutputStream.close();
+
+                                byte[] buffer = new byte[1024];
+                                int read;
+                                while ((read = inputStream.read(buffer)) != -1) {
+                                    fileOutputStream.write(buffer, 0, read);
+                                }
+                                fileOutputStream.close();
+
+                                // Unzip the file
+                                progress.setMessage("Unzipping SES File...");
+                                ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                                ZipEntry zipEntry = zipInputStream.getNextEntry();
+                                while (zipEntry != null) {
+                                    String fileName = zipEntry.getName();
+                                    File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                    FileOutputStream fos = new FileOutputStream(newFile);
+                                    int len;
+                                    while ((len = zipInputStream.read(buffer)) > 0) {
+                                        fos.write(buffer, 0, len);
+                                    }
+                                    fos.close();
+                                    zipEntry = zipInputStream.getNextEntry();
+                                }
+                                zipInputStream.close();
+
+                                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                                hdssSociodemoDao = appDatabase.hdssSociodemoDao();
+                                // Import the unzipped CSV file into the Room database
+                                if (hdssSociodemoDao != null) {
+                                    File unzippedFile = new File(getExternalCacheDir() + File.separator + "ses.csv");
+                                    CsvMapper mapper = new CsvMapper();
+                                    CsvSchema schema = CsvSchema.builder().addColumn("socialgroup_uuid")
+                                            .addColumn("aircon_fcorres").addColumn("aircon_num_fcorres").addColumn("animal_othr_fcorres").addColumn("animal_othr_num_fcorres")
+                                            .addColumn("animal_othr_spfy_fcorres").addColumn("bike_fcorres").addColumn("bike_num_fcorres").addColumn("blender_fcorres")
+                                            .addColumn("blender_num_fcorres").addColumn("boat_fcorres").addColumn("boat_num_fcorres").addColumn("cabinets_fcorres")
+                                            .addColumn("cabinets_num_fcorres").addColumn("car_fcorres").addColumn("car_num_fcorres").addColumn("cart_fcorres")
+                                            .addColumn("cart_num_fcorres").addColumn("cattle_fcorres").addColumn("cattle_num_fcorres").addColumn("cethnic")
+                                            .addColumn("chew_bnut_oecoccur").addColumn("chew_oecoccur").addColumn("computer_fcorres").addColumn("computer_num_fcorres")
+                                            .addColumn("cooking_inside_fcorres").addColumn("cooking_loc_fcorres").addColumn("cooking_room_fcorres").addColumn("cooking_vent_fcorres")
+                                            .addColumn("donkey_fcorres").addColumn("donkey_num_fcorres").addColumn("drink_oecoccur").addColumn("dvd_cd_fcorres")
+                                            .addColumn("dvd_cd_num_fcorres").addColumn("electricity_fcorres").addColumn("ext_wall_fcorres").addColumn("ext_wall_spfy_fcorres")
+                                            .addColumn("floor_fcorres").addColumn("floor_spfy_fcorres").addColumn("foam_matt_fcorres").addColumn("foam_matt_num_fcorres")
+                                            .addColumn("form_comments_txt").addColumn("form_comments_yn").addColumn("fridge_fcorres").addColumn("fridge_num_fcorres")
+                                            .addColumn("fw_uuid").addColumn("goat_fcorres").addColumn("goat_num_fcorres")
+                                            .addColumn("h2o_dist_fcorres").addColumn("h2o_fcorres").addColumn("h2o_hours_fcorres")
+                                            .addColumn("h2o_mins_fcorres").addColumn("h2o_prep_fcorres").addColumn("h2o_prep_spfy_fcorres_1")
+                                            .addColumn("h2o_prep_spfy_fcorres_2").addColumn("h2o_prep_spfy_fcorres_3")
+                                            .addColumn("h2o_prep_spfy_fcorres_4").addColumn("h2o_prep_spfy_fcorres_5").addColumn("h2o_spfy_fcorres")
+                                            .addColumn("head_hh_fcorres").addColumn("head_hh_spfy_fcorres").addColumn("horse_fcorres")
+                                            .addColumn("horse_num_fcorres").addColumn("house_occ_ge5_fcorres").addColumn("house_occ_lt5_fcorres")
+                                            .addColumn("house_occ_tot_fcorres").addColumn("house_room_child_fcorres")
+                                            .addColumn("house_rooms_fcorres").addColumn("individual_uuid").addColumn("insertDate")
+                                            .addColumn("internet_fcorres").addColumn("job_busown_spfy_scorres").addColumn("job_othr_spfy_scorres")
+                                            .addColumn("job_salary_spfy_scorres").addColumn("job_scorres").addColumn("job_skilled_spfy_scorres")
+                                            .addColumn("job_smbus_spfy_scorres").addColumn("job_unskilled_spfy_scorres").addColumn("land_fcorres")
+                                            .addColumn("land_use_fcorres_1").addColumn("land_use_fcorres_2").addColumn("land_use_fcorres_3")
+                                            .addColumn("land_use_fcorres_4").addColumn("land_use_fcorres_5").addColumn("land_use_fcorres_88")
+                                            .addColumn("land_use_spfy_fcorres_88").addColumn("landline_fcorres").addColumn("lantern_fcorres")
+                                            .addColumn("lantern_num_fcorres").addColumn("livestock_fcorres").addColumn("location_uuid")
+                                            .addColumn("marital_age").addColumn("marital_scorres").addColumn("mnh03_formcompldat")
+                                            .addColumn("mobile_access_fcorres").addColumn("mobile_fcorres").addColumn("mobile_num_fcorres")
+                                            .addColumn("mosquito_net_fcorres").addColumn("mosquito_net_num_fcorres").addColumn("motorcycle_fcorres")
+                                            .addColumn("motorcycle_num_fcorres").addColumn("nth_trb_spfy_cethnic")
+                                            .addColumn("othr_trb_spfy_cethnic").addColumn("own_rent_scorres").addColumn("own_rent_spfy_scorres")
+                                            .addColumn("pd_birth_fac_spfy_oholoc").addColumn("pd_birth_oholoc")
+                                            .addColumn("pd_birth_othr_spfy_oholoc").addColumn("pd_dm_rel_spfy_scorres").addColumn("pd_dm_scorres")
+                                            .addColumn("pig_fcorres").addColumn("pig_num_fcorres").addColumn("plough_fcorres")
+                                            .addColumn("plough_num_fcorres").addColumn("poultry_fcorres").addColumn("poultry_num_fcorres")
+                                            .addColumn("ptr_busown_spfy_scorres").addColumn("ptr_othr_spfy_scorres")
+                                            .addColumn("ptr_salary_spfy_scorres").addColumn("ptr_scorres").addColumn("ptr_skilled_spfy_scorres")
+                                            .addColumn("ptr_smbus_spfy_scorres").addColumn("ptr_unskilled_spfy_scorres").addColumn("radio_fcorres")
+                                            .addColumn("radio_num_fcorres").addColumn("religion_scorres").addColumn("religion_spfy_scorres")
+                                            .addColumn("roof_fcorres").addColumn("roof_spfy_fcorres").addColumn("sat_dish_fcorres")
+                                            .addColumn("sat_dish_num_fcorres").addColumn("sd_obsstdat").addColumn("sew_fcorres")
+                                            .addColumn("sew_num_fcorres").addColumn("sheep_fcorres").addColumn("sheep_num_fcorres")
+                                            .addColumn("smoke_hhold_in_oecdosfrq").addColumn("smoke_hhold_oecoccur").addColumn("smoke_in_oecdosfrq")
+                                            .addColumn("smoke_oecoccur").addColumn("sofa_fcorres").addColumn("sofa_num_fcorres")
+                                            .addColumn("solar_fcorres").addColumn("spring_matt_fcorres").addColumn("spring_matt_num_fcorres")
+                                            .addColumn("stove_fcorres").addColumn("stove_fuel_fcorres_1").addColumn("stove_fuel_fcorres_10")
+                                            .addColumn("stove_fuel_fcorres_11").addColumn("stove_fuel_fcorres_12")
+                                            .addColumn("stove_fuel_fcorres_13").addColumn("stove_fuel_fcorres_14").addColumn("stove_fuel_fcorres_2")
+                                            .addColumn("stove_fuel_fcorres_3").addColumn("stove_fuel_fcorres_4").addColumn("stove_fuel_fcorres_5")
+                                            .addColumn("stove_fuel_fcorres_6").addColumn("stove_fuel_fcorres_7").addColumn("stove_fuel_fcorres_8")
+                                            .addColumn("stove_fuel_fcorres_88").addColumn("stove_fuel_fcorres_9")
+                                            .addColumn("stove_fuel_spfy_fcorres_88").addColumn("stove_spfy_fcorres").addColumn("straw_matt_fcorres")
+                                            .addColumn("straw_matt_num_fcorres").addColumn("tables_fcorres").addColumn("tables_num_fcorres")
+                                            .addColumn("toilet_fcorres").addColumn("toilet_loc_fcorres").addColumn("toilet_loc_spfy_fcorres")
+                                            .addColumn("toilet_share_fcorres").addColumn("toilet_share_num_fcorres")
+                                            .addColumn("toilet_spfy_fcorres").addColumn("tractor_fcorres").addColumn("tractor_num_fcorres")
+                                            .addColumn("tricycles_fcorres").addColumn("tricycles_num_fcorres").addColumn("tv_fcorres")
+                                            .addColumn("tv_num_fcorres").addColumn("wash_fcorres").addColumn("wash_num_fcorres")
+                                            .addColumn("watch_fcorres")
+                                            .addColumn("watch_num_fcorres").build();
+                                    MappingIterator<HdssSociodemo> iterator = mapper.readerFor(HdssSociodemo.class).with(schema).readValues(unzippedFile);
+                                    progress.show();
+                                    AtomicInteger counts = new AtomicInteger();
+                                    AppDatabase.databaseWriteExecutor.execute(() -> {
+                                        int batchSize = 10000;
+                                        List<HdssSociodemo> hdssSociodemos = new ArrayList<>();
+                                        int batchCount = 0;
+                                        while (iterator.hasNext()) {
+                                            HdssSociodemo hdssSociodemo = iterator.next();
+                                            if (hdssSociodemo != null) {
+                                                runOnUiThread(new Runnable() {
+                                                    public void run() {
+                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the SES");
+                                                    }
+                                                });
+                                                hdssSociodemos.add(hdssSociodemo);
+                                                batchCount++;
+                                                if (batchCount == batchSize) {
+                                                    hdssSociodemoDao.insert(hdssSociodemos);
+                                                    hdssSociodemos.clear();
+                                                    batchCount = 0;
+                                                }
+                                            }
+                                        }
+                                        if (batchCount > 0) {
+                                            hdssSociodemoDao.insert(hdssSociodemos);
+                                        }
+                                        progress.dismiss();
+                                        textView_SyncSes.setText("Total SES Saved: " + counts);
+                                        textView_SyncSes.setTextColor(Color.rgb(0, 114, 133));
+                                    });
+                                }
+
+                                File cacheDir = getExternalCacheDir();
+                                if (cacheDir != null && cacheDir.isDirectory()) {
+                                    File[] files = cacheDir.listFiles();
+                                    for (File filez : files) {
+                                        String fileName = filez.getName();
+                                        if (fileName.endsWith(".zip") || fileName.endsWith(".csv")) {
+                                            filez.delete();
+                                        }
+                                    }
+                                }
+
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        // Show error message
+                        progress.dismiss();
+                        textView_SyncSes.setText("SES Download Error! Retry or Contact Administrator");
+                        textView_SyncSes.setTextColor(Color.RED);
                     }
 
 

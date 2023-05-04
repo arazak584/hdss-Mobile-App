@@ -220,11 +220,11 @@ public class ResidencyFragment extends Fragment {
             String omg = UUID.randomUUID().toString();
             String omg_uuid = omg.toString().replaceAll("-", "");
 
-            if (data != null && data.endType!=2) {
+            if (data != null) {
                 binding.setResidency(data);
                 data.loc = locations.getLocation_uuid();
                 data.dobs = individual.dob;
-                data.img = 2;
+                //data.img = 2;
             } else {
                 data = new Residency();
 
@@ -602,12 +602,6 @@ public class ResidencyFragment extends Fragment {
         }
     }
 
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
 
     private <T> void callable(Spinner spinner, T[] array) {
 

@@ -234,7 +234,7 @@ public class IndividualFragment extends Fragment {
             final IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
 
             final Individual individual = binding.getIndividual();
-            individual.setExtId(this.individual.getExtId());
+            individual.setIndividual_uuid(this.individual.getIndividual_uuid());
 
             boolean isExists = false;
             binding.individualExtid.setError(null);
@@ -284,6 +284,7 @@ public class IndividualFragment extends Fragment {
         loadCodeData(binding.individualComplete,  "complete");
         loadCodeData(binding.gender, "gender");
         loadCodeData(binding.other,  "complete");
+        loadCodeData(binding.gh,  "complete");
 
 
 
@@ -347,12 +348,6 @@ public class IndividualFragment extends Fragment {
                     HouseMembersFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }
 
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 
     private <T> void callable(Spinner spinner, T[] array) {

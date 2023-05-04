@@ -74,7 +74,7 @@ public class SocioFragment extends Fragment {
      * @param eventForm Parameter 7.
      * @return A new instance of fragment SocioFragment.
      */
-    // TODO: Rename and change types and number of parameters
+    //
     public static SocioFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem, EventForm eventForm) {
         SocioFragment fragment = new SocioFragment();
         Bundle args = new Bundle();

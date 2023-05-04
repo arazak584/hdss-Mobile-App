@@ -115,8 +115,6 @@ public class VisitFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentVisitBinding.inflate(inflater, container, false);
-        binding.setVisit(visit);
-
 
 
         final Intent intent = getActivity().getIntent();
@@ -128,10 +126,10 @@ public class VisitFragment extends Fragment {
 
         VisitViewModel viewModel = new ViewModelProvider(this).get(VisitViewModel.class);
         try {
-            Visit data = viewModel.find(socialgroup.houseExtId);
+            Visit data = viewModel.find(socialgroup.socialgroup_uuid);
             if (data != null) {
-                data.visitDate = new Date();
                 binding.setVisit(data);
+                data.visitDate = new Date();
             } else {
                 data = new Visit();
 
@@ -147,6 +145,7 @@ public class VisitFragment extends Fragment {
                 data.visitDate = new Date();
                 data.complete = 1;
                 data.houseExtId = socialgroup.houseExtId;
+                data.socialgroup_uuid =socialgroup.socialgroup_uuid;
                 if(roundData.roundNumber < 10) {
                     data.visitExtId = data.houseExtId + "00" + roundData.getRoundNumber();
                 }else {
@@ -201,12 +200,6 @@ public class VisitFragment extends Fragment {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     HouseMembersFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 
 

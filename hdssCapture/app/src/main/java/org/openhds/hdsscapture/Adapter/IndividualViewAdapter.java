@@ -114,6 +114,10 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
             holder.status.setText("(" + "Outmigrated" + ")");
             holder.status.setTextColor(Color.RED);
         }
+        Integer st = individual.complete;
+        if (st != null) {
+            holder.permid.setTextColor(Color.MAGENTA);
+        }
 
 
 

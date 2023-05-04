@@ -103,11 +103,6 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                for (Locations elem : data.getData()) {
-                    elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getCompno());
-                }
-
                 final Call<DataWrapper<Locations>> c_callable = dao.sendLocationdata(data);
                 c_callable.enqueue(new Callback<DataWrapper<Locations>>() {
                     @Override
@@ -117,6 +112,13 @@ public class PushActivity extends AppCompatActivity {
 
                             Locations[] d = response.body().getData().toArray(new Locations[0]);
                             locationViewModel.add(d);
+
+                            //UPDATE COMPLETE FIELD
+                            for (Locations elem : d) {
+                                elem.setComplete(2);
+                                Log.e("PUSH.tag", "Has value " + elem.getCompno());
+                            }
+
                             progress.dismiss();
                             textViewSendLocationdata.setText("Sent " + d.length + " record(s)");
                             textViewSendLocationdata.setTextColor(Color.rgb(0, 114, 133));
@@ -168,10 +170,6 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                for (Visit elem : data.getData()) {
-                    elem.complete = 0;
-                }
-
                 final Call<DataWrapper<Visit>> c_callable = dao.sendVisitdata(data);
                 c_callable.enqueue(new Callback<DataWrapper<Visit>>() {
                     @Override
@@ -181,6 +179,11 @@ public class PushActivity extends AppCompatActivity {
 
                             Visit[] d = response.body().getData().toArray(new Visit[0]);
                             visitViewModel.add(d);
+
+                            for (Visit elem : d) {
+                                elem.complete = 2;
+                            }
+
                             progress.dismiss();
                             textViewSendVisit.setText("Sent " + d.length + " record(s)");
                             textViewSendVisit.setTextColor(Color.rgb(0, 114, 133));
@@ -232,10 +235,9 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                for (Individual elem : data.getData()) {
-                    elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getExtId());
-                }
+//                for (Individual elem : data.getData()) {
+//                    elem.complete = 0;
+//                }
 
                 final Call<DataWrapper<Individual>> c_callable = dao.sendIndividualdata(data);
                 c_callable.enqueue(new Callback<DataWrapper<Individual>>() {
@@ -246,6 +248,11 @@ public class PushActivity extends AppCompatActivity {
 
                             Individual[] d = response.body().getData().toArray(new Individual[0]);
                             individualViewModel.add(d);
+
+                            for (Individual elem : d) {
+                                elem.complete = 2;
+                            }
+
                             progress.dismiss();
                             textViewSendIndividualdata.setText("Sent " + d.length + " Individual record(s)");
                             textViewSendIndividualdata.setTextColor(Color.rgb(0, 114, 133));
@@ -275,7 +282,7 @@ public class PushActivity extends AppCompatActivity {
         final List<Socialgroup> socialgroupList = new ArrayList<>();
         try {
             socialgroupList.addAll(socialgroupViewModel.findToSync());
-            buttonSendSocialgroupdata.setText("Socialgroup (" + individualList.size() + ") to send");
+            buttonSendSocialgroupdata.setText("Socialgroup (" + socialgroupList.size() + ") to send");
             textViewSendSocialgroupdata.setTextColor(Color.rgb(0, 114, 133));
             if (socialgroupList.isEmpty()) {
                 buttonSendSocialgroupdata.setVisibility(View.GONE);
@@ -297,11 +304,6 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                for (Socialgroup elem : data.getData()) {
-                    elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getHouseExtId());
-                }
-
                 final Call<DataWrapper<Socialgroup>> c_callable = dao.sendSocialgroupdata(data);
                 c_callable.enqueue(new Callback<DataWrapper<Socialgroup>>() {
                     @Override
@@ -311,6 +313,11 @@ public class PushActivity extends AppCompatActivity {
 
                             Socialgroup[] d = response.body().getData().toArray(new Socialgroup[0]);
                             socialgroupViewModel.add(d);
+
+                            for (Socialgroup elem : d) {
+                                elem.complete = 2;
+                            }
+
                             progress.dismiss();
                             textViewSendSocialgroupdata.setText("Sent " + d.length + " Socialgroup record(s)");
                             textViewSendSocialgroupdata.setTextColor(Color.rgb(0, 114, 133));
@@ -362,10 +369,6 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                for (Relationship elem : data.getData()) {
-                    elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getIndividual_uuid());
-                }
 
                 final Call<DataWrapper<Relationship>> c_callable = dao.sendRelationshipdata(data);
                 c_callable.enqueue(new Callback<DataWrapper<Relationship>>() {
@@ -376,6 +379,11 @@ public class PushActivity extends AppCompatActivity {
 
                             Relationship[] d = response.body().getData().toArray(new Relationship[0]);
                             relationshipViewModel.add(d);
+
+                            for (Relationship elem : d) {
+                                elem.complete = 2;
+                            }
+
                             progress.dismiss();
                             textViewSendRelationshipdata.setText("Sent " + d.length + " Relationship record(s)");
                             textViewSendRelationshipdata.setTextColor(Color.rgb(0, 114, 133));
@@ -428,11 +436,6 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                for (Pregnancy elem : data.getData()) {
-                    elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getObs_uuid());
-                }
-
                 final Call<DataWrapper<Pregnancy>> c_callable = dao.sendPregnancydata(data);
                 c_callable.enqueue(new Callback<DataWrapper<Pregnancy>>() {
                     @Override
@@ -442,6 +445,11 @@ public class PushActivity extends AppCompatActivity {
 
                             Pregnancy[] d = response.body().getData().toArray(new Pregnancy[0]);
                             pregnancyViewModel.add(d);
+
+                            for (Pregnancy elem : d) {
+                                elem.complete = 2;
+                            }
+
                             progress.dismiss();
                             textViewSendPregnancydata.setText("Sent " + d.length + " Pregnancy record(s)");
                             textViewSendPregnancydata.setTextColor(Color.rgb(0, 114, 133));
@@ -495,11 +503,6 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                for (Pregnancyoutcome elem : data.getData()) {
-                    elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getMother_uuid());
-                }
-
                 final Call<DataWrapper<Pregnancyoutcome>> c_callable = dao.sendPregoutcomedata(data);
                 c_callable.enqueue(new Callback<DataWrapper<Pregnancyoutcome>>() {
                     @Override
@@ -509,6 +512,11 @@ public class PushActivity extends AppCompatActivity {
 
                             Pregnancyoutcome[] d = response.body().getData().toArray(new Pregnancyoutcome[0]);
                             pregnancyoutcomeViewModel.add(d);
+
+                            for (Pregnancyoutcome elem : d) {
+                                elem.complete = 2;
+                            }
+
                             progress.dismiss();
                             textViewSendOutcomedata.setText("Sent " + d.length + " Pregnancy Outcome record(s)");
                             textViewSendOutcomedata.setTextColor(Color.rgb(0, 114, 133));
@@ -547,7 +555,7 @@ public class PushActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        buttonSendOutcomedata.setOnClickListener(v -> {
+        buttonSendOutcomesdata.setOnClickListener(v -> {
             progress.setMessage(getResources().getString(R.string.init_syncing));
             progress.show();
 
@@ -559,11 +567,6 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                for (Outcome elem : data.getData()) {
-                    elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getChilduuid());
-                }
-
                 final Call<DataWrapper<Outcome>> c_callable = dao.sendOutcomedata(data);
                 c_callable.enqueue(new Callback<DataWrapper<Outcome>>() {
                     @Override
@@ -573,6 +576,11 @@ public class PushActivity extends AppCompatActivity {
 
                             Outcome[] d = response.body().getData().toArray(new Outcome[0]);
                             outcomeViewModel.add(d);
+
+                            for (Outcome elem : d) {
+                                elem.complete = 2;
+                            }
+
                             progress.dismiss();
                             textViewSendOutcomesdata.setText("Sent " + d.length + " Outcome record(s)");
                             textViewSendOutcomesdata.setTextColor(Color.rgb(0, 114, 133));
@@ -625,10 +633,6 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                for (Demographic elem : data.getData()) {
-                    elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getIndividual_uuid());
-                }
 
                 final Call<DataWrapper<Demographic>> c_callable = dao.sendDemographicdata(data);
                 c_callable.enqueue(new Callback<DataWrapper<Demographic>>() {
@@ -639,6 +643,11 @@ public class PushActivity extends AppCompatActivity {
 
                             Demographic[] d = response.body().getData().toArray(new Demographic[0]);
                             demographicViewModel.add(d);
+
+                            for (Demographic elem : d) {
+                                elem.complete = 2;
+                            }
+
                             progress.dismiss();
                             textViewSendDemographicdata.setText("Sent " + d.length + " Demographic record(s)");
                             textViewSendDemographicdata.setTextColor(Color.rgb(0, 114, 133));
@@ -711,6 +720,11 @@ public class PushActivity extends AppCompatActivity {
 
                             d23[0] = response.body().getData().toArray(new Death[0]);
                             death.add(d23[0]);
+
+//                            for (Death elem : d23[0]) {
+//                                elem.complete = 2;
+//                            }
+
                             progress.dismiss();
                             textViewSendEnd.setText(
                                     "Deaht(" + d23[0].length + " of " + listDeath.size() + ")" +
@@ -806,10 +820,6 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                for (HdssSociodemo elem : data.getData()) {
-                    elem.complete = 0;
-                }
-
                 final Call<DataWrapper<HdssSociodemo>> c_callable = dao.sendSociodata(data);
                 c_callable.enqueue(new Callback<DataWrapper<HdssSociodemo>>() {
                     @Override
@@ -819,6 +829,11 @@ public class PushActivity extends AppCompatActivity {
 
                             HdssSociodemo[] d = response.body().getData().toArray(new HdssSociodemo[0]);
                             hdssSociodemoViewModel.add(d);
+
+                            for (HdssSociodemo elem : d) {
+                                elem.complete = 2;
+                            }
+
                             progress.dismiss();
                             textViewSendSocio.setText("Sent " + d.length + " record(s)");
                             textViewSendSocio.setTextColor(Color.rgb(0, 114, 133));
@@ -872,10 +887,6 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                for (Residency elem : data.getData()) {
-                    elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getResidency_uuid());
-                }
 
                 final Call<DataWrapper<Residency>> c_callable = dao.sendResidencydata(data);
                 c_callable.enqueue(new Callback<DataWrapper<Residency>>() {
@@ -886,6 +897,11 @@ public class PushActivity extends AppCompatActivity {
 
                             Residency[] d = response.body().getData().toArray(new Residency[0]);
                             residencyViewModel.add(d);
+
+                            for (Residency elem : d) {
+                                elem.complete = 2;
+                            }
+
                             progress.dismiss();
                             textViewSendRes.setText("Sent " + d.length + " Residency record(s)");
                             textViewSendRes.setTextColor(Color.rgb(0, 114, 133));
@@ -937,11 +953,6 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                for (Inmigration elem : data.getData()) {
-                    elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getResidency_uuid());
-                }
-
                 final Call<DataWrapper<Inmigration>> c_callable = dao.sendInmigrationdata(data);
                 c_callable.enqueue(new Callback<DataWrapper<Inmigration>>() {
                     @Override
@@ -951,6 +962,11 @@ public class PushActivity extends AppCompatActivity {
 
                             Inmigration[] d = response.body().getData().toArray(new Inmigration[0]);
                             inmigrationViewModel.add(d);
+
+                            for (Inmigration elem : d) {
+                                elem.complete = 2;
+                            }
+
                             progress.dismiss();
                             textViewSendImg.setText("Sent " + d.length + " Inmigration record(s)");
                             textViewSendImg.setTextColor(Color.rgb(0, 114, 133));
@@ -1002,10 +1018,6 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                for (Outmigration elem : data.getData()) {
-                    elem.complete = 0;
-                    Log.e("PUSH.tag", "Has value " + elem.getResidency_uuid());
-                }
 
                 final Call<DataWrapper<Outmigration>> c_callable = dao.sendOutmigrationdata(data);
                 c_callable.enqueue(new Callback<DataWrapper<Outmigration>>() {
@@ -1016,6 +1028,11 @@ public class PushActivity extends AppCompatActivity {
 
                             Outmigration[] d = response.body().getData().toArray(new Outmigration[0]);
                             outmigrationViewModel.add(d);
+
+                            for (Outmigration elem : d) {
+                                elem.complete = 2;
+                            }
+
                             progress.dismiss();
                             textViewSendOmg.setText("Sent " + d.length + " Outmigration record(s)");
                             textViewSendOmg.setTextColor(Color.rgb(0, 114, 133));

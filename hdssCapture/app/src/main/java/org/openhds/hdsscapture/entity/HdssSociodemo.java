@@ -33,10 +33,10 @@ public class HdssSociodemo extends BaseObservable {
     @Expose
     @NotNull
     @PrimaryKey
-    public String individual_uuid;
+    public String socialgroup_uuid;
 
     @Expose
-    public String socialgroup_uuid;
+    public String individual_uuid;
 
     @Expose
     public String fw_uuid;
@@ -1062,7 +1062,6 @@ public class HdssSociodemo extends BaseObservable {
         }
     }
 
-    @Bindable
     public String getMarital_age() {
         return marital_age == null ? "" : String.valueOf(marital_age);
     }
@@ -2434,7 +2433,7 @@ public class HdssSociodemo extends BaseObservable {
         if (view != null) {
 
 
-            if (marital_scorres == null || marital_scorres != 11)
+            if (marital_scorres == null || marital_scorres != 1)
                 setMarital_age(null);
 
             if (religion_scorres == null || religion_scorres != AppConstants.OTHER_SPECIFY)

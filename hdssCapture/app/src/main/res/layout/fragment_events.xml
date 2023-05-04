@@ -65,15 +65,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:layout_margin="16dp"
+            android:layout_marginEnd="0dp"
             android:contentDescription="@string/mainmenu"
-            android:src="@drawable/ic_baseline_add_24"
+            android:src="@drawable/ic_add"
             android:text="@string/mainmenu"
             app:fabSize="normal"
+            android:layout_marginBottom="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/add_adhoc_fab"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:ignore="ImageContrastCheck" />
 
+        <!--
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_adhoc_fab"
             android:layout_width="wrap_content"
@@ -122,7 +124,7 @@
             android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/add_outcome_fab"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:ignore="ImageContrastCheck" />
+            tools:ignore="ImageContrastCheck" />-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

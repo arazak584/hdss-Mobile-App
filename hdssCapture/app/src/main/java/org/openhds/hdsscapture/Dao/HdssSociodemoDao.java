@@ -20,6 +20,9 @@ public interface HdssSociodemoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(HdssSociodemo s);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(List<HdssSociodemo> hdssSociodemos);
+
     @Update
     void update(HdssSociodemo s);
 

@@ -62,6 +62,9 @@ public interface ApiDao {
     @GET("/api/task/demography.zip")
     Call<ResponseBody> downloadDemography();
 
+    @GET("/api/task/ses.zip")
+    Call<ResponseBody> downloadSes();
+
     @POST("/api/location")
     Call<DataWrapper<Locations>> sendLocationdata(@Body DataWrapper<Locations> dataModal);
 

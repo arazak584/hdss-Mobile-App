@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,10 +77,22 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
 
         holder.name.setText(socialgroup.getGroupName());
         holder.hhid.setText(socialgroup.getHouseExtId());
+        holder.hhid.setTextColor(Color.RED);
+
+        Integer visit = socialgroup.complete;
+
+        if (visit != null) {
+            holder.hhid.setTextColor(Color.rgb(0, 114, 133));
+            holder.name.setTextColor(Color.rgb(0, 114, 133));
+        }else {
+            holder.hhid.setTextColor(Color.RED);
+            holder.name.setTextColor(Color.RED);
+        }
+
 
         holder.linearLayout.setOnClickListener(v -> {
             activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                   HouseholdFragment.newInstance(individual, residency, locations, socialgroup,caseItem,eventForm)).commit();
+                   HouseholdFragment.newInstance(individual, residency, locations, socialgroup)).commit();
         });
     }
 

@@ -228,6 +228,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/changehh"
+                    android:backgroundTint="@color/black"
+                    android:textColor="@color/white"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
 

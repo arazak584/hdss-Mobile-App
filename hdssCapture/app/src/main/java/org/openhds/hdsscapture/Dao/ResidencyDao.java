@@ -37,7 +37,7 @@ public interface ResidencyDao {
     @Query("SELECT * FROM residency where individual_uuid=:id")
     List<Residency> find(String id);
 
-    @Query("SELECT * FROM residency where individual_uuid=:id")
+    @Query("SELECT * FROM residency where individual_uuid=:id and endType=1")
     Residency findRes(String id);
 
 

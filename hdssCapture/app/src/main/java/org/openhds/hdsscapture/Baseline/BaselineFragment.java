@@ -30,6 +30,7 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import org.openhds.hdsscapture.fragment.BlankFragment;
 import org.openhds.hdsscapture.fragment.DatePickerFragment;
+import org.openhds.hdsscapture.fragment.HouseholdFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -404,7 +405,7 @@ public class BaselineFragment extends Fragment {
         }
         if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    BlankFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    HouseholdFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         } else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     BlankFragment.newInstance(individual,residency, locations, socialgroup)).commit();

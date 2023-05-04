@@ -114,6 +114,7 @@ public class EventsFragment extends Fragment {
         binding = FragmentEventsBinding.inflate(inflater, container, false);
         binding.setIndividual(individual);
 
+        /*
         // when isAllFabsVisible becomes
         // true make all the action name
         // texts and FABs GONE.
@@ -222,7 +223,7 @@ public class EventsFragment extends Fragment {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     SocialgroupFragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
 
-        });
+        });*/
 
 
         binding.addMenuFab.setOnClickListener(view -> {
@@ -426,7 +427,7 @@ public class EventsFragment extends Fragment {
     private void showOutcome1Form(List<EventForm> eventForms) {
         PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         try {
-            Pregnancyoutcome form = viewModel.find(individual.individual_uuid);
+            Pregnancyoutcome form = viewModel.findout(individual.individual_uuid);
             if (form == null) {
                 form = new Pregnancyoutcome();
             }

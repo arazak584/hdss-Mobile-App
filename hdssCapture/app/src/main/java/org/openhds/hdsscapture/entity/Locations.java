@@ -39,7 +39,7 @@ public class Locations extends BaseObservable implements Parcelable {
 
     @Expose
     @ColumnInfo(name = "compextId")
-    public String compextId=AppConstants.Location;
+    public String compextId;//=AppConstants.Location;
 
     @SerializedName("compno")
     @Expose
@@ -106,6 +106,10 @@ public class Locations extends BaseObservable implements Parcelable {
     @Expose
     public Integer edit;
 
+    @SerializedName("site")
+    @Expose
+    public Integer site;
+
     public Locations(){}
 
     @Ignore
@@ -152,12 +156,18 @@ public class Locations extends BaseObservable implements Parcelable {
 
     public void setCompextId(String compextId) {
         this.compextId = compextId;
-        if(villcode != null && compno != null && compno.length()==6){
-            this.compextId = villcode + "00" + compno.substring(2);
-        }else{
-            this.compextId = compextId;
+          //KINTAMPO
+        if(villcode != null && compno != null && compno.length() == 6 && site == 1){
+            this.compextId = villcode + "00" + compno.substring(2,6);
+        } //NAVRONGO
+        else if(villcode != null && compno != null && compno.length() == 6 && site == 2){
+            this.compextId = villcode + "000" + compno.substring(3);
+        } //DODOWA
+        else if(villcode != null && compno != null && compno.length() == 7 && site == 3){
+            this.compextId = villcode + "00" + compno.substring(3);
         }
     }
+
 
     public String getLocationLevel_uuid() {
         return locationLevel_uuid;
@@ -241,6 +251,32 @@ public class Locations extends BaseObservable implements Parcelable {
         this.status = status;
     }
 
+    public Integer getSite() {
+        return site;
+    }
+
+    public void setSite(Integer site) {
+        this.site = site;
+    }
+
+    @Bindable
+    public Integer getComplete() {
+        return complete;
+    }
+
+    public void setComplete(Integer complete) {
+        this.complete = complete;
+    }
+
+    @Bindable
+    public Integer getEdit() {
+        return edit;
+    }
+
+    public void setEdit(Integer edit) {
+        this.edit = edit;
+    }
+
     protected Locations(Parcel in) {
         this.compextId = in.readString();
         this.locationName = in.readString();
@@ -253,6 +289,7 @@ public class Locations extends BaseObservable implements Parcelable {
         this.longitude = in.readString();
         this.latitude = in.readString();
         this.accuracy = in.readString();
+        this.edit = in.readInt();
     }
 
     public static final Creator<Locations> CREATOR = new Creator<Locations>() {
@@ -284,6 +321,7 @@ public class Locations extends BaseObservable implements Parcelable {
         dest.writeString(this.longitude);
         dest.writeString(this.latitude);
         dest.writeString(this.accuracy);
+        dest.writeInt(this.edit);
 
     }
 
@@ -355,6 +393,23 @@ public class Locations extends BaseObservable implements Parcelable {
         } else {
             final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
             edit = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.rgb(255, 0, 255));
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setSite(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            site = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            site = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.rgb(255, 0, 255));
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }

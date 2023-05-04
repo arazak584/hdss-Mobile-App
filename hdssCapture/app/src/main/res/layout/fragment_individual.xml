@@ -200,6 +200,43 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/gh"/>
+
+                <Spinner
+                    android:id="@+id/gh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{individual.gh}"
+                    android:onItemSelected="@{individual::setGh}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="15dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{individual.gh==1}"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/ghanacard"
+                    android:text="@string/ghanacard">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/ghanacard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={individual.ghanacard}"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+
                 <Button
                     android:id="@+id/button_individual_Dob"
                     android:layout_width="match_parent"
