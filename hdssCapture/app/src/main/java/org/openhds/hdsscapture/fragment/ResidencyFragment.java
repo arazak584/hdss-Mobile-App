@@ -227,10 +227,8 @@ public class ResidencyFragment extends Fragment {
                 //data.img = 2;
             } else {
                 data = new Residency();
-
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.toString().replaceAll("-", "");
-
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.residency_uuid = uuidString;
                 data.insertDate = new Date();
@@ -240,6 +238,9 @@ public class ResidencyFragment extends Fragment {
                 data.loc = locations.getLocation_uuid();
                 data.complete = 1;
                 data.dobs = individual.dob;
+                if (data != null && data.endDate != null) {
+                    data.startDate =binding.getRes().endDate;
+                }
 
 //                if (res != null) {
 //                    data.startDate = binding.getRes().endDate;
@@ -280,6 +281,15 @@ public class ResidencyFragment extends Fragment {
 
 
                 binding.setResidency(data);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Residency data = res.finds(individual.individual_uuid);
+            if (data != null) {
+                binding.setRes(data);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -377,17 +387,8 @@ public class ResidencyFragment extends Fragment {
             e.printStackTrace();
         }
 
-        try {
-            Residency data = res.findRes(individual.individual_uuid);
-            if (data != null) {
-                binding.setRes(data);
-            }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
 
-
-        loadCodeData(binding.membershipComplete, "complete");
+        loadCodeData(binding.membershipComplete, "submit");
         loadCodeData(binding.starttype, "startType");
         loadCodeData(binding.endtype,  "endType");
         loadCodeData(binding.rltnHead,  "rltnhead");

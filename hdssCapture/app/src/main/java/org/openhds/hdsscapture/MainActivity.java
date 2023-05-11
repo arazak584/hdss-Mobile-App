@@ -11,6 +11,7 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.Activity.PullActivity;
 import org.openhds.hdsscapture.Activity.PushActivity;
 import org.openhds.hdsscapture.Activity.RemainderActivity;
+import org.openhds.hdsscapture.Activity.ReportActivity;
 import org.openhds.hdsscapture.fragment.InfoFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -46,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         });
 
-        final Button control = findViewById(R.id.btnamendment);
+        final Button control = findViewById(R.id.btnreport);
         control.setOnClickListener(v -> {
-            Intent i = new Intent(getApplicationContext(),RemainderActivity.class);
+            Intent i = new Intent(getApplicationContext(), ReportActivity.class);
             startActivity(i);
         });
 

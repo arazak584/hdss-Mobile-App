@@ -120,7 +120,7 @@ public class HouseholdFragment extends Fragment {
                     String visits = UUID.randomUUID().toString();
                     String visituuid = visits.toString().replaceAll("-", "");
                     data.visit_uuid = visituuid;
-                    //data.complete = 1;
+                    data.complete = 1;
                 }
 
 
@@ -128,7 +128,7 @@ public class HouseholdFragment extends Fragment {
 
         //LOAD SPINNERS
         loadCodeData(binding.selectGroupType, "groupType");
-        loadCodeData(binding.residencyComplete, "complete");
+        loadCodeData(binding.residencyComplete, "submit");
 
 
         binding.buttonSaveClose.setOnClickListener(v -> {

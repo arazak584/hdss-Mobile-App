@@ -70,6 +70,15 @@ public class ResidencyRepository {
         return future.get();
     }
 
+    public Residency finds(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Residency> callable = () -> dao.finds(id);
+
+        Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
 
     public Residency fetch(String id) throws ExecutionException, InterruptedException {
 

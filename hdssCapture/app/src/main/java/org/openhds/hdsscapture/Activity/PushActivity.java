@@ -110,14 +110,13 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            Locations[] d = response.body().getData().toArray(new Locations[0]);
-                            locationViewModel.add(d);
-
-                            //UPDATE COMPLETE FIELD
+                            Locations[] d = data.getData().toArray(new Locations[0]);
                             for (Locations elem : d) {
-                                elem.setComplete(2);
+                                elem.setComplete(3);
                                 Log.e("PUSH.tag", "Has value " + elem.getCompno());
                             }
+                            locationViewModel.add(d);
+
 
                             progress.dismiss();
                             textViewSendLocationdata.setText("Sent " + d.length + " record(s)");
@@ -177,12 +176,12 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            Visit[] d = response.body().getData().toArray(new Visit[0]);
-                            visitViewModel.add(d);
+                            Visit[] d = data.getData().toArray(new Visit[0]);
 
                             for (Visit elem : d) {
                                 elem.complete = 2;
                             }
+                            visitViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendVisit.setText("Sent " + d.length + " record(s)");
@@ -246,12 +245,11 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            Individual[] d = response.body().getData().toArray(new Individual[0]);
-                            individualViewModel.add(d);
-
+                            Individual[] d = data.getData().toArray(new Individual[0]);
                             for (Individual elem : d) {
-                                elem.complete = 2;
+                                elem.complete = 3;
                             }
+                            individualViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendIndividualdata.setText("Sent " + d.length + " Individual record(s)");
@@ -311,12 +309,13 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            Socialgroup[] d = response.body().getData().toArray(new Socialgroup[0]);
-                            socialgroupViewModel.add(d);
+                            Socialgroup[] d = data.getData().toArray(new Socialgroup[0]);
+
 
                             for (Socialgroup elem : d) {
-                                elem.complete = 2;
+                                elem.complete = 3;
                             }
+                            socialgroupViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendSocialgroupdata.setText("Sent " + d.length + " Socialgroup record(s)");
@@ -377,12 +376,12 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            Relationship[] d = response.body().getData().toArray(new Relationship[0]);
-                            relationshipViewModel.add(d);
+                            Relationship[] d = data.getData().toArray(new Relationship[0]);
 
                             for (Relationship elem : d) {
-                                elem.complete = 2;
+                                elem.complete = 3;
                             }
+                            relationshipViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendRelationshipdata.setText("Sent " + d.length + " Relationship record(s)");
@@ -402,7 +401,6 @@ public class PushActivity extends AppCompatActivity {
             }
 
         });
-
 
 
         //PUSH Pregnancy
@@ -443,12 +441,12 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            Pregnancy[] d = response.body().getData().toArray(new Pregnancy[0]);
-                            pregnancyViewModel.add(d);
+                            Pregnancy[] d = data.getData().toArray(new Pregnancy[0]);
 
                             for (Pregnancy elem : d) {
-                                elem.complete = 2;
+                                elem.complete = 3;
                             }
+                            pregnancyViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendPregnancydata.setText("Sent " + d.length + " Pregnancy record(s)");
@@ -468,8 +466,6 @@ public class PushActivity extends AppCompatActivity {
             }
 
         });
-
-
 
 
         //PUSH Pregnancyoutcome
@@ -510,12 +506,12 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            Pregnancyoutcome[] d = response.body().getData().toArray(new Pregnancyoutcome[0]);
-                            pregnancyoutcomeViewModel.add(d);
+                            Pregnancyoutcome[] d = data.getData().toArray(new Pregnancyoutcome[0]);
 
                             for (Pregnancyoutcome elem : d) {
-                                elem.complete = 2;
+                                elem.complete = 3;
                             }
+                            pregnancyoutcomeViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendOutcomedata.setText("Sent " + d.length + " Pregnancy Outcome record(s)");
@@ -574,12 +570,12 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            Outcome[] d = response.body().getData().toArray(new Outcome[0]);
-                            outcomeViewModel.add(d);
+                            Outcome[] d = data.getData().toArray(new Outcome[0]);
 
                             for (Outcome elem : d) {
-                                elem.complete = 2;
+                                elem.complete = 3;
                             }
+                            outcomeViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendOutcomesdata.setText("Sent " + d.length + " Outcome record(s)");
@@ -599,7 +595,6 @@ public class PushActivity extends AppCompatActivity {
             }
 
         });
-
 
 
         //PUSH Demographic
@@ -641,12 +636,12 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            Demographic[] d = response.body().getData().toArray(new Demographic[0]);
-                            demographicViewModel.add(d);
+                            Demographic[] d = data.getData().toArray(new Demographic[0]);
 
                             for (Demographic elem : d) {
-                                elem.complete = 2;
+                                elem.complete = 3;
                             }
+                            demographicViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendDemographicdata.setText("Sent " + d.length + " Demographic record(s)");
@@ -666,7 +661,6 @@ public class PushActivity extends AppCompatActivity {
             }
 
         });
-
 
 
         //PUSH DEATH DATA (DEATH, VPM)
@@ -708,7 +702,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + dataDeath.getData().size() + " of Death record(s)...");
 
                 for (Death elem : dataDeath.getData()) {
-                    elem.complete = 0;
+                    elem.complete = 3;
                 }
 
                 final Call<DataWrapper<Death>> c_callable = dao.sendDeathdata(dataDeath);
@@ -718,12 +712,12 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            d23[0] = response.body().getData().toArray(new Death[0]);
-                            death.add(d23[0]);
+                            d23[0] = dataDeath.getData().toArray(new Death[0]);
 
-//                            for (Death elem : d23[0]) {
-//                                elem.complete = 2;
-//                            }
+                            for (Death elem : d23[0]) {
+                                elem.complete = 3;
+                            }
+                            death.add(d23[0]);
 
                             progress.dismiss();
                             textViewSendEnd.setText(
@@ -751,9 +745,6 @@ public class PushActivity extends AppCompatActivity {
             if (dataMnh24.getData() != null && !dataMnh24.getData().isEmpty()) {
                 progress.setMessage("Sending " + dataMnh24.getData().size() + " VPM record(s)...");
 
-                for (Death ele : dataMnh24.getData()) {
-                    ele.vpmcomplete = 0;
-                }
 
                 final Call<DataWrapper<Death>> c_callable = dao.sendVpmdata(dataMnh24);
                 c_callable.enqueue(new Callback<DataWrapper<Death>>() {
@@ -762,7 +753,10 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            d24[0] = response.body().getData().toArray(new Death[0]);
+                            d24[0] = dataMnh24.getData().toArray(new Death[0]);
+                            for (Death elem : d24[0]) {
+                                elem.vpmcomplete = 3;
+                            }
                             vpms.add(d24[0]);
                             progress.dismiss();
                             textViewSendEnd.setText(
@@ -827,12 +821,12 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            HdssSociodemo[] d = response.body().getData().toArray(new HdssSociodemo[0]);
-                            hdssSociodemoViewModel.add(d);
+                            HdssSociodemo[] d = data.getData().toArray(new HdssSociodemo[0]);
 
                             for (HdssSociodemo elem : d) {
-                                elem.complete = 2;
+                                elem.complete = 3;
                             }
+                            hdssSociodemoViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendSocio.setText("Sent " + d.length + " record(s)");
@@ -853,7 +847,6 @@ public class PushActivity extends AppCompatActivity {
             }
 
         });
-
 
 
         //PUSH Residency
@@ -895,12 +888,12 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            Residency[] d = response.body().getData().toArray(new Residency[0]);
-                            residencyViewModel.add(d);
+                            Residency[] d = data.getData().toArray(new Residency[0]);
 
                             for (Residency elem : d) {
-                                elem.complete = 2;
+                                elem.complete = 3;
                             }
+                            residencyViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendRes.setText("Sent " + d.length + " Residency record(s)");
@@ -960,12 +953,12 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            Inmigration[] d = response.body().getData().toArray(new Inmigration[0]);
-                            inmigrationViewModel.add(d);
+                            Inmigration[] d = data.getData().toArray(new Inmigration[0]);
 
                             for (Inmigration elem : d) {
-                                elem.complete = 2;
+                                elem.complete = 3;
                             }
+                            inmigrationViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendImg.setText("Sent " + d.length + " Inmigration record(s)");
@@ -1026,12 +1019,12 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            Outmigration[] d = response.body().getData().toArray(new Outmigration[0]);
-                            outmigrationViewModel.add(d);
+                            Outmigration[] d = data.getData().toArray(new Outmigration[0]);
 
                             for (Outmigration elem : d) {
-                                elem.complete = 2;
+                                elem.complete = 3;
                             }
+                            outmigrationViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendOmg.setText("Sent " + d.length + " Outmigration record(s)");

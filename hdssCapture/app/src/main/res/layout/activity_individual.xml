@@ -53,9 +53,9 @@
         android:id="@+id/btnView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
         android:layout_below="@+id/btnInsert"
+        android:layout_marginTop="20dp"
         android:text="View Data"
-        android:layout_marginTop="20dp"/>
+        android:textSize="24dp" />
 
 </RelativeLayout>

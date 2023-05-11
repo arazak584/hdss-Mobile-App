@@ -199,7 +199,7 @@ public class PregnancyFragment extends Fragment {
 
         //LOAD SPINNERS
         loadCodeData(binding.anteNatalClinic, "complete");
-        loadCodeData(binding.individualComplete, "complete");
+        loadCodeData(binding.individualComplete, "submit");
         loadCodeData(binding.ttinjection, "complete");
         loadCodeData(binding.slpBednet, "complete");
         loadCodeData(binding.firstPreg, "complete");

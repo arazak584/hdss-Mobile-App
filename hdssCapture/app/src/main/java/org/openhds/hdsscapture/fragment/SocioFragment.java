@@ -160,7 +160,7 @@ public class SocioFragment extends Fragment {
         loadCodeData(binding.sociog.PDDMSCORRES, "PD_DM_SCORRES");
         loadCodeData(binding.sociog.SMOKEINOECDOSFRQ, "FRQ");
         loadCodeData(binding.sociog.SMOKEHHOLDINOECDOSFRQ, "FRQ");
-        loadCodeData(binding.socioz.socioComplete, "complete");
+        loadCodeData(binding.socioz.socioComplete, "submit");
 
 
         binding.buttonSaveClose.setOnClickListener(v -> {

@@ -190,6 +190,18 @@ public class IndividualFragment extends Fragment {
             binding.dob.setError(null);
         }
 
+        if (binding.getIndividual().complete == null) {
+            binding.getIndividual().complete = 1;
+        }
+
+        if (binding.getIndividual().gh == null) {
+            binding.getIndividual().gh=1;
+        }
+
+        if (binding.getIndividual().other == null) {
+            binding.getIndividual().other=1;
+        }
+
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -281,7 +293,7 @@ public class IndividualFragment extends Fragment {
 
         //LOAD SPINNERS
         loadCodeData(binding.dobAspect, "complete");
-        loadCodeData(binding.individualComplete,  "complete");
+        loadCodeData(binding.individualComplete,  "submit");
         loadCodeData(binding.gender, "gender");
         loadCodeData(binding.other,  "complete");
         loadCodeData(binding.gh,  "complete");

@@ -126,8 +126,13 @@ public class DemographicFragment extends Fragment {
         try {
             Demographic data = viewModel.find(individual.individual_uuid);
             if (data != null) {
-                Toast.makeText(requireActivity(), "data pulled ", Toast.LENGTH_LONG).show();
                 binding.setDemographic(data);
+                if(data.complete ==null){
+                data.complete=1;
+                }
+                if(data.phone1 !=null){
+                    data.phone=1;
+                }
             } else {
                 data = new Demographic();
 
@@ -135,6 +140,7 @@ public class DemographicFragment extends Fragment {
                 data.insertDate = new Date();
                 data.individual_uuid = individual.getIndividual_uuid();
                 data.complete = 1;
+                data.phone = 1;
 
                 binding.setDemographic(data);
             }
@@ -148,7 +154,7 @@ public class DemographicFragment extends Fragment {
         loadCodeData(binding.education, "education");
         loadCodeData(binding.occupation, "occupation");
         loadCodeData(binding.marital, "marital");
-        loadCodeData(binding.demoComplete, "complete");
+        loadCodeData(binding.demoComplete, "submit");
         loadCodeData(binding.demoPhone, "complete");
 
         binding.buttonSaveClose.setOnClickListener(v -> {

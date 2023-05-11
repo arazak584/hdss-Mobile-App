@@ -21,17 +21,13 @@ public class VisitRepository {
         dao = db.visitDao();
     }
     public void create(Visit... data) {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
-            dao.create(data);
-        });
+        AppDatabase.databaseWriteExecutor.execute(() -> dao.create(data));
     }
-
 
     public void create(Visit data) {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
-            dao.create(data);
-        });
+        AppDatabase.databaseWriteExecutor.execute(() -> dao.create(data));
     }
+
 
     public List<Visit> findAll() throws ExecutionException, InterruptedException {
 

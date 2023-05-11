@@ -181,23 +181,20 @@
                     android:textColor="#000301"
                     android:padding="15dp"/>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <TextView
                     goneUnless="@{individual.other==1}"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/ind_nick"
-                    android:text="@string/ind_nick">
+                    android:text="@string/ind_nick" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/individual_nickName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={individual.otherName}"
-                        android:inputType="textPersonName|textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                <EditText
+                    goneUnless="@{individual.other==1}"
+                    android:id="@+id/individual_nickName"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:text="@={individual.otherName}" />
 
 
                 <TextView

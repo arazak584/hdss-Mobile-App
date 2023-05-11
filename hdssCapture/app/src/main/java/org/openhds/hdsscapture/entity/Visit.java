@@ -148,15 +148,6 @@ public class Visit extends BaseObservable {
     }
 
     @Bindable
-    public String getRespondent() {
-        return respondent;
-    }
-
-    public void setRespondent(String respondent) {
-        this.respondent = respondent;
-    }
-
-    @Bindable
     public String getHouseExtId() {
         return houseExtId;
     }
@@ -172,15 +163,6 @@ public class Visit extends BaseObservable {
 
     public void setSocialgroup_uuid(String socialgroup_uuid) {
         this.socialgroup_uuid = socialgroup_uuid;
-    }
-
-    @Bindable
-    public Integer getRealVisit() {
-        return realVisit;
-    }
-
-    public void setRealVisit(Integer realVisit) {
-        this.realVisit = realVisit;
     }
 
     //SPINNERS ENTITY COMPLETE FORM FOR SYNC

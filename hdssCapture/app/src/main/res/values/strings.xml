@@ -531,6 +531,10 @@
     <string name="gh">Do you have Ghana Card?</string>
     <string name="ghanacard">Enter Ghana Card Number</string>
     <string name="get_ses">GET SES [PROFILE]</string>
+    <string name="stdate">Date</string>
+    <string name="start">Start</string>
+    <string name="report">Generate Report</string>
+    <string name="records">Number of Events Picked</string>
 
     //SocioDemo End
 

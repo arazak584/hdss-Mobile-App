@@ -151,7 +151,7 @@ public class SocialgroupFragment extends Fragment {
 
         //LOAD SPINNERS
         loadCodeData(binding.selectGroupType, "groupType");
-        loadCodeData(binding.residencyComplete, "complete");
+        loadCodeData(binding.residencyComplete, "submit");
 
 
         binding.buttonSaveClose.setOnClickListener(v -> {

@@ -186,7 +186,7 @@ public class RelationshipFragment extends Fragment {
         }
 
         //SPINNERS
-        loadCodeData(binding.relComplete,  "complete");
+        loadCodeData(binding.relComplete,  "submit");
         loadCodeData(binding.relStarttype,  "relationshipType");
         loadCodeData(binding.relEndtype,  "relendType");
         loadCodeData(binding.mar,  "complete");

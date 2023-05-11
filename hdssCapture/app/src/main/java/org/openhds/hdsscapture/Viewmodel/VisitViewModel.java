@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.VisitRepository;
-import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Visit;
 
 import java.util.List;
@@ -21,7 +20,6 @@ public class VisitViewModel extends AndroidViewModel {
         super(application);
         visitRepository = new VisitRepository(application);
     }
-
 
     public List<Visit> findAll() throws ExecutionException, InterruptedException {
         return visitRepository.findAll();
@@ -38,5 +36,6 @@ public class VisitViewModel extends AndroidViewModel {
     public void add(Visit data){ visitRepository.create(data);}
 
     public void add(Visit... data){visitRepository.create(data);}
+
 
 }

@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Visit;
 
@@ -16,6 +17,9 @@ public interface VisitDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create (Visit visit);
+
+    @Update
+    void update(Visit visit);
 
 
     @Query("SELECT * FROM visit")

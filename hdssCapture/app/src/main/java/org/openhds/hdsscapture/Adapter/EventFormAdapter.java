@@ -96,7 +96,7 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
                     holder.linearLayout.setBackgroundColor(Color.YELLOW);
                     status = UPDATE;
                 }else {
-                    holder.linearLayout.setBackgroundColor(Color.MAGENTA);
+                    holder.linearLayout.setBackgroundColor(Color.GRAY);
                     status = SUBMITTED;
                 }
             }else {

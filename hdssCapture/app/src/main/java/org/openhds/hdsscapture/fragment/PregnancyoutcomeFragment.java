@@ -418,7 +418,7 @@ public class PregnancyoutcomeFragment extends Fragment {
         loadCodeData(binding.whereAnc, codeBookViewModel, "birthPlace");
         loadCodeData(binding.whoAnc, codeBookViewModel, "assist");
         loadCodeData(binding.chdSize, codeBookViewModel, "size");
-        loadCodeData(binding.individualComplete, codeBookViewModel, "complete");
+        loadCodeData(binding.individualComplete, codeBookViewModel, "submit");
         loadCodeData(binding.vpm.dthDeathPlace, codeBookViewModel, "deathPlace");
         loadCodeData(binding.vpm.dthDeathCause, codeBookViewModel, "deathCause");
 

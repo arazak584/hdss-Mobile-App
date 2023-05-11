@@ -159,7 +159,7 @@ public class VisitFragment extends Fragment {
         }
 
 
-        loadCodeData(binding.visitcomplete, "complete");
+        loadCodeData(binding.visitcomplete, "submit");
         loadCodeData(binding.realVisit, "complete");
 
         binding.buttonSaveClose.setOnClickListener(v -> {

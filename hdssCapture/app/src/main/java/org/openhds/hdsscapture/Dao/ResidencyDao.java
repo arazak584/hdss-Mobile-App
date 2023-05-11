@@ -40,6 +40,8 @@ public interface ResidencyDao {
     @Query("SELECT * FROM residency where individual_uuid=:id and endType=1")
     Residency findRes(String id);
 
+    @Query("SELECT * FROM residency where individual_uuid=:id")
+    Residency finds(String id);
 
     @Query("SELECT * FROM residency WHERE complete=1")
     List<Residency> retrieveToSync();

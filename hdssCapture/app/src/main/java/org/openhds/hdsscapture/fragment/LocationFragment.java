@@ -127,6 +127,8 @@ public class LocationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+
         binding = FragmentLocationBinding.inflate(inflater, container, false);
         binding.setLocations(locations);
 
@@ -218,10 +220,14 @@ public class LocationFragment extends Fragment {
             binding.getLocations().location_uuid = uuidString;
             }
 
+        if (binding.getLocations().complete == null) {
+            binding.getLocations().complete = 1;
+        }
+        binding.getLocations().site=1;
 
         final CodeBookViewModel codeBookViewModel = new ViewModelProvider(this).get(CodeBookViewModel.class);
         loadCodeData(binding.locationstatus, codeBookViewModel, "status");
-        loadCodeData(binding.complete, codeBookViewModel, "complete");
+        loadCodeData(binding.complete, codeBookViewModel, "submit");
         loadCodeData(binding.edit, codeBookViewModel, "complete");
         loadCodeData(binding.locationtype, codeBookViewModel, "locationType");
         loadCodeData(binding.site, codeBookViewModel, "site");

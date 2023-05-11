@@ -104,10 +104,12 @@ public class Locations extends BaseObservable implements Parcelable {
 
     @SerializedName("edit")
     @Expose
+    @ColumnInfo(name = "edit")
     public Integer edit;
 
     @SerializedName("site")
     @Expose
+    @ColumnInfo(name = "site")
     public Integer site;
 
     public Locations(){}
@@ -251,14 +253,6 @@ public class Locations extends BaseObservable implements Parcelable {
         this.status = status;
     }
 
-    public Integer getSite() {
-        return site;
-    }
-
-    public void setSite(Integer site) {
-        this.site = site;
-    }
-
     @Bindable
     public Integer getComplete() {
         return complete;
@@ -266,15 +260,6 @@ public class Locations extends BaseObservable implements Parcelable {
 
     public void setComplete(Integer complete) {
         this.complete = complete;
-    }
-
-    @Bindable
-    public Integer getEdit() {
-        return edit;
-    }
-
-    public void setEdit(Integer edit) {
-        this.edit = edit;
     }
 
     protected Locations(Parcel in) {
@@ -290,6 +275,8 @@ public class Locations extends BaseObservable implements Parcelable {
         this.latitude = in.readString();
         this.accuracy = in.readString();
         this.edit = in.readInt();
+        this.site = in.readInt();
+        this.complete = in.readInt();
     }
 
     public static final Creator<Locations> CREATOR = new Creator<Locations>() {
@@ -322,7 +309,8 @@ public class Locations extends BaseObservable implements Parcelable {
         dest.writeString(this.latitude);
         dest.writeString(this.accuracy);
         dest.writeInt(this.edit);
-
+        dest.writeInt(this.site);
+        dest.writeInt(this.complete);
     }
 
     @Override
