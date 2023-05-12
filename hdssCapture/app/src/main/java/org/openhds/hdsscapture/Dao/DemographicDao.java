@@ -11,6 +11,7 @@ import androidx.room.Update;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.subentity.DemographicAmendment;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -43,5 +44,8 @@ public interface DemographicDao {
 
     @Query("SELECT * FROM demographic where individual_uuid=:id")
     Demographic find(String id);
+
+    @Query("SELECT COUNT(*) FROM demographic WHERE insertDate BETWEEN :startDate AND :endDate")
+    long count(Date startDate, Date endDate);
 
 }

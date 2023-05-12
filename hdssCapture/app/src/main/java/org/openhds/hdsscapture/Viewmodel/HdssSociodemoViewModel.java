@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import org.openhds.hdsscapture.Repositories.HdssSociodemoRepository;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -31,6 +32,10 @@ public class HdssSociodemoViewModel extends AndroidViewModel {
 
     public List<HdssSociodemo> findToSync() throws ExecutionException, InterruptedException {
         return hdssSociodemoRepository.findToSync();
+    }
+
+    public long count(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
+        return hdssSociodemoRepository.count(startDate, endDate);
     }
 
     public void add(HdssSociodemo s){

@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import org.openhds.hdsscapture.Repositories.SocialgroupRepository;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -39,6 +40,10 @@ public class SocialgroupViewModel extends AndroidViewModel {
 
     public List<Socialgroup> findToSync() throws ExecutionException, InterruptedException {
         return socialgroupRepository.findToSync();
+    }
+
+    public long count(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
+        return socialgroupRepository.count(startDate, endDate);
     }
 
     public void add(Socialgroup data){

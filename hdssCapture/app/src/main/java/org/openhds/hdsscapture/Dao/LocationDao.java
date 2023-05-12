@@ -10,6 +10,7 @@ import androidx.room.Update;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.subentity.LocationAmendment;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -54,5 +55,7 @@ public interface LocationDao {
             " LEFT JOIN visit as d on a.location_uuid=d.location_uuid where c.name=:id and d.location_uuid is null order by a.compno")
     List<Locations> retrieveByVillage(String id);
 
+    @Query("SELECT COUNT(*) FROM locations WHERE insertDate BETWEEN :startDate AND :endDate")
+    long count(Date startDate, Date endDate);
 
 }

@@ -6,6 +6,7 @@ import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.DemographicDao;
 import org.openhds.hdsscapture.entity.Demographic;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -58,6 +59,12 @@ public class DemographicRepository {
 
         Future<Demographic> future = Executors.newSingleThreadExecutor().submit(callable);
 
+        return future.get();
+    }
+
+    public long count(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.count(startDate, endDate);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }
 }

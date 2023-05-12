@@ -13,6 +13,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -107,6 +108,9 @@ public interface IndividualDao {
             " WHERE b.endType=1 and d.houseExtId=:id and " +
             " date('now', '-5 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
     List<Individual> retrieveChild(String id);
+
+    @Query("SELECT COUNT(*) FROM individual WHERE insertDate BETWEEN :startDate AND :endDate")
+    long countIndividuals(Date startDate, Date endDate);
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

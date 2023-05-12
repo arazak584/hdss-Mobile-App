@@ -6,6 +6,7 @@ import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.PregnancyDao;
 import org.openhds.hdsscapture.entity.Pregnancy;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -67,6 +68,12 @@ public class PregnancyRepository {
 
         Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
 
+        return future.get();
+    }
+
+    public long count(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.count(startDate, endDate);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }
 }

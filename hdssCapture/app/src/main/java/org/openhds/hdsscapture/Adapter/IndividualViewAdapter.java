@@ -132,22 +132,6 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         return individualList.size();
     }
 
-//    public void filter(String charText, IndividualViewModel individualViewModel) {
-//        individualList.clear();
-//            if(socialgroup != null)
-//                try {
-//                    List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getHouseExtId());
-//
-//                    if (list != null) {
-//                        individualList.addAll(list);
-//                    }
-//                } catch (ExecutionException e) {
-//                    e.printStackTrace();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//        notifyDataSetChanged();
-//    }
 
     public void search(String searchText, IndividualViewModel individualViewModel) {
 

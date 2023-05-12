@@ -1,197 +1,199 @@
 package org.openhds.hdsscapture.Activity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Pair;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Adapter.ReportAdapter;
-import org.openhds.hdsscapture.Dao.ReportDao;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
+import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
+import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
+import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
+import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
+import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
+import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
+import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
+import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
+import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Residency;
+import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.Visit;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 public class ReportActivity extends AppCompatActivity {
 
-    private EditText date_picker_date1;
-    private EditText date_picker_date2;
-    private Calendar calendar1;
-    private Calendar calendar2;
-    private Button bt_report;
-
-    // Initialize the ReportDao instance
-    private ReportDao reportDao;
+    private IndividualViewModel individualViewModel;
+    private VisitViewModel visitViewModel;
+    private LocationViewModel locationViewModel;
+    private SocialgroupViewModel socialgroupViewModel;
+    private InmigrationViewModel inmigrationViewModel;
+    private OutmigrationViewModel outmigrationViewModel;
+    private PregnancyViewModel pregnancyViewModel;
+    private PregnancyoutcomeViewModel pregnancyoutcomeViewModel;
+    private DeathViewModel deathViewModel;
+    private DemographicViewModel demographicViewModel;
+    private HdssSociodemoViewModel hdssSociodemoViewModel;
     private ReportAdapter reportAdapter;
-    private RecyclerView my_recycler_view_report;
+
+    private Locations locations;
+    private Socialgroup socialgroup;
+    private Residency residency;
+    private Visit visit;
+
+    private EditText startDateEditText, endDateEditText;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
 
-        bt_report = findViewById(R.id.bt_report);
-        date_picker_date1 = findViewById(R.id.date_picker_date1);
-        date_picker_date2 = findViewById(R.id.date_picker_date2);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Generating Report...");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
 
-        calendar1 = Calendar.getInstance();
-        calendar2 = Calendar.getInstance();
+        startDateEditText = findViewById(R.id.startDate);
+        endDateEditText = findViewById(R.id.endDate);
 
-        my_recycler_view_report = findViewById(R.id.my_recycler_view_report);
-
-
-        bt_report.setOnClickListener(new View.OnClickListener() {
+        Button startDateButton = findViewById(R.id.btStart);
+        startDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                // fetch data from the database based on the selected date range
-
-                String startDateStr = date_picker_date1.getText().toString();
-                String endDateStr = date_picker_date2.getText().toString();
-
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-
-                try {
-                    Date startDate = dateFormat.parse(startDateStr);
-                    Date endDate = dateFormat.parse(endDateStr);
-
-                    // Call the appropriate ReportDao methods to get the counts
-                    LiveData<Integer> visitsLiveData = reportDao.countVisits(startDate, endDate);
-                    LiveData<Integer> deathsLiveData = reportDao.countDeaths(startDate, endDate);
-                    LiveData<Integer> socialgroupsLiveData = reportDao.countSocialgroups(startDate, endDate);
-                    LiveData<Integer> individualsLiveData = reportDao.countIndividuals(startDate, endDate);
-
-                    // Observe the LiveData objects to get the counts
-                    visitsLiveData.observe(ReportActivity.this, new Observer<Integer>() {
-                        @Override
-                        public void onChanged(Integer count) {
-                            // Create a report string for the visits count
-                            String report = "Visits count: " + count;
-
-                            // Add the report string and LiveData object to the list
-                            List<Pair<String, LiveData<Integer>>> reportList = new ArrayList<>();
-                            Pair<String, LiveData<Integer>> reportPair = new Pair<>(report, visitsLiveData);
-                            reportList.add(reportPair);
-
-                            // Create a ReportAdapter and set it on the RecyclerView
-                            ReportAdapter reportAdapter = new ReportAdapter(reportList);
-                            my_recycler_view_report.setAdapter(reportAdapter);
-                        }
-                    });;
-
-                    deathsLiveData.observe(ReportActivity.this, new Observer<Integer>() {
-                        @Override
-                        public void onChanged(Integer count) {
-                            // Create a report string for the deaths count
-                            String report = "Deaths count: " + count;
-
-                            // Add the report string and LiveData object to the list
-                            List<Pair<String, LiveData<Integer>>> reportList = new ArrayList<>();
-                            Pair<String, LiveData<Integer>> reportPair = new Pair<>(report, deathsLiveData);
-                            reportList.add(reportPair);
-
-                            // Create a ReportAdapter and set it on the RecyclerView
-                            ReportAdapter reportAdapter = new ReportAdapter(reportList);
-                            my_recycler_view_report.setAdapter(reportAdapter);
-                        }
-                    });
-
-                    socialgroupsLiveData.observe(ReportActivity.this, new Observer<Integer>() {
-                        @Override
-                        public void onChanged(Integer count) {
-                            // Create a report string for the deaths count
-                            String report = "Social groups count: " + count;
-
-                            // Add the report string and LiveData object to the list
-                            List<Pair<String, LiveData<Integer>>> reportList = new ArrayList<>();
-                            Pair<String, LiveData<Integer>> reportPair = new Pair<>(report, socialgroupsLiveData);
-                            reportList.add(reportPair);
-
-                            // Create a ReportAdapter and set it on the RecyclerView
-                            ReportAdapter reportAdapter = new ReportAdapter(reportList);
-                            my_recycler_view_report.setAdapter(reportAdapter);
-                        }
-                    });
-
-                    individualsLiveData.observe(ReportActivity.this, new Observer<Integer>() {
-                        @Override
-                        public void onChanged(Integer count) {
-                            // Create a report string for the deaths count
-                            String report = "Individual count: " + count;
-
-                            // Add the report string and LiveData object to the list
-                            List<Pair<String, LiveData<Integer>>> reportList = new ArrayList<>();
-                            Pair<String, LiveData<Integer>> reportPair = new Pair<>(report, individualsLiveData);
-                            reportList.add(reportPair);
-
-                            // Create a ReportAdapter and set it on the RecyclerView
-                            ReportAdapter reportAdapter = new ReportAdapter(reportList);
-                            my_recycler_view_report.setAdapter(reportAdapter);
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
+            public void onClick(View v) {
+                // Open DatePickerDialog for start date selection
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(ReportActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        // Set the selected date on EditText
+                        String selectedDate = year + "-" + (month+1) + "-" + dayOfMonth;
+                        startDateEditText.setText(selectedDate);
+                    }
+                }, year, month, day);
+                datePickerDialog.show();
             }
         });
 
-        DatePickerDialog.OnDateSetListener date1 = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar1.set(Calendar.YEAR, year);
-                calendar1.set(Calendar.MONTH, month);
-                calendar1.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-                updateCalendar(date_picker_date1, calendar1);
-            }
-        };
-
-        DatePickerDialog.OnDateSetListener date2 = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar2.set(Calendar.YEAR, year);
-                calendar2.set(Calendar.MONTH, month);
-                calendar2.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-                updateCalendar(date_picker_date2, calendar2);
-            }
-        };
-
-        date_picker_date1.setOnClickListener(new View.OnClickListener() {
+        Button endDateButton = findViewById(R.id.btEnd);
+        endDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(ReportActivity.this, date1, calendar1.get(Calendar.YEAR),
-                        calendar1.get(Calendar.MONTH),calendar1.get(Calendar.DAY_OF_MONTH)).show();
+                // Open DatePickerDialog for end date selection
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(ReportActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        // Set the selected date on EditText
+                        String selectedDate = year + "-" + (month+1) + "-" + dayOfMonth;
+                        endDateEditText.setText(selectedDate);
+                    }
+                }, year, month, day);
+                datePickerDialog.show();
             }
         });
 
-        date_picker_date2.setOnClickListener(new View.OnClickListener() {
+        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+        visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
+        locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
+        socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+        inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
+        outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
+        pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
+        pregnancyoutcomeViewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
+        deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+        demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
+        hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
+
+        RecyclerView recyclerView = findViewById(R.id.my_recycler_view_report);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        reportAdapter = new ReportAdapter(this);
+        recyclerView.setAdapter(reportAdapter);
+
+        Button generateReportButton = findViewById(R.id.bt_report);
+        generateReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(ReportActivity.this, date2, calendar2.get(Calendar.YEAR),
-                        calendar2.get(Calendar.MONTH),calendar2.get(Calendar.DAY_OF_MONTH)).show();
+                progressDialog.show();
+
+                // Simulate long operation
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 10);
+                report();
             }
         });
     }
 
-    private void updateCalendar(EditText editText, Calendar calendar){
-        String format = "yyyy-MM-dd";
-        SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.FRANCE);
-        editText.setText(sdf.format(calendar.getTime()));
+    private void report() {
+        Date startDate = null;
+        Date endDate = null;
+
+        // Retrieve the text entered in the start and end date EditText views
+        String startDateText = startDateEditText.getText().toString().trim();
+        String endDateText = endDateEditText.getText().toString().trim();
+
+        // Parse the text into Date objects
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            startDate = dateFormat.parse(startDateText);
+            endDate = dateFormat.parse(endDateText);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Invalid date format", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        reportAdapter.report(startDate, endDate, individualViewModel, visitViewModel, locationViewModel,socialgroupViewModel,inmigrationViewModel,
+                outmigrationViewModel,pregnancyViewModel,pregnancyoutcomeViewModel,deathViewModel,demographicViewModel,hdssSociodemoViewModel);
+
     }
 
 
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.exit_confirmation_title))
+                .setMessage(getString(R.string.exiting_lbl))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        try{
+                            ReportActivity.this.finish();
+                        }
+                        catch(Exception e){}
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), null)
+                .show();
+    }
 }

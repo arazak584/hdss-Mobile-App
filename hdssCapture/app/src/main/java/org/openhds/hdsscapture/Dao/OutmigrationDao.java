@@ -7,6 +7,7 @@ import androidx.room.Query;
 
 import org.openhds.hdsscapture.entity.Outmigration;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -30,4 +31,7 @@ public interface OutmigrationDao {
 
     @Query("SELECT * FROM outmigration where individual_uuid=:id")
     Outmigration find(String id);
+
+    @Query("SELECT COUNT(*) FROM outmigration WHERE insertDate BETWEEN :startDate AND :endDate")
+    long count(Date startDate, Date endDate);
 }

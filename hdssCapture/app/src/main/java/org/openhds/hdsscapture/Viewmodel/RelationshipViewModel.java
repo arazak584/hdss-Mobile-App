@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import org.openhds.hdsscapture.Repositories.RelationshipRepository;
 import org.openhds.hdsscapture.entity.Relationship;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -32,6 +33,10 @@ public class RelationshipViewModel extends AndroidViewModel {
 
     public Relationship find(String id) throws ExecutionException, InterruptedException {
         return relationshipRepository.find(id);
+    }
+
+    public long count(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
+        return relationshipRepository.count(startDate, endDate);
     }
 
     public void add(Relationship data){ relationshipRepository.create(data);}

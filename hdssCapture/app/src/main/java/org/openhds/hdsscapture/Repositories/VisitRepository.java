@@ -6,6 +6,7 @@ import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.VisitDao;
 import org.openhds.hdsscapture.entity.Visit;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -53,6 +54,18 @@ public class VisitRepository {
 
         Future<List<Visit>> future = Executors.newSingleThreadExecutor().submit(callable);
 
+        return future.get();
+    }
+
+    public long countVisits(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.countVisits(startDate, endDate);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    public long countLocs(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.countLocs(startDate, endDate);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }
 }

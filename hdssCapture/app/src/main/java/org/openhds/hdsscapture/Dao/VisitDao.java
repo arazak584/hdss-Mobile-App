@@ -8,6 +8,7 @@ import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Visit;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -34,4 +35,10 @@ public interface VisitDao {
 
     @Query("SELECT * FROM visit WHERE complete=1")
     List<Visit> retrieveToSync();
+
+    @Query("SELECT COUNT(*) FROM visit WHERE insertDate BETWEEN :startDate AND :endDate")
+    long countVisits(Date startDate, Date endDate);
+
+    @Query("SELECT COUNT(*) FROM visit WHERE insertDate BETWEEN :startDate AND :endDate group by location_uuid ")
+    long countLocs(Date startDate, Date endDate);
 }

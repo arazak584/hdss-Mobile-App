@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import org.openhds.hdsscapture.Repositories.VisitRepository;
 import org.openhds.hdsscapture.entity.Visit;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -31,6 +32,14 @@ public class VisitViewModel extends AndroidViewModel {
 
     public List<Visit> findToSync() throws ExecutionException, InterruptedException {
         return visitRepository.findToSync();
+    }
+
+    public long countVisits(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
+        return visitRepository.countVisits(startDate, endDate);
+    }
+
+    public long countLocs(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
+        return visitRepository.countLocs(startDate, endDate);
     }
 
     public void add(Visit data){ visitRepository.create(data);}

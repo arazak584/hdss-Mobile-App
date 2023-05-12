@@ -10,6 +10,7 @@ import org.openhds.hdsscapture.Repositories.IndividualRepository;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -72,6 +73,10 @@ public class IndividualViewModel extends AndroidViewModel {
 
     public Individual find(String id) throws ExecutionException, InterruptedException {
         return individualRepository.find(id);
+    }
+
+    public long countIndividuals(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
+        return individualRepository.countIndividuals(startDate, endDate);
     }
 
 

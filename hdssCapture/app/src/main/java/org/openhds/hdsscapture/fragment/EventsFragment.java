@@ -241,15 +241,13 @@ public class EventsFragment extends Fragment {
             Date dobdif = f.parse(String.valueOf(individual.dob));
             long difference = Math.abs(dobdif.getTime() - new Date().getTime());
             ageyrs = (int) (difference / (1000 * 60 * 60 * 24 * 365.25));
-            System.out.println("dobParse: " + dobdif);
-            System.out.println("agediff: " + difference);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        System.out.println("dob: " + individual.dob);
-        System.out.println("age: " + individual.age);
-        System.out.println("ageyrs: " + ageyrs);
+//        System.out.println("dob: " + individual.dob);
+//        System.out.println("age: " + individual.age);
+//        System.out.println("ageyrs: " + ageyrs);
 
 
         final int yrs = individual.age + (int) ageyrs;

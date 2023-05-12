@@ -9,6 +9,7 @@ import org.openhds.hdsscapture.Dao.IndividualDao;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -145,6 +146,13 @@ public class IndividualRepository {
 
         return future.get();
     }
+
+    public long countIndividuals(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.countIndividuals(startDate, endDate);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
 
 
 }

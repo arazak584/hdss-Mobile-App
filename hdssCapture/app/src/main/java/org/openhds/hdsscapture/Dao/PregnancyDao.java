@@ -9,6 +9,7 @@ import androidx.room.Update;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.subentity.PregnancyobsAmendment;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -45,4 +46,7 @@ public interface PregnancyDao {
             " INNER JOIN Locations as c on b.location_uuid=c.location_uuid " +
             " WHERE b.endType=1 and outcome=2 and c.compextId=:id ")
     List<Pregnancy> retrievePregnancy(String id);
+
+    @Query("SELECT COUNT(*) FROM pregnancy WHERE insertDate BETWEEN :startDate AND :endDate")
+    long count(Date startDate, Date endDate);
 }

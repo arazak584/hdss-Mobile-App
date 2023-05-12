@@ -9,6 +9,7 @@ import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -40,4 +41,7 @@ public interface HdssSociodemoDao {
 
     @Query("SELECT * FROM sociodemo")
     List<HdssSociodemo> retrieveAll();
+
+    @Query("SELECT COUNT(*) FROM sociodemo WHERE insertDate BETWEEN :startDate AND :endDate")
+    long count(Date startDate, Date endDate);
 }

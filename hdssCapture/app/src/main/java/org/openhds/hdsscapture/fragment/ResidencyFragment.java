@@ -2,7 +2,6 @@ package org.openhds.hdsscapture.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +74,7 @@ public class ResidencyFragment extends Fragment {
     private CaseItem caseItem;
     private EventForm eventForm;
     private Visit visit;
+
 
     public ResidencyFragment() {
         // Required empty public constructor
@@ -238,47 +238,15 @@ public class ResidencyFragment extends Fragment {
                 data.loc = locations.getLocation_uuid();
                 data.complete = 1;
                 data.dobs = individual.dob;
-                if (data != null && data.endDate != null) {
-                    data.startDate =binding.getRes().endDate;
-                }
-
-//                if (res != null) {
-//                    data.startDate = binding.getRes().endDate;
+//                if (data != null && data.endDate!=null && data.startDate==null) {
+//                    binding.getResidency().startDate =binding.getRes().endDate;
 //                }
                 if (data != null){
                     data.startType=1;
                 }
                 if (data!=null){
                     data.img=1;
-                }
-                if (data != null && data.endDate != null) {
-                    try {
-                        // Parse the endDate into a Date object
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                        Date endDate = sdf.parse(String.valueOf(data.endDate));
-
-                        // Add one day to the endDate
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(endDate);
-                        cal.add(Calendar.DAY_OF_MONTH, 1);
-                        Log.d("TAG", "Formatted End Date: " + endDate);
-
-                        // Format the startDate as a string
-                        Date startDate = cal.getTime();
-                        String startDateString = sdf.format(startDate);
-                        Log.d("TAG", "Formatted Start Date: " + startDateString);
-                        // Set the startDate of the data object
-                        data.startDate = startDate;
-
-                        // Set the text of the TextView to the formatted startDate
-                        binding.editTextStartDate.setText(startDateString);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-
-
+                }else{data.img=2;}
 
                 binding.setResidency(data);
             }
@@ -444,7 +412,6 @@ public class ResidencyFragment extends Fragment {
             }
 
 
-
             //Date Validations
 
             try {
@@ -472,15 +439,16 @@ public class ResidencyFragment extends Fragment {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
                     Date edate = f.parse(binding.res.resEndDate.getText().toString().trim());
+                    String formattedDate = f.format(edate);
                     if (edate.after(stdate)) {
-                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Previous End Date" + edate);
-                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Previous End Date" + edate, Toast.LENGTH_SHORT).show();
+                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Or Equal to " + formattedDate);
+                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Or Equal to " + formattedDate, Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     if (edate.equals(stdate)) {
-                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Previous End Date" + edate);
-                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Previous End Date" + edate, Toast.LENGTH_SHORT).show();
+                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Or Equal to " + formattedDate);
+                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Or Equal to " + formattedDate, Toast.LENGTH_SHORT).show();
                         return;
                     }
                     // clear error if validation passes

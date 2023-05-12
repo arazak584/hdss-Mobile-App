@@ -9,6 +9,7 @@ import androidx.room.Update;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -51,4 +52,7 @@ public interface SocialgroupDao {
             " INNER JOIN Locations as c on b.location_uuid=c.location_uuid " +
             " WHERE b.endType=1 and c.compextId=:id GROUP BY a.houseExtId ")
     List<Socialgroup> retrieveBySocialgroup(String id);
+
+    @Query("SELECT COUNT(*) FROM socialgroup WHERE insertDate BETWEEN :startDate AND :endDate")
+    long count(Date startDate, Date endDate);
 }

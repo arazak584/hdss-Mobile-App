@@ -19,28 +19,20 @@
         android:padding="10dp">
 
 
-        <com.google.android.material.textfield.TextInputLayout
+        <TextView
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:padding="5dp"
-            android:hint="@string/enddate"
-            android:text="@string/enddate">
+            android:text="@string/enddate" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:id="@+id/res_endDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@={res.endDate}"
-                android:inputType="textPersonName"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-
+        <EditText
+            android:visibility="gone"
+            android:id="@+id/res_endDate"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@={res.endDate}" />
 
 
 

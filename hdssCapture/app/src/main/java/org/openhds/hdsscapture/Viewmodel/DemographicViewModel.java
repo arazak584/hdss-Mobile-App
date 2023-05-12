@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import org.openhds.hdsscapture.Repositories.DemographicRepository;
 import org.openhds.hdsscapture.entity.Demographic;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -32,6 +33,10 @@ public class DemographicViewModel extends AndroidViewModel {
 
     public Demographic find(String id) throws ExecutionException, InterruptedException {
         return demographicRepository.find(id);
+    }
+
+    public long count(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
+        return demographicRepository.count(startDate, endDate);
     }
 
     public void add(Demographic data){ demographicRepository.create(data);}

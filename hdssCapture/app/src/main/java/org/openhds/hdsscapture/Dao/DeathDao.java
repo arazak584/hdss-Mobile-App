@@ -7,6 +7,7 @@ import androidx.room.Query;
 
 import org.openhds.hdsscapture.entity.Death;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -32,4 +33,7 @@ public interface DeathDao {
 
     @Query("SELECT * FROM death WHERE vpmcomplete=1")
     List<Death> retrieveVpmSync();
+
+    @Query("SELECT COUNT(*) FROM death WHERE insertDate BETWEEN :startDate AND :endDate")
+    long count(Date startDate, Date endDate);
 }

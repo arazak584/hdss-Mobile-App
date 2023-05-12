@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import org.openhds.hdsscapture.Repositories.DeathRepository;
 import org.openhds.hdsscapture.entity.Death;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -36,6 +37,10 @@ public class DeathViewModel extends AndroidViewModel {
 
     public List<Death> retrieveVpmSync() throws ExecutionException, InterruptedException {
         return deathRepository.retrieveVpmSync();
+    }
+
+    public long count(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
+        return deathRepository.count(startDate, endDate);
     }
 
     public void add(Death data){ deathRepository.create(data);}

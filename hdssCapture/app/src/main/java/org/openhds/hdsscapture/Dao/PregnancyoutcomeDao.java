@@ -7,6 +7,7 @@ import androidx.room.Query;
 
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -35,4 +36,7 @@ PregnancyoutcomeDao {
 
     @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id")
     List<Pregnancyoutcome> findpreg(String id);
+
+    @Query("SELECT COUNT(*) FROM pregnancyoutcome WHERE insertDate BETWEEN :startDate AND :endDate")
+    long count(Date startDate, Date endDate);
 }

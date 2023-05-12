@@ -10,6 +10,7 @@ import androidx.room.Update;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.subentity.RelationshipAmendment;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -40,5 +41,7 @@ public interface RelationshipDao {
     @Query("SELECT * FROM relationship where individual_uuid=:id")
     Relationship find(String id);
 
+    @Query("SELECT COUNT(*) FROM relationship WHERE insertDate BETWEEN :startDate AND :endDate")
+    long count(Date startDate, Date endDate);
 
 }
