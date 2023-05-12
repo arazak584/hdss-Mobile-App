@@ -25,6 +25,7 @@ import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -241,8 +242,12 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     public void setRecordedDate(String recordedDate) {
         try {
             this.recordedDate = f.parse(recordedDate);
+            Calendar calendar = Calendar.getInstance(Locale.US);
+            calendar.setTime(this.recordedDate);
+            calendar.add(Calendar.MONTH,9);
+            this.expectedDeliveryDate =calendar.getTime();
         } catch (ParseException e) {
-            System.out.println("Recorded Date Error " + e.getMessage());
+
         }
     }
 
@@ -763,6 +768,9 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);
+        }
+        if(first_preg != null && first_preg==1){
+            this.pregnancyNumber=1;
         }
 
     }

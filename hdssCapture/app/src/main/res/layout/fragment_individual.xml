@@ -312,7 +312,26 @@
                     android:required="true"
                     android:padding="10dp"/>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/mother"/>
+
+                <Spinner
+                    android:id="@+id/mother"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{individual.mother}"
+                    android:onItemSelected="@{individual::setMother}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="15dp"/>
+
                 <Button
+                    goneUnless="@{individual.mother==1}"
                     android:id="@+id/button_individual_mother"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -323,6 +342,7 @@
                     app:icon="@drawable/ic_baseline_pregnant_woman_24" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{individual.mother==1}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -341,7 +361,26 @@
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/father"/>
+
+                <Spinner
+                    android:id="@+id/father"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{individual.father}"
+                    android:onItemSelected="@{individual::setFather}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="15dp"/>
+
                 <Button
+                    goneUnless="@{individual.father==1}"
                     android:id="@+id/button_individual_father"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -352,6 +391,7 @@
                     app:icon="@drawable/ic_baseline_person_24" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{individual.father==1}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

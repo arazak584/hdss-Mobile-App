@@ -90,12 +90,12 @@ public class Individual extends BaseObservable implements Parcelable {
     @SerializedName("mother_uuid")
     @Expose
     @ColumnInfo(name = "mother_uuid")
-    public String mother_uuid = AppConstants.Mother;
+    public String mother_uuid;
 
     @SerializedName("father_uuid")
     @Expose
     @ColumnInfo(name = "father_uuid")
-    public String father_uuid = AppConstants.Father;
+    public String father_uuid;
 
     @SerializedName("fw_uuid")
     @Expose
@@ -120,6 +120,10 @@ public class Individual extends BaseObservable implements Parcelable {
     @Expose
     @ColumnInfo(name = "gh")
     public Integer gh;
+    @Expose
+    public Integer mother;
+    @Expose
+    public Integer father;
 
     public Individual(){}
 
@@ -317,6 +321,7 @@ public class Individual extends BaseObservable implements Parcelable {
         this.gh = gh;
     }
 
+
     protected Individual(Parcel in) {
         this.extId = in.readString();
         this.dob = (java.util.Date) in.readSerializable();
@@ -333,6 +338,8 @@ public class Individual extends BaseObservable implements Parcelable {
         this.ghanacard = in.readString();
         this.gh = in.readInt();
         this.other = in.readInt();
+        this.mother = in.readInt();
+        this.father = in.readInt();
     }
 
     public static final Creator<Individual> CREATOR = new Creator<Individual>() {
@@ -369,6 +376,8 @@ public class Individual extends BaseObservable implements Parcelable {
         dest.writeString(this.ghanacard);
         dest.writeInt(this.gh);
         dest.writeInt(this.other);
+        dest.writeInt(this.mother);
+        dest.writeInt(this.father);
     }
 
     //SPINNERS ENTITY DOB ASPECT
@@ -457,5 +466,48 @@ public class Individual extends BaseObservable implements Parcelable {
         }
 
     }
+
+    //SPINNERS ENTITY
+    public void setMother(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            mother = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            mother = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
+        }
+        if(mother != null && mother==2){
+            this.mother_uuid=AppConstants.Mother;
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setFather(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            father = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            father = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
+        }
+        if(father != null && father==2){
+            this.father_uuid=AppConstants.Father;
+        }
+
+    }
+
 
 }

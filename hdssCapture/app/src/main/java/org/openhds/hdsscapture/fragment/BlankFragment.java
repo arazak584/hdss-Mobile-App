@@ -61,6 +61,7 @@ public class BlankFragment extends Fragment {
     private FragmentBlankBinding binding;
     private ProgressDialog progress;
     private Button buttonHousehold;
+    private ProgressDialog progressDialog;
 
     public BlankFragment() {
         // Required empty public constructor
@@ -125,6 +126,20 @@ public class BlankFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                progressDialog = new ProgressDialog(requireContext());
+                progressDialog.setMessage("Generating Pregnancies Without Outcome...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+
+                progressDialog.show();
+
+                // Simulate long operation
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 500);
 
                 // Show the dialog fragment
                 PregnancyDialogFragment.newInstance(individual, residency, locations,socialgroup)
@@ -168,7 +183,7 @@ public class BlankFragment extends Fragment {
                     progress = new ProgressDialog(requireContext());
                     //progress.setTitle(getString(R.string.loading_lbl));
                     //progress.setProgressStyle();
-                    progress.setMessage("Loading...");
+                    progress.setMessage("Loading Households...");
                     //progress.setMessage("Loading...");
                     progress.setCancelable(false);
                 }

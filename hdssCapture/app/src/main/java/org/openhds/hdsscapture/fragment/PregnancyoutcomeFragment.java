@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -73,6 +74,7 @@ public class PregnancyoutcomeFragment extends Fragment {
     private FragmentOutcomeBinding binding;
     private EventForm eventForm;
     private CaseItem caseItem;
+    private ProgressDialog progressDialog;
 
     public PregnancyoutcomeFragment() {
         // Required empty public constructor
@@ -133,6 +135,21 @@ public class PregnancyoutcomeFragment extends Fragment {
         showDialogButtons.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog = new ProgressDialog(requireContext());
+                progressDialog.setMessage("Loading Fathers...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+
+                progressDialog.show();
+
+                // Simulate long operation
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 500);
+
                 // Show the dialog fragment
                 FatherOutcomeDialogFragment.newInstance(individual, residency, locations,socialgroup)
                         .show(getChildFragmentManager(), "FatherOutcomeDialogFragment");
@@ -245,7 +262,7 @@ public class PregnancyoutcomeFragment extends Fragment {
         DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         try {
             Pregnancyoutcome data = viewModel.find(individual.individual_uuid);
-            if (data != null && data.extra==null) {
+            if (data != null && data.extra==null ) {
                 binding.setPregoutcome(data);
             } else {
                 data = new Pregnancyoutcome();
@@ -421,6 +438,7 @@ public class PregnancyoutcomeFragment extends Fragment {
         loadCodeData(binding.individualComplete, codeBookViewModel, "submit");
         loadCodeData(binding.vpm.dthDeathPlace, codeBookViewModel, "deathPlace");
         loadCodeData(binding.vpm.dthDeathCause, codeBookViewModel, "deathCause");
+        loadCodeData(binding.father, codeBookViewModel, "complete");
 
 
         binding.buttonSaveClose.setOnClickListener(v -> {

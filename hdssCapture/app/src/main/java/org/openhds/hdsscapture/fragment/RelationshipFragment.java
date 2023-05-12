@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -66,6 +67,7 @@ public class RelationshipFragment extends Fragment {
     private CaseItem caseItem;
     private EventForm eventForm;
     private Relationship relationship;
+    private ProgressDialog progressDialog;
 
     public RelationshipFragment() {
         // Required empty public constructor
@@ -123,6 +125,22 @@ public class RelationshipFragment extends Fragment {
         showDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog = new ProgressDialog(requireContext());
+                progressDialog.setMessage("Loading Adult Males...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+
+                progressDialog.show();
+
+                // Simulate long operation
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 500);
+
+
                 // Show the dialog fragment
                 RelationshipDialogFragment.newInstance(individual, residency, locations,socialgroup)
                         .show(getChildFragmentManager(), "RelationshipDialogFragment");

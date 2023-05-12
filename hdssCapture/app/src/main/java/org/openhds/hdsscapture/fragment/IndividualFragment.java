@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -68,6 +69,7 @@ public class IndividualFragment extends Fragment {
     private FragmentIndividualBinding binding;;
     private CaseItem caseItem;
     private EventForm eventForm;
+    private ProgressDialog progressDialog;
 
 
     public IndividualFragment() {
@@ -139,6 +141,26 @@ public class IndividualFragment extends Fragment {
             binding.getIndividual().insertDate = new Date();
         }
 
+        if (individual.mother_uuid != null) {
+            binding.getIndividual().mother=1;
+        }
+
+        if (individual.father_uuid != null) {
+            binding.getIndividual().father=1;
+        }
+
+        if (individual.complete == null) {
+            binding.getIndividual().complete = 1;
+        }
+
+        if (individual.ghanacard != null && individual.gh ==null) {
+            binding.getIndividual().gh=1;
+        }
+
+        if (individual.otherName != null && individual.other==null) {
+            binding.getIndividual().other=1;
+        }
+
         // Generate ID if extId is null
         if (binding.getIndividual().extId == null) {
             final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
@@ -167,6 +189,22 @@ public class IndividualFragment extends Fragment {
         showDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                progressDialog = new ProgressDialog(requireContext());
+                progressDialog.setMessage("Loading Fathers...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+
+                progressDialog.show();
+
+                // Simulate long operation
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 500);
+
                 // Show the dialog fragment
                 MotherDialogFragment.newInstance(individual, residency, locations,socialgroup)
                         .show(getChildFragmentManager(), "MotherDialogFragment");
@@ -178,6 +216,21 @@ public class IndividualFragment extends Fragment {
         showDialogButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog = new ProgressDialog(requireContext());
+                progressDialog.setMessage("Loading Mothers...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+
+                progressDialog.show();
+
+                // Simulate long operation
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 500);
+
                 // Show the dialog fragment
                 FatherDialogFragment.newInstance(individual, residency, locations,socialgroup)
                         .show(getChildFragmentManager(), "FatherDialogFragment");
@@ -188,18 +241,6 @@ public class IndividualFragment extends Fragment {
             final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
             binding.individualAge.setText("" + estimatedAge + " years old");
             binding.dob.setError(null);
-        }
-
-        if (binding.getIndividual().complete == null) {
-            binding.getIndividual().complete = 1;
-        }
-
-        if (binding.getIndividual().gh == null) {
-            binding.getIndividual().gh=1;
-        }
-
-        if (binding.getIndividual().other == null) {
-            binding.getIndividual().other=1;
         }
 
 
@@ -297,6 +338,8 @@ public class IndividualFragment extends Fragment {
         loadCodeData(binding.gender, "gender");
         loadCodeData(binding.other,  "complete");
         loadCodeData(binding.gh,  "complete");
+        loadCodeData(binding.mother,  "complete");
+        loadCodeData(binding.father,  "complete");
 
 
 

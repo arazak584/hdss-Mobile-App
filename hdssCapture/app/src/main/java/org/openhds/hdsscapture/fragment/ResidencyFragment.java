@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -74,6 +75,7 @@ public class ResidencyFragment extends Fragment {
     private CaseItem caseItem;
     private EventForm eventForm;
     private Visit visit;
+    private ProgressDialog progressDialog;
 
 
     public ResidencyFragment() {
@@ -139,6 +141,21 @@ public class ResidencyFragment extends Fragment {
         showDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressDialog = new ProgressDialog(requireContext());
+                progressDialog.setMessage("Loading Households...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+
+                progressDialog.show();
+
+                // Simulate long operation
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 500);
+
                 // Show the dialog fragment
                 HouseholdDialogFragment.newInstance(individual, residency, locations,socialgroup)
                         .show(getChildFragmentManager(), "HouseholdDialogFragment");
@@ -214,17 +231,10 @@ public class ResidencyFragment extends Fragment {
         try {
             Residency data = viewModel.findRes(individual.individual_uuid);
 
-            String img = UUID.randomUUID().toString();
-            String img_uuid = img.toString().replaceAll("-", "");
-
-            String omg = UUID.randomUUID().toString();
-            String omg_uuid = omg.toString().replaceAll("-", "");
-
             if (data != null) {
                 binding.setResidency(data);
                 data.loc = locations.getLocation_uuid();
                 data.dobs = individual.dob;
-                //data.img = 2;
             } else {
                 data = new Residency();
                 String uuid = UUID.randomUUID().toString();
@@ -238,9 +248,6 @@ public class ResidencyFragment extends Fragment {
                 data.loc = locations.getLocation_uuid();
                 data.complete = 1;
                 data.dobs = individual.dob;
-//                if (data != null && data.endDate!=null && data.startDate==null) {
-//                    binding.getResidency().startDate =binding.getRes().endDate;
-//                }
                 if (data != null){
                     data.startType=1;
                 }

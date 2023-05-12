@@ -17,7 +17,7 @@ public class AppConstants {
     public static final String SPINNER_NOSELECT = "--Select an option--";
 
 
-    public static final String Mother = "Unk", Father = "Unk", Location ="0000";
+    public static final String Mother = "UNK", Father = "UNK", Location ="0000";
 
     public static final int IND1 = 1, IND2 = 2, IND3 = 3;
 

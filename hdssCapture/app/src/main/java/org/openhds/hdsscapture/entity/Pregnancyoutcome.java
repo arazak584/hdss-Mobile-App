@@ -48,7 +48,7 @@ public class Pregnancyoutcome extends BaseObservable {
     public String mother_uuid;
 
     @Expose
-    public String father_uuid=AppConstants.Father;
+    public String father_uuid;
 
     @Expose
     public String visit_uuid;
@@ -108,6 +108,8 @@ public class Pregnancyoutcome extends BaseObservable {
     public Integer weig_hcard;//Record weight in kilograms from Health Card
     @Expose
     public Integer stillbirth;
+    @Expose
+    public Integer father;
 
     @Expose
     public Integer extra;
@@ -323,15 +325,6 @@ public class Pregnancyoutcome extends BaseObservable {
     public void setWhere_anc_Other(String where_anc_Other) {
         this.where_anc_Other = where_anc_Other;
     }
-
-    public String getWhlth_fac() {
-        return whlth_fac;
-    }
-
-    public void setWhlth_fac(String whlth_fac) {
-        this.whlth_fac = whlth_fac;
-    }
-
 
     public Integer getWho_anc() {
         return who_anc;
@@ -673,6 +666,27 @@ public class Pregnancyoutcome extends BaseObservable {
             chd_size = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setFather(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            father = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            father = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
+        }
+        if(father != null && father==2){
+            this.father_uuid=AppConstants.Father;
         }
 
     }

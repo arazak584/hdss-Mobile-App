@@ -75,8 +75,8 @@ public class LoginActivity extends AppCompatActivity  {
                     Fieldworker[] d = response.body().getData().toArray(new Fieldworker[0]);
                     viewModel.add(d);
                     progress.dismiss();
-                    textView_SyncFw.setText("USER ACCESS Updated!");
-                    textView_SyncFw.setTextColor(Color.GREEN);
+                    textView_SyncFw.setText("USER ACCESS UPDATED!");
+                    textView_SyncFw.setTextColor(Color.BLACK);
                 }
 
                 @Override

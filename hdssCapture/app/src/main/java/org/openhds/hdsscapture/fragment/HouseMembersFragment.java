@@ -143,7 +143,7 @@ public class HouseMembersFragment extends Fragment {
             public void showLoadingDialogs() {
                 if (progress == null) {
                     progress = new ProgressDialog(requireContext());
-                    progress.setTitle(getString(R.string.loading_lbl));
+                    progress.setTitle("Searching...");
                     progress.setMessage(getString(R.string.please_wait_lbl));
                 }
                 progress.show();
@@ -166,8 +166,9 @@ public class HouseMembersFragment extends Fragment {
             public void showLoadingDialog() {
                 if (progress == null) {
                     progress = new ProgressDialog(requireContext());
-                    progress.setTitle(getString(R.string.loading_lbl));
+                    progress.setTitle("Loading Individuals...");
                     progress.setMessage(getString(R.string.please_wait_lbl));
+                    progress.setCancelable(false);
                 }
                 progress.show();
             }
@@ -182,13 +183,6 @@ public class HouseMembersFragment extends Fragment {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     BlankFragment.newInstance(individual,residency,locations, socialgroup)).commit();
         });
-
-//        final ExtendedFloatingActionButton addvisit = binding.getRoot().findViewById(R.id.add_visit);
-//        addvisit.setOnClickListener(v -> {
-//
-//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-//                    VisitFragment.newInstance(individual,residency,locations, socialgroup)).commit();
-//        });
 
 
         final FloatingActionButton add_individual = binding.getRoot().findViewById(R.id.button_newindividual);

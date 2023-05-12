@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -58,6 +59,7 @@ public class SocialgroupFragment extends Fragment {
     private FragmentSocialgroupBinding binding;
     private CaseItem caseItem;
     private EventForm eventForm;
+    private ProgressDialog progressDialog;
 
     public SocialgroupFragment() {
         // Required empty public constructor
@@ -123,6 +125,22 @@ public class SocialgroupFragment extends Fragment {
         showDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                progressDialog = new ProgressDialog(requireContext());
+                progressDialog.setMessage("Loading Household Members...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+
+                progressDialog.show();
+
+                // Simulate long operation
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 500);
+
                 // Show the dialog fragment
                 ChangeHohFragment.newInstance(individual, residency, locations,socialgroup)
                         .show(getChildFragmentManager(), "ChangeHohFragment");
