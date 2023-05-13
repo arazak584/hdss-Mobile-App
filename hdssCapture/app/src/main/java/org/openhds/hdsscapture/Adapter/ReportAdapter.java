@@ -1,6 +1,5 @@
 package org.openhds.hdsscapture.Adapter;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +21,7 @@ import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
+import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.entity.Death;
@@ -33,6 +33,7 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
+import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
 
@@ -58,7 +59,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
     private List<Death> deathList;
     private List<Demographic> demographicList;
     private List<HdssSociodemo> hdssSociodemoList;
-    private ProgressDialog progress;
+    private List<Relationship> relationshipList;
     private Context context;
 
     public ReportAdapter(ReportActivity activity) {
@@ -75,6 +76,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
         deathList = new ArrayList<>();
         demographicList = new ArrayList<>();
         hdssSociodemoList = new ArrayList<>();
+        relationshipList = new ArrayList<>();
         inflater = LayoutInflater.from(activity);
         context = activity;
     }
@@ -152,8 +154,11 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             final HdssSociodemo hdssSociodemo = hdssSociodemoList.get(0);
             holder.indcnt.setText(hdssSociodemo.getSocialgroup_uuid());
             holder.title.setText("Household Socio-Demographics");
+        }else if (position == 12 && relationshipList.size() >= 0) {
+            final Relationship relationship = relationshipList.get(0);
+            holder.indcnt.setText(relationship.getIndividual_uuid());
+            holder.title.setText("Relationships");
         }
-
 
     }
 
@@ -162,13 +167,13 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
     public int getItemCount() {
         return individualList.size()+ visitList.size()+ visitLists.size()+ locationsLists.size()+ socialgroupList.size()
                 + inmigrationList.size() + outmigrationList.size() + pregnancyList.size()+ pregnancyoutcomeList.size()
-                + deathList.size()+ demographicList.size()+ hdssSociodemoList.size()   ;
+                + deathList.size()+ demographicList.size()+ hdssSociodemoList.size()+ relationshipList.size();
     }
 
-    public void report(Date startDate, Date endDate, IndividualViewModel individualViewModel, VisitViewModel visitViewModel, LocationViewModel locationViewModel,
+    public void report(Date startDate, Date endDate, String username, IndividualViewModel individualViewModel, VisitViewModel visitViewModel, LocationViewModel locationViewModel,
                        SocialgroupViewModel socialgroupViewModel, InmigrationViewModel inmigrationViewModel, OutmigrationViewModel outmigrationViewModel,
                        PregnancyViewModel pregnancyViewModel, PregnancyoutcomeViewModel pregnancyoutcomeViewModel, DeathViewModel deathViewModel,
-                       DemographicViewModel demographicViewModel, HdssSociodemoViewModel hdssSociodemoViewModel) {
+                       DemographicViewModel demographicViewModel, HdssSociodemoViewModel hdssSociodemoViewModel, RelationshipViewModel relationshipViewModel) {
         individualList.clear();
         visitList.clear();
         visitLists.clear();
@@ -181,78 +186,85 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
         deathList.clear();
         demographicList.clear();
         hdssSociodemoList.clear();
-        if (startDate != null && endDate !=null) {
+        relationshipList.clear();
+        if (startDate != null && endDate !=null && username!=null) {
             try {
-                long count = individualViewModel.countIndividuals(startDate, endDate);
+                long count = individualViewModel.countIndividuals(startDate, endDate,username);
                 Individual countIndividual = new Individual();
                 countIndividual.setIndividual_uuid(String.format(Locale.getDefault(), "%d", count));
                 individualList.add(countIndividual);
 
                 // Get Household visit count
-                long visitCount = visitViewModel.countVisits(startDate, endDate);
+                long visitCount = visitViewModel.countVisits(startDate, endDate,username);
                 Visit countVisit = new Visit();
                 countVisit.setVisitExtId(String.format(Locale.getDefault(), "%d", visitCount));
                 visitList.add(countVisit);
 
                 // Get Location visit count
-                long locCount = visitViewModel.countLocs(startDate, endDate);
+                long locCount = visitViewModel.countLocs(startDate, endDate, username);
                 Visit countLoc = new Visit();
                 countLoc.setLocation_uuid(String.format(Locale.getDefault(), "%d", locCount));
                 visitLists.add(countLoc);
 
                 // Get New Location count
-                long locationsCount = locationViewModel.count(startDate, endDate);
+                long locationsCount = locationViewModel.count(startDate, endDate,username);
                 Locations countLocations = new Locations();
                 countLocations.setLocation_uuid(String.format(Locale.getDefault(), "%d", locationsCount));
                 locationsLists.add(countLocations);
 
                 // Get New Household count
-                long householdCount = socialgroupViewModel.count(startDate, endDate);
+                long householdCount = socialgroupViewModel.count(startDate, endDate,username);
                 Socialgroup counthse = new Socialgroup();
                 counthse.setSocialgroup_uuid(String.format(Locale.getDefault(), "%d", householdCount));
                 socialgroupList.add(counthse);
 
                 // Get Inmigration count
-                long imgCount = inmigrationViewModel.count(startDate, endDate);
+                long imgCount = inmigrationViewModel.count(startDate, endDate,username);
                 Inmigration countimg = new Inmigration();
                 countimg.setIndividual_uuid(String.format(Locale.getDefault(), "%d", imgCount));
                 inmigrationList.add(countimg);
 
                 // Get Outmigration count
-                long omgCount = outmigrationViewModel.count(startDate, endDate);
+                long omgCount = outmigrationViewModel.count(startDate, endDate,username);
                 Outmigration countomg = new Outmigration();
                 countomg.setIndividual_uuid(String.format(Locale.getDefault(), "%d", omgCount));
                 outmigrationList.add(countomg);
 
                 // Get Pregnancy count
-                long pregCount = pregnancyViewModel.count(startDate, endDate);
+                long pregCount = pregnancyViewModel.count(startDate, endDate,username);
                 Pregnancy countpreg = new Pregnancy();
                 countpreg.setObs_uuid(String.format(Locale.getDefault(), "%d", pregCount));
                 pregnancyList.add(countpreg);
 
                 // Get Pregnancy Outcome count
-                long birthCount = pregnancyoutcomeViewModel.count(startDate, endDate);
+                long birthCount = pregnancyoutcomeViewModel.count(startDate, endDate,username);
                 Pregnancyoutcome countbirth = new Pregnancyoutcome();
                 countbirth.setPreg_uuid(String.format(Locale.getDefault(), "%d", birthCount));
                 pregnancyoutcomeList.add(countbirth);
 
                 // Get Death count
-                long deathCount = deathViewModel.count(startDate, endDate);
+                long deathCount = deathViewModel.count(startDate, endDate,username);
                 Death countdeath = new Death();
                 countdeath.setIndividual_uuid(String.format(Locale.getDefault(), "%d", deathCount));
                 deathList.add(countdeath);
 
                 // Get Demographics count
-                long demoCount = demographicViewModel.count(startDate, endDate);
+                long demoCount = demographicViewModel.count(startDate, endDate,username);
                 Demographic countdemo = new Demographic();
                 countdemo.setIndividual_uuid(String.format(Locale.getDefault(), "%d", demoCount));
                 demographicList.add(countdemo);
 
                 // Get SES count
-                long sesCount = hdssSociodemoViewModel.count(startDate, endDate);
+                long sesCount = hdssSociodemoViewModel.count(startDate, endDate,username);
                 HdssSociodemo countses = new HdssSociodemo();
                 countses.setSocialgroup_uuid(String.format(Locale.getDefault(), "%d", sesCount));
                 hdssSociodemoList.add(countses);
+
+                // Get Relationship count
+                long relCount = relationshipViewModel.count(startDate, endDate, username);
+                Relationship countrel = new Relationship();
+                countrel.setIndividual_uuid(String.format(Locale.getDefault(), "%d", relCount));
+                relationshipList.add(countrel);
 
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();

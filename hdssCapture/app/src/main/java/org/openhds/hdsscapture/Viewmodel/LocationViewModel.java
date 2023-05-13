@@ -45,8 +45,8 @@ public class LocationViewModel extends AndroidViewModel {
         return locationRepository.findBySearch("%" + id + "%");
     }
 
-    public long count(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
-        return locationRepository.count(startDate, endDate);
+    public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
+        return locationRepository.count(startDate, endDate, username);
     }
 
     public void add(Locations data){

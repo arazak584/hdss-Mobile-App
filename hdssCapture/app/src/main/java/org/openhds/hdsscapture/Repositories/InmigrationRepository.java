@@ -64,8 +64,8 @@ public class InmigrationRepository {
         return future.get();
     }
 
-    public long count(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
-        Callable<Long> callable = () -> dao.count(startDate, endDate);
+    public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.count(startDate, endDate, username);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }

@@ -45,7 +45,7 @@ public interface DemographicDao {
     @Query("SELECT * FROM demographic where individual_uuid=:id")
     Demographic find(String id);
 
-    @Query("SELECT COUNT(*) FROM demographic WHERE insertDate BETWEEN :startDate AND :endDate")
-    long count(Date startDate, Date endDate);
-
+    @Query("SELECT COUNT(*) FROM demographic a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
+            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
+    long count(Date startDate, Date endDate, String username);
 }

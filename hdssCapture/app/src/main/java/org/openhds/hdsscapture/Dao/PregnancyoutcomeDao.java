@@ -37,6 +37,7 @@ PregnancyoutcomeDao {
     @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id")
     List<Pregnancyoutcome> findpreg(String id);
 
-    @Query("SELECT COUNT(*) FROM pregnancyoutcome WHERE insertDate BETWEEN :startDate AND :endDate")
-    long count(Date startDate, Date endDate);
+    @Query("SELECT COUNT(*) FROM pregnancyoutcome a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
+            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
+    long count(Date startDate, Date endDate, String username);
 }

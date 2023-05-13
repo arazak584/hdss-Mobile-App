@@ -36,9 +36,13 @@ public interface VisitDao {
     @Query("SELECT * FROM visit WHERE complete=1")
     List<Visit> retrieveToSync();
 
-    @Query("SELECT COUNT(*) FROM visit WHERE insertDate BETWEEN :startDate AND :endDate")
-    long countVisits(Date startDate, Date endDate);
+    @Query("SELECT COUNT(*) FROM visit a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
+            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
+    long countVisits(Date startDate, Date endDate, String username);
 
-    @Query("SELECT COUNT(*) FROM visit WHERE insertDate BETWEEN :startDate AND :endDate group by location_uuid ")
-    long countLocs(Date startDate, Date endDate);
+
+    @Query("SELECT COUNT(*) FROM visit a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
+            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username GROUP BY a.location_uuid")
+    long countLocs(Date startDate, Date endDate, String username);
+
 }

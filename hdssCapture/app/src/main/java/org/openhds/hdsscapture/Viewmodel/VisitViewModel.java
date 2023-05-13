@@ -34,12 +34,12 @@ public class VisitViewModel extends AndroidViewModel {
         return visitRepository.findToSync();
     }
 
-    public long countVisits(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
-        return visitRepository.countVisits(startDate, endDate);
+    public long countVisits(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
+        return visitRepository.countVisits(startDate, endDate, username);
     }
 
-    public long countLocs(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
-        return visitRepository.countLocs(startDate, endDate);
+    public long countLocs(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
+        return visitRepository.countLocs(startDate, endDate, username);
     }
 
     public void add(Visit data){ visitRepository.create(data);}

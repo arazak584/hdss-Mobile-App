@@ -173,7 +173,7 @@ public class PregnancyFragment extends Fragment {
         PregnancyViewModel viewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         try {
             Pregnancy data = viewModel.find(individual.individual_uuid);
-            if (data != null && data.extra==1 ) {
+            if (data != null) {
                 binding.setPregnancy(data);
             } else {
                 data = new Pregnancy();
@@ -189,7 +189,6 @@ public class PregnancyFragment extends Fragment {
                 data.individual_uuid = individual.getIndividual_uuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
-                //data.expectedDeliveryDate = data.recordedDate(9);
 
                 binding.setPregnancy(data);
             }

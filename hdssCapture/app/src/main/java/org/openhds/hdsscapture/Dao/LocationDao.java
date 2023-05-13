@@ -55,7 +55,8 @@ public interface LocationDao {
             " LEFT JOIN visit as d on a.location_uuid=d.location_uuid where c.name=:id and d.location_uuid is null order by a.compno")
     List<Locations> retrieveByVillage(String id);
 
-    @Query("SELECT COUNT(*) FROM locations WHERE insertDate BETWEEN :startDate AND :endDate")
-    long count(Date startDate, Date endDate);
+    @Query("SELECT COUNT(*) FROM locations a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
+            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
+    long count(Date startDate, Date endDate, String username);
 
 }

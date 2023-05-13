@@ -41,7 +41,8 @@ public interface RelationshipDao {
     @Query("SELECT * FROM relationship where individual_uuid=:id")
     Relationship find(String id);
 
-    @Query("SELECT COUNT(*) FROM relationship WHERE insertDate BETWEEN :startDate AND :endDate")
-    long count(Date startDate, Date endDate);
+    @Query("SELECT COUNT(*) FROM relationship a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid " +
+            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
+    long count(Date startDate, Date endDate, String username);
 
 }

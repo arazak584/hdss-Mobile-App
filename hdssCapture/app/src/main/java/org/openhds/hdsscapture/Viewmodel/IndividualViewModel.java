@@ -75,8 +75,8 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.find(id);
     }
 
-    public long countIndividuals(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
-        return individualRepository.countIndividuals(startDate, endDate);
+    public long countIndividuals(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
+        return individualRepository.countIndividuals(startDate, endDate, username);
     }
 
 

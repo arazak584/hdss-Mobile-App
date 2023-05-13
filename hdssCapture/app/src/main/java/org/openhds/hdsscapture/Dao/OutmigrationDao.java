@@ -32,6 +32,7 @@ public interface OutmigrationDao {
     @Query("SELECT * FROM outmigration where individual_uuid=:id")
     Outmigration find(String id);
 
-    @Query("SELECT COUNT(*) FROM outmigration WHERE insertDate BETWEEN :startDate AND :endDate")
-    long count(Date startDate, Date endDate);
+    @Query("SELECT COUNT(*) FROM outmigration a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
+            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
+    long count(Date startDate, Date endDate, String username);
 }

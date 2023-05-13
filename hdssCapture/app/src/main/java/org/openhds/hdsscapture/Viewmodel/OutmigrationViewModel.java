@@ -40,8 +40,8 @@ public class OutmigrationViewModel extends AndroidViewModel {
         return outmigrationRepository.findToSync();
     }
 
-    public long count(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
-        return outmigrationRepository.count(startDate, endDate);
+    public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
+        return outmigrationRepository.count(startDate, endDate, username);
     }
 
     //public void add(Death... data){     deathRepository.create(data);  }

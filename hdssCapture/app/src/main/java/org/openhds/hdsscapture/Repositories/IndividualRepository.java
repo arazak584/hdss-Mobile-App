@@ -147,8 +147,8 @@ public class IndividualRepository {
         return future.get();
     }
 
-    public long countIndividuals(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
-        Callable<Long> callable = () -> dao.countIndividuals(startDate, endDate);
+    public long countIndividuals(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.countIndividuals(startDate, endDate, username);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }

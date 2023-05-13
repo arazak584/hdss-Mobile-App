@@ -102,6 +102,27 @@
                     android:inputType="date"/>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/Fusername"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Enter Username of Data Collector"
+                    android:clickable="false"
+                    android:inputType="textCapCharacters"/>
+
+            </LinearLayout>
+
+
+
             <LinearLayout
                 android:id="@+id/report_select"
                 android:layout_width="match_parent"

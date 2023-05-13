@@ -42,8 +42,8 @@ public class SocialgroupViewModel extends AndroidViewModel {
         return socialgroupRepository.findToSync();
     }
 
-    public long count(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
-        return socialgroupRepository.count(startDate, endDate);
+    public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
+        return socialgroupRepository.count(startDate, endDate, username);
     }
 
     public void add(Socialgroup data){

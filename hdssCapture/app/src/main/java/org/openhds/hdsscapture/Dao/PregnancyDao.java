@@ -38,7 +38,7 @@ public interface PregnancyDao {
     @Query("SELECT * FROM pregnancy WHERE complete=1")
     List<Pregnancy> retrieveToSync();
 
-    @Query("SELECT * FROM pregnancy where individual_uuid=:id")
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND extra!=1")
     Pregnancy find(String id);
 
     @Query("SELECT a.*,d.firstName,d.lastName FROM pregnancy as a " + "INNER JOIN residency as b ON a.individual_uuid = b.individual_uuid " +
@@ -47,6 +47,7 @@ public interface PregnancyDao {
             " WHERE b.endType=1 and outcome=2 and c.compextId=:id ")
     List<Pregnancy> retrievePregnancy(String id);
 
-    @Query("SELECT COUNT(*) FROM pregnancy WHERE insertDate BETWEEN :startDate AND :endDate")
-    long count(Date startDate, Date endDate);
+    @Query("SELECT COUNT(*) FROM pregnancy a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
+            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
+    long count(Date startDate, Date endDate, String username);
 }

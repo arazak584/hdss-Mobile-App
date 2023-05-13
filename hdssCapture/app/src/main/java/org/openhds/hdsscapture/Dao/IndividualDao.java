@@ -109,8 +109,9 @@ public interface IndividualDao {
             " date('now', '-5 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
     List<Individual> retrieveChild(String id);
 
-    @Query("SELECT COUNT(*) FROM individual WHERE insertDate BETWEEN :startDate AND :endDate")
-    long countIndividuals(Date startDate, Date endDate);
+    @Query("SELECT COUNT(*) FROM individual a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
+            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
+    long countIndividuals(Date startDate, Date endDate, String username);
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

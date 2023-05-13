@@ -53,6 +53,8 @@ public interface SocialgroupDao {
             " WHERE b.endType=1 and c.compextId=:id GROUP BY a.houseExtId ")
     List<Socialgroup> retrieveBySocialgroup(String id);
 
-    @Query("SELECT COUNT(*) FROM socialgroup WHERE insertDate BETWEEN :startDate AND :endDate")
-    long count(Date startDate, Date endDate);
+
+    @Query("SELECT COUNT(*) FROM socialgroup a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
+            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
+    long count(Date startDate, Date endDate, String username);
 }

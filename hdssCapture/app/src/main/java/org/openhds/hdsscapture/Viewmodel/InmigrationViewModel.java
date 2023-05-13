@@ -35,8 +35,8 @@ public class InmigrationViewModel extends AndroidViewModel {
         return inmigrationRepository.find(id);
     }
 
-    public long count(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
-        return inmigrationRepository.count(startDate, endDate);
+    public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
+        return inmigrationRepository.count(startDate, endDate, username);
     }
 
     public void add(Inmigration data){ inmigrationRepository.create(data);}

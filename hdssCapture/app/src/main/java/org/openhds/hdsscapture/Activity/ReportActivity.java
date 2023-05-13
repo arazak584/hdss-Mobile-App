@@ -28,6 +28,7 @@ import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
+import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.entity.Locations;
@@ -53,6 +54,7 @@ public class ReportActivity extends AppCompatActivity {
     private DeathViewModel deathViewModel;
     private DemographicViewModel demographicViewModel;
     private HdssSociodemoViewModel hdssSociodemoViewModel;
+    private RelationshipViewModel relationshipViewModel;
     private ReportAdapter reportAdapter;
 
     private Locations locations;
@@ -60,7 +62,7 @@ public class ReportActivity extends AppCompatActivity {
     private Residency residency;
     private Visit visit;
 
-    private EditText startDateEditText, endDateEditText;
+    private EditText startDateEditText, endDateEditText, usernameEditText;
     private ProgressDialog progressDialog;
 
     @Override
@@ -75,6 +77,7 @@ public class ReportActivity extends AppCompatActivity {
 
         startDateEditText = findViewById(R.id.startDate);
         endDateEditText = findViewById(R.id.endDate);
+        usernameEditText = findViewById(R.id.Fusername);
 
         Button startDateButton = findViewById(R.id.btStart);
         startDateButton.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +132,7 @@ public class ReportActivity extends AppCompatActivity {
         deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
         hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
+        relationshipViewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
 
         RecyclerView recyclerView = findViewById(R.id.my_recycler_view_report);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -156,10 +160,12 @@ public class ReportActivity extends AppCompatActivity {
     private void report() {
         Date startDate = null;
         Date endDate = null;
+        //String username = null;
 
         // Retrieve the text entered in the start and end date EditText views
         String startDateText = startDateEditText.getText().toString().trim();
         String endDateText = endDateEditText.getText().toString().trim();
+        String username = usernameEditText.getText().toString().trim();
 
         // Parse the text into Date objects
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -172,8 +178,8 @@ public class ReportActivity extends AppCompatActivity {
             return;
         }
 
-        reportAdapter.report(startDate, endDate, individualViewModel, visitViewModel, locationViewModel,socialgroupViewModel,inmigrationViewModel,
-                outmigrationViewModel,pregnancyViewModel,pregnancyoutcomeViewModel,deathViewModel,demographicViewModel,hdssSociodemoViewModel);
+        reportAdapter.report(startDate, endDate, username, individualViewModel, visitViewModel, locationViewModel,socialgroupViewModel,inmigrationViewModel,
+                outmigrationViewModel,pregnancyViewModel,pregnancyoutcomeViewModel,deathViewModel,demographicViewModel,hdssSociodemoViewModel,relationshipViewModel);
 
     }
 

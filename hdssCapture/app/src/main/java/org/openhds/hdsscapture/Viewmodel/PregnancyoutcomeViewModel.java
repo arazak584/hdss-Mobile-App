@@ -43,8 +43,8 @@ public class PregnancyoutcomeViewModel extends AndroidViewModel {
         return pregnancyoutcomeRepository.findpreg(id);
     }
 
-    public long count(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.count(startDate, endDate);
+    public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.count(startDate, endDate, username);
     }
 
     public void add(Pregnancyoutcome data){ pregnancyoutcomeRepository.create(data);}

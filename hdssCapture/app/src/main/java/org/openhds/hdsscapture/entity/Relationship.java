@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -84,18 +85,6 @@ public class Relationship extends BaseObservable implements Parcelable {
     public Relationship(){}
 
     @Ignore
-    public Relationship(@NotNull String individual_uuid, String man_uuid, Date startDate, Date endDate, Date insertDate,Integer endType, Integer aIsToB, String fw) {
-        this.individual_uuid = individual_uuid;
-        this.man_uuid = man_uuid;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.insertDate = insertDate;
-        this.endType = endType;
-        this.aIsToB = aIsToB;
-        this.fw_uuid = fw_uuid;
-    }
-
-    @Ignore
     public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     public String getIndividual_uuid() {
@@ -106,6 +95,7 @@ public class Relationship extends BaseObservable implements Parcelable {
         this.individual_uuid = individual_uuid;
     }
 
+    @Bindable
     public String getMan_uuid() {
         return man_uuid;
     }
@@ -114,6 +104,7 @@ public class Relationship extends BaseObservable implements Parcelable {
         this.man_uuid = man_uuid;
     }
 
+    @Bindable
     public String getDob() {
         if (dob == null) return null;
         return f.format(dob);
@@ -127,6 +118,7 @@ public class Relationship extends BaseObservable implements Parcelable {
         }
     }
 
+    @Bindable
     public String getStartDate() {
         if (startDate == null) return null;
         return f.format(startDate);
@@ -141,9 +133,9 @@ public class Relationship extends BaseObservable implements Parcelable {
                 System.out.println("Start Date Error " + e.getMessage());
             }
     }
-
+    @Bindable
     public String getEndDate() {
-        if (endDate == null) return "";
+        if (endDate == null) return null;
         return f.format(endDate);
     }
 
@@ -151,6 +143,7 @@ public class Relationship extends BaseObservable implements Parcelable {
         if(endDate == null ) this.endDate=null;
     }
 
+    @Bindable
     public String getInsertDate() {
         if (insertDate == null) return null;
         return f.format(insertDate);
@@ -166,6 +159,7 @@ public class Relationship extends BaseObservable implements Parcelable {
             }
     }
 
+    @Bindable
     public Integer getEndType() {
         return endType;
     }
@@ -173,7 +167,7 @@ public class Relationship extends BaseObservable implements Parcelable {
     public void setEndType(Integer endType) {
         this.endType = endType;
     }
-
+    @Bindable
     public Integer getaIsToB() {
         return aIsToB;
     }
@@ -182,6 +176,7 @@ public class Relationship extends BaseObservable implements Parcelable {
         this.aIsToB = aIsToB;
     }
 
+    @Bindable
     @NotNull
     public String getRel_uuid() {
         return rel_uuid;
