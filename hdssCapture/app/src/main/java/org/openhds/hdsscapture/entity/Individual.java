@@ -213,9 +213,6 @@ public class Individual extends BaseObservable implements Parcelable {
             try {
                 this.insertDate = new Date(Long.parseLong(insertDate));
             } catch (NumberFormatException ne) {
-                System.out.println("InsertDate error1 " + e.getMessage());
-                System.out.println("InsertDate error2 " + ne.getMessage());
-
             }
         }
     }

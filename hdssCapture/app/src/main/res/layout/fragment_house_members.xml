@@ -99,7 +99,7 @@
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="120dp"
+            android:layout_marginBottom="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -108,55 +108,42 @@
 
     </LinearLayout>
 
-    <!--
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/add_visit"
+        android:id="@+id/button_newindividual"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="150dp"
-        android:contentDescription="@string/visit_household"
-        android:src="@drawable/ic_add"
-        android:text="@string/visit_household"
+        android:layout_gravity="bottom"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/newindividual"
+        android:src="@drawable/ic_baseline_add_24"
+        android:text="@string/newindividual"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:backgroundTint="#2196F3"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="ImageContrastCheck" />-->
+        tools:ignore="ImageContrastCheck" />
+
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/add_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:contentDescription="@string/mainmenu"
-        android:src="@drawable/ic_add"
+        android:src="@drawable/ic_baseline_add_24"
         android:text="@string/mainmenu"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:backgroundTint="#8A080D"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/button_newindividual"
         tools:ignore="ImageContrastCheck" />
-
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottom_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.BottomAppBar"
-        android:layout_gravity="bottom"
-        android:backgroundTint="@color/pakistan_green"
-        app:fabCradleRoundedCornerRadius="16dp">
-    </com.google.android.material.bottomappbar.BottomAppBar>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/button_newindividual"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:fabSize="normal"
-        app:layout_anchor="@id/bottom_app_bar"
-        android:src="@drawable/ic_add"
-        android:tint="@android:color/white"/>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

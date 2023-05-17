@@ -29,6 +29,7 @@ import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -126,13 +127,13 @@ public class SocioFragment extends Fragment {
                 data.socialgroup_uuid = socialgroup.getSocialgroup_uuid();
                 data.fw_uuid = fieldworkerData.getFw_uuid();
 
-                data.insertDate = new Date();
                 //get the hour and minute on first fill
                 Calendar cal = Calendar.getInstance();
                 int hh = cal.get(Calendar.HOUR_OF_DAY);
                 int mm = cal.get(Calendar.MINUTE);
 
                 binding.setSociodemo(data);
+                binding.getSociodemo().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();

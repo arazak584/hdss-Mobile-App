@@ -53,8 +53,9 @@ public class Socialgroup extends BaseObservable implements Parcelable {
     @Expose
     public String visit_uuid;
 
-    @NotNull
+    @SerializedName("insertDate")
     @Expose
+    @ColumnInfo(name = "insertDate")
     public Date insertDate;
 
     @NotNull
@@ -119,12 +120,18 @@ public class Socialgroup extends BaseObservable implements Parcelable {
     }
 
     public void setInsertDate(String insertDate) {
-        if(insertDate == null ) this.insertDate=null;
+        if(insertDate == null) this.insertDate = null;
         else
             try {
                 this.insertDate = f.parse(insertDate);
             } catch (ParseException e) {
-          System.out.println("Visit Date Error " + e.getMessage());
+                try {
+                    this.insertDate = new Date(Long.parseLong(insertDate));
+                } catch (NumberFormatException ne) {
+                    System.out.println("InsertDate error1 " + e.getMessage());
+                    System.out.println("InsertDate error2 " + ne.getMessage());
+
+                }
             }
     }
 

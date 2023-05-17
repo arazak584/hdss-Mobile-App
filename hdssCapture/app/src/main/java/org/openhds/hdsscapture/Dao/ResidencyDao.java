@@ -40,7 +40,7 @@ public interface ResidencyDao {
     @Query("SELECT * FROM residency where individual_uuid=:id and endType=1")
     Residency findRes(String id);
 
-    @Query("SELECT * FROM residency where individual_uuid=:id")
+    @Query("SELECT * FROM residency where individual_uuid=:id ORDER BY startDate DESC LIMIT 1")
     Residency finds(String id);
 
     @Query("SELECT * FROM residency WHERE complete=1")

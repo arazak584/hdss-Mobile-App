@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity  {
                     viewModel.add(d);
                     progress.dismiss();
                     textView_SyncFw.setText("USER ACCESS UPDATED!");
-                    textView_SyncFw.setTextColor(Color.BLACK);
+                    textView_SyncFw.setTextColor(Color.GREEN);
                 }
 
                 @Override

@@ -67,4 +67,5 @@ public class RelationshipRepository {
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }
+
 }

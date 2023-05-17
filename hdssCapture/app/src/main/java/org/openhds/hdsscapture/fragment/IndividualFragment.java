@@ -138,7 +138,7 @@ public class IndividualFragment extends Fragment {
         }
 
         if(individual.insertDate==null){
-            binding.getIndividual().insertDate = new Date();
+            binding.getIndividual().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         }
 
         if (individual.mother_uuid != null) {

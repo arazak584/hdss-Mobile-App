@@ -6,10 +6,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.openhds.hdsscapture.Dialog.FatherDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.entity.Individual;
@@ -17,7 +19,6 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
-import org.openhds.hdsscapture.Dialog.FatherDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,6 +125,7 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
                 if (list != null) {
                     individualList.addAll(list);
                 }
+
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -138,6 +140,11 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
                     if (list != null) {
                         individualList.addAll(list);
                     }
+
+                    if (list.isEmpty()) {
+                        Toast.makeText(activity.getActivity(), "No Adult Male Found In This Compound", Toast.LENGTH_SHORT).show();
+                    }
+
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {

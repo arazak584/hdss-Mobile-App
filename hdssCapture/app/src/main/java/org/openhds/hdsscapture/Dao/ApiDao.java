@@ -41,28 +41,28 @@ public interface ApiDao {
     @GET("/api/hierarchy")
     Call<DataWrapper<Hierarchy>> getAllHierarchy();
 
-    @GET("/api/task/location.zip")
+    @GET("/api/zip/location")
     Call<ResponseBody> downloadLocation();
 
-    @GET("/api/task/residency.zip")
+    @GET("/api/zip/residency")
     Call<ResponseBody> downloadResidency();
 
-    @GET("/api/task/socialgroup.zip")
+    @GET("/api/zip/socialgroup")
     Call<ResponseBody> downloadSocialgroup();
 
-    @GET("/api/task/relationship.zip")
+    @GET("/api/zip/relationship")
     Call<ResponseBody> downloadRelationship();
 
-    @GET("/api/task/pregnancy.zip")
+    @GET("/api/zip/pregnancy")
     Call<ResponseBody> downloadPregnancy();
 
-    @GET("/api/task/individual.zip")
+    @GET("/api/task/individual")
     Call<ResponseBody> downloadZipFile();
 
-    @GET("/api/task/demography.zip")
+    @GET("/api/zip/demographics")
     Call<ResponseBody> downloadDemography();
 
-    @GET("/api/task/ses.zip")
+    @GET("/api/zip/ses")
     Call<ResponseBody> downloadSes();
 
     @POST("/api/location")

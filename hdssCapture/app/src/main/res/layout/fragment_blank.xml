@@ -87,6 +87,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:backgroundTint="#246EE9"
+            android:textColor="@color/white"
             android:text="@string/household_select" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -105,24 +107,23 @@
 
     </LinearLayout>
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottom_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.BottomAppBar"
-        android:layout_gravity="bottom"
-        android:backgroundTint="@color/pakistan_green"
-        app:fabCradleRoundedCornerRadius="16dp">
-    </com.google.android.material.bottomappbar.BottomAppBar>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/button_newhousehold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/text_newhousehold"
+        android:src="@drawable/ic_baseline_add_24"
+        android:text="@string/text_newhousehold"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:backgroundTint="#246EE9"
         app:fabSize="normal"
-        app:layout_anchor="@id/bottom_app_bar"
-        android:src="@drawable/ic_add"
-        android:tint="@android:color/white"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="ImageContrastCheck" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

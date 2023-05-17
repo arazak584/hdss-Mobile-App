@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -157,6 +158,11 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ViewHolder> 
                     if (list != null) {
                         individualList.addAll(list);
                     }
+
+                    if (list.isEmpty()) {
+                        Toast.makeText(activity.getActivity(), "No Children Under 5 Years", Toast.LENGTH_SHORT).show();
+                    }
+
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {

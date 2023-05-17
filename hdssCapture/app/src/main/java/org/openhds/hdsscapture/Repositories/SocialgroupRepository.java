@@ -63,9 +63,9 @@ public class SocialgroupRepository {
         return future.get();
     }
 
-    public List<Socialgroup> findAll() throws ExecutionException, InterruptedException {
+    public List<Socialgroup> findAll(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
 
-        Callable<List<Socialgroup>> callable = () -> dao.retrieve();
+        Callable<List<Socialgroup>> callable = () -> dao.retrieve(startDate, endDate);
 
         Future<List<Socialgroup>> future = Executors.newSingleThreadExecutor().submit(callable);
 

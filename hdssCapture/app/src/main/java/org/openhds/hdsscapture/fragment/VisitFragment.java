@@ -30,6 +30,7 @@ import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -141,8 +142,6 @@ public class VisitFragment extends Fragment {
                 data.location_uuid = locations.getLocation_uuid();
                 data.roundNumber = roundData.getRoundNumber();
                 data.visit_uuid = socialgroup.getVisit_uuid();
-                data.insertDate = new Date();
-                data.visitDate = new Date();
                 data.complete = 1;
                 data.houseExtId = socialgroup.houseExtId;
                 data.socialgroup_uuid =socialgroup.socialgroup_uuid;
@@ -153,6 +152,9 @@ public class VisitFragment extends Fragment {
                 };
 
                 binding.setVisit(data);
+                binding.getVisit().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                binding.getVisit().setVisitDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();

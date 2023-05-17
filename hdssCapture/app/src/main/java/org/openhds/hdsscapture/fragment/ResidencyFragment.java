@@ -224,113 +224,120 @@ public class ResidencyFragment extends Fragment {
         });
 
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-        ResidencyViewModel res = new ViewModelProvider(this).get(ResidencyViewModel.class);
+        ResidencyViewModel resViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
         OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
         try {
-            Residency data = viewModel.findRes(individual.individual_uuid);
+            Residency dataRes = viewModel.findRes(individual.individual_uuid);
 
-            if (data != null) {
-                binding.setResidency(data);
-                data.loc = locations.getLocation_uuid();
-                data.dobs = individual.dob;
+            if (dataRes != null) {
+                binding.setResidency(dataRes);
+                dataRes.loc = locations.getLocation_uuid();
+                dataRes.dobs = individual.dob;
             } else {
-                data = new Residency();
+                dataRes = new Residency();
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.toString().replaceAll("-", "");
-                data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.residency_uuid = uuidString;
-                data.insertDate = new Date();
-                data.individual_uuid = individual.getIndividual_uuid();
-                data.location_uuid = locations.getLocation_uuid();
-                data.socialgroup_uuid = socialgroup.socialgroup_uuid;
-                data.loc = locations.getLocation_uuid();
-                data.complete = 1;
-                data.dobs = individual.dob;
-                if (data != null){
-                    data.startType=1;
+                dataRes.fw_uuid = fieldworkerData.getFw_uuid();
+                dataRes.residency_uuid = uuidString;
+                dataRes.individual_uuid = individual.getIndividual_uuid();
+                dataRes.location_uuid = locations.getLocation_uuid();
+                dataRes.socialgroup_uuid = socialgroup.socialgroup_uuid;
+                dataRes.loc = locations.getLocation_uuid();
+                dataRes.complete = 1;
+                dataRes.dobs = individual.dob;
+                if (dataRes != null){
+                    dataRes.startType=1;
                 }
-                if (data!=null){
-                    data.img=1;
-                }else{data.img=2;}
+                if (dataRes!=null){
+                    dataRes.img=1;
+                }else{dataRes.img=2;}
 
-                binding.setResidency(data);
+                binding.setResidency(dataRes);
+                binding.getResidency().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
+
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
 
-        try {
-            Residency data = res.finds(individual.individual_uuid);
-            if (data != null) {
-                binding.setRes(data);
-            }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
 
         try {
-            Death data = deathViewModel.find(individual.individual_uuid);
-            if (data != null) {
-//                data.visit_uuid = socialgroup.getVisit_uuid();
-//                data.img_uuid = img_uuid;
-//                data.omg_uuid = omg_uuid;
-                binding.setDeath(data);
-            } else {
-                data = new Death();
+            Residency datas = resViewModel.finds(individual.individual_uuid);
+            if (datas != null) {
+                binding.setRes(datas);
 
-                String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
-                data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.death_uuid = uuidString;
-                data.insertDate = new Date();
-                data.dob = individual.dob;
-                data.firstName = individual.getFirstName();
-                data.lastName = individual.getLastName();
-                data.gender = individual.getGender();
-                data.compno = locations.getCompno();
-                data.extId = individual.getExtId();
-                data.compname = locations.getLocationName();
-                data.individual_uuid = individual.getIndividual_uuid();
-                data.villname = level5Data.getName();
-                data.villcode = level5Data.getVillcode();
-                data.visit_uuid = socialgroup.getVisit_uuid();
-                data.deathDate = binding.getResidency().endDate;
-                data.vpmcomplete=1;
-                data.complete = 1;
-
-
-                binding.setDeath(data);
-            }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            Inmigration data = inmigrationViewModel.find(individual.individual_uuid);
-            if (data != null) {
-                binding.setInmigration(data);
-            } else {
-                data = new Inmigration();
-
-                String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
-
-                data.img_uuid=uuidString;
-                data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.residency_uuid = binding.getResidency().residency_uuid;
-                data.insertDate = new Date();
-                data.individual_uuid = individual.getIndividual_uuid();
-                data.visit_uuid = socialgroup.getVisit_uuid();
-                data.recordedDate = binding.getResidency().startDate;
-                if (data!=null){
-                    data.migType=2;
+                if (binding.getResidency().startDate == null) {
+                    Calendar calendar = Calendar.getInstance(Locale.US);
+                    calendar.setTime(datas.endDate);
+                    calendar.add(Calendar.DAY_OF_MONTH, 1);
+                    binding.getResidency().setStartDate(new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()));
                 }
-                data.complete = 1;
 
 
-                binding.setInmigration(data);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Death datadth = deathViewModel.find(individual.individual_uuid);
+            if (datadth != null) {
+                binding.setDeath(datadth);
+            } else {
+                datadth = new Death();
+
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+                datadth.fw_uuid = fieldworkerData.getFw_uuid();
+                datadth.death_uuid = uuidString;
+                datadth.dob = individual.dob;
+                datadth.firstName = individual.getFirstName();
+                datadth.lastName = individual.getLastName();
+                datadth.gender = individual.getGender();
+                datadth.compno = locations.getCompno();
+                datadth.extId = individual.getExtId();
+                datadth.compname = locations.getLocationName();
+                datadth.individual_uuid = individual.getIndividual_uuid();
+                datadth.villname = level5Data.getName();
+                datadth.villcode = level5Data.getVillcode();
+                datadth.visit_uuid = socialgroup.getVisit_uuid();
+                datadth.deathDate = binding.getResidency().endDate;
+                datadth.vpmcomplete=1;
+                datadth.complete = 1;
+
+
+                binding.setDeath(datadth);
+                binding.getDeath().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Inmigration dataimg = inmigrationViewModel.find(individual.individual_uuid);
+            if (dataimg != null && binding.getResidency().rltn_head !=null) {
+                binding.setInmigration(dataimg);
+            } else {
+                dataimg = new Inmigration();
+
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+
+                dataimg.img_uuid=uuidString;
+                dataimg.fw_uuid = fieldworkerData.getFw_uuid();
+                dataimg.residency_uuid = binding.getResidency().residency_uuid;
+                dataimg.individual_uuid = individual.getIndividual_uuid();
+                dataimg.visit_uuid = socialgroup.getVisit_uuid();
+                dataimg.recordedDate = binding.getResidency().startDate;
+                dataimg.complete = 1;
+
+
+                binding.setInmigration(dataimg);
+
+                binding.getInmigration().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -349,7 +356,6 @@ public class ResidencyFragment extends Fragment {
                 data.omg_uuid=uuidString;
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.residency_uuid = binding.getResidency().residency_uuid;
-                data.insertDate = new Date();
                 data.individual_uuid = individual.getIndividual_uuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.recordedDate = binding.getResidency().endDate;
@@ -357,6 +363,7 @@ public class ResidencyFragment extends Fragment {
 
 
                 binding.setOutmigration(data);
+                binding.getOutmigration().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -369,7 +376,7 @@ public class ResidencyFragment extends Fragment {
         loadCodeData(binding.rltnHead,  "rltnhead");
         loadCodeData(binding.residencyImg,  "complete");
         loadCodeData(binding.img.reason,  "reason");
-        loadCodeData(binding.omg.reasonOut,  "reason");
+        loadCodeData(binding.omg.reasonOut,  "reasonForOutMigration");
         loadCodeData(binding.img.origin,  "whereoutside");
         loadCodeData(binding.img.migtype,  "migType");
         loadCodeData(binding.omg.destination,  "whereoutside");
@@ -534,6 +541,21 @@ public class ResidencyFragment extends Fragment {
                         Toast.makeText(getActivity(), "Migration Date Not Equal to Start Date", Toast.LENGTH_SHORT).show();
                         return;
                     }
+
+                    boolean imgend = false;
+                    boolean imgends = false;
+                    if (!binding.res.resEndDate.getText().toString().trim().isEmpty() && binding.img.migtype.getSelectedItemPosition() == 1) {
+                        imgend = true;
+                        Toast.makeText(getActivity(), "Migration Type Cannot be External", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (binding.res.resEndDate.getText().toString().trim().isEmpty() && binding.img.migtype.getSelectedItemPosition() == 2) {
+                        imgends = true;
+                        Toast.makeText(getActivity(), "Migration Type Cannot be Internal", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
 
                     final Inmigration img = binding.getInmigration();
                     img.complete = 1;

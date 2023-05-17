@@ -39,6 +39,7 @@ public class RelationshipViewModel extends AndroidViewModel {
         return relationshipRepository.count(startDate, endDate, username);
     }
 
+
     public void add(Relationship data){ relationshipRepository.create(data);}
 
     public void add(Relationship... data){

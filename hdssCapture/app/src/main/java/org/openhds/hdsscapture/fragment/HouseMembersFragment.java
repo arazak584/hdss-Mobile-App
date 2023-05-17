@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
@@ -185,7 +184,7 @@ public class HouseMembersFragment extends Fragment {
         });
 
 
-        final FloatingActionButton add_individual = binding.getRoot().findViewById(R.id.button_newindividual);
+        final ExtendedFloatingActionButton add_individual = binding.getRoot().findViewById(R.id.button_newindividual);
         add_individual.setOnClickListener(v -> {
 
             final Individual individual = new Individual();

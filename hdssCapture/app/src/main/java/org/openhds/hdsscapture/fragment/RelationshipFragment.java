@@ -117,7 +117,6 @@ public class RelationshipFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentRelationshipBinding.inflate(inflater, container, false);
-        binding.setRelationship(relationship);
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_partner);
 
@@ -192,12 +191,14 @@ public class RelationshipFragment extends Fragment {
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.rel_uuid = uuidString;
-                data.insertDate = new Date();
+
                 data.individual_uuid = individual.getIndividual_uuid();
                 data.dob = individual.dob;
-                //data.visit_uuid = visit.visit_uuid;
+
 
                 binding.setRelationship(data);
+                binding.getRelationship().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();

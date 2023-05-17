@@ -8,7 +8,6 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Relationship;
-import org.openhds.hdsscapture.entity.subentity.RelationshipAmendment;
 
 import java.util.Date;
 import java.util.List;
@@ -28,9 +27,6 @@ public interface RelationshipDao {
     @Update
     void update(Relationship relationship);
 
-    @Update(entity = Relationship.class)
-    int update(RelationshipAmendment relationshipAmendment);
-
 
     @Query("SELECT * FROM relationship")
     List<Relationship> retrieve();
@@ -44,5 +40,6 @@ public interface RelationshipDao {
     @Query("SELECT COUNT(*) FROM relationship a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid " +
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
+
 
 }

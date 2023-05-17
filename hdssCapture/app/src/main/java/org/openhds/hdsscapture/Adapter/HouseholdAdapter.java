@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -128,6 +129,9 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
 
                 if (list != null) {
                     socialgroupList.addAll(list);
+                }
+                if (list.isEmpty()) {
+                    Toast.makeText(activity.getActivity(), "No household Found", Toast.LENGTH_SHORT).show();
                 }
 
             } catch (ExecutionException e) {

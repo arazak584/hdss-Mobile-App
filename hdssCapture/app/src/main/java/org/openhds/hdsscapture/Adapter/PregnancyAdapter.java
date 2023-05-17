@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -97,6 +98,11 @@ public class PregnancyAdapter extends RecyclerView.Adapter<PregnancyAdapter.View
                     if (list != null) {
                         pregnancyList.addAll(list);
                     }
+
+                    if (list.isEmpty()) {
+                        Toast.makeText(activity.getActivity(), "No Pregnancy Without Outcome", Toast.LENGTH_SHORT).show();
+                    }
+
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {

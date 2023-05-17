@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import org.openhds.hdsscapture.Adapter.LocationAdapter;
 import org.openhds.hdsscapture.R;
@@ -103,7 +103,7 @@ public class ClusterFragment extends Fragment {
             }
         });
 
-        final FloatingActionButton add_location = view.findViewById(R.id.button_new_location);
+        final ExtendedFloatingActionButton add_location = view.findViewById(R.id.button_new_location);
         add_location.setOnClickListener(v -> {
 
             final Locations locations = new Locations();

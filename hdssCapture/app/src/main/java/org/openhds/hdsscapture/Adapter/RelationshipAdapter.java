@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -134,6 +135,10 @@ public class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapte
                     if (list != null) {
                         individualList.addAll(list);
                     }
+                    if (list.isEmpty()) {
+                        Toast.makeText(activity.getActivity(), "No Adult Male Found In This Compound", Toast.LENGTH_SHORT).show();
+                    }
+
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {

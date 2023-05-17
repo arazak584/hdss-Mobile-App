@@ -274,13 +274,13 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 String uuidString = uuid.toString().replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.preg_uuid = uuidString;
-                data.insertDate = new Date();
                 data.extra =1;
                 data.mother_uuid = individual.getIndividual_uuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
 
                 binding.setPregoutcome(data);
+                binding.getPregoutcome().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();

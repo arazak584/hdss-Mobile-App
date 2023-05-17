@@ -201,7 +201,7 @@
     <string name="text_newhousehold">New Household</string>
     <string name="nameofhousehold">Name of Household Head</string>
     <string name="nameofcompound">Name of Compound</string>
-    <string name="newindividual">Add Individual</string>
+    <string name="newindividual">Add Individual(New)</string>
     <string name="visithousehold">Visit Household</string>
     <string name="text_extid">extId</string>
     <string name="compname">Compound Name</string>
@@ -537,6 +537,7 @@
     <string name="records">Number of Events Picked</string>
     <string name="mother">Is the Mother Known and Registered</string>
     <string name="father">Is the Father Known and Registered</string>
+    <string name="createLocation">Create Location</string>
 
     //SocioDemo End
 

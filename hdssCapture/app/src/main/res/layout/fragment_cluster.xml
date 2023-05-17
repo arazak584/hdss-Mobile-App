@@ -46,8 +46,8 @@
             android:layout_height="match_parent"
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="80dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="20dp"
             android:padding="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -58,6 +58,27 @@
 
     </LinearLayout>
 
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/button_new_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/createLocation"
+        android:src="@drawable/ic_baseline_add_24"
+        android:text="@string/createLocation"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:backgroundTint="#246EE9"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="ImageContrastCheck" />
+
+
+
+    <!--
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottom_app_bar"
         android:layout_width="match_parent"
@@ -75,5 +96,5 @@
         app:fabSize="normal"
         app:layout_anchor="@id/bottom_app_bar"
         android:src="@drawable/ic_add"
-        android:tint="@android:color/white"/>
+        android:tint="@android:color/white"/>-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

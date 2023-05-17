@@ -175,7 +175,7 @@ public class BaselineFragment extends Fragment {
         }
 
         if(socialgroup.insertDate==null){
-            binding.getSocialgroup().insertDate = new Date();
+            binding.getSocialgroup().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         }
 
         if(residency.insertDate==null){

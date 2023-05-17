@@ -34,8 +34,8 @@ public class SocialgroupViewModel extends AndroidViewModel {
         return socialgroupRepository.findhse(id);
     }
 
-    public List<Socialgroup> findAll() throws ExecutionException, InterruptedException {
-        return socialgroupRepository.findAll();
+    public List<Socialgroup> findAll(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
+        return socialgroupRepository.findAll(startDate, endDate);
     }
 
     public List<Socialgroup> findToSync() throws ExecutionException, InterruptedException {

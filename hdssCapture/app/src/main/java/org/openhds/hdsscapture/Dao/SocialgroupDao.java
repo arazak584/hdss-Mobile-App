@@ -36,8 +36,8 @@ public interface SocialgroupDao {
     @Query("SELECT * FROM socialgroup WHERE complete=1")
     List<Socialgroup> retrieveToSync();
 
-    @Query("SELECT * FROM socialgroup ")
-    List<Socialgroup> retrieve();
+    @Query("SELECT * FROM socialgroup WHERE insertDate BETWEEN :startDate AND :endDate")
+    List<Socialgroup> retrieve(Date startDate, Date endDate);
 
     @Update(entity = Socialgroup.class)
     int update (SocialgroupAmendment socialgroupAmendment);
@@ -57,4 +57,5 @@ public interface SocialgroupDao {
     @Query("SELECT COUNT(*) FROM socialgroup a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
+
 }

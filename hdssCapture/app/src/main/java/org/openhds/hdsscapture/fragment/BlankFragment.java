@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import org.openhds.hdsscapture.Adapter.HouseholdAdapter;
 import org.openhds.hdsscapture.Baseline.BaselineFragment;
@@ -195,7 +195,7 @@ public class BlankFragment extends Fragment {
         //initial loading of Individuals in locations
         //adapter.filter("", socialgroupViewModel);
 
-        final FloatingActionButton add_household = binding.getRoot().findViewById(R.id.button_newhousehold);
+        final ExtendedFloatingActionButton add_household = binding.getRoot().findViewById(R.id.button_newhousehold);
         add_household.setOnClickListener(v -> {
 
             final Individual individual = new Individual();

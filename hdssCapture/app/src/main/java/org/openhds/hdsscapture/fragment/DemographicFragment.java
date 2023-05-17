@@ -29,6 +29,7 @@ import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -137,12 +138,12 @@ public class DemographicFragment extends Fragment {
                 data = new Demographic();
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.insertDate = new Date();
                 data.individual_uuid = individual.getIndividual_uuid();
                 data.complete = 1;
                 data.phone = 1;
 
                 binding.setDemographic(data);
+                binding.getDemographic().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();

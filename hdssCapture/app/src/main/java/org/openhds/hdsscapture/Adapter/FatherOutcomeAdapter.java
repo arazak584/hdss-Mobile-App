@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -124,6 +125,11 @@ public class FatherOutcomeAdapter extends RecyclerView.Adapter<FatherOutcomeAdap
                 if (list != null) {
                     individualList.addAll(list);
                 }
+
+                if (list.isEmpty()) {
+                    Toast.makeText(activity.getActivity(), "No Adult Male Found In This Compound", Toast.LENGTH_SHORT).show();
+                }
+
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -138,6 +144,11 @@ public class FatherOutcomeAdapter extends RecyclerView.Adapter<FatherOutcomeAdap
                     if (list != null) {
                         individualList.addAll(list);
                     }
+
+                    if (list.isEmpty()) {
+                        Toast.makeText(activity.getActivity(), "No Adult Male Found In This Compound", Toast.LENGTH_SHORT).show();
+                    }
+
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {

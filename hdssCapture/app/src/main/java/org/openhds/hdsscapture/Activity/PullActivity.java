@@ -980,7 +980,7 @@ public class PullActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 progress.show();
-                progress.setMessage("Downloading Demography...");
+                progress.setMessage("Downloading Demographics...");
                 Call<ResponseBody> call = dao.downloadDemography();
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
@@ -990,7 +990,7 @@ public class PullActivity extends AppCompatActivity {
                             progress.setMessage("Contacting Server...");
                             try {
                                 // Read the response body into a file
-                                progress.setMessage("Downloading Demography Zip File...");
+                                progress.setMessage("Downloading Demograpics Zip File...");
                                 InputStream inputStream = response.body().byteStream();
                                 File file = new File(getExternalCacheDir(), "demography.zip");
                                 if (file.exists()) {
@@ -1008,7 +1008,7 @@ public class PullActivity extends AppCompatActivity {
                                 fileOutputStream.close();
 
                                 // Unzip the file
-                                progress.setMessage("Unzipping Demography File...");
+                                progress.setMessage("Unzipping Demograpics File...");
                                 ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
                                 ZipEntry zipEntry = zipInputStream.getNextEntry();
                                 while (zipEntry != null) {
@@ -1028,7 +1028,7 @@ public class PullActivity extends AppCompatActivity {
                                 demographicDao = appDatabase.demographicDao();
                                 // Import the unzipped CSV file into the Room database
                                 if (demographicDao != null) {
-                                    File unzippedFile = new File(getExternalCacheDir() + File.separator + "demography.csv");
+                                    File unzippedFile = new File(getExternalCacheDir() + File.separator + "demographics.csv");
                                     CsvMapper mapper = new CsvMapper();
                                     CsvSchema schema = CsvSchema.builder().addColumn("individual_uuid").addColumn("comp_yrs").addColumn("education").addColumn("fw_uuid")
                                             .addColumn("insertDate").addColumn("marital").addColumn("occupation").addColumn("occupation_oth")
@@ -1062,7 +1062,7 @@ public class PullActivity extends AppCompatActivity {
                                             demographicDao.insert(demographics);
                                         }
                                         progress.dismiss();
-                                        textView_SyncDemography.setText("Total Demography Saved: " + counts);
+                                        textView_SyncDemography.setText("Total Demographics Saved: " + counts);
                                         textView_SyncDemography.setTextColor(Color.rgb(0, 114, 133));
                                     });
                                 }

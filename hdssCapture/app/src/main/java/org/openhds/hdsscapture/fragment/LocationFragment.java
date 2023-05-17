@@ -44,9 +44,8 @@ import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -212,6 +211,10 @@ public class LocationFragment extends Fragment {
             binding.getLocations().fw_uuid = fieldworkerData.getFw_uuid();
         }
 
+        if(locations.insertDate==null){
+            binding.getLocations().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        }
+
         // Generate a UUID
         if(locations.location_uuid == null) {
             String uuid = UUID.randomUUID().toString();
@@ -245,10 +248,6 @@ public class LocationFragment extends Fragment {
             binding.locationcompno.setError(null);
             binding.longitude.setError(null);
             binding.latitude.setError(null);
-
-            if (binding.locationInsertDate.getText().toString().isEmpty()) {
-                binding.locationInsertDate.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.US).format(Calendar.getInstance().getTime()));
-            }
 
             boolean val = false;
 

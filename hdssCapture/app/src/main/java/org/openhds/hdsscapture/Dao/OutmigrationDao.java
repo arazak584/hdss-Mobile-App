@@ -29,7 +29,7 @@ public interface OutmigrationDao {
     @Query("SELECT * FROM outmigration WHERE complete=1")
     List<Outmigration> retrieveomgToSync();
 
-    @Query("SELECT * FROM outmigration where individual_uuid=:id")
+    @Query("SELECT * FROM outmigration where individual_uuid=:id ORDER BY recordedDate DESC LIMIT 1")
     Outmigration find(String id);
 
     @Query("SELECT COUNT(*) FROM outmigration a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
