@@ -157,8 +157,6 @@ public class SocioFragment extends Fragment {
         loadCodeData(binding.socioe.PTRSCORRES, "JOB");
         loadCodeData(binding.sociof.STOVEFCORRES, "STOVE_FCORRES");
         loadCodeData(binding.sociof.COOKINGLOCFCORRES, "COOKING_LOC_FCORRES");
-        loadCodeData(binding.sociog.PDBIRTHOHOLOC, "INF_OHOLOC");
-        loadCodeData(binding.sociog.PDDMSCORRES, "PD_DM_SCORRES");
         loadCodeData(binding.sociog.SMOKEINOECDOSFRQ, "FRQ");
         loadCodeData(binding.sociog.SMOKEHHOLDINOECDOSFRQ, "FRQ");
         loadCodeData(binding.socioz.socioComplete, "submit");

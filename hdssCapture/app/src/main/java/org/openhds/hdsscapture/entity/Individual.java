@@ -125,6 +125,11 @@ public class Individual extends BaseObservable implements Parcelable {
     @Expose
     public Integer father;
 
+    @Expose
+    public Integer f_age=150;
+    @Expose
+    public Integer m_age=150;
+
     public Individual(){}
 
     @Ignore
@@ -178,6 +183,8 @@ public class Individual extends BaseObservable implements Parcelable {
             System.out.println("Dob error " + e.getMessage());
         }
     }
+
+
 
     @Bindable
     public int getAge() {

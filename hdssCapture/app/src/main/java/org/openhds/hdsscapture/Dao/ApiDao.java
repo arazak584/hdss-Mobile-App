@@ -56,7 +56,7 @@ public interface ApiDao {
     @GET("/api/zip/pregnancy")
     Call<ResponseBody> downloadPregnancy();
 
-    @GET("/api/task/individual")
+    @GET("/api/zip/individual")
     Call<ResponseBody> downloadZipFile();
 
     @GET("/api/zip/demographics")

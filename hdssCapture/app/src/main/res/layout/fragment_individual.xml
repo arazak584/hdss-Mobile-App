@@ -193,7 +193,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:ems="10"
-                    android:inputType="number"
+                    android:inputType="textCapCharacters"
                     android:text="@={individual.otherName}" />
 
 
@@ -253,6 +253,15 @@
                     android:required="true"
                     android:textSize="20sp"
                     tools:ignore="TextContrastCheck" />
+
+                <EditText
+                    android:id="@+id/individ_age"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="number" />
 
 
                 <TextView
@@ -361,6 +370,17 @@
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <EditText
+                    goneUnless="@{individual.mother==1}"
+                    android:id="@+id/mother_age"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:text="@{Integer.toString(individual.m_age)}"
+                    android:focusableInTouchMode="false"
+                    android:inputType="number" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -409,6 +429,17 @@
                         android:focusableInTouchMode="false"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <EditText
+                    goneUnless="@{individual.father==1}"
+                    android:id="@+id/father_age"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:text="@{Integer.toString(individual.f_age)}"
+                    android:inputType="number" />
 
                 <TextView
                     android:layout_width="match_parent"

@@ -2,6 +2,7 @@ package org.openhds.hdsscapture.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -120,7 +121,39 @@ public class IndividualFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentIndividualBinding.inflate(inflater, container, false);
-        binding.setIndividual(individual);
+        Individual b = new Individual();
+
+        b.individual_uuid = individual.individual_uuid;
+        b.extId = individual.extId;
+        b.ghanacard = individual.ghanacard;
+        b.dob = individual.dob;
+        b.age = individual.age;
+        b.insertDate =individual.insertDate;
+        b.firstName = individual.firstName;
+        b.lastName = individual.lastName;
+        b.gender = individual.gender;
+        b.dobAspect = individual.dobAspect;
+        b.otherName = individual.otherName;
+        b.mother_uuid = individual.mother_uuid;
+        b.father_uuid = individual.father_uuid;
+        b.fw_uuid = individual.fw_uuid;
+        b.complete = individual.complete;
+        b.other = individual.other;
+        //b.compextId = individual.compextId;
+        //b.houseExtId = individual.houseExtId;
+        b.endType = individual.endType;
+        b.gh = individual.gh;
+        b.mother = individual.mother;
+        b.father = individual.father;
+
+        binding.setIndividual(b);
+
+        if (binding.getIndividual().dob != null) {
+            final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
+            binding.individAge.setText(String.valueOf(estimatedAge));
+            binding.dob.setError(null);
+        }
+
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
@@ -191,7 +224,7 @@ public class IndividualFragment extends Fragment {
             public void onClick(View v) {
 
                 progressDialog = new ProgressDialog(requireContext());
-                progressDialog.setMessage("Loading Fathers...");
+                progressDialog.setMessage("Loading Mothers...");
                 progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 progressDialog.setCancelable(false);
 
@@ -217,7 +250,7 @@ public class IndividualFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 progressDialog = new ProgressDialog(requireContext());
-                progressDialog.setMessage("Loading Mothers...");
+                progressDialog.setMessage("Loading Fathers...");
                 progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 progressDialog.setCancelable(false);
 
@@ -237,13 +270,6 @@ public class IndividualFragment extends Fragment {
             }
         });
 
-        if (binding.getIndividual().dob!=null) {
-            final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
-            binding.individualAge.setText("" + estimatedAge + " years old");
-            binding.dob.setError(null);
-        }
-
-
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             // We use a String here, but any type that can be put in a Bundle is supported
@@ -257,6 +283,14 @@ public class IndividualFragment extends Fragment {
             if (bundle.containsKey((IndividualFragment.DATE_BUNDLES.DOB.getBundleKey()))) {
                 final String result = bundle.getString(IndividualFragment.DATE_BUNDLES.DOB.getBundleKey());
                 binding.dob.setText(result);
+
+                if (binding.getIndividual().dob != null) {
+                    final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
+                        binding.individAge.setText(String.valueOf(estimatedAge));
+                        binding.individAge.setTextColor(Color.MAGENTA);
+
+                    binding.dob.setError(null);
+                }
             }
 
         });
@@ -386,6 +420,30 @@ public class IndividualFragment extends Fragment {
                 Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
+
+            boolean agedif = false;
+            boolean modif = false;
+
+            if (!binding.fatherAge.getText().toString().trim().isEmpty() && !binding.individAge.getText().toString().trim().isEmpty()) {
+                int fAgeValue = Integer.parseInt(binding.fatherAge.getText().toString().trim());
+                int individidAgeValue = Integer.parseInt(binding.individAge.getText().toString().trim());
+                if (fAgeValue - individidAgeValue <10) {
+                    agedif = true;
+                    Toast.makeText(getActivity(), "Father selected is too young to be the father of this Individual ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            if (!binding.motherAge.getText().toString().trim().isEmpty() && !binding.individAge.getText().toString().trim().isEmpty()) {
+                int mthgeValue = Integer.parseInt(binding.motherAge.getText().toString().trim());
+                int individidAge = Integer.parseInt(binding.individAge.getText().toString().trim());
+                if (mthgeValue - individidAge <10) {
+                    modif = true;
+                    Toast.makeText(getActivity(), "Mother selected is too young to be the mother of this Individual ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();

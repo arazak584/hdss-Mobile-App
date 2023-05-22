@@ -402,16 +402,6 @@ public class HdssSociodemo extends BaseObservable {
     public Integer chew_bnut_oecoccur;
     @Expose
     public Integer drink_oecoccur;
-    @Expose
-    public Integer pd_birth_oholoc;
-    @Expose
-    public String pd_birth_othr_spfy_oholoc;
-    @Expose
-    public String pd_birth_fac_spfy_oholoc;
-    @Expose
-    public Integer pd_dm_scorres;
-    @Expose
-    public String pd_dm_rel_spfy_scorres;
 
 
     public HdssSociodemo() {
@@ -2325,42 +2315,6 @@ public class HdssSociodemo extends BaseObservable {
     }
 
 
-    public void setPd_birth_oholoc(AdapterView<?> parent, View view, int position, long id) {
-
-        if (position != parent.getSelectedItemPosition()) {
-            parent.setSelection(position);
-        }
-        if (position == 0) {
-            pd_birth_oholoc = AppConstants.NOSELECT;
-        } else {
-            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            pd_birth_oholoc = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-            ((TextView) parent.getChildAt(0)).setTextSize(20);
-        }
-        patternSkipper(view);
-
-
-    }
-
-
-    public void setPd_dm_scorres(AdapterView<?> parent, View view, int position, long id) {
-
-        if (position != parent.getSelectedItemPosition()) {
-            parent.setSelection(position);
-        }
-        if (position == 0) {
-            pd_dm_scorres = AppConstants.NOSELECT;
-        } else {
-            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            pd_dm_scorres = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-            ((TextView) parent.getChildAt(0)).setTextSize(20);
-        }
-        patternSkipper(view);
-
-
-    }
 
     public void setHouse_room_child_fcorres(RadioGroup view, int checkedId) {
         if (checkedId != view.getCheckedRadioButtonId()) {
@@ -2641,12 +2595,6 @@ public class HdssSociodemo extends BaseObservable {
             if (smoke_hhold_oecoccur == null || smoke_hhold_oecoccur != AppConstants.YES)
                 smoke_hhold_in_oecdosfrq = AppConstants.NOSELECT;
 
-
-            if (pd_birth_oholoc == null || pd_birth_oholoc != AppConstants.OTHER_SPECIFY)
-                pd_birth_othr_spfy_oholoc = "";
-
-            if (pd_dm_scorres == null || pd_dm_scorres != AppConstants.OTHER_SPECIFY)
-                pd_dm_rel_spfy_scorres = "";
 
             notifyPropertyChanged(BR._all);
         }

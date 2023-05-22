@@ -148,17 +148,17 @@ public class SocialgroupFragment extends Fragment {
         });
 
         SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-       try {
+            try {
             Socialgroup data = viewModel.find(socialgroup.socialgroup_uuid);
             if (data != null) {
+
+                binding.setSocialgroup(data);
 
                 if (data.groupName!= null && individual.firstName!= null && "FAKE".equals(data.groupName)){
 
                     data.groupName = individual.firstName +' '+ individual.lastName;
                     data.individual_uuid = individual.individual_uuid;
                 }
-
-                binding.setSocialgroup(data);
 
             }
            } catch (ExecutionException | InterruptedException e) {

@@ -159,7 +159,8 @@ public class PullActivity extends AppCompatActivity {
 
                         progress.dismiss();
                          textView_SyncHierarchyData.setText("Codebook and Locationhierarchy updated Successfully");
-                                textView_SyncHierarchyData.setTextColor(Color.rgb(0, 114, 133));
+                           textView_SyncHierarchyData.setTextColor(Color.GREEN);
+                                //textView_SyncHierarchyData.setTextColor(Color.rgb(0, 114, 133));
                             }
 
 
@@ -285,7 +286,7 @@ public class PullActivity extends AppCompatActivity {
                                         }
                                         progress.dismiss();
                                         textView_SyncIndividual.setText("Total Individuals Saved: " + counts);
-                                        textView_SyncIndividual.setTextColor(Color.rgb(0, 114, 133));
+                                        textView_SyncIndividual.setTextColor(Color.GREEN);
                                     });
                                 }
                                 File cacheDir = getExternalCacheDir();
@@ -415,7 +416,7 @@ public class PullActivity extends AppCompatActivity {
                                             @Override
                                             public void run() {
                                                 textView_SyncLocation.setText("Total Compounds Saved: " + counts);
-                                                textView_SyncLocation.setTextColor(Color.rgb(0, 114, 133));
+                                                textView_SyncLocation.setTextColor(Color.GREEN);
                                             }
                                         });
 
@@ -543,7 +544,7 @@ public class PullActivity extends AppCompatActivity {
                                         }
                                         progress.dismiss();
                                         textView_SyncResidency.setText("Total Residency Saved: " + counts);
-                                        textView_SyncResidency.setTextColor(Color.rgb(0, 114, 133));
+                                        textView_SyncResidency.setTextColor(Color.GREEN);
                                     });
                                 }
 
@@ -674,7 +675,7 @@ public class PullActivity extends AppCompatActivity {
                                         }
                                         progress.dismiss();
                                         textView_SyncRelationship.setText("Total Relationship Saved: " + counts);
-                                        textView_SyncRelationship.setTextColor(Color.rgb(0, 114, 133));
+                                        textView_SyncRelationship.setTextColor(Color.GREEN);
                                     });
                                 }
 
@@ -803,7 +804,7 @@ public class PullActivity extends AppCompatActivity {
                                         }
                                         progress.dismiss();
                                         textView_SyncSocialgroup.setText("Total Socialgroup Saved: " + counts);
-                                        textView_SyncSocialgroup.setTextColor(Color.rgb(0, 114, 133));
+                                        textView_SyncSocialgroup.setTextColor(Color.GREEN);
                                     });
                                 }
 
@@ -933,7 +934,7 @@ public class PullActivity extends AppCompatActivity {
                                         }
                                         progress.dismiss();
                                         textView_SyncPregnancy.setText("Total Pregnancy Saved: " + counts);
-                                        textView_SyncPregnancy.setTextColor(Color.rgb(0, 114, 133));
+                                        textView_SyncPregnancy.setTextColor(Color.GREEN);
                                     });
                                 }
 
@@ -1063,7 +1064,7 @@ public class PullActivity extends AppCompatActivity {
                                         }
                                         progress.dismiss();
                                         textView_SyncDemography.setText("Total Demographics Saved: " + counts);
-                                        textView_SyncDemography.setTextColor(Color.rgb(0, 114, 133));
+                                        textView_SyncDemography.setTextColor(Color.GREEN);
                                     });
                                 }
 
@@ -1194,8 +1195,6 @@ public class PullActivity extends AppCompatActivity {
                                             .addColumn("mosquito_net_fcorres").addColumn("mosquito_net_num_fcorres").addColumn("motorcycle_fcorres")
                                             .addColumn("motorcycle_num_fcorres").addColumn("nth_trb_spfy_cethnic")
                                             .addColumn("othr_trb_spfy_cethnic").addColumn("own_rent_scorres").addColumn("own_rent_spfy_scorres")
-                                            .addColumn("pd_birth_fac_spfy_oholoc").addColumn("pd_birth_oholoc")
-                                            .addColumn("pd_birth_othr_spfy_oholoc").addColumn("pd_dm_rel_spfy_scorres").addColumn("pd_dm_scorres")
                                             .addColumn("pig_fcorres").addColumn("pig_num_fcorres").addColumn("plough_fcorres")
                                             .addColumn("plough_num_fcorres").addColumn("poultry_fcorres").addColumn("poultry_num_fcorres")
                                             .addColumn("ptr_busown_spfy_scorres").addColumn("ptr_othr_spfy_scorres")
@@ -1252,7 +1251,7 @@ public class PullActivity extends AppCompatActivity {
                                         }
                                         progress.dismiss();
                                         textView_SyncSes.setText("Total SES Saved: " + counts);
-                                        textView_SyncSes.setTextColor(Color.rgb(0, 114, 133));
+                                        textView_SyncSes.setTextColor(Color.GREEN);
                                     });
                                 }
 
