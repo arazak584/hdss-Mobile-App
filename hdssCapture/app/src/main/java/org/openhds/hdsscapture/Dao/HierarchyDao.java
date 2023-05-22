@@ -20,6 +20,9 @@ public interface HierarchyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Hierarchy data);
 
+    @Query("DELETE FROM locationhierarchy")
+    void deleteAll();
+
     @Update
     void update(Hierarchy data);
 

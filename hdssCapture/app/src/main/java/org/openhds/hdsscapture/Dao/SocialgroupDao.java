@@ -27,6 +27,9 @@ public interface SocialgroupDao {
     @Update
     void update(Socialgroup socialgroup);
 
+    @Query("DELETE FROM socialgroup")
+    void deleteAll();
+
     @Query("SELECT * FROM socialgroup WHERE socialgroup_uuid=:id")
     Socialgroup retrieve(String id);
 

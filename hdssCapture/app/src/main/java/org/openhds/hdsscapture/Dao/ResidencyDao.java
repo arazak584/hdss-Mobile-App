@@ -28,6 +28,9 @@ public interface ResidencyDao {
     @Update(entity = Residency.class)
    int update (ResidencyAmendment residencyAmendment);
 
+    @Query("DELETE FROM residency")
+    void deleteAll();
+
     @Query("SELECT * FROM residency")
     List<Residency> getAll();
 

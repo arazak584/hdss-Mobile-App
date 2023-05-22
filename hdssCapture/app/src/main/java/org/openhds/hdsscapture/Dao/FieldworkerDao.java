@@ -20,6 +20,9 @@ public interface FieldworkerDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Fieldworker data);
 
+    @Query("DELETE FROM fieldworker")
+    void deleteAll();
+
     @Update
     void update(Fieldworker data);
 

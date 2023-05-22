@@ -19,6 +19,9 @@ public interface CodeBookDao {
     @Query("SELECT * FROM CodeBook")
     List<CodeBook> retrieve();
 
+    @Query("DELETE FROM codebook")
+    void deleteAll();
+
     @Query("SELECT codeValue,codeLabel FROM CodeBook WHERE codeFeature=:codeFeature")
     List<KeyValuePair> retrieveCodesOfFeature(String codeFeature);
 

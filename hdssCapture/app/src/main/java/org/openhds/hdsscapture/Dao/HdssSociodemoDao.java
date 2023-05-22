@@ -24,6 +24,9 @@ public interface HdssSociodemoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<HdssSociodemo> hdssSociodemos);
 
+    @Query("DELETE FROM sociodemo")
+    void deleteAll();
+
     @Update
     void update(HdssSociodemo s);
 

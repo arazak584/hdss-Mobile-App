@@ -103,5 +103,32 @@ public abstract class AppDatabase extends RoomDatabase {
             super.onCreate(db);
         }
     };
+
+    public void resetDatabase() {
+        databaseWriteExecutor.execute(() -> {
+            // Delete all data from the tables
+            individualDao().deleteAll();
+            codeBookDao().deleteAll();
+            locationDao().deleteAll();
+            deathDao().deleteAll();
+            demographicDao().deleteAll();
+            hdssSociodemoDao().deleteAll();
+            hierarchyDao().deleteAll();
+            inmigrationDao().deleteAll();
+            outcomeDao().deleteAll();
+            outmigrationDao().deleteAll();
+            pregnancyDao().deleteAll();
+            pregnancyoutcomeDao().deleteAll();
+            relationshipDao().deleteAll();
+            residencyDao().deleteAll();
+            roundDao().deleteAll();
+            socialgroupDao().deleteAll();
+            visitDao().deleteAll();
+
+
+            // Perform any other necessary cleanup or initialization
+        });
+    }
+
 }
 

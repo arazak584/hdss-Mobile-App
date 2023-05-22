@@ -18,6 +18,8 @@ public interface DeathDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Death... death);
 
+    @Query("DELETE FROM death")
+    void deleteAll();
 
     @Query("SELECT * FROM death")
     List<Death> getAll();

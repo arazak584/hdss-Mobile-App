@@ -19,6 +19,9 @@ PregnancyoutcomeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Pregnancyoutcome... pregnancyoutcome);
 
+    @Query("DELETE FROM pregnancyoutcome")
+    void deleteAll();
+
     @Query("SELECT * FROM pregnancyoutcome ")
     List<Pregnancyoutcome> getAll();
 

@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.R;
 
 /**
@@ -42,6 +45,7 @@ public class InfoFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_info, container, false);
 
         Button buttonUrl = view.findViewById(R.id.button_url);
+        Button buttonReset = view.findViewById(R.id.button_resetDatabase);
 
         buttonUrl.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,6 +53,20 @@ public class InfoFragment extends DialogFragment {
                 Uri uri = Uri.parse("https://github.com/arazak584/hdss_apk/blob/main/app-hdss_v2023_1.apk"); // replace with your URL
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
+            }
+        });
+
+        buttonReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the context of the application
+                Context context = requireContext().getApplicationContext();
+
+                // Reset the AppDatabase
+                AppDatabase.getDatabase(context).resetDatabase();
+
+                // Display a message or perform any other necessary actions
+                Toast.makeText(context, "Database reset", Toast.LENGTH_SHORT).show();
             }
         });
 

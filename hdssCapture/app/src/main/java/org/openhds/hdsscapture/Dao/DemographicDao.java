@@ -26,6 +26,9 @@ public interface DemographicDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Demographic> demographics);
 
+    @Query("DELETE FROM demographic")
+    void deleteAll();
+
     @Update
     void update(Demographic demographic);
 

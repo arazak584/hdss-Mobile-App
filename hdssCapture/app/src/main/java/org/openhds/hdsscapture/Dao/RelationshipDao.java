@@ -24,6 +24,9 @@ public interface RelationshipDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Relationship> relationships);
 
+    @Query("DELETE FROM relationship")
+    void deleteAll();
+
     @Update
     void update(Relationship relationship);
 

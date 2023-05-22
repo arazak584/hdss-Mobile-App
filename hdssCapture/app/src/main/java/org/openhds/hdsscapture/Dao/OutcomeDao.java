@@ -18,6 +18,9 @@ OutcomeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Outcome... outcome);
 
+    @Query("DELETE FROM outcome")
+    void deleteAll();
+
     @Query("SELECT * FROM outcome ")
     List<Outcome> getAll();
 

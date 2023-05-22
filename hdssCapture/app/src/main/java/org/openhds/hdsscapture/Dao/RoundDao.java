@@ -18,6 +18,9 @@ public interface RoundDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Round... round);
 
+    @Query("DELETE FROM round")
+    void deleteAll();
+
 
     @Query("SELECT * from round")
     List<Round> getAll();

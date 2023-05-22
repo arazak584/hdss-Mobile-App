@@ -19,6 +19,8 @@ public interface OutmigrationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Outmigration... outmigration);
 
+    @Query("DELETE FROM outmigration")
+    void deleteAll();
 
     @Query("SELECT * FROM outmigration")
     List<Outmigration> getAll();

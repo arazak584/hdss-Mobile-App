@@ -22,6 +22,9 @@ public interface LocationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Locations locations);
 
+    @Query("DELETE FROM locations")
+    void deleteAll();
+
     @Update
     void update(Locations locations);
 

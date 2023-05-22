@@ -991,7 +991,7 @@ public class PushActivity extends AppCompatActivity {
         final List<Outmigration> outmigrationList = new ArrayList<>();
         try {
             outmigrationList.addAll(outmigrationViewModel.findToSync());
-            buttonSendOmg.setText("Outmigration (" + inmigrationList.size() + ") to send");
+            buttonSendOmg.setText("Outmigration (" + outmigrationList.size() + ") to send");
             textViewSendOmg.setTextColor(Color.rgb(0, 114, 133));
             if (outmigrationList.isEmpty()) {
                 buttonSendOmg.setVisibility(View.GONE);

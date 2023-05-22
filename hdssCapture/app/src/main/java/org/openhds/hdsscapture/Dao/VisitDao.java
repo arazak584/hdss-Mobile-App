@@ -19,6 +19,9 @@ public interface VisitDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create (Visit visit);
 
+    @Query("DELETE FROM visit")
+    void deleteAll();
+
     @Update
     void update(Visit visit);
 

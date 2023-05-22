@@ -31,6 +31,9 @@ public interface IndividualDao {
     @Update
     void update(Individual individual);
 
+    @Query("DELETE FROM individual")
+    void deleteAll();
+
     @Update(entity = Individual.class)
     int update(IndividualAmendment individualAmendment);
 

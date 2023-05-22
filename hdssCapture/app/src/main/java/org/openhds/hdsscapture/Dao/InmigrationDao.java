@@ -19,6 +19,9 @@ public interface InmigrationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Inmigration... inmigration);
 
+    @Query("DELETE FROM inmigration")
+    void deleteAll();
+
     @Query("SELECT * FROM inmigration")
     List<Inmigration> getAll();
 
