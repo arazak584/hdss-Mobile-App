@@ -114,116 +114,6 @@ public class EventsFragment extends Fragment {
         binding = FragmentEventsBinding.inflate(inflater, container, false);
         binding.setIndividual(individual);
 
-        /*
-        // when isAllFabsVisible becomes
-        // true make all the action name
-        // texts and FABs GONE.
-        binding.addCghohFab.hide();
-        binding.addOutcomeFab.hide();
-        binding.addSesFab.hide();
-
-        // make the boolean variable false
-        // as we have set the sub FABs
-        // visibility to GONE
-        isAllFabsVisible = false;
-
-        binding.addAdhocFab.setOnClickListener(view -> {
-
-        if (!isAllFabsVisible) {
-
-            // when isAllFabsVisible becomes
-            // true make all the action name
-            // texts and FABs VISIBLE.
-//                binding.addAdverseFab.show();
-            binding.addCghohFab.show();
-            binding.addOutcomeFab.show();
-            binding.addSesFab.show();
-
-            // make the boolean variable true as
-            // we have set the sub FABs
-            // visibility to GONE
-            isAllFabsVisible = true;
-
-        } else {
-
-            // when isAllFabsVisible becomes
-            // true make all the action name
-            // texts and FABs GONE.
-//                binding.addAdverseFab.hide();
-            binding.addCghohFab.hide();
-            binding.addOutcomeFab.hide();
-            binding.addSesFab.hide();
-
-
-            // make the boolean variable false
-            // as we have set the sub FABs
-            // visibility to GONE
-            isAllFabsVisible = false;
-        }
-        });
-
-        binding.addSesFab.setOnClickListener(view -> {
-
-            HdssSociodemoViewModel viewModel =
-                    new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
-            int countForms = 0;
-            try {
-                List<HdssSociodemo> ses = viewModel.find(socialgroup.socialgroup_uuid);
-                countForms = ses.size();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            final EventForm eventForm = new EventForm(AppConstants.EVENT_SOCIO, countForms, AppConstants.EVENT_DSOCIO, 0, 0);
-
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    SocioFragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
-
-        });
-
-        binding.addOutcomeFab.setOnClickListener(view -> {
-
-            PregnancyoutcomeViewModel viewModel =
-                    new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
-            int countForms = 0;
-            try {
-                List<Pregnancyoutcome> preg = viewModel.findpreg(individual.individual_uuid);
-                countForms = preg.size();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            final EventForm eventForm = new EventForm(AppConstants.EVENT_HDSS12, countForms, AppConstants.EVENT_OUTCOMES, 0, 0);
-
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    Pregnancyoutcome1Fragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
-
-        });
-
-        binding.addCghohFab.setOnClickListener(view -> {
-
-            SocialgroupViewModel viewModel =
-                    new ViewModelProvider(this).get(SocialgroupViewModel.class);
-            int countForms = 0;
-            try {
-                List<Socialgroup> socialgroups = viewModel.findhse(socialgroup.houseExtId);
-                countForms = socialgroups.size();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            final EventForm eventForm = new EventForm(AppConstants.EVENT_HDSS12, countForms, AppConstants.EVENT_OUTCOMES, 0, 0);
-
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    SocialgroupFragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
-
-        });*/
 
 
         binding.addMenuFab.setOnClickListener(view -> {
@@ -232,22 +122,23 @@ public class EventsFragment extends Fragment {
                     HouseMembersFragment.newInstance(individual, residency, locations, socialgroup)).commit();
         });
 
-        final SimpleDateFormat f = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
-        //final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-ddd", Locale.US);
+        //final SimpleDateFormat f = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+        final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
         int ageyrs = 0;
 
         try {
-            Date dobdif = f.parse(String.valueOf(individual.dob));
+            Date dobdif = f.parse(individual.getDob());
+            System.out.println("dateob: " + dobdif);
             long difference = Math.abs(dobdif.getTime() - new Date().getTime());
             ageyrs = (int) (difference / (1000 * 60 * 60 * 24 * 365.25));
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-//        System.out.println("dob: " + individual.dob);
-//        System.out.println("age: " + individual.age);
-//        System.out.println("ageyrs: " + ageyrs);
+        System.out.println("dob: " + individual.dob);
+        System.out.println("age: " + individual.age);
+        System.out.println("ageyrs: " + ageyrs);
 
 
         final int yrs = individual.age + (int) ageyrs;

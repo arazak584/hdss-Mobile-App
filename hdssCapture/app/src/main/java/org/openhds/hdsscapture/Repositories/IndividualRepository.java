@@ -57,9 +57,9 @@ public class IndividualRepository {
         return future.get();
     }
 
-    public List<Individual> findAll(Date startDate,Date endDate) throws ExecutionException, InterruptedException {
+    public List<Individual> findAll() throws ExecutionException, InterruptedException {
 
-        Callable<List<Individual>> callable = () -> dao.retrieve(startDate, endDate);
+        Callable<List<Individual>> callable = () -> dao.retrieve();
 
         Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
 

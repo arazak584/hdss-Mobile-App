@@ -325,6 +325,27 @@ public class Individual extends BaseObservable implements Parcelable {
         this.gh = gh;
     }
 
+    public String getF_age() {
+        return f_age == null ? "" : String.valueOf(f_age);
+    }
+
+    public void setF_age(String f_age) {
+        try {
+            this.f_age = (f_age == null) ? null : Integer.valueOf(f_age);
+        } catch (NumberFormatException e) {
+        }
+    }
+
+    public String getM_age() {
+        return m_age == null ? "" : String.valueOf(m_age);
+    }
+
+    public void setM_age(String m_age) {
+        try {
+            this.m_age = (m_age == null) ? null : Integer.valueOf(m_age);
+        } catch (NumberFormatException e) {
+        }
+    }
 
     protected Individual(Parcel in) {
         this.extId = in.readString();

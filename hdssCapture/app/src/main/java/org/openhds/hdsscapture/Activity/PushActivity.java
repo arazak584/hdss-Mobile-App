@@ -23,6 +23,7 @@ import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
+import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
@@ -37,6 +38,7 @@ import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
+import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Outmigration;
@@ -181,7 +183,7 @@ public class PushActivity extends AppCompatActivity {
                             Visit[] d = data.getData().toArray(new Visit[0]);
 
                             for (Visit elem : d) {
-                                elem.complete = 2;
+                                elem.complete = 3;
                             }
                             visitViewModel.add(d);
 
@@ -195,6 +197,71 @@ public class PushActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Call<DataWrapper<Visit>> call, @NonNull Throwable t) {
                         progress.dismiss();
                         Toast.makeText(PushActivity.this, "Failed to send Visitdata", Toast.LENGTH_LONG).show();
+                        Log.e(TAG, t.getMessage());
+
+                    }
+                });
+            } else {
+                progress.dismiss();
+            }
+
+        });
+
+        //PUSH LISTING DATA
+        final Button buttonSendList = findViewById(R.id.buttonSendList);
+        final TextView textViewSendList = findViewById(R.id.textViewSendList);
+        final ListingViewModel listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
+
+        //GET MODIFIED DATA
+        final List<Listing> listingList = new ArrayList<>();
+        try {
+            listingList.addAll(listingViewModel.findToSync());
+            buttonSendList.setText("Listing(" + listingList.size() + ") to send");
+            textViewSendList.setTextColor(Color.rgb(0, 114, 133));
+            if (listingList.isEmpty()) {
+                buttonSendList.setVisibility(View.GONE);
+                textViewSendList.setVisibility(View.GONE);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        buttonSendList.setOnClickListener(v -> {
+            progress.setMessage(getResources().getString(R.string.init_syncing));
+            progress.show();
+
+            //WRAP THE DATA
+            final DataWrapper<Listing> data = new DataWrapper<>(listingList);
+
+            //SEND THE DATA
+            if (data.getData() != null && !data.getData().isEmpty()) {
+
+                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
+
+                final Call<DataWrapper<Listing>> c_callable = dao.sendListing(data);
+                c_callable.enqueue(new Callback<DataWrapper<Listing>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DataWrapper<Listing>> call, Response<DataWrapper<Listing>> response) {
+                        if (response != null && response.body() != null && response.isSuccessful()
+                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
+
+                            Listing[] d = data.getData().toArray(new Listing[0]);
+
+                            for (Listing elem : d) {
+                                elem.complete = 3;
+                            }
+                            listingViewModel.add(d);
+
+                            progress.dismiss();
+                            textViewSendList.setText("Sent " + d.length + " record(s)");
+                            textViewSendList.setTextColor(Color.rgb(0, 114, 133));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<DataWrapper<Listing>> call, @NonNull Throwable t) {
+                        progress.dismiss();
+                        Toast.makeText(PushActivity.this, "Failed to send Listing", Toast.LENGTH_LONG).show();
                         Log.e(TAG, t.getMessage());
 
                     }

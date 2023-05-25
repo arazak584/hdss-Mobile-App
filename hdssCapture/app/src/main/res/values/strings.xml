@@ -529,7 +529,7 @@
     <string name="server_setup">Server Setup</string>
     <string name="site">Site</string>
     <string name="gh">Do you have Ghana Card?</string>
-    <string name="ghanacard">Enter Ghana Card Number</string>
+    <string name="ghanacard">Enter Ghana Card Number [GHA-XXXXXXXXX-X]</string>
     <string name="get_ses">GET SES [PROFILE]</string>
     <string name="stdate">Date</string>
     <string name="start">Start</string>
@@ -538,6 +538,9 @@
     <string name="mother">Is the Mother Known and Registered</string>
     <string name="father">Is the Father Known and Registered</string>
     <string name="createLocation">Create Location</string>
+    <string name="listing">Listing</string>
+    <string name="fieldworker">Name of Fieldworker</string>
+    <string name="send_list">Send Listing</string>
 
     //SocioDemo End
 

@@ -50,8 +50,8 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.findToSync();
     }
 
-    public List<Individual> findAll(Date startDate,Date endDate) throws ExecutionException, InterruptedException {
-        return individualRepository.findAll(startDate, endDate);
+    public List<Individual> findAll() throws ExecutionException, InterruptedException {
+        return individualRepository.findAll();
     }
 
     public List<Individual> retrieveBySearch(String id) throws ExecutionException, InterruptedException {

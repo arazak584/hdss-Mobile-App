@@ -121,32 +121,8 @@ public class IndividualFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentIndividualBinding.inflate(inflater, container, false);
-        Individual b = new Individual();
 
-        b.individual_uuid = individual.individual_uuid;
-        b.extId = individual.extId;
-        b.ghanacard = individual.ghanacard;
-        b.dob = individual.dob;
-        b.age = individual.age;
-        b.insertDate =individual.insertDate;
-        b.firstName = individual.firstName;
-        b.lastName = individual.lastName;
-        b.gender = individual.gender;
-        b.dobAspect = individual.dobAspect;
-        b.otherName = individual.otherName;
-        b.mother_uuid = individual.mother_uuid;
-        b.father_uuid = individual.father_uuid;
-        b.fw_uuid = individual.fw_uuid;
-        b.complete = individual.complete;
-        b.other = individual.other;
-        //b.compextId = individual.compextId;
-        //b.houseExtId = individual.houseExtId;
-        b.endType = individual.endType;
-        b.gh = individual.gh;
-        b.mother = individual.mother;
-        b.father = individual.father;
-
-        binding.setIndividual(b);
+        binding.setIndividual(individual);
 
         if (binding.getIndividual().dob != null) {
             final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
@@ -427,9 +403,10 @@ public class IndividualFragment extends Fragment {
             if (!binding.fatherAge.getText().toString().trim().isEmpty() && !binding.individAge.getText().toString().trim().isEmpty()) {
                 int fAgeValue = Integer.parseInt(binding.fatherAge.getText().toString().trim());
                 int individidAgeValue = Integer.parseInt(binding.individAge.getText().toString().trim());
-                if (fAgeValue - individidAgeValue <10) {
+                if (fAgeValue - individidAgeValue < 10) {
                     agedif = true;
-                    Toast.makeText(getActivity(), "Father selected is too young to be the father of this Individual ", Toast.LENGTH_SHORT).show();
+                    binding.fatherAge.setError("Father selected is too young to be the father of this Individual");
+                    Toast.makeText(getActivity(), "Father selected is too young to be the father of this Individual", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -437,12 +414,31 @@ public class IndividualFragment extends Fragment {
             if (!binding.motherAge.getText().toString().trim().isEmpty() && !binding.individAge.getText().toString().trim().isEmpty()) {
                 int mthgeValue = Integer.parseInt(binding.motherAge.getText().toString().trim());
                 int individidAge = Integer.parseInt(binding.individAge.getText().toString().trim());
-                if (mthgeValue - individidAge <10) {
+                if (mthgeValue - individidAge < 10) {
                     modif = true;
-                    Toast.makeText(getActivity(), "Mother selected is too young to be the mother of this Individual ", Toast.LENGTH_SHORT).show();
+                    binding.motherAge.setError("Mother selected is too young to be the mother of this Individual");
+                    Toast.makeText(getActivity(), "Mother selected is too young to be the mother of this Individual", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
+
+
+
+
+            boolean gh = false;
+
+            if (!binding.ghanacard.getText().toString().trim().isEmpty()) {
+                String input = binding.ghanacard.getText().toString().trim();
+                String regex = "[A-Z]{3}-\\d{9}-\\d";
+
+                if (!input.matches(regex)) {
+                    gh = true;
+                    Toast.makeText(getActivity(), "Ghana Card Number or format is incorrect", Toast.LENGTH_SHORT).show();
+                    binding.ghanacard.setError("Format Should Be GHA-XXXXXXXXX-X");
+                    return;
+                }
+            }
+
 
 
             if (hasErrors) {

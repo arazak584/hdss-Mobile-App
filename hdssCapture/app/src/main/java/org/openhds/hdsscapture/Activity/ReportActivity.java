@@ -24,6 +24,7 @@ import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
+import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
@@ -55,6 +56,7 @@ public class ReportActivity extends AppCompatActivity {
     private DemographicViewModel demographicViewModel;
     private HdssSociodemoViewModel hdssSociodemoViewModel;
     private RelationshipViewModel relationshipViewModel;
+    private ListingViewModel listingViewModel;
     private ReportAdapter reportAdapter;
 
     private EditText startDateEditText, endDateEditText, usernameEditText;
@@ -131,6 +133,7 @@ public class ReportActivity extends AppCompatActivity {
         demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
         hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
         relationshipViewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
+        listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
 
         Button generateReportButton = findViewById(R.id.bt_report);
         generateReportButton.setOnClickListener(new View.OnClickListener() {
@@ -206,11 +209,17 @@ public class ReportActivity extends AppCompatActivity {
             locsCounter.index = 4;
             list.add(4, locsCounter);
 
+            ReportCounter listCounter = new ReportCounter();
+            listCounter.name = "Listing";
+            listCounter.count = listingViewModel.count(startDate, endDate, username);
+            listCounter.index = 5;
+            list.add(5, listCounter);
+
             ReportCounter nhseCounter = new ReportCounter();
             nhseCounter.name = "New Household";
             nhseCounter.count = socialgroupViewModel.count(startDate, endDate, username);
-            nhseCounter.index = 5;
-            list.add(5, nhseCounter);
+            nhseCounter.index = 6;
+            list.add(6, nhseCounter);
 
 //            int c=1;
 //            for(Socialgroup e: socialgroupViewModel.findAll(startDate, endDate)){
@@ -226,44 +235,44 @@ public class ReportActivity extends AppCompatActivity {
             ReportCounter imgCounter = new ReportCounter();
             imgCounter.name = "Inmigration";
             imgCounter.count = inmigrationViewModel.count(startDate, endDate, username);
-            imgCounter.index = 6;
-            list.add(6, imgCounter);
+            imgCounter.index = 7;
+            list.add(7, imgCounter);
 
             ReportCounter omgCounter = new ReportCounter();
             omgCounter.name = "Outmigration";
             omgCounter.count = outmigrationViewModel.count(startDate, endDate, username);
-            omgCounter.index = 7;
-            list.add(7, omgCounter);
+            omgCounter.index = 8;
+            list.add(8, omgCounter);
 
             ReportCounter pregCounter = new ReportCounter();
             pregCounter.name = "Pregnancy";
             pregCounter.count = pregnancyViewModel.count(startDate, endDate, username);
-            pregCounter.index = 8;
-            list.add(8, pregCounter);
+            pregCounter.index = 9;
+            list.add(9, pregCounter);
 
             ReportCounter outcomeCounter = new ReportCounter();
             outcomeCounter.name = "Pregnancy Outcome";
             outcomeCounter.count = pregnancyoutcomeViewModel.count(startDate, endDate, username);
-            outcomeCounter.index = 9;
-            list.add(9, outcomeCounter);
+            outcomeCounter.index = 10;
+            list.add(10, outcomeCounter);
 
             ReportCounter demoCounter = new ReportCounter();
             demoCounter.name = "Demographic";
             demoCounter.count = demographicViewModel.count(startDate, endDate, username);
-            demoCounter.index = 10;
-            list.add(10, demoCounter);
+            demoCounter.index = 11;
+            list.add(11, demoCounter);
 
             ReportCounter sesCounter = new ReportCounter();
             sesCounter.name = "Household Profile";
             sesCounter.count = hdssSociodemoViewModel.count(startDate, endDate, username);
-            sesCounter.index = 11;
-            list.add(11, sesCounter);
+            sesCounter.index = 12;
+            list.add(12, sesCounter);
 
             ReportCounter dthCounter = new ReportCounter();
             dthCounter.name = "Death";
             dthCounter.count = deathViewModel.count(startDate, endDate, username);
-            dthCounter.index = 12;
-            list.add(12, dthCounter);
+            dthCounter.index = 13;
+            list.add(13, dthCounter);
 
 
             reportAdapter = new ReportAdapter(this);

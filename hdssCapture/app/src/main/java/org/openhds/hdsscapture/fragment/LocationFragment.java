@@ -299,6 +299,33 @@ public class LocationFragment extends Fragment {
                 return;
             }
 
+            boolean loc = false;
+            boolean nhrc = false;
+            boolean dhrc = false;
+
+            if (!binding.locationcluster.getText().toString().trim().isEmpty() && !binding.locationcompno.getText().toString().trim().isEmpty() && binding.site.getSelectedItem() != null) {
+                String vill = binding.locationcluster.getText().toString().trim();
+                String locs = binding.locationcompno.getText().toString().trim();
+                String site = binding.site.getSelectedItem().toString();
+
+                if (!vill.startsWith(locs.substring(0, 2))) {
+                    if (site.equals("KHDSS")) {
+                        loc = true;
+                    } else if (site.equals("NHDSS") && !vill.startsWith(locs.substring(0, 3))) {
+                        nhrc = true;
+                    } else if (site.equals("DHDSS") && !vill.startsWith(locs.substring(0, 4))) {
+                        dhrc = true;
+                    }
+
+                    Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_SHORT).show();
+                    binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
+                    return;
+                }
+            }
+
+
+
+
             locationViewModel.add(locations);
             Toast.makeText(v.getContext(), "Saved Successfully", Toast.LENGTH_LONG).show();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,

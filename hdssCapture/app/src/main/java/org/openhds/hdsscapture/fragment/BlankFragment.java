@@ -206,6 +206,13 @@ public class BlankFragment extends Fragment {
                     BaselineFragment.newInstance(individual, residency, locations,socialgroup)).commit();
         });
 
+        final ExtendedFloatingActionButton add_listing = binding.getRoot().findViewById(R.id.button_listing);
+        add_listing.setOnClickListener(v -> {
+
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    ListingFragment.newInstance(locations)).commit();
+        });
+
         View view = binding.getRoot();
         return view;
 

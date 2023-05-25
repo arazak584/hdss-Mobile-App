@@ -45,7 +45,7 @@ public class HdssSociodemo extends BaseObservable {
     public String location_uuid;
 
     @Expose
-    public Date mnh03_formcompldat;
+    public Date formcompldate;
 
     @Expose
     public Date insertDate;
@@ -2367,16 +2367,16 @@ public class HdssSociodemo extends BaseObservable {
     }
 
     @Bindable
-    public String getMnh03_formcompldat() {
-        if (mnh03_formcompldat == null) return "";
-        return f.format(mnh03_formcompldat);
+    public String getFormcompldate() {
+        if (formcompldate == null) return "";
+        return f.format(formcompldate);
     }
 
-    public void setMnh03_formcompldat(String mnh03_formcompldat) {
-        if (mnh03_formcompldat == null) this.mnh03_formcompldat = null;
+    public void setFormcompldate(String formcompldate) {
+        if (formcompldate == null) this.formcompldate = null;
         else
             try {
-                this.mnh03_formcompldat = (mnh03_formcompldat == null) ? null : f.parse(mnh03_formcompldat);
+                this.formcompldate = (formcompldate == null) ? null : f.parse(formcompldate);
             } catch (ParseException e) {
 
             }

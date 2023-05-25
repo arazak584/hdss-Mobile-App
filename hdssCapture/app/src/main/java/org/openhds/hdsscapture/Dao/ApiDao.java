@@ -9,6 +9,7 @@ import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
+import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Outmigration;
@@ -109,6 +110,9 @@ public interface ApiDao {
 
     @POST("/api/demographic")
     Call<DataWrapper<Demographic>> sendDemographicdata(@Body DataWrapper<Demographic> dataModal);
+
+    @POST("/api/listing")
+    Call<DataWrapper<Listing>> sendListing(@Body DataWrapper<Listing> dataModal);
 
 
 }

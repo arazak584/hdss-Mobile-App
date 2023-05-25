@@ -3,8 +3,6 @@ package org.openhds.hdsscapture.entity.subentity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Date;
-
 public class CaseItem implements Parcelable {
     public CaseItem() {
     }
@@ -14,7 +12,7 @@ public class CaseItem implements Parcelable {
     public String lastName;
     public String extId;
     public Integer age;
-    public Date dob;
+    public String dob;
     public String location_uuid;
     public String residency_uuid;
     public String socialgroup_uuid;
@@ -27,7 +25,7 @@ public class CaseItem implements Parcelable {
         this.lastName = in.readString();
         this.extId = in.readString();
         this.age = in.readInt();
-        this.dob = (java.util.Date) in.readSerializable();
+        this.dob = in.readString();
         this.location_uuid = in.readString();
         this.residency_uuid = in.readString();
         this.socialgroup_uuid = in.readString();

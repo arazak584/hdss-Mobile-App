@@ -273,7 +273,8 @@ public class HierarchyActivity extends AppCompatActivity {
                 // Load level 6 data
                 try {
                     List<Hierarchy> level6Data = hierarchyViewModel.retrieveLevel6(level5Data.getUuid());
-                    if(position == 0){ level6Data = null;} else{
+                    if(position == 0){ level6Data = null;}
+                    else{
                         level6Data.add(0,new Hierarchy("","Select Cluster"));
                         level6Adapter.clear();
                         level6Adapter.addAll(level6Data);}
@@ -303,7 +304,7 @@ public class HierarchyActivity extends AppCompatActivity {
 
         final ExtendedFloatingActionButton start = findViewById(R.id.btn_location);
         start.setOnClickListener(v -> {
-            if (level6Data == null || level6Spinner.getAdapter().isEmpty()) {
+            if (level6Adapter == null || level6Spinner.getAdapter().isEmpty()) {
                 Toast.makeText(this, "Please Select All Fields", Toast.LENGTH_LONG).show();
                 return;
             }

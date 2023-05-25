@@ -3,6 +3,7 @@ package org.openhds.hdsscapture.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.databinding.BaseObservable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -11,7 +12,7 @@ import androidx.room.PrimaryKey;
 import org.jetbrains.annotations.NotNull;
 
 @Entity(tableName = "fieldworker")
-public class Fieldworker implements Parcelable {
+public class Fieldworker extends BaseObservable implements Parcelable {
 
 
     @NotNull
@@ -25,8 +26,11 @@ public class Fieldworker implements Parcelable {
     @ColumnInfo(name = "password")
     public String password;
 
-    @ColumnInfo(name = "fullName")
-    public String fullName;
+    @ColumnInfo(name = "firstName")
+    public String firstName;
+
+    @ColumnInfo(name = "lastName")
+    public String lastName;
 
     @ColumnInfo(name = "status")
     public Integer status;
@@ -63,22 +67,32 @@ public class Fieldworker implements Parcelable {
         this.password = password;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public Fieldworker() {
     }
 
     protected Fieldworker(Parcel in) {
-        this.fw_uuid = in.readString();
+        this.firstName = in.readString();
+        this.lastName = in.readString();
         this.username = in.readString();
         this.password = in.readString();
-        this.fullName = in.readString();
+        this.status = in.readInt();
+        this.fw_uuid = in.readString();
     }
 
     public static final Creator<Fieldworker> CREATOR = new Creator<Fieldworker>() {
@@ -100,10 +114,13 @@ public class Fieldworker implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.fw_uuid);
+        dest.writeString(this.firstName);
+        dest.writeString(this.lastName);
         dest.writeString(this.username);
         dest.writeString(this.password);
-        dest.writeString(this.fullName);
+        dest.writeInt(this.status);
+        dest.writeString(this.fw_uuid);
+
     }
 
     @Override

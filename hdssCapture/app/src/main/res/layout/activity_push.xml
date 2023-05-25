@@ -48,6 +48,19 @@
             android:layout_height="wrap_content"
             android:textSize="20sp" />
 
+        <Button
+            android:id="@+id/buttonSendList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_list"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
     <Button
             android:id="@+id/buttonSendIndividual"
             android:layout_width="match_parent"

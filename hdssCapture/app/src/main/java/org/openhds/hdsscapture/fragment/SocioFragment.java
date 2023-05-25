@@ -197,7 +197,7 @@ public class SocioFragment extends Fragment {
                     return;
                 }
 
-            data.mnh03_formcompldat = new Date();
+            data.formcompldate = new Date();
 
             //get the hour and minute on first fill
             Calendar cal = Calendar.getInstance();

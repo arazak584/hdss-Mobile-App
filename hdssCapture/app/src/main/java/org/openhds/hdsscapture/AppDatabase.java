@@ -17,6 +17,7 @@ import org.openhds.hdsscapture.Dao.HdssSociodemoDao;
 import org.openhds.hdsscapture.Dao.HierarchyDao;
 import org.openhds.hdsscapture.Dao.IndividualDao;
 import org.openhds.hdsscapture.Dao.InmigrationDao;
+import org.openhds.hdsscapture.Dao.ListingDao;
 import org.openhds.hdsscapture.Dao.LocationDao;
 import org.openhds.hdsscapture.Dao.OutcomeDao;
 import org.openhds.hdsscapture.Dao.OutmigrationDao;
@@ -36,6 +37,7 @@ import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
+import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Outmigration;
@@ -53,7 +55,7 @@ import java.util.concurrent.Executors;
 @Database(  entities = {
         Relationship.class, Locations.class, Residency.class, Pregnancyoutcome.class, Individual.class, Round.class, Demographic.class,
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
-        Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class
+        Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class
         }, version = 1, exportSchema = true)
 
 @TypeConverters({Converter.class})
@@ -77,6 +79,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract HierarchyDao hierarchyDao();
     public abstract HdssSociodemoDao hdssSociodemoDao();
     public abstract OutcomeDao outcomeDao();
+    public abstract ListingDao listingDao();
 
 
     private static volatile AppDatabase INSTANCE;
@@ -124,6 +127,7 @@ public abstract class AppDatabase extends RoomDatabase {
             roundDao().deleteAll();
             socialgroupDao().deleteAll();
             visitDao().deleteAll();
+            listingDao().deleteAll();
 
 
             // Perform any other necessary cleanup or initialization

@@ -377,7 +377,7 @@
                     android:layout_height="50dp"
                     android:ems="10"
                     android:focusable="false"
-                    android:text="@{Integer.toString(individual.m_age)}"
+                    android:text="@{individual.m_age}"
                     android:focusableInTouchMode="false"
                     android:inputType="number" />
 
@@ -438,7 +438,7 @@
                     android:ems="10"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:text="@{Integer.toString(individual.f_age)}"
+                    android:text="@{individual.f_age}"
                     android:inputType="number" />
 
                 <TextView

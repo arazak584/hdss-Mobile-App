@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="locations"
+            type="org.openhds.hdsscapture.entity.Locations" />
+
+        <variable
+            name="listing"
+            type="org.openhds.hdsscapture.entity.Listing" />
+
+    </data>
+
+
+    <LinearLayout
+        android:id="@+id/MAIN_LAYOUT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".fragment.LocationFragment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/listing"
+            android:textColor="@color/colorPrimary"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_margin="5dp"
+            android:background="@color/colorPrimaryDark" />
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/fw"
+                    android:text="@string/fw">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/location_fw"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={listing.fw_uuid}"
+                        android:visibility="visible"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <Button
+                    android:id="@+id/button_location_insertDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/visitDate"
+                    tools:ignore="DuplicateSpeakableTextCheck"
+                    android:visibility="gone"
+                    app:icon="@drawable/ic_baseline_calendar_month_24" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="visible"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/visitDate"
+                    android:text="@string/visitDate">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/location_insertDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={listing.insertDate}"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/compoundnumber">
+                    android:text="@string/compoundnumber">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/locationcompno"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={listing.compno}"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="Compound Number"
+                    android:text="Compound Number">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/locationextid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={listing.compextId}"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/fieldworker"
+                    android:text="@string/fieldworker">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/fw_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={listing.fw_name}"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/village"
+                    android:text="@string/village">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/village"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={listing.village}"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+
+                    android:text="@string/location_status"/>
+
+
+                <Spinner
+                    android:id="@+id/locationstatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{listing.status}"
+                    android:onItemSelected="@{listing::setStatus}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="20dp"/>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:text="@string/form_complete"/>
+
+                <Spinner
+                    android:id="@+id/complete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    selection="@{listing.complete}"
+                    android:onItemSelected="@{listing::setComplete}"
+                    android:padding="20dp"/>
+
+
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/buttonSaveClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="@string/saveclosedata" />
+
+            <Button
+                android:id="@+id/buttonClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="@string/closedata" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</layout>
