@@ -41,8 +41,14 @@ public interface PregnancyDao {
     @Query("SELECT * FROM pregnancy WHERE complete=1")
     List<Pregnancy> retrieveToSync();
 
-    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND extra!=1")
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id ORDER BY recordedDate ASC LIMIT 1")
     Pregnancy find(String id);
+
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND extra=1")
+    Pregnancy finds(String id);
+
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id ORDER BY recordedDate DESC LIMIT 1")
+    Pregnancy findpreg(String id);
 
     @Query("SELECT a.*,d.firstName,d.lastName FROM pregnancy as a " + "INNER JOIN residency as b ON a.individual_uuid = b.individual_uuid " +
             " INNER JOIN individual as d on a.individual_uuid=d.individual_uuid " +

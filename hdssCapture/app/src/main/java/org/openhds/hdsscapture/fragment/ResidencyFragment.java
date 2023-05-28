@@ -499,7 +499,23 @@ public class ResidencyFragment extends Fragment {
             }
 
 
-
+            try {
+                if (!binding.editTextStartDate.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
+                    if (stdate.after(currentDate)) {
+                        binding.editTextStartDate.setError("Start Date Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Start Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.editTextStartDate.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
 
 
             final boolean validateOnComplete = true;//finalData.complete == 1;

@@ -173,6 +173,7 @@ public class EventsFragment extends Fragment {
                                 showDemographicForm(eventForms);
                                 showRelationshipForm(eventForms);
                                 showPregnancyForm(eventForms);
+                                showPregnancyFormExtra(eventForms);
                                 showOutcomeForm(eventForms);
                                 showOutcome1Form(eventForms);
                                 showResidencyForm(eventForms);
@@ -218,7 +219,7 @@ public class EventsFragment extends Fragment {
     private void showSocialgroupForm(List<EventForm> eventForms) {
         SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
         try {
-            Socialgroup form = viewModel.find(socialgroup.socialgroup_uuid);
+            Socialgroup form = viewModel.findhse(socialgroup.socialgroup_uuid);
             if (form == null) {
                 form = new Socialgroup();
             }
@@ -320,8 +321,7 @@ public class EventsFragment extends Fragment {
             if (form == null) {
                 form = new Pregnancyoutcome();
             }
-
-            eventForms.add(new EventForm(AppConstants.EVENT_HDSS12, AppConstants.EVENT_OUTCOMES, form.complete));
+                eventForms.add(new EventForm(AppConstants.EVENT_HDSS12, AppConstants.EVENT_OUTCOMES, form.complete));
 
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -340,6 +340,22 @@ public class EventsFragment extends Fragment {
             }
 
                 eventForms.add(new EventForm(AppConstants.EVENT_HDSS10, AppConstants.EVENT_OBSERVATION, form.complete));
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showPregnancyFormExtra(List<EventForm> eventForms) {
+        PregnancyViewModel viewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
+        try {
+            Pregnancy form = viewModel.finds(individual.individual_uuid);
+            if (form == null) {
+                form = new Pregnancy();
+            }
+                eventForms.add(new EventForm(AppConstants.EVENT_HDSS13, AppConstants.EVENT_OBSERVATION, form.complete));
 
         } catch (ExecutionException e) {
             e.printStackTrace();

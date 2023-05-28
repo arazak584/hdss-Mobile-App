@@ -33,8 +33,8 @@ public interface SocialgroupDao {
     @Query("SELECT * FROM socialgroup WHERE socialgroup_uuid=:id")
     Socialgroup retrieve(String id);
 
-    @Query("SELECT * FROM socialgroup WHERE houseExtId=:id")
-    List<Socialgroup> findhse(String id);
+    @Query("SELECT * FROM socialgroup WHERE socialgroup_uuid=:id")
+    Socialgroup findhse(String id);
 
     @Query("SELECT * FROM socialgroup WHERE complete=1")
     List<Socialgroup> retrieveToSync();
@@ -47,9 +47,6 @@ public interface SocialgroupDao {
 
     @Query("SELECT * FROM socialgroup")
     List<Socialgroup> getAll();
-
-    @Query("SELECT COUNT(*) FROM socialgroup")
-    int count();
 
     @Query("SELECT a.*,compextId FROM socialgroup as a " + "INNER JOIN residency as b ON a.socialgroup_uuid = b.socialgroup_uuid" +
             " INNER JOIN Locations as c on b.location_uuid=c.location_uuid " +

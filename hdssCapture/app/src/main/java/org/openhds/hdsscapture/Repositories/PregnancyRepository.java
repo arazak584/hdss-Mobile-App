@@ -71,6 +71,24 @@ public class PregnancyRepository {
         return future.get();
     }
 
+    public Pregnancy finds(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Pregnancy> callable = () -> dao.finds(id);
+
+        Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Pregnancy findpreg(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Pregnancy> callable = () -> dao.findpreg(id);
+
+        Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         Callable<Long> callable = () -> dao.count(startDate, endDate, username);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);

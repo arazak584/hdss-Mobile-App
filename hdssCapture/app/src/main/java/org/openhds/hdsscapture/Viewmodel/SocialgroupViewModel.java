@@ -30,7 +30,7 @@ public class SocialgroupViewModel extends AndroidViewModel {
         return socialgroupRepository.retrieveBySocialgroup(id);
     }
 
-    public List<Socialgroup> findhse(String id) throws ExecutionException, InterruptedException {
+    public Socialgroup findhse(String id) throws ExecutionException, InterruptedException {
         return socialgroupRepository.findhse(id);
     }
 

@@ -149,7 +149,7 @@ public class SocialgroupFragment extends Fragment {
 
         SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             try {
-            Socialgroup data = viewModel.find(socialgroup.socialgroup_uuid);
+            Socialgroup data = viewModel.findhse(socialgroup.socialgroup_uuid);
             if (data != null) {
 
                 binding.setSocialgroup(data);
@@ -182,7 +182,7 @@ public class SocialgroupFragment extends Fragment {
             save(false, true);
         });
 
-
+        binding.setEventname(eventForm.event_name);
         Handler.colorLayouts(requireContext(), binding.SOCIALGROUPSLAYOUT);
         View v = binding.getRoot();
         return v;
