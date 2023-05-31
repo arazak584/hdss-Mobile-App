@@ -19,6 +19,10 @@
             type="org.openhds.hdsscapture.entity.Pregnancyoutcome" />
 
         <variable
+            name="preg"
+            type="org.openhds.hdsscapture.entity.Pregnancyoutcome" />
+
+        <variable
             name="pregoutcome1"
             type="org.openhds.hdsscapture.entity.Outcome" />
 
@@ -71,6 +75,24 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="30sp"
                     android:textStyle="bold" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/date">
+                    android:text="@string/date">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/last_preg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={preg.outcomeDate}"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
@@ -805,6 +827,25 @@
                     </LinearLayout>
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/exts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/extras"/>
+
+                <Spinner
+                    android:id="@+id/extras"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{pregoutcome.extra}"
+                    android:onItemSelected="@{pregoutcome::setExtra}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="15dp"/>
 
                 <TextView
                     android:layout_width="match_parent"

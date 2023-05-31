@@ -515,6 +515,7 @@
     <string name="text_CONYN_COVAL_YN">Are there any comments to add\?:</string>
     <string name="send_profile">SEND SES</string>
     <string name="extra">Is there an additional pregnancy to pick?</string>
+    <string name="extras">Is there an additional pregnancy Outcome to pick?</string>
     <string name="preguuid">Pregnancy UUID</string>
     <string name="select_child">Select Child</string>
     <string name="text_1">1</string>

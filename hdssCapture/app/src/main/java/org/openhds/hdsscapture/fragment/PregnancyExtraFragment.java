@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
@@ -117,6 +118,12 @@ public class PregnancyExtraFragment extends Fragment {
         binding = FragmentPregnancyBinding.inflate(inflater, container, false);
         binding.setPregnancy(pregnancy);
 
+        final TextView ex = binding.getRoot().findViewById(R.id.ext);
+        final Spinner extra = binding.getRoot().findViewById(R.id.extra);
+
+        ex.setVisibility(View.GONE);
+        extra.setVisibility(View.GONE);
+
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             // We use a String here, but any type that can be put in a Bundle is supported
@@ -187,7 +194,8 @@ public class PregnancyExtraFragment extends Fragment {
                 data.individual_uuid = individual.getIndividual_uuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
-                data.extra = 1;
+                data.extra = 2;
+                data.id = 2;
 
                 binding.setPregnancy(data);
                 binding.getPregnancy().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));

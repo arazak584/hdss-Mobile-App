@@ -107,32 +107,43 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
-    public void resetDatabase() {
-        databaseWriteExecutor.execute(() -> {
-            // Delete all data from the tables
-            individualDao().deleteAll();
-            codeBookDao().deleteAll();
-            locationDao().deleteAll();
-            deathDao().deleteAll();
-            demographicDao().deleteAll();
-            hdssSociodemoDao().deleteAll();
-            hierarchyDao().deleteAll();
-            inmigrationDao().deleteAll();
-            outcomeDao().deleteAll();
-            outmigrationDao().deleteAll();
-            pregnancyDao().deleteAll();
-            pregnancyoutcomeDao().deleteAll();
-            relationshipDao().deleteAll();
-            residencyDao().deleteAll();
-            roundDao().deleteAll();
-            socialgroupDao().deleteAll();
-            visitDao().deleteAll();
-            listingDao().deleteAll();
+    public void resetDatabase(final Context context, final ResetCallback callback) {
+        databaseWriteExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                // Delete all data from the tables
+                individualDao().deleteAll();
+                codeBookDao().deleteAll();
+                locationDao().deleteAll();
+                deathDao().deleteAll();
+                demographicDao().deleteAll();
+                hdssSociodemoDao().deleteAll();
+                hierarchyDao().deleteAll();
+                inmigrationDao().deleteAll();
+                outcomeDao().deleteAll();
+                outmigrationDao().deleteAll();
+                pregnancyDao().deleteAll();
+                pregnancyoutcomeDao().deleteAll();
+                relationshipDao().deleteAll();
+                residencyDao().deleteAll();
+                roundDao().deleteAll();
+                socialgroupDao().deleteAll();
+                visitDao().deleteAll();
+                listingDao().deleteAll();
 
+                // Perform any other necessary cleanup or initialization
 
-            // Perform any other necessary cleanup or initialization
+                // Invoke the callback when all entities are reset
+                callback.onResetComplete();
+            }
         });
     }
+
+    // Callback interface to notify when all entities are reset
+    public interface ResetCallback {
+        void onResetComplete();
+    }
+
 
 }
 

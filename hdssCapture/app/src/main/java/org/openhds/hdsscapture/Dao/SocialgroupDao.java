@@ -25,13 +25,19 @@ public interface SocialgroupDao {
     void insert(List<Socialgroup> socialgroup);
 
     @Update
-    void update(Socialgroup socialgroup);
+    int update(Socialgroup s);
+
+    @Update(entity = Socialgroup.class)
+    int update(SocialgroupAmendment s);
 
     @Query("DELETE FROM socialgroup")
     void deleteAll();
 
     @Query("SELECT * FROM socialgroup WHERE socialgroup_uuid=:id")
     Socialgroup retrieve(String id);
+
+    @Query("SELECT * FROM socialgroup WHERE houseExtId=:id")
+    Socialgroup createhse(String id);
 
     @Query("SELECT * FROM socialgroup WHERE socialgroup_uuid=:id")
     Socialgroup findhse(String id);
@@ -41,9 +47,6 @@ public interface SocialgroupDao {
 
     @Query("SELECT * FROM socialgroup WHERE insertDate BETWEEN :startDate AND :endDate")
     List<Socialgroup> retrieve(Date startDate, Date endDate);
-
-    @Update(entity = Socialgroup.class)
-    int update (SocialgroupAmendment socialgroupAmendment);
 
     @Query("SELECT * FROM socialgroup")
     List<Socialgroup> getAll();

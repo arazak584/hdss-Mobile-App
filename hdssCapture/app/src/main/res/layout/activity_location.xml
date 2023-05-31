@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/MidnightBlue"
+    android:padding="@dimen/fragment_horizontal_margin"
     tools:context=".Activity.LocationActivity">
 
     <LinearLayout
@@ -14,6 +16,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,6 +25,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:orientation="horizontal">
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -31,7 +35,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/button_home"
                 android:focusable="true"
-                app:backgroundTint="#246EE9"
+                app:backgroundTint="#8A080D"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:text="@string/button_home"
@@ -51,7 +55,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/Black"
                     android:textStyle="bold"
                     android:textAlignment="center" />
 
@@ -70,7 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
-                    android:textColor="@color/black"
+                    android:textColor="@color/Black"
                     android:textStyle="bold"
                     android:textAlignment="textEnd" />
 

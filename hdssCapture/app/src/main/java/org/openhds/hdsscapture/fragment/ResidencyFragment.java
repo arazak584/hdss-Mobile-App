@@ -26,6 +26,7 @@ import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
+import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.databinding.FragmentMembershipBinding;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Fieldworker;
@@ -38,6 +39,7 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
+import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
@@ -605,6 +607,20 @@ public class ResidencyFragment extends Fragment {
 
             viewModel.add(finalData);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+
+            SocialgroupAmendment socialgroupA = new SocialgroupAmendment();
+
+            if (socialgroup.groupName!= null && individual.firstName!= null && "UNK".equals(socialgroup.groupName)) {
+                socialgroupA.individual_uuid = finalData.individual_uuid;
+                socialgroupA.groupName = individual.firstName +' '+ individual.lastName;
+                socialgroupA.socialgroup_uuid = socialgroup.socialgroup_uuid;
+            }
+
+            SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+            socialgroupViewModel.update(socialgroupA);
+
+            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+
 
         }
         if (save) {

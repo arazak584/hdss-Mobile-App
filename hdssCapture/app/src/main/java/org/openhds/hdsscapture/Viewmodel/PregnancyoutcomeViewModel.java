@@ -43,7 +43,7 @@ public class PregnancyoutcomeViewModel extends AndroidViewModel {
         return pregnancyoutcomeRepository.findout(id);
     }
 
-    public List<Pregnancyoutcome> findpreg(String id) throws ExecutionException, InterruptedException {
+    public Pregnancyoutcome findpreg(String id) throws ExecutionException, InterruptedException {
         return pregnancyoutcomeRepository.findpreg(id);
     }
 

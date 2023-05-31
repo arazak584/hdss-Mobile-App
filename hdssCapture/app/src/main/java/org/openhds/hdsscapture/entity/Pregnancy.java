@@ -137,6 +137,9 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     @Expose
     public Integer extra;
 
+    @Expose
+    public Integer id;
+
     public Pregnancy(){}
 
     @Ignore
@@ -241,15 +244,19 @@ public class Pregnancy extends BaseObservable implements Parcelable {
 
     public void setRecordedDate(String recordedDate) {
         try {
-            this.recordedDate = f.parse(recordedDate);
+            Date newRecordedDate = f.parse(recordedDate);
             Calendar calendar = Calendar.getInstance(Locale.US);
-            calendar.setTime(this.recordedDate);
-            calendar.add(Calendar.MONTH,9);
-            this.expectedDeliveryDate =calendar.getTime();
-        } catch (ParseException e) {
+            calendar.setTime(newRecordedDate);
+            calendar.add(Calendar.MONTH, 9);
+            this.expectedDeliveryDate = calendar.getTime();
 
+            // Update the recordedDate field
+            this.recordedDate = newRecordedDate;
+        } catch (ParseException e) {
+            // Handle the ParseException
         }
     }
+
 
     public String getExpectedDeliveryDate() {
         if (expectedDeliveryDate == null) return null;

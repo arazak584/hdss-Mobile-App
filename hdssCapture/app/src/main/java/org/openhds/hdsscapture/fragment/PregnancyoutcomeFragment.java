@@ -262,7 +262,7 @@ public class PregnancyoutcomeFragment extends Fragment {
         DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         try {
             Pregnancyoutcome data = viewModel.find(individual.individual_uuid);
-            if (data != null && data.extra==null ) {
+            if (data != null) {
                 binding.setPregoutcome(data);
             } else {
                 data = new Pregnancyoutcome();
@@ -439,6 +439,7 @@ public class PregnancyoutcomeFragment extends Fragment {
         loadCodeData(binding.vpm.dthDeathPlace, codeBookViewModel, "deathPlace");
         loadCodeData(binding.vpm.dthDeathCause, codeBookViewModel, "deathCause");
         loadCodeData(binding.father, codeBookViewModel, "complete");
+        loadCodeData(binding.extras, codeBookViewModel, "complete");
 
 
         binding.buttonSaveClose.setOnClickListener(v -> {
@@ -645,8 +646,8 @@ public class PregnancyoutcomeFragment extends Fragment {
                                 return;
                             }
                             if (!dob.equals(stdate)) {
-                                binding.vpm.dthDob.setError("Date of Outcome Not Equal to Date of Birth");
-                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
+                                binding.vpm.dthDob.setError("Date of Death Not Equal to Date of Birth");
+                                Toast.makeText(getActivity(), "Date of Death Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             // clear error if validation passes
@@ -658,6 +659,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     }
 
                     boolean end = false;
+                    boolean stb = false;
 
                     if (!binding.childFetus1.out1Type.toString().trim().equals(2) || !binding.childFetus2.out2Type.toString().trim().equals(2)
                             || !binding.childFetus3.out3Type.toString().trim().equals(2) || !binding.childFetus4.out4Type.toString().trim().equals(2)
@@ -665,6 +667,15 @@ public class PregnancyoutcomeFragment extends Fragment {
                         end = true;
                         binding.vpm.dthHousehead.setError("None of of the Outcomes is a Still Birth");
                         Toast.makeText(getActivity(), "None of of the Outcomes is a Still Birth", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (binding.childFetus1.out1Type.toString().trim().equals(2) || binding.childFetus2.out2Type.toString().trim().equals(2)
+                            || binding.childFetus3.out3Type.toString().trim().equals(2) || binding.childFetus4.out4Type.toString().trim().equals(2)
+                            && !binding.stillbirth.toString().trim().equals(1)) {
+                        stb = true;
+                        binding.vpm.dthHousehead.setError("You selected No for StillBirth");
+                        Toast.makeText(getActivity(), "You selected No for StillBirth", Toast.LENGTH_SHORT).show();
                         return;
                     }
 

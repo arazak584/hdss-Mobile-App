@@ -44,6 +44,10 @@ public class PregnancyViewModel extends AndroidViewModel {
         return pregnancyRepository.finds(id);
     }
 
+    public Pregnancy findss(String id) throws ExecutionException, InterruptedException {
+        return pregnancyRepository.findss(id);
+    }
+
     public Pregnancy findpreg(String id) throws ExecutionException, InterruptedException {
         return pregnancyRepository.findpreg(id);
     }

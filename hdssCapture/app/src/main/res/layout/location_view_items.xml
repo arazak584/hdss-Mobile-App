@@ -16,6 +16,7 @@
             android:id="@+id/nameLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:text="@string/compname" />
 
         <TextView
@@ -36,6 +37,7 @@
             android:id="@+id/compidLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:text="@string/text_compid" />
 
         <TextView
@@ -55,6 +57,7 @@
             android:id="@+id/longLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:text="@string/longitude" />
 
         <TextView
@@ -73,6 +76,7 @@
             android:id="@+id/latLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:text="@string/longitude" />
 
         <TextView

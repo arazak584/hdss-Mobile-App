@@ -154,7 +154,7 @@ public class SocialgroupFragment extends Fragment {
 
                 binding.setSocialgroup(data);
 
-                if (data.groupName!= null && individual.firstName!= null && "FAKE".equals(data.groupName)){
+                if (data.groupName!= null && individual.firstName!= null && "UNK".equals(data.groupName)){
 
                     data.groupName = individual.firstName +' '+ individual.lastName;
                     data.individual_uuid = individual.individual_uuid;

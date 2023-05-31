@@ -163,10 +163,10 @@ public class Locations extends BaseObservable implements Parcelable {
             this.compextId = villcode + "00" + compno.substring(2,6);
         } //NAVRONGO
         else if(villcode != null && compno != null && compno.length() == 6 && site == 2){
-            this.compextId = villcode + "000" + compno.substring(3);
+            this.compextId = villcode + "000" + compno.substring(3,6);
         } //DODOWA
         else if(villcode != null && compno != null && compno.length() == 7 && site == 3){
-            this.compextId = villcode + "00" + compno.substring(3);
+            this.compextId = villcode + "00" + compno.substring(4,7);
         }
     }
 

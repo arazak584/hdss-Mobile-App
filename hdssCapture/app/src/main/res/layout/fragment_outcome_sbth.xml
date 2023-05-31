@@ -184,6 +184,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:visibility="gone"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -203,6 +204,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:visibility="gone"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -276,6 +278,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -284,6 +287,7 @@
             android:text="@string/causeofdeath"/>
 
         <Spinner
+            android:visibility="gone"
             android:id="@+id/dth_deathCause"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -312,6 +316,7 @@
             android:padding="20dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:visibility="gone"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -331,6 +336,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:visibility="gone"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

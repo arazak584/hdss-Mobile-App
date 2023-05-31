@@ -115,12 +115,16 @@ public class HouseholdFragment extends Fragment {
         SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             Socialgroup data = binding.getSocialgroup();
             if (data != null) {
+                if (data.complete==null){
+                    data.complete = 2;
+                }
+
                 if (data.visit_uuid==null){
 
                     String visits = UUID.randomUUID().toString();
                     String visituuid = visits.toString().replaceAll("-", "");
                     data.visit_uuid = visituuid;
-                    data.complete = 1;
+                    //data.complete = 2;
                 }
 
 

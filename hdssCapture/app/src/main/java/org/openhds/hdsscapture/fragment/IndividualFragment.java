@@ -448,7 +448,8 @@ public class IndividualFragment extends Fragment {
 
             IndividualViewModel viewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
             viewModel.add(finalData);
-        }
+
+            }
         if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     ResidencyFragment.newInstance(individual,residency, locations, socialgroup,caseItem,eventForm)).commit();

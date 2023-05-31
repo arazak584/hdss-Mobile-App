@@ -116,7 +116,7 @@ public class PushActivity extends AppCompatActivity {
 
                             Locations[] d = data.getData().toArray(new Locations[0]);
                             for (Locations elem : d) {
-                                elem.setComplete(3);
+                                elem.setComplete(2);
                                 Log.e("PUSH.tag", "Has value " + elem.getCompno());
                             }
                             locationViewModel.add(d);
@@ -124,7 +124,8 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             textViewSendLocationdata.setText("Sent " + d.length + " record(s)");
-                            textViewSendLocationdata.setTextColor(Color.rgb(0, 114, 133));
+                            //textViewSendLocationdata.setTextColor(Color.rgb(0, 114, 133));
+                            textViewSendLocationdata.setTextColor(Color.GREEN);
                         }
                     }
 
@@ -183,13 +184,13 @@ public class PushActivity extends AppCompatActivity {
                             Visit[] d = data.getData().toArray(new Visit[0]);
 
                             for (Visit elem : d) {
-                                elem.complete = 3;
+                                elem.complete = 2;
                             }
                             visitViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendVisit.setText("Sent " + d.length + " record(s)");
-                            textViewSendVisit.setTextColor(Color.rgb(0, 114, 133));
+                            textViewSendVisit.setTextColor(Color.GREEN);
                         }
                     }
 
@@ -248,13 +249,13 @@ public class PushActivity extends AppCompatActivity {
                             Listing[] d = data.getData().toArray(new Listing[0]);
 
                             for (Listing elem : d) {
-                                elem.complete = 3;
+                                elem.complete = 2;
                             }
                             listingViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendList.setText("Sent " + d.length + " record(s)");
-                            textViewSendList.setTextColor(Color.rgb(0, 114, 133));
+                            textViewSendList.setTextColor(Color.GREEN);
                         }
                     }
 
@@ -316,13 +317,13 @@ public class PushActivity extends AppCompatActivity {
 
                             Individual[] d = data.getData().toArray(new Individual[0]);
                             for (Individual elem : d) {
-                                elem.complete = 3;
+                                elem.complete = 2;
                             }
                             individualViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendIndividualdata.setText("Sent " + d.length + " Individual record(s)");
-                            textViewSendIndividualdata.setTextColor(Color.rgb(0, 114, 133));
+                            textViewSendIndividualdata.setTextColor(Color.GREEN);
                         }
                     }
 
@@ -382,13 +383,13 @@ public class PushActivity extends AppCompatActivity {
 
 
                             for (Socialgroup elem : d) {
-                                elem.complete = 3;
+                                elem.complete = 2;
                             }
                             socialgroupViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendSocialgroupdata.setText("Sent " + d.length + " Socialgroup record(s)");
-                            textViewSendSocialgroupdata.setTextColor(Color.rgb(0, 114, 133));
+                            textViewSendSocialgroupdata.setTextColor(Color.GREEN);
                         }
                     }
 
@@ -448,13 +449,13 @@ public class PushActivity extends AppCompatActivity {
                             Relationship[] d = data.getData().toArray(new Relationship[0]);
 
                             for (Relationship elem : d) {
-                                elem.complete = 3;
+                                elem.complete = 0;
                             }
                             relationshipViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendRelationshipdata.setText("Sent " + d.length + " Relationship record(s)");
-                            textViewSendRelationshipdata.setTextColor(Color.rgb(0, 114, 133));
+                            textViewSendRelationshipdata.setTextColor(Color.GREEN);
                         }
                     }
 
@@ -513,13 +514,13 @@ public class PushActivity extends AppCompatActivity {
                             Pregnancy[] d = data.getData().toArray(new Pregnancy[0]);
 
                             for (Pregnancy elem : d) {
-                                elem.complete = 3;
+                                elem.complete = 0;
                             }
                             pregnancyViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendPregnancydata.setText("Sent " + d.length + " Pregnancy record(s)");
-                            textViewSendPregnancydata.setTextColor(Color.rgb(0, 114, 133));
+                            textViewSendPregnancydata.setTextColor(Color.GREEN);
                         }
                     }
 
@@ -578,13 +579,13 @@ public class PushActivity extends AppCompatActivity {
                             Pregnancyoutcome[] d = data.getData().toArray(new Pregnancyoutcome[0]);
 
                             for (Pregnancyoutcome elem : d) {
-                                elem.complete = 3;
+                                elem.complete = 0;
                             }
                             pregnancyoutcomeViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendOutcomedata.setText("Sent " + d.length + " Pregnancy Outcome record(s)");
-                            textViewSendOutcomedata.setTextColor(Color.rgb(0, 114, 133));
+                            textViewSendOutcomedata.setTextColor(Color.GREEN);
                         }
                     }
 
@@ -642,13 +643,13 @@ public class PushActivity extends AppCompatActivity {
                             Outcome[] d = data.getData().toArray(new Outcome[0]);
 
                             for (Outcome elem : d) {
-                                elem.complete = 3;
+                                elem.complete = 0;
                             }
                             outcomeViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendOutcomesdata.setText("Sent " + d.length + " Outcome record(s)");
-                            textViewSendOutcomesdata.setTextColor(Color.rgb(0, 114, 133));
+                            textViewSendOutcomesdata.setTextColor(Color.GREEN);
                         }
                     }
 
@@ -708,13 +709,13 @@ public class PushActivity extends AppCompatActivity {
                             Demographic[] d = data.getData().toArray(new Demographic[0]);
 
                             for (Demographic elem : d) {
-                                elem.complete = 3;
+                                elem.complete = 0;
                             }
                             demographicViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendDemographicdata.setText("Sent " + d.length + " Demographic record(s)");
-                            textViewSendDemographicdata.setTextColor(Color.rgb(0, 114, 133));
+                            textViewSendDemographicdata.setTextColor(Color.GREEN);
                         }
                     }
 
@@ -770,9 +771,9 @@ public class PushActivity extends AppCompatActivity {
             if (dataDeath.getData() != null && !dataDeath.getData().isEmpty()) {
                 progress.setMessage("Sending " + dataDeath.getData().size() + " of Death record(s)...");
 
-                for (Death elem : dataDeath.getData()) {
-                    elem.complete = 3;
-                }
+//                for (Death elem : dataDeath.getData()) {
+//                    elem.complete = 3;
+//                }
 
                 final Call<DataWrapper<Death>> c_callable = dao.sendDeathdata(dataDeath);
                 c_callable.enqueue(new Callback<DataWrapper<Death>>() {
@@ -784,13 +785,13 @@ public class PushActivity extends AppCompatActivity {
                             d23[0] = dataDeath.getData().toArray(new Death[0]);
 
                             for (Death elem : d23[0]) {
-                                elem.complete = 3;
+                                elem.complete = 0;
                             }
                             death.add(d23[0]);
 
                             progress.dismiss();
                             textViewSendEnd.setText(
-                                    "Deaht(" + d23[0].length + " of " + listDeath.size() + ")" +
+                                    "Death(" + d23[0].length + " of " + listDeath.size() + ")" +
                                             ", VPM(" + d24[0].length + " of " + listVpm.size() + ")" +
                                             " sent"
                             );
@@ -824,7 +825,7 @@ public class PushActivity extends AppCompatActivity {
 
                             d24[0] = dataMnh24.getData().toArray(new Death[0]);
                             for (Death elem : d24[0]) {
-                                elem.vpmcomplete = 3;
+                                elem.vpmcomplete = 0;
                             }
                             vpms.add(d24[0]);
                             progress.dismiss();
@@ -893,13 +894,13 @@ public class PushActivity extends AppCompatActivity {
                             HdssSociodemo[] d = data.getData().toArray(new HdssSociodemo[0]);
 
                             for (HdssSociodemo elem : d) {
-                                elem.complete = 3;
+                                elem.complete = 0;
                             }
                             hdssSociodemoViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendSocio.setText("Sent " + d.length + " record(s)");
-                            textViewSendSocio.setTextColor(Color.rgb(0, 114, 133));
+                            textViewSendSocio.setTextColor(Color.GREEN);
                         }
                     }
 
@@ -960,13 +961,13 @@ public class PushActivity extends AppCompatActivity {
                             Residency[] d = data.getData().toArray(new Residency[0]);
 
                             for (Residency elem : d) {
-                                elem.complete = 3;
+                                elem.complete = 0;
                             }
                             residencyViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendRes.setText("Sent " + d.length + " Residency record(s)");
-                            textViewSendRes.setTextColor(Color.rgb(0, 114, 133));
+                            textViewSendRes.setTextColor(Color.GREEN);
                         }
                     }
 
@@ -1025,13 +1026,13 @@ public class PushActivity extends AppCompatActivity {
                             Inmigration[] d = data.getData().toArray(new Inmigration[0]);
 
                             for (Inmigration elem : d) {
-                                elem.complete = 3;
+                                elem.complete = 0;
                             }
                             inmigrationViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendImg.setText("Sent " + d.length + " Inmigration record(s)");
-                            textViewSendImg.setTextColor(Color.rgb(0, 114, 133));
+                            textViewSendImg.setTextColor(Color.GREEN);
                         }
                     }
 
@@ -1091,13 +1092,13 @@ public class PushActivity extends AppCompatActivity {
                             Outmigration[] d = data.getData().toArray(new Outmigration[0]);
 
                             for (Outmigration elem : d) {
-                                elem.complete = 3;
+                                elem.complete = 0;
                             }
                             outmigrationViewModel.add(d);
 
                             progress.dismiss();
                             textViewSendOmg.setText("Sent " + d.length + " Outmigration record(s)");
-                            textViewSendOmg.setTextColor(Color.rgb(0, 114, 133));
+                            textViewSendOmg.setTextColor(Color.GREEN);
                         }
                     }
 

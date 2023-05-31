@@ -114,8 +114,6 @@ public class EventsFragment extends Fragment {
         binding = FragmentEventsBinding.inflate(inflater, container, false);
         binding.setIndividual(individual);
 
-
-
         binding.addMenuFab.setOnClickListener(view -> {
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
@@ -317,12 +315,15 @@ public class EventsFragment extends Fragment {
     private void showOutcome1Form(List<EventForm> eventForms) {
         PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         try {
-            Pregnancyoutcome form = viewModel.findout(individual.individual_uuid);
-            if (form == null) {
-                form = new Pregnancyoutcome();
-            }
-                eventForms.add(new EventForm(AppConstants.EVENT_HDSS12, AppConstants.EVENT_OUTCOMES, form.complete));
+            Pregnancyoutcome prev = viewModel.findout(individual.individual_uuid);
+            if (prev != null && prev.extra!=null) {
+                Pregnancyoutcome extra = viewModel.finds(individual.individual_uuid);
+                if (extra == null) {
+                    extra = new Pregnancyoutcome();
+                }
 
+                eventForms.add(new EventForm(AppConstants.EVENT_HDSS12, AppConstants.EVENT_OUTCOMES, extra.complete));
+            }
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -351,11 +352,14 @@ public class EventsFragment extends Fragment {
     private void showPregnancyFormExtra(List<EventForm> eventForms) {
         PregnancyViewModel viewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         try {
-            Pregnancy form = viewModel.finds(individual.individual_uuid);
-            if (form == null) {
-                form = new Pregnancy();
+            Pregnancy previous = viewModel.findss(individual.individual_uuid);
+            if (previous != null && previous.extra!=null) {
+                Pregnancy extra = viewModel.finds(individual.individual_uuid);
+                if (extra == null) {
+                    extra = new Pregnancy();
+                }
+                eventForms.add(new EventForm(AppConstants.EVENT_HDSS13, AppConstants.EVENT_OBSERVATION, extra.complete));
             }
-                eventForms.add(new EventForm(AppConstants.EVENT_HDSS13, AppConstants.EVENT_OBSERVATION, form.complete));
 
         } catch (ExecutionException e) {
             e.printStackTrace();

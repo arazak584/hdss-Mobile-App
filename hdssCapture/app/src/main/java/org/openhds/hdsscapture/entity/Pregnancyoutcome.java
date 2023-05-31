@@ -117,6 +117,9 @@ public class Pregnancyoutcome extends BaseObservable {
     @Expose
     public Integer complete;
 
+    @Expose
+    public Integer id;
+
     public Pregnancyoutcome(){}
 
 
@@ -687,6 +690,23 @@ public class Pregnancyoutcome extends BaseObservable {
         }
         if(father != null && father==2){
             this.father_uuid=AppConstants.Father;
+        }
+
+    }
+
+    //SPINNERS ENTITY
+    public void setExtra(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            extra = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            extra = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
         }
 
     }

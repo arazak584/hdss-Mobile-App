@@ -30,7 +30,7 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import org.openhds.hdsscapture.fragment.BlankFragment;
 import org.openhds.hdsscapture.fragment.DatePickerFragment;
-import org.openhds.hdsscapture.fragment.VisitFragment;
+import org.openhds.hdsscapture.fragment.HouseholdFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -208,7 +208,7 @@ public class BaselineFragment extends Fragment {
             String id = locations.compextId + String.format("%02d", sequenceNumber); // generate ID with sequence number padded with zeros
             while (true) {
                 try {
-                    if (!(socialgroupViewModels.find(id) != null)) break;
+                    if (!(socialgroupViewModels.createhse(id) != null)) break;
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -262,7 +262,7 @@ public class BaselineFragment extends Fragment {
         }
 
         if(socialgroup.groupName==null){
-            binding.getSocialgroup().groupName = "FAKE";
+            binding.getSocialgroup().groupName = "UNK";
         }
 
 
@@ -405,7 +405,7 @@ public class BaselineFragment extends Fragment {
         }
         if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    VisitFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    HouseholdFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         } else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     BlankFragment.newInstance(individual,residency, locations, socialgroup)).commit();

@@ -44,8 +44,11 @@ public interface PregnancyDao {
     @Query("SELECT * FROM pregnancy where individual_uuid=:id ORDER BY recordedDate ASC LIMIT 1")
     Pregnancy find(String id);
 
-    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND extra=1")
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND id=2")
     Pregnancy finds(String id);
+
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id and extra=1")
+    Pregnancy findss(String id);
 
     @Query("SELECT * FROM pregnancy where individual_uuid=:id ORDER BY recordedDate DESC LIMIT 1")
     Pregnancy findpreg(String id);

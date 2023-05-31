@@ -5,6 +5,7 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.SocialgroupDao;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 
 import java.util.Date;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SocialgroupRepository {
 
@@ -35,10 +37,25 @@ public class SocialgroupRepository {
         });
     }
 
+    public int update(SocialgroupAmendment s) {
+        AtomicInteger row = new AtomicInteger();
+        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
+        return row.intValue();
+    }
+
 
     public Socialgroup find(String id) throws ExecutionException, InterruptedException {
 
         Callable<Socialgroup> callable = () -> dao.retrieve(id.toUpperCase());
+
+        Future<Socialgroup> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Socialgroup createhse(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Socialgroup> callable = () -> dao.createhse(id.toUpperCase());
 
         Future<Socialgroup> future = Executors.newSingleThreadExecutor().submit(callable);
 
@@ -80,6 +97,8 @@ public class SocialgroupRepository {
 
         return future.get();
     }
+
+
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         Callable<Long> callable = () -> dao.count(startDate, endDate, username);

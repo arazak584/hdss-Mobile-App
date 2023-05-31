@@ -45,8 +45,6 @@ public class InfoFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_info, container, false);
 
         Button buttonUrl = view.findViewById(R.id.button_url);
-        Button buttonReset = view.findViewById(R.id.button_resetDatabase);
-
         buttonUrl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,19 +54,31 @@ public class InfoFragment extends DialogFragment {
             }
         });
 
+        Button buttonReset = view.findViewById(R.id.button_resetDatabase);
         buttonReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Get the context of the application
-                Context context = requireContext().getApplicationContext();
+                final Context context = requireContext().getApplicationContext();
 
                 // Reset the AppDatabase
-                AppDatabase.getDatabase(context).resetDatabase();
-
-                // Display a message or perform any other necessary actions
-                Toast.makeText(context, "Database reset", Toast.LENGTH_SHORT).show();
+                AppDatabase appDatabase = AppDatabase.getDatabase(context);
+                appDatabase.resetDatabase(context, new AppDatabase.ResetCallback() {
+                    @Override
+                    public void onResetComplete() {
+                        // Show toast message when all entities are reset
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(context, "Database reset successful", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
             }
         });
+
+
 
 
 

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
@@ -125,6 +126,12 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentOutcomeBinding.inflate(inflater, container, false);
         binding.setIndividual(individual);
+
+        final TextView ex = binding.getRoot().findViewById(R.id.exts);
+        final Spinner extra = binding.getRoot().findViewById(R.id.extras);
+
+        ex.setVisibility(View.GONE);
+        extra.setVisibility(View.GONE);
 
         final Intent intent = getActivity().getIntent();
         final Round roundData = intent.getParcelableExtra(HierarchyActivity.ROUND_DATA);
@@ -260,9 +267,10 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         OutcomeViewModel outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
         DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+        PregnancyoutcomeViewModel pviewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         try {
-            Pregnancyoutcome data = viewModel.findout(individual.individual_uuid);
-            if (data != null && data.extra!=null) {
+            Pregnancyoutcome data = viewModel.finds(individual.individual_uuid);
+            if (data != null) {
                 binding.setPregoutcome(data);
             } else {
                 data = new Pregnancyoutcome();
@@ -278,9 +286,21 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.mother_uuid = individual.getIndividual_uuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
+                data.extra = 2;
+                data.id = 2;
 
                 binding.setPregoutcome(data);
                 binding.getPregoutcome().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Pregnancyoutcome datas = pviewModel.findpreg(individual.individual_uuid);
+            if (datas != null) {
+                binding.setPreg(datas);
+
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -488,6 +508,25 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 e.printStackTrace();
             }
 
+            try {
+                if (!binding.lastPreg.getText().toString().trim().isEmpty() && !binding.editTextOutcomeDate.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date stdate = f.parse(binding.lastPreg.getText().toString().trim());
+                    Date edate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                    String formattedDate = f.format(stdate);
+                    if (edate.before(stdate)) {
+                        binding.editTextOutcomeDate.setError("Outcome with a later Date exist " + formattedDate);
+                        Toast.makeText(getActivity(), "Outcome with a later Date exist " + formattedDate, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.editTextOutcomeDate.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.OUTCOMELAYOUT, validateOnComplete, false);
 
@@ -658,6 +697,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     }
 
                     boolean end = false;
+                    boolean stb = false;
 
                     if (!binding.childFetus1.out1Type.toString().trim().equals(2) || !binding.childFetus2.out2Type.toString().trim().equals(2)
                             || !binding.childFetus3.out3Type.toString().trim().equals(2) || !binding.childFetus4.out4Type.toString().trim().equals(2)
@@ -665,6 +705,15 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                         end = true;
                         binding.vpm.dthHousehead.setError("None of of the Outcomes is a Still Birth");
                         Toast.makeText(getActivity(), "None of of the Outcomes is a Still Birth", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (binding.childFetus1.out1Type.toString().trim().equals(2) || binding.childFetus2.out2Type.toString().trim().equals(2)
+                            || binding.childFetus3.out3Type.toString().trim().equals(2) || binding.childFetus4.out4Type.toString().trim().equals(2)
+                            && !binding.stillbirth.toString().trim().equals(1)) {
+                        stb = true;
+                        binding.vpm.dthHousehead.setError("You selected No for StillBirth");
+                        Toast.makeText(getActivity(), "You selected No for StillBirth", Toast.LENGTH_SHORT).show();
                         return;
                     }
 

@@ -81,11 +81,11 @@ public class PregnancyoutcomeRepository {
         return future.get();
     }
 
-    public List<Pregnancyoutcome> findpreg(String id) throws ExecutionException, InterruptedException {
+    public Pregnancyoutcome findpreg(String id) throws ExecutionException, InterruptedException {
 
-        Callable<List<Pregnancyoutcome>> callable = () -> dao.findpreg(id);
+        Callable<Pregnancyoutcome> callable = () -> dao.findpreg(id);
 
-        Future<List<Pregnancyoutcome>> future = Executors.newSingleThreadExecutor().submit(callable);
+        Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }

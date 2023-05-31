@@ -3,7 +3,7 @@ package org.openhds.hdsscapture;
 public class AppConstants {
 
     public static final int NO = 0, YES = 1, UK = 8, NA = 9, RUR = 1, URB = 2;
-    public static final int OTHER_SPECIFY = 66;
+    public static final int OTHER_SPECIFY = 77;
 
     public static final String MARKED_COMPLETE="MARKED AS COMPLETED";
     public static final String MARKED_INCOMPLETE="INCOMPLETE";
@@ -33,7 +33,7 @@ public class AppConstants {
             EVENT_BASE = "BASELINE",
             EVENT_HDSS1 = "MEMBERSHIP REGISTRATION",
             EVENT_HDSS2 = "VISIT REGISTRATION",
-            EVENT_HDSS3 = "CHANGE HEAD OF HOUSEHOLD",
+            EVENT_HDSS3 = "SOCIALGROUP [HOUSEHOLD]",
             EVENT_HDSS4 = "DEMOGRAPHICS",
             EVENT_HDSS5 = "SOCIO-DEMOGRAPHICS",
             EVENT_SOCIO = "SOCIO-DEMOGRAPHICS [PROFILE]",
@@ -53,7 +53,7 @@ public class AppConstants {
             EVENT_OBSERVATION2 = "PREGNANCY OBSERVATION [EXTRA]",
             EVENT_OUTCOME = "PREGNANCY OUTCOME",
             EVENT_OUTCOMES = "PREGNANCY OUTCOME [EXTRA]",
-            EVENT_HOUSEHOLD = "CHANGE HEAD OF HOUSEHOLD",
+            EVENT_HOUSEHOLD = "SOCIALGROUP [HOUSEHOLD]",
             EVENT_DEATH = "DEATH REGISTRATION",
             EVENT_DEMO = "DEMOGRAPHICS",
             EVENT_DSOCIO = "SOCIO-DEMOGRAPHICS [PROFILE]",

@@ -211,6 +211,12 @@ public class LocationFragment extends Fragment {
             binding.getLocations().fw_uuid = fieldworkerData.getFw_uuid();
         }
 
+        if(locations.compno==null){
+            binding.getLocations().edit = 1;
+        }else{
+            binding.getLocations().edit = 2;
+        }
+
         if(locations.insertDate==null){
             binding.getLocations().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         }
@@ -226,7 +232,10 @@ public class LocationFragment extends Fragment {
         if (binding.getLocations().complete == null) {
             binding.getLocations().complete = 1;
         }
-        binding.getLocations().site=1;
+
+        if (binding.getLocations().site == null) {
+            binding.getLocations().site = 1;
+        }
 
         final CodeBookViewModel codeBookViewModel = new ViewModelProvider(this).get(CodeBookViewModel.class);
         loadCodeData(binding.locationstatus, codeBookViewModel, "status");

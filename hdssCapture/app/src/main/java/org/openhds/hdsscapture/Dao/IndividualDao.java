@@ -54,11 +54,12 @@ public interface IndividualDao {
             " WHERE b.endType=1 and firstName!='FAKE' and d.houseExtId=:id order by dob")
     List<Individual> retrieveByLocationId(String id);
 
-    @Query("SELECT a.*,compno,c.compextId,firstName || ' ' || lastName as fullName,b.endType FROM individual as a " + "LEFT JOIN residency as b ON a.individual_uuid = b.individual_uuid" +
-            " LEFT JOIN Locations as c on b.location_uuid=c.location_uuid " +
+    @Query("SELECT a.*,compno,c.compextId,firstName || ' ' || lastName as fullName,b.endType FROM individual as a " + "INNER JOIN residency as b ON a.individual_uuid = b.individual_uuid" +
+            " INNER JOIN Locations as c on b.location_uuid=c.location_uuid " +
             " WHERE b.endType!=3 AND firstName!='FAKE' AND  " +
             " ( fullName LIKE:id OR c.compno LIKE:id OR ghanacard LIKE :id) ORDER BY dob ")
     List<Individual> retrieveBySearch(String id);
+
 
     @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.individual_uuid = b.individual_uuid " +
             " INNER JOIN Locations as c on b.location_uuid=c.location_uuid " +
