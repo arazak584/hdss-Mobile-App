@@ -143,7 +143,7 @@ public class SocioFragment extends Fragment {
         loadCodeData(binding.socioa.MARITALSCORRES, "MARITAL_SCORRES");
         loadCodeData(binding.socioa.RELIGIONSCORRES, "religion");
         loadCodeData(binding.socioa.CETHNIC, "tribe");
-        loadCodeData(binding.socioa.HEADHHFCORRES, "HEAD_HH_FCORRES");
+        loadCodeData(binding.socioa.HEADHHFCORRES, "rltnhead");
         loadCodeData(binding.sociob.H2OFCORRES, "H2O_FCORRES");
         loadCodeData(binding.sociob.TOILETFCORRES, "TOILET_FCORRES");
         loadCodeData(binding.sociob.TOILETLOCFCORRES, "TOILET_LOC_FCORRES");
