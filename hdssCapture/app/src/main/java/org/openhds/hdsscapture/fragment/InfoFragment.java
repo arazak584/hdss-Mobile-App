@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -24,6 +25,7 @@ import org.openhds.hdsscapture.R;
 public class InfoFragment extends DialogFragment {
 
 
+    private ProgressDialog progressDialog;
 
     public InfoFragment() {
         // Required empty public constructor
@@ -61,11 +63,20 @@ public class InfoFragment extends DialogFragment {
                 // Get the context of the application
                 final Context context = requireContext().getApplicationContext();
 
+                // Initialize and show the ProgressDialog
+                progressDialog = new ProgressDialog(getActivity());
+                progressDialog.setMessage("Resetting database...");
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
                 // Reset the AppDatabase
                 AppDatabase appDatabase = AppDatabase.getDatabase(context);
                 appDatabase.resetDatabase(context, new AppDatabase.ResetCallback() {
                     @Override
                     public void onResetComplete() {
+                        // Dismiss the ProgressDialog
+                        progressDialog.dismiss();
+
                         // Show toast message when all entities are reset
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -77,6 +88,7 @@ public class InfoFragment extends DialogFragment {
                 });
             }
         });
+
 
 
 
