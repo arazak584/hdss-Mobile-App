@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Relationship;
+import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,10 @@ public interface RelationshipDao {
     void deleteAll();
 
     @Update
-    void update(Relationship relationship);
+    int update(Relationship s);
+
+    @Update(entity = Relationship.class)
+    int update(RelationshipUpdate s);
 
 
     @Query("SELECT * FROM relationship")

@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.RelationshipRepository;
 import org.openhds.hdsscapture.entity.Relationship;
+import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 
 import java.util.Date;
 import java.util.List;
@@ -44,5 +45,9 @@ public class RelationshipViewModel extends AndroidViewModel {
 
     public void add(Relationship... data){
         relationshipRepository.create(data);
+    }
+
+    public int update(RelationshipUpdate s){
+        return relationshipRepository.update(s);
     }
 }

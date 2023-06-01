@@ -249,9 +249,7 @@ public class ResidencyFragment extends Fragment {
                 dataRes.loc = locations.getLocation_uuid();
                 dataRes.complete = 1;
                 dataRes.dobs = individual.dob;
-                if (dataRes != null){
-                    dataRes.startType=1;
-                }
+
                 if (dataRes!=null){
                     dataRes.img=1;
                 }else{dataRes.img=2;}
@@ -309,6 +307,7 @@ public class ResidencyFragment extends Fragment {
                 datadth.deathDate = binding.getResidency().endDate;
                 datadth.vpmcomplete=1;
                 datadth.complete = 1;
+                datadth.househead = socialgroup.getGroupName();
 
 
                 binding.setDeath(datadth);
@@ -620,6 +619,7 @@ public class ResidencyFragment extends Fragment {
             socialgroupViewModel.update(socialgroupA);
 
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+
 
 
         }

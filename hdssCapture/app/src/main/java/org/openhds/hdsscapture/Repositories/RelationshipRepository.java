@@ -5,6 +5,7 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.RelationshipDao;
 import org.openhds.hdsscapture.entity.Relationship;
+import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 
 import java.util.Date;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RelationshipRepository {
 
@@ -34,6 +36,11 @@ public class RelationshipRepository {
         });
     }
 
+    public int update(RelationshipUpdate s) {
+        AtomicInteger row = new AtomicInteger();
+        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
+        return row.intValue();
+    }
 
     public List<Relationship> findAll() throws ExecutionException, InterruptedException {
 
