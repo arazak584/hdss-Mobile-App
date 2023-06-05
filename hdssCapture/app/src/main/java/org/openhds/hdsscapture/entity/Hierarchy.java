@@ -21,8 +21,8 @@ public class Hierarchy extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "uuid")
     private String uuid;
 
-    @ColumnInfo(name = "villcode")
-    private String villcode;
+    @ColumnInfo(name = "extId")
+    private String extId;
 
     @ColumnInfo(name = "town")
     private String town;
@@ -44,7 +44,7 @@ public class Hierarchy extends BaseObservable implements Parcelable {
 
    @Ignore
     public Hierarchy(@NotNull String extId, String name) {
-        this.villcode = extId;
+        this.extId = extId;
         this.name = name;
     }
 
@@ -60,13 +60,14 @@ public class Hierarchy extends BaseObservable implements Parcelable {
     }
 
     @Bindable
-    public String getVillcode() {
-        return villcode;
+    public String getExtId() {
+        return extId;
     }
 
-    public void setVillcode(String villcode) {
-        this.villcode = villcode;
+    public void setExtId(String extId) {
+        this.extId = extId;
     }
+
 
     public String getTown() {
         return town;
@@ -112,7 +113,7 @@ public class Hierarchy extends BaseObservable implements Parcelable {
 
     protected Hierarchy(Parcel in) {
         this.uuid = in.readString();
-        this.villcode = in.readString();
+        this.extId = in.readString();
         this.town = in.readString();
         this.name = in.readString();
         this.area = in.readString();
@@ -140,7 +141,7 @@ public class Hierarchy extends BaseObservable implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.uuid);
-        dest.writeString(this.villcode);
+        dest.writeString(this.extId);
         dest.writeString(this.town);
         dest.writeString(this.name);
         dest.writeString(this.area);

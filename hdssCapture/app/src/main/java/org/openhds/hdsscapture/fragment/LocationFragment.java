@@ -204,7 +204,7 @@ public class LocationFragment extends Fragment {
         }
 
         if(locations.compno==null){
-            binding.getLocations().villcode = level6Data.getVillcode();
+            binding.getLocations().extId = level6Data.getExtId();
         }
 
         if(locations.fw_uuid==null){
@@ -222,11 +222,11 @@ public class LocationFragment extends Fragment {
         }
 
         // Generate a UUID
-        if(locations.location_uuid == null) {
+        if(locations.uuid == null) {
             String uuid = UUID.randomUUID().toString();
             String uuidString = uuid.toString().replaceAll("-", "");
             // Set the ID of the Fieldworker object
-            binding.getLocations().location_uuid = uuidString;
+            binding.getLocations().uuid = uuidString;
             }
 
         if (binding.getLocations().complete == null) {

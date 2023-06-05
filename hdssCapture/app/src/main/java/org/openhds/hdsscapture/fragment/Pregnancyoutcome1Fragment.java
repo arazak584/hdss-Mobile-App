@@ -269,7 +269,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         PregnancyoutcomeViewModel pviewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         try {
-            Pregnancyoutcome data = viewModel.finds(individual.individual_uuid);
+            Pregnancyoutcome data = viewModel.finds(individual.uuid);
             if (data != null) {
                 binding.setPregoutcome(data);
             } else {
@@ -281,9 +281,9 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.toString().replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.preg_uuid = uuidString;
+                data.uuid = uuidString;
                 data.extra =1;
-                data.mother_uuid = individual.getIndividual_uuid();
+                data.mother_uuid = individual.getUuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
                 data.extra = 2;
@@ -297,7 +297,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         }
 
         try {
-            Pregnancyoutcome datas = pviewModel.findpreg(individual.individual_uuid);
+            Pregnancyoutcome datas = pviewModel.findpreg(individual.uuid);
             if (datas != null) {
                 binding.setPreg(datas);
 
@@ -308,14 +308,14 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
 
         try {
-            final String child_id = individual.individual_uuid + AppConstants.CHILD4 + + eventForm.event_name_id + roundData.roundNumber;
+            final String child_id = individual.uuid + AppConstants.CHILD4 + + eventForm.event_name_id + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 binding.setPregoutcome1(data);
             } else {
                 data = new Outcome();
 
-                data.mother_uuid = individual.getIndividual_uuid();
+                data.mother_uuid = individual.getUuid();
                 data.child_idx = AppConstants.CHILD4;
 
                 data.vis_number = eventForm.event_name_id;
@@ -323,7 +323,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber();
                 data.complete = 1;
-                data.preg_uuid = binding.getPregoutcome().preg_uuid;
+                data.preg_uuid = binding.getPregoutcome().uuid;
 
 
                 binding.setPregoutcome1(data);
@@ -333,14 +333,14 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         }
 
         try {
-            final String child_id = individual.individual_uuid + AppConstants.CHILD5 + eventForm.event_name_id + roundData.roundNumber;
+            final String child_id = individual.uuid + AppConstants.CHILD5 + eventForm.event_name_id + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 binding.setPregoutcome2(data);
             } else {
                 data = new Outcome();
 
-                data.mother_uuid = individual.getIndividual_uuid();
+                data.mother_uuid = individual.getUuid();
                 data.child_idx = AppConstants.CHILD5;
 
                 data.vis_number = eventForm.event_name_id;
@@ -348,7 +348,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber();
                 data.complete = 1;
-                data.preg_uuid = binding.getPregoutcome().preg_uuid;
+                data.preg_uuid = binding.getPregoutcome().uuid;
 
                 binding.setPregoutcome2(data);
             }
@@ -357,14 +357,14 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         }
 
         try {
-            final String child_id = individual.individual_uuid + AppConstants.CHILD6 + eventForm.event_name_id + roundData.roundNumber;
+            final String child_id = individual.uuid + AppConstants.CHILD6 + eventForm.event_name_id + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 binding.setPregoutcome3(data);
             } else {
                 data = new Outcome();
 
-                data.mother_uuid = individual.getIndividual_uuid();
+                data.mother_uuid = individual.getUuid();
                 data.child_idx = AppConstants.CHILD6;
 
                 data.vis_number = eventForm.event_name_id;
@@ -372,7 +372,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber();
                 data.complete = 1;
-                data.preg_uuid = binding.getPregoutcome().preg_uuid;
+                data.preg_uuid = binding.getPregoutcome().uuid;
 
                 binding.setPregoutcome3(data);
             }
@@ -381,14 +381,14 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         }
 
         try {
-            final String child_id = individual.individual_uuid + AppConstants.CHILD7 + eventForm.event_name_id + roundData.roundNumber;
+            final String child_id = individual.uuid + AppConstants.CHILD7 + eventForm.event_name_id + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 binding.setPregoutcome4(data);
             } else {
                 data = new Outcome();
 
-                data.mother_uuid = individual.getIndividual_uuid();
+                data.mother_uuid = individual.getUuid();
                 data.child_idx = AppConstants.CHILD7;
 
                 data.vis_number = eventForm.event_name_id;
@@ -396,7 +396,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber() ;
                 data.complete = 1;
-                data.preg_uuid = binding.getPregoutcome().preg_uuid;
+                data.preg_uuid = binding.getPregoutcome().uuid;
 
 
                 binding.setPregoutcome4(data);
@@ -406,7 +406,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         }
 
         try {
-            Death data = deathViewModel.find(individual.individual_uuid);
+            Death data = deathViewModel.find(individual.uuid);
             if (data != null && data.edit!=null) {
                 binding.setDeath(data);
             } else {
@@ -415,7 +415,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.toString().replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.death_uuid = uuidString;
+                data.uuid = uuidString;
                 data.insertDate = new Date();
                 data.firstName = "Still";
                 data.lastName = "Birth";
@@ -423,9 +423,9 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.compno = locations.getCompno();
                 data.extId = individual.getExtId();
                 data.compname = locations.getLocationName();
-                data.individual_uuid = individual.getIndividual_uuid();
+                data.individual_uuid = individual.getUuid();
                 data.villname = level5Data.getName();
-                data.villcode = level5Data.getVillcode();
+                data.villcode = level5Data.getExtId();
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.respondent = individual.getFirstName() +" "+ individual.getLastName();
                 data.househead = individual.getFirstName() +" "+ individual.getLastName();

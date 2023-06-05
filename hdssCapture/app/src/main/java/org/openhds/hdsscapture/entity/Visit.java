@@ -26,16 +26,16 @@ import java.util.Locale;
 
 
 @Entity(tableName = "visit",
-        indices = {@Index(value = {"location_uuid","visit_uuid"}, unique = false)})
+        indices = {@Index(value = {"location_uuid","uuid"}, unique = false)})
 public class Visit extends BaseObservable {
 
     @Expose
     @NotNull
     @PrimaryKey
-    public String visitExtId;
+    public String extId;
 
     @Expose
-    public String visit_uuid;
+    public String uuid;
 
     @Expose
     public String location_uuid;
@@ -72,24 +72,21 @@ public class Visit extends BaseObservable {
     @Ignore
     public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
-    @Bindable
     @NotNull
-    public String getVisit_uuid() {
-        return visit_uuid;
+    public String getExtId() {
+        return extId;
     }
 
-    public void setVisit_uuid(@NotNull String visit_uuid) {
-        this.visit_uuid = visit_uuid;
+    public void setExtId(@NotNull String extId) {
+        this.extId = extId;
     }
 
-    @Bindable
-    public String getVisitExtId() {
-        return visitExtId;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setVisitExtId(String visitExtId) {
-        this.visitExtId = visitExtId;
-
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     @Bindable

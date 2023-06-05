@@ -94,7 +94,7 @@ public class ChangeHOH extends RecyclerView.Adapter<ChangeHOH.ViewHolder>{
                 EditText headname = activity.requireActivity().findViewById(R.id.groupName);
 
                 // Set the mother's ID in the text field
-                headIdField.setText(individual.getIndividual_uuid());
+                headIdField.setText(individual.getUuid());
                 headname.setText(individual.getFirstName() +' '+individual.getLastName());
 
                 // Hide the MotherDialogFragment

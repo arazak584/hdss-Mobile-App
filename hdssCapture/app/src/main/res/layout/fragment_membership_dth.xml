@@ -69,25 +69,6 @@
             android:textSize="20sp"
             tools:ignore="TextContrastCheck" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:visibility="gone"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:padding="5dp"
-            android:hint="@string/uuid">
-            android:text="@string/uuid">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/dth_uuid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@={death.death_uuid}"
-                android:inputType="textPersonName"/>
-        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
@@ -147,7 +128,7 @@
                 android:id="@+id/dth_individual_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={death.death_uuid}"
+                android:text="@={death.uuid}"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -84,7 +84,7 @@
                         android:id="@+id/location_uuid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={locations.location_uuid}"
+                        android:text="@={locations.uuid}"
                         android:focusable="false"
                         android:visibility="gone"
                         android:focusableInTouchMode="false"
@@ -157,7 +157,7 @@
                         android:id="@+id/locationcluster"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={locations.villcode}"
+                        android:text="@={locations.extId}"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:inputType="textPersonName|textCapCharacters"/>

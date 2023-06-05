@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class ResidencyAmendment {
 
-    public String residency_uuid;
+    public String uuid;
     public Date endDate;
     public String endType;
 }

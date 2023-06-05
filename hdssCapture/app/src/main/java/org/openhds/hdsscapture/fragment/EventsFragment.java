@@ -217,7 +217,7 @@ public class EventsFragment extends Fragment {
     private void showSocialgroupForm(List<EventForm> eventForms) {
         SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
         try {
-            Socialgroup form = viewModel.findhse(socialgroup.socialgroup_uuid);
+            Socialgroup form = viewModel.findhse(socialgroup.uuid);
             if (form == null) {
                 form = new Socialgroup();
             }
@@ -235,7 +235,7 @@ public class EventsFragment extends Fragment {
     private void showDemographicForm(List<EventForm> eventForms) {
         DemographicViewModel viewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
         try {
-            Demographic form = viewModel.find(individual.individual_uuid);
+            Demographic form = viewModel.find(individual.uuid);
             if (form == null) {
                 form = new Demographic();
             }
@@ -250,7 +250,7 @@ public class EventsFragment extends Fragment {
     private void showSocioForm(List<EventForm> eventForms) {
         HdssSociodemoViewModel viewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
         try {
-            HdssSociodemo form = viewModel.findses(socialgroup.socialgroup_uuid);
+            HdssSociodemo form = viewModel.findses(socialgroup.uuid);
             if (form == null) {
                 form = new HdssSociodemo();
             }
@@ -265,7 +265,7 @@ public class EventsFragment extends Fragment {
     private void showRelationshipForm(List<EventForm> eventForms) {
         RelationshipViewModel viewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
         try {
-            Relationship form = viewModel.find(individual.individual_uuid);
+            Relationship form = viewModel.find(individual.uuid);
             if (form == null) {
                 form = new Relationship();
             }
@@ -281,7 +281,7 @@ public class EventsFragment extends Fragment {
     private void showResidencyForm(List<EventForm> eventForms) {
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         try {
-            Residency form = viewModel.findRes(individual.individual_uuid);
+            Residency form = viewModel.findRes(individual.uuid);
             if (form == null) {
                 form = new Residency();
             }
@@ -298,7 +298,7 @@ public class EventsFragment extends Fragment {
     private void showOutcomeForm(List<EventForm> eventForms) {
         PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         try {
-            Pregnancyoutcome form = viewModel.find(individual.individual_uuid);
+            Pregnancyoutcome form = viewModel.find(individual.uuid);
             if (form == null) {
                 form = new Pregnancyoutcome();
             }
@@ -315,9 +315,9 @@ public class EventsFragment extends Fragment {
     private void showOutcome1Form(List<EventForm> eventForms) {
         PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         try {
-            Pregnancyoutcome prev = viewModel.findout(individual.individual_uuid);
+            Pregnancyoutcome prev = viewModel.findout(individual.uuid);
             if (prev != null && prev.extra!=null) {
-                Pregnancyoutcome extra = viewModel.finds(individual.individual_uuid);
+                Pregnancyoutcome extra = viewModel.finds(individual.uuid);
                 if (extra == null) {
                     extra = new Pregnancyoutcome();
                 }
@@ -335,7 +335,7 @@ public class EventsFragment extends Fragment {
     private void showPregnancyForm(List<EventForm> eventForms) {
         PregnancyViewModel viewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         try {
-            Pregnancy form = viewModel.find(individual.individual_uuid);
+            Pregnancy form = viewModel.find(individual.uuid);
             if (form == null) {
                 form = new Pregnancy();
             }
@@ -352,9 +352,9 @@ public class EventsFragment extends Fragment {
     private void showPregnancyFormExtra(List<EventForm> eventForms) {
         PregnancyViewModel viewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         try {
-            Pregnancy previous = viewModel.findss(individual.individual_uuid);
+            Pregnancy previous = viewModel.findss(individual.uuid);
             if (previous != null && previous.extra!=null) {
-                Pregnancy extra = viewModel.finds(individual.individual_uuid);
+                Pregnancy extra = viewModel.finds(individual.uuid);
                 if (extra == null) {
                     extra = new Pregnancy();
                 }

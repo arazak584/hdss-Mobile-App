@@ -97,7 +97,7 @@ public class MotherAdapter extends RecyclerView.Adapter<MotherAdapter.ViewHolder
                 EditText motherIdField = activity.requireActivity().findViewById(R.id.individual_mother);
                 EditText motherAge = activity.requireActivity().findViewById(R.id.mother_age);
                 // Set the mother's ID in the text field
-                motherIdField.setText(individual.getIndividual_uuid());
+                motherIdField.setText(individual.getUuid());
                 motherAge.setText(String.valueOf(individual.getAge()));
 
                 // Hide the MotherDialogFragment

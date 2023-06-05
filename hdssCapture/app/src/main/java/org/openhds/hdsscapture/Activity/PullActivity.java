@@ -253,9 +253,9 @@ public class PullActivity extends AppCompatActivity {
                                 if (individualDao != null) {
                                     File unzippedFile = new File(getExternalCacheDir() + File.separator + "individual.csv");
                                     CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("individual_uuid").addColumn("dob").addColumn("dobAspect").addColumn("extId")
-                                            .addColumn("father_uuid").addColumn("firstName").addColumn("fw_uuid").addColumn("gender").addColumn("ghanacard").addColumn("insertDate")
-                                            .addColumn("lastName").addColumn("mother_uuid").addColumn("otherName").build();
+                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("dob").addColumn("dobAspect").addColumn("extId")
+                                            .addColumn("firstName").addColumn("fw_uuid").addColumn("gender").addColumn("ghanacard").addColumn("insertDate")
+                                            .addColumn("lastName").addColumn("otherName").addColumn("father_uuid").addColumn("mother_uuid").build();
                                     MappingIterator<Individual> iterator = mapper.readerFor(Individual.class).with(schema).readValues(unzippedFile);
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
@@ -379,9 +379,9 @@ public class PullActivity extends AppCompatActivity {
                                 if (locationDao != null) {
                                     File unzippedFile = new File(getExternalCacheDir() + File.separator + "location.csv");
                                     CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("compextId").addColumn("accuracy").addColumn("compno")
+                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("accuracy").addColumn("compextId").addColumn("compno")
                                             .addColumn("fw_uuid").addColumn("insertDate").addColumn("latitude").addColumn("locationLevel_uuid").addColumn("locationName")
-                                            .addColumn("locationType").addColumn("location_uuid").addColumn("longitude").addColumn("status").build();
+                                            .addColumn("locationType").addColumn("longitude").addColumn("status").build();
                                     MappingIterator<Locations> iterator = mapper.readerFor(Locations.class).with(schema).readValues(unzippedFile);
                                     progress.setCancelable(true);
                                     progress.setCanceledOnTouchOutside(true);
@@ -512,9 +512,10 @@ public class PullActivity extends AppCompatActivity {
                                 if (residencyDao != null) {
                                     File unzippedFile = new File(getExternalCacheDir() + File.separator + "residency.csv");
                                     CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("residency_uuid").addColumn("endDate").addColumn("endType")
-                                            .addColumn("fw_uuid").addColumn("individual_uuid").addColumn("insertDate").addColumn("location_uuid")
-                                            .addColumn("rltn_head").addColumn("socialgroup_uuid").addColumn("startDate").addColumn("startType").build();
+                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("endDate").addColumn("endType")
+                                            .addColumn("fw_uuid").addColumn("insertDate").addColumn("rltn_head")
+                                            .addColumn("startDate").addColumn("startType")
+                                            .addColumn("individual_uuid").addColumn("location_uuid").addColumn("socialgroup_uuid").build();
                                     MappingIterator<Residency> iterator = mapper.readerFor(Residency.class).with(schema).readValues(unzippedFile);
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
@@ -642,8 +643,8 @@ public class PullActivity extends AppCompatActivity {
                                 if (relationshipDao != null) {
                                     File unzippedFile = new File(getExternalCacheDir() + File.separator + "relationship.csv");
                                     CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("rel_uuid").addColumn("aIsToB").addColumn("endDate").addColumn("endType")
-                                            .addColumn("fw_uuid").addColumn("individual_uuid").addColumn("insertDate").addColumn("lcow").addColumn("man_uuid").addColumn("mar")
+                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("aIsToB").addColumn("endDate").addColumn("endType")
+                                            .addColumn("fw_uuid").addColumn("individualA_uuid").addColumn("individualB_uuid").addColumn("insertDate").addColumn("lcow").addColumn("mar")
                                             .addColumn("mrank").addColumn("nchdm").addColumn("nwive").addColumn("polygamous")
                                             .addColumn("startDate").addColumn("tnbch").build();
                                     MappingIterator<Relationship> iterator = mapper.readerFor(Relationship.class).with(schema).readValues(unzippedFile);
@@ -773,8 +774,9 @@ public class PullActivity extends AppCompatActivity {
                                 if (socialgroupDao != null) {
                                     File unzippedFile = new File(getExternalCacheDir() + File.separator + "socialgroup.csv");
                                     CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("socialgroup_uuid").addColumn("houseExtId").addColumn("fw_uuid").addColumn("groupName").addColumn("groupType")
-                                            .addColumn("individual_uuid").addColumn("insertDate").build();
+                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("extId").addColumn("fw_uuid").addColumn("groupName")
+                                            .addColumn("groupType").addColumn("insertDate")
+                                            .addColumn("individual_uuid").build();
                                     MappingIterator<Socialgroup> iterator = mapper.readerFor(Socialgroup.class).with(schema).readValues(unzippedFile);
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
@@ -898,13 +900,13 @@ public class PullActivity extends AppCompatActivity {
                                 if (pregnancyDao != null) {
                                     File unzippedFile = new File(getExternalCacheDir() + File.separator + "pregnancy.csv");
                                     CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("obs_uuid").addColumn("ageOfPregFromPregNotes").addColumn("anc_visits").addColumn("anteNatalClinic").addColumn("attend_you")
+                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("ageOfPregFromPregNotes").addColumn("anc_visits").addColumn("anteNatalClinic").addColumn("attend_you")
                                             .addColumn("attend_you_other").addColumn("bnet_loc").addColumn("bnet_loc_other").addColumn("bnet_sou").addColumn("bnet_sou_other")
                                             .addColumn("estimatedAgeOfPreg").addColumn("expectedDeliveryDate").addColumn("first_preg").addColumn("first_rec")
-                                            .addColumn("fw_uuid").addColumn("healthfacility").addColumn("how_many").addColumn("individual_uuid").addColumn("insertDate").addColumn("lastClinicVisitDate")
+                                            .addColumn("fw_uuid").addColumn("healthfacility").addColumn("how_many").addColumn("insertDate").addColumn("lastClinicVisitDate")
                                             .addColumn("medicineforpregnancy").addColumn("outcome").addColumn("outcome_date").addColumn("own_bnet")
                                             .addColumn("pregnancyNumber").addColumn("recordedDate").addColumn("slp_bednet").addColumn("trt_bednet").addColumn("ttinjection")
-                                            .addColumn("visit_uuid").addColumn("why_no").addColumn("why_no_other").build();
+                                            .addColumn("why_no").addColumn("why_no_other").addColumn("individual_uuid").addColumn("visit_uuid").build();
                                     MappingIterator<Pregnancy> iterator = mapper.readerFor(Pregnancy.class).with(schema).readValues(unzippedFile);
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
@@ -1182,14 +1184,14 @@ public class PullActivity extends AppCompatActivity {
                                             .addColumn("head_hh_fcorres").addColumn("head_hh_spfy_fcorres").addColumn("horse_fcorres")
                                             .addColumn("horse_num_fcorres").addColumn("house_occ_ge5_fcorres").addColumn("house_occ_lt5_fcorres")
                                             .addColumn("house_occ_tot_fcorres").addColumn("house_room_child_fcorres")
-                                            .addColumn("house_rooms_fcorres").addColumn("individual_uuid").addColumn("insertDate")
+                                            .addColumn("house_rooms_fcorres").addColumn("insertDate")
                                             .addColumn("internet_fcorres").addColumn("job_busown_spfy_scorres").addColumn("job_othr_spfy_scorres")
                                             .addColumn("job_salary_spfy_scorres").addColumn("job_scorres").addColumn("job_skilled_spfy_scorres")
                                             .addColumn("job_smbus_spfy_scorres").addColumn("job_unskilled_spfy_scorres").addColumn("land_fcorres")
                                             .addColumn("land_use_fcorres_1").addColumn("land_use_fcorres_2").addColumn("land_use_fcorres_3")
                                             .addColumn("land_use_fcorres_4").addColumn("land_use_fcorres_5").addColumn("land_use_fcorres_88")
                                             .addColumn("land_use_spfy_fcorres_88").addColumn("landline_fcorres").addColumn("lantern_fcorres")
-                                            .addColumn("lantern_num_fcorres").addColumn("livestock_fcorres").addColumn("location_uuid")
+                                            .addColumn("lantern_num_fcorres").addColumn("livestock_fcorres")
                                             .addColumn("marital_age").addColumn("marital_scorres")
                                             .addColumn("mobile_access_fcorres").addColumn("mobile_fcorres").addColumn("mobile_num_fcorres")
                                             .addColumn("mosquito_net_fcorres").addColumn("mosquito_net_num_fcorres").addColumn("motorcycle_fcorres")
@@ -1219,9 +1221,9 @@ public class PullActivity extends AppCompatActivity {
                                             .addColumn("toilet_share_fcorres").addColumn("toilet_share_num_fcorres")
                                             .addColumn("toilet_spfy_fcorres").addColumn("tractor_fcorres").addColumn("tractor_num_fcorres")
                                             .addColumn("tricycles_fcorres").addColumn("tricycles_num_fcorres").addColumn("tv_fcorres")
-                                            .addColumn("tv_num_fcorres").addColumn("wash_fcorres").addColumn("wash_num_fcorres")
+                                            .addColumn("tv_num_fcorres").addColumn("uuid").addColumn("wash_fcorres").addColumn("wash_num_fcorres")
                                             .addColumn("watch_fcorres")
-                                            .addColumn("watch_num_fcorres").build();
+                                            .addColumn("watch_num_fcorres").addColumn("individual_uuid").addColumn("location_uuid").build();
                                     MappingIterator<HdssSociodemo> iterator = mapper.readerFor(HdssSociodemo.class).with(schema).readValues(unzippedFile);
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();

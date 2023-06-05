@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class RelationshipUpdate {
 
-    public String rel_uuid;
-    public String individual_uuid;
+    public String uuid;
+    public String individualA_uuid;
     public Date endDate;
     public Integer endType;
 }

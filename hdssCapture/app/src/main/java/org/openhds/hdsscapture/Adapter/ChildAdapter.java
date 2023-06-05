@@ -124,7 +124,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ViewHolder> 
                 }
 
                 // Set the mother's ID in the text field
-                childIdField.setText(individual.getIndividual_uuid());
+                childIdField.setText(individual.getUuid());
                 childIdDOB.setText(individual.getDob());
 
                 // Increment the flag to update the next field on the next click
@@ -153,7 +153,7 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ViewHolder> 
         //individualList.clear();
             if(locations != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveChild(socialgroup.getHouseExtId());
+                    List<Individual> list = individualViewModel.retrieveChild(socialgroup.getExtId());
 
                     if (list != null) {
                         individualList.addAll(list);

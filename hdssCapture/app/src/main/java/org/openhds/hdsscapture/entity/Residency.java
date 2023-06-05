@@ -29,13 +29,13 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "residency",
-indices = {@Index(value = {"residency_uuid","individual_uuid","location_uuid","socialgroup_uuid"}, unique = false)})
+indices = {@Index(value = {"uuid","individual_uuid","location_uuid","socialgroup_uuid"}, unique = false)})
 public class Residency extends BaseObservable implements Parcelable {
 
     @Expose
     @NotNull
     @PrimaryKey
-    public String residency_uuid;
+    public String uuid;
 
     @Expose
     public Date insertDate;
@@ -83,32 +83,17 @@ public class Residency extends BaseObservable implements Parcelable {
 
     public Residency(){}
 
-    @Ignore
-    public Residency(@NotNull String residency_uuid, Date insertDate, Date startDate, Date endDate, String individual_uuid, String location_uuid, String socialgroup_uuid, Integer endType, Integer startType, String fw_uuid) {
-        this.residency_uuid = residency_uuid;
-        this.insertDate = insertDate;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.individual_uuid = individual_uuid;
-        this.location_uuid = location_uuid;
-        this.socialgroup_uuid = socialgroup_uuid;
-        this.endType = endType;
-        this.startType = startType;
-        this.fw_uuid = fw_uuid;
-
-    }
 
     @Ignore
     public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
-    @Bindable
     @NotNull
-    public String getResidency_uuid() {
-        return residency_uuid;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setResidency_uuid(@NotNull String residency_uuid) {
-        this.residency_uuid = residency_uuid;
+    public void setUuid(@NotNull String uuid) {
+        this.uuid = uuid;
     }
 
     @Bindable
@@ -262,7 +247,7 @@ public class Residency extends BaseObservable implements Parcelable {
     }
 
     protected Residency(Parcel in) {
-        this.residency_uuid = in.readString();
+        this.uuid = in.readString();
         this.insertDate = (java.util.Date) in.readSerializable();
         this.startDate = (java.util.Date) in.readSerializable();
         this.endDate = (java.util.Date) in.readSerializable();
@@ -297,7 +282,7 @@ public class Residency extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.residency_uuid);
+        dest.writeString(this.uuid);
         dest.writeSerializable(this.insertDate);
         dest.writeSerializable(this.startDate);
         dest.writeSerializable(this.endDate);

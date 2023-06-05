@@ -250,7 +250,7 @@
     <string name="estimatedAgeOfPreg">Number of months pregnant (Use the information in the ANC Booklet)</string>
     <string name="attend_you">Who attended to you?</string>
     <string name="attend_you_other">Other, Specify</string>
-    <string name="first_rec">How many months pregnant were you when you first received  IPT?</string>
+    <string name="first_rec">How many months pregnant were you when you first received antenatal care for this pregnancy</string>
     <string name="anc_visits">How many Antenatal care visits have you made for this pregnancy</string>
     <string name="why_no">If no, Why?</string>
     <string name="bednet">BED NET</string>

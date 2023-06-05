@@ -45,7 +45,7 @@ public class LocationActivity extends AppCompatActivity {
         }
 
         if (level6Data != null) {
-            level6.setText(level6Data.getVillcode());
+            level6.setText(level6Data.getExtId());
         } else {
             // Handle the case where location is null
             level6.setText("Error loading Locations data");

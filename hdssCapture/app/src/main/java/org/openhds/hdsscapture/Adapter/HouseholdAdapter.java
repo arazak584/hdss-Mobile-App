@@ -77,7 +77,7 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
         final Socialgroup socialgroup = socialgroupList.get(position);
 
         holder.name.setText(socialgroup.getGroupName());
-        holder.hhid.setText(socialgroup.getHouseExtId());
+        holder.hhid.setText(socialgroup.getExtId());
         holder.hhid.setTextColor(Color.RED);
 
         Integer visit = socialgroup.complete;

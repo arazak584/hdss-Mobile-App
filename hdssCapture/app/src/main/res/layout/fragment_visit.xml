@@ -86,7 +86,7 @@
                 android:id="@+id/visit_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={visit.visit_uuid}"
+                android:text="@={visit.uuid}"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="textPersonName"/>
@@ -200,7 +200,7 @@
                 android:id="@+id/visit_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={visit.visitExtId}"
+                android:text="@={visit.extId}"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="textPersonName"/>

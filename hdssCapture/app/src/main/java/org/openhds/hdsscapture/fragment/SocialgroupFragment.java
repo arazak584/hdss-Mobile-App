@@ -149,7 +149,7 @@ public class SocialgroupFragment extends Fragment {
 
         SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             try {
-            Socialgroup data = viewModel.findhse(socialgroup.socialgroup_uuid);
+            Socialgroup data = viewModel.findhse(socialgroup.uuid);
             if (data != null) {
 
                 binding.setSocialgroup(data);
@@ -157,7 +157,7 @@ public class SocialgroupFragment extends Fragment {
                 if (data.groupName!= null && individual.firstName!= null && "UNK".equals(data.groupName)){
 
                     data.groupName = individual.firstName +' '+ individual.lastName;
-                    data.individual_uuid = individual.individual_uuid;
+                    data.individual_uuid = individual.uuid;
                 }
 
             }

@@ -231,22 +231,22 @@ public class ResidencyFragment extends Fragment {
         InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
         OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
         try {
-            Residency dataRes = viewModel.findRes(individual.individual_uuid);
+            Residency dataRes = viewModel.findRes(individual.uuid);
 
             if (dataRes != null) {
                 binding.setResidency(dataRes);
-                dataRes.loc = locations.getLocation_uuid();
+                dataRes.loc = locations.getUuid();
                 dataRes.dobs = individual.dob;
             } else {
                 dataRes = new Residency();
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.toString().replaceAll("-", "");
                 dataRes.fw_uuid = fieldworkerData.getFw_uuid();
-                dataRes.residency_uuid = uuidString;
-                dataRes.individual_uuid = individual.getIndividual_uuid();
-                dataRes.location_uuid = locations.getLocation_uuid();
-                dataRes.socialgroup_uuid = socialgroup.socialgroup_uuid;
-                dataRes.loc = locations.getLocation_uuid();
+                dataRes.uuid = uuidString;
+                dataRes.individual_uuid = individual.getUuid();
+                dataRes.location_uuid = locations.getUuid();
+                dataRes.socialgroup_uuid = socialgroup.uuid;
+                dataRes.loc = locations.getUuid();
                 dataRes.complete = 1;
                 dataRes.dobs = individual.dob;
 
@@ -265,7 +265,7 @@ public class ResidencyFragment extends Fragment {
 
 
         try {
-            Residency datas = resViewModel.finds(individual.individual_uuid);
+            Residency datas = resViewModel.finds(individual.uuid);
             if (datas != null) {
                 binding.setRes(datas);
 
@@ -283,7 +283,7 @@ public class ResidencyFragment extends Fragment {
         }
 
         try {
-            Death datadth = deathViewModel.find(individual.individual_uuid);
+            Death datadth = deathViewModel.find(individual.uuid);
             if (datadth != null) {
                 binding.setDeath(datadth);
             } else {
@@ -292,7 +292,7 @@ public class ResidencyFragment extends Fragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.toString().replaceAll("-", "");
                 datadth.fw_uuid = fieldworkerData.getFw_uuid();
-                datadth.death_uuid = uuidString;
+                datadth.uuid = uuidString;
                 datadth.dob = individual.dob;
                 datadth.firstName = individual.getFirstName();
                 datadth.lastName = individual.getLastName();
@@ -300,9 +300,9 @@ public class ResidencyFragment extends Fragment {
                 datadth.compno = locations.getCompno();
                 datadth.extId = individual.getExtId();
                 datadth.compname = locations.getLocationName();
-                datadth.individual_uuid = individual.getIndividual_uuid();
+                datadth.individual_uuid = individual.getUuid();
                 datadth.villname = level5Data.getName();
-                datadth.villcode = level5Data.getVillcode();
+                datadth.villcode = level5Data.getExtId();
                 datadth.visit_uuid = socialgroup.getVisit_uuid();
                 datadth.deathDate = binding.getResidency().endDate;
                 datadth.vpmcomplete=1;
@@ -318,7 +318,7 @@ public class ResidencyFragment extends Fragment {
         }
 
         try {
-            Inmigration dataimg = inmigrationViewModel.find(individual.individual_uuid);
+            Inmigration dataimg = inmigrationViewModel.find(individual.uuid);
             if (dataimg != null && binding.getResidency().rltn_head !=null) {
                 binding.setInmigration(dataimg);
             } else {
@@ -327,10 +327,10 @@ public class ResidencyFragment extends Fragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.toString().replaceAll("-", "");
 
-                dataimg.img_uuid=uuidString;
+                dataimg.uuid=uuidString;
                 dataimg.fw_uuid = fieldworkerData.getFw_uuid();
-                dataimg.residency_uuid = binding.getResidency().residency_uuid;
-                dataimg.individual_uuid = individual.getIndividual_uuid();
+                dataimg.residency_uuid = binding.getResidency().uuid;
+                dataimg.individual_uuid = individual.getUuid();
                 dataimg.visit_uuid = socialgroup.getVisit_uuid();
                 dataimg.recordedDate = binding.getResidency().startDate;
                 dataimg.complete = 1;
@@ -345,7 +345,7 @@ public class ResidencyFragment extends Fragment {
         }
 
         try {
-            Outmigration data = outmigrationViewModel.find(individual.individual_uuid);
+            Outmigration data = outmigrationViewModel.find(individual.uuid);
             if (data != null) {
                 binding.setOutmigration(data);
             } else {
@@ -354,10 +354,10 @@ public class ResidencyFragment extends Fragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.toString().replaceAll("-", "");
 
-                data.omg_uuid=uuidString;
+                data.uuid=uuidString;
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.residency_uuid = binding.getResidency().residency_uuid;
-                data.individual_uuid = individual.getIndividual_uuid();
+                data.residency_uuid = binding.getResidency().uuid;
+                data.individual_uuid = individual.getUuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.recordedDate = binding.getResidency().endDate;
                 data.complete = 1;
@@ -612,7 +612,7 @@ public class ResidencyFragment extends Fragment {
             if (socialgroup.groupName!= null && individual.firstName!= null && "UNK".equals(socialgroup.groupName)) {
                 socialgroupA.individual_uuid = finalData.individual_uuid;
                 socialgroupA.groupName = individual.firstName +' '+ individual.lastName;
-                socialgroupA.socialgroup_uuid = socialgroup.socialgroup_uuid;
+                socialgroupA.uuid = socialgroup.uuid;
             }
 
             SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);

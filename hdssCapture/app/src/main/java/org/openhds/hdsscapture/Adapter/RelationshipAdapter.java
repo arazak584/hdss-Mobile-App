@@ -97,7 +97,7 @@ public class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapte
                 EditText partnerIdField = activity.requireActivity().findViewById(R.id.man_extidB);
 
                 // Set the mother's ID in the text field
-                partnerIdField.setText(individual.getIndividual_uuid());
+                partnerIdField.setText(individual.getUuid());
 
                 // Hide the MotherDialogFragment
                 activity.dismiss();

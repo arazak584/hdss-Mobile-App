@@ -127,7 +127,7 @@ public class VisitFragment extends Fragment {
 
         VisitViewModel viewModel = new ViewModelProvider(this).get(VisitViewModel.class);
         try {
-            Visit data = viewModel.find(socialgroup.socialgroup_uuid);
+            Visit data = viewModel.find(socialgroup.uuid);
             if (data != null) {
                 binding.setVisit(data);
                 data.visitDate = new Date();
@@ -139,16 +139,16 @@ public class VisitFragment extends Fragment {
 
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.location_uuid = locations.getLocation_uuid();
+                data.location_uuid = locations.getUuid();
                 data.roundNumber = roundData.getRoundNumber();
-                data.visit_uuid = socialgroup.getVisit_uuid();
+                data.uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
-                data.houseExtId = socialgroup.houseExtId;
-                data.socialgroup_uuid =socialgroup.socialgroup_uuid;
+                data.houseExtId = socialgroup.extId;
+                data.socialgroup_uuid =socialgroup.uuid;
                 if(roundData.roundNumber < 10) {
-                    data.visitExtId = data.houseExtId + "00" + roundData.getRoundNumber();
+                    data.extId = data.houseExtId + "00" + roundData.getRoundNumber();
                 }else {
-                    data.visitExtId = data.houseExtId + "0" + roundData.getRoundNumber();
+                    data.extId = data.houseExtId + "0" + roundData.getRoundNumber();
                 };
 
                 binding.setVisit(data);

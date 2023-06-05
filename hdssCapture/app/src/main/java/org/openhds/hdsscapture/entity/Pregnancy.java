@@ -33,12 +33,12 @@ import java.util.Locale;
         indices = {@Index(value = {"individual_uuid"}, unique = false)})
 public class Pregnancy extends BaseObservable implements Parcelable {
 
-    @SerializedName("obs_uuid")
+    @SerializedName("uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "obs_uuid")
+    @ColumnInfo(name = "uuid")
     @PrimaryKey
-    public String obs_uuid;
+    public String uuid;
 
     @SerializedName("individual_uuid")
     @Expose
@@ -142,28 +142,18 @@ public class Pregnancy extends BaseObservable implements Parcelable {
 
     public Pregnancy(){}
 
-    @Ignore
-    public Pregnancy(@NotNull String obs_uuid,String individual_uuid, Date insertDate, Integer outcome, Date recordedDate, Date expectedDeliveryDate, String visitid, String fw) {
-        this.obs_uuid = obs_uuid;
-        this.individual_uuid = individual_uuid;
-        this.insertDate = insertDate;
-        this.outcome = outcome;
-        this.recordedDate = recordedDate;
-        this.expectedDeliveryDate = expectedDeliveryDate;
-        this.visit_uuid = visit_uuid;
-        this.fw_uuid = fw_uuid;
-    }
+
 
     @Ignore
     public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @NotNull
-    public String getObs_uuid() {
-        return obs_uuid;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setObs_uuid(@NotNull String obs_uuid) {
-        this.obs_uuid = obs_uuid;
+    public void setUuid(@NotNull String uuid) {
+        this.uuid = uuid;
     }
 
     public String getIndividual_uuid() {

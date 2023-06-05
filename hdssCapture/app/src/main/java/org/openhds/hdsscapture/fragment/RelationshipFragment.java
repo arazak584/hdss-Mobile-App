@@ -179,7 +179,7 @@ public class RelationshipFragment extends Fragment {
 
         RelationshipViewModel viewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
         try {
-            Relationship data = viewModel.find(individual.individual_uuid);
+            Relationship data = viewModel.find(individual.uuid);
             if (data != null) {
                 binding.setRelationship(data);
             } else {
@@ -190,9 +190,9 @@ public class RelationshipFragment extends Fragment {
 
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.rel_uuid = uuidString;
+                data.uuid = uuidString;
 
-                data.individual_uuid = individual.getIndividual_uuid();
+                data.individualA_uuid = individual.getUuid();
                 data.dob = individual.dob;
 
 

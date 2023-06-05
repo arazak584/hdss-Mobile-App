@@ -54,8 +54,8 @@ public interface PregnancyDao {
     Pregnancy findpreg(String id);
 
     @Query("SELECT a.*,d.firstName,d.lastName FROM pregnancy as a " + "INNER JOIN residency as b ON a.individual_uuid = b.individual_uuid " +
-            " INNER JOIN individual as d on a.individual_uuid=d.individual_uuid " +
-            " INNER JOIN Locations as c on b.location_uuid=c.location_uuid " +
+            " INNER JOIN individual as d on a.individual_uuid=d.uuid " +
+            " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
             " WHERE b.endType=1 and outcome=2 and c.compextId=:id ")
     List<Pregnancy> retrievePregnancy(String id);
 

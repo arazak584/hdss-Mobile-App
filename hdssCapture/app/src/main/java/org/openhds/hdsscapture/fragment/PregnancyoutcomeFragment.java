@@ -261,7 +261,7 @@ public class PregnancyoutcomeFragment extends Fragment {
         OutcomeViewModel outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
         DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         try {
-            Pregnancyoutcome data = viewModel.find(individual.individual_uuid);
+            Pregnancyoutcome data = viewModel.find(individual.uuid);
             if (data != null) {
                 binding.setPregoutcome(data);
             } else {
@@ -273,8 +273,8 @@ public class PregnancyoutcomeFragment extends Fragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.toString().replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.preg_uuid = uuidString;
-                data.mother_uuid = individual.getIndividual_uuid();
+                data.uuid = uuidString;
+                data.mother_uuid = individual.getUuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
 
@@ -287,14 +287,14 @@ public class PregnancyoutcomeFragment extends Fragment {
 
 
         try {
-            final String child_id = individual.individual_uuid + AppConstants.CHILD1 + eventForm.event_name_id + roundData.roundNumber;
+            final String child_id = individual.uuid + AppConstants.CHILD1 + eventForm.event_name_id + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 binding.setPregoutcome1(data);
             } else {
                 data = new Outcome();
 
-                data.mother_uuid = individual.getIndividual_uuid();
+                data.mother_uuid = individual.getUuid();
                 data.child_idx = AppConstants.CHILD1;
 
                 data.vis_number = eventForm.event_name_id;
@@ -302,7 +302,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber();
                 data.complete = 1;
-                data.preg_uuid = binding.getPregoutcome().preg_uuid;
+                data.preg_uuid = binding.getPregoutcome().uuid;
 
 
                 binding.setPregoutcome1(data);
@@ -312,14 +312,14 @@ public class PregnancyoutcomeFragment extends Fragment {
         }
 
         try {
-            final String child_id = individual.individual_uuid + AppConstants.CHILD2 + eventForm.event_name_id + roundData.roundNumber;
+            final String child_id = individual.uuid + AppConstants.CHILD2 + eventForm.event_name_id + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 binding.setPregoutcome2(data);
             } else {
                 data = new Outcome();
 
-                data.mother_uuid = individual.getIndividual_uuid();
+                data.mother_uuid = individual.getUuid();
                 data.child_idx = AppConstants.CHILD2;
 
                 data.vis_number = eventForm.event_name_id;
@@ -327,7 +327,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber();
                 data.complete = 1;
-                data.preg_uuid = binding.getPregoutcome().preg_uuid;
+                data.preg_uuid = binding.getPregoutcome().uuid;
 
                 binding.setPregoutcome2(data);
             }
@@ -336,14 +336,14 @@ public class PregnancyoutcomeFragment extends Fragment {
         }
 
         try {
-            final String child_id = individual.individual_uuid + AppConstants.CHILD3 + eventForm.event_name_id + roundData.roundNumber;
+            final String child_id = individual.uuid + AppConstants.CHILD3 + eventForm.event_name_id + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 binding.setPregoutcome3(data);
             } else {
                 data = new Outcome();
 
-                data.mother_uuid = individual.getIndividual_uuid();
+                data.mother_uuid = individual.getUuid();
                 data.child_idx = AppConstants.CHILD3;
 
                 data.vis_number = eventForm.event_name_id;
@@ -351,7 +351,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber();
                 data.complete = 1;
-                data.preg_uuid = binding.getPregoutcome().preg_uuid;
+                data.preg_uuid = binding.getPregoutcome().uuid;
 
                 binding.setPregoutcome3(data);
             }
@@ -360,14 +360,14 @@ public class PregnancyoutcomeFragment extends Fragment {
         }
 
         try {
-            final String child_id = individual.individual_uuid + AppConstants.CHILD4 + eventForm.event_name_id + roundData.roundNumber;
+            final String child_id = individual.uuid + AppConstants.CHILD4 + eventForm.event_name_id + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 binding.setPregoutcome4(data);
             } else {
                 data = new Outcome();
 
-                data.mother_uuid = individual.getIndividual_uuid();
+                data.mother_uuid = individual.getUuid();
                 data.child_idx = AppConstants.CHILD4;
 
                 data.vis_number = eventForm.event_name_id;
@@ -375,7 +375,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber() ;
                 data.complete = 1;
-                data.preg_uuid = binding.getPregoutcome().preg_uuid;
+                data.preg_uuid = binding.getPregoutcome().uuid;
 
 
                 binding.setPregoutcome4(data);
@@ -385,7 +385,7 @@ public class PregnancyoutcomeFragment extends Fragment {
         }
 
         try {
-            Death data = deathViewModel.find(individual.individual_uuid);
+            Death data = deathViewModel.find(individual.uuid);
             if (data != null) {
                 binding.setDeath(data);
             } else {
@@ -394,7 +394,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.toString().replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.death_uuid = uuidString;
+                data.uuid = uuidString;
                 data.insertDate = new Date();
                 data.firstName = "Still";
                 data.lastName = "Birth";
@@ -402,9 +402,9 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.compno = locations.getCompno();
                 data.extId = individual.getExtId();
                 data.compname = locations.getLocationName();
-                data.individual_uuid = individual.getIndividual_uuid();
+                data.individual_uuid = individual.getUuid();
                 data.villname = level5Data.getName();
-                data.villcode = level5Data.getVillcode();
+                data.villcode = level5Data.getExtId();
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.respondent = individual.getFirstName() +" "+ individual.getLastName();
                 data.househead = individual.getFirstName() +" "+ individual.getLastName();

@@ -108,7 +108,7 @@ public class HouseMembersFragment extends Fragment {
         final TextView hh = binding.getRoot().findViewById(R.id.textView_compextId);
         final TextView name = binding.getRoot().findViewById(R.id.textView_compname);
 
-        hh.setText(socialgroup.getHouseExtId());
+        hh.setText(socialgroup.getExtId());
         name.setText(socialgroup.getGroupName());
 
         final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_household);

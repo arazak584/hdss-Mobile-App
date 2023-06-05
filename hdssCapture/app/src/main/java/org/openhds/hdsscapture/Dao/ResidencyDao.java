@@ -49,7 +49,7 @@ public interface ResidencyDao {
     @Query("SELECT * FROM residency WHERE complete=1")
     List<Residency> retrieveToSync();
 
-    @Query("SELECT * FROM residency WHERE residency_uuid=:id AND location_uuid!=loc")
+    @Query("SELECT * FROM residency WHERE uuid=:id AND location_uuid!=loc")
     Residency fetch(String id);
 
 }

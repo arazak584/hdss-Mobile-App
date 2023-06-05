@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -116,15 +117,19 @@ public class SocioFragment extends Fragment {
         HdssSociodemoViewModel viewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
 
         try {
-            HdssSociodemo data = viewModel.findses(socialgroup.socialgroup_uuid);
+            HdssSociodemo data = viewModel.findses(socialgroup.uuid);
             if (data != null) {
                 binding.setSociodemo(data);
             } else {
                 data = new HdssSociodemo();
 
-                data.individual_uuid = individual.getIndividual_uuid();
-                data.location_uuid = locations.getLocation_uuid();
-                data.socialgroup_uuid = socialgroup.getSocialgroup_uuid();
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+
+                data.uuid = uuidString;
+                data.individual_uuid = individual.getUuid();
+                data.location_uuid = locations.getUuid();
+                data.socialgroup_uuid = socialgroup.getUuid();
                 data.fw_uuid = fieldworkerData.getFw_uuid();
 
                 //get the hour and minute on first fill

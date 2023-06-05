@@ -29,12 +29,12 @@ import java.util.Locale;
 @Entity(tableName = "outmigration")
 public class Outmigration extends BaseObservable implements Parcelable {
 
-    @SerializedName("omg_uuid")
+    @SerializedName("uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "omg_uuid")
+    @ColumnInfo(name = "uuid")
     @PrimaryKey
-    public String omg_uuid;
+    public String uuid;
 
     @Expose
     public String individual_uuid;
@@ -86,12 +86,12 @@ public class Outmigration extends BaseObservable implements Parcelable {
     public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @NotNull
-    public String getOmg_uuid() {
-        return omg_uuid;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setOmg_uuid(@NotNull String omg_uuid) {
-        this.omg_uuid = omg_uuid;
+    public void setUuid(@NotNull String uuid) {
+        this.uuid = uuid;
     }
 
     @NotNull

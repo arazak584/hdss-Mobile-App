@@ -27,15 +27,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity(tableName = "locations",
-indices = {@Index(value = {"location_uuid","compextId","compno"}, unique = true)})
+indices = {@Index(value = {"uuid","compextId","compno"}, unique = true)})
 public class Locations extends BaseObservable implements Parcelable {
 
-    @SerializedName("location_uuid")
+    @SerializedName("uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "location_uuid")
+    @ColumnInfo(name = "uuid")
     @PrimaryKey
-    public String location_uuid;
+    public String uuid;
 
     @Expose
     @ColumnInfo(name = "compextId")
@@ -97,7 +97,7 @@ public class Locations extends BaseObservable implements Parcelable {
     public Integer complete;
 
     @Expose
-    public String villcode;
+    public String extId;
 
     @Expose
     public String houseExtId;
@@ -141,15 +141,13 @@ public class Locations extends BaseObservable implements Parcelable {
         }
     }
 
-    @Bindable
     @NotNull
-    public String getLocation_uuid() {
-        return location_uuid;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setLocation_uuid(@NotNull String location_uuid) {
-        this.location_uuid = location_uuid;
-
+    public void setUuid(@NotNull String uuid) {
+        this.uuid = uuid;
     }
 
     public String getCompextId() {
@@ -159,14 +157,14 @@ public class Locations extends BaseObservable implements Parcelable {
     public void setCompextId(String compextId) {
         this.compextId = compextId;
           //KINTAMPO
-        if(villcode != null && compno != null && compno.length() == 6 && site == 1){
-            this.compextId = villcode + "00" + compno.substring(2,6);
+        if(extId != null && compno != null && compno.length() == 6 && site == 1){
+            this.compextId = extId + "00" + compno.substring(2,6);
         } //NAVRONGO
-        else if(villcode != null && compno != null && compno.length() == 6 && site == 2){
-            this.compextId = villcode + "000" + compno.substring(3,6);
+        else if(extId != null && compno != null && compno.length() == 6 && site == 2){
+            this.compextId = extId + "000" + compno.substring(3,6);
         } //DODOWA
-        else if(villcode != null && compno != null && compno.length() == 7 && site == 3){
-            this.compextId = villcode + "00" + compno.substring(4,7);
+        else if(extId != null && compno != null && compno.length() == 7 && site == 3){
+            this.compextId = extId + "00" + compno.substring(4,7);
         }
     }
 

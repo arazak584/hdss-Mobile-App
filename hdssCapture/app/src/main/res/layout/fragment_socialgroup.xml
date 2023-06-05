@@ -105,7 +105,7 @@
                     android:id="@+id/sociagroup_extid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@={socialgroup.houseExtId}"
+                    android:text="@={socialgroup.extId}"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:inputType="textPersonName"/>

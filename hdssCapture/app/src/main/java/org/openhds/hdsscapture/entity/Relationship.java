@@ -30,18 +30,18 @@ import java.util.Locale;
 @Entity(tableName = "relationship")
 public class Relationship extends BaseObservable implements Parcelable {
 
-    @SerializedName("rel_uuid")
+    @SerializedName("uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "rel_uuid")
+    @ColumnInfo(name = "uuid")
     @PrimaryKey
-    public String rel_uuid;
+    public String uuid;
 
     @Expose
-    public String individual_uuid;
+    public String individualA_uuid;
 
     @Expose
-    public String man_uuid;
+    public String individualB_uuid;
 
     @Expose
     public Date dob;
@@ -87,21 +87,29 @@ public class Relationship extends BaseObservable implements Parcelable {
     @Ignore
     public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
-    public String getIndividual_uuid() {
-        return individual_uuid;
+    @NotNull
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setIndividual_uuid(String individual_uuid) {
-        this.individual_uuid = individual_uuid;
+    public void setUuid(@NotNull String uuid) {
+        this.uuid = uuid;
     }
 
-    @Bindable
-    public String getMan_uuid() {
-        return man_uuid;
+    public String getIndividualA_uuid() {
+        return individualA_uuid;
     }
 
-    public void setMan_uuid(String man_uuid) {
-        this.man_uuid = man_uuid;
+    public void setIndividualA_uuid(String individualA_uuid) {
+        this.individualA_uuid = individualA_uuid;
+    }
+
+    public String getIndividualB_uuid() {
+        return individualB_uuid;
+    }
+
+    public void setIndividualB_uuid(String individualB_uuid) {
+        this.individualB_uuid = individualB_uuid;
     }
 
     @Bindable
@@ -179,15 +187,6 @@ public class Relationship extends BaseObservable implements Parcelable {
         this.aIsToB = aIsToB;
     }
 
-    @Bindable
-    @NotNull
-    public String getRel_uuid() {
-        return rel_uuid;
-    }
-
-    public void setRel_uuid(@NotNull String rel_uuid) {
-        this.rel_uuid = rel_uuid;
-    }
 
     public Integer getMar() {
         return mar;
@@ -271,8 +270,9 @@ public class Relationship extends BaseObservable implements Parcelable {
     }
 
     protected Relationship(Parcel in) {
-        this.individual_uuid = in.readString();
-        this.man_uuid = in.readString();
+        this.uuid = in.readString();
+        this.individualA_uuid = in.readString();
+        this.individualB_uuid = in.readString();
         this.startDate = (Date) in.readSerializable();
         this.endDate = (Date) in.readSerializable();
         this.insertDate = (Date) in.readSerializable();
@@ -308,8 +308,9 @@ public class Relationship extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.individual_uuid);
-        dest.writeString(this.man_uuid);
+        dest.writeString(this.uuid);
+        dest.writeString(this.individualA_uuid);
+        dest.writeString(this.individualB_uuid);
         dest.writeSerializable(this.startDate);
         dest.writeSerializable(this.endDate);
         dest.writeSerializable(this.insertDate);

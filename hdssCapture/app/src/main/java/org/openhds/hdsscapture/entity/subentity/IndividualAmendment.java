@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class IndividualAmendment {
 
-    public String individual_uuid;
+    public String uuid;
     public String firstName;
 
     public String lastName;

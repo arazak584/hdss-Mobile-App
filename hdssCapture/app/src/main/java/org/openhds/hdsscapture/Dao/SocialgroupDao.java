@@ -33,13 +33,13 @@ public interface SocialgroupDao {
     @Query("DELETE FROM socialgroup")
     void deleteAll();
 
-    @Query("SELECT * FROM socialgroup WHERE socialgroup_uuid=:id")
+    @Query("SELECT * FROM socialgroup WHERE uuid=:id")
     Socialgroup retrieve(String id);
 
-    @Query("SELECT * FROM socialgroup WHERE houseExtId=:id")
+    @Query("SELECT * FROM socialgroup WHERE extId=:id")
     Socialgroup createhse(String id);
 
-    @Query("SELECT * FROM socialgroup WHERE socialgroup_uuid=:id")
+    @Query("SELECT * FROM socialgroup WHERE uuid=:id")
     Socialgroup findhse(String id);
 
     @Query("SELECT * FROM socialgroup WHERE complete=1")
@@ -51,9 +51,9 @@ public interface SocialgroupDao {
     @Query("SELECT * FROM socialgroup")
     List<Socialgroup> getAll();
 
-    @Query("SELECT a.*,compextId FROM socialgroup as a " + "INNER JOIN residency as b ON a.socialgroup_uuid = b.socialgroup_uuid" +
-            " INNER JOIN Locations as c on b.location_uuid=c.location_uuid " +
-            " WHERE b.endType=1 and c.compextId=:id GROUP BY a.houseExtId ")
+    @Query("SELECT a.*,compextId FROM socialgroup as a " + "INNER JOIN residency as b ON a.uuid = b.socialgroup_uuid" +
+            " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
+            " WHERE b.endType=1 and c.compextId=:id GROUP BY a.extId ")
     List<Socialgroup> retrieveBySocialgroup(String id);
 
 

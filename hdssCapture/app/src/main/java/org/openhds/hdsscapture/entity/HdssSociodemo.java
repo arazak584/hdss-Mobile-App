@@ -36,6 +36,9 @@ public class HdssSociodemo extends BaseObservable {
     public String socialgroup_uuid;
 
     @Expose
+    public String uuid;
+
+    @Expose
     public String individual_uuid;
 
     @Expose
@@ -430,6 +433,14 @@ public class HdssSociodemo extends BaseObservable {
 
     public void setLocation_uuid(String location_uuid) {
         this.location_uuid = location_uuid;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getInsertDate() {

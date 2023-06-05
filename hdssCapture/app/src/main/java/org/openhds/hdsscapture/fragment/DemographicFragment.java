@@ -125,7 +125,7 @@ public class DemographicFragment extends Fragment {
 
         DemographicViewModel viewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
         try {
-            Demographic data = viewModel.find(individual.individual_uuid);
+            Demographic data = viewModel.find(individual.uuid);
             if (data != null) {
                 binding.setDemographic(data);
                 if(data.complete ==null){
@@ -138,7 +138,7 @@ public class DemographicFragment extends Fragment {
                 data = new Demographic();
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.individual_uuid = individual.getIndividual_uuid();
+                data.individual_uuid = individual.getUuid();
                 data.complete = 1;
                 data.phone = 1;
 

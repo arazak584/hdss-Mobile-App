@@ -30,15 +30,15 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "individual",
-indices = {@Index(value = {"individual_uuid","lastName","firstName"}, unique = false)})
+indices = {@Index(value = {"uuid","lastName","firstName"}, unique = false)})
 public class Individual extends BaseObservable implements Parcelable {
 
-    @SerializedName("individual_uuid")
+    @SerializedName("uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "individual_uuid")
+    @ColumnInfo(name = "uuid")
     @PrimaryKey
-    public String individual_uuid;
+    public String uuid;
 
     @Expose
     @ColumnInfo(name = "extId")
@@ -133,8 +133,8 @@ public class Individual extends BaseObservable implements Parcelable {
     public Individual(){}
 
     @Ignore
-    public Individual(@NotNull String individual_uuid, String extId, Date dob, Integer age, Date insertDate, String firstName, String lastName, Integer gender, Integer dobAspect, String otherName, String mother_uuid, String father_uuid, String fw_uuid) {
-        this.individual_uuid = individual_uuid;
+    public Individual(@NotNull String uuid, String extId, Date dob, Integer age, Date insertDate, String firstName, String lastName, Integer gender, Integer dobAspect, String otherName, String mother_uuid, String father_uuid, String fw_uuid) {
+        this.uuid = uuid;
         this.extId = extId;
         this.dob = dob;
         this.age = age;
@@ -150,12 +150,12 @@ public class Individual extends BaseObservable implements Parcelable {
     }
 
     @NotNull
-    public String getIndividual_uuid() {
-        return individual_uuid;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setIndividual_uuid(@NotNull String individual_uuid) {
-        this.individual_uuid = individual_uuid;
+    public void setUuid(@NotNull String uuid) {
+        this.uuid = uuid;
     }
 
     @NotNull
@@ -348,6 +348,7 @@ public class Individual extends BaseObservable implements Parcelable {
     }
 
     protected Individual(Parcel in) {
+        this.uuid = in.readString();
         this.extId = in.readString();
         this.dob = (java.util.Date) in.readSerializable();
         this.insertDate = (java.util.Date) in.readSerializable();
@@ -386,6 +387,7 @@ public class Individual extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.uuid);
         dest.writeString(this.extId);
         dest.writeSerializable(this.dob);
         dest.writeSerializable(this.insertDate);

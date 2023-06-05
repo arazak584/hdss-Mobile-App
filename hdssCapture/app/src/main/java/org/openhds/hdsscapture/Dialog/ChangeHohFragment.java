@@ -90,7 +90,7 @@ public class ChangeHohFragment extends DialogFragment {
 
         final TextView hh = view.findViewById(R.id.textView_hoh);
         if (socialgroup != null) {
-            hh.setText(socialgroup.getHouseExtId());
+            hh.setText(socialgroup.getExtId());
         } else {
             // Handle the case where locations is null
             hh.setText("Error loading household data");

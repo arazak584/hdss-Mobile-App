@@ -98,7 +98,7 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
                 EditText fatherIdField = activity.requireActivity().findViewById(R.id.individual_father);
                 EditText fatherAge = activity.requireActivity().findViewById(R.id.father_age);
                 // Set the mother's ID in the text field
-                fatherIdField.setText(individual.getIndividual_uuid());
+                fatherIdField.setText(individual.getUuid());
                 fatherAge.setText(String.valueOf(individual.getAge()));
 
                 // Hide the MotherDialogFragment

@@ -29,12 +29,12 @@ import java.util.Locale;
 @Entity(tableName = "inmigration")
 public class Inmigration extends BaseObservable implements Parcelable {
 
-    @SerializedName("img_uuid")
+    @SerializedName("uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "img_uuid")
+    @ColumnInfo(name = "uuid")
     @PrimaryKey
-    public String img_uuid;
+    public String uuid;
 
     @Expose
     public String individual_uuid;
@@ -119,12 +119,12 @@ public class Inmigration extends BaseObservable implements Parcelable {
     }
 
     @NotNull
-    public String getImg_uuid() {
-        return img_uuid;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setImg_uuid(@NotNull String img_uuid) {
-        this.img_uuid = img_uuid;
+    public void setUuid(@NotNull String uuid) {
+        this.uuid = uuid;
     }
 
     public String getIndividual_uuid() {
@@ -177,7 +177,7 @@ public class Inmigration extends BaseObservable implements Parcelable {
 
 
     protected Inmigration(Parcel in) {
-        this.img_uuid = in.readString();
+        this.uuid = in.readString();
         this.individual_uuid = in.readString();
         this.insertDate = (Date) in.readSerializable();
         this.migType = in.readInt();
@@ -208,7 +208,7 @@ public class Inmigration extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.img_uuid);
+        dest.writeString(this.uuid);
         dest.writeString(this.individual_uuid);
         dest.writeSerializable(this.insertDate);
         dest.writeInt(this.migType);

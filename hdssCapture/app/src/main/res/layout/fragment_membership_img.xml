@@ -88,7 +88,7 @@
                 android:id="@+id/img_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={inmigration.img_uuid}"
+                android:text="@={inmigration.uuid}"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 

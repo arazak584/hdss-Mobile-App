@@ -172,7 +172,7 @@ public class PregnancyFragment extends Fragment {
 
         PregnancyViewModel viewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         try {
-            Pregnancy data = viewModel.find(individual.individual_uuid);
+            Pregnancy data = viewModel.find(individual.uuid);
             if (data != null) {
                 binding.setPregnancy(data);
             } else {
@@ -184,8 +184,8 @@ public class PregnancyFragment extends Fragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.toString().replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.obs_uuid = uuidString;
-                data.individual_uuid = individual.getIndividual_uuid();
+                data.uuid = uuidString;
+                data.individual_uuid = individual.getUuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
 

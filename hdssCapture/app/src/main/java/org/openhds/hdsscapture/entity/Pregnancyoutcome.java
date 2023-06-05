@@ -28,12 +28,12 @@ import java.util.Locale;
 @Entity(tableName = "pregnancyoutcome")
 public class Pregnancyoutcome extends BaseObservable {
 
-    @SerializedName("preg_uuid")
+    @SerializedName("uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "preg_uuid")
+    @ColumnInfo(name = "uuid")
     @PrimaryKey
-    public String preg_uuid;
+    public String uuid;
 
     @Expose
     public Date insertDate;
@@ -127,12 +127,12 @@ public class Pregnancyoutcome extends BaseObservable {
     public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @NotNull
-    public String getPreg_uuid() {
-        return preg_uuid;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setPreg_uuid(@NotNull String preg_uuid) {
-        this.preg_uuid = preg_uuid;
+    public void setUuid(@NotNull String uuid) {
+        this.uuid = uuid;
     }
 
     public String getMother_uuid() {

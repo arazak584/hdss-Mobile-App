@@ -122,27 +122,27 @@ public class BaselineFragment extends Fragment {
 
 
         // Generate a UUID
-        if(individual.individual_uuid == null) {
+        if(individual.uuid == null) {
             String uuid = UUID.randomUUID().toString();
             String uuidString = uuid.toString().replaceAll("-", "");
             // Set the ID of the Fieldworker object
-            binding.getIndividual().individual_uuid = uuidString;
+            binding.getIndividual().uuid = uuidString;
             binding.getSocialgroup().individual_uuid = uuidString;
             binding.getResidency().individual_uuid = uuidString;
         }
 
-        if(residency.residency_uuid == null) {
+        if(residency.uuid == null) {
             String uuid = UUID.randomUUID().toString();
             String resuuidString = uuid.toString().replaceAll("-", "");
             // Set the ID of the Fieldworker object
-            binding.getResidency().residency_uuid = resuuidString;
+            binding.getResidency().uuid = resuuidString;
         }
 
-        if(socialgroup.socialgroup_uuid == null) {
+        if(socialgroup.uuid == null) {
             String uuid = UUID.randomUUID().toString();
             String suuidString = uuid.toString().replaceAll("-", "");
             // Set the ID of the Fieldworker object
-            binding.getSocialgroup().socialgroup_uuid = suuidString;
+            binding.getSocialgroup().uuid = suuidString;
             binding.getResidency().socialgroup_uuid = suuidString;
         }
 
@@ -159,7 +159,7 @@ public class BaselineFragment extends Fragment {
         }
 
         if(residency.location_uuid==null){
-            binding.getResidency().location_uuid = locations.getLocation_uuid();
+            binding.getResidency().location_uuid = locations.getUuid();
         }
 
         if(socialgroup.complete==null){
@@ -202,7 +202,7 @@ public class BaselineFragment extends Fragment {
         }
 
         // Generate ID if extId is null
-        if (binding.getSocialgroup().houseExtId == null) {
+        if (binding.getSocialgroup().extId == null) {
             final SocialgroupViewModel socialgroupViewModels = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             int sequenceNumber = 1;
             String id = locations.compextId + String.format("%02d", sequenceNumber); // generate ID with sequence number padded with zeros
@@ -217,7 +217,7 @@ public class BaselineFragment extends Fragment {
                 sequenceNumber++; // increment sequence number if ID exists
                 id = locations.compextId + String.format("%02d", sequenceNumber); // generate new ID with updated sequence number
             }
-            binding.getSocialgroup().houseExtId = id; // set the generated ID to the extId property of the Individual object
+            binding.getSocialgroup().extId = id; // set the generated ID to the extId property of the Individual object
         }
 
 

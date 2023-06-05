@@ -135,11 +135,11 @@ public class IndividualFragment extends Fragment {
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
         // Generate a UUID
-        if(individual.individual_uuid == null) {
+        if(individual.uuid == null) {
             String uuid = UUID.randomUUID().toString();
             String uuidString = uuid.toString().replaceAll("-", "");
             // Set the ID of the Fieldworker object
-            binding.getIndividual().individual_uuid = uuidString;
+            binding.getIndividual().uuid = uuidString;
         }
 
         if(individual.fw_uuid==null){
@@ -297,7 +297,7 @@ public class IndividualFragment extends Fragment {
             final IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
 
             final Individual individual = binding.getIndividual();
-            individual.setIndividual_uuid(this.individual.getIndividual_uuid());
+            individual.setUuid(this.individual.getUuid());
 
             boolean isExists = false;
             binding.individualExtid.setError(null);

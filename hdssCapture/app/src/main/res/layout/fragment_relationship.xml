@@ -103,7 +103,7 @@
                         android:id="@+id/uuid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={relationship.rel_uuid}"
+                        android:text="@={relationship.uuid}"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -140,7 +140,7 @@
                         android:id="@+id/woman_extid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={relationship.individual_uuid}"
+                        android:text="@={relationship.individualA_uuid}"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:inputType="textPersonName"/>
@@ -171,7 +171,7 @@
                         android:id="@+id/man_extidB"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={relationship.man_uuid}"
+                        android:text="@={relationship.individualB_uuid}"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 

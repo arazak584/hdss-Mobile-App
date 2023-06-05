@@ -41,7 +41,7 @@ public interface RelationshipDao {
     @Query("SELECT * FROM relationship WHERE complete=1 ")
     List<Relationship> retrieveToSync();
 
-    @Query("SELECT * FROM relationship where individual_uuid=:id")
+    @Query("SELECT * FROM relationship where individualA_uuid=:id")
     Relationship find(String id);
 
     @Query("SELECT COUNT(*) FROM relationship a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid " +

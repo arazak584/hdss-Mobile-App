@@ -152,8 +152,9 @@
                         android:id="@+id/preg_mother"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:text="@={pregoutcome.mother_uuid}"
-                        android:required="true"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -201,7 +202,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={pregoutcome.father_uuid}"
-                        android:required="true"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -219,7 +221,7 @@
                         android:id="@+id/uuid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={pregoutcome.preg_uuid}"
+                        android:text="@={pregoutcome.uuid}"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -595,7 +597,7 @@
                     goneUnless="@{pregoutcome.rec_ipt==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/first_rec" />
+                    android:text="@string/first_recs" />
 
                 <EditText
                     goneUnless="@{pregoutcome.rec_ipt==1}"

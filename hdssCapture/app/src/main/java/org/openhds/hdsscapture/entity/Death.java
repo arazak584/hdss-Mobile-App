@@ -35,7 +35,7 @@ public class Death extends BaseObservable implements Parcelable {
     public String individual_uuid;
 
     @Expose
-    public String death_uuid;
+    public String uuid;
 
     @Expose
     public Date deathDate;
@@ -109,12 +109,12 @@ public class Death extends BaseObservable implements Parcelable {
 
 
     @NotNull
-    public String getDeath_uuid() {
-        return death_uuid;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setDeath_uuid(@NotNull String death_uuid) {
-        this.death_uuid = death_uuid;
+    public void setUuid(@NotNull String uuid) {
+        this.uuid = uuid;
     }
 
     @NonNull

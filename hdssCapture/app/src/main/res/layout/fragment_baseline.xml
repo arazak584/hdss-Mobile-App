@@ -86,7 +86,7 @@
                         android:id="@+id/individual_uuid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={individual.individual_uuid}"
+                        android:text="@={individual.uuid}"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:inputType="textPersonName"/>
@@ -355,7 +355,7 @@
                         android:id="@+id/sociagroup_extid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={socialgroup.houseExtId}"
+                        android:text="@={socialgroup.extId}"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -411,7 +411,7 @@
                         android:id="@+id/uuid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={residency.residency_uuid}"
+                        android:text="@={residency.uuid}"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 

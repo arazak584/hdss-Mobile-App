@@ -78,7 +78,7 @@ public class SocialgroupAdapter extends RecyclerView.Adapter<SocialgroupAdapter.
         final Socialgroup socialgroup = socialgroupList.get(position);
 
         holder.name.setText(socialgroup.getGroupName());
-        holder.hhid.setText(socialgroup.getHouseExtId());
+        holder.hhid.setText(socialgroup.getExtId());
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +87,7 @@ public class SocialgroupAdapter extends RecyclerView.Adapter<SocialgroupAdapter.
                 EditText householdIdField = activity.requireActivity().findViewById(R.id.socialgroup);
 
                 // Set the mother's ID in the text field
-                householdIdField.setText(socialgroup.getSocialgroup_uuid());
+                householdIdField.setText(socialgroup.getUuid());
 
                 // Hide the MotherDialogFragment
                 activity.dismiss();
