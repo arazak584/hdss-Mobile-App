@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.openhds.hdsscapture.Adapter.EventFormAdapter;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
@@ -23,7 +24,9 @@ import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
+import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.databinding.FragmentEventsBinding;
+import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
@@ -33,6 +36,7 @@ import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 
@@ -163,6 +167,7 @@ public class EventsFragment extends Fragment {
                             if (individual.gender==1 && yrs>=12) {
                                 showDemographicForm(eventForms);
                                 showResidencyForm(eventForms);
+                                showAmendment(eventForms);
 
                             }
 
@@ -175,6 +180,7 @@ public class EventsFragment extends Fragment {
                                 showOutcomeForm(eventForms);
                                 showOutcome1Form(eventForms);
                                 showResidencyForm(eventForms);
+                                showAmendment(eventForms);
 
                             }
 
@@ -183,6 +189,7 @@ public class EventsFragment extends Fragment {
 
                                 showDemographicForm(eventForms);
                                 showResidencyForm(eventForms);
+                                showAmendment(eventForms);
 
                             }
 
@@ -190,6 +197,11 @@ public class EventsFragment extends Fragment {
                             if (yrs >= 14) {
                                 showSocialgroupForm(eventForms);
                                 showSocioForm(eventForms);
+                            }
+
+                            //Vaccination
+                            if (yrs < 5) {
+                                showVaccination(eventForms);
                             }
 
                             }
@@ -367,6 +379,39 @@ public class EventsFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+    private void showAmendment(List<EventForm> eventForms) {
+        AmendmentViewModel viewModel = new ViewModelProvider(this).get(AmendmentViewModel.class);
+        try {
+            Amendment form = viewModel.find(individual.uuid);
+            if (form == null) {
+                form = new Amendment();
+            }
+            eventForms.add(new EventForm(AppConstants.EVENT_HDSS14, AppConstants.EVENT_AMEND, form.complete));
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showVaccination(List<EventForm> eventForms) {
+        VaccinationViewModel viewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
+        try {
+            Vaccination form = viewModel.find(individual.uuid);
+            if (form == null) {
+                form = new Vaccination();
+            }
+            eventForms.add(new EventForm(AppConstants.EVENT_HDSS15, AppConstants.EVENT_VAC, form.complete));
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     public void onBackPressed() {

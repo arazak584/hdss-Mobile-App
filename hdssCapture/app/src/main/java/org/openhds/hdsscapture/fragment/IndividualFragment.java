@@ -158,7 +158,7 @@ public class IndividualFragment extends Fragment {
             binding.getIndividual().father=1;
         }
 
-        if (individual.complete == null) {
+        if (individual.firstName == null) {
             binding.getIndividual().complete = 1;
         }
 
@@ -168,6 +168,23 @@ public class IndividualFragment extends Fragment {
 
         if (individual.otherName != null && individual.other==null) {
             binding.getIndividual().other=1;
+        }
+
+        if (individual.firstName != null) {
+            binding.individualFirstName.setEnabled(false);
+            binding.individualLastName.setEnabled(false);
+            //binding.buttonIndividualDob.setVisibility(View.GONE);
+            binding.dobAspect.setEnabled(false);
+            binding.gender.setEnabled(false);
+            binding.buttonIndividualDob.setEnabled(false);
+        }
+
+        if (individual.ghanacard != null && individual.ghanacard =="") {
+            binding.ghanacard.setEnabled(false);
+        }
+
+        if (individual.otherName != null && individual.otherName =="") {
+            binding.individualNickName.setEnabled(false);
         }
 
         // Generate ID if extId is null

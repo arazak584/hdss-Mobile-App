@@ -270,6 +270,17 @@
                     android:textColor="#000301"
                     android:padding="10dp"/>
 
+                <EditText
+                    android:visibility="gone"
+                    android:id="@+id/ind_age"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:text="@={residency.age}"
+                    android:focusableInTouchMode="false"
+                    android:inputType="number" />
+
                 <Button
                     android:id="@+id/button_residency_startDate"
                     android:layout_width="match_parent"

@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.Dao.ApiDao;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
@@ -32,7 +33,9 @@ import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
+import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
+import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
@@ -47,6 +50,7 @@ import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
@@ -1104,6 +1108,141 @@ public class PushActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Outmigration>> call, @NonNull Throwable t) {
+                        progress.dismiss();
+                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+                });
+            } else {
+                progress.dismiss();
+            }
+
+        });
+
+
+
+
+        //PUSH Amendment
+        final Button buttonSendAmend = findViewById(R.id.buttonSendAmend);
+        final TextView textViewSendAmend = findViewById(R.id.textViewSendAmend);
+        final AmendmentViewModel amendmentViewModel = new ViewModelProvider(this).get(AmendmentViewModel.class);
+
+        //GET MODIFIED DATA
+        final List<Amendment> amendmentList = new ArrayList<>();
+        try {
+            amendmentList.addAll(amendmentViewModel.findToSync());
+            buttonSendAmend.setText("Amendment (" + amendmentList.size() + ") to send");
+            textViewSendAmend.setTextColor(Color.rgb(0, 114, 133));
+            if (amendmentList.isEmpty()) {
+                buttonSendAmend.setVisibility(View.GONE);
+                textViewSendAmend.setVisibility(View.GONE);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        buttonSendAmend.setOnClickListener(v -> {
+            progress.setMessage(getResources().getString(R.string.init_syncing));
+            progress.show();
+
+            //WRAP THE DATA
+            final DataWrapper<Amendment> data = new DataWrapper<>(amendmentList);
+
+            //SEND THE DATA
+            if (data.getData() != null && !data.getData().isEmpty()) {
+
+                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
+
+
+                final Call<DataWrapper<Amendment>> c_callable = dao.sendAmendment(data);
+                c_callable.enqueue(new Callback<DataWrapper<Amendment>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DataWrapper<Amendment>> call, Response<DataWrapper<Amendment>> response) {
+                        if (response != null && response.body() != null && response.isSuccessful()
+                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
+
+                            Amendment[] d = data.getData().toArray(new Amendment[0]);
+
+                            for (Amendment elem : d) {
+                                elem.complete = 0;
+                            }
+                            amendmentViewModel.add(d);
+
+                            progress.dismiss();
+                            textViewSendAmend.setText("Sent " + d.length + " Amendment record(s)");
+                            textViewSendAmend.setTextColor(Color.GREEN);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<DataWrapper<Amendment>> call, @NonNull Throwable t) {
+                        progress.dismiss();
+                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+                });
+            } else {
+                progress.dismiss();
+            }
+
+        });
+
+
+
+        //PUSH Vaccination
+        final Button buttonSendVac = findViewById(R.id.buttonSendVac);
+        final TextView textViewSendVac = findViewById(R.id.textViewSendVac);
+        final VaccinationViewModel vaccinationViewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
+
+        //GET MODIFIED DATA
+        final List<Vaccination> vaccinationList = new ArrayList<>();
+        try {
+            vaccinationList.addAll(vaccinationViewModel.findToSync());
+            buttonSendVac.setText("Vaccination (" + vaccinationList.size() + ") to send");
+            textViewSendVac.setTextColor(Color.rgb(0, 114, 133));
+            if (vaccinationList.isEmpty()) {
+                buttonSendVac.setVisibility(View.GONE);
+                textViewSendVac.setVisibility(View.GONE);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        buttonSendAmend.setOnClickListener(v -> {
+            progress.setMessage(getResources().getString(R.string.init_syncing));
+            progress.show();
+
+            //WRAP THE DATA
+            final DataWrapper<Vaccination> data = new DataWrapper<>(vaccinationList);
+
+            //SEND THE DATA
+            if (data.getData() != null && !data.getData().isEmpty()) {
+
+                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
+
+
+                final Call<DataWrapper<Vaccination>> c_callable = dao.sendVaccination(data);
+                c_callable.enqueue(new Callback<DataWrapper<Vaccination>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DataWrapper<Vaccination>> call, Response<DataWrapper<Vaccination>> response) {
+                        if (response != null && response.body() != null && response.isSuccessful()
+                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
+
+                            Vaccination[] d = data.getData().toArray(new Vaccination[0]);
+
+                            for (Vaccination elem : d) {
+                                elem.complete = 0;
+                            }
+                            vaccinationViewModel.add(d);
+
+                            progress.dismiss();
+                            textViewSendVac.setText("Sent " + d.length + " Vaccination record(s)");
+                            textViewSendVac.setTextColor(Color.GREEN);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<DataWrapper<Vaccination>> call, @NonNull Throwable t) {
                         progress.dismiss();
                         Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
 

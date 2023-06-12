@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import org.openhds.hdsscapture.Adapter.HouseholdAdapter;
-import org.openhds.hdsscapture.Baseline.BaselineFragment;
 import org.openhds.hdsscapture.Dialog.PregnancyDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
@@ -203,7 +202,7 @@ public class BlankFragment extends Fragment {
             final Socialgroup socialgroup = new Socialgroup();
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    BaselineFragment.newInstance(individual, residency, locations,socialgroup)).commit();
+                    NewSocialgroupFragment.newInstance(individual, residency, locations,socialgroup)).commit();
         });
 
         final ExtendedFloatingActionButton add_listing = binding.getRoot().findViewById(R.id.button_listing);

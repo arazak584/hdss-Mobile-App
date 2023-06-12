@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -32,6 +33,9 @@ public class Listing extends BaseObservable {
     @Expose
     @ColumnInfo(name = "compextId")
     public String compextId;
+
+    @Expose
+    public String location_uuid;
 
     @SerializedName("compno")
     @Expose
@@ -61,8 +65,25 @@ public class Listing extends BaseObservable {
     public String village;
 
     @Expose
+    public String vill_extId;
+
+    @Expose
+    public String cluster_id;
+
+    @Expose
     public String fw_name;
 
+    @SerializedName("locationName")
+    @Expose
+    @ColumnInfo(name = "locationName")
+    public String locationName;
+
+    @SerializedName("correct_yn")
+    @Expose
+    public Integer correct_yn;
+
+    @Expose
+    public String repl_locationName;
 
     public Listing(){}
 
@@ -187,6 +208,24 @@ public class Listing extends BaseObservable {
             complete = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.rgb(255, 0, 255));
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    //SPINNERS ENTITY COMPLETE FORM FOR SYNC
+    public void setCorrect_yn(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            correct_yn = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            correct_yn = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.rgb(255, 0, 255));
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }

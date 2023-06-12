@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="amendment"
+            type="org.openhds.hdsscapture.entity.Amendment" />
+
+        <variable
+            name="individual"
+            type="org.openhds.hdsscapture.entity.Individual" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="eventname"
+            type="String" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/AMEND_LAYOUT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".fragment.AmendmentFragment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Amendment"
+            android:textColor="@color/colorPrimary"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_margin="5dp"
+        android:background="@color/colorPrimaryDark" />
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:visibility="visible"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/fw"
+                android:text="@string/fw">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/individual_fw"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={amendment.fw_uuid}"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:visibility="gone"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/ind_uuid"
+                android:text="@string/ind_uuid">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/uuid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={amendment.uuid}"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/ind_uuid"
+                android:text="@string/ind_uuid">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/individual_uuid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={amendment.individual_uuid}"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:visibility="gone"
+                android:id="@+id/button_individual_insertDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/visitDate"
+                tools:ignore="DuplicateSpeakableTextCheck"
+                app:icon="@drawable/ic_baseline_calendar_month_24" />
+
+            <TextView
+                android:id="@+id/individual_insertDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:text="@={amendment.insertDate}"
+                android:ems="10"
+                android:required="true"
+                android:minHeight="30dp"
+                android:textSize="20sp"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp"
+                android:text="@string/amendment_info" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/fragment_horizontal_margin">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="FirstName"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/yn_firstname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{amendment::setYn_firstName}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/yn_firstName_1_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_firstName==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/yn_firstName_1_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_firstName==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_firstName==0}"
+                            android:tag="0"
+                            android:visibility="invisible" />
+
+                    </RadioGroup>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/surname"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/yn_lastname_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{amendment::setYn_lastName}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/yn_lastname_2_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_lastName==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/yn_lastname_2_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_lastName==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_lastName==0}"
+                            android:tag="0"
+                            android:visibility="invisible" />
+                    </RadioGroup>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/othername"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/other_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{amendment::setYn_otherName}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/other_name_3_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_otherName==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/other_name_3_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_otherName==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_otherName==0}"
+                            android:tag="0"
+                            android:visibility="invisible" />
+                    </RadioGroup>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/genders"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/gender_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{amendment::setYn_gender}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/gender_4_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_gender==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/gender_4_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_gender==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_gender==0}"
+                            android:tag="0"
+                            android:visibility="invisible" />
+                    </RadioGroup>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/actual_dob"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/dob_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{amendment::setYn_dob}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/dob_5_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_dob==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/dob_5_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_dob==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_dob==0}"
+                            android:tag="0"
+                            android:visibility="invisible" />
+                    </RadioGroup>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:text="@string/card"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/ghanacard_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{amendment::setYn_ghanacard}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/ghanacard_5_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_ghanacard==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/ghanacard_5_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_ghanacard==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{amendment.yn_ghanacard==0}"
+                            android:tag="0"
+                            android:visibility="invisible" />
+                    </RadioGroup>
+
+                </TableRow>
+            </TableLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{amendment.yn_firstName==1}"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/firstname">
+                    android:text="@string/firstname">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/amend_firstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={amendment.orig_firstName}"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{amendment.yn_firstName==1}"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/replfirstname">
+                    android:text="@string/replfirstname">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/repl_firstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={amendment.repl_firstName}"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                goneUnless="@{amendment.yn_lastName==1}"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/lastname">
+                android:text="@string/lastname">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/amend_lastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={amendment.orig_lastName}"
+                    android:inputType="textPersonName|textCapCharacters"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                goneUnless="@{amendment.yn_lastName==1}"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/repllastname">
+                android:text="@string/repllastname">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/repl_lastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={amendment.repl_lastName}"
+                    android:inputType="textPersonName|textCapCharacters"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                goneUnless="@{amendment.yn_otherName==1}"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/othername">
+                android:text="@string/othername">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/amend_otherName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={amendment.orig_otherName}"
+                    android:inputType="textPersonName|textCapCharacters"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                goneUnless="@{amendment.yn_otherName==1}"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/replothname">
+                android:text="@string/replothname">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/repl_otherName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={amendment.repl_otherName}"
+                    android:inputType="textPersonName|textCapCharacters"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                goneUnless="@{amendment.yn_ghanacard==1}"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/ghanacard">
+                android:text="@string/ghanacard">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/amend_ghanacard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={amendment.orig_ghanacard}"
+                    android:inputType="textPersonName|textCapCharacters"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                goneUnless="@{amendment.yn_ghanacard==1}"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/replghcard">
+                android:text="@string/replghcard">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/repl_ghanacard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={amendment.repl_ghanacard}"
+                    android:inputType="textPersonName|textCapCharacters"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                goneUnless="@{amendment.yn_gender==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/gender"/>
+
+            <Spinner
+                goneUnless="@{amendment.yn_gender==1}"
+                android:id="@+id/amend_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onItemSelected="@{amendment::setGenders}"
+                selection="@{amendment.orig_gender}"
+                android:gravity="left"
+                android:required="true"
+                android:padding="10dp"/>
+
+            <TextView
+                goneUnless="@{amendment.yn_gender==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/replgender"/>
+
+            <Spinner
+                goneUnless="@{amendment.yn_gender==1}"
+                android:id="@+id/repl_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onItemSelected="@{amendment::setGender}"
+                selection="@{amendment.repl_gender}"
+                android:gravity="left"
+                android:padding="10dp"/>
+
+            <TextView
+                goneUnless="@{amendment.yn_dob==1}"
+                android:id="@+id/amend_dob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={amendment.orig_dob}"
+                android:autofillHints=""
+                android:ems="10"
+                android:minHeight="30dp"
+                android:required="true"
+                android:textSize="20sp"
+                tools:ignore="TextContrastCheck" />
+
+            <Button
+                goneUnless="@{amendment.yn_dob==1}"
+                android:id="@+id/button_repl_Dob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/actual_dob"
+                tools:ignore="DuplicateSpeakableTextCheck"
+                app:icon="@drawable/ic_baseline_calendar_month_24" />
+
+            <TextView
+                goneUnless="@{amendment.yn_dob==1}"
+                android:id="@+id/repl_dob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={amendment.repl_dob}"
+                android:autofillHints=""
+                android:ems="10"
+                android:minHeight="30dp"
+                android:required="true"
+                android:textSize="20sp"
+                tools:ignore="TextContrastCheck" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/form_complete"/>
+
+            <Spinner
+                android:id="@+id/amend_complete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{amendment.complete}"
+                android:onItemSelected="@{amendment::setComplete}"
+                android:gravity="left"
+                android:textColor="#000301"
+                android:padding="15dp"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/buttonSaveClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="@string/saveclosedata" />
+
+            <Button
+                android:id="@+id/buttonClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:text="@string/closedata" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</layout>

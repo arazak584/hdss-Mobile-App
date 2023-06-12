@@ -104,7 +104,6 @@ public class HouseMembersFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentHouseMembersBinding.inflate(inflater, container, false);
 
-
         final TextView hh = binding.getRoot().findViewById(R.id.textView_compextId);
         final TextView name = binding.getRoot().findViewById(R.id.textView_compname);
 

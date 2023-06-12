@@ -117,7 +117,9 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         }
         Integer st = individual.complete;
         if (st != null) {
-            holder.permid.setTextColor(Color.MAGENTA);
+            holder.permid.setTextColor(Color.BLUE);
+            holder.firstname.setTextColor(Color.BLUE);
+            holder.lastname.setTextColor(Color.BLUE);
         }
 
 

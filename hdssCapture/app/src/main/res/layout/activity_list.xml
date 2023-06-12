@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/MidnightBlue"
+    android:padding="@dimen/fragment_horizontal_margin"
     tools:context=".Activity.ListActivity">
 
     <LinearLayout
@@ -14,6 +16,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +29,7 @@
 
             <LinearLayout
                 android:id="@+id/layout_manu"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
@@ -35,8 +38,8 @@
                     android:id="@+id/text_Villname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="15sp"
-                    android:textColor="@color/magenta"
+                    android:textSize="25sp"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
                     android:textAlignment="center" />
 

@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.openhds.hdsscapture.Adapter.ReportAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.ReportCounter;
+import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
@@ -57,6 +58,7 @@ public class ReportActivity extends AppCompatActivity {
     private HdssSociodemoViewModel hdssSociodemoViewModel;
     private RelationshipViewModel relationshipViewModel;
     private ListingViewModel listingViewModel;
+    private AmendmentViewModel amendmentViewModel;
     private ReportAdapter reportAdapter;
 
     private EditText startDateEditText, endDateEditText, usernameEditText;
@@ -134,6 +136,7 @@ public class ReportActivity extends AppCompatActivity {
         hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
         relationshipViewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
         listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
+        amendmentViewModel = new ViewModelProvider(this).get(AmendmentViewModel.class);
 
         Button generateReportButton = findViewById(R.id.bt_report);
         generateReportButton.setOnClickListener(new View.OnClickListener() {
@@ -273,6 +276,12 @@ public class ReportActivity extends AppCompatActivity {
             dthCounter.count = deathViewModel.count(startDate, endDate, username);
             dthCounter.index = 13;
             list.add(13, dthCounter);
+
+            ReportCounter amendCounter = new ReportCounter();
+            amendCounter.name = "Amendment";
+            amendCounter.count = amendmentViewModel.count(startDate, endDate, username);
+            amendCounter.index = 14;
+            list.add(14, amendCounter);
 
 
             reportAdapter = new ReportAdapter(this);

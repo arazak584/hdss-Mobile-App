@@ -168,12 +168,26 @@
                 android:backgroundTint="@color/white"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="10dp"
+                android:textAlignment="center"
+                app:fabSize="mini"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Update" />
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/btn_baseline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:textAlignment="center"
                 app:fabSize="mini"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:text="Select Locations" />
+                android:text="Baseline" />
 
 
 

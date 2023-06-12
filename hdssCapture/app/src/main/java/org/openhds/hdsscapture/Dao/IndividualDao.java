@@ -29,13 +29,13 @@ public interface IndividualDao {
     void insert(Individual individual);
 
     @Update
-    void update(Individual individual);
+    int update(Individual s);
+
+    @Update(entity = Individual.class)
+    int update(IndividualAmendment s);
 
     @Query("DELETE FROM individual")
     void deleteAll();
-
-    @Update(entity = Individual.class)
-    int update(IndividualAmendment individualAmendment);
 
     @Delete
     void Delete(Individual user);
@@ -49,7 +49,7 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual")
     List<Individual> retrieve();
 
-    @Query("SELECT a.*,d.extId,b.endType FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
+    @Query("SELECT a.*,d.extId as houseExtId,b.endType FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
             " INNER JOIN socialgroup as d on b.socialgroup_uuid=d.uuid " +
             " WHERE b.endType=1 and firstName!='FAKE' and d.extId=:id order by dob")
     List<Individual> retrieveByLocationId(String id);
@@ -90,13 +90,6 @@ public interface IndividualDao {
             "(firstName LIKE :id OR lastName LIKE :id OR c.compno LIKE :id OR ghanacard LIKE :id)")
     List<Individual> retrieveByFatherSearch(String id);
 
-    @Query("SELECT a.uuid,a.extId,dob,age,gender,firstName,lastName,b.location_uuid,b.uuid,socialgroup_uuid FROM individual AS a " +
-            "LEFT JOIN residency AS b ON a.uuid = b.individual_uuid " +
-            " LEFT JOIN Locations as c on b.location_uuid=c.uuid " +
-            "WHERE b.endType != 3 AND " +
-            "(a.uuid=:id)")
-    LiveData<List<CaseItem>> retrieveByIndividual1(String id);
-
     @Query("SELECT uuid,extId,dob,age,gender,firstName,lastName FROM individual " +
             " WHERE uuid=:id")
     LiveData<List<CaseItem>> retrieveByIndividual(String id);
@@ -117,7 +110,7 @@ public interface IndividualDao {
     List<Individual> retrieveChild(String id);
 
     @Query("SELECT COUNT(*) FROM individual a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
-            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
+            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username AND a.firstName!='FAKE'")
     long countIndividuals(Date startDate, Date endDate, String username);
 
 

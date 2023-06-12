@@ -87,6 +87,15 @@ public class HierarchyRepository {
         return future.get();
     }
 
+    public List<Hierarchy> clusters(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Hierarchy>> callable = () -> dao.clusters(id);
+
+        Future<List<Hierarchy>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Hierarchy> retrieveLevel7() throws ExecutionException, InterruptedException {
 
         Callable<List<Hierarchy>> callable = () -> dao.retrieveLevel7();

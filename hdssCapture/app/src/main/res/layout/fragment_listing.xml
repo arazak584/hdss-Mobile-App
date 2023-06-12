@@ -124,6 +124,26 @@
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/location_uuid">
+                    android:text="@string/location_uuid">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/uuid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={listing.location_uuid}"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
@@ -142,6 +162,109 @@
                         android:text="@={listing.compextId}"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/compound"
+                    app:isRequired="true"
+                    android:text="@string/compound">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/locationName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={listing.locationName}"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:text="@string/correctcompname"/>
+
+
+                <Spinner
+                    android:id="@+id/correct"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    selection="@{listing.correct_yn}"
+                    android:onItemSelected="@{listing::setCorrect_yn}"
+                    android:gravity="left"
+                    android:textColor="#000301"
+                    android:padding="20dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{listing.correct_yn==2}"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/compoundcorrect"
+                    app:isRequired="true"
+                    android:text="@string/compoundcorrect">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/repllocationName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={listing.repl_locationName}"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/button_change_cluster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/changecluster"
+                    tools:ignore="DuplicateSpeakableTextCheck"
+                    android:backgroundTint="@color/black"
+                    android:textColor="@color/white" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/cluster"
+                    android:text="@string/cluster">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/villcode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={listing.vill_extId}"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/cluster"
+                    android:text="@string/cluster">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/cluster_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={listing.cluster_id}"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -191,7 +314,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-
                     android:text="@string/location_status"/>
 
 

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -87,22 +86,22 @@ public class RemainderFragment extends Fragment {
         adapter.filter("", locationViewModel);
 
         // Locate the EditText in listview_main.xml
-        final SearchView editSearch = view.findViewById(R.id.research);
+        //final SearchView editSearch = view.findViewById(R.id.research);
         // below line is to call set on query text listener method.
-        editSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // inside on query text change method we are
-                // calling a method to filter our recycler view.
-                adapter.filter(newText, locationViewModel);
-                return false;
-            }
-        });
+//        editSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                // inside on query text change method we are
+//                // calling a method to filter our recycler view.
+//                adapter.filter(newText, locationViewModel);
+//                return false;
+//            }
+//        });
 
         return view;
     }

@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,6 +81,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         holder.compno.setText(locations.getCompno());
         holder.longitude.setText(locations.getLongitude());
         holder.latitude.setText(locations.getLatitude());
+
+        Integer st = locations.complete;
+        if (st != null) {
+            holder.compno.setTextColor(Color.BLUE);
+            holder.locationname.setTextColor(Color.BLUE);
+        }
 
         holder.linearLayout.setOnClickListener(v -> {
             activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,

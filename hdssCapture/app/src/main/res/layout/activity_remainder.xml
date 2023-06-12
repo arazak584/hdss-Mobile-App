@@ -4,6 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/MidnightBlue"
+    android:padding="@dimen/fragment_horizontal_margin"
     tools:context=".Activity.RemainderActivity">
 
     <LinearLayout
@@ -14,6 +16,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:orientation="vertical"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,6 +25,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="5dp"
         android:orientation="vertical">
 
         <TextView
@@ -39,15 +43,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
+            android:textAlignment="center"
             android:text="@string/village" />
 
         <Spinner
             android:id="@+id/spinnerRVillage"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/teal_200"
+            android:background="@color/Wheat"
             android:contentDescription="@string/village"
             android:spinnerMode="dialog"
+            android:paddingLeft="10dp"
             tools:ignore="DuplicateSpeakableTextCheck"/>
 
 
@@ -56,11 +62,12 @@
             android:id="@+id/btn_remain_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
             android:backgroundTint="@color/white"
+            android:textColor="@color/MidnightBlue"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             app:fabSize="mini"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

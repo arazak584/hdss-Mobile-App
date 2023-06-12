@@ -6,6 +6,8 @@ import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS10;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS11;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS12;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS13;
+import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS14;
+import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS15;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS3;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS4;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS7;
@@ -36,6 +38,7 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
+import org.openhds.hdsscapture.fragment.AmendmentFragment;
 import org.openhds.hdsscapture.fragment.DemographicFragment;
 import org.openhds.hdsscapture.fragment.EventsFragment;
 import org.openhds.hdsscapture.fragment.PregnancyExtraFragment;
@@ -46,6 +49,7 @@ import org.openhds.hdsscapture.fragment.RelationshipFragment;
 import org.openhds.hdsscapture.fragment.ResidencyFragment;
 import org.openhds.hdsscapture.fragment.SocialgroupFragment;
 import org.openhds.hdsscapture.fragment.SocioFragment;
+import org.openhds.hdsscapture.fragment.VaccinationFragment;
 
 import java.util.List;
 
@@ -98,7 +102,9 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
                     holder.linearLayout.setBackgroundColor(Color.YELLOW);
                     status = UPDATE;
                 }else {
-                    holder.linearLayout.setBackgroundColor(Color.GRAY);
+                    holder.linearLayout.setBackgroundColor(Color.BLUE);
+                    holder.textView_status.setTextColor(Color.WHITE);
+                    holder.textView_event.setTextColor(Color.WHITE);
                     status = SUBMITTED;
                 }
             }else {
@@ -184,6 +190,21 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
 
                 activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                         Pregnancyoutcome1Fragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
+
+                break;
+            }
+            case EVENT_HDSS14: {
+
+                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                        AmendmentFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
+
+                break;
+            }
+
+            case EVENT_HDSS15: {
+
+                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                        VaccinationFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
 
                 break;
             }

@@ -1,11 +1,13 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -14,10 +16,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.Dialog.ClusterDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
+import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.databinding.FragmentListingBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
@@ -26,6 +30,7 @@ import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.LocationAmendment;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.SimpleDateFormat;
@@ -52,6 +57,8 @@ public class ListingFragment extends Fragment {
     private Individual individual;
     private Socialgroup socialgroup;
     private Residency residency;
+    private Hierarchy hierarchy;
+    private ProgressDialog progressDialog;
 
     public ListingFragment() {
         // Required empty public constructor
@@ -86,6 +93,19 @@ public class ListingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentListingBinding.inflate(inflater, container, false);
+        binding.setListing(listing);
+
+        Button showDialogButton = binding.getRoot().findViewById(R.id.button_change_cluster);
+
+        // Set a click listener on the button for mother
+        showDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Show the dialog fragment
+                ClusterDialogFragment.newInstance(hierarchy, locations)
+                        .show(getChildFragmentManager(), "ClusterDialogFragment");
+            }
+        });
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
@@ -98,7 +118,9 @@ public class ListingFragment extends Fragment {
             Listing data = viewModel.find(locations.compno);
             if (data != null) {
                 binding.setListing(data);
-                data.insertDate = new Date();
+                binding.locationName.setEnabled(false);
+                binding.clusterCode.setEnabled(false);
+                binding.villcode.setEnabled(false);
             } else {
                 data = new Listing();
 
@@ -109,6 +131,14 @@ public class ListingFragment extends Fragment {
                 data.status = locations.getStatus();
                 data.village = level5Data.getName();
                 data.fw_name = fieldworkerData.getFirstName() + ' ' + fieldworkerData.lastName ;
+                data.locationName = locations.locationName;
+                data.location_uuid = locations.uuid;
+                data.vill_extId = locations.getExtId();
+                data.cluster_id = locations.locationLevel_uuid;
+
+                binding.locationName.setEnabled(false);
+                binding.clusterCode.setEnabled(false);
+                binding.villcode.setEnabled(false);
 
                 binding.setListing(data);
                 binding.getListing().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
@@ -120,6 +150,7 @@ public class ListingFragment extends Fragment {
 
         loadCodeData(binding.locationstatus, "status");
         loadCodeData(binding.complete, "submit");
+        loadCodeData(binding.correct, "complete");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
@@ -152,6 +183,22 @@ public class ListingFragment extends Fragment {
             }
             viewModel.add(finalData);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+
+            LocationAmendment location = new LocationAmendment();
+            location.uuid = finalData.location_uuid;
+
+            if (!binding.repllocationName.getText().toString().trim().isEmpty()) {
+                location.locationName = binding.getListing().repl_locationName;
+            }else {
+                location.locationName = finalData.locationName;
+            }
+            location.status = finalData.status;
+            location.locationLevel_uuid = finalData.cluster_id;
+            location.extId = finalData.vill_extId;
+
+            location.complete = 1;
+            LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
+            locationViewModel.update(location);
 
         }
         if (close) {

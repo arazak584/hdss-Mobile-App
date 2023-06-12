@@ -7,13 +7,10 @@ public class IndividualAmendment {
 
     public String uuid;
     public String firstName;
-
     public String lastName;
-
-    public String gender;
-
+    public Integer gender;
     public Date dob;
-
     public String otherName;
-
+    public String ghanacard;
+    public Integer complete;
 }

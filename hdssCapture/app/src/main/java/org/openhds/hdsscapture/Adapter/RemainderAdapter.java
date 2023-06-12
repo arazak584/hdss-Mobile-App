@@ -40,7 +40,7 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
 
         public ViewHolder(View view) {
             super(view);
-            this.extId = view.findViewById(R.id.locationView_rextid);
+            //this.extId = view.findViewById(R.id.locationView_rextid);
             this.locationname = view.findViewById(R.id.Location_rname);
             this.compno = view.findViewById(R.id.location_rcompno);
             this.longitude = view.findViewById(R.id.rlongitude);
@@ -65,7 +65,7 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
     public void onBindViewHolder(@NonNull RemainderAdapter.ViewHolder holder, int position) {
         final Locations locations = locationsList.get(position);
 
-        holder.extId.setText(locations.getCompextId());
+        //holder.extId.setText(locations.getCompextId());
         holder.locationname.setText(locations.getLocationName());
         holder.compno.setText(locations.getCompno());
         holder.longitude.setText(locations.getLongitude());

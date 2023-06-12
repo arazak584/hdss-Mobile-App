@@ -45,6 +45,10 @@ public class HierarchyViewModel extends AndroidViewModel {
         return hierarchyRepository.retrieveLevel6(id);
     }
 
+    public List<Hierarchy> clusters(String id) throws ExecutionException, InterruptedException {
+        return hierarchyRepository.clusters(id);
+    }
+
     public List<Hierarchy> retrieveLevel7() throws ExecutionException, InterruptedException {
         return hierarchyRepository.retrieveLevel7();
     }

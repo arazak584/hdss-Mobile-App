@@ -26,10 +26,10 @@ public interface LocationDao {
     void deleteAll();
 
     @Update
-    void update(Locations locations);
+    void update(Locations s);
 
     @Update(entity = Locations.class)
-    int update(LocationAmendment locationAmendment);
+    int update(LocationAmendment s);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Locations> locations);
@@ -57,6 +57,7 @@ public interface LocationDao {
             " INNER JOIN locationhierarchy as c on b.parent_uuid=c.uuid " +
             " LEFT JOIN visit as d on a.uuid=d.location_uuid where c.name=:id and d.location_uuid is null order by a.compno")
     List<Locations> retrieveByVillage(String id);
+
 
     @Query("SELECT COUNT(*) FROM locations a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")

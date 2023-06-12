@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -20,7 +21,6 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
-import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -264,8 +264,13 @@ public class Individual extends BaseObservable implements Parcelable {
     }
 
     public void setOtherName(String otherName) {
-        this.otherName = otherName;
+        if (otherName != null && otherName=="") {
+            this.otherName = null;
+        } else {
+            this.otherName = otherName;
+        }
     }
+
 
     public String getMother_uuid() {
         return mother_uuid;
@@ -306,7 +311,11 @@ public class Individual extends BaseObservable implements Parcelable {
     }
 
     public void setGhanacard(String ghanacard) {
-        this.ghanacard = ghanacard;
+        if (ghanacard != null && ghanacard=="") {
+            this.ghanacard = null;
+        } else {
+            this.ghanacard = ghanacard;
+        }
     }
 
     public Integer getOther() {

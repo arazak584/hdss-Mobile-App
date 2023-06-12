@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import org.openhds.hdsscapture.Repositories.IndividualRepository;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
+import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 
 import java.util.Date;
 import java.util.List;
@@ -88,5 +89,9 @@ public class IndividualViewModel extends AndroidViewModel {
 
     public void add(Individual... data){
         individualRepository.create(data);
+    }
+
+    public int update(IndividualAmendment s){
+        return individualRepository.update(s);
     }
 }

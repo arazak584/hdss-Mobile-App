@@ -12,6 +12,7 @@
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout-w600dp/list_event_forms.xml" value="0.34010416666666665" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout-w936dp/fragment_individual_summary.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/activity_add_individual.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/activity_baseline.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/activity_hierarchy.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/activity_individual.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/activity_individual_list.xml" value="0.25" />
@@ -28,18 +29,28 @@
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/activity_selection.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/activity_test.xml" value="0.264" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/activity_url.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/baseline_household_items.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/baseline_itemlist.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/changehoh_itemlist.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/child_itemlist.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/cluster_itemlist.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/content_remainder.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/expenses_item.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/father_itemlist.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/father_outcome_itemlist.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_amendment.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_base.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_basehouse.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_baseline.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_baselinehousehold.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_basesocialgroup.xml" value="0.2359375" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_basevisit.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_baslinelocation.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_blank.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_change_hoh.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_child_dialog.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_cluster.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_cluster_dialog.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_death.xml" value="0.264" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_demographic.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_events.xml" value="0.25" />
@@ -55,13 +66,14 @@
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_inmigration.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_listing.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_location.xml" value="0.25" />
-        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_membership.xml" value="0.2077022933794894" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_membership.xml" value="0.17706576728499157" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_membership_dth.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_membership_edate.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_membership_img.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_membership_omg.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_mother_dialog.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_move_in_error.xml" value="0.2" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_newhousehold.xml" value="0.2359375" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_outcome.xml" value="0.18489984591679506" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_outcome1.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_outcome2.xml" value="0.2359375" />
@@ -97,6 +109,7 @@
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_socio_g.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_socio_z.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_url.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_vaccination.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_visit.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/household_itemlist.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/individual_itemlist.xml" value="0.25" />
@@ -105,6 +118,7 @@
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/list_cases.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/list_event_forms.xml" value="0.264" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/list_households.xml" value="0.25" />
+        <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/location_baseline.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/location_view_items.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/mother_itemlist.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/pregnancy_itemlist.xml" value="0.25" />

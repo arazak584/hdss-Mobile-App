@@ -28,6 +28,7 @@ import org.openhds.hdsscapture.Dao.PregnancyDao;
 import org.openhds.hdsscapture.Dao.RelationshipDao;
 import org.openhds.hdsscapture.Dao.ResidencyDao;
 import org.openhds.hdsscapture.Dao.SocialgroupDao;
+import org.openhds.hdsscapture.Dao.VaccinationDao;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Repositories.IndividualRepository;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
@@ -44,6 +45,7 @@ import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
 import java.io.File;
@@ -74,6 +76,7 @@ public class PullActivity extends AppCompatActivity {
     private SocialgroupDao socialgroupDao;
     private PregnancyDao pregnancyDao;
     private DemographicDao demographicDao;
+    private VaccinationDao vaccinationDao;
     private HdssSociodemoDao hdssSociodemoDao;
     ProgressBar progressBar;
 
@@ -1293,6 +1296,141 @@ public class PullActivity extends AppCompatActivity {
 
         });
 
+
+
+        //Sync Zipped Vaccination
+        final Button button_DownloadVac = findViewById(R.id.button_SyncVac);
+        final TextView textView_SyncVac = findViewById(R.id.textView_SyncVac);
+        button_DownloadVac.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progress.show();
+                progress.setMessage("Downloading Vaccination...");
+                Call<ResponseBody> call = dao.downloadVaccination();
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        //progress.show();
+                        if (response.isSuccessful()) {
+                            progress.setMessage("Contacting Server...");
+                            try {
+                                // Read the response body into a file
+                                progress.setMessage("Downloading Vaccination Zip File...");
+                                InputStream inputStream = response.body().byteStream();
+                                File file = new File(getExternalCacheDir(), "vaccination.zip");
+                                if (file.exists()) {
+                                    file.delete();
+                                }
+                                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                                fileOutputStream.write(response.body().bytes());
+                                fileOutputStream.close();
+
+                                byte[] buffer = new byte[1024];
+                                int read;
+                                while ((read = inputStream.read(buffer)) != -1) {
+                                    fileOutputStream.write(buffer, 0, read);
+                                }
+                                fileOutputStream.close();
+
+                                // Unzip the file
+                                progress.setMessage("Unzipping Vaccination File...");
+                                ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                                ZipEntry zipEntry = zipInputStream.getNextEntry();
+                                while (zipEntry != null) {
+                                    String fileName = zipEntry.getName();
+                                    File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                    FileOutputStream fos = new FileOutputStream(newFile);
+                                    int len;
+                                    while ((len = zipInputStream.read(buffer)) > 0) {
+                                        fos.write(buffer, 0, len);
+                                    }
+                                    fos.close();
+                                    zipEntry = zipInputStream.getNextEntry();
+                                }
+                                zipInputStream.close();
+
+                                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                                vaccinationDao = appDatabase.vaccinationDao();
+                                // Import the unzipped CSV file into the Room database
+                                if (vaccinationDao != null) {
+                                    File unzippedFile = new File(getExternalCacheDir() + File.separator + "vaccination.csv");
+                                    CsvMapper mapper = new CsvMapper();
+                                    CsvSchema schema = CsvSchema.builder().addColumn("individual_uuid").addColumn("bcg").addColumn("dob").addColumn("dpt_hepb_hib1")
+                                            .addColumn("dpt_hepb_hib2").addColumn("dpt_hepb_hib3").addColumn("fw_uuid").addColumn("insertDate")
+                                            .addColumn("ipv").addColumn("itn").addColumn("location_uuid").addColumn("measles_rubella1").addColumn("measles_rubella2")
+                                            .addColumn("menA").addColumn("opv0").addColumn("opv1").addColumn("opv2").addColumn("opv3")
+                                            .addColumn("pneumo1").addColumn("pneumo2").addColumn("pneumo3").addColumn("rota1")
+                                            .addColumn("rota2").addColumn("rota3").addColumn("rtss18").addColumn("rtss6").addColumn("rtss7").addColumn("rtss9")
+                                            .addColumn("socialgroup_uuid").addColumn("uuid").addColumn("vitaminA12").addColumn("vitaminA18")
+                                            .addColumn("vitaminA6").addColumn("yellow_fever").build();
+                                    MappingIterator<Vaccination> iterator = mapper.readerFor(Demographic.class).with(schema).readValues(unzippedFile);
+                                    progress.show();
+                                    AtomicInteger counts = new AtomicInteger();
+                                    AppDatabase.databaseWriteExecutor.execute(() -> {
+                                        int batchSize = 10000;
+                                        List<Vaccination> vaccinations = new ArrayList<>();
+                                        int batchCount = 0;
+                                        while (iterator.hasNext()) {
+                                            Vaccination vaccination = iterator.next();
+                                            if (vaccination != null) {
+                                                runOnUiThread(new Runnable() {
+                                                    public void run() {
+                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the vaccination");
+                                                    }
+                                                });
+                                                vaccinations.add(vaccination);
+                                                batchCount++;
+                                                if (batchCount == batchSize) {
+                                                    vaccinationDao.insert(vaccinations);
+                                                    vaccinations.clear();
+                                                    batchCount = 0;
+                                                }
+                                            }
+                                        }
+                                        if (batchCount > 0) {
+                                            vaccinationDao.insert(vaccinations);
+                                        }
+                                        progress.dismiss();
+                                        textView_SyncVac.setText("Total Vaccination Saved: " + counts);
+                                        textView_SyncVac.setTextColor(Color.GREEN);
+                                    });
+                                }
+
+                                File cacheDir = getExternalCacheDir();
+                                if (cacheDir != null && cacheDir.isDirectory()) {
+                                    File[] files = cacheDir.listFiles();
+                                    for (File filez : files) {
+                                        String fileName = filez.getName();
+                                        if (fileName.endsWith(".zip") || fileName.endsWith(".csv")) {
+                                            filez.delete();
+                                        }
+                                    }
+                                }
+
+
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        // Show error message
+                        progress.dismiss();
+                        textView_SyncDemography.setText("Demography Download Error! Retry or Contact Administrator");
+                        textView_SyncDemography.setTextColor(Color.RED);
+                    }
+
+
+                });
+
+
+            }
+
+        });
 
     }
 

@@ -1,6 +1,7 @@
 package org.openhds.hdsscapture.Dao;
 
 
+import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.CodeBook;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
@@ -19,6 +20,7 @@ import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
@@ -65,6 +67,9 @@ public interface ApiDao {
 
     @GET("/api/zip/ses")
     Call<ResponseBody> downloadSes();
+
+    @GET("/api/zip/vaccination")
+    Call<ResponseBody> downloadVaccination();
 
     @POST("/api/location")
     Call<DataWrapper<Locations>> sendLocationdata(@Body DataWrapper<Locations> dataModal);
@@ -113,6 +118,12 @@ public interface ApiDao {
 
     @POST("/api/listing")
     Call<DataWrapper<Listing>> sendListing(@Body DataWrapper<Listing> dataModal);
+
+    @POST("/api/amendment")
+    Call<DataWrapper<Amendment>> sendAmendment(@Body DataWrapper<Amendment> dataModal);
+
+    @POST("/api/vaccination")
+    Call<DataWrapper<Vaccination>> sendVaccination(@Body DataWrapper<Vaccination> dataModal);
 
 
 }

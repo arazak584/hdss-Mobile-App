@@ -5,6 +5,7 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.LocationDao;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.subentity.LocationAmendment;
 
 import java.util.Date;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class LocationRepository {
 
@@ -32,6 +34,12 @@ public class LocationRepository {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             dao.create(data);
         });
+    }
+
+    public int update(LocationAmendment s) {
+        AtomicInteger row = new AtomicInteger();
+        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
+        return row.intValue();
     }
 
 

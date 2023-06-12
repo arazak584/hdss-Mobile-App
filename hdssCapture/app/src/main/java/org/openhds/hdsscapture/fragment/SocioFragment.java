@@ -198,11 +198,13 @@ public class SocioFragment extends Fragment {
                 hasErrors = hasErrors || new Handler().hasInvalidInput(binding.sociog.MAINLAYOUT, validateOnComplete, false);
                 hasErrors = hasErrors || new Handler().hasInvalidInput(binding.socioz.MAINLAYOUT, validateOnComplete, false);
                 if (hasErrors) {
-                    Toast.makeText(requireActivity(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
-                    return;
+                    data.complete = 2;
+                    Toast.makeText(requireActivity(), R.string.incomplete, Toast.LENGTH_LONG).show();
+                    //return;
                 }
 
             data.formcompldate = new Date();
+
 
             //get the hour and minute on first fill
             Calendar cal = Calendar.getInstance();

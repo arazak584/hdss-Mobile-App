@@ -345,6 +345,51 @@ public class HierarchyActivity extends AppCompatActivity {
         });
 
 
+        final ExtendedFloatingActionButton base = findViewById(R.id.btn_baseline);
+        base.setOnClickListener(v -> {
+            if (level6Adapter == null || level6Spinner.getAdapter().isEmpty()) {
+                Toast.makeText(this, "Please Select All Fields", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if(username.getText().toString()==null || username.getText().toString().trim().isEmpty()){
+                username.setError("Invalid Username");
+                Toast.makeText(this,"Please provide a valid Username", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            final String myuser = username.getText().toString();
+
+            try {
+                fieldworkerData = fieldworkerViewModel.finds(myuser);
+
+            } catch (ExecutionException e) {
+                Toast.makeText(this,"Something terrible went wrong", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+                return;
+            } catch (InterruptedException e) {
+                Toast.makeText(this,"Something terrible went wrong", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+                return;
+            }
+
+            if(fieldworkerData == null){
+                username.setError("Invalid Username");
+                Toast.makeText(this,"Please provide a valid Username", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            Toast.makeText(this,"Baseline Disabled", Toast.LENGTH_LONG).show();
+
+//            Intent intent = new Intent(HierarchyActivity.this, BaselineActivity.class);
+//            intent.putExtra(ROUND_DATA, roundData);
+//            intent.putExtra(LEVEL5_DATA, level5Data);
+//            intent.putExtra(LEVEL6_DATA, level6Data);
+//            intent.putExtra(FIELDWORKER_DATA, fieldworkerData);
+//            startActivity(intent);
+        });
+
+
     }
 
     private <T> void callable(Spinner spinner, T[] array){

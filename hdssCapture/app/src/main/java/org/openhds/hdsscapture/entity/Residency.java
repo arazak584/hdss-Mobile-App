@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
@@ -20,7 +21,6 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
-import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -81,6 +81,9 @@ public class Residency extends BaseObservable implements Parcelable {
     @Expose
     public Integer img;
 
+    @Expose
+    public Integer age;
+
     public Residency(){}
 
 
@@ -138,6 +141,17 @@ public class Residency extends BaseObservable implements Parcelable {
             this.dobs = f.parse(dobs);
         } catch (ParseException e) {
             System.out.println("Dob error " + e.getMessage());
+        }
+    }
+
+    public String getAge() {
+        return age == null ? "" : String.valueOf(age);
+    }
+
+    public void setAge(String age) {
+        try {
+            this.age = (age == null) ? null : Integer.valueOf(age);
+        } catch (NumberFormatException e) {
         }
     }
 

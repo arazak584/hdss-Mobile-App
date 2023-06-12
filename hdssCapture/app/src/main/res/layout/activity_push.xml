@@ -235,6 +235,34 @@
             android:layout_height="wrap_content"
             android:textSize="20sp" />
 
+        <Button
+            android:id="@+id/buttonSendAmend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_amendment"
+            android:backgroundTint="@color/DarkSlateGray"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendAmend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/buttonSendVac"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_vaccination"
+            android:backgroundTint="@color/DarkSlateGray"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendVac"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
 
     </LinearLayout>
 </ScrollView>

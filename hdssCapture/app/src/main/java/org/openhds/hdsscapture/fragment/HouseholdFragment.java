@@ -115,6 +115,7 @@ public class HouseholdFragment extends Fragment {
         SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             Socialgroup data = binding.getSocialgroup();
             if (data != null) {
+                binding.selectGroupType.setEnabled(false);
                 if (data.complete==null){
                     data.complete = 2;
                 }
@@ -126,7 +127,6 @@ public class HouseholdFragment extends Fragment {
                     data.visit_uuid = visituuid;
                     //data.complete = 2;
                 }
-
 
             }
 

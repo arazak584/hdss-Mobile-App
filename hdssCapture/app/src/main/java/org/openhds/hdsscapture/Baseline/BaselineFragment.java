@@ -1,12 +1,16 @@
 package org.openhds.hdsscapture.Baseline;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -14,6 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.Dialog.FatherDialogFragment;
+import org.openhds.hdsscapture.Dialog.MotherDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Calculators;
 import org.openhds.hdsscapture.Utilities.Handler;
@@ -27,10 +33,9 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
-import org.openhds.hdsscapture.fragment.BlankFragment;
 import org.openhds.hdsscapture.fragment.DatePickerFragment;
-import org.openhds.hdsscapture.fragment.HouseholdFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,9 +55,6 @@ import java.util.concurrent.ExecutionException;
  */
 public class BaselineFragment extends Fragment {
 
-    //private Button showDialogButton;
-
-
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
@@ -62,9 +64,10 @@ public class BaselineFragment extends Fragment {
 
     private Locations locations;
     private Residency residency;
+    private Socialgroup socialgroup;
     private Individual individual;
     private FragmentBaselineBinding binding;;
-    private Socialgroup socialgroup;
+    private ProgressDialog progressDialog;
 
     public BaselineFragment() {
         // Required empty public constructor
@@ -74,28 +77,23 @@ public class BaselineFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     *
-
      * @param individual Parameter 4.
      * @param residency Parameter 2.
      * @param locations Parameter 1.
      * @param socialgroup Parameter 3.
-     * @return A new instance of fragment IndividualFragment.
+     * @return A new instance of fragment BaselineFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BaselineFragment newInstance(Individual individual, Residency residency, Locations locations,Socialgroup socialgroup) {
+    public static BaselineFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
         BaselineFragment fragment = new BaselineFragment();
         Bundle args = new Bundle();
-
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(RESIDENCY_ID, residency);
-        args.putParcelable(INDIVIDUAL_ID, individual);
         args.putParcelable(SOCIAL_ID, socialgroup);
+        args.putParcelable(INDIVIDUAL_ID, individual);
         fragment.setArguments(args);
         return fragment;
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,8 +101,8 @@ public class BaselineFragment extends Fragment {
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
             residency = getArguments().getParcelable(RESIDENCY_ID);
-            individual = getArguments().getParcelable(INDIVIDUAL_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
+            individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
     }
 
@@ -114,174 +112,83 @@ public class BaselineFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentBaselineBinding.inflate(inflater, container, false);
         binding.setIndividual(individual);
-        binding.setSocialgroup(socialgroup);
-        binding.setResidency(residency);
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
+        // Find the button view
+        Button showDialogButton = binding.getRoot().findViewById(R.id.button_individual_mother);
+        Button showDialogButton1 = binding.getRoot().findViewById(R.id.button_individual_father);
 
-        // Generate a UUID
-        if(individual.uuid == null) {
-            String uuid = UUID.randomUUID().toString();
-            String uuidString = uuid.toString().replaceAll("-", "");
-            // Set the ID of the Fieldworker object
-            binding.getIndividual().uuid = uuidString;
-            binding.getSocialgroup().individual_uuid = uuidString;
-            binding.getResidency().individual_uuid = uuidString;
-        }
+        // Set a click listener on the button for mother
+        showDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        if(residency.uuid == null) {
-            String uuid = UUID.randomUUID().toString();
-            String resuuidString = uuid.toString().replaceAll("-", "");
-            // Set the ID of the Fieldworker object
-            binding.getResidency().uuid = resuuidString;
-        }
+                progressDialog = new ProgressDialog(requireContext());
+                progressDialog.setMessage("Loading Mothers...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
 
-        if(socialgroup.uuid == null) {
-            String uuid = UUID.randomUUID().toString();
-            String suuidString = uuid.toString().replaceAll("-", "");
-            // Set the ID of the Fieldworker object
-            binding.getSocialgroup().uuid = suuidString;
-            binding.getResidency().socialgroup_uuid = suuidString;
-        }
+                progressDialog.show();
 
-        if(individual.fw_uuid==null){
-           binding.getIndividual().fw_uuid = fieldworkerData.getFw_uuid();
-        }
+                // Simulate long operation
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 500);
 
-        if(residency.fw_uuid==null){
-            binding.getResidency().fw_uuid = fieldworkerData.getFw_uuid();
-        }
-
-        if(socialgroup.fw_uuid==null){
-            binding.getSocialgroup().fw_uuid = fieldworkerData.getFw_uuid();
-        }
-
-        if(residency.location_uuid==null){
-            binding.getResidency().location_uuid = locations.getUuid();
-        }
-
-        if(socialgroup.complete==null){
-            binding.getSocialgroup().complete = 1;
-        }
-
-        if(residency.complete==null){
-            binding.getResidency().complete = 2;
-        }
-
-        if(individual.insertDate==null){
-            binding.getIndividual().insertDate = new Date();
-        }
-
-        if(socialgroup.insertDate==null){
-            binding.getSocialgroup().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-        }
-
-        if(residency.insertDate==null){
-            binding.getResidency().insertDate = new Date();
-        }
-
-        // Generate ID if extId is null
-        if (binding.getIndividual().extId == null) {
-            final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
-            int sequenceNumber = 1;
-            String id = locations.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
-            while (true) {
-                try {
-                    if (!(individualViewModels.findAll(id) != null)) break;
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } // check if ID already exists in ViewModel
-                sequenceNumber++; // increment sequence number if ID exists
-                id = locations.compextId + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
+                // Show the dialog fragment
+                MotherDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                        .show(getChildFragmentManager(), "MotherDialogFragment");
             }
-            binding.getIndividual().extId = id; // set the generated ID to the extId property of the Individual object
-        }
+        });
 
-        // Generate ID if extId is null
-        if (binding.getSocialgroup().extId == null) {
-            final SocialgroupViewModel socialgroupViewModels = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-            int sequenceNumber = 1;
-            String id = locations.compextId + String.format("%02d", sequenceNumber); // generate ID with sequence number padded with zeros
-            while (true) {
-                try {
-                    if (!(socialgroupViewModels.createhse(id) != null)) break;
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } // check if ID already exists in ViewModel
-                sequenceNumber++; // increment sequence number if ID exists
-                id = locations.compextId + String.format("%02d", sequenceNumber); // generate new ID with updated sequence number
+
+        // Set a click listener on the button for mother
+        showDialogButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressDialog = new ProgressDialog(requireContext());
+                progressDialog.setMessage("Loading Fathers...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+
+                progressDialog.show();
+
+                // Simulate long operation
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 500);
+
+                // Show the dialog fragment
+                FatherDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                        .show(getChildFragmentManager(), "FatherDialogFragment");
             }
-            binding.getSocialgroup().extId = id; // set the generated ID to the extId property of the Individual object
-        }
+        });
 
-
-        if(individual.firstName==null){
-            binding.getIndividual().firstName = "FAKE";
-        }
-
-        if(individual.lastName==null){
-            binding.getIndividual().lastName = "FAKE";
-        }
-
-        if(individual.dob==null){
-            binding.getIndividual().dob = new Date(2003-12-15);
-        }
-
-        if(individual.gender==null){
-            binding.getIndividual().gender = 1;
-        }
-
-        if(socialgroup.groupType==null){
-            binding.getSocialgroup().groupType = 1;
-        }
-
-        if(residency.startDate==null){
-            binding.getResidency().startDate = new Date();
-        }
-
-        if(residency.startType==null){
-            binding.getResidency().startType = 1;
-        }
-
-        if(residency.endType==null){
-            binding.getResidency().endType = 1;
-        }
-
-        if(residency.rltn_head==null){
-            binding.getResidency().rltn_head = 1;
-        }
-
-        if(individual.complete==null){
-            binding.getIndividual().complete = 2;
-        }
-
-        if(socialgroup.groupName==null){
-            binding.getSocialgroup().groupName = "UNK";
-        }
-
-
-        if (binding.getIndividual().dob!=null) {
-            final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
-            binding.individualAge.setText("" + estimatedAge + " years old");
-            binding.dob.setError(null);
-        }
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            // We use a String here, but any type that can be put in a Bundle is supported
+
+
             if (bundle.containsKey((BaselineFragment.DATE_BUNDLES.DOB.getBundleKey()))) {
                 final String result = bundle.getString(BaselineFragment.DATE_BUNDLES.DOB.getBundleKey());
                 binding.dob.setText(result);
-            }
 
-            if (bundle.containsKey((BaselineFragment.DATE_BUNDLES.STARTDATE.getBundleKey()))) {
-                final String result = bundle.getString(BaselineFragment.DATE_BUNDLES.STARTDATE.getBundleKey());
-                binding.editTextStartDate.setText(result);
+                if (binding.getIndividual().dob != null) {
+                    final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
+                    binding.individAge.setText(String.valueOf(estimatedAge));
+                    binding.individAge.setTextColor(Color.MAGENTA);
+
+                    binding.dob.setError(null);
+                }
             }
 
         });
@@ -300,83 +207,124 @@ public class BaselineFragment extends Fragment {
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
-        binding.buttonResidencyStartDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(BaselineFragment.DATE_BUNDLES.STARTDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
+        ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+        IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
 
-        binding.buttonSaveClose.setOnClickListener(v -> {
-            final IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-            final SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-            final ResidencyViewModel residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+        try {
+            Individual data = individualViewModel.find(individual.uuid);
 
-            final Individual individual = binding.getIndividual();
-            final Socialgroup socialgroup = binding.getSocialgroup();
-            final Residency residency = binding.getResidency();
-            individual.setExtId(this.individual.getExtId());
+            if (data != null) {
+                binding.setIndividual(data);
+                binding.individualExtid.setEnabled(false);
 
-            boolean isExists = false;
-            binding.individualExtid.setError(null);
-            binding.individualInsertDate.setError(null);
-            binding.individualFw.setError(null);
-            binding.individualFirstName.setError(null);
-            binding.individualLastName.setError(null);
-            binding.dob.setError(null);
+                if (binding.getIndividual().dob != null) {
+                    final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
+                    binding.individAge.setText(String.valueOf(estimatedAge));
+                    binding.dob.setError(null);
+                }
 
-            if(individual.extId==null){
-                isExists = true;
-                binding.individualExtid.setError("Individual Id is Required");
+            } else {
+                data = new Individual();
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.uuid = uuidString;
+
+                binding.individualExtid.setEnabled(false);
+
+                binding.setIndividual(data);
+                binding.getIndividual().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
+                // Generate ID if extId is null
+                if (binding.getIndividual().extId == null) {
+                    final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
+                    int sequenceNumber = 1;
+                    String id = locations.compextId + String.format("%04d", sequenceNumber); // generate ID with sequence number padded with zeros
+                    while (true) {
+                        try {
+                            if (!(individualViewModels.findAll(id) != null)) break;
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } // check if ID already exists in ViewModel
+                        sequenceNumber++; // increment sequence number if ID exists
+                        id = locations.compextId + String.format("%04d", sequenceNumber); // generate new ID with updated sequence number
+                    }
+                    binding.getIndividual().extId = id; // set the generated ID to the extId property of the Individual object
+                }
+
+
+
+
             }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-            if(individual.insertDate==null){
-                isExists = true;
-                binding.individualInsertDate.setError("Date of visit is Required");
+
+        try {
+            Residency data = viewModel.findRes(individual.uuid);
+
+            if (data != null) {
+                binding.setResidency(data);
+
+            } else {
+                data = new Residency();
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.uuid = uuidString;
+                data.startType = 3;
+                data.endType = 1;
+                data.location_uuid = locations.uuid;
+                data.socialgroup_uuid = socialgroup.uuid;
+                data.complete = 1;
+                data.individual_uuid = binding.getIndividual().uuid;
+
+                binding.starttype.setEnabled(false);
+                binding.endtype.setEnabled(false);
+                binding.editTextStartDate.setEnabled(false);
+                binding.buttonResidencyStartDate.setEnabled(false);
+
+                binding.setResidency(data);
+                binding.getResidency().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                binding.getResidency().setStartDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
+
 
             }
-
-            if(individual.fw_uuid==null){
-                isExists = true;
-                binding.individualFw.setError("Fieldworker userName is Required");
-            }
-
-            if(individual.firstName==null){
-                isExists = true;
-                binding.individualFirstName.setError("FirstName is Required");
-            }
-
-            if(individual.lastName==null){
-                isExists = true;
-                binding.individualLastName.setError("LastName is Required");
-            }
-
-            if(individual.dob==null){
-                isExists = true;
-                binding.dob.setError("Date of Birth is Required");
-            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
-        });
 
         //LOAD SPINNERS
-        loadCodeData(binding.dobAspect, "yn");
-        loadCodeData(binding.individualComplete,  "yn");
+        loadCodeData(binding.dobAspect, "complete");
+        loadCodeData(binding.individualComplete,  "complete");
         loadCodeData(binding.gender, "gender");
-        loadCodeData(binding.selectGroupType, "groupType");
         loadCodeData(binding.starttype, "startType");
         loadCodeData(binding.endtype, "endType");
         loadCodeData(binding.rltnHead, "rltnhead");
+        loadCodeData(binding.other,  "complete");
+        loadCodeData(binding.gh,  "complete");
+        loadCodeData(binding.mother,  "complete");
+        loadCodeData(binding.father,  "complete");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
-            save(true, true);
+            save(true, true, viewModel, individualViewModel);
         });
 
         binding.buttonClose.setOnClickListener(v -> {
 
-            save(false, true);
+            save(false, true, viewModel, individualViewModel);
         });
-
 
         binding.setEventname(AppConstants.EVENT_BASE);
         Handler.colorLayouts(requireContext(), binding.BASELINELAYOUT);
@@ -385,32 +333,49 @@ public class BaselineFragment extends Fragment {
 
     }
 
-    private void save(boolean save, boolean close) {
+    private void save(boolean save, boolean close, ResidencyViewModel viewModel,  IndividualViewModel individualViewModel) {
 
         if (save) {
-            Individual finalData = binding.getIndividual();
-            Residency res = binding.getResidency();
-            Socialgroup soc = binding.getSocialgroup();
-            //finalData.modified = AppConstants.YES;
+            Residency finalData = binding.getResidency();
+            Individual Data = binding.getIndividual();
 
 
-            IndividualViewModel viewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+            final boolean validateOnComplete = true;//finalData.complete == 1;
+            boolean hasErrors = new Handler().hasInvalidInput(binding.BASELINELAYOUT, validateOnComplete, false);
+
+            if (hasErrors) {
+                Toast.makeText(requireContext(), "All fields are Required", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+
             viewModel.add(finalData);
+            individualViewModel.add(Data);
+            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
-            ResidencyViewModel viewModels = new ViewModelProvider(this).get(ResidencyViewModel.class);
-            viewModels.add(res);
+            SocialgroupAmendment socialgroupA = new SocialgroupAmendment();
 
-            SocialgroupViewModel viewModelss = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-            viewModelss.add(soc);
+            if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)) {
+                socialgroupA.individual_uuid = binding.getIndividual().getUuid();
+                socialgroupA.groupName = binding.getIndividual().firstName +' '+ binding.getIndividual().lastName;
+                socialgroupA.uuid = socialgroup.uuid;
+            }
+
+            SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+            socialgroupViewModel.update(socialgroupA);
+
+            Toast.makeText(requireActivity(), R.string.updated, Toast.LENGTH_LONG).show();
+
+
+
         }
         if (save) {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseholdFragment.newInstance(individual,residency, locations, socialgroup)).commit();
-        } else {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    BlankFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
+                    IndividualSummaryFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+        }else {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
+                    IndividualSummaryFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }
-
     }
 
     private <T> void callable(Spinner spinner, T[] array) {

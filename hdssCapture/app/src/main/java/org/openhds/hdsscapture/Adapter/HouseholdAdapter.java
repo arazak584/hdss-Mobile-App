@@ -83,8 +83,8 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
         Integer visit = socialgroup.complete;
 
         if (visit != null) {
-            holder.hhid.setTextColor(Color.rgb(0, 114, 133));
-            holder.name.setTextColor(Color.rgb(0, 114, 133));
+            holder.hhid.setTextColor(Color.BLUE);
+            holder.name.setTextColor(Color.BLUE);
         }else {
             holder.hhid.setTextColor(Color.RED);
             holder.name.setTextColor(Color.RED);

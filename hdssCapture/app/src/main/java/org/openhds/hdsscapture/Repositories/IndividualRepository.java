@@ -8,6 +8,7 @@ import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.IndividualDao;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
+import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 
 import java.util.Date;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class IndividualRepository {
 
@@ -37,6 +39,12 @@ public class IndividualRepository {
         });
     }
 
+
+    public int update(IndividualAmendment s) {
+        AtomicInteger row = new AtomicInteger();
+        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
+        return row.intValue();
+    }
 
     public Individual findAll(String id) throws ExecutionException, InterruptedException {
 

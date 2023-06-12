@@ -102,6 +102,9 @@ public class Locations extends BaseObservable implements Parcelable {
     @Expose
     public String houseExtId;
 
+    @Expose
+    public String vill_extId;
+
     @SerializedName("edit")
     @Expose
     @ColumnInfo(name = "edit")
@@ -260,6 +263,22 @@ public class Locations extends BaseObservable implements Parcelable {
         this.complete = complete;
     }
 
+    public String getVill_extId() {
+        return vill_extId;
+    }
+
+    public void setVill_extId(String vill_extId) {
+        this.vill_extId = vill_extId;
+    }
+
+    public String getExtId() {
+        return extId;
+    }
+
+    public void setExtId(String extId) {
+        this.extId = extId;
+    }
+
     protected Locations(Parcel in) {
         this.compextId = in.readString();
         this.locationName = in.readString();
@@ -275,6 +294,8 @@ public class Locations extends BaseObservable implements Parcelable {
         this.edit = in.readInt();
         this.site = in.readInt();
         this.complete = in.readInt();
+        this.extId = in.readString();
+        this.vill_extId = in.readString();
     }
 
     public static final Creator<Locations> CREATOR = new Creator<Locations>() {
@@ -309,6 +330,8 @@ public class Locations extends BaseObservable implements Parcelable {
         dest.writeInt(this.edit);
         dest.writeInt(this.site);
         dest.writeInt(this.complete);
+        dest.writeString(this.extId);
+        dest.writeString(this.vill_extId);
     }
 
     @Override

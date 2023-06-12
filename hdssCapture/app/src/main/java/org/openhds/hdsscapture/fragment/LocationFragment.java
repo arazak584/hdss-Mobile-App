@@ -195,6 +195,9 @@ public class LocationFragment extends Fragment {
         final Intent intent = getActivity().getIntent();
         final Hierarchy level6Data = intent.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
 
+        final Intent j = getActivity().getIntent();
+        final Hierarchy level5Data = j.getParcelableExtra(HierarchyActivity.LEVEL5_DATA);
+
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
@@ -203,8 +206,12 @@ public class LocationFragment extends Fragment {
             binding.getLocations().locationLevel_uuid = level6Data.getUuid();
         }
 
-        if(locations.compno==null){
+        if(locations.extId==null){
             binding.getLocations().extId = level6Data.getExtId();
+        }
+
+        if(locations.vill_extId==null){
+            binding.getLocations().vill_extId = level6Data.getParent_uuid();
         }
 
         if(locations.fw_uuid==null){
@@ -220,6 +227,14 @@ public class LocationFragment extends Fragment {
         if(locations.insertDate==null){
             binding.getLocations().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         }
+
+        if(locations.compno!=null){
+            binding.locationcompno.setEnabled(false);
+            binding.locationtype.setEnabled(false);
+            binding.locationstatus.setEnabled(false);
+        }
+
+        binding.edit.setEnabled(false);
 
         // Generate a UUID
         if(locations.uuid == null) {

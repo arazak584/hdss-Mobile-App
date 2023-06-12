@@ -9,6 +9,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import org.openhds.hdsscapture.Dao.AmendmentDao;
 import org.openhds.hdsscapture.Dao.CodeBookDao;
 import org.openhds.hdsscapture.Dao.DeathDao;
 import org.openhds.hdsscapture.Dao.DemographicDao;
@@ -27,8 +28,10 @@ import org.openhds.hdsscapture.Dao.RelationshipDao;
 import org.openhds.hdsscapture.Dao.ResidencyDao;
 import org.openhds.hdsscapture.Dao.RoundDao;
 import org.openhds.hdsscapture.Dao.SocialgroupDao;
+import org.openhds.hdsscapture.Dao.VaccinationDao;
 import org.openhds.hdsscapture.Dao.VisitDao;
 import org.openhds.hdsscapture.Utilities.Converter;
+import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.CodeBook;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
@@ -47,6 +50,7 @@ import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
 
 import java.util.concurrent.ExecutorService;
@@ -55,7 +59,7 @@ import java.util.concurrent.Executors;
 @Database(  entities = {
         Relationship.class, Locations.class, Residency.class, Pregnancyoutcome.class, Individual.class, Round.class, Demographic.class,
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
-        Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class
+        Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class
         }, version = 1, exportSchema = true)
 
 @TypeConverters({Converter.class})
@@ -80,6 +84,8 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract HdssSociodemoDao hdssSociodemoDao();
     public abstract OutcomeDao outcomeDao();
     public abstract ListingDao listingDao();
+    public abstract AmendmentDao amendmentDao();
+    public abstract VaccinationDao vaccinationDao();
 
 
     private static volatile AppDatabase INSTANCE;
@@ -130,6 +136,8 @@ public abstract class AppDatabase extends RoomDatabase {
                 socialgroupDao().deleteAll();
                 visitDao().deleteAll();
                 listingDao().deleteAll();
+                amendmentDao().deleteAll();
+                vaccinationDao().deleteAll();
 
                 // Perform any other necessary cleanup or initialization
 

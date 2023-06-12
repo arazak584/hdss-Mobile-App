@@ -25,6 +25,7 @@ import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
+import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.databinding.FragmentMembershipBinding;
@@ -35,10 +36,12 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outmigration;
+import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
+import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
@@ -237,6 +240,13 @@ public class ResidencyFragment extends Fragment {
                 binding.setResidency(dataRes);
                 dataRes.loc = locations.getUuid();
                 dataRes.dobs = individual.dob;
+                if(dataRes.img ==null){
+                    dataRes.img = 2;
+                }
+                binding.starttype.setEnabled(false);
+                binding.editTextStartDate.setEnabled(false);
+                binding.residencyImg.setEnabled(false);
+                binding.buttonResidencyStartDate.setEnabled(false);
             } else {
                 dataRes = new Residency();
                 String uuid = UUID.randomUUID().toString();
@@ -249,6 +259,7 @@ public class ResidencyFragment extends Fragment {
                 dataRes.loc = locations.getUuid();
                 dataRes.complete = 1;
                 dataRes.dobs = individual.dob;
+                dataRes.age = individual.getAge();
 
                 if (dataRes!=null){
                     dataRes.img=1;
@@ -256,10 +267,18 @@ public class ResidencyFragment extends Fragment {
 
                 binding.setResidency(dataRes);
                 binding.getResidency().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                binding.residencyImg.setEnabled(false);
 
+                // Check for error condition
+                int selectedStartType = binding.starttype.getSelectedItemPosition();
+                if (selectedStartType == 1) {
+                    throw new Exception("Error: StartType 1 selected when dataRes is null");
+                }
 
             }
         } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -268,12 +287,13 @@ public class ResidencyFragment extends Fragment {
             Residency datas = resViewModel.finds(individual.uuid);
             if (datas != null) {
                 binding.setRes(datas);
-
+                binding.starttype.setEnabled(false);
                 if (binding.getResidency().startDate == null) {
                     Calendar calendar = Calendar.getInstance(Locale.US);
                     calendar.setTime(datas.endDate);
                     calendar.add(Calendar.DAY_OF_MONTH, 1);
                     binding.getResidency().setStartDate(new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()));
+                    binding.getResidency().startType= 1;
                 }
 
 
@@ -378,7 +398,7 @@ public class ResidencyFragment extends Fragment {
         loadCodeData(binding.residencyImg,  "complete");
         loadCodeData(binding.img.reason,  "reason");
         loadCodeData(binding.omg.reasonOut,  "reasonForOutMigration");
-        loadCodeData(binding.img.origin,  "whereoutside");
+        loadCodeData(binding.img.origin,  "comingfrom");
         loadCodeData(binding.img.migtype,  "migType");
         loadCodeData(binding.omg.destination,  "whereoutside");
         loadCodeData(binding.dth.dthDeathPlace, "deathPlace");
@@ -426,6 +446,25 @@ public class ResidencyFragment extends Fragment {
                 return;
             }
 
+            boolean end = false;
+            boolean age = false;
+
+            if (binding.starttype.getSelectedItemPosition() == 1 && binding.residencyImg.getSelectedItemPosition() == 1) {
+                end = true;
+                Toast.makeText(getActivity(), "Enumeration Cannot be Selected", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!binding.indAge.getText().toString().trim().isEmpty() && binding.starttype.getSelectedItemPosition() == 3) {
+                int individidAge = Integer.parseInt(binding.indAge.getText().toString().trim());
+                if (individidAge > 5) {
+                    age = true;
+                    Toast.makeText(getActivity(), "Too Old To Be Registered Through Birth", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+
 
             //Date Validations
 
@@ -448,6 +487,22 @@ public class ResidencyFragment extends Fragment {
                 e.printStackTrace();
             }
 
+
+            try {
+                if (!binding.currentdob.getText().toString().trim().equals(binding.editTextStartDate.getText().toString().trim())
+                        && binding.starttype.getSelectedItemPosition() == 3) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date date = f.parse(binding.currentdob.getText().toString().trim());
+                    String dob = f.format(date);
+                    binding.dth.dthDeathDate.setError("Start Date Should be Equal to Date of Birth " + dob);
+                    Toast.makeText(getActivity(), "Start Date Should be Equal to Date of Birth " + dob, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
 
             try {
                 if (!binding.editTextStartDate.getText().toString().trim().isEmpty() && !binding.res.resEndDate.getText().toString().trim().isEmpty()) {
@@ -620,6 +675,26 @@ public class ResidencyFragment extends Fragment {
 
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
+
+            RelationshipViewModel relModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
+            try {
+                Relationship data = relModel.find(individual.uuid);
+                if (data != null && !binding.dth.dthDeathDate.getText().toString().trim().isEmpty()) {
+
+                    RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
+                    relationshipUpdate.endType = 4;
+                    relationshipUpdate.endDate = binding.getDeath().deathDate;
+                    relationshipUpdate.individualA_uuid = individual.uuid;
+                    relationshipUpdate.complete = 1;
+
+                    relModel.update(relationshipUpdate);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
 
         }

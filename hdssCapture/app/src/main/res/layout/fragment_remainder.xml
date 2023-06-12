@@ -23,16 +23,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <SearchView
-                android:id="@+id/research"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="48dip"
-                android:inputType="textPersonName|textCapCharacters"
-                android:queryHint="@string/text_searchid">
-
-                <requestFocus />
-            </SearchView>
 
 
         </LinearLayout>
@@ -44,7 +34,8 @@
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="80dp"
+            android:layout_marginBottom="20dp"
+            android:padding="@dimen/fragment_horizontal_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

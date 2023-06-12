@@ -542,6 +542,38 @@
     <string name="listing">Listing</string>
     <string name="fieldworker">Name of Fieldworker</string>
     <string name="send_list">Send Listing</string>
+    <string name="amendment_info">Select Appropriate Information to Amend</string>
+    <string name="oth_name">Other Name of Individual</string>
+    <string name="ghanacards">Ghana Card Number</string>
+    <string name="replfirstname">Replace FirstName</string>
+    <string name="repllastname">Replace LastName</string>
+    <string name="othername">Other Name</string>
+    <string name="replothname">Replace Other Name</string>
+    <string name="replghcard">Replace Ghana Card Number [GHA-XXXXXXXXX-X]</string>
+    <string name="replgender">Replace Gender of Individual</string>
+    <string name="send_amendment">Send Amendment</string>
+    <string name="baseline">Baseline</string>
+    <string name="updated">Successfully Updated</string>
+    <string name="incomplete">Incomplete</string>
+    <string name="compound">Compound Name</string>
+    <string name="correctcompname">Is the Compound Name Correct?</string>
+    <string name="compoundcorrect">Enter the Correct Compound Name</string>
+    <string name="changecluster">Change Cluster</string>
+    <string name="bcg">Bacille Calmette-Guerin Vaccine (BCG)</string>
+    <string name="opv0">Oral Polio Vaccine (OPV0)</string>
+    <string name="opv1">Oral Polio Vaccine (OPV1)</string>
+    <string name="opv2">Oral Polio Vaccine (OPV2)</string>
+    <string name="opv3">Oral Polio Vaccine (OPV3)</string>
+    <string name="month">Age in Months</string>
+    <string name="week">Age in Weeks</string>
+    <string name="ipv">Inactivated Polio Vaccine (IPV)</string>
+    <string name="mena">Meningococcal Vaccine (MenA)</string>
+    <string name="itn">Insecticide treated net (ITN)</string>
+    <string name="send_vaccination">Send Vaccination</string>
+    <string name="surname">Surname</string>
+    <string name="genders">Gender</string>
+    <string name="card">Ghana card</string>
+    <string name="get_vac">Get Vaccination</string>
 
     //SocioDemo End
 
