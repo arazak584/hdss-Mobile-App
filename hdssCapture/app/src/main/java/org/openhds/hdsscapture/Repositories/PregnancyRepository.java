@@ -71,6 +71,15 @@ public class PregnancyRepository {
         return future.get();
     }
 
+    public Pregnancy lastpreg(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Pregnancy> callable = () -> dao.lastpreg(id);
+
+        Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public Pregnancy finds(String id) throws ExecutionException, InterruptedException {
 
         Callable<Pregnancy> callable = () -> dao.finds(id);

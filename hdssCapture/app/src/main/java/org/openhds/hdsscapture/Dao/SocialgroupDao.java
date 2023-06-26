@@ -61,4 +61,7 @@ public interface SocialgroupDao {
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
+    @Query("SELECT * FROM socialgroup where groupName='UNK' AND complete=1 ")
+    List<Socialgroup> error();
+
 }

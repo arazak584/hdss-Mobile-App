@@ -38,6 +38,7 @@
             name="pregoutcome4"
             type="org.openhds.hdsscapture.entity.Outcome" />
 
+
         <variable
             name="eventname"
             type="String" />
@@ -302,7 +303,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     selection="@{pregoutcome.b_place}"
-                    android:onItemSelected="@{pregoutcome::setBirthplace}"
+                    android:onItemSelected="@{pregoutcome::setB_place}"
                     android:gravity="left"
                     android:textColor="#000301"
                     android:padding="10dp"/>
@@ -337,7 +338,6 @@
                     android:text="@string/attend_you_other">
 
                     <com.google.android.material.textfield.TextInputEditText
-
                         android:id="@+id/not_del_other"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -409,7 +409,6 @@
                     android:text="@string/attend_you_other">
 
                     <com.google.android.material.textfield.TextInputEditText
-
                         android:id="@+id/how_del_other"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -516,7 +515,6 @@
                     android:text="@string/attend_you_other">
 
                     <com.google.android.material.textfield.TextInputEditText
-
                         android:id="@+id/where_anc_Other"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -776,6 +774,7 @@
 
                     </LinearLayout>
 
+
                     <LinearLayout
                         goneUnless="@{pregoutcome.numberofBirths>=2}"
                         android:layout_width="match_parent"
@@ -789,6 +788,7 @@
 
                     </LinearLayout>
 
+
                     <LinearLayout
                         goneUnless="@{pregoutcome.numberofBirths>=3}"
                         android:layout_width="match_parent"
@@ -801,6 +801,7 @@
                             bind:pregoutcome3="@{pregoutcome3}" />
 
                     </LinearLayout>
+
 
                     <LinearLayout
                         goneUnless="@{pregoutcome.numberofBirths>=4}"

@@ -13,6 +13,7 @@ import org.openhds.hdsscapture.Dao.AmendmentDao;
 import org.openhds.hdsscapture.Dao.CodeBookDao;
 import org.openhds.hdsscapture.Dao.DeathDao;
 import org.openhds.hdsscapture.Dao.DemographicDao;
+import org.openhds.hdsscapture.Dao.DuplicateDao;
 import org.openhds.hdsscapture.Dao.FieldworkerDao;
 import org.openhds.hdsscapture.Dao.HdssSociodemoDao;
 import org.openhds.hdsscapture.Dao.HierarchyDao;
@@ -35,6 +36,7 @@ import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.CodeBook;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Hierarchy;
@@ -59,7 +61,7 @@ import java.util.concurrent.Executors;
 @Database(  entities = {
         Relationship.class, Locations.class, Residency.class, Pregnancyoutcome.class, Individual.class, Round.class, Demographic.class,
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
-        Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class
+        Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class, Duplicate.class
         }, version = 1, exportSchema = true)
 
 @TypeConverters({Converter.class})
@@ -86,6 +88,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract ListingDao listingDao();
     public abstract AmendmentDao amendmentDao();
     public abstract VaccinationDao vaccinationDao();
+    public abstract DuplicateDao duplicateDao();
 
 
     private static volatile AppDatabase INSTANCE;
@@ -138,6 +141,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 listingDao().deleteAll();
                 amendmentDao().deleteAll();
                 vaccinationDao().deleteAll();
+                duplicateDao().deleteAll();
 
                 // Perform any other necessary cleanup or initialization
 

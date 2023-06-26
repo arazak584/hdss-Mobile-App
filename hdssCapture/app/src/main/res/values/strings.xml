@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HDSS</string>
+    <string name="app_name">OpenAB</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>
@@ -132,7 +132,7 @@
     <string name="pregobs">Pregnancy Observation</string>
     <string name="conception">Estimated Date of Conception</string>
     <string name="delivery">Expected Date of Delivery</string>
-    <string name="outcome">Has the the outcome been recorded</string>
+    <string name="outcome">Does this pregnancy have an outcome?</string>
     <string name="outcomeDate">Date of Outcome</string>
     <string name="pregoutcome">Pregnancy Outcome</string>
     <string name="outcome_number">Number of Outcomes</string>
@@ -308,7 +308,7 @@
     <string name="versions">v2023.0.1</string>
     <string name="mar">Is this the first marriage of the woman?</string>
     <string name="tnbch">Total Number of biological children</string>
-    <string name="nchdm">Number of biological children from this marriage</string>
+    <string name="nchdm">Number of biological children from this marriage or relationship</string>
     <string name="polygamous">Are you in a polygamous marriage?</string>
     <string name="nwive">Number of wives of husband(including you)</string>
     <string name="lcow">Does women live in the same household with co-wife(s)</string>
@@ -574,6 +574,23 @@
     <string name="genders">Gender</string>
     <string name="card">Ghana card</string>
     <string name="get_vac">Get Vaccination</string>
+    <string name="hcard">HC (Hcard)</string>
+    <string name="vareason">Reason not vaccinated for BCG, Polio, Penta, and MV</string>
+    <string name="onet">How often does the baby sleep under a bednet?</string>
+    <string name="lastpreg">Last Pregnancy Date</string>
+    <string name="rea">Reason for Admission?</string>
+    <string name="hl">How long after birth did you start Breastfeeding?</string>
+    <string name="hod">How old (in days) was the baby when you started giving the baby food or drinks?</string>
+    <string name="hom">How old (in months) was the baby when you started giving the baby food or drinks?</string>
+    <string name="stm">How old (in months) was the baby when you stopped breastfeeding?</string>
+    <string name="sty">How old (in years) was the baby when you stopped breastfeeding?</string>
+    <string name="nhis">National Health Insurance Scheme</string>
+    <string name="sbf">Are you still breastfeeding?</string>
+    <string name="admission">Has the baby been admitted at a health facility in the last six months?</string>
+    <string name="query">QUERIES</string>
+    <string name="reserror">Resolve these errors before you Sync</string>
+    <string name="dup">Duplicate Name</string>
+    <string name="send_duplicate">Send Duplicate</string>
 
     //SocioDemo End
 

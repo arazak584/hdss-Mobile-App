@@ -9,6 +9,7 @@ import androidx.room.Update;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -51,5 +52,12 @@ public interface ResidencyDao {
 
     @Query("SELECT * FROM residency WHERE uuid=:id AND location_uuid!=loc")
     Residency fetch(String id);
+
+    @Query("SELECT * FROM residency where individual_uuid=:id ORDER BY startDate ASC LIMIT 1")
+    Residency amend(String id);
+
+    @Query("SELECT COUNT(*) FROM residency a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
+            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
+    long count(Date startDate, Date endDate, String username);
 
 }

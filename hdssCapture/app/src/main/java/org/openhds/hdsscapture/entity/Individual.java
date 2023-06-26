@@ -168,7 +168,7 @@ public class Individual extends BaseObservable implements Parcelable {
     }
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @Bindable
     public String getDob() {

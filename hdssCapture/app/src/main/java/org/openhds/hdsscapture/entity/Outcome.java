@@ -51,23 +51,50 @@ public class Outcome extends BaseObservable {
     public String mother_uuid;
 
     @Expose
+    public String individual_uuid;
+
+    @Expose
+    public String residency_uuid;
+
+    @Expose
+    public String firstName;
+
+    @Expose
+    public String lastName;
+
+    @Expose
+    public String father_uuid;
+
+    @Expose
+    public String extId;
+
+    @Expose
     public String preg_uuid;
 
     @Expose
     public Integer type;
 
     @Expose
+    public Integer gender;
+
+    @Expose
     public Date dob;
 
     @Expose
+    public Date insertDate;
+
+    @Expose
     public Integer complete;
+
+    @Expose
+    public Integer rltn_head;
 
 
 
     public Outcome(){}
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @Bindable
     public String getDob() {
@@ -80,6 +107,20 @@ public class Outcome extends BaseObservable {
             this.dob = f.parse(dob);
         } catch (ParseException e) {
             System.out.println("Dob error " + e.getMessage());
+        }
+    }
+
+    @Bindable
+    public String getInsertDate() {
+        if (insertDate == null) return null;
+        return f.format(insertDate);
+    }
+
+    public void setInsertDate(String insertDate) {
+        try {
+            this.insertDate = f.parse(insertDate);
+        } catch (ParseException e) {
+            System.out.println("Date error " + e.getMessage());
         }
     }
 
@@ -149,5 +190,39 @@ public class Outcome extends BaseObservable {
         }
 
     }
+
+    //SPINNERS ENTITY Gender
+    public void setGenders(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            gender = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            gender = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    public void setRltn_head(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            rltn_head = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            rltn_head = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
 
 }

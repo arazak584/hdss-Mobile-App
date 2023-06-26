@@ -142,12 +142,9 @@ public class LocationFragment extends Fragment {
         locationRequest.setSmallestDisplacement(10); // 10 meters
 
 
-
-
         // Get a reference to the progress bar view
         ProgressBar progressBar = binding.getRoot().findViewById(R.id.progress_bar);
 
-        // Get a reference to the button and set its OnClickListener
         binding.buttonGps.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -183,10 +180,26 @@ public class LocationFragment extends Fragment {
                                 locationManager.removeUpdates(this);
                             }
                         }
+
+                        @Override
+                        public void onProviderDisabled(String provider) {
+                            // Handle the case when the location provider is disabled
+                            // For example, you can display a message or prompt the user to enable the location provider
+                        }
+
+                        // Other methods of LocationListener
+                        @Override
+                        public void onStatusChanged(String provider, int status, Bundle extras) {
+                        }
+
+                        @Override
+                        public void onProviderEnabled(String provider) {
+                        }
                     });
                 }
             }
         });
+
 
 
 
@@ -206,8 +219,18 @@ public class LocationFragment extends Fragment {
             binding.getLocations().locationLevel_uuid = level6Data.getUuid();
         }
 
-        if(locations.extId==null){
+        if(locations.extId==null && locations.compno==null){
             binding.getLocations().extId = level6Data.getExtId();
+        }
+
+        if(locations.extId==null && locations.compno!=null){
+            //binding.getLocations().extId = level6Data.getExtId();
+            binding.getLocations().extId = locations.compextId.substring(0, 3);
+        }
+
+        if(locations.extId==null && locations.compno!=null && locations.site==3){
+            //binding.getLocations().extId = level6Data.getExtId();
+            binding.getLocations().extId = locations.compextId.substring(0, 4);
         }
 
         if(locations.vill_extId==null){

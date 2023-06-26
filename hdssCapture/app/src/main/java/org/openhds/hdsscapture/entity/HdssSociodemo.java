@@ -28,7 +28,7 @@ import java.util.Locale;
 public class HdssSociodemo extends BaseObservable {
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @Expose
     @NotNull

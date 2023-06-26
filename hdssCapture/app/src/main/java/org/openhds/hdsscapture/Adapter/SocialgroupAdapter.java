@@ -84,7 +84,7 @@ public class SocialgroupAdapter extends RecyclerView.Adapter<SocialgroupAdapter.
             @Override
             public void onClick(View v) {
                 // Get the text field in the IndividualFragment where you want to insert the mother's ID
-                EditText householdIdField = activity.requireActivity().findViewById(R.id.socialgroup);
+                EditText householdIdField = activity.requireActivity().findViewById(R.id.socialgroup_uuid);
 
                 // Set the mother's ID in the text field
                 householdIdField.setText(socialgroup.getUuid());

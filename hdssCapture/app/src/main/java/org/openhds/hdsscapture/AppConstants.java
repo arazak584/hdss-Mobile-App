@@ -45,6 +45,7 @@ public class AppConstants {
             EVENT_HDSS13 = "PREGNANCY OBSERVATION [EXTRA]",
             EVENT_HDSS14 = "AMENDMENT",
             EVENT_HDSS15 = "VACCINATION",
+            EVENT_HDSS16 = "DUPLICATE",
             EVENT_HDSS11 = "PREGNANCY OUTCOME",
             EVENT_HDSS12 = "PREGNANCY OUTCOME [EXTRA]",
 
@@ -62,6 +63,7 @@ public class AppConstants {
             EVENT_OMG = "OUTMIGRATION REGISTRATION",
             EVENT_IMG = "INMIGRATION REGISTRATION",
             EVENT_AMEND = "AMENDMENT",
+            EVENT_DUP = "DUPLICATE",
             EVENT_VAC = "VACCINATION";
 
 

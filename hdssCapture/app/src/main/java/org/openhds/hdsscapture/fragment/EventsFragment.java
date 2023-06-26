@@ -18,6 +18,7 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
+import org.openhds.hdsscapture.Viewmodel.DuplicateViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
@@ -28,6 +29,7 @@ import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.databinding.FragmentEventsBinding;
 import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
@@ -168,6 +170,7 @@ public class EventsFragment extends Fragment {
                                 showDemographicForm(eventForms);
                                 showResidencyForm(eventForms);
                                 showAmendment(eventForms);
+                                showDup(eventForms);
 
                             }
 
@@ -181,6 +184,7 @@ public class EventsFragment extends Fragment {
                                 showOutcome1Form(eventForms);
                                 showResidencyForm(eventForms);
                                 showAmendment(eventForms);
+                                showDup(eventForms);
 
                             }
 
@@ -190,6 +194,7 @@ public class EventsFragment extends Fragment {
                                 showDemographicForm(eventForms);
                                 showResidencyForm(eventForms);
                                 showAmendment(eventForms);
+                                showDup(eventForms);
 
                             }
 
@@ -404,6 +409,22 @@ public class EventsFragment extends Fragment {
                 form = new Vaccination();
             }
             eventForms.add(new EventForm(AppConstants.EVENT_HDSS15, AppConstants.EVENT_VAC, form.complete));
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showDup(List<EventForm> eventForms) {
+        DuplicateViewModel viewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
+        try {
+            Duplicate form = viewModel.find(individual.uuid);
+            if (form == null) {
+                form = new Duplicate();
+            }
+            eventForms.add(new EventForm(AppConstants.EVENT_HDSS16, AppConstants.EVENT_DUP, form.complete));
 
         } catch (ExecutionException e) {
             e.printStackTrace();

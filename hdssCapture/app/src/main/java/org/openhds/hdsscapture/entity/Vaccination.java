@@ -6,6 +6,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -132,6 +133,48 @@ public class Vaccination extends BaseObservable {
     @Expose
     public String fw_uuid;
 
+    @Expose
+    public Integer hcard;
+
+    @Expose
+    public Integer reason;
+
+    @Expose
+    public Integer onet;
+
+    @Expose
+    public Integer rea;
+
+    @Expose
+    public Integer hl;
+
+    @Expose
+    public Integer hod;
+
+    @Expose
+    public Integer hom;
+
+    @Expose
+    public Integer nhis;
+
+    @Expose
+    public Integer sbf;
+
+    @Expose
+    public Integer stm;
+
+    @Expose
+    public Integer sty;
+
+    @Expose
+    public Integer admission;
+
+    @Expose
+    private String reason_oth;
+
+    @Expose
+    private String rea_oth;
+
     @ColumnInfo(name = "complete")
     public Integer complete;
 
@@ -139,7 +182,7 @@ public class Vaccination extends BaseObservable {
 
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
 
     public String getInsertDate() {
@@ -547,6 +590,113 @@ public class Vaccination extends BaseObservable {
         }
     }
 
+    public Integer getHcard() {
+        return hcard;
+    }
+
+    public void setHcard(Integer hcard) {
+        this.hcard = hcard;
+    }
+
+    public Integer getReason() {
+        return reason;
+    }
+
+    public void setReason(Integer reason) {
+        this.reason = reason;
+    }
+
+    public Integer getOnet() {
+        return onet;
+    }
+
+    public void setOnet(Integer onet) {
+        this.onet = onet;
+    }
+
+    public Integer getRea() {
+        return rea;
+    }
+
+    public void setRea(Integer rea) {
+        this.rea = rea;
+    }
+
+    public Integer getHl() {
+        return hl;
+    }
+
+    public void setHl(Integer hl) {
+        this.hl = hl;
+    }
+
+    public String getHod() {
+        return hod == null ? "" : String.valueOf(hod);
+    }
+
+    public void setHod(String hod) {
+        if (hod == null) this.hod = null;
+        else
+            try {
+                this.hod = Integer.valueOf(hod);
+            } catch (NumberFormatException e) {
+            }
+    }
+
+    public String getHom() {
+        return hom == null ? "" : String.valueOf(hom);
+    }
+
+    public void setHom(String hom) {
+        if (hom == null) this.hom = null;
+        else
+            try {
+                this.hom = Integer.valueOf(hom);
+            } catch (NumberFormatException e) {
+            }
+    }
+
+    public Integer getNhis() {
+        return nhis;
+    }
+
+    public void setNhis(Integer nhis) {
+        this.nhis = nhis;
+    }
+
+    public Integer getSbf() {
+        return sbf;
+    }
+
+    public void setSbf(Integer sbf) {
+        this.sbf = sbf;
+    }
+
+    public String getStm() {
+        return stm == null ? "" : String.valueOf(stm);
+    }
+
+    public void setStm(String stm) {
+        if (stm == null) this.stm = null;
+        else
+            try {
+                this.stm = Integer.valueOf(stm);
+            } catch (NumberFormatException e) {
+            }
+    }
+
+    public String getSty() {
+        return sty == null ? "" : String.valueOf(sty);
+    }
+
+    public void setSty(String sty) {
+        if (sty == null) this.sty = null;
+        else
+            try {
+                this.sty = Integer.valueOf(sty);
+            } catch (NumberFormatException e) {
+            }
+    }
 
     public String getFw_uuid() {
         return fw_uuid;
@@ -554,6 +704,30 @@ public class Vaccination extends BaseObservable {
 
     public void setFw_uuid(String fw_uuid) {
         this.fw_uuid = fw_uuid;
+    }
+
+    public Integer getAdmission() {
+        return admission;
+    }
+
+    public void setAdmission(Integer admission) {
+        this.admission = admission;
+    }
+
+    public String getReason_oth() {
+        return reason_oth;
+    }
+
+    public void setReason_oth(String reason_oth) {
+        this.reason_oth = reason_oth;
+    }
+
+    public String getRea_oth() {
+        return rea_oth;
+    }
+
+    public void setRea_oth(String rea_oth) {
+        this.rea_oth = rea_oth;
     }
 
     //SPINNERS ENTITY COMPLETE FORM FOR SYNC
@@ -569,6 +743,139 @@ public class Vaccination extends BaseObservable {
             complete = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    public void setHcard(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            hcard = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            hcard = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
+        }
+
+    }
+
+    public void setReason(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            reason = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            reason = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
+        }
+
+    }
+
+    public void setOnet(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            onet = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            onet = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    public void setRea(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            rea = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            rea = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
+        }
+
+    }
+
+    public void setHl(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            hl = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            hl = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    public void setNhis(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            nhis = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            nhis = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    public void setSbf(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            sbf = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            sbf = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
+        }
+
+    }
+
+    public void setAdmission(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            admission = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            admission = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }

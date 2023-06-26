@@ -6,6 +6,7 @@ import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.ResidencyDao;
 import org.openhds.hdsscapture.entity.Residency;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -86,6 +87,21 @@ public class ResidencyRepository {
 
         Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
 
+        return future.get();
+    }
+
+    public Residency amend(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Residency> callable = () -> dao.amend(id);
+
+        Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.count(startDate, endDate, username);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }
 

@@ -73,7 +73,7 @@ public class Inmigration extends BaseObservable implements Parcelable {
 
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
 
     public String getInsertDate() {
@@ -251,6 +251,9 @@ public class Inmigration extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);
+        }
+        if(reason != null && reason!=77){
+            this.reason_oth=null;
         }
 
     }

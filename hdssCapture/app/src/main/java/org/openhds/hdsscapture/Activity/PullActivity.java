@@ -263,7 +263,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 10000;
+                                        int batchSize = 50000;
                                         List<Individual> individuals = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -288,8 +288,14 @@ public class PullActivity extends AppCompatActivity {
                                             individualDao.insert(individuals);
                                         }
                                         progress.dismiss();
-                                        textView_SyncIndividual.setText("Total Individuals Saved: " + counts);
-                                        textView_SyncIndividual.setTextColor(Color.GREEN);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                textView_SyncIndividual.setText("Total Individuals Saved: " + counts);
+                                                textView_SyncIndividual.setTextColor(Color.GREEN);
+                                            }
+                                        });
+
                                     });
                                 }
                                 File cacheDir = getExternalCacheDir();
@@ -391,7 +397,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 10000;
+                                        int batchSize = 50000;
                                         List<Locations> locations = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -523,7 +529,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 10000;
+                                        int batchSize = 50000;
                                         List<Residency> residencies = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -547,8 +553,14 @@ public class PullActivity extends AppCompatActivity {
                                             residencyDao.insert(residencies);
                                         }
                                         progress.dismiss();
-                                        textView_SyncResidency.setText("Total Residency Saved: " + counts);
-                                        textView_SyncResidency.setTextColor(Color.GREEN);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                textView_SyncResidency.setText("Total Residency Saved: " + counts);
+                                                textView_SyncResidency.setTextColor(Color.GREEN);
+                                            }
+                                        });
+
                                     });
                                 }
 
@@ -654,7 +666,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 10000;
+                                        int batchSize = 50000;
                                         List<Relationship> relationships = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -678,8 +690,14 @@ public class PullActivity extends AppCompatActivity {
                                             relationshipDao.insert(relationships);
                                         }
                                         progress.dismiss();
-                                        textView_SyncRelationship.setText("Total Relationship Saved: " + counts);
-                                        textView_SyncRelationship.setTextColor(Color.GREEN);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                textView_SyncRelationship.setText("Total Relationship Saved: " + counts);
+                                                textView_SyncRelationship.setTextColor(Color.GREEN);
+                                            }
+                                        });
+
                                     });
                                 }
 
@@ -784,7 +802,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 10000;
+                                        int batchSize = 50000;
                                         List<Socialgroup> socialgroups = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -808,8 +826,14 @@ public class PullActivity extends AppCompatActivity {
                                             socialgroupDao.insert(socialgroups);
                                         }
                                         progress.dismiss();
-                                        textView_SyncSocialgroup.setText("Total Socialgroup Saved: " + counts);
-                                        textView_SyncSocialgroup.setTextColor(Color.GREEN);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                textView_SyncSocialgroup.setText("Total Socialgroup Saved: " + counts);
+                                                textView_SyncSocialgroup.setTextColor(Color.GREEN);
+                                            }
+                                        });
+
                                     });
                                 }
 
@@ -914,7 +938,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 10000;
+                                        int batchSize = 50000;
                                         List<Pregnancy> pregnancies = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -938,8 +962,14 @@ public class PullActivity extends AppCompatActivity {
                                             pregnancyDao.insert(pregnancies);
                                         }
                                         progress.dismiss();
-                                        textView_SyncPregnancy.setText("Total Pregnancy Saved: " + counts);
-                                        textView_SyncPregnancy.setTextColor(Color.GREEN);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                textView_SyncPregnancy.setText("Total Pregnancy Saved: " + counts);
+                                                textView_SyncPregnancy.setTextColor(Color.GREEN);
+                                            }
+                                        });
+
                                     });
                                 }
 
@@ -1044,7 +1074,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 10000;
+                                        int batchSize = 50000;
                                         List<Demographic> demographics = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -1068,8 +1098,14 @@ public class PullActivity extends AppCompatActivity {
                                             demographicDao.insert(demographics);
                                         }
                                         progress.dismiss();
-                                        textView_SyncDemography.setText("Total Demographics Saved: " + counts);
-                                        textView_SyncDemography.setTextColor(Color.GREEN);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                textView_SyncDemography.setText("Total Demographics Saved: " + counts);
+                                                textView_SyncDemography.setTextColor(Color.GREEN);
+                                            }
+                                        });
+
                                     });
                                 }
 
@@ -1231,7 +1267,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 10000;
+                                        int batchSize = 50000;
                                         List<HdssSociodemo> hdssSociodemos = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -1255,8 +1291,14 @@ public class PullActivity extends AppCompatActivity {
                                             hdssSociodemoDao.insert(hdssSociodemos);
                                         }
                                         progress.dismiss();
-                                        textView_SyncSes.setText("Total SES Saved: " + counts);
-                                        textView_SyncSes.setTextColor(Color.GREEN);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                textView_SyncSes.setText("Total SES Saved: " + counts);
+                                                textView_SyncSes.setTextColor(Color.GREEN);
+                                            }
+                                        });
+
                                     });
                                 }
 
@@ -1355,19 +1397,23 @@ public class PullActivity extends AppCompatActivity {
                                 if (vaccinationDao != null) {
                                     File unzippedFile = new File(getExternalCacheDir() + File.separator + "vaccination.csv");
                                     CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("individual_uuid").addColumn("bcg").addColumn("dob").addColumn("dpt_hepb_hib1")
-                                            .addColumn("dpt_hepb_hib2").addColumn("dpt_hepb_hib3").addColumn("fw_uuid").addColumn("insertDate")
-                                            .addColumn("ipv").addColumn("itn").addColumn("location_uuid").addColumn("measles_rubella1").addColumn("measles_rubella2")
-                                            .addColumn("menA").addColumn("opv0").addColumn("opv1").addColumn("opv2").addColumn("opv3")
-                                            .addColumn("pneumo1").addColumn("pneumo2").addColumn("pneumo3").addColumn("rota1")
-                                            .addColumn("rota2").addColumn("rota3").addColumn("rtss18").addColumn("rtss6").addColumn("rtss7").addColumn("rtss9")
-                                            .addColumn("socialgroup_uuid").addColumn("uuid").addColumn("vitaminA12").addColumn("vitaminA18")
+                                    CsvSchema schema = CsvSchema.builder().addColumn("individual_uuid").addColumn("admission")
+                                            .addColumn("bcg").addColumn("dob").addColumn("dpt_hepb_hib1").addColumn("dpt_hepb_hib2")
+                                            .addColumn("dpt_hepb_hib3").addColumn("fw_uuid").addColumn("hcard").addColumn("hl").addColumn("hod")
+                                            .addColumn("hom").addColumn("insertDate").addColumn("ipv").addColumn("itn").addColumn("location_uuid")
+                                            .addColumn("measles_rubella1").addColumn("measles_rubella2").addColumn("menA").addColumn("nhis")
+                                            .addColumn("onet").addColumn("opv0").addColumn("opv1").addColumn("opv2").addColumn("opv3")
+                                            .addColumn("pneumo1").addColumn("pneumo2").addColumn("pneumo3").addColumn("rea").addColumn("rea_oth")
+                                            .addColumn("reason").addColumn("reason_oth")
+                                            .addColumn("rota1").addColumn("rota2").addColumn("rota3").addColumn("rtss18").addColumn("rtss6")
+                                            .addColumn("rtss7").addColumn("rtss9").addColumn("sbf").addColumn("socialgroup_uuid").addColumn("stm")
+                                            .addColumn("sty").addColumn("uuid").addColumn("vitaminA12").addColumn("vitaminA18")
                                             .addColumn("vitaminA6").addColumn("yellow_fever").build();
-                                    MappingIterator<Vaccination> iterator = mapper.readerFor(Demographic.class).with(schema).readValues(unzippedFile);
+                                    MappingIterator<Vaccination> iterator = mapper.readerFor(Vaccination.class).with(schema).readValues(unzippedFile);
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 10000;
+                                        int batchSize = 50000;
                                         List<Vaccination> vaccinations = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -1391,8 +1437,14 @@ public class PullActivity extends AppCompatActivity {
                                             vaccinationDao.insert(vaccinations);
                                         }
                                         progress.dismiss();
-                                        textView_SyncVac.setText("Total Vaccination Saved: " + counts);
-                                        textView_SyncVac.setTextColor(Color.GREEN);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                textView_SyncVac.setText("Total Vaccination Saved: " + counts);
+                                                textView_SyncVac.setTextColor(Color.GREEN);
+                                            }
+                                        });
+
                                     });
                                 }
 
@@ -1420,8 +1472,8 @@ public class PullActivity extends AppCompatActivity {
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         // Show error message
                         progress.dismiss();
-                        textView_SyncDemography.setText("Demography Download Error! Retry or Contact Administrator");
-                        textView_SyncDemography.setTextColor(Color.RED);
+                        textView_SyncVac.setText("Vaccination Download Error! Retry or Contact Administrator");
+                        textView_SyncVac.setTextColor(Color.RED);
                     }
 
 

@@ -39,6 +39,10 @@ public class DeathViewModel extends AndroidViewModel {
         return deathRepository.retrieveVpmSync();
     }
 
+    public List<Death> error() throws ExecutionException, InterruptedException {
+        return deathRepository.error();
+    }
+
     public long count(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
         return deathRepository.count(startDate, endDate, username);
     }

@@ -68,6 +68,10 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.retrieveByFather(id);
     }
 
+    public List<Individual> retrieveDup(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.retrieveDup(id);
+    }
+
     public List<Individual> retrieveHOH(String id) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveHOH(id);
     }

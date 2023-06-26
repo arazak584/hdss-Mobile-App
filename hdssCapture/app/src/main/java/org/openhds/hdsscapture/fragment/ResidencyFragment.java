@@ -260,6 +260,8 @@ public class ResidencyFragment extends Fragment {
                 dataRes.complete = 1;
                 dataRes.dobs = individual.dob;
                 dataRes.age = individual.getAge();
+                dataRes.startType = 1;
+                binding.starttype.setEnabled(false);
 
                 if (dataRes!=null){
                     dataRes.img=1;
@@ -269,11 +271,6 @@ public class ResidencyFragment extends Fragment {
                 binding.getResidency().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                 binding.residencyImg.setEnabled(false);
 
-                // Check for error condition
-                int selectedStartType = binding.starttype.getSelectedItemPosition();
-                if (selectedStartType == 1) {
-                    throw new Exception("Error: StartType 1 selected when dataRes is null");
-                }
 
             }
         } catch (ExecutionException | InterruptedException e) {
@@ -446,25 +443,6 @@ public class ResidencyFragment extends Fragment {
                 return;
             }
 
-            boolean end = false;
-            boolean age = false;
-
-            if (binding.starttype.getSelectedItemPosition() == 1 && binding.residencyImg.getSelectedItemPosition() == 1) {
-                end = true;
-                Toast.makeText(getActivity(), "Enumeration Cannot be Selected", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (!binding.indAge.getText().toString().trim().isEmpty() && binding.starttype.getSelectedItemPosition() == 3) {
-                int individidAge = Integer.parseInt(binding.indAge.getText().toString().trim());
-                if (individidAge > 5) {
-                    age = true;
-                    Toast.makeText(getActivity(), "Too Old To Be Registered Through Birth", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-
-
 
             //Date Validations
 
@@ -482,23 +460,6 @@ public class ResidencyFragment extends Fragment {
                     // clear error if validation passes
                     binding.editTextStartDate.setError(null);
                 }
-            } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
-
-
-            try {
-                if (!binding.currentdob.getText().toString().trim().equals(binding.editTextStartDate.getText().toString().trim())
-                        && binding.starttype.getSelectedItemPosition() == 3) {
-                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date date = f.parse(binding.currentdob.getText().toString().trim());
-                    String dob = f.format(date);
-                    binding.dth.dthDeathDate.setError("Start Date Should be Equal to Date of Birth " + dob);
-                    Toast.makeText(getActivity(), "Start Date Should be Equal to Date of Birth " + dob, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
             } catch (ParseException e) {
                 Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
@@ -659,6 +620,10 @@ public class ResidencyFragment extends Fragment {
                 return;
             }
 
+            if(finalData.endType==2 || finalData.endType==3){
+                finalData.complete=1;
+            }
+
             viewModel.add(finalData);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
@@ -698,10 +663,14 @@ public class ResidencyFragment extends Fragment {
 
 
         }
-        if (save) {
+        if (save && binding.getResidency().endType==1) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
-        }else {
+        }else if (save && binding.getResidency().endType==2 || binding.getResidency().endType==3){
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    HouseMembersFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+        }
+        else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     IndividualFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
         }

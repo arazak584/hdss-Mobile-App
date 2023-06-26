@@ -5,6 +5,7 @@ import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.CodeBook;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Hierarchy;
@@ -124,6 +125,9 @@ public interface ApiDao {
 
     @POST("/api/vaccination")
     Call<DataWrapper<Vaccination>> sendVaccination(@Body DataWrapper<Vaccination> dataModal);
+
+    @POST("/api/duplicate")
+    Call<DataWrapper<Duplicate>> sendDup(@Body DataWrapper<Duplicate> dataModal);
 
 
 }

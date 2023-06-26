@@ -270,13 +270,11 @@
                     android:padding="10dp"/>
 
                 <TextView
-                    goneUnless="@{relationship.aIsToB==2}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/tnbch" />
 
                 <EditText
-                    goneUnless="@{relationship.aIsToB==2}"
                     android:id="@+id/tnbch"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -285,13 +283,11 @@
                     android:text="@={relationship.tnbch}" />
 
                 <TextView
-                    goneUnless="@{relationship.aIsToB==2}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/nchdm" />
 
                 <EditText
-                    goneUnless="@{relationship.aIsToB==2}"
                     android:id="@+id/nchdm"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"

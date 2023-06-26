@@ -70,7 +70,7 @@ public class Visit extends BaseObservable {
     public Visit(){}
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @NotNull
     public String getExtId() {

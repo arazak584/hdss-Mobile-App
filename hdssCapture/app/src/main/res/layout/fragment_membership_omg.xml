@@ -196,7 +196,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@={outmigration.reason_oth}"
-                android:inputType="number"/>
+                android:inputType="textCapCharacters"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

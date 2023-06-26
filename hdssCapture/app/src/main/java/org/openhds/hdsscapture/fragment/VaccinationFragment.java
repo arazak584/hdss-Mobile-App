@@ -30,6 +30,7 @@ import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -868,6 +869,14 @@ public class VaccinationFragment extends Fragment {
 
         //Codebook
         loadCodeData(binding.vacComplete, "submit");
+        loadCodeData(binding.sbf, "complete");
+        loadCodeData(binding.nhis, "nhis");
+        loadCodeData(binding.hl, "HL");
+        loadCodeData(binding.rea, "rea");
+        loadCodeData(binding.onet, "onet");
+        loadCodeData(binding.hcard, "HC");
+        loadCodeData(binding.reason, "reavac");
+        loadCodeData(binding.admission, "complete");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
@@ -890,6 +899,321 @@ public class VaccinationFragment extends Fragment {
         if (save) {
             Vaccination finalData = binding.getVaccination();
 
+            try {
+                if (!binding.opv0.getText().toString().trim().isEmpty() && !binding.opv1.getText().toString().trim().isEmpty() ||
+                        !binding.opv2.getText().toString().trim().isEmpty() || !binding.opv3.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date opv0 = f.parse(binding.opv0.getText().toString().trim());
+                    Date opv1 = f.parse(binding.opv1.getText().toString().trim());
+                    Date opv2 = f.parse(binding.opv2.getText().toString().trim());
+                    Date opv3 = f.parse(binding.opv3.getText().toString().trim());
+                    if (opv0.after(currentDate)) {
+                        binding.opv0.setError("Date Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (opv1.before(opv0)) {
+                        binding.opv1.setError("OPV1 Date Cannot Be Less than OPV0 Date");
+                        Toast.makeText(getActivity(), "OPV1 Date Cannot Be Less than OPV0 Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (opv2.before(opv1)) {
+                        binding.opv2.setError("OPV2 Date Cannot Be Less than OPV1 Date");
+                        Toast.makeText(getActivity(), "OPV2 Date Cannot Be Less than OPV1 Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (opv3.before(opv3)) {
+                        binding.opv3.setError("OPV3 Date Cannot Be Less than OPV2 Date");
+                        Toast.makeText(getActivity(), "OPV3 Date Cannot Be Less than OPV2 Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // clear error if validation passes
+                    binding.opv1.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+            try {
+                if (!binding.DPTHepBHib1.getText().toString().trim().isEmpty() && !binding.DPTHepBHib2.getText().toString().trim().isEmpty() ||
+                        !binding.DPTHepBHib3.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date DPTHepBHib1 = f.parse(binding.DPTHepBHib1.getText().toString().trim());
+                    Date DPTHepBHib2 = f.parse(binding.DPTHepBHib2.getText().toString().trim());
+                    Date DPTHepBHib3 = f.parse(binding.DPTHepBHib3.getText().toString().trim());
+                    if (DPTHepBHib1.after(currentDate)) {
+                        binding.DPTHepBHib1.setError("Date Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (DPTHepBHib2.before(DPTHepBHib1)) {
+                        binding.DPTHepBHib2.setError("Date Cannot Be Less than Previous Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (DPTHepBHib3.before(DPTHepBHib2)) {
+                        binding.DPTHepBHib3.setError("Date Cannot Be Less than Previous Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // clear error if validation passes
+                    binding.DPTHepBHib1.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+
+            try {
+                if (!binding.pneumo1.getText().toString().trim().isEmpty() && !binding.pneumo2.getText().toString().trim().isEmpty() ||
+                        !binding.pneumo3.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date pneumo1 = f.parse(binding.pneumo1.getText().toString().trim());
+                    Date pneumo2 = f.parse(binding.pneumo2.getText().toString().trim());
+                    Date pneumo3 = f.parse(binding.pneumo3.getText().toString().trim());
+                    if (pneumo1.after(currentDate)) {
+                        binding.pneumo1.setError("Date Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (pneumo2.before(pneumo1)) {
+                        binding.pneumo2.setError("Date Cannot Be Less than Previous Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (pneumo3.before(pneumo2)) {
+                        binding.pneumo3.setError("Date Cannot Be Less than Previous Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // clear error if validation passes
+                    binding.pneumo1.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+            try {
+                if (!binding.rota1.getText().toString().trim().isEmpty() && !binding.rota2.getText().toString().trim().isEmpty() ||
+                        !binding.rota3.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date rota1 = f.parse(binding.rota1.getText().toString().trim());
+                    Date rota2 = f.parse(binding.rota2.getText().toString().trim());
+                    Date rota3 = f.parse(binding.rota3.getText().toString().trim());
+                    if (rota1.after(currentDate)) {
+                        binding.rota1.setError("Date Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (rota2.before(rota1)) {
+                        binding.rota2.setError("Date Cannot Be Less than Previous Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (rota3.before(rota2)) {
+                        binding.rota3.setError("Date Cannot Be Less than Previous Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // clear error if validation passes
+                    binding.rota1.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+
+            try {
+                if (!binding.ipv.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date ipv = f.parse(binding.ipv.getText().toString().trim());
+                    if (ipv.after(currentDate)) {
+                        binding.ipv.setError("Date Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // clear error if validation passes
+                    binding.ipv.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+            try {
+                if (!binding.vitaminA6.getText().toString().trim().isEmpty() && !binding.vitaminA12.getText().toString().trim().isEmpty() ||
+                        !binding.vitaminA18.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date vita1 = f.parse(binding.vitaminA6.getText().toString().trim());
+                    Date vita2 = f.parse(binding.vitaminA12.getText().toString().trim());
+                    Date vita3 = f.parse(binding.vitaminA18.getText().toString().trim());
+                    if (vita1.after(currentDate)) {
+                        binding.vitaminA6.setError("Date Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (vita2.before(vita1)) {
+                        binding.vitaminA12.setError("Date Cannot Be Less than Previous Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (vita3.before(vita2)) {
+                        binding.vitaminA18.setError("Date Cannot Be Less than Previous Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // clear error if validation passes
+                    binding.vitaminA6.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+
+            try {
+                if (!binding.rtss6.getText().toString().trim().isEmpty() && !binding.rtss6.getText().toString().trim().isEmpty() ||
+                        !binding.rtss9.getText().toString().trim().isEmpty() || !binding.rtss18.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date rtss1 = f.parse(binding.rtss6.getText().toString().trim());
+                    Date rtss2 = f.parse(binding.rtss7.getText().toString().trim());
+                    Date rtss3 = f.parse(binding.rtss9.getText().toString().trim());
+                    Date rtss4 = f.parse(binding.rtss18.getText().toString().trim());
+                    if (rtss1.after(currentDate)) {
+                        binding.rtss6.setError("Date Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (rtss2.before(rtss1)) {
+                        binding.rtss6.setError("Date Cannot Be Less than Previous Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (rtss3.before(rtss2)) {
+                        binding.rtss9.setError("Date Cannot Be Less than Previous Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (rtss4.before(rtss3)) {
+                        binding.rtss18.setError("Date Cannot Be Less than Previous Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // clear error if validation passes
+                    binding.rtss6.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+            try {
+                if (!binding.measles1.getText().toString().trim().isEmpty() && !binding.measles2.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date measles1 = f.parse(binding.measles1.getText().toString().trim());
+                    Date measles2 = f.parse(binding.measles2.getText().toString().trim());
+                    if (measles1.after(currentDate)) {
+                        binding.measles1.setError("Date Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (measles2.before(measles1)) {
+                        binding.measles2.setError("Date Cannot Be Less than Previous Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // clear error if validation passes
+                    binding.measles1.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+            try {
+                if (!binding.yellowFever.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date yf = f.parse(binding.yellowFever.getText().toString().trim());
+                    if (yf.after(currentDate)) {
+                        binding.yellowFever.setError("Date Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // clear error if validation passes
+                    binding.yellowFever.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+            try {
+                if (!binding.menA.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date men = f.parse(binding.menA.getText().toString().trim());
+                    if (men.after(currentDate)) {
+                        binding.menA.setError("Date Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // clear error if validation passes
+                    binding.menA.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+            try {
+                if (!binding.itn.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date itn = f.parse(binding.itn.getText().toString().trim());
+                    if (itn.after(currentDate)) {
+                        binding.itn.setError("Date Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // clear error if validation passes
+                    binding.itn.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.VACLAYOUT, validateOnComplete, false);

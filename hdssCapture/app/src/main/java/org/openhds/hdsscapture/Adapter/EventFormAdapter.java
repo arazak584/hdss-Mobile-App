@@ -8,6 +8,7 @@ import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS12;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS13;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS14;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS15;
+import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS16;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS3;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS4;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS7;
@@ -40,6 +41,7 @@ import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.fragment.AmendmentFragment;
 import org.openhds.hdsscapture.fragment.DemographicFragment;
+import org.openhds.hdsscapture.fragment.DupFragment;
 import org.openhds.hdsscapture.fragment.EventsFragment;
 import org.openhds.hdsscapture.fragment.PregnancyExtraFragment;
 import org.openhds.hdsscapture.fragment.PregnancyFragment;
@@ -205,6 +207,14 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
 
                 activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                         VaccinationFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
+
+                break;
+            }
+
+            case EVENT_HDSS16: {
+
+                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                        DupFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
 
                 break;
             }

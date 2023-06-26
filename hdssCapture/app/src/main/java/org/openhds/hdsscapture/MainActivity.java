@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.openhds.hdsscapture.Activity.ErrorActivity;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.Activity.PullActivity;
 import org.openhds.hdsscapture.Activity.PushActivity;
@@ -52,6 +53,12 @@ public class MainActivity extends AppCompatActivity {
         final Button control = findViewById(R.id.btnreport);
         control.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(), ReportActivity.class);
+            startActivity(i);
+        });
+
+        final Button query = findViewById(R.id.btnquerry);
+        query.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), ErrorActivity.class);
             startActivity(i);
         });
 

@@ -263,6 +263,20 @@
             android:layout_height="wrap_content"
             android:textSize="20sp" />
 
+        <Button
+            android:id="@+id/buttonSendDup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/send_duplicate"
+            android:backgroundTint="@color/DarkSlateGray"
+            app:icon="@drawable/push"/>
+
+        <TextView
+            android:id="@+id/textViewSendDup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+
 
     </LinearLayout>
 </ScrollView>

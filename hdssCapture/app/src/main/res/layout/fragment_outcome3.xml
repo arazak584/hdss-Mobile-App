@@ -104,16 +104,9 @@
             android:textColor="#000301"
             android:padding="15dp"/>
 
-        <Button
-            goneUnless="@{pregoutcome3.type==1}"
-            android:id="@+id/button_out3_uuid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/black"
-            android:textColor="@color/white"
-            android:text="@string/select_child" />
 
         <com.google.android.material.textfield.TextInputLayout
+            android:visibility="gone"
             goneUnless="@{pregoutcome3.type==1}"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
@@ -140,18 +133,118 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:hint="@string/actual_dob">
-            android:text="@string/actual_dob">
+            android:inputType="text"
+            android:hint="@string/ind_extid">
+            android:text="@string/ind_extid">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/out3_child_dob"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@={pregoutcome3.dob}"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
+                android:id="@+id/individual1_extid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={pregoutcome3.extId}"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:visibility="gone"
+            goneUnless="@{pregoutcome3.type==1}"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:hint="@string/motherid">
+            android:text="@string/motherid">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/individual1_mother"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={pregoutcome3.mother_uuid}"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:inputType="textPersonName|textCapCharacters"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            goneUnless="@{pregoutcome3.type==1}"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:hint="@string/firstname">
+            android:text="@string/firstname">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/individual1_firstName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={pregoutcome3.firstName}"
+                android:required="true"
+                android:inputType="textPersonName|textCapCharacters"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            goneUnless="@{pregoutcome3.type==1}"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:hint="@string/lastname"
+            android:text="@string/lastname">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/individual1_lastName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={pregoutcome3.lastName}"
+                android:required="true"
+                android:inputType="textPersonName|textCapCharacters"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            goneUnless="@{pregoutcome3.type==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="@string/gender"/>
+
+        <Spinner
+            goneUnless="@{pregoutcome3.type==1}"
+            android:id="@+id/gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onItemSelected="@{pregoutcome3::setGenders}"
+            selection="@{pregoutcome3.gender}"
+            android:gravity="left"
+            android:textColor="#000301"
+            android:required="true"
+            android:padding="10dp"/>
+
+        <TextView
+            goneUnless="@{pregoutcome3.type==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:text="@string/rltn_head"/>
+
+        <Spinner
+            goneUnless="@{pregoutcome3.type==1}"
+            android:id="@+id/rltn_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            selection="@{pregoutcome3.rltn_head}"
+            android:onItemSelected="@{pregoutcome3::setRltn_head}"
+            android:textColor="#000301"
+            android:padding="10dp"/>
 
     </LinearLayout>
 

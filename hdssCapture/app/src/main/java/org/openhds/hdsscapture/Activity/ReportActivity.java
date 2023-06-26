@@ -31,7 +31,9 @@ import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
+import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
+import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 
 import java.text.ParseException;
@@ -59,6 +61,8 @@ public class ReportActivity extends AppCompatActivity {
     private RelationshipViewModel relationshipViewModel;
     private ListingViewModel listingViewModel;
     private AmendmentViewModel amendmentViewModel;
+    private VaccinationViewModel vaccinationViewModel;
+    private ResidencyViewModel residencyViewModel;
     private ReportAdapter reportAdapter;
 
     private EditText startDateEditText, endDateEditText, usernameEditText;
@@ -137,6 +141,8 @@ public class ReportActivity extends AppCompatActivity {
         relationshipViewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
         listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
         amendmentViewModel = new ViewModelProvider(this).get(AmendmentViewModel.class);
+        vaccinationViewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
+        residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
 
         Button generateReportButton = findViewById(R.id.bt_report);
         generateReportButton.setOnClickListener(new View.OnClickListener() {
@@ -150,7 +156,7 @@ public class ReportActivity extends AppCompatActivity {
                     public void run() {
                         progressDialog.dismiss();
                     }
-                }, 500);
+                }, 10);
                 report();
             }
         });
@@ -188,11 +194,11 @@ public class ReportActivity extends AppCompatActivity {
             individualCounter.index = 0;
             list.add(0, individualCounter);
 
-            ReportCounter relationshipCounter = new ReportCounter();
-            relationshipCounter.name = "Relationship";
-            relationshipCounter.count = relationshipViewModel.count(startDate, endDate, username);
-            relationshipCounter.index = 1;
-            list.add(1, relationshipCounter);
+            ReportCounter memCounter = new ReportCounter();
+            memCounter.name = "Membership";
+            memCounter.count = residencyViewModel.count(startDate, endDate, username);
+            memCounter.index = 1;
+            list.add(1, memCounter);
 
             ReportCounter visitCounter = new ReportCounter();
             visitCounter.name = "Household Visit";
@@ -282,6 +288,18 @@ public class ReportActivity extends AppCompatActivity {
             amendCounter.count = amendmentViewModel.count(startDate, endDate, username);
             amendCounter.index = 14;
             list.add(14, amendCounter);
+
+            ReportCounter relationshipCounter = new ReportCounter();
+            relationshipCounter.name = "Relationship";
+            relationshipCounter.count = relationshipViewModel.count(startDate, endDate, username);
+            relationshipCounter.index = 15;
+            list.add(15, relationshipCounter);
+
+            ReportCounter vacCounter = new ReportCounter();
+            vacCounter.name = "Vaccination";
+            vacCounter.count = vaccinationViewModel.count(startDate, endDate, username);
+            vacCounter.index = 16;
+            list.add(16, vacCounter);
 
 
             reportAdapter = new ReportAdapter(this);

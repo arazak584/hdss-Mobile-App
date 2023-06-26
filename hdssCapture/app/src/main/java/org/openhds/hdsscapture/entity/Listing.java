@@ -89,7 +89,7 @@ public class Listing extends BaseObservable {
 
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
     @Bindable
     public String getInsertDate() {

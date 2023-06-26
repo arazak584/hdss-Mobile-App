@@ -74,15 +74,6 @@ public class Socialgroup extends BaseObservable implements Parcelable {
 
     public Socialgroup(){}
 
-    @Ignore
-    public Socialgroup(@NotNull String extId, String groupName, String individual_uuid, Date insertDate, String fw_uuid, Integer groupType) {
-        this.extId = extId;
-        this.groupName = groupName;
-        this.individual_uuid = individual_uuid;
-        this.insertDate = insertDate;
-        this.fw_uuid = fw_uuid;
-        this.groupType = groupType;
-    }
 
     @NotNull
     public String getUuid() {
@@ -118,7 +109,7 @@ public class Socialgroup extends BaseObservable implements Parcelable {
     }
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
     @Bindable
     public String getInsertDate() {

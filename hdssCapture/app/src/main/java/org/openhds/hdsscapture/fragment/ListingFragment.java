@@ -113,6 +113,9 @@ public class ListingFragment extends Fragment {
         final Intent intent = getActivity().getIntent();
         final Hierarchy level5Data = intent.getParcelableExtra(HierarchyActivity.LEVEL5_DATA);
 
+        final Intent j = getActivity().getIntent();
+        final Hierarchy level6Data = j.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
+
         ListingViewModel viewModel = new ViewModelProvider(this).get(ListingViewModel.class);
         try {
             Listing data = viewModel.find(locations.compno);
@@ -129,7 +132,7 @@ public class ListingFragment extends Fragment {
                 data.compextId = locations.getCompextId();
                 data.compno = locations.getCompno();
                 data.status = locations.getStatus();
-                data.village = level5Data.getName();
+                data.village = level6Data.getName();
                 data.fw_name = fieldworkerData.getFirstName() + ' ' + fieldworkerData.lastName ;
                 data.locationName = locations.locationName;
                 data.location_uuid = locations.uuid;

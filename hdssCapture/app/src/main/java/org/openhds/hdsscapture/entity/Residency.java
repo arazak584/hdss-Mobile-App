@@ -88,7 +88,7 @@ public class Residency extends BaseObservable implements Parcelable {
 
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @NotNull
     public String getUuid() {
@@ -343,6 +343,9 @@ public class Residency extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);
+        }
+        if(endType != null && endType==1){
+            this.endDate=null;
         }
 
     }

@@ -83,7 +83,7 @@ public class Amendment extends BaseObservable {
     public Amendment(){}
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @Bindable
     @NotNull
@@ -133,6 +133,7 @@ public class Amendment extends BaseObservable {
             System.out.println("Date Error " + e.getMessage());
         }
     }
+
 
     public String getUuid() {
         return uuid;

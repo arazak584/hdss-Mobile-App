@@ -3,7 +3,6 @@ package org.openhds.hdsscapture.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -98,48 +97,48 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ViewHolder> 
         holder.fname.setText(individual.getFirstName());
         holder.lname.setText(individual.getLastName());
 
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get the text field in the IndividualFragment where you want to insert the mother's ID
-                EditText childIdField = null;
-                EditText childIdDOB = null;
-                switch (holder.fieldToUpdate) {
-                    case 1:
-                        childIdField = activity.requireActivity().findViewById(R.id.out1_child_extid);
-                        childIdDOB = activity.requireActivity().findViewById(R.id.out1_child_dob);
-                        break;
-                    case 2:
-                        childIdField = activity.requireActivity().findViewById(R.id.out2_child_extid);
-                        childIdDOB = activity.requireActivity().findViewById(R.id.out2_child_dob);
-                        break;
-                    case 3:
-                        childIdField = activity.requireActivity().findViewById(R.id.out3_child_extid);
-                        childIdDOB = activity.requireActivity().findViewById(R.id.out3_child_dob);
-                        break;
-                    case 4:
-                        childIdField = activity.requireActivity().findViewById(R.id.out4_child_extid);
-                        childIdDOB = activity.requireActivity().findViewById(R.id.out4_child_dob);
-                        break;
-                }
-
-                // Set the mother's ID in the text field
-                childIdField.setText(individual.getUuid());
-                childIdDOB.setText(individual.getDob());
-
-                // Increment the flag to update the next field on the next click
-                int nextFieldToUpdate = holder.fieldToUpdate + 1;
-
-                // Reset the flag to 1 if it exceeds 4
-                if (nextFieldToUpdate > 4) {
-                    nextFieldToUpdate = 1;
-                }
-
-                holder.fieldToUpdate = nextFieldToUpdate;
-
-                activity.dismiss();
-            }
-        });
+//        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Get the text field in the IndividualFragment where you want to insert the mother's ID
+//                EditText childIdField = null;
+//                EditText childIdDOB = null;
+//                switch (holder.fieldToUpdate) {
+//                    case 1:
+//                        childIdField = activity.requireActivity().findViewById(R.id.out1_child_extid);
+//                        childIdDOB = activity.requireActivity().findViewById(R.id.out1_child_dob);
+//                        break;
+//                    case 2:
+//                        childIdField = activity.requireActivity().findViewById(R.id.out2_child_extid);
+//                        childIdDOB = activity.requireActivity().findViewById(R.id.out2_child_dob);
+//                        break;
+//                    case 3:
+//                        childIdField = activity.requireActivity().findViewById(R.id.out3_child_extid);
+//                        childIdDOB = activity.requireActivity().findViewById(R.id.out3_child_dob);
+//                        break;
+//                    case 4:
+//                        childIdField = activity.requireActivity().findViewById(R.id.out4_child_extid);
+//                        childIdDOB = activity.requireActivity().findViewById(R.id.out4_child_dob);
+//                        break;
+//                }
+//
+//                // Set the mother's ID in the text field
+//                childIdField.setText(individual.getUuid());
+//                childIdDOB.setText(individual.getDob());
+//
+//                // Increment the flag to update the next field on the next click
+//                int nextFieldToUpdate = holder.fieldToUpdate + 1;
+//
+//                // Reset the flag to 1 if it exceeds 4
+//                if (nextFieldToUpdate > 4) {
+//                    nextFieldToUpdate = 1;
+//                }
+//
+//                holder.fieldToUpdate = nextFieldToUpdate;
+//
+//                activity.dismiss();
+//            }
+//        });
 
     }
 

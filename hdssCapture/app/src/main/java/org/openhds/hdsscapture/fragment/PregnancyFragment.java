@@ -171,6 +171,7 @@ public class PregnancyFragment extends Fragment {
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
         PregnancyViewModel viewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
+        PregnancyViewModel pviewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         try {
             Pregnancy data = viewModel.find(individual.uuid);
             if (data != null) {
@@ -191,6 +192,17 @@ public class PregnancyFragment extends Fragment {
 
                 binding.setPregnancy(data);
                 binding.getPregnancy().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Pregnancy datas = pviewModel.lastpreg(individual.uuid);
+            if (datas != null) {
+                binding.setPreg(datas);
+            }else{
+                binding.lastPreg.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -278,6 +290,25 @@ public class PregnancyFragment extends Fragment {
                     }
                     // clear error if validation passes
                     binding.editTextOutcomeDate.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+            try {
+                if (!binding.lastPreg.getText().toString().trim().isEmpty() && !binding.editTextRecordedDate.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date stdate = f.parse(binding.lastPreg.getText().toString().trim());
+                    Date edate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
+                    String formattedDate = f.format(stdate);
+                    if (edate.before(stdate)) {
+                        binding.editTextRecordedDate.setError("Pregnancy with a later Date exist " + formattedDate);
+                        Toast.makeText(getActivity(), "Pregnancy with a later Date exist " + formattedDate, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.editTextRecordedDate.setError(null);
                 }
             } catch (ParseException e) {
                 Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();

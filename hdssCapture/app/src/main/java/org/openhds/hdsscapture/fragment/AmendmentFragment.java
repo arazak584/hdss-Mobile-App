@@ -20,6 +20,7 @@ import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.databinding.FragmentAmendmentBinding;
 import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.Fieldworker;
@@ -32,6 +33,7 @@ import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -132,6 +134,7 @@ public class AmendmentFragment extends Fragment {
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
         AmendmentViewModel viewModel = new ViewModelProvider(this).get(AmendmentViewModel.class);
+        ResidencyViewModel resViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         try {
             Amendment data = viewModel.find(individual.uuid);
             if (data != null) {
@@ -174,6 +177,16 @@ public class AmendmentFragment extends Fragment {
             e.printStackTrace();
         }
 
+        try {
+            Residency datas = resViewModel.amend(individual.uuid);
+            if (datas != null) {
+                binding.setRes(datas);
+
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
         //Codebook
         loadCodeData(binding.amendComplete, "submit");
         loadCodeData(binding.amendGender, "gender");
@@ -199,6 +212,24 @@ public class AmendmentFragment extends Fragment {
 
         if (save) {
             Amendment finalData = binding.getAmendment();
+
+            try {
+                if (!binding.replDob.getText().toString().trim().isEmpty() && !binding.startDate.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date stdate = f.parse(binding.startDate.getText().toString().trim());
+                    Date dob = f.parse(binding.replDob.getText().toString().trim());
+                    if (dob.after(stdate)) {
+                        binding.replDob.setError("Date of Birth Cannot Be Greater than Start Date");
+                        Toast.makeText(getActivity(), "Date of Birth Cannot Be Greater than Start Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.replDob.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
 
             IndividualAmendment amend = new IndividualAmendment();
             amend.uuid = finalData.individual_uuid;

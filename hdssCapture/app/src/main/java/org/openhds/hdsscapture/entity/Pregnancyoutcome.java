@@ -124,7 +124,7 @@ public class Pregnancyoutcome extends BaseObservable {
 
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @NotNull
     public String getUuid() {
@@ -429,7 +429,7 @@ public class Pregnancyoutcome extends BaseObservable {
 
 
     //SPINNERS ENTITY
-    public void setBirthplace (AdapterView<?> parent, View view, int position, long id) {
+    public void setB_place (AdapterView<?> parent, View view, int position, long id) {
 
         if (position != parent.getSelectedItemPosition()) {
             parent.setSelection(position);
@@ -442,6 +442,9 @@ public class Pregnancyoutcome extends BaseObservable {
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);
+        }
+        if(b_place == null || b_place!=4 || b_place!=5 || b_place!=6){
+            this.not_del=null;
         }
 
     }
@@ -476,8 +479,8 @@ public class Pregnancyoutcome extends BaseObservable {
             not_del = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -494,8 +497,8 @@ public class Pregnancyoutcome extends BaseObservable {
             ass_del = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -529,8 +532,8 @@ public class Pregnancyoutcome extends BaseObservable {
             first_nb = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -564,8 +567,8 @@ public class Pregnancyoutcome extends BaseObservable {
             rec_anc = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -599,8 +602,8 @@ public class Pregnancyoutcome extends BaseObservable {
             where_anc = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -619,8 +622,8 @@ public class Pregnancyoutcome extends BaseObservable {
             rec_ipt = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -637,8 +640,8 @@ public class Pregnancyoutcome extends BaseObservable {
             chd_weight = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -686,11 +689,8 @@ public class Pregnancyoutcome extends BaseObservable {
             father = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
-        if(father != null && father==2){
-            this.father_uuid=AppConstants.Father;
-        }
+        patternSkipper(view);
 
     }
 
@@ -714,6 +714,54 @@ public class Pregnancyoutcome extends BaseObservable {
     private void patternSkipper(View view) {
 
         if (view != null) {
+
+            if(not_del == null || not_del!=15){
+                setNot_del_other(null);
+            }
+
+            if(ass_del == null || ass_del!=6){
+                setAss_del_other(null);
+            }
+
+            if(how_del == null || how_del!=4){
+                setHow_del_other(null);
+            }
+
+            if(first_nb == null || first_nb!=2){
+                l_birth = 0;
+            }
+
+            if(rec_anc == null || rec_anc!=2){
+                setWhy_no_anc(null);
+            }
+
+            if(rec_anc == null || rec_anc!=1){
+                setWhere_anc(null);
+            }
+
+            if(where_anc == null || where_anc!=6){
+                setWhere_anc_Other(null);
+            }
+
+            if(rec_anc == null || rec_anc!=1){
+                setWho_anc(null);
+                setMonth_pg(null);
+                setNum_anc(null);
+                setRec_ipt(null);
+            }
+
+            if(rec_ipt == null || rec_ipt!=1){
+                setFirst_rec(null);
+                setMany_ipt(null);
+            }
+
+            if(chd_weight == null || chd_weight!=1){
+                setWeig_hcard(null);
+            }
+
+            if(father != null && father==2){
+                this.father_uuid=AppConstants.Father;
+            }
 
             notifyPropertyChanged(BR._all);
         }

@@ -21,6 +21,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
+import org.openhds.hdsscapture.Viewmodel.DuplicateViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
@@ -38,6 +39,7 @@ import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
@@ -799,6 +801,7 @@ public class PushActivity extends AppCompatActivity {
                                             ", VPM(" + d24[0].length + " of " + listVpm.size() + ")" +
                                             " sent"
                             );
+                            textViewSendEnd.setTextColor(Color.GREEN);
                         }
                     }
 
@@ -838,6 +841,7 @@ public class PushActivity extends AppCompatActivity {
                                             ", VPM(" + d24[0].length + " of " + listVpm.size() + ")" +
                                             " sent"
                             );
+                            textViewSendEnd.setTextColor(Color.GREEN);
                         }
                     }
 
@@ -1208,7 +1212,7 @@ public class PushActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        buttonSendAmend.setOnClickListener(v -> {
+        buttonSendVac.setOnClickListener(v -> {
             progress.setMessage(getResources().getString(R.string.init_syncing));
             progress.show();
 
@@ -1253,6 +1257,73 @@ public class PushActivity extends AppCompatActivity {
             }
 
         });
+
+        //PUSH Duplicates
+        final Button buttonSendDup = findViewById(R.id.buttonSendDup);
+        final TextView textViewSendDup = findViewById(R.id.textViewSendDup);
+        final DuplicateViewModel duplicateViewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
+
+        //GET MODIFIED DATA
+        final List<Duplicate> duplicateList = new ArrayList<>();
+        try {
+            duplicateList.addAll(duplicateViewModel.findToSync());
+            buttonSendDup.setText("Duplicate (" + duplicateList.size() + ") to send");
+            textViewSendDup.setTextColor(Color.rgb(0, 114, 133));
+            if (duplicateList.isEmpty()) {
+                buttonSendDup.setVisibility(View.GONE);
+                textViewSendDup.setVisibility(View.GONE);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        buttonSendDup.setOnClickListener(v -> {
+            progress.setMessage(getResources().getString(R.string.init_syncing));
+            progress.show();
+
+            //WRAP THE DATA
+            final DataWrapper<Duplicate> data = new DataWrapper<>(duplicateList);
+
+            //SEND THE DATA
+            if (data.getData() != null && !data.getData().isEmpty()) {
+
+                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
+
+
+                final Call<DataWrapper<Duplicate>> c_callable = dao.sendDup(data);
+                c_callable.enqueue(new Callback<DataWrapper<Duplicate>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DataWrapper<Duplicate>> call, Response<DataWrapper<Duplicate>> response) {
+                        if (response != null && response.body() != null && response.isSuccessful()
+                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
+
+                            Duplicate[] d = data.getData().toArray(new Duplicate[0]);
+
+                            for (Duplicate elem : d) {
+                                elem.complete = 0;
+                            }
+                            duplicateViewModel.add(d);
+
+                            progress.dismiss();
+                            textViewSendDup.setText("Sent " + d.length + " Duplicate record(s)");
+                            textViewSendDup.setTextColor(Color.GREEN);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<DataWrapper<Duplicate>> call, @NonNull Throwable t) {
+                        progress.dismiss();
+                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+                });
+            } else {
+                progress.dismiss();
+            }
+
+        });
+
+
 
     }
 

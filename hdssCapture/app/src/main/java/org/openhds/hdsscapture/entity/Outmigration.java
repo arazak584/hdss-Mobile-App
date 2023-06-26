@@ -70,20 +70,9 @@ public class Outmigration extends BaseObservable implements Parcelable {
 
     public Outmigration(){}
 
-    @Ignore
-    public Outmigration(@NotNull String extId, Date insertDate, Integer destination, Integer reason, Date recordedDate, String residency_uuid, String visitid, String fw) {
-        this.individual_uuid = extId;
-        this.insertDate = insertDate;
-        this.destination = destination;
-        this.reason = reason;
-        this.recordedDate = recordedDate;
-        this.residency_uuid = residency_uuid;
-        this.visit_uuid = visit_uuid;
-        this.fw_uuid = fw_uuid;
-    }
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @NotNull
     public String getUuid() {
@@ -274,6 +263,9 @@ public class Outmigration extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);
+        }
+        if(reason != null && reason!=77){
+            this.reason_oth=null;
         }
 
     }

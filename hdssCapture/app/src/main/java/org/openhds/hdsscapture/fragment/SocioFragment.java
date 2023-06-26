@@ -201,6 +201,8 @@ public class SocioFragment extends Fragment {
                     data.complete = 2;
                     Toast.makeText(requireActivity(), R.string.incomplete, Toast.LENGTH_LONG).show();
                     //return;
+                }else {
+                    data.complete = 1;
                 }
 
             data.formcompldate = new Date();

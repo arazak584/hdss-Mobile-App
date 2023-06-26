@@ -36,6 +36,10 @@ public interface DeathDao {
     @Query("SELECT * FROM death WHERE vpmcomplete=1")
     List<Death> retrieveVpmSync();
 
+    @Query("SELECT a.* FROM death as a INNER JOIN socialgroup as b ON a.individual_uuid=b.individual_uuid " +
+            " INNER JOIN residency as c on b.uuid=c.socialgroup_uuid where c.endType=1 GROUP BY a.individual_uuid")
+    List<Death> error();
+
     @Query("SELECT COUNT(*) FROM death a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);

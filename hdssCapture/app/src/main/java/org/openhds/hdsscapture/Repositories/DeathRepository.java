@@ -72,6 +72,15 @@ public class DeathRepository {
         return future.get();
     }
 
+    public List<Death> error() throws ExecutionException, InterruptedException {
+
+        Callable<List<Death>> callable = () -> dao.error();
+
+        Future<List<Death>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public long count(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
         Callable<Long> callable = () -> dao.count(startDate, endDate, username);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);

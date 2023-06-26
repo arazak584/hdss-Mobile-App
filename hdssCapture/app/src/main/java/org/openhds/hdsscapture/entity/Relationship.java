@@ -86,7 +86,7 @@ public class Relationship extends BaseObservable implements Parcelable {
     public Relationship(){}
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @NotNull
     public String getUuid() {
@@ -358,8 +358,8 @@ public class Relationship extends BaseObservable implements Parcelable {
             endType = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -376,8 +376,8 @@ public class Relationship extends BaseObservable implements Parcelable {
             aIsToB = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
     }
 
         //SPINNERS ENTITY
@@ -393,8 +393,8 @@ public class Relationship extends BaseObservable implements Parcelable {
                 mar = kv.codeValue;
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
                 ((TextView) parent.getChildAt(0)).setTextSize(20);
-                notifyPropertyChanged(BR._all);
             }
+            patternSkipper(view);
 
     }
 
@@ -411,8 +411,8 @@ public class Relationship extends BaseObservable implements Parcelable {
                 polygamous = kv.codeValue;
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
                 ((TextView) parent.getChildAt(0)).setTextSize(20);
-                notifyPropertyChanged(BR._all);
             }
+            patternSkipper(view);
 
         }
 
@@ -433,5 +433,26 @@ public class Relationship extends BaseObservable implements Parcelable {
             }
 
         }
+
+    private void patternSkipper(View view) {
+
+        if (view != null) {
+
+            if (aIsToB==null || aIsToB != 2) {
+                setPolygamous(null);
+                setMar(null);
+            }
+
+            if (polygamous==null || polygamous != 1) {
+                setNwive(null);
+                setLcow(null);
+                setMrank(null);
+            }
+
+
+            notifyPropertyChanged(BR._all);
+        }
+
+    }
 
 }

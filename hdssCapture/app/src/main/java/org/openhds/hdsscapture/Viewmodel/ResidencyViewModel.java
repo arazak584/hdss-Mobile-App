@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import org.openhds.hdsscapture.Repositories.ResidencyRepository;
 import org.openhds.hdsscapture.entity.Residency;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -47,7 +48,13 @@ public class ResidencyViewModel extends AndroidViewModel {
         return residencyRepository.fetch(id);
     }
 
+    public Residency amend(String id) throws ExecutionException, InterruptedException {
+        return residencyRepository.amend(id);
+    }
 
+    public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
+        return residencyRepository.count(startDate, endDate, username);
+    }
 
     public void add(Residency data){ residencyRepository.create(data);}
 

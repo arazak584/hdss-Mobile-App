@@ -17,14 +17,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
-import org.openhds.hdsscapture.Dialog.ChildDialogFragment;
 import org.openhds.hdsscapture.Dialog.FatherOutcomeDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
+import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.databinding.FragmentOutcomeBinding;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Fieldworker;
@@ -156,50 +157,50 @@ public class PregnancyoutcomeFragment extends Fragment {
             }
         });
 
-        // Find the button view
-        Button showDialogButton = binding.getRoot().findViewById(R.id.button_out1_uuid);
-        Button showDialogButton1 = binding.getRoot().findViewById(R.id.button_out2_uuid);
-        Button showDialogButton2 = binding.getRoot().findViewById(R.id.button_out3_uuid);
-        Button showDialogButton3 = binding.getRoot().findViewById(R.id.button_out4_uuid);
-
-        // Set a click listener on the button for mother
-        showDialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Show the dialog fragment
-                ChildDialogFragment.newInstance(individual, residency, locations,socialgroup)
-                        .show(getChildFragmentManager(), "ChildDialogFragment");
-            }
-        });
-
-
-        // Set a click listener on the button for mother
-        showDialogButton1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Show the dialog fragment
-                ChildDialogFragment.newInstance(individual, residency, locations,socialgroup)
-                        .show(getChildFragmentManager(), "ChildDialogFragment");
-            }
-        });
-
-        showDialogButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Show the dialog fragment
-                ChildDialogFragment.newInstance(individual, residency, locations,socialgroup)
-                        .show(getChildFragmentManager(), "ChildDialogFragment");
-            }
-        });
-
-        showDialogButton3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Show the dialog fragment
-                ChildDialogFragment.newInstance(individual, residency, locations,socialgroup)
-                        .show(getChildFragmentManager(), "ChildDialogFragment");
-            }
-        });
+//        // Find the button view
+//        Button showDialogButton = binding.getRoot().findViewById(R.id.button_out1_uuid);
+//        Button showDialogButton1 = binding.getRoot().findViewById(R.id.button_out2_uuid);
+//        Button showDialogButton2 = binding.getRoot().findViewById(R.id.button_out3_uuid);
+//        Button showDialogButton3 = binding.getRoot().findViewById(R.id.button_out4_uuid);
+//
+//        // Set a click listener on the button for mother
+//        showDialogButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Show the dialog fragment
+//                ChildDialogFragment.newInstance(individual, residency, locations,socialgroup)
+//                        .show(getChildFragmentManager(), "ChildDialogFragment");
+//            }
+//        });
+//
+//
+//        // Set a click listener on the button for mother
+//        showDialogButton1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Show the dialog fragment
+//                ChildDialogFragment.newInstance(individual, residency, locations,socialgroup)
+//                        .show(getChildFragmentManager(), "ChildDialogFragment");
+//            }
+//        });
+//
+//        showDialogButton2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Show the dialog fragment
+//                ChildDialogFragment.newInstance(individual, residency, locations,socialgroup)
+//                        .show(getChildFragmentManager(), "ChildDialogFragment");
+//            }
+//        });
+//
+//        showDialogButton3.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Show the dialog fragment
+//                ChildDialogFragment.newInstance(individual, residency, locations,socialgroup)
+//                        .show(getChildFragmentManager(), "ChildDialogFragment");
+//            }
+//        });
 
 
         //CHOOSING THE DATE
@@ -260,6 +261,8 @@ public class PregnancyoutcomeFragment extends Fragment {
         PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         OutcomeViewModel outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
         DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+        IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+        ResidencyViewModel residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         try {
             Pregnancyoutcome data = viewModel.find(individual.uuid);
             if (data != null) {
@@ -294,6 +297,18 @@ public class PregnancyoutcomeFragment extends Fragment {
             } else {
                 data = new Outcome();
 
+                //Additions
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+
+                String rs = UUID.randomUUID().toString();
+                String rsi = rs.toString().replaceAll("-", "");
+
+                data.individual_uuid = uuidString;
+                data.childuuid = uuidString;
+                data.mother_uuid = individual.uuid;
+                data.residency_uuid = rsi;
+
                 data.mother_uuid = individual.getUuid();
                 data.child_idx = AppConstants.CHILD1;
 
@@ -306,10 +321,31 @@ public class PregnancyoutcomeFragment extends Fragment {
 
 
                 binding.setPregoutcome1(data);
+                binding.getPregoutcome1().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
+                // Generate ID if extId is null
+                if (binding.getPregoutcome1().extId == null) {
+                    final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
+                    int sequenceNumber = 1;
+                    String id = locations.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
+                    while (true) {
+                        try {
+                            if (!(individualViewModels.findAll(id) != null)) break;
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } // check if ID already exists in ViewModel
+                        sequenceNumber++; // increment sequence number if ID exists
+                        id = locations.compextId + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
+                    }
+                    binding.getPregoutcome1().extId = id; // set the generated ID to the extId property of the Individual object
+                }
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
+
 
         try {
             final String child_id = individual.uuid + AppConstants.CHILD2 + eventForm.event_name_id + roundData.roundNumber;
@@ -318,6 +354,18 @@ public class PregnancyoutcomeFragment extends Fragment {
                 binding.setPregoutcome2(data);
             } else {
                 data = new Outcome();
+
+                //Additions
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+
+                String rs = UUID.randomUUID().toString();
+                String rsi = rs.toString().replaceAll("-", "");
+
+                data.individual_uuid = uuidString;
+                data.childuuid = uuidString;
+                data.mother_uuid = individual.uuid;
+                data.residency_uuid = rsi;
 
                 data.mother_uuid = individual.getUuid();
                 data.child_idx = AppConstants.CHILD2;
@@ -330,6 +378,31 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.preg_uuid = binding.getPregoutcome().uuid;
 
                 binding.setPregoutcome2(data);
+                binding.getPregoutcome2().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
+                // Generate ID if extId is null
+                if (binding.getPregoutcome2().extId == null) {
+                    final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
+                    String pregoutcome1Id = binding.getPregoutcome1().extId;
+                    int sequenceNumber = Integer.parseInt(pregoutcome1Id.substring(pregoutcome1Id.length() - 3));
+                    sequenceNumber += 1; // Increment the sequence number by 2
+
+                    String id = locations.compextId + String.format("%03d", sequenceNumber);
+                    while (true) {
+                        try {
+                            if (!(individualViewModels.findAll(id) != null)) break;
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        sequenceNumber += 1;
+                        id = locations.compextId + String.format("%03d", sequenceNumber);
+                    }
+                    binding.getPregoutcome2().extId = id;
+                }
+
+
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -343,6 +416,18 @@ public class PregnancyoutcomeFragment extends Fragment {
             } else {
                 data = new Outcome();
 
+                //Additions
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+
+                String rs = UUID.randomUUID().toString();
+                String rsi = rs.toString().replaceAll("-", "");
+
+                data.individual_uuid = uuidString;
+                data.childuuid = uuidString;
+                data.mother_uuid = individual.uuid;
+                data.residency_uuid = rsi;
+
                 data.mother_uuid = individual.getUuid();
                 data.child_idx = AppConstants.CHILD3;
 
@@ -353,7 +438,33 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.complete = 1;
                 data.preg_uuid = binding.getPregoutcome().uuid;
 
+
                 binding.setPregoutcome3(data);
+                binding.getPregoutcome3().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
+
+                // Generate ID if extId is null
+                if (binding.getPregoutcome3().extId == null) {
+                    final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
+                    String pregoutcome1Id = binding.getPregoutcome1().extId;
+                    int sequenceNumber = Integer.parseInt(pregoutcome1Id.substring(pregoutcome1Id.length() - 3));
+                    sequenceNumber += 2; // Increment the sequence number by 2
+
+                    String id = locations.compextId + String.format("%03d", sequenceNumber);
+                    while (true) {
+                        try {
+                            if (!(individualViewModels.findAll(id) != null)) break;
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        sequenceNumber += 2;
+                        id = locations.compextId + String.format("%03d", sequenceNumber);
+                    }
+                    binding.getPregoutcome3().extId = id;
+                }
+
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -367,6 +478,18 @@ public class PregnancyoutcomeFragment extends Fragment {
             } else {
                 data = new Outcome();
 
+                //Additions
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+
+                String rs = UUID.randomUUID().toString();
+                String rsi = rs.toString().replaceAll("-", "");
+
+                data.individual_uuid = uuidString;
+                data.childuuid = uuidString;
+                data.mother_uuid = individual.uuid;
+                data.residency_uuid = rsi;
+
                 data.mother_uuid = individual.getUuid();
                 data.child_idx = AppConstants.CHILD4;
 
@@ -379,6 +502,30 @@ public class PregnancyoutcomeFragment extends Fragment {
 
 
                 binding.setPregoutcome4(data);
+                binding.getPregoutcome4().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
+                // Generate ID if extId is null
+                if (binding.getPregoutcome4().extId == null) {
+                    final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
+                    String pregoutcome1Id = binding.getPregoutcome1().extId;
+                    int sequenceNumber = Integer.parseInt(pregoutcome1Id.substring(pregoutcome1Id.length() - 3));
+                    sequenceNumber += 3; // Increment the sequence number by 2
+
+                    String id = locations.compextId + String.format("%03d", sequenceNumber);
+                    while (true) {
+                        try {
+                            if (!(individualViewModels.findAll(id) != null)) break;
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        sequenceNumber += 3;
+                        id = locations.compextId + String.format("%03d", sequenceNumber);
+                    }
+                    binding.getPregoutcome4().extId = id;
+                }
+
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -423,6 +570,14 @@ public class PregnancyoutcomeFragment extends Fragment {
         loadCodeData(binding.childFetus2.out2Type, codeBookViewModel, "outcometype");
         loadCodeData(binding.childFetus3.out3Type, codeBookViewModel, "outcometype");
         loadCodeData(binding.childFetus4.out4Type, codeBookViewModel, "outcometype");
+        loadCodeData(binding.childFetus1.gender, codeBookViewModel, "gender");
+        loadCodeData(binding.childFetus1.rltnHead, codeBookViewModel,  "rltnhead");
+        loadCodeData(binding.childFetus2.gender, codeBookViewModel, "gender");
+        loadCodeData(binding.childFetus2.rltnHead, codeBookViewModel,  "rltnhead");
+        loadCodeData(binding.childFetus3.gender, codeBookViewModel, "gender");
+        loadCodeData(binding.childFetus3.rltnHead, codeBookViewModel,  "rltnhead");
+        loadCodeData(binding.childFetus4.gender, codeBookViewModel, "gender");
+        loadCodeData(binding.childFetus4.rltnHead, codeBookViewModel,  "rltnhead");
         loadCodeData(binding.birthplace, codeBookViewModel, "birthPlace");
         loadCodeData(binding.notDel, codeBookViewModel, "notdel");
         loadCodeData(binding.whyNoAnc, codeBookViewModel, "notdel");
@@ -444,12 +599,12 @@ public class PregnancyoutcomeFragment extends Fragment {
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
-            save(true, true, viewModel, outcomeViewModel,deathViewModel);
+            save(true, true, viewModel, outcomeViewModel,deathViewModel,individualViewModel,residencyViewModel);
         });
 
         binding.buttonClose.setOnClickListener(v -> {
 
-            save(false, true, viewModel, outcomeViewModel,deathViewModel);
+            save(false, true, viewModel, outcomeViewModel,deathViewModel,individualViewModel,residencyViewModel);
         });
 
         binding.setEventname(eventForm.event_name);
@@ -458,7 +613,7 @@ public class PregnancyoutcomeFragment extends Fragment {
         return view;
     }
 
-    private void save(boolean save, boolean close, PregnancyoutcomeViewModel viewModel, OutcomeViewModel outcomeViewModel,DeathViewModel deathViewModel) {
+    private void save(boolean save, boolean close, PregnancyoutcomeViewModel viewModel, OutcomeViewModel outcomeViewModel,DeathViewModel deathViewModel,IndividualViewModel individualViewModel,ResidencyViewModel residencyViewModel) {
 
         if (save) {
             Pregnancyoutcome finalData = binding.getPregoutcome();
@@ -501,133 +656,210 @@ public class PregnancyoutcomeFragment extends Fragment {
                 if (finalData.numberofBirths >= 1) {
 
 
-                    try {
-                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.childFetus1.out1ChildDob.getText().toString().trim().isEmpty()) {
-                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                            Date stdate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
-                            Date edate = f.parse(binding.childFetus1.out1ChildDob.getText().toString().trim());
-                            if (edate.after(stdate)) {
-                                binding.childFetus1.out1ChildDob.setError("Date of Outcome Not Equal to Date of Birth");
-                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            if (edate.before(stdate)) {
-                                binding.childFetus1.out1ChildDob.setError("Date of Outcome Not Equal to Date of Birth");
-                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            // clear error if validation passes
-                            binding.childFetus1.out1ChildDob.setError(null);
-                        }
-                    } catch (ParseException e) {
-                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-
 
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus1.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome1();
                     inf.complete = 1;
+                    if (inf.type != 1) {
+                        inf.childuuid = null;
+                    }
                     outcomeViewModel.add(inf);
+
+                    if (binding.getPregoutcome1().type==1){
+                        Individual ind = new Individual();
+                        Outcome prg = binding.getPregoutcome1();
+                        ind.uuid= prg.individual_uuid;
+                        ind.gender = prg.gender;
+                        ind.mother_uuid= prg.mother_uuid;
+                        ind.father_uuid= finalData.father_uuid;
+                        ind.firstName= prg.firstName;
+                        ind.lastName= prg.lastName;
+                        ind.extId= prg.extId;
+                        ind.insertDate=prg.insertDate;
+                        ind.fw_uuid= finalData.fw_uuid;
+                        ind.dob = finalData.outcomeDate;
+                        ind.complete = 1;
+                        ind.dobAspect = 1;
+
+                        individualViewModel.add(ind);
+
+                    }
+
+                    if (binding.getPregoutcome1().type==1){
+                        Residency res = new Residency();
+                        Outcome prg = binding.getPregoutcome1();
+                        res.uuid= prg.residency_uuid;
+                        res.individual_uuid = prg.individual_uuid;
+                        res.startDate= finalData.outcomeDate;
+                        res.endType= 1;
+                        res.startType= 2;
+                        res.insertDate= prg.insertDate;
+                        res.location_uuid= locations.uuid;
+                        res.socialgroup_uuid = socialgroup.uuid;
+                        res.fw_uuid= finalData.fw_uuid;
+                        res.rltn_head = prg.rltn_head;
+                        res.complete = 1;
+
+                        residencyViewModel.add(res);
+                    }
+
+
                 }
 
                 if (finalData.numberofBirths >= 2) {
 
-                    try {
-                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.childFetus2.out2ChildDob.getText().toString().trim().isEmpty()) {
-                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                            Date stdate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
-                            Date edate = f.parse(binding.childFetus2.out2ChildDob.getText().toString().trim());
-                            if (edate.after(stdate)) {
-                                binding.childFetus2.out2ChildDob.setError("Date of Outcome Not Equal to Date of Birth");
-                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            if (edate.before(stdate)) {
-                                binding.childFetus2.out2ChildDob.setError("Date of Outcome Not Equal to Date of Birth");
-                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            // clear error if validation passes
-                            binding.childFetus2.out2ChildDob.setError(null);
-                        }
-                    } catch (ParseException e) {
-                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
 
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus2.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome2();
                     inf.complete = 1;
+                    if (inf.type != 1) {
+                        inf.childuuid = null;
+                    }
                     outcomeViewModel.add(inf);
+
+                    if (binding.getPregoutcome2().type==1){
+                        Individual ind = new Individual();
+                        Outcome prg = binding.getPregoutcome2();
+                        ind.uuid= prg.individual_uuid;
+                        ind.gender = prg.gender;
+                        ind.mother_uuid= prg.mother_uuid;
+                        ind.father_uuid= finalData.father_uuid;
+                        ind.firstName= prg.firstName;
+                        ind.lastName= prg.lastName;
+                        ind.extId= prg.extId;
+                        ind.insertDate=prg.insertDate;
+                        ind.fw_uuid= finalData.fw_uuid;
+                        ind.dob = finalData.outcomeDate;
+                        ind.complete = 1;
+                        ind.dobAspect = 1;
+
+                        individualViewModel.add(ind);
+
+                    }
+
+                    if (binding.getPregoutcome2().type==1){
+                        Residency res = new Residency();
+                        Outcome prg = binding.getPregoutcome2();
+                        res.uuid= prg.residency_uuid;
+                        res.individual_uuid = prg.individual_uuid;
+                        res.startDate= finalData.outcomeDate;
+                        res.endType= 1;
+                        res.startType= 2;
+                        res.insertDate= prg.insertDate;
+                        res.location_uuid= locations.uuid;
+                        res.socialgroup_uuid = socialgroup.uuid;
+                        res.fw_uuid= finalData.fw_uuid;
+                        res.rltn_head = prg.rltn_head;
+                        res.complete = 1;
+
+                        residencyViewModel.add(res);
+                    }
 
                 }
 
                 if (finalData.numberofBirths >= 3) {
 
-                    try {
-                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.childFetus3.out3ChildDob.getText().toString().trim().isEmpty()) {
-                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                            Date stdate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
-                            Date edate = f.parse(binding.childFetus3.out3ChildDob.getText().toString().trim());
-                            if (edate.after(stdate)) {
-                                binding.childFetus3.out3ChildDob.setError("Date of Outcome Not Equal to Date of Birth");
-                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            if (edate.before(stdate)) {
-                                binding.childFetus3.out3ChildDob.setError("Date of Outcome Not Equal to Date of Birth");
-                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            // clear error if validation passes
-                            binding.childFetus3.out3ChildDob.setError(null);
-                        }
-                    } catch (ParseException e) {
-                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
 
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus3.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome3();
                     inf.complete = 1;
+                    if (inf.type != 1) {
+                        inf.childuuid = null;
+                    }
                     outcomeViewModel.add(inf);
+
+                    if (binding.getPregoutcome3().type==1){
+                        Individual ind = new Individual();
+                        Outcome prg = binding.getPregoutcome3();
+                        ind.uuid= prg.individual_uuid;
+                        ind.gender = prg.gender;
+                        ind.mother_uuid= prg.mother_uuid;
+                        ind.father_uuid= finalData.father_uuid;
+                        ind.firstName= prg.firstName;
+                        ind.lastName= prg.lastName;
+                        ind.extId= prg.extId;
+                        ind.insertDate=prg.insertDate;
+                        ind.fw_uuid= finalData.fw_uuid;
+                        ind.dob = finalData.outcomeDate;
+                        ind.complete = 1;
+                        ind.dobAspect = 1;
+
+                        individualViewModel.add(ind);
+
+                    }
+
+                    if (binding.getPregoutcome3().type==1){
+                        Residency res = new Residency();
+                        Outcome prg = binding.getPregoutcome3();
+                        res.uuid= prg.residency_uuid;
+                        res.individual_uuid = prg.individual_uuid;
+                        res.startDate= finalData.outcomeDate;
+                        res.endType= 1;
+                        res.startType= 2;
+                        res.insertDate= prg.insertDate;
+                        res.location_uuid= locations.uuid;
+                        res.socialgroup_uuid = socialgroup.uuid;
+                        res.fw_uuid= finalData.fw_uuid;
+                        res.rltn_head = prg.rltn_head;
+                        res.complete = 1;
+
+                        residencyViewModel.add(res);
+                    }
 
                 }
 
                 if (finalData.numberofBirths >= 4) {
 
-                    try {
-                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.childFetus4.out4ChildDob.getText().toString().trim().isEmpty()) {
-                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                            Date stdate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
-                            Date edate = f.parse(binding.childFetus4.out4ChildDob.getText().toString().trim());
-                            if (edate.after(stdate)) {
-                                binding.childFetus4.out4ChildDob.setError("Date of Outcome Not Equal to Date of Birth");
-                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            if (edate.before(stdate)) {
-                                binding.childFetus4.out4ChildDob.setError("Date of Outcome Not Equal to Date of Birth");
-                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            // clear error if validation passes
-                            binding.childFetus4.out4ChildDob.setError(null);
-                        }
-                    } catch (ParseException e) {
-                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
 
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus4.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome4();
                     inf.complete = 1;
+                    if (inf.type != 1) {
+                        inf.childuuid = null;
+                    }
                     outcomeViewModel.add(inf);
+
+                    if (binding.getPregoutcome4().type==1){
+                        Individual ind = new Individual();
+                        Outcome prg = binding.getPregoutcome4();
+                        ind.uuid= prg.individual_uuid;
+                        ind.gender = prg.gender;
+                        ind.mother_uuid= prg.mother_uuid;
+                        ind.father_uuid= finalData.father_uuid;
+                        ind.firstName= prg.firstName;
+                        ind.lastName= prg.lastName;
+                        ind.extId= prg.extId;
+                        ind.insertDate=prg.insertDate;
+                        ind.fw_uuid= finalData.fw_uuid;
+                        ind.dob = finalData.outcomeDate;
+                        ind.complete = 1;
+                        ind.dobAspect = 1;
+
+                        individualViewModel.add(ind);
+
+                    }
+
+                    if (binding.getPregoutcome4().type==1){
+                        Residency res = new Residency();
+                        Outcome prg = binding.getPregoutcome4();
+                        res.uuid= prg.residency_uuid;
+                        res.individual_uuid = prg.individual_uuid;
+                        res.startDate= finalData.outcomeDate;
+                        res.endType= 1;
+                        res.startType= 2;
+                        res.insertDate= prg.insertDate;
+                        res.location_uuid= locations.uuid;
+                        res.socialgroup_uuid = socialgroup.uuid;
+                        res.fw_uuid= finalData.fw_uuid;
+                        res.rltn_head = prg.rltn_head;
+                        res.complete = 1;
+
+                        residencyViewModel.add(res);
+                    }
 
                 }
 

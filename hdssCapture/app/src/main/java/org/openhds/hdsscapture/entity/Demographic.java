@@ -90,7 +90,7 @@ public class Demographic extends BaseObservable implements Parcelable {
     }
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
 
     @Bindable
@@ -303,6 +303,9 @@ public class Demographic extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);
+        }
+        if(education != null && education==1){
+            this.comp_yrs=AppConstants.NOSELECT;
         }
 
     }

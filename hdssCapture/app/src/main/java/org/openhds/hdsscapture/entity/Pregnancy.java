@@ -145,7 +145,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
 
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
     @NotNull
     public String getUuid() {
@@ -565,8 +565,8 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             anteNatalClinic = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -583,8 +583,8 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             attend_you = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -601,8 +601,8 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             why_no = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -619,8 +619,8 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             own_bnet = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -638,8 +638,8 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             bnet_sou = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -656,8 +656,8 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             bnet_loc = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -674,8 +674,8 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             slp_bednet = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -692,8 +692,8 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             trt_bednet = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -710,8 +710,8 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             healthfacility = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -728,8 +728,8 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             medicineforpregnancy = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -746,8 +746,8 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             ttinjection = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
+        patternSkipper(view);
 
     }
 
@@ -764,11 +764,8 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             first_preg = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
-        if(first_preg != null && first_preg==1){
-            this.pregnancyNumber=1;
-        }
+        patternSkipper(view);
 
     }
 
@@ -785,6 +782,63 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             outcome = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+    }
+
+    private void patternSkipper(View view) {
+
+        if (view != null) {
+
+            if(anteNatalClinic == null || anteNatalClinic!=1){
+
+                setAgeOfPregFromPregNotes(null);
+                setEstimatedAgeOfPreg(null);
+                lastClinicVisitDate=null;
+                setAttend_you(null);
+                setTtinjection(null);
+                setFirst_rec(null);
+                setAnc_visits(null);
+            }
+            if(anteNatalClinic == null || anteNatalClinic!=2){
+                setWhy_no(null);
+            }
+
+            if(own_bnet == null || own_bnet!=1){
+                setHow_many(null);
+                setBnet_sou(null);
+                setBnet_loc(null);
+                setSlp_bednet(null);
+            }
+
+            if(slp_bednet == null || slp_bednet!=1){
+                setTrt_bednet(null);
+            }
+
+            if(bnet_sou == null || bnet_sou!=77){
+                setBnet_sou_other(null);
+            }
+
+            if(bnet_loc == null || bnet_loc!=77){
+                setBnet_loc_other(null);
+            }
+
+            if(attend_you == null || attend_you!=77){
+                setAttend_you_other(null);
+            }
+
+            if(why_no == null || why_no!=15){
+                setWhy_no_other(null);
+            }
+
+            if(outcome == null || outcome!=1){
+                outcome_date = null;
+            }
+
+            if(first_preg != null && first_preg==1){
+                this.pregnancyNumber=1;
+            }
+
             notifyPropertyChanged(BR._all);
         }
 

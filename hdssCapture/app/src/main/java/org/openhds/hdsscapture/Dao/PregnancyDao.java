@@ -41,8 +41,11 @@ public interface PregnancyDao {
     @Query("SELECT * FROM pregnancy WHERE complete=1")
     List<Pregnancy> retrieveToSync();
 
-    @Query("SELECT * FROM pregnancy where individual_uuid=:id ORDER BY recordedDate ASC LIMIT 1")
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND outcome IS NOT NULL ORDER BY recordedDate ASC LIMIT 1")
     Pregnancy find(String id);
+
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id ORDER BY recordedDate ASC LIMIT 1")
+    Pregnancy lastpreg(String id);
 
     @Query("SELECT * FROM pregnancy where individual_uuid=:id AND id=2")
     Pregnancy finds(String id);
