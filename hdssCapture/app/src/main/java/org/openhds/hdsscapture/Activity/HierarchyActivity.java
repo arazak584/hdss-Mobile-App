@@ -379,7 +379,7 @@ public class HierarchyActivity extends AppCompatActivity {
                 return;
             }
 
-            Toast.makeText(this,"Baseline Disabled", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Enumeration Disabled", Toast.LENGTH_LONG).show();
 
 //            Intent intent = new Intent(HierarchyActivity.this, BaselineActivity.class);
 //            intent.putExtra(ROUND_DATA, roundData);
