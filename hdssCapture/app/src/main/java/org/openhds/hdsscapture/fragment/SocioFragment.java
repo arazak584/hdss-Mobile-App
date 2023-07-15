@@ -123,6 +123,8 @@ public class SocioFragment extends Fragment {
             } else {
                 data = new HdssSociodemo();
 
+                binding.formcompldate.setVisibility(View.GONE);
+
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.toString().replaceAll("-", "");
 
