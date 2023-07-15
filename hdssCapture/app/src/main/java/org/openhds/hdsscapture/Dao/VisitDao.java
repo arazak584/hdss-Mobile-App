@@ -44,8 +44,10 @@ public interface VisitDao {
     long countVisits(Date startDate, Date endDate, String username);
 
 
-    @Query("SELECT COUNT(*) FROM visit a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
-            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username GROUP BY a.location_uuid")
-    long countLocs(Date startDate, Date endDate, String username);
+//    @Query("SELECT COUNT(*) FROM visit a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
+//            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username GROUP BY a.location_uuid")
+//    long countLocs(Date startDate, Date endDate, String username);
+
+
 
 }

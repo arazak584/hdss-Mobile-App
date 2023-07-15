@@ -122,7 +122,7 @@ public class DupAdapter extends RecyclerView.Adapter<DupAdapter.ViewHolder>{
             charText = charText.toLowerCase(Locale.getDefault());
 
             try {
-                List<Individual> list = individualViewModel.retrieveBySearch(charText);
+                List<Individual> list = individualViewModel.retrieveBy(charText);
 
                 if (list != null) {
                     individualList.addAll(list);

@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.HouseholdDialogFragment;
-import org.openhds.hdsscapture.Dialog.MoveInErrorFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
@@ -42,6 +41,7 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
+import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
@@ -230,11 +230,13 @@ public class ResidencyFragment extends Fragment {
 
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         ResidencyViewModel resViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+        ResidencyViewModel esViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+        ResidencyViewModel eviewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
         OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
         try {
-            Residency dataRes = viewModel.findRes(individual.uuid);
+            Residency dataRes = viewModel.findRes(individual.uuid, locations.uuid);
 
             if (dataRes != null) {
                 binding.setResidency(dataRes);
@@ -300,6 +302,23 @@ public class ResidencyFragment extends Fragment {
         }
 
         try {
+            Residency datae = esViewModel.findEnd(individual.uuid, locations.uuid);
+            if (datae != null) {
+                binding.setOmgg(datae);
+                if (binding.getOmgg().old_residency == null) {
+                    binding.getOmgg().loc = datae.getLocation_uuid();
+                    binding.getOmgg().old_residency = datae.getUuid();
+                    binding.getOmgg().startDate = datae.startDate;
+                    binding.getResidency().old_residency =datae.getUuid();
+                }
+
+
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
             Death datadth = deathViewModel.find(individual.uuid);
             if (datadth != null) {
                 binding.setDeath(datadth);
@@ -335,9 +354,21 @@ public class ResidencyFragment extends Fragment {
         }
 
         try {
+            Residency datas = eviewModel.amend(individual.uuid);
+            if (datas != null) {
+                binding.setMig(datas);
+
+            }
+
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
             Inmigration dataimg = inmigrationViewModel.find(individual.uuid);
             if (dataimg != null && binding.getResidency().rltn_head !=null) {
                 binding.setInmigration(dataimg);
+                binding.img.migtype.setEnabled(false);
             } else {
                 dataimg = new Inmigration();
 
@@ -352,8 +383,20 @@ public class ResidencyFragment extends Fragment {
                 dataimg.recordedDate = binding.getResidency().startDate;
                 dataimg.complete = 1;
 
+                if (binding.getMig() == null || binding.getMig().individual_uuid == null) {
+                    if (dataimg.migType == null) {
+                        dataimg.migType = 1;
+                    }
+                } else {
+                    if (dataimg.migType == null) {
+                        dataimg.migType = 2;
+                    }
+                }
 
                 binding.setInmigration(dataimg);
+
+
+                binding.img.migtype.setEnabled(false);
 
                 binding.getInmigration().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             }
@@ -432,16 +475,16 @@ public class ResidencyFragment extends Fragment {
 
             //Log.d("DEBUG", "locationExtid: " + binding.locationExtid);
             //Log.d("DEBUG", "currentLoc: " + binding.currentLoc);
-            if (!binding.locationExtid.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim())) {
-                isOmg = true;
-                binding.currentLoc.setError("Move Individual Out of His/Her Previous Compound");
-            }
-
-            if(isOmg){//if there is an error, do not continue
-                MoveInErrorFragment dialog = MoveInErrorFragment.newInstance(individual,residency,locations,socialgroup);
-                dialog.show(requireActivity().getSupportFragmentManager(), "dialog");
-                return;
-            }
+//            if (!binding.locationExtid.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim())) {
+//                isOmg = true;
+//                binding.currentLoc.setError("Move Individual Out of His/Her Previous Compound");
+//            }
+//
+//            if(isOmg){//if there is an error, do not continue
+//                MoveInErrorFragment dialog = MoveInErrorFragment.newInstance(individual,residency,locations,socialgroup);
+//                dialog.show(requireActivity().getSupportFragmentManager(), "dialog");
+//                return;
+//            }
 
 
             //Date Validations
@@ -464,6 +507,32 @@ public class ResidencyFragment extends Fragment {
                 Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
+
+            try {
+                if (!binding.omgg.oldStartDate.getText().toString().trim().isEmpty() && !binding.editTextStartDate.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
+                    Date edate = f.parse(binding.omgg.oldStartDate.getText().toString().trim());
+
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(edate);
+                    calendar.add(Calendar.DAY_OF_MONTH, 3);
+                    Date minStartDate = calendar.getTime();
+
+                    if (stdate.before(minStartDate)) {
+                        binding.editTextStartDate.setError("Start Date must be at least three days after the previous start date " + f.format(minStartDate));
+                        Toast.makeText(getActivity(), "Start Date must be at least three days after the previous start date " + f.format(minStartDate), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // Clear error if validation passes
+                    binding.editTextStartDate.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
 
             try {
                 if (!binding.editTextStartDate.getText().toString().trim().isEmpty() && !binding.res.resEndDate.getText().toString().trim().isEmpty()) {
@@ -575,21 +644,6 @@ public class ResidencyFragment extends Fragment {
                         return;
                     }
 
-                    boolean imgend = false;
-                    boolean imgends = false;
-                    if (!binding.res.resEndDate.getText().toString().trim().isEmpty() && binding.img.migtype.getSelectedItemPosition() == 1) {
-                        imgend = true;
-                        Toast.makeText(getActivity(), "Migration Type Cannot be External", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (binding.res.resEndDate.getText().toString().trim().isEmpty() && binding.img.migtype.getSelectedItemPosition() == 2) {
-                        imgends = true;
-                        Toast.makeText(getActivity(), "Migration Type Cannot be Internal", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-
                     final Inmigration img = binding.getInmigration();
                     img.complete = 1;
                     inmigrationViewModel.add(img);
@@ -624,22 +678,40 @@ public class ResidencyFragment extends Fragment {
                 finalData.complete=1;
             }
 
+//            SocialgroupAmendment socialgroupA = new SocialgroupAmendment();
+//
+//            if (socialgroup.groupName!= null && individual.getFirstName()!= null && "UNK".equals(socialgroup.groupName)) {
+//                socialgroupA.individual_uuid = individual.getUuid();
+//                socialgroupA.groupName = individual.getFirstName() +' '+ individual.getLastName();
+//                socialgroupA.uuid = socialgroup.uuid;
+//            }
+//
+//            SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+//            socialgroupViewModel.update(socialgroupA);
+//
+//            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+
             viewModel.add(finalData);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
-            SocialgroupAmendment socialgroupA = new SocialgroupAmendment();
-
-            if (socialgroup.groupName!= null && individual.firstName!= null && "UNK".equals(socialgroup.groupName)) {
-                socialgroupA.individual_uuid = finalData.individual_uuid;
-                socialgroupA.groupName = individual.firstName +' '+ individual.lastName;
-                socialgroupA.uuid = socialgroup.uuid;
-            }
 
             SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-            socialgroupViewModel.update(socialgroupA);
+            try {
+                Socialgroup data = socialgroupViewModel.find(socialgroup.uuid);
+                if (data !=null) {
+                    SocialgroupAmendment socialgroupAmendment = new SocialgroupAmendment();
+                    socialgroupAmendment.individual_uuid = individual.uuid;
+                    socialgroupAmendment.groupName = individual.getFirstName() + ' ' + individual.getLastName();
+                    socialgroupAmendment.uuid = socialgroup.uuid;
 
-            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+                    socialgroupViewModel.update(socialgroupAmendment);
+                }
 
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             RelationshipViewModel relModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
             try {
@@ -653,6 +725,67 @@ public class ResidencyFragment extends Fragment {
                     relationshipUpdate.complete = 1;
 
                     relModel.update(relationshipUpdate);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            OutmigrationViewModel omgModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
+            try {
+                Outmigration data = omgModel.createOmg(individual.uuid, locations.uuid);
+            if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim())) {
+
+                Outmigration omg = new Outmigration();
+
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.toString().replaceAll("-", "");
+
+                // Subtract one day from the recordedDate
+                Date recordedDate = binding.getInmigration().recordedDate;
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(recordedDate);
+                calendar.add(Calendar.DAY_OF_MONTH, -1);
+
+                omg.recordedDate = calendar.getTime();
+                omg.uuid = uuidString;
+                omg.individual_uuid = finalData.individual_uuid;
+                omg.insertDate = new Date();
+                omg.destination = binding.getInmigration().origin;
+                omg.reason = binding.getInmigration().reason;
+                omg.residency_uuid = binding.getOmgg().old_residency;
+                omg.fw_uuid = finalData.fw_uuid;
+                omg.complete = 1;
+                omg.visit_uuid = binding.getInmigration().visit_uuid;
+
+                omgModel.add(omg);
+            }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+            try {
+                Residency data = resModel.fetchs(individual.uuid);
+                if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim())) {
+
+                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+
+                    Date recordedDate = binding.getInmigration().recordedDate;
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(recordedDate);
+                    calendar.add(Calendar.DAY_OF_MONTH, -1);
+
+                    residencyAmendment.endType = 2;
+                    residencyAmendment.endDate = calendar.getTime();
+                    residencyAmendment.uuid = binding.getOmgg().old_residency;
+                    residencyAmendment.complete = 1;
+
+                    resModel.update(residencyAmendment);
                 }
 
             } catch (ExecutionException e) {

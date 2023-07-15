@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="mig"
+            type="org.openhds.hdsscapture.entity.Residency" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/MAIN_LAYOUT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <EditText
+            android:visibility="gone"
+            android:id="@+id/old_ress"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@={mig.uuid}" />
+
+        <EditText
+            android:visibility="gone"
+            android:id="@+id/old_id"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@={mig.individual_uuid}" />
+
+        <EditText
+            android:visibility="gone"
+            android:id="@+id/old_stDate"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@={mig.startDate}" />
+
+
+
+
+    </LinearLayout>
+
+</layout>

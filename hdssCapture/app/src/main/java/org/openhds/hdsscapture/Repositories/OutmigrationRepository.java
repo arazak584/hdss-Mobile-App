@@ -5,6 +5,7 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.OutmigrationDao;
 import org.openhds.hdsscapture.entity.Outmigration;
+import org.openhds.hdsscapture.entity.Relationship;
 
 import java.util.Date;
 import java.util.List;
@@ -50,6 +51,15 @@ public class OutmigrationRepository {
         Callable<List<Outmigration>> callable = () -> dao.retrieveomgToSync();
 
         Future<List<Outmigration>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Outmigration createOmg(String id, String locid) throws ExecutionException, InterruptedException {
+
+        Callable<Outmigration> callable = () -> dao.createOmg(id, locid);
+
+        Future<Outmigration> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }

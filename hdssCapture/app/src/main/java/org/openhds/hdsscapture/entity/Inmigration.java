@@ -29,12 +29,12 @@ import java.util.Locale;
 @Entity(tableName = "inmigration")
 public class Inmigration extends BaseObservable implements Parcelable {
 
-    @SerializedName("uuid")
+    @SerializedName("residency_uuid")
     @Expose
     @NotNull
-    @ColumnInfo(name = "uuid")
+    @ColumnInfo(name = "residency_uuid")
     @PrimaryKey
-    public String uuid;
+    public String residency_uuid;
 
     @Expose
     public String individual_uuid;
@@ -58,7 +58,7 @@ public class Inmigration extends BaseObservable implements Parcelable {
     public Date recordedDate;
 
     @Expose
-    public String residency_uuid;
+    public String uuid;
 
     @Expose
     public String visit_uuid;
@@ -110,11 +110,12 @@ public class Inmigration extends BaseObservable implements Parcelable {
         }
     }
 
+    @NotNull
     public String getResidency_uuid() {
         return residency_uuid;
     }
 
-    public void setResidency_uuid(String residency_uuid) {
+    public void setResidency_uuid(@NotNull String residency_uuid) {
         this.residency_uuid = residency_uuid;
     }
 

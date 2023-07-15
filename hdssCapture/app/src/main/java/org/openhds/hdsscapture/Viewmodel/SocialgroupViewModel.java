@@ -23,6 +23,10 @@ public class SocialgroupViewModel extends AndroidViewModel {
         socialgroupRepository = new SocialgroupRepository(application);
     }
 
+    public Socialgroup retrieve(String id) throws ExecutionException, InterruptedException {
+        return socialgroupRepository.retrieve(id);
+    }
+
     public Socialgroup find(String id) throws ExecutionException, InterruptedException {
         return socialgroupRepository.find(id);
     }

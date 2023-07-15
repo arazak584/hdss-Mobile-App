@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 
@@ -41,6 +42,9 @@ public interface SocialgroupDao {
 
     @Query("SELECT * FROM socialgroup WHERE uuid=:id")
     Socialgroup findhse(String id);
+
+    @Query("SELECT * FROM socialgroup where uuid=:id and groupName='UNK' ")
+    Socialgroup find(String id);
 
     @Query("SELECT * FROM socialgroup WHERE complete=1")
     List<Socialgroup> retrieveToSync();

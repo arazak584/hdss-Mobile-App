@@ -29,7 +29,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "residency",
-indices = {@Index(value = {"uuid","individual_uuid","location_uuid","socialgroup_uuid"}, unique = false)})
+indices = {@Index(value = {"individual_uuid","location_uuid","socialgroup_uuid"}, unique = false)})
 public class Residency extends BaseObservable implements Parcelable {
 
     @Expose
@@ -77,6 +77,9 @@ public class Residency extends BaseObservable implements Parcelable {
     @SerializedName("loc")
     @Expose
     public String loc;
+
+    @Expose
+    public String old_residency;
 
     @Expose
     public Integer img;
@@ -258,6 +261,14 @@ public class Residency extends BaseObservable implements Parcelable {
 
     public void setLoc(String loc) {
         this.loc = loc;
+    }
+
+    public String getOld_residency() {
+        return old_residency;
+    }
+
+    public void setOld_residency(String old_residency) {
+        this.old_residency = old_residency;
     }
 
     protected Residency(Parcel in) {

@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "individual",
-indices = {@Index(value = {"uuid","lastName","firstName"}, unique = false)})
+indices = {@Index(value = {"uuid"}, unique = true)})
 public class Individual extends BaseObservable implements Parcelable {
 
     @SerializedName("uuid")

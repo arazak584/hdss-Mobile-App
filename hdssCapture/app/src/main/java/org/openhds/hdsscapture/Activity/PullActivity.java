@@ -263,7 +263,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 50000;
+                                        int batchSize = 5000;
                                         List<Individual> individuals = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -397,7 +397,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 50000;
+                                        int batchSize = 5000;
                                         List<Locations> locations = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -529,7 +529,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 50000;
+                                        int batchSize = 5000;
                                         List<Residency> residencies = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -666,7 +666,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 50000;
+                                        int batchSize = 5000;
                                         List<Relationship> relationships = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -802,7 +802,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 50000;
+                                        int batchSize = 5000;
                                         List<Socialgroup> socialgroups = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -938,7 +938,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 50000;
+                                        int batchSize = 5000;
                                         List<Pregnancy> pregnancies = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -1074,7 +1074,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 50000;
+                                        int batchSize = 5000;
                                         List<Demographic> demographics = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -1267,7 +1267,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 50000;
+                                        int batchSize = 5000;
                                         List<HdssSociodemo> hdssSociodemos = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -1413,7 +1413,7 @@ public class PullActivity extends AppCompatActivity {
                                     progress.show();
                                     AtomicInteger counts = new AtomicInteger();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 50000;
+                                        int batchSize = 5000;
                                         List<Vaccination> vaccinations = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {

@@ -53,6 +53,9 @@ public class HierarchyViewModel extends AndroidViewModel {
         return hierarchyRepository.retrieveLevel7();
     }
 
+    public List<Hierarchy> retrieveVillage() throws ExecutionException, InterruptedException {
+        return hierarchyRepository.retrieveVillage();
+    }
 
     public void add(Hierarchy data){
         hierarchyRepository.create(data);

@@ -34,16 +34,14 @@
         <activity
             android:name=".Baseline.BaselineActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
         <activity
             android:name=".Activity.ReportActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
         <activity
             android:name=".Activity.LocationActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
         <activity
             android:name=".Activity.ListActivity"
@@ -51,12 +49,10 @@
         <activity
             android:name=".Activity.HierarchyActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
         <activity
             android:name=".Activity.RemainderActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false"/>
         <activity
             android:name=".MainActivity"
             android:exported="false"

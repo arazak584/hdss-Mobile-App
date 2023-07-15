@@ -7,5 +7,6 @@ public class ResidencyAmendment {
 
     public String uuid;
     public Date endDate;
-    public String endType;
+    public Integer endType;
+    public Integer complete;
 }

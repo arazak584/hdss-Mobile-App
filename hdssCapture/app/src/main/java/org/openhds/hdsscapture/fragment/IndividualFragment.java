@@ -25,6 +25,7 @@ import org.openhds.hdsscapture.Utilities.Calculators;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.databinding.FragmentIndividualBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
@@ -32,6 +33,7 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
+import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
@@ -316,45 +318,6 @@ public class IndividualFragment extends Fragment {
             final Individual individual = binding.getIndividual();
             individual.setUuid(this.individual.getUuid());
 
-            boolean isExists = false;
-            binding.individualExtid.setError(null);
-            binding.individualInsertDate.setError(null);
-            binding.individualFw.setError(null);
-            binding.individualFirstName.setError(null);
-            binding.individualLastName.setError(null);
-            binding.dob.setError(null);
-
-
-            if(individual.extId==null){
-                isExists = true;
-                binding.individualExtid.setError("Individual Id is Required");
-            }
-
-            if(individual.insertDate==null){
-                isExists = true;
-                binding.individualInsertDate.setError("Date of visit is Required");
-
-            }
-
-            if(individual.fw_uuid==null){
-                isExists = true;
-                binding.individualFw.setError("Fieldworker userName is Required");
-            }
-
-            if(individual.firstName==null){
-                isExists = true;
-                binding.individualFirstName.setError("FirstName is Required");
-            }
-
-            if(individual.lastName==null){
-                isExists = true;
-                binding.individualLastName.setError("LastName is Required");
-            }
-
-            if(individual.dob==null){
-                isExists = true;
-                binding.dob.setError("Date of Birth is Required");
-            }
 
 
         });
@@ -455,8 +418,6 @@ public class IndividualFragment extends Fragment {
                     return;
                 }
             }
-
-
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();

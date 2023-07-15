@@ -24,12 +24,12 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
     RemainderFragment activity;
     LayoutInflater inflater;
     private List<Locations> locationsList;
-    private Hierarchy level5Data;
+    private Hierarchy level6Data;
 
 
-    public RemainderAdapter(RemainderFragment activity, Hierarchy level5Data) {
+    public RemainderAdapter(RemainderFragment activity, Hierarchy level6Data) {
         this.activity = activity;
-        this.level5Data = level5Data;
+        this.level6Data = level6Data;
         locationsList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -82,9 +82,9 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
     public void filter(String charText, LocationViewModel locationViewModel) {
         locationsList.clear();
 
-            if(level5Data != null)
+            if(level6Data != null)
                 try {
-                    List<Locations> list = locationViewModel.retrieveByVillage(level5Data.getName());
+                    List<Locations> list = locationViewModel.retrieveByVillage(level6Data.getName());
 
                     if (list != null) {
                         locationsList.addAll(list);

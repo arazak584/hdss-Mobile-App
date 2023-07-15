@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:hint="@string/uuid">
+            android:hint="@string/uuid"
             android:text="@string/uuid">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:hint="@string/preguuid">
+            android:hint="@string/preguuid"
             android:text="@string/preguuid">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -68,16 +68,16 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:visibility="gone"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:hint="@string/motherid">
+            android:hint="@string/motherid"
             android:text="@string/motherid">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:visibility="gone"
                 android:id="@+id/out1_preguuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -107,13 +107,12 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            goneUnless="@{pregoutcome1.type==1}"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:hint="@string/childextid">
+            android:hint="@string/childextid"
             android:text="@string/childextid">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -135,7 +134,7 @@
             android:gravity="start"
             android:padding="5dp"
             android:inputType="text"
-            android:hint="@string/ind_extid">
+            android:hint="@string/ind_extid"
             android:text="@string/ind_extid">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -150,13 +149,12 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            goneUnless="@{pregoutcome1.type==1}"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:hint="@string/motherid">
+            android:hint="@string/motherid"
             android:text="@string/motherid">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -176,7 +174,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:hint="@string/firstname">
+            android:hint="@string/firstname"
             android:text="@string/firstname">
 
             <com.google.android.material.textfield.TextInputEditText

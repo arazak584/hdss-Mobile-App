@@ -83,6 +83,15 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public List<Individual> retrieveBy(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.retrieveBy(id);
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Individual> retrieveChild(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Individual>> callable = () -> dao.retrieveChild(id);
@@ -110,9 +119,9 @@ public class IndividualRepository {
         return future.get();
     }
 
-    public List<Individual> retrieveBySearch(String id) throws ExecutionException, InterruptedException {
+    public List<Individual> retrieveBySearch(String id,String searchText) throws ExecutionException, InterruptedException {
 
-        Callable<List<Individual>> callable = () -> dao.retrieveBySearch(id);
+        Callable<List<Individual>> callable = () -> dao.retrieveBySearch(id, searchText);
 
         Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
 

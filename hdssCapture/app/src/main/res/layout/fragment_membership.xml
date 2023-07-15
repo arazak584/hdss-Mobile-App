@@ -19,6 +19,14 @@
             type="org.openhds.hdsscapture.entity.Residency" />
 
         <variable
+            name="omgg"
+            type="org.openhds.hdsscapture.entity.Residency" />
+
+        <variable
+            name="mig"
+            type="org.openhds.hdsscapture.entity.Residency" />
+
+        <variable
             name="inmigration"
             type="org.openhds.hdsscapture.entity.Inmigration" />
 
@@ -76,9 +84,22 @@
                     android:background="@color/colorPrimaryDark" />
 
                 <include
+                    android:visibility="gone"
                     android:id="@+id/res"
                     layout="@layout/fragment_membership_edate"
                     bind:res="@{res}" />
+
+                <include
+                    android:visibility="gone"
+                    android:id="@+id/omgg"
+                    layout="@layout/fragment_membership_prev"
+                    bind:omgg="@{omgg}" />
+
+                <include
+                    android:visibility="gone"
+                    android:id="@+id/mig"
+                    layout="@layout/fragment_membership_migtype"
+                    bind:mig="@{mig}" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
@@ -231,6 +252,26 @@
                     android:backgroundTint="@color/black"
                     android:textColor="@color/white"
                     tools:ignore="DuplicateSpeakableTextCheck" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/old_res"
+                    android:text="@string/old_res">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/old_res"
+                        android:text="@={residency.old_residency}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <com.google.android.material.textfield.TextInputLayout

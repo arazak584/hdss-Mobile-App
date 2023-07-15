@@ -719,6 +719,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -726,6 +727,7 @@
                     android:text="@string/stillbirth"/>
 
                 <RadioGroup
+                    android:visibility="gone"
                     android:id="@+id/stillbirth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -817,7 +819,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        goneUnless="@{pregoutcome.stillbirth==1}"
+                        goneUnless="@{pregoutcome1.type==2 || pregoutcome2.type==2 || pregoutcome3.type==2 || pregoutcome4.type==2}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">

@@ -298,7 +298,7 @@ public class EventsFragment extends Fragment {
     private void showResidencyForm(List<EventForm> eventForms) {
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         try {
-            Residency form = viewModel.findRes(individual.uuid);
+            Residency form = viewModel.findRes(individual.uuid,locations.uuid);
             if (form == null) {
                 form = new Residency();
             }

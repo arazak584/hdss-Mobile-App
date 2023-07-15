@@ -728,7 +728,7 @@ public class Pregnancyoutcome extends BaseObservable {
             }
 
             if(first_nb == null || first_nb!=2){
-                l_birth = 0;
+                l_birth = AppConstants.NOSELECT;
             }
 
             if(rec_anc == null || rec_anc!=2){

@@ -836,7 +836,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             }
 
             if(first_preg != null && first_preg==1){
-                this.pregnancyNumber=1;
+                this.pregnancyNumber=AppConstants.COMPLETE;
             }
 
             notifyPropertyChanged(BR._all);

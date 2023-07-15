@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="omgg"
+            type="org.openhds.hdsscapture.entity.Residency" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/MAIN_LAYOUT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+
+        <TextView
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/enddate" />
+
+        <EditText
+            android:visibility="gone"
+            android:id="@+id/old_ress"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@={omgg.old_residency}" />
+
+        <EditText
+            android:visibility="gone"
+            android:id="@+id/old_loc"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@={omgg.loc}" />
+
+        <EditText
+            android:visibility="gone"
+            android:id="@+id/old_startDate"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@={omgg.startDate}" />
+
+
+    </LinearLayout>
+
+</layout>

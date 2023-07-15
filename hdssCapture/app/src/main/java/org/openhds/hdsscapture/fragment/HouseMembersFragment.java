@@ -2,13 +2,18 @@ package org.openhds.hdsscapture.fragment;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,8 +26,10 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentHouseMembersBinding;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Pregnancy;
@@ -30,6 +37,10 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,6 +67,10 @@ public class HouseMembersFragment extends Fragment {
     private EventForm eventForm;
     private FragmentHouseMembersBinding binding;
     private ProgressDialog progress;
+
+    private Hierarchy level6Data;
+    private ArrayAdapter<Hierarchy> level6Adapter;
+    private List<Hierarchy> level6List = new ArrayList<>();
 
     public HouseMembersFragment() {
         // Required empty public constructor
@@ -104,6 +119,39 @@ public class HouseMembersFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentHouseMembersBinding.inflate(inflater, container, false);
 
+        // Get the Context object
+//        Context context = requireContext();
+
+        final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(this).get(HierarchyViewModel.class);
+        final Spinner level6Spinner = binding.getRoot().findViewById(R.id.searchVillage);
+        level6Spinner.setAdapter(level6Adapter);
+
+        level6Adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item);
+        level6Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        level6Spinner.setAdapter(level6Adapter);
+
+        // Load level 1 data
+        try {
+            List<Hierarchy> level6Data = hierarchyViewModel.retrieveVillage();
+            level6Adapter.addAll(level6Data);
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "Error loading data", Toast.LENGTH_SHORT).show();
+        }
+
+        level6Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                level6Data = level6Adapter.getItem(position);
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
         final TextView hh = binding.getRoot().findViewById(R.id.textView_compextId);
         final TextView name = binding.getRoot().findViewById(R.id.textView_compname);
 
@@ -129,13 +177,32 @@ public class HouseMembersFragment extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        // Get the selected item from the spinner
+                        Spinner searchSpinner = binding.getRoot().findViewById(R.id.searchVillage);
+                        String selectedSpinnerItem = searchSpinner.getSelectedItem().toString();
+
                         // Get the search text from the search input field
                         TextInputEditText searchInput = binding.getRoot().findViewById(R.id.search_indivdual);
                         String searchText = searchInput.getText().toString();
-                        adapter.search(searchText, individualViewModel);
-                        //progressBar.setVisibility(View.GONE);
+
+                        // Perform search based on the selected item and search text
+                        List<Individual> searchResults = null;
+                        try {
+                            searchResults = individualViewModel.retrieveBySearch(selectedSpinnerItem, searchText);
+                        } catch (ExecutionException e) {
+                            throw new RuntimeException(e);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        // Pass the search results to the adapter
+                        adapter.search(selectedSpinnerItem, searchText, individualViewModel);
+
+
+                        // Dismiss the progress dialog
+                        progress.dismiss();
                     }
-                }, 500); // change delay time as needed
+                }, 500); // Change delay time as needed
             }
 
             public void showLoadingDialogs() {
@@ -147,6 +214,8 @@ public class HouseMembersFragment extends Fragment {
                 progress.show();
             }
         });
+
+
 
         binding.buttonIndividuals.setOnClickListener(new View.OnClickListener() {
             @Override

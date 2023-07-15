@@ -863,7 +863,8 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 }
 
-                if (finalData.stillbirth == 1) {
+                //Replicate Same Changes to Pregnancyoutcome1Fragment
+                if (binding.getPregoutcome1().type == 2 || binding.getPregoutcome2().type == 2 || binding.getPregoutcome3().type == 2 || binding.getPregoutcome4().type == 2) {
 
                     try {
                         if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.vpm.dthDob.getText().toString().trim().isEmpty()
@@ -890,26 +891,6 @@ public class PregnancyoutcomeFragment extends Fragment {
                         e.printStackTrace();
                     }
 
-                    boolean end = false;
-                    boolean stb = false;
-
-                    if (!binding.childFetus1.out1Type.toString().trim().equals(2) || !binding.childFetus2.out2Type.toString().trim().equals(2)
-                            || !binding.childFetus3.out3Type.toString().trim().equals(2) || !binding.childFetus4.out4Type.toString().trim().equals(2)
-                    && binding.stillbirth.toString().trim().equals(1)) {
-                        end = true;
-                        binding.vpm.dthHousehead.setError("None of of the Outcomes is a Still Birth");
-                        Toast.makeText(getActivity(), "None of of the Outcomes is a Still Birth", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (binding.childFetus1.out1Type.toString().trim().equals(2) || binding.childFetus2.out2Type.toString().trim().equals(2)
-                            || binding.childFetus3.out3Type.toString().trim().equals(2) || binding.childFetus4.out4Type.toString().trim().equals(2)
-                            && !binding.stillbirth.toString().trim().equals(1)) {
-                        stb = true;
-                        binding.vpm.dthHousehead.setError("You selected No for StillBirth");
-                        Toast.makeText(getActivity(), "You selected No for StillBirth", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
 
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.vpm.OUTCOMELAYOUT, validateOnComplete, false);
 

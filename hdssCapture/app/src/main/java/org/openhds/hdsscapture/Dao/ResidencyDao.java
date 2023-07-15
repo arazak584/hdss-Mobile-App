@@ -6,7 +6,9 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
+import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 
 import java.util.Date;
@@ -23,11 +25,11 @@ public interface ResidencyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Residency> residency);
 
-   @Update
-   void update(Residency residency);
+    @Update
+    int update(Residency s);
 
     @Update(entity = Residency.class)
-   int update (ResidencyAmendment residencyAmendment);
+    int update(ResidencyAmendment s);
 
     @Query("DELETE FROM residency")
     void deleteAll();
@@ -41,8 +43,11 @@ public interface ResidencyDao {
     @Query("SELECT * FROM residency where individual_uuid=:id")
     List<Residency> find(String id);
 
-    @Query("SELECT * FROM residency where individual_uuid=:id and endType=1")
-    Residency findRes(String id);
+    @Query("SELECT * FROM residency where individual_uuid=:id and location_uuid=:locid and endType=1")
+    Residency findRes(String id, String locid);
+
+    @Query("SELECT * FROM residency where individual_uuid=:id and location_uuid!=:locid and endType=1")
+    Residency findEnd(String id, String locid);
 
     @Query("SELECT * FROM residency where individual_uuid=:id AND endDate is not null ORDER BY startDate DESC LIMIT 1")
     Residency finds(String id);
@@ -52,6 +57,9 @@ public interface ResidencyDao {
 
     @Query("SELECT * FROM residency WHERE uuid=:id AND location_uuid!=loc")
     Residency fetch(String id);
+
+    @Query("SELECT * FROM residency as a INNER JOIN outmigration as b on a.uuid=b.residency_uuid WHERE a.individual_uuid=:id AND endType=1")
+    Residency fetchs(String id);
 
     @Query("SELECT * FROM residency where individual_uuid=:id ORDER BY startDate ASC LIMIT 1")
     Residency amend(String id);

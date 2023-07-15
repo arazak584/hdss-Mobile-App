@@ -266,7 +266,7 @@ public class BaselineFragment extends Fragment {
 
 
         try {
-            Residency data = viewModel.findRes(individual.uuid);
+            Residency data = viewModel.findRes(individual.uuid,locations.uuid);
 
             if (data != null) {
                 binding.setResidency(data);

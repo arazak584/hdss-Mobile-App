@@ -150,6 +150,7 @@
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/menu/main_menu.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/menu/save_menu.xml" value="0.25" />
         <entry key="..\:/Users/Razak/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/menu/search_menu.xml" value="0.25" />
+        <entry key="..\:/Users/hp/Documents/GitHub/hdss-Mobile-App/hdssCapture/app/src/main/res/layout/fragment_membership.xml" value="0.24547101449275363" />
         <entry key="..\:/hdssCapture/app/src/main/res/drawable-v24/border_shape.xml" value="0.216" />
         <entry key="..\:/hdssCapture/app/src/main/res/drawable-v24/ic_baseline_add_24.xml" value="0.216" />
         <entry key="..\:/hdssCapture/app/src/main/res/drawable-v24/ic_close.xml" value="0.2135" />
@@ -261,7 +262,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

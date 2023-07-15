@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -145,6 +146,7 @@ public class HierarchyActivity extends AppCompatActivity {
 
         // Set listener for level 1 spinner
         level1Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("SuspiciousIndentation")
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Hierarchy selectedLevel1 = level1Adapter.getItem(position);

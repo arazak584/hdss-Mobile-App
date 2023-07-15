@@ -4,6 +4,7 @@ import android.app.Application;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.SocialgroupDao;
+import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 
@@ -44,9 +45,18 @@ public class SocialgroupRepository {
     }
 
 
-    public Socialgroup find(String id) throws ExecutionException, InterruptedException {
+    public Socialgroup retrieve(String id) throws ExecutionException, InterruptedException {
 
         Callable<Socialgroup> callable = () -> dao.retrieve(id.toUpperCase());
+
+        Future<Socialgroup> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Socialgroup find(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Socialgroup> callable = () -> dao.find(id);
 
         Future<Socialgroup> future = Executors.newSingleThreadExecutor().submit(callable);
 

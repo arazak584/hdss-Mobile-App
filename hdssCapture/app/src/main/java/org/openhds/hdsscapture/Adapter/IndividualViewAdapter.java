@@ -136,32 +136,23 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
     }
 
 
-    public void search(String searchText, IndividualViewModel individualViewModel) {
-
+    public void search(String selectedSpinnerItem, String searchText, IndividualViewModel individualViewModel) {
         individualList.clear();
         if (searchText != null) {
             searchText = searchText.toLowerCase(Locale.getDefault());
 
             try {
-                List<Individual> list = individualViewModel.retrieveBySearch(searchText);
-
-                if (list != null) {
-                    individualList.addAll(list);
-                }
-
-                if (list.isEmpty()) {
-                    Toast.makeText(activity.getActivity(), "No Individual Found", Toast.LENGTH_SHORT).show();
-                }
-
-            } catch (ExecutionException e) {
+                List<Individual> searchResults = individualViewModel.retrieveBySearch(selectedSpinnerItem, searchText);
+                individualList.addAll(searchResults);
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                Toast.makeText(activity.getActivity(), "Error searching individuals", Toast.LENGTH_SHORT).show();
             }
         }
         notifyDataSetChanged();
         activity.dismissLoadingDialog();
     }
+
 
     public void pull(IndividualViewModel individualViewModel) {
         individualList.clear();

@@ -46,6 +46,15 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <Spinner
+                android:id="@+id/searchVillage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="28dp"
+                android:contentDescription="@string/village"
+                android:spinnerMode="dialog"
+                tools:ignore="DuplicateSpeakableTextCheck"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
@@ -54,7 +63,7 @@
                 android:gravity="start"
                 android:layout_weight="1"
                 android:padding="5dp"
-                android:hint="@string/text_searchindividual">
+                android:hint="@string/text_searchindividual"
                 android:text="@string/text_searchindividual">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -67,16 +76,23 @@
 
 
 
-            <Button
-                android:id="@+id/button_search"
-                android:layout_width="250dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dp"
-                android:text="@string/search" />
-
 
         </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:text="@string/search" />
+    </LinearLayout>
 
         <Button
             android:id="@+id/button_individuals"

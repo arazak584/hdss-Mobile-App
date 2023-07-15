@@ -648,7 +648,7 @@
                     android:layout_height="50dp"
                     android:ems="10"
                     android:inputType="number"
-                    android:text="@={pregnancy.how_many}" />
+                    android:text="@={pregnancy.pregnancyNumber}" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -689,6 +689,7 @@
                     tools:ignore="TextContrastCheck" />
 
                 <TextView
+                    goneUnless="@{pregnancy.outcome==1}"
                     android:id="@+id/ext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -698,6 +699,7 @@
                     android:text="@string/extra"/>
 
                 <Spinner
+                    goneUnless="@{pregnancy.outcome==1}"
                     android:id="@+id/extra"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

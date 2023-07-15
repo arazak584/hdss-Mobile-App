@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import org.openhds.hdsscapture.entity.Outmigration;
+import org.openhds.hdsscapture.entity.Residency;
 
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,13 @@ public interface OutmigrationDao {
 
     @Query("SELECT * FROM outmigration")
     List<Outmigration> retrieve();
+
+//    @Query("SELECT * FROM outmigration as a INNER JOIN residency as b on a.residency_uuid=b.uuid WHERE a.individual_uuid=:id AND endType=1")
+//    Outmigration createOmg(String id);
+
+    @Query("SELECT * FROM residency as a LEFT JOIN outmigration as b on a.uuid=b.residency_uuid" +
+            " where b.residency_uuid IS NULL AND a.individual_uuid=:id and location_uuid!=:locid and endType=1")
+    Outmigration createOmg(String id, String locid);
 
     @Query("SELECT * FROM outmigration WHERE complete=1")
     List<Outmigration> retrieveomgToSync();

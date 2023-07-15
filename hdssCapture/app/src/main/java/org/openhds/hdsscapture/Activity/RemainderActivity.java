@@ -25,37 +25,37 @@ import java.util.concurrent.ExecutionException;
 
 public class RemainderActivity extends AppCompatActivity {
 
-    private Hierarchy level5Data;
-    private ArrayAdapter<Hierarchy> level5Adapter;
-    private List<Hierarchy> level5List = new ArrayList<>();
-    public static final String LEVEL5_DATA = "org.openhds.hdsscapture.activity.RemainderActivity.LEVEL5_DATA";
+    private Hierarchy level6Data;
+    private ArrayAdapter<Hierarchy> level6Adapter;
+    private List<Hierarchy> level6List = new ArrayList<>();
+    public static final String LEVEL6_DATA = "org.openhds.hdsscapture.activity.RemainderActivity.LEVEL5_DATA";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remainder);
 
         final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(this).get(HierarchyViewModel.class);
-        final Spinner level5Spinner = findViewById(R.id.spinnerRVillage);
-        level5Spinner.setAdapter(level5Adapter);
+        final Spinner level6Spinner = findViewById(R.id.spinnerRVillage);
+        level6Spinner.setAdapter(level6Adapter);
 
-        level5Adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-        level5Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        level5Spinner.setAdapter(level5Adapter);
+        level6Adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        level6Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        level6Spinner.setAdapter(level6Adapter);
 
         // Load level 1 data
         try {
-            List<Hierarchy> level5Data = hierarchyViewModel.retrieveLevel7();
-            level5Adapter.addAll(level5Data);
+            List<Hierarchy> level6Data = hierarchyViewModel.retrieveLevel7();
+            level6Adapter.addAll(level6Data);
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             Toast.makeText(this, "Error loading data", Toast.LENGTH_SHORT).show();
         }
 
-        // Set listener for level 5 spinner
-        level5Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        // Set listener for level 6 spinner
+        level6Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                level5Data = level5Adapter.getItem(position);
+                level6Data = level6Adapter.getItem(position);
 
 
             }
@@ -70,7 +70,7 @@ public class RemainderActivity extends AppCompatActivity {
 
             final Intent i = new Intent(this, ListActivity.class);
 
-            i.putExtra(LEVEL5_DATA, level5Data);
+            i.putExtra(LEVEL6_DATA, level6Data);
             startActivity(i);
         });
 

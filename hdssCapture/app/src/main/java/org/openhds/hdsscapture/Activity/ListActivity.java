@@ -23,12 +23,12 @@ public class ListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list);
 
         final Intent i = getIntent();
-        final Hierarchy level5Data = i.getParcelableExtra(RemainderActivity.LEVEL5_DATA);
+        final Hierarchy level6Data = i.getParcelableExtra(RemainderActivity.LEVEL6_DATA);
 
         final TextView villageInfo = findViewById(R.id.text_Villname);
-        villageInfo.setText(level5Data.getName());
+        villageInfo.setText(level6Data.getName());
 
-        loadFragment(RemainderFragment.newInstance(level5Data));
+        loadFragment(RemainderFragment.newInstance(level6Data));
 
     }
 

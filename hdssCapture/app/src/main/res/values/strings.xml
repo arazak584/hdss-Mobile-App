@@ -81,7 +81,7 @@
     <string name="ind_extid">Individual ID</string>
     <string name="ind_name">Name of Individual</string>
     <string name="ind_nick">Nick or Other Name of Individual</string>
-    <string name="dob">Date of birth actual</string>
+    <string name="dob">Is it an estimated Date of birth?</string>
     <string name="actual_dob">Date of Birth</string>
     <string name="ind_q4p5">Age</string>
     <string name="gender">Gender of Individual</string>
@@ -207,7 +207,7 @@
     <string name="compname">Compound Name</string>
     <string name="text_compid">Structure Number</string>
     <string name="status">Compound Status</string>
-    <string name="username">Interviewer\'s Username</string>
+    <string name="username">Username</string>
     <string name="password">Interviewer\'s Pin</string>
     <string name="text_location_extid">extId</string>
     <string name="individual">Individual Registration</string>
@@ -591,6 +591,8 @@
     <string name="reserror">Resolve these errors before you Sync</string>
     <string name="dup">Duplicate Name</string>
     <string name="send_duplicate">Send Duplicate</string>
+    <string name="old_res">Previous Residency</string>
+    <string name="duplicate">Duplicate Registration</string>
 
     //SocioDemo End
 

@@ -49,6 +49,7 @@ public class ReportActivity extends AppCompatActivity {
 
     private IndividualViewModel individualViewModel;
     private VisitViewModel visitViewModel;
+    private VisitViewModel locsvisitViewModel;
     private LocationViewModel locationViewModel;
     private SocialgroupViewModel socialgroupViewModel;
     private InmigrationViewModel inmigrationViewModel;
@@ -129,6 +130,7 @@ public class ReportActivity extends AppCompatActivity {
 
         individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
         visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
+        locsvisitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
         locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
         socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
         inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
@@ -206,29 +208,24 @@ public class ReportActivity extends AppCompatActivity {
             visitCounter.index = 2;
             list.add(2, visitCounter);
 
-            ReportCounter lvisitCounter = new ReportCounter();
-            lvisitCounter.name = "Compound Visit";
-            lvisitCounter.count = visitViewModel.countLocs(startDate, endDate, username);
-            lvisitCounter.index = 3;
-            list.add(3, lvisitCounter);
 
             ReportCounter locsCounter = new ReportCounter();
             locsCounter.name = "New Compound";
             locsCounter.count = locationViewModel.count(startDate, endDate, username);
-            locsCounter.index = 4;
-            list.add(4, locsCounter);
+            locsCounter.index = 3;
+            list.add(3, locsCounter);
 
             ReportCounter listCounter = new ReportCounter();
             listCounter.name = "Listing";
             listCounter.count = listingViewModel.count(startDate, endDate, username);
-            listCounter.index = 5;
-            list.add(5, listCounter);
+            listCounter.index = 4;
+            list.add(4, listCounter);
 
             ReportCounter nhseCounter = new ReportCounter();
             nhseCounter.name = "New Household";
             nhseCounter.count = socialgroupViewModel.count(startDate, endDate, username);
-            nhseCounter.index = 6;
-            list.add(6, nhseCounter);
+            nhseCounter.index = 5;
+            list.add(5, nhseCounter);
 
 //            int c=1;
 //            for(Socialgroup e: socialgroupViewModel.findAll(startDate, endDate)){
@@ -244,62 +241,62 @@ public class ReportActivity extends AppCompatActivity {
             ReportCounter imgCounter = new ReportCounter();
             imgCounter.name = "Inmigration";
             imgCounter.count = inmigrationViewModel.count(startDate, endDate, username);
-            imgCounter.index = 7;
-            list.add(7, imgCounter);
+            imgCounter.index = 6;
+            list.add(6, imgCounter);
 
             ReportCounter omgCounter = new ReportCounter();
             omgCounter.name = "Outmigration";
             omgCounter.count = outmigrationViewModel.count(startDate, endDate, username);
-            omgCounter.index = 8;
-            list.add(8, omgCounter);
+            omgCounter.index = 7;
+            list.add(7, omgCounter);
 
             ReportCounter pregCounter = new ReportCounter();
             pregCounter.name = "Pregnancy";
             pregCounter.count = pregnancyViewModel.count(startDate, endDate, username);
-            pregCounter.index = 9;
-            list.add(9, pregCounter);
+            pregCounter.index = 8;
+            list.add(8, pregCounter);
 
             ReportCounter outcomeCounter = new ReportCounter();
             outcomeCounter.name = "Pregnancy Outcome";
             outcomeCounter.count = pregnancyoutcomeViewModel.count(startDate, endDate, username);
-            outcomeCounter.index = 10;
-            list.add(10, outcomeCounter);
+            outcomeCounter.index = 9;
+            list.add(9, outcomeCounter);
 
             ReportCounter demoCounter = new ReportCounter();
             demoCounter.name = "Demographic";
             demoCounter.count = demographicViewModel.count(startDate, endDate, username);
-            demoCounter.index = 11;
-            list.add(11, demoCounter);
+            demoCounter.index = 10;
+            list.add(10, demoCounter);
 
             ReportCounter sesCounter = new ReportCounter();
             sesCounter.name = "Household Profile";
             sesCounter.count = hdssSociodemoViewModel.count(startDate, endDate, username);
-            sesCounter.index = 12;
-            list.add(12, sesCounter);
+            sesCounter.index = 11;
+            list.add(11, sesCounter);
 
             ReportCounter dthCounter = new ReportCounter();
             dthCounter.name = "Death";
             dthCounter.count = deathViewModel.count(startDate, endDate, username);
-            dthCounter.index = 13;
-            list.add(13, dthCounter);
+            dthCounter.index = 12;
+            list.add(12, dthCounter);
 
             ReportCounter amendCounter = new ReportCounter();
             amendCounter.name = "Amendment";
             amendCounter.count = amendmentViewModel.count(startDate, endDate, username);
-            amendCounter.index = 14;
-            list.add(14, amendCounter);
+            amendCounter.index = 13;
+            list.add(13, amendCounter);
 
             ReportCounter relationshipCounter = new ReportCounter();
             relationshipCounter.name = "Relationship";
             relationshipCounter.count = relationshipViewModel.count(startDate, endDate, username);
-            relationshipCounter.index = 15;
-            list.add(15, relationshipCounter);
+            relationshipCounter.index = 14;
+            list.add(14, relationshipCounter);
 
             ReportCounter vacCounter = new ReportCounter();
             vacCounter.name = "Vaccination";
             vacCounter.count = vaccinationViewModel.count(startDate, endDate, username);
-            vacCounter.index = 16;
-            list.add(16, vacCounter);
+            vacCounter.index = 15;
+            list.add(15, vacCounter);
 
 
             reportAdapter = new ReportAdapter(this);

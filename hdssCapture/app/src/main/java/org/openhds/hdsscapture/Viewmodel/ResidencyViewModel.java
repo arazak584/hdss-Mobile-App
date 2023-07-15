@@ -7,6 +7,8 @@ import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.ResidencyRepository;
 import org.openhds.hdsscapture.entity.Residency;
+import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
+import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 
 import java.util.Date;
 import java.util.List;
@@ -31,8 +33,12 @@ public class ResidencyViewModel extends AndroidViewModel {
         return residencyRepository.find(id);
     }
 
-    public Residency findRes(String id) throws ExecutionException, InterruptedException {
-        return residencyRepository.findRes(id);
+    public Residency findRes(String id,String locid) throws ExecutionException, InterruptedException {
+        return residencyRepository.findRes(id, locid);
+    }
+
+    public Residency findEnd(String id,String locid) throws ExecutionException, InterruptedException {
+        return residencyRepository.findEnd(id, locid);
     }
 
     public Residency finds(String id) throws ExecutionException, InterruptedException {
@@ -48,6 +54,10 @@ public class ResidencyViewModel extends AndroidViewModel {
         return residencyRepository.fetch(id);
     }
 
+    public Residency fetchs(String id) throws ExecutionException, InterruptedException {
+        return residencyRepository.fetchs(id);
+    }
+
     public Residency amend(String id) throws ExecutionException, InterruptedException {
         return residencyRepository.amend(id);
     }
@@ -60,5 +70,9 @@ public class ResidencyViewModel extends AndroidViewModel {
 
     public void add(Residency... data){
         residencyRepository.create(data);
+    }
+
+    public int update(ResidencyAmendment s){
+        return residencyRepository.update(s);
     }
 }

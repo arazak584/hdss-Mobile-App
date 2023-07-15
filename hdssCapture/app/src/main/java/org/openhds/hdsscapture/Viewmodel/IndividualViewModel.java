@@ -38,6 +38,10 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.retrieveChild(id);
     }
 
+    public List<Individual> retrieveBy(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.retrieveBy(id);
+    }
+
     public List<Individual> retrieveByMother(String id) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveByMother(id);
     }
@@ -55,8 +59,8 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.findAll();
     }
 
-    public List<Individual> retrieveBySearch(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveBySearch("%" + id + "%");
+    public List<Individual> retrieveBySearch(String id, String searchText) throws ExecutionException, InterruptedException {
+        return individualRepository.retrieveBySearch(id, "%" + searchText + "%");
     }
 
 

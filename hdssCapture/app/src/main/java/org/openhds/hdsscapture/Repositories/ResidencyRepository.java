@@ -5,6 +5,8 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.ResidencyDao;
 import org.openhds.hdsscapture.entity.Residency;
+import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
+import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 
 import java.util.Date;
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ResidencyRepository {
 
@@ -34,6 +37,11 @@ public class ResidencyRepository {
         });
     }
 
+    public int update(ResidencyAmendment s) {
+        AtomicInteger row = new AtomicInteger();
+        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
+        return row.intValue();
+    }
 
     public List<Residency> findAll() throws ExecutionException, InterruptedException {
 
@@ -62,9 +70,18 @@ public class ResidencyRepository {
         return future.get();
     }
 
-    public Residency findRes(String id) throws ExecutionException, InterruptedException {
+    public Residency findRes(String id,String locid) throws ExecutionException, InterruptedException {
 
-        Callable<Residency> callable = () -> dao.findRes(id);
+        Callable<Residency> callable = () -> dao.findRes(id, locid);
+
+        Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Residency findEnd(String id,String locid) throws ExecutionException, InterruptedException {
+
+        Callable<Residency> callable = () -> dao.findEnd(id, locid);
 
         Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
 
@@ -84,6 +101,15 @@ public class ResidencyRepository {
     public Residency fetch(String id) throws ExecutionException, InterruptedException {
 
         Callable<Residency> callable = () -> dao.fetch(id.toUpperCase());
+
+        Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Residency fetchs(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Residency> callable = () -> dao.fetchs(id);
 
         Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
 

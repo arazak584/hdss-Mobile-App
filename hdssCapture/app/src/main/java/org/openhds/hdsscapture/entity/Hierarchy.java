@@ -8,12 +8,14 @@ import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
 
-@Entity(tableName = "locationhierarchy")
+@Entity(tableName = "locationhierarchy",
+        indices = {@Index(value = {"uuid","parent_uuid"}, unique = false)})
 public class Hierarchy extends BaseObservable implements Parcelable {
 
     @NotNull
