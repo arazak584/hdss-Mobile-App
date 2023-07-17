@@ -67,17 +67,12 @@ public class ReportActivity extends AppCompatActivity {
     private ReportAdapter reportAdapter;
 
     private EditText startDateEditText, endDateEditText, usernameEditText;
-    private ProgressDialog progressDialog;
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Generating Report...");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
 
         startDateEditText = findViewById(R.id.startDate);
         endDateEditText = findViewById(R.id.endDate);
@@ -150,18 +145,37 @@ public class ReportActivity extends AppCompatActivity {
         generateReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog.show();
+                showLoadingDialog();
 
                 // Simulate long operation
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        progressDialog.dismiss();
+                        report();
+                        hideLoadingDialog(); // Dismiss the progress dialog after generating the report
                     }
-                }, 10);
-                report();
+                }, 500);
+
+            }
+
+            public void showLoadingDialog() {
+                if (progress == null) {
+                    progress = new ProgressDialog(ReportActivity.this);
+                    progress.setTitle("Generating Report...");
+                    progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progress.setMessage(getString(R.string.please_wait_lbl));
+                    progress.setCancelable(false);
+                }
+                progress.show();
+            }
+
+            public void hideLoadingDialog() {
+                if (progress != null && progress.isShowing()) {
+                    progress.dismiss();
+                }
             }
         });
+
     }
 
     private void report() {

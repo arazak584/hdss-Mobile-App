@@ -752,7 +752,7 @@ public class ResidencyFragment extends Fragment {
                 omg.recordedDate = calendar.getTime();
                 omg.uuid = uuidString;
                 omg.individual_uuid = finalData.individual_uuid;
-                omg.insertDate = new Date();
+                omg.insertDate = finalData.insertDate;
                 omg.destination = binding.getInmigration().origin;
                 omg.reason = binding.getInmigration().reason;
                 omg.residency_uuid = binding.getOmgg().old_residency;
