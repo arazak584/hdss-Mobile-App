@@ -144,6 +144,18 @@
             android:layout_height="wrap_content"
             android:textSize="15sp" />
 
+        <Button
+            android:id="@+id/button_Complete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/complete"/>
+
+        <TextView
+            android:id="@+id/textView_Complete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp" />
+
 
 
 

@@ -719,7 +719,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -727,7 +726,6 @@
                     android:text="@string/stillbirth"/>
 
                 <RadioGroup
-                    android:visibility="gone"
                     android:id="@+id/stillbirth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

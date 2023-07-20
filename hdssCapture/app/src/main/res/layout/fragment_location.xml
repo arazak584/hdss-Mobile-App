@@ -150,7 +150,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/cluster">
+                    android:hint="@string/cluster"
                     android:text="@string/cluster">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -170,7 +170,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/compoundnumber">
+                    android:hint="@string/compoundnumber"
                     android:text="@string/compoundnumber">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -236,6 +236,7 @@
                         android:text="@={locations.locationName}"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
+
 
                 <Button
                     android:id="@+id/button_gps"
@@ -321,7 +322,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-
                     android:text="@string/location_status"/>
 
 

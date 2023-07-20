@@ -57,11 +57,13 @@
 
 
         <TextView
+            goneUnless="@{sociodemo.marital_scorres==1}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/PTR_SCORRES_SOCIO" />
 
         <Spinner
+            goneUnless="@{sociodemo.marital_scorres==1}"
             android:id="@+id/PTR_SCORRES"
             selection="@{sociodemo.ptr_scorres}"
             android:layout_width="match_parent"

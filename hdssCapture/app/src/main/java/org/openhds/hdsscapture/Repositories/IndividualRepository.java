@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.IndividualDao;
+import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
@@ -189,5 +190,13 @@ public class IndividualRepository {
     }
 
 
+    public List<Individual> error() throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.error();
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
 
 }

@@ -3,7 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="org.openhds.hdsscapture">
 
+    <supports-screens android:largeScreens="true"
+                      android:xlargeScreens="true"
+        android:requiresSmallestWidthDp="800"/>
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -49,6 +54,7 @@
         <activity
             android:name=".Activity.HierarchyActivity"
             android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
         <activity
             android:name=".Activity.RemainderActivity"
@@ -60,12 +66,14 @@
         <activity
             android:name=".Activity.PullActivity"
             android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="Fetch Data From Server"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
         <activity
             android:name=".Activity.PushActivity"
             android:exported="false"
             android:label="Sync Data"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:resizeableActivity="true"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
             tools:targetApi="24" />

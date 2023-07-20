@@ -1,6 +1,10 @@
 package org.openhds.hdsscapture.Activity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -8,11 +12,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Adapter.ErrorAdapter;
+import org.openhds.hdsscapture.Dao.HdssSociodemoDao;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Queries;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
+import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.entity.Death;
+import org.openhds.hdsscapture.entity.HdssSociodemo;
+import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
 import java.text.SimpleDateFormat;
@@ -25,6 +34,8 @@ public class ErrorActivity extends AppCompatActivity {
 
     private SocialgroupViewModel socialgroupViewModel;
     private DeathViewModel deathViewModel;
+    private IndividualViewModel individualViewModel;
+    private ProgressDialog progress;
 
     private ErrorAdapter errorAdapter;
 
@@ -35,8 +46,43 @@ public class ErrorActivity extends AppCompatActivity {
 
         socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
         deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
 
-        query();
+        Button generateQueryButton = findViewById(R.id.btn_query);
+        generateQueryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLoadingDialog();
+
+                // Simulate long operation
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        query();
+                        hideLoadingDialog(); // Dismiss the progress dialog after generating the report
+                    }
+                }, 500);
+
+            }
+
+            public void showLoadingDialog() {
+                if (progress == null) {
+                    progress = new ProgressDialog(ErrorActivity.this);
+                    progress.setTitle("Generating Query...");
+                    progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progress.setMessage(getString(R.string.please_wait_lbl));
+                    progress.setCancelable(false);
+                }
+                progress.show();
+            }
+
+            public void hideLoadingDialog() {
+                if (progress != null && progress.isShowing()) {
+                    progress.dismiss();
+                }
+            }
+        });
+
     }
     private void query() {
         List<Queries> list = new ArrayList<>();
@@ -68,6 +114,20 @@ public class ErrorActivity extends AppCompatActivity {
                 r1.date = "" + formattedDate;
                 r1.error = "Change Head of Household";
                 r1.index = d;
+
+                list.add(r1);
+
+            }
+
+            int g=1;
+            for (Individual e : individualViewModel.error()) {
+                String formattedDate = f.format(e.insertDate);
+                Queries r1 = new Queries();
+                r1.name = "Profile " ;
+                r1.extid = "" + e.compextId + " - " +e.firstName + " " + e.lastName;
+                r1.date = "" + e.houseExtId;
+                r1.error = "Incomplete Profile";
+                r1.index = g;
 
                 list.add(r1);
 

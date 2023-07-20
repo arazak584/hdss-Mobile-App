@@ -164,6 +164,14 @@ public class IndividualFragment extends Fragment {
             binding.getIndividual().complete = 1;
         }
 
+        if (individual.compextId == null) {
+            binding.getIndividual().compextId = locations.compextId;
+        }
+
+        if (individual.houseExtId == null) {
+            binding.getIndividual().houseExtId = socialgroup.extId;
+        }
+
         if (individual.ghanacard != null && individual.gh ==null) {
             binding.getIndividual().gh=1;
         }
@@ -403,8 +411,6 @@ public class IndividualFragment extends Fragment {
             }
 
 
-
-
             boolean gh = false;
 
             if (!binding.ghanacard.getText().toString().trim().isEmpty()) {
@@ -418,6 +424,29 @@ public class IndividualFragment extends Fragment {
                     return;
                 }
             }
+
+            boolean val = false;
+            String firstName = binding.individualFirstName.getText().toString();
+            if (firstName.charAt(0) == ' ' || firstName.charAt(firstName.length() - 1) == ' ') {
+                binding.individualFirstName.setError("Spaces are not allowed before or after the Name");
+                Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                val = true;
+                return;
+            } else {
+                binding.individualFirstName.setError(null); // Clear the error if the input is valid
+            }
+
+            boolean vals = false;
+            String lastName = binding.individualLastName.getText().toString();
+            if (lastName.charAt(0) == ' ' || lastName.charAt(lastName.length() - 1) == ' ') {
+                binding.individualLastName.setError("Spaces are not allowed before or after the Name");
+                Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                vals = true;
+                return;
+            } else {
+                binding.individualLastName.setError(null); // Clear the error if the input is valid
+            }
+
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();

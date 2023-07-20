@@ -248,23 +248,114 @@ public class PregnancyFragment extends Fragment {
             Pregnancy finalData = binding.getPregnancy();
 
             try {
-                if (!binding.editTextRecordedDate.getText().toString().trim().isEmpty() && !binding.expectedDelivery.getText().toString().trim().isEmpty()) {
+                if (!binding.editTextRecordedDate.getText().toString().trim().isEmpty() && !binding.editTextLastClinicVisitDate.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date currentDate = new Date();
                     Date stdate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
-                    Date edate = f.parse(binding.expectedDelivery.getText().toString().trim());
+                    Date edate = f.parse(binding.editTextLastClinicVisitDate.getText().toString().trim());
                     if (stdate.after(currentDate)) {
                         binding.editTextRecordedDate.setError("Date of Conception Cannot Be a Future Date");
                         Toast.makeText(getActivity(), "Date of Conception Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
                         return;
                     }
-//                    if (edate.before(stdate)) {
-//                        binding.expectedDelivery.setError("Delivery Date Cannot Be Less than Conception Date");
-//                        Toast.makeText(getActivity(), "Delivery Date Cannot Be Less than Conception Date", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
+                    if (edate.before(stdate) || edate.equals(stdate)) {
+                        binding.editTextLastClinicVisitDate.setError("Last Visit Date Cannot Be Less than or Equal to Conception Date");
+                        Toast.makeText(getActivity(), "Last Visit Date Cannot Be Less than or Equal to Conception Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     // clear error if validation passes
-                    binding.expectedDelivery.setError(null);
+                    binding.editTextLastClinicVisitDate.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+            boolean total = false;
+            if (finalData.anteNatalClinic == 1 && !binding.ageOfPregFromPregNotes.getText().toString().trim().isEmpty()) {
+                int totalweeks = Integer.parseInt(binding.ageOfPregFromPregNotes.getText().toString().trim());
+                if (totalweeks > 52) {
+                    total = true;
+                    binding.ageOfPregFromPregNotes.setError("Maximum Number of Weeks Allowed is 52");
+                    Toast.makeText(getActivity(), "Maximum Number of Weeks Allowed is 52", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            boolean totalm = false;
+            if (finalData.anteNatalClinic == 1 && !binding.estimatedAgeOfPreg.getText().toString().trim().isEmpty()) {
+                int totalmnth = Integer.parseInt(binding.estimatedAgeOfPreg.getText().toString().trim());
+                if (totalmnth > 13) {
+                    totalm = true;
+                    binding.estimatedAgeOfPreg.setError("Maximum Number of Months Allowed is 13");
+                    Toast.makeText(getActivity(), "Maximum Number of Months Allowed is 13", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            boolean check = false;
+            if (finalData.anteNatalClinic == 1
+                    && !binding.estimatedAgeOfPreg.getText().toString().trim().isEmpty()
+                    && !binding.ageOfPregFromPregNotes.getText().toString().trim().isEmpty()) {
+
+                int totalMonths = Integer.parseInt(binding.estimatedAgeOfPreg.getText().toString().trim());
+                int totalWeeks = Integer.parseInt(binding.ageOfPregFromPregNotes.getText().toString().trim());
+
+                int totalWeeksConvertedToMonths = totalWeeks / 4;
+
+                if (totalMonths < totalWeeksConvertedToMonths) {
+                    check = true;
+                    binding.ageOfPregFromPregNotes.setError("Check Number of Months and weeks Pregnant");
+                    Toast.makeText(getActivity(), "Check Number of Months and weeks Pregnant", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            boolean totalmths = false;
+            if (finalData.anteNatalClinic == 1 && !binding.firstRec.getText().toString().trim().isEmpty()) {
+                int totalmnth = Integer.parseInt(binding.firstRec.getText().toString().trim());
+                if (totalmnth > 9) {
+                    totalmths = true;
+                    binding.firstRec.setError("Maximum Number of Months Allowed is 9");
+                    Toast.makeText(getActivity(), "Maximum Number of Months Allowed is 9", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            boolean bed = false;
+            if (finalData.own_bnet == 1 && !binding.howMany.getText().toString().trim().isEmpty()) {
+                int totalmnth = Integer.parseInt(binding.howMany.getText().toString().trim());
+                if (totalmnth > 10) {
+                    bed = true;
+                    binding.howMany.setError("Maximum Number of Bednets is 10");
+                    Toast.makeText(getActivity(), "Maximum Number of Bednets is 10", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            boolean pregs = false;
+            if (finalData.first_preg == 2 && !binding.pregnancyNumber.getText().toString().trim().isEmpty()) {
+                int totalbirth = Integer.parseInt(binding.pregnancyNumber.getText().toString().trim());
+                if (totalbirth < 2) {
+                    pregs = true;
+                    binding.pregnancyNumber.setError("Cannot be less than 2");
+                    Toast.makeText(getActivity(), "Total Pregnancies Cannot be less than 2", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            try {
+                if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextLastClinicVisitDate.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date stdate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                    Date edate = f.parse(binding.editTextLastClinicVisitDate.getText().toString().trim());
+                    if (stdate.before(edate)) {
+                        binding.editTextLastClinicVisitDate.setError("Date of Outcome Cannot Be Before Last Clinic Visit Date");
+                        Toast.makeText(getActivity(), "Date of Outcome Cannot Be Before Last Clinic Visit Date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.editTextLastClinicVisitDate.setError(null);
                 }
             } catch (ParseException e) {
                 Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
@@ -283,7 +374,7 @@ public class PregnancyFragment extends Fragment {
                         Toast.makeText(getActivity(), "Date of Outcome Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    if (edate.before(stdate)) {
+                    if (edate.before(stdate) || edate.equals(stdate)) {
                         binding.expectedDelivery.setError("Delivery Date Cannot Be Less than Conception Date");
                         Toast.makeText(getActivity(), "Delivery Date Cannot Be Less than Conception Date", Toast.LENGTH_SHORT).show();
                         return;
@@ -314,6 +405,8 @@ public class PregnancyFragment extends Fragment {
                 Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
+
+
 
 
             final boolean validateOnComplete = true;//finalData.complete == 1;

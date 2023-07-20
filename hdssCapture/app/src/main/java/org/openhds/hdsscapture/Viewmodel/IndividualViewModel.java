@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.IndividualRepository;
+import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
@@ -60,7 +61,7 @@ public class IndividualViewModel extends AndroidViewModel {
     }
 
     public List<Individual> retrieveBySearch(String id, String searchText) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveBySearch(id, "%" + searchText + "%");
+        return individualRepository.retrieveBySearch( "%" + id + "%", "%" + searchText + "%");
     }
 
 
@@ -92,6 +93,9 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.countIndividuals(startDate, endDate, username);
     }
 
+    public List<Individual> error() throws ExecutionException, InterruptedException {
+        return individualRepository.error();
+    }
 
     public void add(Individual data){ individualRepository.create(data);}
 

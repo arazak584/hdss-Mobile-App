@@ -198,143 +198,214 @@ public class PullActivity extends AppCompatActivity {
         });
 
         //Sync Zipped Individual
-        final TextView textView_SyncIndividual = findViewById(R.id.textView_SyncIndividualData);
         final Button button_DownloadIndividual = findViewById(R.id.button_SyncIndividualData);
+        final TextView textView_SyncIndividual  = findViewById(R.id.textView_SyncIndividualData);
         button_DownloadIndividual.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 progress.show();
-                progress.setMessage("Downloading Individual Dataset...");
-                Call<ResponseBody> call = dao.downloadZipFile();
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        //progress.show();
-                        if (response.isSuccessful()) {
-                            //progress.setMessage("Downloading zip file...");
-                            progress.setMessage("Contacting Server...");
-                            try {
-                                // Read the response body into a file
-                                progress.setMessage("Downloading Zip File...");
-                                InputStream inputStream = response.body().byteStream();
-                                File file = new File(getExternalCacheDir(), "individual.zip");
-                                if (file.exists()) {
-                                    file.delete();
-                                }
-                                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                                fileOutputStream.write(response.body().bytes());
-                                fileOutputStream.close();
-                                //Toast.makeText(PullActivity.this, "Download success", Toast.LENGTH_SHORT).show();
-                                byte[] buffer = new byte[1024];
-                                int read;
-                                while ((read = inputStream.read(buffer)) != -1) {
-                                    fileOutputStream.write(buffer, 0, read);
-                                }
-                                fileOutputStream.close();
+                progress.setMessage("Downloading Individuals...");
 
-                                // Unzip the file
-                                progress.setMessage("Unzipping File...");
-                                ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
-                                ZipEntry zipEntry = zipInputStream.getNextEntry();
-                                while (zipEntry != null) {
-                                    String fileName = zipEntry.getName();
-                                    File newFile = new File(getExternalCacheDir() + File.separator + fileName);
-                                    FileOutputStream fos = new FileOutputStream(newFile);
-                                    int len;
-                                    while ((len = zipInputStream.read(buffer)) > 0) {
-                                        fos.write(buffer, 0, len);
+                // Specify the file names
+                String zipFileName = "individual.zip";
+                String extractedFileName = "individual.csv";
+
+                // File path for the downloaded location file
+                File file = new File(getExternalCacheDir(), zipFileName);
+
+                // Check if the file already exists
+                if (!file.exists()) {
+                    // File doesn't exist, proceed with download, unzip, and insert
+
+                    Call<ResponseBody> call = dao.downloadZipFile();
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            //progress.show();
+                            if (response.isSuccessful()) {
+                                try {
+                                    // Read the response body into a file
+                                    InputStream inputStream = response.body().byteStream();
+                                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                                    byte[] buffer = new byte[1024];
+                                    int read;
+                                    while ((read = inputStream.read(buffer)) != -1) {
+                                        fileOutputStream.write(buffer, 0, read);
                                     }
-                                    fos.close();
-                                    zipEntry = zipInputStream.getNextEntry();
-                                    progress.dismiss();
-                                }
-                                zipInputStream.close();
+                                    fileOutputStream.close();
 
-                                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
-                                individualDao = appDatabase.individualDao();
-                                // Import the unzipped CSV file into the Room database
-                                if (individualDao != null) {
-                                    File unzippedFile = new File(getExternalCacheDir() + File.separator + "individual.csv");
-                                    CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("dob").addColumn("dobAspect").addColumn("extId")
-                                            .addColumn("firstName").addColumn("fw_uuid").addColumn("gender").addColumn("ghanacard").addColumn("insertDate")
-                                            .addColumn("lastName").addColumn("otherName").addColumn("father_uuid").addColumn("mother_uuid").build();
-                                    MappingIterator<Individual> iterator = mapper.readerFor(Individual.class).with(schema).readValues(unzippedFile);
-                                    progress.show();
-                                    AtomicInteger counts = new AtomicInteger();
-                                    AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 5000;
-                                        List<Individual> individuals = new ArrayList<>();
-                                        int batchCount = 0;
-                                        while (iterator.hasNext()) {
-                                            Individual individual = iterator.next();
-                                            if (individual != null) {
-                                                runOnUiThread(new Runnable() {
-                                                    public void run() {
-                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the Individuals");
+                                    // Unzip the file
+                                    ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                                    ZipEntry zipEntry = zipInputStream.getNextEntry();
+                                    while (zipEntry != null) {
+                                        String fileName = zipEntry.getName();
+                                        if (fileName.equals(extractedFileName)) {
+                                            File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                            FileOutputStream fos = new FileOutputStream(newFile);
+                                            int len;
+                                            while ((len = zipInputStream.read(buffer)) > 0) {
+                                                fos.write(buffer, 0, len);
+                                            }
+                                            fos.close();
+                                            break;
+                                        }
+                                        zipEntry = zipInputStream.getNextEntry();
+                                    }
+                                    zipInputStream.close();
+
+                                    AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                                    individualDao = appDatabase.individualDao();
+                                    // Import the unzipped CSV file into the Room database
+                                    if (individualDao != null) {
+                                        File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                                        CsvMapper mapper = new CsvMapper();
+                                        CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("dob").addColumn("dobAspect").addColumn("extId")
+                                                .addColumn("firstName").addColumn("fw_uuid").addColumn("gender").addColumn("ghanacard").addColumn("insertDate")
+                                                .addColumn("lastName").addColumn("otherName").addColumn("father_uuid").addColumn("mother_uuid").build();
+                                        MappingIterator<Individual> iterator = mapper.readerFor(Individual.class).with(schema).readValues(unzippedFile);
+                                        progress.setCancelable(false);
+                                        progress.setCanceledOnTouchOutside(false);
+                                        progress.show();
+                                        AtomicInteger counts = new AtomicInteger();
+                                        AppDatabase.databaseWriteExecutor.execute(() -> {
+                                            int batchSize = 5000;
+                                            List<Individual> individuals = new ArrayList<>();
+                                            int batchCount = 0;
+                                            while (iterator.hasNext()) {
+                                                Individual individual = iterator.next();
+                                                if (individual != null) {
+                                                    runOnUiThread(new Runnable() {
+                                                        public void run() {
+                                                            progress.setMessage("Saving " + counts.incrementAndGet() + " of the Individuals");
+                                                        }
+                                                    });
+                                                    individuals.add(individual);
+                                                    batchCount++;
+                                                    if (batchCount == batchSize) {
+                                                        individualDao.insert(individuals);
+                                                        individuals.clear();
+                                                        batchCount = 0;
                                                     }
-                                                });
-
-                                                individuals.add(individual);
-                                                batchCount++;
-                                                if (batchCount == batchSize) {
-                                                    individualDao.insert(individuals);
-                                                    individuals.clear();
-                                                    batchCount = 0;
                                                 }
                                             }
-                                        }
-                                        if (batchCount > 0) {
-                                            individualDao.insert(individuals);
-                                        }
-                                        progress.dismiss();
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                textView_SyncIndividual.setText("Total Individuals Saved: " + counts);
-                                                textView_SyncIndividual.setTextColor(Color.GREEN);
+                                            if (batchCount > 0) {
+                                                individualDao.insert(individuals);
                                             }
+                                            progress.dismiss();
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    textView_SyncIndividual.setText("Total Individuals Saved: " + counts);
+                                                    textView_SyncIndividual.setTextColor(Color.GREEN);
+                                                }
+                                            });
+
                                         });
-
-                                    });
-                                }
-                                File cacheDir = getExternalCacheDir();
-                                if (cacheDir != null && cacheDir.isDirectory()) {
-                                    File[] files = cacheDir.listFiles();
-                                    for (File filez : files) {
-                                        String fileName = filez.getName();
-                                        if (fileName.endsWith(".zip") || fileName.endsWith(".csv")) {
-                                            filez.delete();
-                                        }
                                     }
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
 
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
 
                         }
 
-                    }
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            // Show error message
+                            progress.dismiss();
+                            textView_SyncIndividual.setText("Individuals Download Error! Retry or Contact Administrator");
+                            textView_SyncIndividual.setTextColor(Color.RED);
+                        }
+                    });
+                } else {
+                    // File already exists, proceed with unzipping and inserting the data
+                    try {
+                        // Unzip the file
+                        ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                        ZipEntry zipEntry = zipInputStream.getNextEntry();
+                        while (zipEntry != null) {
+                            String fileName = zipEntry.getName();
+                            if (fileName.equals(extractedFileName)) {
+                                File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                FileOutputStream fos = new FileOutputStream(newFile);
+                                byte[] buffer = new byte[1024];
+                                int len;
+                                while ((len = zipInputStream.read(buffer)) > 0) {
+                                    fos.write(buffer, 0, len);
+                                }
+                                fos.close();
+                                break;
+                            }
+                            zipEntry = zipInputStream.getNextEntry();
+                        }
+                        zipInputStream.close();
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        // Show error message
+                        // Insert the unzipped data into the Room database
+                        AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                        individualDao = appDatabase.individualDao();
+
+                        // Import the unzipped CSV file into the Room database
+                        if (individualDao != null) {
+                            File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                            CsvMapper mapper = new CsvMapper();
+                            CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("dob").addColumn("dobAspect").addColumn("extId")
+                                    .addColumn("firstName").addColumn("fw_uuid").addColumn("gender").addColumn("ghanacard").addColumn("insertDate")
+                                    .addColumn("lastName").addColumn("otherName").addColumn("father_uuid").addColumn("mother_uuid").build();
+                            MappingIterator<Individual> iterator = mapper.readerFor(Individual.class).with(schema).readValues(unzippedFile);
+                            progress.setCancelable(false);
+                            progress.setCanceledOnTouchOutside(false);
+                            progress.show();
+                            AtomicInteger counts = new AtomicInteger();
+                            AppDatabase.databaseWriteExecutor.execute(() -> {
+                                int batchSize = 5000;
+                                List<Individual> individuals = new ArrayList<>();
+                                int batchCount = 0;
+                                while (iterator.hasNext()) {
+                                    Individual individual = iterator.next();
+                                    if (individual != null) {
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                progress.setMessage("Saving " + counts.incrementAndGet() + " of the Individuals");
+                                            }
+                                        });
+                                        individuals.add(individual);
+                                        batchCount++;
+                                        if (batchCount == batchSize) {
+                                            individualDao.insert(individuals);
+                                            individuals.clear();
+                                            batchCount = 0;
+                                        }
+                                    }
+                                }
+                                if (batchCount > 0) {
+                                    individualDao.insert(individuals);
+                                }
+                                progress.dismiss();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        textView_SyncIndividual.setText("Total Individuals Saved: " + counts);
+                                        textView_SyncIndividual.setTextColor(Color.GREEN);
+                                    }
+                                });
+
+                            });
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                         progress.dismiss();
-                        textView_SyncIndividual.setText("Individual Download Error! Retry or Contact Administrator");
+                        textView_SyncIndividual.setText("Error while unzipping or inserting data.");
                         textView_SyncIndividual.setTextColor(Color.RED);
                     }
-
-
-                });
-
-
+                }
             }
-
         });
 
 
-        //Sync Zipped Locations
+        // Sync Zipped Locations
         final Button button_DownloadLocation = findViewById(R.id.button_SyncLocationData);
         final TextView textView_SyncLocation = findViewById(R.id.textView_SyncLocationData);
         button_DownloadLocation.setOnClickListener(new View.OnClickListener() {
@@ -343,260 +414,412 @@ public class PullActivity extends AppCompatActivity {
             public void onClick(View v) {
                 progress.show();
                 progress.setMessage("Downloading Locations...");
-                Call<ResponseBody> call = dao.downloadLocation();
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        //progress.show();
-                        if (response.isSuccessful()) {
-                            try {
-                                // Read the response body into a file
-                                InputStream inputStream = response.body().byteStream();
-                                File file = new File(getExternalCacheDir(), "location.zip");
-                                if (file.exists()) {
-                                    file.delete();
-                                }
-                                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                                fileOutputStream.write(response.body().bytes());
-                                fileOutputStream.close();
-                                byte[] buffer = new byte[1024];
-                                int read;
-                                while ((read = inputStream.read(buffer)) != -1) {
-                                    fileOutputStream.write(buffer, 0, read);
-                                }
-                                fileOutputStream.close();
 
-                                // Unzip the file
-                                ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
-                                ZipEntry zipEntry = zipInputStream.getNextEntry();
-                                while (zipEntry != null) {
-                                    String fileName = zipEntry.getName();
-                                    File newFile = new File(getExternalCacheDir() + File.separator + fileName);
-                                    FileOutputStream fos = new FileOutputStream(newFile);
-                                    int len;
-                                    while ((len = zipInputStream.read(buffer)) > 0) {
-                                        fos.write(buffer, 0, len);
+                // Specify the file names
+                String zipFileName = "location.zip";
+                String extractedFileName = "location.csv";
+
+                // File path for the downloaded location file
+                File file = new File(getExternalCacheDir(), zipFileName);
+
+                // Check if the file already exists
+                if (!file.exists()) {
+                    // File doesn't exist, proceed with download, unzip, and insert
+
+                    Call<ResponseBody> call = dao.downloadLocation();
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            //progress.show();
+                            if (response.isSuccessful()) {
+                                try {
+                                    // Read the response body into a file
+                                    InputStream inputStream = response.body().byteStream();
+                                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                                    byte[] buffer = new byte[1024];
+                                    int read;
+                                    while ((read = inputStream.read(buffer)) != -1) {
+                                        fileOutputStream.write(buffer, 0, read);
                                     }
-                                    fos.close();
-                                    zipEntry = zipInputStream.getNextEntry();
-                                }
-                                zipInputStream.close();
+                                    fileOutputStream.close();
 
-                                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
-                                locationDao = appDatabase.locationDao();
-                                // Import the unzipped CSV file into the Room database
-                                if (locationDao != null) {
-                                    File unzippedFile = new File(getExternalCacheDir() + File.separator + "location.csv");
-                                    CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("accuracy").addColumn("compextId").addColumn("compno")
-                                            .addColumn("fw_uuid").addColumn("insertDate").addColumn("latitude").addColumn("locationLevel_uuid").addColumn("locationName")
-                                            .addColumn("locationType").addColumn("longitude").addColumn("status").build();
-                                    MappingIterator<Locations> iterator = mapper.readerFor(Locations.class).with(schema).readValues(unzippedFile);
-                                    progress.setCancelable(true);
-                                    progress.setCanceledOnTouchOutside(true);
-                                    progress.show();
-                                    AtomicInteger counts = new AtomicInteger();
-                                    AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 5000;
-                                        List<Locations> locations = new ArrayList<>();
-                                        int batchCount = 0;
-                                        while (iterator.hasNext()) {
-                                            Locations location = iterator.next();
-                                            if (location != null) {
-                                                runOnUiThread(new Runnable() {
-                                                    public void run() {
-                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the Compounds");
+                                    // Unzip the file
+                                    ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                                    ZipEntry zipEntry = zipInputStream.getNextEntry();
+                                    while (zipEntry != null) {
+                                        String fileName = zipEntry.getName();
+                                        if (fileName.equals(extractedFileName)) {
+                                            File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                            FileOutputStream fos = new FileOutputStream(newFile);
+                                            int len;
+                                            while ((len = zipInputStream.read(buffer)) > 0) {
+                                                fos.write(buffer, 0, len);
+                                            }
+                                            fos.close();
+                                            break;
+                                        }
+                                        zipEntry = zipInputStream.getNextEntry();
+                                    }
+                                    zipInputStream.close();
+
+                                    AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                                    locationDao = appDatabase.locationDao();
+                                    // Import the unzipped CSV file into the Room database
+                                    if (locationDao != null) {
+                                        File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                                        CsvMapper mapper = new CsvMapper();
+                                        CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("accuracy").addColumn("compextId").addColumn("compno")
+                                                .addColumn("fw_uuid").addColumn("insertDate").addColumn("latitude").addColumn("locationLevel_uuid").addColumn("locationName")
+                                                .addColumn("locationType").addColumn("longitude").addColumn("status").build();
+                                        MappingIterator<Locations> iterator = mapper.readerFor(Locations.class).with(schema).readValues(unzippedFile);
+                                        progress.setCancelable(false);
+                                        progress.setCanceledOnTouchOutside(false);
+                                        progress.show();
+                                        AtomicInteger counts = new AtomicInteger();
+                                        AppDatabase.databaseWriteExecutor.execute(() -> {
+                                            int batchSize = 5000;
+                                            List<Locations> locations = new ArrayList<>();
+                                            int batchCount = 0;
+                                            while (iterator.hasNext()) {
+                                                Locations location = iterator.next();
+                                                if (location != null) {
+                                                    runOnUiThread(new Runnable() {
+                                                        public void run() {
+                                                            progress.setMessage("Saving " + counts.incrementAndGet() + " of the Compounds");
+                                                        }
+                                                    });
+                                                    locations.add(location);
+                                                    batchCount++;
+                                                    if (batchCount == batchSize) {
+                                                        locationDao.insert(locations);
+                                                        locations.clear();
+                                                        batchCount = 0;
                                                     }
-                                                });
-                                                locations.add(location);
-                                                batchCount++;
-                                                if (batchCount == batchSize) {
-                                                    locationDao.insert(locations);
-                                                    locations.clear();
-                                                    batchCount = 0;
                                                 }
                                             }
-                                        }
-                                        if (batchCount > 0) {
-                                            locationDao.insert(locations);
-                                        }
-                                        progress.dismiss();
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                textView_SyncLocation.setText("Total Compounds Saved: " + counts);
-                                                textView_SyncLocation.setTextColor(Color.GREEN);
+                                            if (batchCount > 0) {
+                                                locationDao.insert(locations);
                                             }
+                                            progress.dismiss();
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    textView_SyncLocation.setText("Total Compounds Saved: " + counts);
+                                                    textView_SyncLocation.setTextColor(Color.GREEN);
+                                                }
+                                            });
+
                                         });
-
-                                    });
-                                }
-                                File cacheDir = getExternalCacheDir();
-                                if (cacheDir != null && cacheDir.isDirectory()) {
-                                    File[] files = cacheDir.listFiles();
-                                    for (File filez : files) {
-                                        String fileName = filez.getName();
-                                        if (fileName.endsWith(".zip") || fileName.endsWith(".csv")) {
-                                            filez.delete();
-                                        }
                                     }
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
 
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
 
                         }
 
-                    }
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            // Show error message
+                            progress.dismiss();
+                            textView_SyncLocation.setText("Locations Download Error! Retry or Contact Administrator");
+                            textView_SyncLocation.setTextColor(Color.RED);
+                        }
+                    });
+                } else {
+                    // File already exists, proceed with unzipping and inserting the data
+                    try {
+                        // Unzip the file
+                        ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                        ZipEntry zipEntry = zipInputStream.getNextEntry();
+                        while (zipEntry != null) {
+                            String fileName = zipEntry.getName();
+                            if (fileName.equals(extractedFileName)) {
+                                File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                FileOutputStream fos = new FileOutputStream(newFile);
+                                byte[] buffer = new byte[1024];
+                                int len;
+                                while ((len = zipInputStream.read(buffer)) > 0) {
+                                    fos.write(buffer, 0, len);
+                                }
+                                fos.close();
+                                break;
+                            }
+                            zipEntry = zipInputStream.getNextEntry();
+                        }
+                        zipInputStream.close();
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        // Show error message
+                        // Insert the unzipped data into the Room database
+                        AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                        locationDao = appDatabase.locationDao();
+
+                        // Import the unzipped CSV file into the Room database
+                        if (locationDao != null) {
+                            File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                            CsvMapper mapper = new CsvMapper();
+                            CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("accuracy").addColumn("compextId").addColumn("compno")
+                                    .addColumn("fw_uuid").addColumn("insertDate").addColumn("latitude").addColumn("locationLevel_uuid").addColumn("locationName")
+                                    .addColumn("locationType").addColumn("longitude").addColumn("status").build();
+                            MappingIterator<Locations> iterator = mapper.readerFor(Locations.class).with(schema).readValues(unzippedFile);
+                            progress.setCancelable(false);
+                            progress.setCanceledOnTouchOutside(false);
+                            progress.show();
+                            AtomicInteger counts = new AtomicInteger();
+                            AppDatabase.databaseWriteExecutor.execute(() -> {
+                                int batchSize = 5000;
+                                List<Locations> locations = new ArrayList<>();
+                                int batchCount = 0;
+                                while (iterator.hasNext()) {
+                                    Locations location = iterator.next();
+                                    if (location != null) {
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                progress.setMessage("Saving " + counts.incrementAndGet() + " of the Compounds");
+                                            }
+                                        });
+                                        locations.add(location);
+                                        batchCount++;
+                                        if (batchCount == batchSize) {
+                                            locationDao.insert(locations);
+                                            locations.clear();
+                                            batchCount = 0;
+                                        }
+                                    }
+                                }
+                                if (batchCount > 0) {
+                                    locationDao.insert(locations);
+                                }
+                                progress.dismiss();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        textView_SyncLocation.setText("Total Compounds Saved: " + counts);
+                                        textView_SyncLocation.setTextColor(Color.GREEN);
+                                    }
+                                });
+
+                            });
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                         progress.dismiss();
-                        textView_SyncLocation.setText("Locations Download Error! Retry or Contact Administrator");
+                        textView_SyncLocation.setText("Error while unzipping or inserting data.");
                         textView_SyncLocation.setTextColor(Color.RED);
                     }
-
-
-                });
-
-
+                }
             }
-
         });
 
 
         //Sync Zipped Residency
         final Button button_DownloadResidency = findViewById(R.id.button_SyncResidency);
-        final TextView textView_SyncResidency = findViewById(R.id.textView_SyncResidency);
+        final TextView textView_SyncResidency  = findViewById(R.id.textView_SyncResidency);
         button_DownloadResidency.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 progress.show();
-                progress.setMessage("Downloading Residency...");
-                Call<ResponseBody> call = dao.downloadResidency();
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful()) {
-                            try {
-                                // Read the response body into a file
-                                InputStream inputStream = response.body().byteStream();
-                                File file = new File(getExternalCacheDir(), "residency.zip");
-                                if (file.exists()) {
-                                    file.delete();
-                                }
-                                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                                fileOutputStream.write(response.body().bytes());
-                                fileOutputStream.close();
-                                byte[] buffer = new byte[1024];
-                                int read;
-                                while ((read = inputStream.read(buffer)) != -1) {
-                                    fileOutputStream.write(buffer, 0, read);
-                                }
-                                fileOutputStream.close();
+                progress.setMessage("Downloading Membership...");
 
-                                // Unzip the file
-                                ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
-                                ZipEntry zipEntry = zipInputStream.getNextEntry();
-                                while (zipEntry != null) {
-                                    String fileName = zipEntry.getName();
-                                    File newFile = new File(getExternalCacheDir() + File.separator + fileName);
-                                    FileOutputStream fos = new FileOutputStream(newFile);
-                                    int len;
-                                    while ((len = zipInputStream.read(buffer)) > 0) {
-                                        fos.write(buffer, 0, len);
+                // Specify the file names
+                String zipFileName = "residency.zip";
+                String extractedFileName = "residency.csv";
+
+                // File path for the downloaded location file
+                File file = new File(getExternalCacheDir(), zipFileName);
+
+                // Check if the file already exists
+                if (!file.exists()) {
+                    // File doesn't exist, proceed with download, unzip, and insert
+
+                    Call<ResponseBody> call = dao.downloadResidency();
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            //progress.show();
+                            if (response.isSuccessful()) {
+                                try {
+                                    // Read the response body into a file
+                                    InputStream inputStream = response.body().byteStream();
+                                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                                    byte[] buffer = new byte[1024];
+                                    int read;
+                                    while ((read = inputStream.read(buffer)) != -1) {
+                                        fileOutputStream.write(buffer, 0, read);
                                     }
-                                    fos.close();
-                                    zipEntry = zipInputStream.getNextEntry();
-                                    progress.dismiss();
-                                }
-                                zipInputStream.close();
+                                    fileOutputStream.close();
 
-                                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
-                                residencyDao = appDatabase.residencyDao();
-                                // Import the unzipped CSV file into the Room database
-                                if (residencyDao != null) {
-                                    File unzippedFile = new File(getExternalCacheDir() + File.separator + "residency.csv");
-                                    CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("endDate").addColumn("endType")
-                                            .addColumn("fw_uuid").addColumn("insertDate").addColumn("rltn_head")
-                                            .addColumn("startDate").addColumn("startType")
-                                            .addColumn("individual_uuid").addColumn("location_uuid").addColumn("socialgroup_uuid").build();
-                                    MappingIterator<Residency> iterator = mapper.readerFor(Residency.class).with(schema).readValues(unzippedFile);
-                                    progress.show();
-                                    AtomicInteger counts = new AtomicInteger();
-                                    AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 5000;
-                                        List<Residency> residencies = new ArrayList<>();
-                                        int batchCount = 0;
-                                        while (iterator.hasNext()) {
-                                            Residency residency = iterator.next();
-                                            if (residency != null) {
-                                                runOnUiThread(new Runnable() {
-                                                    public void run() {
-                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the Residency");
+                                    // Unzip the file
+                                    ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                                    ZipEntry zipEntry = zipInputStream.getNextEntry();
+                                    while (zipEntry != null) {
+                                        String fileName = zipEntry.getName();
+                                        if (fileName.equals(extractedFileName)) {
+                                            File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                            FileOutputStream fos = new FileOutputStream(newFile);
+                                            int len;
+                                            while ((len = zipInputStream.read(buffer)) > 0) {
+                                                fos.write(buffer, 0, len);
+                                            }
+                                            fos.close();
+                                            break;
+                                        }
+                                        zipEntry = zipInputStream.getNextEntry();
+                                    }
+                                    zipInputStream.close();
+
+                                    AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                                    residencyDao = appDatabase.residencyDao();
+                                    // Import the unzipped CSV file into the Room database
+                                    if (residencyDao != null) {
+                                        File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                                        CsvMapper mapper = new CsvMapper();
+                                        CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("endDate").addColumn("endType")
+                                                .addColumn("fw_uuid").addColumn("insertDate").addColumn("rltn_head")
+                                                .addColumn("startDate").addColumn("startType")
+                                                .addColumn("individual_uuid").addColumn("location_uuid").addColumn("socialgroup_uuid").build();
+                                        MappingIterator<Residency> iterator = mapper.readerFor(Residency.class).with(schema).readValues(unzippedFile);
+                                        progress.setCancelable(false);
+                                        progress.setCanceledOnTouchOutside(false);
+                                        progress.show();
+                                        AtomicInteger counts = new AtomicInteger();
+                                        AppDatabase.databaseWriteExecutor.execute(() -> {
+                                            int batchSize = 5000;
+                                            List<Residency> residencies = new ArrayList<>();
+                                            int batchCount = 0;
+                                            while (iterator.hasNext()) {
+                                                Residency residency = iterator.next();
+                                                if (residency != null) {
+                                                    runOnUiThread(new Runnable() {
+                                                        public void run() {
+                                                            progress.setMessage("Saving " + counts.incrementAndGet() + " of the Membership");
+                                                        }
+                                                    });
+                                                    residencies.add(residency);
+                                                    batchCount++;
+                                                    if (batchCount == batchSize) {
+                                                        residencyDao.insert(residencies);
+                                                        residencies.clear();
+                                                        batchCount = 0;
                                                     }
-                                                });
-                                                residencies.add(residency);
-                                                batchCount++;
-                                                if (batchCount == batchSize) {
-                                                    residencyDao.insert(residencies);
-                                                    residencies.clear();
-                                                    batchCount = 0;
                                                 }
                                             }
-                                        }
-                                        if (batchCount > 0) {
-                                            residencyDao.insert(residencies);
-                                        }
-                                        progress.dismiss();
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                textView_SyncResidency.setText("Total Residency Saved: " + counts);
-                                                textView_SyncResidency.setTextColor(Color.GREEN);
+                                            if (batchCount > 0) {
+                                                residencyDao.insert(residencies);
                                             }
+                                            progress.dismiss();
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    textView_SyncResidency.setText("Total Membership Saved: " + counts);
+                                                    textView_SyncResidency.setTextColor(Color.GREEN);
+                                                }
+                                            });
+
                                         });
-
-                                    });
-                                }
-
-                                File cacheDir = getExternalCacheDir();
-                                if (cacheDir != null && cacheDir.isDirectory()) {
-                                    File[] files = cacheDir.listFiles();
-                                    for (File filez : files) {
-                                        String fileName = filez.getName();
-                                        if (fileName.endsWith(".zip") || fileName.endsWith(".csv")) {
-                                            filez.delete();
-                                        }
                                     }
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
 
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
 
                         }
 
-                    }
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            // Show error message
+                            progress.dismiss();
+                            textView_SyncResidency.setText("Membership Download Error! Retry or Contact Administrator");
+                            textView_SyncResidency.setTextColor(Color.RED);
+                        }
+                    });
+                } else {
+                    // File already exists, proceed with unzipping and inserting the data
+                    try {
+                        // Unzip the file
+                        ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                        ZipEntry zipEntry = zipInputStream.getNextEntry();
+                        while (zipEntry != null) {
+                            String fileName = zipEntry.getName();
+                            if (fileName.equals(extractedFileName)) {
+                                File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                FileOutputStream fos = new FileOutputStream(newFile);
+                                byte[] buffer = new byte[1024];
+                                int len;
+                                while ((len = zipInputStream.read(buffer)) > 0) {
+                                    fos.write(buffer, 0, len);
+                                }
+                                fos.close();
+                                break;
+                            }
+                            zipEntry = zipInputStream.getNextEntry();
+                        }
+                        zipInputStream.close();
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        // Show error message
+                        // Insert the unzipped data into the Room database
+                        AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                        residencyDao = appDatabase.residencyDao();
+
+                        // Import the unzipped CSV file into the Room database
+                        if (residencyDao != null) {
+                            File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                            CsvMapper mapper = new CsvMapper();
+                            CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("endDate").addColumn("endType")
+                                    .addColumn("fw_uuid").addColumn("insertDate").addColumn("rltn_head")
+                                    .addColumn("startDate").addColumn("startType")
+                                    .addColumn("individual_uuid").addColumn("location_uuid").addColumn("socialgroup_uuid").build();
+                            MappingIterator<Residency> iterator = mapper.readerFor(Residency.class).with(schema).readValues(unzippedFile);
+                            progress.setCancelable(false);
+                            progress.setCanceledOnTouchOutside(false);
+                            progress.show();
+                            AtomicInteger counts = new AtomicInteger();
+                            AppDatabase.databaseWriteExecutor.execute(() -> {
+                                int batchSize = 5000;
+                                List<Residency> residencies = new ArrayList<>();
+                                int batchCount = 0;
+                                while (iterator.hasNext()) {
+                                    Residency residency = iterator.next();
+                                    if (residency != null) {
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                progress.setMessage("Saving " + counts.incrementAndGet() + " of the Membership");
+                                            }
+                                        });
+                                        residencies.add(residency);
+                                        batchCount++;
+                                        if (batchCount == batchSize) {
+                                            residencyDao.insert(residencies);
+                                            residencies.clear();
+                                            batchCount = 0;
+                                        }
+                                    }
+                                }
+                                if (batchCount > 0) {
+                                    residencyDao.insert(residencies);
+                                }
+                                progress.dismiss();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        textView_SyncResidency.setText("Total Membership Saved: " + counts);
+                                        textView_SyncResidency.setTextColor(Color.GREEN);
+                                    }
+                                });
+
+                            });
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                         progress.dismiss();
-                        textView_SyncResidency.setText("Residency Download Error! Retry or Contact Administrator");
+                        textView_SyncResidency.setText("Error while unzipping or inserting data.");
                         textView_SyncResidency.setTextColor(Color.RED);
                     }
-
-
-                });
-
-
+                }
             }
-
         });
 
 
@@ -608,133 +831,205 @@ public class PullActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 progress.show();
-                progress.setMessage("Updating Relationship...");
-                Call<ResponseBody> call = dao.downloadRelationship();
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        //progress.show();
-                        if (response.isSuccessful()) {
-                            //progress.setMessage("Downloading zip file...");
-                            progress.setMessage("Contacting Server...");
-                            try {
-                                // Read the response body into a file
-                                progress.setMessage("Downloading Relationship Zip File...");
-                                InputStream inputStream = response.body().byteStream();
-                                File file = new File(getExternalCacheDir(), "relationship.zip");
-                                if (file.exists()) {
-                                    file.delete();
-                                }
-                                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                                fileOutputStream.write(response.body().bytes());
-                                fileOutputStream.close();
-                                byte[] buffer = new byte[1024];
-                                int read;
-                                while ((read = inputStream.read(buffer)) != -1) {
-                                    fileOutputStream.write(buffer, 0, read);
-                                }
-                                fileOutputStream.close();
+                progress.setMessage("Downloading Relationship...");
 
-                                // Unzip the file
-                                progress.setMessage("Unzipping Relationship File...");
-                                ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
-                                ZipEntry zipEntry = zipInputStream.getNextEntry();
-                                while (zipEntry != null) {
-                                    String fileName = zipEntry.getName();
-                                    File newFile = new File(getExternalCacheDir() + File.separator + fileName);
-                                    FileOutputStream fos = new FileOutputStream(newFile);
-                                    int len;
-                                    while ((len = zipInputStream.read(buffer)) > 0) {
-                                        fos.write(buffer, 0, len);
+                // Specify the file names
+                String zipFileName = "relationship.zip";
+                String extractedFileName = "relationship.csv";
+
+                // File path for the downloaded location file
+                File file = new File(getExternalCacheDir(), zipFileName);
+
+                // Check if the file already exists
+                if (!file.exists()) {
+                    // File doesn't exist, proceed with download, unzip, and insert
+
+                    Call<ResponseBody> call = dao.downloadRelationship();
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            //progress.show();
+                            if (response.isSuccessful()) {
+                                try {
+                                    // Read the response body into a file
+                                    InputStream inputStream = response.body().byteStream();
+                                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                                    byte[] buffer = new byte[1024];
+                                    int read;
+                                    while ((read = inputStream.read(buffer)) != -1) {
+                                        fileOutputStream.write(buffer, 0, read);
                                     }
-                                    fos.close();
-                                    zipEntry = zipInputStream.getNextEntry();
-                                }
-                                zipInputStream.close();
+                                    fileOutputStream.close();
 
-                                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
-                                relationshipDao = appDatabase.relationshipDao();
-                                // Import the unzipped CSV file into the Room database
-                                if (relationshipDao != null) {
-                                    File unzippedFile = new File(getExternalCacheDir() + File.separator + "relationship.csv");
-                                    CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("aIsToB").addColumn("endDate").addColumn("endType")
-                                            .addColumn("fw_uuid").addColumn("individualA_uuid").addColumn("individualB_uuid").addColumn("insertDate").addColumn("lcow").addColumn("mar")
-                                            .addColumn("mrank").addColumn("nchdm").addColumn("nwive").addColumn("polygamous")
-                                            .addColumn("startDate").addColumn("tnbch").build();
-                                    MappingIterator<Relationship> iterator = mapper.readerFor(Relationship.class).with(schema).readValues(unzippedFile);
-                                    progress.show();
-                                    AtomicInteger counts = new AtomicInteger();
-                                    AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 5000;
-                                        List<Relationship> relationships = new ArrayList<>();
-                                        int batchCount = 0;
-                                        while (iterator.hasNext()) {
-                                            Relationship relationship = iterator.next();
-                                            if (relationship != null) {
-                                                runOnUiThread(new Runnable() {
-                                                    public void run() {
-                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the Relationship");
+                                    // Unzip the file
+                                    ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                                    ZipEntry zipEntry = zipInputStream.getNextEntry();
+                                    while (zipEntry != null) {
+                                        String fileName = zipEntry.getName();
+                                        if (fileName.equals(extractedFileName)) {
+                                            File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                            FileOutputStream fos = new FileOutputStream(newFile);
+                                            int len;
+                                            while ((len = zipInputStream.read(buffer)) > 0) {
+                                                fos.write(buffer, 0, len);
+                                            }
+                                            fos.close();
+                                            break;
+                                        }
+                                        zipEntry = zipInputStream.getNextEntry();
+                                    }
+                                    zipInputStream.close();
+
+                                    AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                                    relationshipDao = appDatabase.relationshipDao();
+                                    // Import the unzipped CSV file into the Room database
+                                    if (relationshipDao != null) {
+                                        File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                                        CsvMapper mapper = new CsvMapper();
+                                        CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("aIsToB").addColumn("endDate").addColumn("endType")
+                                                .addColumn("fw_uuid").addColumn("individualA_uuid").addColumn("individualB_uuid").addColumn("insertDate").addColumn("lcow").addColumn("mar")
+                                                .addColumn("mrank").addColumn("nchdm").addColumn("nwive").addColumn("polygamous")
+                                                .addColumn("startDate").addColumn("tnbch").build();
+                                        MappingIterator<Relationship> iterator = mapper.readerFor(Relationship.class).with(schema).readValues(unzippedFile);
+                                        progress.setCancelable(false);
+                                        progress.setCanceledOnTouchOutside(false);
+                                        progress.show();
+                                        AtomicInteger counts = new AtomicInteger();
+                                        AppDatabase.databaseWriteExecutor.execute(() -> {
+                                            int batchSize = 5000;
+                                            List<Relationship> relationships = new ArrayList<>();
+                                            int batchCount = 0;
+                                            while (iterator.hasNext()) {
+                                                Relationship relationship = iterator.next();
+                                                if (relationship != null) {
+                                                    runOnUiThread(new Runnable() {
+                                                        public void run() {
+                                                            progress.setMessage("Saving " + counts.incrementAndGet() + " of the Relationship");
+                                                        }
+                                                    });
+                                                    relationships.add(relationship);
+                                                    batchCount++;
+                                                    if (batchCount == batchSize) {
+                                                        relationshipDao.insert(relationships);
+                                                        relationships.clear();
+                                                        batchCount = 0;
                                                     }
-                                                });
-                                                relationships.add(relationship);
-                                                batchCount++;
-                                                if (batchCount == batchSize) {
-                                                    relationshipDao.insert(relationships);
-                                                    relationships.clear();
-                                                    batchCount = 0;
                                                 }
                                             }
-                                        }
-                                        if (batchCount > 0) {
-                                            relationshipDao.insert(relationships);
-                                        }
-                                        progress.dismiss();
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                textView_SyncRelationship.setText("Total Relationship Saved: " + counts);
-                                                textView_SyncRelationship.setTextColor(Color.GREEN);
+                                            if (batchCount > 0) {
+                                                relationshipDao.insert(relationships);
                                             }
+                                            progress.dismiss();
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    textView_SyncRelationship.setText("Total Relationship Saved: " + counts);
+                                                    textView_SyncRelationship.setTextColor(Color.GREEN);
+                                                }
+                                            });
+
                                         });
-
-                                    });
-                                }
-
-                                File cacheDir = getExternalCacheDir();
-                                if (cacheDir != null && cacheDir.isDirectory()) {
-                                    File[] files = cacheDir.listFiles();
-                                    for (File filez : files) {
-                                        String fileName = filez.getName();
-                                        if (fileName.endsWith(".zip") || fileName.endsWith(".csv")) {
-                                            filez.delete();
-                                        }
                                     }
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
 
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
 
                         }
 
-                    }
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            // Show error message
+                            progress.dismiss();
+                            textView_SyncRelationship.setText("Relationship Download Error! Retry or Contact Administrator");
+                            textView_SyncRelationship.setTextColor(Color.RED);
+                        }
+                    });
+                } else {
+                    // File already exists, proceed with unzipping and inserting the data
+                    try {
+                        // Unzip the file
+                        ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                        ZipEntry zipEntry = zipInputStream.getNextEntry();
+                        while (zipEntry != null) {
+                            String fileName = zipEntry.getName();
+                            if (fileName.equals(extractedFileName)) {
+                                File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                FileOutputStream fos = new FileOutputStream(newFile);
+                                byte[] buffer = new byte[1024];
+                                int len;
+                                while ((len = zipInputStream.read(buffer)) > 0) {
+                                    fos.write(buffer, 0, len);
+                                }
+                                fos.close();
+                                break;
+                            }
+                            zipEntry = zipInputStream.getNextEntry();
+                        }
+                        zipInputStream.close();
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        // Show error message
+                        // Insert the unzipped data into the Room database
+                        AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                        relationshipDao = appDatabase.relationshipDao();
+
+                        // Import the unzipped CSV file into the Room database
+                        if (relationshipDao != null) {
+                            File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                            CsvMapper mapper = new CsvMapper();
+                            CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("aIsToB").addColumn("endDate").addColumn("endType")
+                                    .addColumn("fw_uuid").addColumn("individualA_uuid").addColumn("individualB_uuid").addColumn("insertDate").addColumn("lcow").addColumn("mar")
+                                    .addColumn("mrank").addColumn("nchdm").addColumn("nwive").addColumn("polygamous")
+                                    .addColumn("startDate").addColumn("tnbch").build();
+                            MappingIterator<Relationship> iterator = mapper.readerFor(Relationship.class).with(schema).readValues(unzippedFile);
+                            progress.setCancelable(false);
+                            progress.setCanceledOnTouchOutside(false);
+                            progress.show();
+                            AtomicInteger counts = new AtomicInteger();
+                            AppDatabase.databaseWriteExecutor.execute(() -> {
+                                int batchSize = 5000;
+                                List<Relationship> relationships = new ArrayList<>();
+                                int batchCount = 0;
+                                while (iterator.hasNext()) {
+                                    Relationship relationship = iterator.next();
+                                    if (relationship != null) {
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                progress.setMessage("Saving " + counts.incrementAndGet() + " of the Relationship");
+                                            }
+                                        });
+                                        relationships.add(relationship);
+                                        batchCount++;
+                                        if (batchCount == batchSize) {
+                                            relationshipDao.insert(relationships);
+                                            relationships.clear();
+                                            batchCount = 0;
+                                        }
+                                    }
+                                }
+                                if (batchCount > 0) {
+                                    relationshipDao.insert(relationships);
+                                }
+                                progress.dismiss();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        textView_SyncRelationship.setText("Total Relationship Saved: " + counts);
+                                        textView_SyncRelationship.setTextColor(Color.GREEN);
+                                    }
+                                });
+
+                            });
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                         progress.dismiss();
-                        textView_SyncRelationship.setText("Relationship Download Error! Retry or Contact Administrator");
+                        textView_SyncRelationship.setText("Error while unzipping or inserting data.");
                         textView_SyncRelationship.setTextColor(Color.RED);
-                        //Toast.makeText(PullActivity.this, "Download failed", Toast.LENGTH_SHORT).show();
                     }
-
-
-                });
-
-
+                }
             }
-
         });
 
 
@@ -743,133 +1038,207 @@ public class PullActivity extends AppCompatActivity {
         final Button button_DownloadSocialgroup = findViewById(R.id.button_SyncSocialgroup);
         final TextView textView_SyncSocialgroup = findViewById(R.id.textView_SyncSocialgroup);
         button_DownloadSocialgroup.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 progress.show();
                 progress.setMessage("Downloading Socialgroup...");
-                Call<ResponseBody> call = dao.downloadSocialgroup();
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        //progress.show();
-                        if (response.isSuccessful()) {
-                            try {
-                                // Read the response body into a file
-                                progress.setMessage("Downloading Socialgroup Zip File...");
-                                InputStream inputStream = response.body().byteStream();
-                                File file = new File(getExternalCacheDir(), "socialgroup.zip");
-                                if (file.exists()) {
-                                    file.delete();
-                                }
-                                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                                fileOutputStream.write(response.body().bytes());
-                                fileOutputStream.close();
-                                byte[] buffer = new byte[1024];
-                                int read;
-                                while ((read = inputStream.read(buffer)) != -1) {
-                                    fileOutputStream.write(buffer, 0, read);
-                                }
-                                fileOutputStream.close();
 
-                                // Unzip the file
-                                progress.setMessage("Unzipping Socialgroup File...");
-                                ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
-                                ZipEntry zipEntry = zipInputStream.getNextEntry();
-                                while (zipEntry != null) {
-                                    String fileName = zipEntry.getName();
-                                    File newFile = new File(getExternalCacheDir() + File.separator + fileName);
-                                    FileOutputStream fos = new FileOutputStream(newFile);
-                                    int len;
-                                    while ((len = zipInputStream.read(buffer)) > 0) {
-                                        fos.write(buffer, 0, len);
+                // Specify the file names
+                String zipFileName = "socialgroup.zip";
+                String extractedFileName = "socialgroup.csv";
+
+                // File path for the downloaded location file
+                File file = new File(getExternalCacheDir(), zipFileName);
+
+                // Check if the file already exists
+                if (!file.exists()) {
+                    // File doesn't exist, proceed with download, unzip, and insert
+
+                    Call<ResponseBody> call = dao.downloadSocialgroup();
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            //progress.show();
+                            if (response.isSuccessful()) {
+                                try {
+                                    // Read the response body into a file
+                                    InputStream inputStream = response.body().byteStream();
+                                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                                    byte[] buffer = new byte[1024];
+                                    int read;
+                                    while ((read = inputStream.read(buffer)) != -1) {
+                                        fileOutputStream.write(buffer, 0, read);
                                     }
-                                    fos.close();
-                                    zipEntry = zipInputStream.getNextEntry();
+                                    fileOutputStream.close();
 
-                                }
-                                zipInputStream.close();
+                                    // Unzip the file
+                                    ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                                    ZipEntry zipEntry = zipInputStream.getNextEntry();
+                                    while (zipEntry != null) {
+                                        String fileName = zipEntry.getName();
+                                        if (fileName.equals(extractedFileName)) {
+                                            File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                            FileOutputStream fos = new FileOutputStream(newFile);
+                                            int len;
+                                            while ((len = zipInputStream.read(buffer)) > 0) {
+                                                fos.write(buffer, 0, len);
+                                            }
+                                            fos.close();
+                                            break;
+                                        }
+                                        zipEntry = zipInputStream.getNextEntry();
+                                    }
+                                    zipInputStream.close();
 
-                                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
-                                socialgroupDao = appDatabase.socialgroupDao();
-                                // Import the unzipped CSV file into the Room database
-                                if (socialgroupDao != null) {
-                                    File unzippedFile = new File(getExternalCacheDir() + File.separator + "socialgroup.csv");
-                                    CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("extId").addColumn("fw_uuid").addColumn("groupName")
-                                            .addColumn("groupType").addColumn("insertDate")
-                                            .addColumn("individual_uuid").build();
-                                    MappingIterator<Socialgroup> iterator = mapper.readerFor(Socialgroup.class).with(schema).readValues(unzippedFile);
-                                    progress.show();
-                                    AtomicInteger counts = new AtomicInteger();
-                                    AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 5000;
-                                        List<Socialgroup> socialgroups = new ArrayList<>();
-                                        int batchCount = 0;
-                                        while (iterator.hasNext()) {
-                                            Socialgroup socialgroup = iterator.next();
-                                            if (socialgroup != null) {
-                                                runOnUiThread(new Runnable() {
-                                                    public void run() {
-                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the Socialgroup");
+                                    AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                                    socialgroupDao = appDatabase.socialgroupDao();
+                                    // Import the unzipped CSV file into the Room database
+                                    if (socialgroupDao != null) {
+                                        File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                                        CsvMapper mapper = new CsvMapper();
+                                        CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("extId").addColumn("fw_uuid").addColumn("groupName")
+                                                .addColumn("groupType").addColumn("insertDate")
+                                                .addColumn("individual_uuid").build();
+                                        MappingIterator<Socialgroup> iterator = mapper.readerFor(Socialgroup.class).with(schema).readValues(unzippedFile);
+                                        progress.setCancelable(false);
+                                        progress.setCanceledOnTouchOutside(false);
+                                        progress.show();
+                                        AtomicInteger counts = new AtomicInteger();
+                                        AppDatabase.databaseWriteExecutor.execute(() -> {
+                                            int batchSize = 5000;
+                                            List<Socialgroup> socialgroups = new ArrayList<>();
+                                            int batchCount = 0;
+                                            while (iterator.hasNext()) {
+                                                Socialgroup socialgroup = iterator.next();
+                                                if (socialgroup != null) {
+                                                    runOnUiThread(new Runnable() {
+                                                        public void run() {
+                                                            progress.setMessage("Saving " + counts.incrementAndGet() + " of the Socialgroup");
+                                                        }
+                                                    });
+                                                    socialgroups.add(socialgroup);
+                                                    batchCount++;
+                                                    if (batchCount == batchSize) {
+                                                        socialgroupDao.insert(socialgroups);
+                                                        socialgroups.clear();
+                                                        batchCount = 0;
                                                     }
-                                                });
-                                                socialgroups.add(socialgroup);
-                                                batchCount++;
-                                                if (batchCount == batchSize) {
-                                                    socialgroupDao.insert(socialgroups);
-                                                    socialgroups.clear();
-                                                    batchCount = 0;
                                                 }
                                             }
-                                        }
-                                        if (batchCount > 0) {
-                                            socialgroupDao.insert(socialgroups);
-                                        }
-                                        progress.dismiss();
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                textView_SyncSocialgroup.setText("Total Socialgroup Saved: " + counts);
-                                                textView_SyncSocialgroup.setTextColor(Color.GREEN);
+                                            if (batchCount > 0) {
+                                                socialgroupDao.insert(socialgroups);
                                             }
+                                            progress.dismiss();
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    textView_SyncSocialgroup.setText("Total Socialgroup Saved: " + counts);
+                                                    textView_SyncSocialgroup.setTextColor(Color.GREEN);
+                                                }
+                                            });
+
                                         });
-
-                                    });
-                                }
-
-                                File cacheDir = getExternalCacheDir();
-                                if (cacheDir != null && cacheDir.isDirectory()) {
-                                    File[] files = cacheDir.listFiles();
-                                    for (File filez : files) {
-                                        String fileName = filez.getName();
-                                        if (fileName.endsWith(".zip") || fileName.endsWith(".csv")) {
-                                            filez.delete();
-                                        }
                                     }
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
 
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
 
                         }
 
-                    }
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            // Show error message
+                            progress.dismiss();
+                            textView_SyncSocialgroup.setText("Socialgroup Download Error! Retry or Contact Administrator");
+                            textView_SyncSocialgroup.setTextColor(Color.RED);
+                        }
+                    });
+                } else {
+                    // File already exists, proceed with unzipping and inserting the data
+                    try {
+                        // Unzip the file
+                        ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                        ZipEntry zipEntry = zipInputStream.getNextEntry();
+                        while (zipEntry != null) {
+                            String fileName = zipEntry.getName();
+                            if (fileName.equals(extractedFileName)) {
+                                File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                FileOutputStream fos = new FileOutputStream(newFile);
+                                byte[] buffer = new byte[1024];
+                                int len;
+                                while ((len = zipInputStream.read(buffer)) > 0) {
+                                    fos.write(buffer, 0, len);
+                                }
+                                fos.close();
+                                break;
+                            }
+                            zipEntry = zipInputStream.getNextEntry();
+                        }
+                        zipInputStream.close();
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        // Show error message
+                        // Insert the unzipped data into the Room database
+                        AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                        socialgroupDao = appDatabase.socialgroupDao();
+
+                        // Import the unzipped CSV file into the Room database
+                        if (socialgroupDao != null) {
+                            File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                            CsvMapper mapper = new CsvMapper();
+                            CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("extId").addColumn("fw_uuid").addColumn("groupName")
+                                    .addColumn("groupType").addColumn("insertDate")
+                                    .addColumn("individual_uuid").build();
+                            MappingIterator<Socialgroup> iterator = mapper.readerFor(Socialgroup.class).with(schema).readValues(unzippedFile);
+                            progress.setCancelable(false);
+                            progress.setCanceledOnTouchOutside(false);
+                            progress.show();
+                            AtomicInteger counts = new AtomicInteger();
+                            AppDatabase.databaseWriteExecutor.execute(() -> {
+                                int batchSize = 5000;
+                                List<Socialgroup> socialgroups = new ArrayList<>();
+                                int batchCount = 0;
+                                while (iterator.hasNext()) {
+                                    Socialgroup socialgroup = iterator.next();
+                                    if (socialgroup != null) {
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                progress.setMessage("Saving " + counts.incrementAndGet() + " of the Socialgroup");
+                                            }
+                                        });
+                                        socialgroups.add(socialgroup);
+                                        batchCount++;
+                                        if (batchCount == batchSize) {
+                                            socialgroupDao.insert(socialgroups);
+                                            socialgroups.clear();
+                                            batchCount = 0;
+                                        }
+                                    }
+                                }
+                                if (batchCount > 0) {
+                                    socialgroupDao.insert(socialgroups);
+                                }
+                                progress.dismiss();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        textView_SyncSocialgroup.setText("Total Socialgroup Saved: " + counts);
+                                        textView_SyncSocialgroup.setTextColor(Color.GREEN);
+                                    }
+                                });
+
+                            });
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                         progress.dismiss();
-                        textView_SyncSocialgroup.setText("Socialgroup Download Error! Retry or Contact Administrator");
+                        textView_SyncSocialgroup.setText("Error while unzipping or inserting data.");
                         textView_SyncSocialgroup.setTextColor(Color.RED);
                     }
-
-
-                });
-
-
+                }
             }
-
         });
 
 
@@ -882,130 +1251,210 @@ public class PullActivity extends AppCompatActivity {
             public void onClick(View v) {
                 progress.show();
                 progress.setMessage("Downloading Pregnancy...");
-                Call<ResponseBody> call = dao.downloadPregnancy();
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        //progress.show();
-                        if (response.isSuccessful()) {
-                            try {
-                                // Read the response body into a file
-                                InputStream inputStream = response.body().byteStream();
-                                File file = new File(getExternalCacheDir(), "pregnancy.zip");
-                                if (file.exists()) {
-                                    file.delete();
-                                }
-                                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                                fileOutputStream.write(response.body().bytes());
-                                fileOutputStream.close();
-                                byte[] buffer = new byte[1024];
-                                int read;
-                                while ((read = inputStream.read(buffer)) != -1) {
-                                    fileOutputStream.write(buffer, 0, read);
-                                }
-                                fileOutputStream.close();
 
-                                // Unzip the file
-                                ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
-                                ZipEntry zipEntry = zipInputStream.getNextEntry();
-                                while (zipEntry != null) {
-                                    String fileName = zipEntry.getName();
-                                    File newFile = new File(getExternalCacheDir() + File.separator + fileName);
-                                    FileOutputStream fos = new FileOutputStream(newFile);
-                                    int len;
-                                    while ((len = zipInputStream.read(buffer)) > 0) {
-                                        fos.write(buffer, 0, len);
+                // Specify the file names
+                String zipFileName = "pregnancy.zip";
+                String extractedFileName = "pregnancy.csv";
+
+                // File path for the downloaded location file
+                File file = new File(getExternalCacheDir(), zipFileName);
+
+                // Check if the file already exists
+                if (!file.exists()) {
+                    // File doesn't exist, proceed with download, unzip, and insert
+
+                    Call<ResponseBody> call = dao.downloadPregnancy();
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            //progress.show();
+                            if (response.isSuccessful()) {
+                                try {
+                                    // Read the response body into a file
+                                    InputStream inputStream = response.body().byteStream();
+                                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                                    byte[] buffer = new byte[1024];
+                                    int read;
+                                    while ((read = inputStream.read(buffer)) != -1) {
+                                        fileOutputStream.write(buffer, 0, read);
                                     }
-                                    fos.close();
-                                    zipEntry = zipInputStream.getNextEntry();
-                                }
-                                zipInputStream.close();
+                                    fileOutputStream.close();
 
-                                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
-                                pregnancyDao = appDatabase.pregnancyDao();
-                                // Import the unzipped CSV file into the Room database
-                                if (pregnancyDao != null) {
-                                    File unzippedFile = new File(getExternalCacheDir() + File.separator + "pregnancy.csv");
-                                    CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("ageOfPregFromPregNotes").addColumn("anc_visits").addColumn("anteNatalClinic").addColumn("attend_you")
-                                            .addColumn("attend_you_other").addColumn("bnet_loc").addColumn("bnet_loc_other").addColumn("bnet_sou").addColumn("bnet_sou_other")
-                                            .addColumn("estimatedAgeOfPreg").addColumn("expectedDeliveryDate").addColumn("first_preg").addColumn("first_rec")
-                                            .addColumn("fw_uuid").addColumn("healthfacility").addColumn("how_many").addColumn("insertDate").addColumn("lastClinicVisitDate")
-                                            .addColumn("medicineforpregnancy").addColumn("outcome").addColumn("outcome_date").addColumn("own_bnet")
-                                            .addColumn("pregnancyNumber").addColumn("recordedDate").addColumn("slp_bednet").addColumn("trt_bednet").addColumn("ttinjection")
-                                            .addColumn("why_no").addColumn("why_no_other").addColumn("individual_uuid").addColumn("visit_uuid").build();
-                                    MappingIterator<Pregnancy> iterator = mapper.readerFor(Pregnancy.class).with(schema).readValues(unzippedFile);
-                                    progress.show();
-                                    AtomicInteger counts = new AtomicInteger();
-                                    AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 5000;
-                                        List<Pregnancy> pregnancies = new ArrayList<>();
-                                        int batchCount = 0;
-                                        while (iterator.hasNext()) {
-                                            Pregnancy pregnancy = iterator.next();
-                                            if (pregnancy != null) {
-                                                runOnUiThread(new Runnable() {
-                                                    public void run() {
-                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the Pregnancies");
+                                    // Unzip the file
+                                    ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                                    ZipEntry zipEntry = zipInputStream.getNextEntry();
+                                    while (zipEntry != null) {
+                                        String fileName = zipEntry.getName();
+                                        if (fileName.equals(extractedFileName)) {
+                                            File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                            FileOutputStream fos = new FileOutputStream(newFile);
+                                            int len;
+                                            while ((len = zipInputStream.read(buffer)) > 0) {
+                                                fos.write(buffer, 0, len);
+                                            }
+                                            fos.close();
+                                            break;
+                                        }
+                                        zipEntry = zipInputStream.getNextEntry();
+                                    }
+                                    zipInputStream.close();
+
+                                    AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                                    pregnancyDao = appDatabase.pregnancyDao();
+                                    // Import the unzipped CSV file into the Room database
+                                    if (pregnancyDao != null) {
+                                        File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                                        CsvMapper mapper = new CsvMapper();
+                                        CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("ageOfPregFromPregNotes").addColumn("anc_visits").addColumn("anteNatalClinic").addColumn("attend_you")
+                                                .addColumn("attend_you_other").addColumn("bnet_loc").addColumn("bnet_loc_other").addColumn("bnet_sou").addColumn("bnet_sou_other")
+                                                .addColumn("estimatedAgeOfPreg").addColumn("expectedDeliveryDate").addColumn("first_preg").addColumn("first_rec")
+                                                .addColumn("fw_uuid").addColumn("healthfacility").addColumn("how_many").addColumn("insertDate").addColumn("lastClinicVisitDate")
+                                                .addColumn("medicineforpregnancy").addColumn("outcome").addColumn("outcome_date").addColumn("own_bnet")
+                                                .addColumn("pregnancyNumber").addColumn("recordedDate").addColumn("slp_bednet").addColumn("trt_bednet").addColumn("ttinjection")
+                                                .addColumn("why_no").addColumn("why_no_other").addColumn("individual_uuid").addColumn("visit_uuid").build();
+                                        MappingIterator<Pregnancy> iterator = mapper.readerFor(Pregnancy.class).with(schema).readValues(unzippedFile);
+                                        progress.setCancelable(false);
+                                        progress.setCanceledOnTouchOutside(false);
+                                        progress.show();
+                                        AtomicInteger counts = new AtomicInteger();
+                                        AppDatabase.databaseWriteExecutor.execute(() -> {
+                                            int batchSize = 5000;
+                                            List<Pregnancy> pregnancys = new ArrayList<>();
+                                            int batchCount = 0;
+                                            while (iterator.hasNext()) {
+                                                Pregnancy pregnancy = iterator.next();
+                                                if (pregnancy != null) {
+                                                    runOnUiThread(new Runnable() {
+                                                        public void run() {
+                                                            progress.setMessage("Saving " + counts.incrementAndGet() + " of the Pregnancy");
+                                                        }
+                                                    });
+                                                    pregnancys.add(pregnancy);
+                                                    batchCount++;
+                                                    if (batchCount == batchSize) {
+                                                        pregnancyDao.insert(pregnancys);
+                                                        pregnancys.clear();
+                                                        batchCount = 0;
                                                     }
-                                                });
-                                                pregnancies.add(pregnancy);
-                                                batchCount++;
-                                                if (batchCount == batchSize) {
-                                                    pregnancyDao.insert(pregnancies);
-                                                    pregnancies.clear();
-                                                    batchCount = 0;
                                                 }
                                             }
-                                        }
-                                        if (batchCount > 0) {
-                                            pregnancyDao.insert(pregnancies);
-                                        }
-                                        progress.dismiss();
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                textView_SyncPregnancy.setText("Total Pregnancy Saved: " + counts);
-                                                textView_SyncPregnancy.setTextColor(Color.GREEN);
+                                            if (batchCount > 0) {
+                                                pregnancyDao.insert(pregnancys);
                                             }
+                                            progress.dismiss();
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    textView_SyncPregnancy.setText("Total Pregnancy Saved: " + counts);
+                                                    textView_SyncPregnancy.setTextColor(Color.GREEN);
+                                                }
+                                            });
+
                                         });
-
-                                    });
-                                }
-
-                                File cacheDir = getExternalCacheDir();
-                                if (cacheDir != null && cacheDir.isDirectory()) {
-                                    File[] files = cacheDir.listFiles();
-                                    for (File filez : files) {
-                                        String fileName = filez.getName();
-                                        if (fileName.endsWith(".zip") || fileName.endsWith(".csv")) {
-                                            filez.delete();
-                                        }
                                     }
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
 
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
 
                         }
 
-                    }
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            // Show error message
+                            progress.dismiss();
+                            textView_SyncPregnancy.setText("Pregnancy Download Error! Retry or Contact Administrator");
+                            textView_SyncPregnancy.setTextColor(Color.RED);
+                        }
+                    });
+                } else {
+                    // File already exists, proceed with unzipping and inserting the data
+                    try {
+                        // Unzip the file
+                        ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                        ZipEntry zipEntry = zipInputStream.getNextEntry();
+                        while (zipEntry != null) {
+                            String fileName = zipEntry.getName();
+                            if (fileName.equals(extractedFileName)) {
+                                File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                FileOutputStream fos = new FileOutputStream(newFile);
+                                byte[] buffer = new byte[1024];
+                                int len;
+                                while ((len = zipInputStream.read(buffer)) > 0) {
+                                    fos.write(buffer, 0, len);
+                                }
+                                fos.close();
+                                break;
+                            }
+                            zipEntry = zipInputStream.getNextEntry();
+                        }
+                        zipInputStream.close();
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        // Show error message
+                        // Insert the unzipped data into the Room database
+                        AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                        pregnancyDao = appDatabase.pregnancyDao();
+
+                        // Import the unzipped CSV file into the Room database
+                        if (pregnancyDao != null) {
+                            File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                            CsvMapper mapper = new CsvMapper();
+                            CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("ageOfPregFromPregNotes").addColumn("anc_visits").addColumn("anteNatalClinic").addColumn("attend_you")
+                                    .addColumn("attend_you_other").addColumn("bnet_loc").addColumn("bnet_loc_other").addColumn("bnet_sou").addColumn("bnet_sou_other")
+                                    .addColumn("estimatedAgeOfPreg").addColumn("expectedDeliveryDate").addColumn("first_preg").addColumn("first_rec")
+                                    .addColumn("fw_uuid").addColumn("healthfacility").addColumn("how_many").addColumn("insertDate").addColumn("lastClinicVisitDate")
+                                    .addColumn("medicineforpregnancy").addColumn("outcome").addColumn("outcome_date").addColumn("own_bnet")
+                                    .addColumn("pregnancyNumber").addColumn("recordedDate").addColumn("slp_bednet").addColumn("trt_bednet").addColumn("ttinjection")
+                                    .addColumn("why_no").addColumn("why_no_other").addColumn("individual_uuid").addColumn("visit_uuid").build();
+                            MappingIterator<Pregnancy> iterator = mapper.readerFor(Pregnancy.class).with(schema).readValues(unzippedFile);
+                            progress.setCancelable(false);
+                            progress.setCanceledOnTouchOutside(false);
+                            progress.show();
+                            AtomicInteger counts = new AtomicInteger();
+                            AppDatabase.databaseWriteExecutor.execute(() -> {
+                                int batchSize = 5000;
+                                List<Pregnancy> pregnancys = new ArrayList<>();
+                                int batchCount = 0;
+                                while (iterator.hasNext()) {
+                                    Pregnancy pregnancy = iterator.next();
+                                    if (pregnancy != null) {
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                progress.setMessage("Saving " + counts.incrementAndGet() + " of the Pregnancy");
+                                            }
+                                        });
+                                        pregnancys.add(pregnancy);
+                                        batchCount++;
+                                        if (batchCount == batchSize) {
+                                            pregnancyDao.insert(pregnancys);
+                                            pregnancys.clear();
+                                            batchCount = 0;
+                                        }
+                                    }
+                                }
+                                if (batchCount > 0) {
+                                    pregnancyDao.insert(pregnancys);
+                                }
+                                progress.dismiss();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        textView_SyncPregnancy.setText("Total Pregnancy Saved: " + counts);
+                                        textView_SyncPregnancy.setTextColor(Color.GREEN);
+                                    }
+                                });
+
+                            });
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                         progress.dismiss();
-                        textView_SyncPregnancy.setText("Pregnancy Download Error! Retry or Contact Administrator");
+                        textView_SyncPregnancy.setText("Error while unzipping or inserting data.");
                         textView_SyncPregnancy.setTextColor(Color.RED);
                     }
-
-
-                });
-
-
+                }
             }
-
         });
 
 
@@ -1013,136 +1462,209 @@ public class PullActivity extends AppCompatActivity {
         final Button button_DownloadDemography = findViewById(R.id.button_SyncDemography);
         final TextView textView_SyncDemography = findViewById(R.id.textView_SyncDemography);
         button_DownloadDemography.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 progress.show();
-                progress.setMessage("Downloading Demographics...");
-                Call<ResponseBody> call = dao.downloadDemography();
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        //progress.show();
-                        if (response.isSuccessful()) {
-                            progress.setMessage("Contacting Server...");
-                            try {
-                                // Read the response body into a file
-                                progress.setMessage("Downloading Demograpics Zip File...");
-                                InputStream inputStream = response.body().byteStream();
-                                File file = new File(getExternalCacheDir(), "demography.zip");
-                                if (file.exists()) {
-                                    file.delete();
-                                }
-                                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                                fileOutputStream.write(response.body().bytes());
-                                fileOutputStream.close();
+                progress.setMessage("Downloading Demographic...");
 
-                                byte[] buffer = new byte[1024];
-                                int read;
-                                while ((read = inputStream.read(buffer)) != -1) {
-                                    fileOutputStream.write(buffer, 0, read);
-                                }
-                                fileOutputStream.close();
+                // Specify the file names
+                String zipFileName = "demographics.zip";
+                String extractedFileName = "demographics.csv";
 
-                                // Unzip the file
-                                progress.setMessage("Unzipping Demograpics File...");
-                                ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
-                                ZipEntry zipEntry = zipInputStream.getNextEntry();
-                                while (zipEntry != null) {
-                                    String fileName = zipEntry.getName();
-                                    File newFile = new File(getExternalCacheDir() + File.separator + fileName);
-                                    FileOutputStream fos = new FileOutputStream(newFile);
-                                    int len;
-                                    while ((len = zipInputStream.read(buffer)) > 0) {
-                                        fos.write(buffer, 0, len);
+                // File path for the downloaded location file
+                File file = new File(getExternalCacheDir(), zipFileName);
+
+                // Check if the file already exists
+                if (!file.exists()) {
+                    // File doesn't exist, proceed with download, unzip, and insert
+
+                    Call<ResponseBody> call = dao.downloadDemography();
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            //progress.show();
+                            if (response.isSuccessful()) {
+                                try {
+                                    // Read the response body into a file
+                                    InputStream inputStream = response.body().byteStream();
+                                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                                    byte[] buffer = new byte[1024];
+                                    int read;
+                                    while ((read = inputStream.read(buffer)) != -1) {
+                                        fileOutputStream.write(buffer, 0, read);
                                     }
-                                    fos.close();
-                                    zipEntry = zipInputStream.getNextEntry();
-                                }
-                                zipInputStream.close();
+                                    fileOutputStream.close();
 
-                                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
-                                demographicDao = appDatabase.demographicDao();
-                                // Import the unzipped CSV file into the Room database
-                                if (demographicDao != null) {
-                                    File unzippedFile = new File(getExternalCacheDir() + File.separator + "demographics.csv");
-                                    CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("individual_uuid").addColumn("comp_yrs").addColumn("education").addColumn("fw_uuid")
-                                            .addColumn("insertDate").addColumn("marital").addColumn("occupation").addColumn("occupation_oth")
-                                            .addColumn("phone1").addColumn("phone2")
-                                            .addColumn("religion").addColumn("religion_oth").addColumn("tribe").addColumn("tribe_oth").build();
-                                    MappingIterator<Demographic> iterator = mapper.readerFor(Demographic.class).with(schema).readValues(unzippedFile);
-                                    progress.show();
-                                    AtomicInteger counts = new AtomicInteger();
-                                    AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 5000;
-                                        List<Demographic> demographics = new ArrayList<>();
-                                        int batchCount = 0;
-                                        while (iterator.hasNext()) {
-                                            Demographic demographic = iterator.next();
-                                            if (demographic != null) {
-                                                runOnUiThread(new Runnable() {
-                                                    public void run() {
-                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the demographics");
+                                    // Unzip the file
+                                    ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                                    ZipEntry zipEntry = zipInputStream.getNextEntry();
+                                    while (zipEntry != null) {
+                                        String fileName = zipEntry.getName();
+                                        if (fileName.equals(extractedFileName)) {
+                                            File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                            FileOutputStream fos = new FileOutputStream(newFile);
+                                            int len;
+                                            while ((len = zipInputStream.read(buffer)) > 0) {
+                                                fos.write(buffer, 0, len);
+                                            }
+                                            fos.close();
+                                            break;
+                                        }
+                                        zipEntry = zipInputStream.getNextEntry();
+                                    }
+                                    zipInputStream.close();
+
+                                    AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                                    demographicDao = appDatabase.demographicDao();
+                                    // Import the unzipped CSV file into the Room database
+                                    if (demographicDao != null) {
+                                        File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                                        CsvMapper mapper = new CsvMapper();
+                                        CsvSchema schema = CsvSchema.builder().addColumn("individual_uuid").addColumn("comp_yrs").addColumn("education").addColumn("fw_uuid")
+                                                .addColumn("insertDate").addColumn("marital").addColumn("occupation").addColumn("occupation_oth")
+                                                .addColumn("phone1").addColumn("phone2")
+                                                .addColumn("religion").addColumn("religion_oth").addColumn("tribe").addColumn("tribe_oth").build();
+                                        MappingIterator<Demographic> iterator = mapper.readerFor(Demographic.class).with(schema).readValues(unzippedFile);
+                                        progress.setCancelable(false);
+                                        progress.setCanceledOnTouchOutside(false);
+                                        progress.show();
+                                        AtomicInteger counts = new AtomicInteger();
+                                        AppDatabase.databaseWriteExecutor.execute(() -> {
+                                            int batchSize = 5000;
+                                            List<Demographic> demographics = new ArrayList<>();
+                                            int batchCount = 0;
+                                            while (iterator.hasNext()) {
+                                                Demographic demographic = iterator.next();
+                                                if (demographic != null) {
+                                                    runOnUiThread(new Runnable() {
+                                                        public void run() {
+                                                            progress.setMessage("Saving " + counts.incrementAndGet() + " of the Demographic");
+                                                        }
+                                                    });
+                                                    demographics.add(demographic);
+                                                    batchCount++;
+                                                    if (batchCount == batchSize) {
+                                                        demographicDao.insert(demographics);
+                                                        demographics.clear();
+                                                        batchCount = 0;
                                                     }
-                                                });
-                                                demographics.add(demographic);
-                                                batchCount++;
-                                                if (batchCount == batchSize) {
-                                                    demographicDao.insert(demographics);
-                                                    demographics.clear();
-                                                    batchCount = 0;
                                                 }
                                             }
-                                        }
-                                        if (batchCount > 0) {
-                                            demographicDao.insert(demographics);
-                                        }
-                                        progress.dismiss();
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                textView_SyncDemography.setText("Total Demographics Saved: " + counts);
-                                                textView_SyncDemography.setTextColor(Color.GREEN);
+                                            if (batchCount > 0) {
+                                                demographicDao.insert(demographics);
                                             }
+                                            progress.dismiss();
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    textView_SyncDemography.setText("Total Demographic Saved: " + counts);
+                                                    textView_SyncDemography.setTextColor(Color.GREEN);
+                                                }
+                                            });
+
                                         });
-
-                                    });
-                                }
-
-                                File cacheDir = getExternalCacheDir();
-                                if (cacheDir != null && cacheDir.isDirectory()) {
-                                    File[] files = cacheDir.listFiles();
-                                    for (File filez : files) {
-                                        String fileName = filez.getName();
-                                        if (fileName.endsWith(".zip") || fileName.endsWith(".csv")) {
-                                            filez.delete();
-                                        }
                                     }
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
 
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
 
                         }
 
-                    }
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            // Show error message
+                            progress.dismiss();
+                            textView_SyncDemography.setText("Demographic Download Error! Retry or Contact Administrator");
+                            textView_SyncDemography.setTextColor(Color.RED);
+                        }
+                    });
+                } else {
+                    // File already exists, proceed with unzipping and inserting the data
+                    try {
+                        // Unzip the file
+                        ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                        ZipEntry zipEntry = zipInputStream.getNextEntry();
+                        while (zipEntry != null) {
+                            String fileName = zipEntry.getName();
+                            if (fileName.equals(extractedFileName)) {
+                                File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                FileOutputStream fos = new FileOutputStream(newFile);
+                                byte[] buffer = new byte[1024];
+                                int len;
+                                while ((len = zipInputStream.read(buffer)) > 0) {
+                                    fos.write(buffer, 0, len);
+                                }
+                                fos.close();
+                                break;
+                            }
+                            zipEntry = zipInputStream.getNextEntry();
+                        }
+                        zipInputStream.close();
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        // Show error message
+                        // Insert the unzipped data into the Room database
+                        AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                        demographicDao = appDatabase.demographicDao();
+
+                        // Import the unzipped CSV file into the Room database
+                        if (demographicDao != null) {
+                            File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                            CsvMapper mapper = new CsvMapper();
+                            CsvSchema schema = CsvSchema.builder().addColumn("individual_uuid").addColumn("comp_yrs").addColumn("education").addColumn("fw_uuid")
+                                    .addColumn("insertDate").addColumn("marital").addColumn("occupation").addColumn("occupation_oth")
+                                    .addColumn("phone1").addColumn("phone2")
+                                    .addColumn("religion").addColumn("religion_oth").addColumn("tribe").addColumn("tribe_oth").build();
+                            MappingIterator<Demographic> iterator = mapper.readerFor(Demographic.class).with(schema).readValues(unzippedFile);
+                            progress.setCancelable(false);
+                            progress.setCanceledOnTouchOutside(false);
+                            progress.show();
+                            AtomicInteger counts = new AtomicInteger();
+                            AppDatabase.databaseWriteExecutor.execute(() -> {
+                                int batchSize = 5000;
+                                List<Demographic> demographics = new ArrayList<>();
+                                int batchCount = 0;
+                                while (iterator.hasNext()) {
+                                    Demographic demographic = iterator.next();
+                                    if (demographic != null) {
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                progress.setMessage("Saving " + counts.incrementAndGet() + " of the Demographic");
+                                            }
+                                        });
+                                        demographics.add(demographic);
+                                        batchCount++;
+                                        if (batchCount == batchSize) {
+                                            demographicDao.insert(demographics);
+                                            demographics.clear();
+                                            batchCount = 0;
+                                        }
+                                    }
+                                }
+                                if (batchCount > 0) {
+                                    demographicDao.insert(demographics);
+                                }
+                                progress.dismiss();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        textView_SyncDemography.setText("Total Demographic Saved: " + counts);
+                                        textView_SyncDemography.setTextColor(Color.GREEN);
+                                    }
+                                });
+
+                            });
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                         progress.dismiss();
-                        textView_SyncDemography.setText("Demography Download Error! Retry or Contact Administrator");
+                        textView_SyncDemography.setText("Error while unzipping or inserting data.");
                         textView_SyncDemography.setTextColor(Color.RED);
                     }
-
-
-                });
-
-
+                }
             }
-
         });
 
 
@@ -1150,192 +1672,321 @@ public class PullActivity extends AppCompatActivity {
         final Button button_DownloadSes = findViewById(R.id.button_SyncSes);
         final TextView textView_SyncSes = findViewById(R.id.textView_SyncSes);
         button_DownloadSes.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 progress.show();
-                progress.setMessage("Downloading SES...");
-                Call<ResponseBody> call = dao.downloadSes();
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        //progress.show();
-                        if (response.isSuccessful()) {
-                            progress.setMessage("Contacting Server...");
-                            try {
-                                // Read the response body into a file
-                                progress.setMessage("Downloading SES Zip File...");
-                                InputStream inputStream = response.body().byteStream();
-                                File file = new File(getExternalCacheDir(), "ses.zip");
-                                if (file.exists()) {
-                                    file.delete();
-                                }
-                                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                                fileOutputStream.write(response.body().bytes());
-                                fileOutputStream.close();
+                progress.setMessage("Downloading Profile...");
 
-                                byte[] buffer = new byte[1024];
-                                int read;
-                                while ((read = inputStream.read(buffer)) != -1) {
-                                    fileOutputStream.write(buffer, 0, read);
-                                }
-                                fileOutputStream.close();
+                // Specify the file names
+                String zipFileName = "ses.zip";
+                String extractedFileName = "ses.csv";
 
-                                // Unzip the file
-                                progress.setMessage("Unzipping SES File...");
-                                ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
-                                ZipEntry zipEntry = zipInputStream.getNextEntry();
-                                while (zipEntry != null) {
-                                    String fileName = zipEntry.getName();
-                                    File newFile = new File(getExternalCacheDir() + File.separator + fileName);
-                                    FileOutputStream fos = new FileOutputStream(newFile);
-                                    int len;
-                                    while ((len = zipInputStream.read(buffer)) > 0) {
-                                        fos.write(buffer, 0, len);
+                // File path for the downloaded location file
+                File file = new File(getExternalCacheDir(), zipFileName);
+
+                // Check if the file already exists
+                if (!file.exists()) {
+                    // File doesn't exist, proceed with download, unzip, and insert
+
+                    Call<ResponseBody> call = dao.downloadSes();
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            //progress.show();
+                            if (response.isSuccessful()) {
+                                try {
+                                    // Read the response body into a file
+                                    InputStream inputStream = response.body().byteStream();
+                                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                                    byte[] buffer = new byte[1024];
+                                    int read;
+                                    while ((read = inputStream.read(buffer)) != -1) {
+                                        fileOutputStream.write(buffer, 0, read);
                                     }
-                                    fos.close();
-                                    zipEntry = zipInputStream.getNextEntry();
-                                }
-                                zipInputStream.close();
+                                    fileOutputStream.close();
 
-                                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
-                                hdssSociodemoDao = appDatabase.hdssSociodemoDao();
-                                // Import the unzipped CSV file into the Room database
-                                if (hdssSociodemoDao != null) {
-                                    File unzippedFile = new File(getExternalCacheDir() + File.separator + "ses.csv");
-                                    CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("socialgroup_uuid")
-                                            .addColumn("aircon_fcorres").addColumn("aircon_num_fcorres").addColumn("animal_othr_fcorres").addColumn("animal_othr_num_fcorres")
-                                            .addColumn("animal_othr_spfy_fcorres").addColumn("bike_fcorres").addColumn("bike_num_fcorres").addColumn("blender_fcorres")
-                                            .addColumn("blender_num_fcorres").addColumn("boat_fcorres").addColumn("boat_num_fcorres").addColumn("cabinets_fcorres")
-                                            .addColumn("cabinets_num_fcorres").addColumn("car_fcorres").addColumn("car_num_fcorres").addColumn("cart_fcorres")
-                                            .addColumn("cart_num_fcorres").addColumn("cattle_fcorres").addColumn("cattle_num_fcorres").addColumn("cethnic")
-                                            .addColumn("chew_bnut_oecoccur").addColumn("chew_oecoccur").addColumn("computer_fcorres").addColumn("computer_num_fcorres")
-                                            .addColumn("cooking_inside_fcorres").addColumn("cooking_loc_fcorres").addColumn("cooking_room_fcorres").addColumn("cooking_vent_fcorres")
-                                            .addColumn("donkey_fcorres").addColumn("donkey_num_fcorres").addColumn("drink_oecoccur").addColumn("dvd_cd_fcorres")
-                                            .addColumn("dvd_cd_num_fcorres").addColumn("electricity_fcorres").addColumn("ext_wall_fcorres").addColumn("ext_wall_spfy_fcorres")
-                                            .addColumn("floor_fcorres").addColumn("floor_spfy_fcorres").addColumn("foam_matt_fcorres").addColumn("foam_matt_num_fcorres")
-                                            .addColumn("form_comments_txt").addColumn("form_comments_yn").addColumn("formcompldate").addColumn("fridge_fcorres").addColumn("fridge_num_fcorres")
-                                            .addColumn("fw_uuid").addColumn("goat_fcorres").addColumn("goat_num_fcorres")
-                                            .addColumn("h2o_dist_fcorres").addColumn("h2o_fcorres").addColumn("h2o_hours_fcorres")
-                                            .addColumn("h2o_mins_fcorres").addColumn("h2o_prep_fcorres").addColumn("h2o_prep_spfy_fcorres_1")
-                                            .addColumn("h2o_prep_spfy_fcorres_2").addColumn("h2o_prep_spfy_fcorres_3")
-                                            .addColumn("h2o_prep_spfy_fcorres_4").addColumn("h2o_prep_spfy_fcorres_5").addColumn("h2o_spfy_fcorres")
-                                            .addColumn("head_hh_fcorres").addColumn("head_hh_spfy_fcorres").addColumn("horse_fcorres")
-                                            .addColumn("horse_num_fcorres").addColumn("house_occ_ge5_fcorres").addColumn("house_occ_lt5_fcorres")
-                                            .addColumn("house_occ_tot_fcorres").addColumn("house_room_child_fcorres")
-                                            .addColumn("house_rooms_fcorres").addColumn("insertDate")
-                                            .addColumn("internet_fcorres").addColumn("job_busown_spfy_scorres").addColumn("job_othr_spfy_scorres")
-                                            .addColumn("job_salary_spfy_scorres").addColumn("job_scorres").addColumn("job_skilled_spfy_scorres")
-                                            .addColumn("job_smbus_spfy_scorres").addColumn("job_unskilled_spfy_scorres").addColumn("land_fcorres")
-                                            .addColumn("land_use_fcorres_1").addColumn("land_use_fcorres_2").addColumn("land_use_fcorres_3")
-                                            .addColumn("land_use_fcorres_4").addColumn("land_use_fcorres_5").addColumn("land_use_fcorres_88")
-                                            .addColumn("land_use_spfy_fcorres_88").addColumn("landline_fcorres").addColumn("lantern_fcorres")
-                                            .addColumn("lantern_num_fcorres").addColumn("livestock_fcorres")
-                                            .addColumn("marital_age").addColumn("marital_scorres")
-                                            .addColumn("mobile_access_fcorres").addColumn("mobile_fcorres").addColumn("mobile_num_fcorres")
-                                            .addColumn("mosquito_net_fcorres").addColumn("mosquito_net_num_fcorres").addColumn("motorcycle_fcorres")
-                                            .addColumn("motorcycle_num_fcorres").addColumn("nth_trb_spfy_cethnic")
-                                            .addColumn("othr_trb_spfy_cethnic").addColumn("own_rent_scorres").addColumn("own_rent_spfy_scorres")
-                                            .addColumn("pig_fcorres").addColumn("pig_num_fcorres").addColumn("plough_fcorres")
-                                            .addColumn("plough_num_fcorres").addColumn("poultry_fcorres").addColumn("poultry_num_fcorres")
-                                            .addColumn("ptr_busown_spfy_scorres").addColumn("ptr_othr_spfy_scorres")
-                                            .addColumn("ptr_salary_spfy_scorres").addColumn("ptr_scorres").addColumn("ptr_skilled_spfy_scorres")
-                                            .addColumn("ptr_smbus_spfy_scorres").addColumn("ptr_unskilled_spfy_scorres").addColumn("radio_fcorres")
-                                            .addColumn("radio_num_fcorres").addColumn("religion_scorres").addColumn("religion_spfy_scorres")
-                                            .addColumn("roof_fcorres").addColumn("roof_spfy_fcorres").addColumn("sat_dish_fcorres")
-                                            .addColumn("sat_dish_num_fcorres").addColumn("sd_obsstdat").addColumn("sew_fcorres")
-                                            .addColumn("sew_num_fcorres").addColumn("sheep_fcorres").addColumn("sheep_num_fcorres")
-                                            .addColumn("smoke_hhold_in_oecdosfrq").addColumn("smoke_hhold_oecoccur").addColumn("smoke_in_oecdosfrq")
-                                            .addColumn("smoke_oecoccur").addColumn("sofa_fcorres").addColumn("sofa_num_fcorres")
-                                            .addColumn("solar_fcorres").addColumn("spring_matt_fcorres").addColumn("spring_matt_num_fcorres")
-                                            .addColumn("stove_fcorres").addColumn("stove_fuel_fcorres_1").addColumn("stove_fuel_fcorres_10")
-                                            .addColumn("stove_fuel_fcorres_11").addColumn("stove_fuel_fcorres_12")
-                                            .addColumn("stove_fuel_fcorres_13").addColumn("stove_fuel_fcorres_14").addColumn("stove_fuel_fcorres_2")
-                                            .addColumn("stove_fuel_fcorres_3").addColumn("stove_fuel_fcorres_4").addColumn("stove_fuel_fcorres_5")
-                                            .addColumn("stove_fuel_fcorres_6").addColumn("stove_fuel_fcorres_7").addColumn("stove_fuel_fcorres_8")
-                                            .addColumn("stove_fuel_fcorres_88").addColumn("stove_fuel_fcorres_9")
-                                            .addColumn("stove_fuel_spfy_fcorres_88").addColumn("stove_spfy_fcorres").addColumn("straw_matt_fcorres")
-                                            .addColumn("straw_matt_num_fcorres").addColumn("tables_fcorres").addColumn("tables_num_fcorres")
-                                            .addColumn("toilet_fcorres").addColumn("toilet_loc_fcorres").addColumn("toilet_loc_spfy_fcorres")
-                                            .addColumn("toilet_share_fcorres").addColumn("toilet_share_num_fcorres")
-                                            .addColumn("toilet_spfy_fcorres").addColumn("tractor_fcorres").addColumn("tractor_num_fcorres")
-                                            .addColumn("tricycles_fcorres").addColumn("tricycles_num_fcorres").addColumn("tv_fcorres")
-                                            .addColumn("tv_num_fcorres").addColumn("uuid").addColumn("wash_fcorres").addColumn("wash_num_fcorres")
-                                            .addColumn("watch_fcorres")
-                                            .addColumn("watch_num_fcorres").addColumn("individual_uuid").addColumn("location_uuid").build();
-                                    MappingIterator<HdssSociodemo> iterator = mapper.readerFor(HdssSociodemo.class).with(schema).readValues(unzippedFile);
-                                    progress.show();
-                                    AtomicInteger counts = new AtomicInteger();
-                                    AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 5000;
-                                        List<HdssSociodemo> hdssSociodemos = new ArrayList<>();
-                                        int batchCount = 0;
-                                        while (iterator.hasNext()) {
-                                            HdssSociodemo hdssSociodemo = iterator.next();
-                                            if (hdssSociodemo != null) {
-                                                runOnUiThread(new Runnable() {
-                                                    public void run() {
-                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the SES");
+                                    // Unzip the file
+                                    ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                                    ZipEntry zipEntry = zipInputStream.getNextEntry();
+                                    while (zipEntry != null) {
+                                        String fileName = zipEntry.getName();
+                                        if (fileName.equals(extractedFileName)) {
+                                            File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                            FileOutputStream fos = new FileOutputStream(newFile);
+                                            int len;
+                                            while ((len = zipInputStream.read(buffer)) > 0) {
+                                                fos.write(buffer, 0, len);
+                                            }
+                                            fos.close();
+                                            break;
+                                        }
+                                        zipEntry = zipInputStream.getNextEntry();
+                                    }
+                                    zipInputStream.close();
+
+                                    AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                                    hdssSociodemoDao = appDatabase.hdssSociodemoDao();
+                                    // Import the unzipped CSV file into the Room database
+                                    if (hdssSociodemoDao != null) {
+                                        File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                                        CsvMapper mapper = new CsvMapper();
+                                        CsvSchema schema = CsvSchema.builder().addColumn("socialgroup_uuid")
+                                                .addColumn("aircon_fcorres").addColumn("aircon_num_fcorres").addColumn("animal_othr_fcorres").addColumn("animal_othr_num_fcorres")
+                                                .addColumn("animal_othr_spfy_fcorres").addColumn("bike_fcorres").addColumn("bike_num_fcorres").addColumn("blender_fcorres")
+                                                .addColumn("blender_num_fcorres").addColumn("boat_fcorres").addColumn("boat_num_fcorres").addColumn("cabinets_fcorres")
+                                                .addColumn("cabinets_num_fcorres").addColumn("car_fcorres").addColumn("car_num_fcorres").addColumn("cart_fcorres")
+                                                .addColumn("cart_num_fcorres").addColumn("cattle_fcorres").addColumn("cattle_num_fcorres").addColumn("cethnic")
+                                                .addColumn("chew_bnut_oecoccur").addColumn("chew_oecoccur").addColumn("computer_fcorres").addColumn("computer_num_fcorres")
+                                                .addColumn("cooking_inside_fcorres").addColumn("cooking_loc_fcorres").addColumn("cooking_room_fcorres").addColumn("cooking_vent_fcorres")
+                                                .addColumn("donkey_fcorres").addColumn("donkey_num_fcorres").addColumn("drink_oecoccur").addColumn("dvd_cd_fcorres")
+                                                .addColumn("dvd_cd_num_fcorres").addColumn("electricity_fcorres").addColumn("ext_wall_fcorres").addColumn("ext_wall_spfy_fcorres")
+                                                .addColumn("floor_fcorres").addColumn("floor_spfy_fcorres").addColumn("foam_matt_fcorres").addColumn("foam_matt_num_fcorres")
+                                                .addColumn("form_comments_txt").addColumn("form_comments_yn").addColumn("formcompldate").addColumn("fridge_fcorres").addColumn("fridge_num_fcorres")
+                                                .addColumn("fw_uuid").addColumn("goat_fcorres").addColumn("goat_num_fcorres")
+                                                .addColumn("h2o_dist_fcorres").addColumn("h2o_fcorres").addColumn("h2o_hours_fcorres")
+                                                .addColumn("h2o_mins_fcorres").addColumn("h2o_prep_fcorres").addColumn("h2o_prep_spfy_fcorres_1")
+                                                .addColumn("h2o_prep_spfy_fcorres_2").addColumn("h2o_prep_spfy_fcorres_3")
+                                                .addColumn("h2o_prep_spfy_fcorres_4").addColumn("h2o_prep_spfy_fcorres_5").addColumn("h2o_spfy_fcorres")
+                                                .addColumn("head_hh_fcorres").addColumn("head_hh_spfy_fcorres").addColumn("horse_fcorres")
+                                                .addColumn("horse_num_fcorres").addColumn("house_occ_ge5_fcorres").addColumn("house_occ_lt5_fcorres")
+                                                .addColumn("house_occ_tot_fcorres").addColumn("house_room_child_fcorres")
+                                                .addColumn("house_rooms_fcorres").addColumn("insertDate")
+                                                .addColumn("internet_fcorres").addColumn("job_busown_spfy_scorres").addColumn("job_othr_spfy_scorres")
+                                                .addColumn("job_salary_spfy_scorres").addColumn("job_scorres").addColumn("job_skilled_spfy_scorres")
+                                                .addColumn("job_smbus_spfy_scorres").addColumn("job_unskilled_spfy_scorres").addColumn("land_fcorres")
+                                                .addColumn("land_use_fcorres_1").addColumn("land_use_fcorres_2").addColumn("land_use_fcorres_3")
+                                                .addColumn("land_use_fcorres_4").addColumn("land_use_fcorres_5").addColumn("land_use_fcorres_88")
+                                                .addColumn("land_use_spfy_fcorres_88").addColumn("landline_fcorres").addColumn("lantern_fcorres")
+                                                .addColumn("lantern_num_fcorres").addColumn("livestock_fcorres")
+                                                .addColumn("marital_age").addColumn("marital_scorres")
+                                                .addColumn("mobile_access_fcorres").addColumn("mobile_fcorres").addColumn("mobile_num_fcorres")
+                                                .addColumn("mosquito_net_fcorres").addColumn("mosquito_net_num_fcorres").addColumn("motorcycle_fcorres")
+                                                .addColumn("motorcycle_num_fcorres").addColumn("nth_trb_spfy_cethnic")
+                                                .addColumn("othr_trb_spfy_cethnic").addColumn("own_rent_scorres").addColumn("own_rent_spfy_scorres")
+                                                .addColumn("pig_fcorres").addColumn("pig_num_fcorres").addColumn("plough_fcorres")
+                                                .addColumn("plough_num_fcorres").addColumn("poultry_fcorres").addColumn("poultry_num_fcorres")
+                                                .addColumn("ptr_busown_spfy_scorres").addColumn("ptr_othr_spfy_scorres")
+                                                .addColumn("ptr_salary_spfy_scorres").addColumn("ptr_scorres").addColumn("ptr_skilled_spfy_scorres")
+                                                .addColumn("ptr_smbus_spfy_scorres").addColumn("ptr_unskilled_spfy_scorres").addColumn("radio_fcorres")
+                                                .addColumn("radio_num_fcorres").addColumn("religion_scorres").addColumn("religion_spfy_scorres")
+                                                .addColumn("roof_fcorres").addColumn("roof_spfy_fcorres").addColumn("sat_dish_fcorres")
+                                                .addColumn("sat_dish_num_fcorres").addColumn("sd_obsstdat").addColumn("sew_fcorres")
+                                                .addColumn("sew_num_fcorres").addColumn("sheep_fcorres").addColumn("sheep_num_fcorres")
+                                                .addColumn("smoke_hhold_in_oecdosfrq").addColumn("smoke_hhold_oecoccur").addColumn("smoke_in_oecdosfrq")
+                                                .addColumn("smoke_oecoccur").addColumn("sofa_fcorres").addColumn("sofa_num_fcorres")
+                                                .addColumn("solar_fcorres").addColumn("spring_matt_fcorres").addColumn("spring_matt_num_fcorres")
+                                                .addColumn("stove_fcorres").addColumn("stove_fuel_fcorres_1").addColumn("stove_fuel_fcorres_10")
+                                                .addColumn("stove_fuel_fcorres_11").addColumn("stove_fuel_fcorres_12")
+                                                .addColumn("stove_fuel_fcorres_13").addColumn("stove_fuel_fcorres_14").addColumn("stove_fuel_fcorres_2")
+                                                .addColumn("stove_fuel_fcorres_3").addColumn("stove_fuel_fcorres_4").addColumn("stove_fuel_fcorres_5")
+                                                .addColumn("stove_fuel_fcorres_6").addColumn("stove_fuel_fcorres_7").addColumn("stove_fuel_fcorres_8")
+                                                .addColumn("stove_fuel_fcorres_88").addColumn("stove_fuel_fcorres_9")
+                                                .addColumn("stove_fuel_spfy_fcorres_88").addColumn("stove_spfy_fcorres").addColumn("straw_matt_fcorres")
+                                                .addColumn("straw_matt_num_fcorres").addColumn("tables_fcorres").addColumn("tables_num_fcorres")
+                                                .addColumn("toilet_fcorres").addColumn("toilet_loc_fcorres").addColumn("toilet_loc_spfy_fcorres")
+                                                .addColumn("toilet_share_fcorres").addColumn("toilet_share_num_fcorres")
+                                                .addColumn("toilet_spfy_fcorres").addColumn("tractor_fcorres").addColumn("tractor_num_fcorres")
+                                                .addColumn("tricycles_fcorres").addColumn("tricycles_num_fcorres").addColumn("tv_fcorres")
+                                                .addColumn("tv_num_fcorres").addColumn("uuid").addColumn("wash_fcorres").addColumn("wash_num_fcorres")
+                                                .addColumn("watch_fcorres")
+                                                .addColumn("watch_num_fcorres").addColumn("individual_uuid").addColumn("location_uuid").build();
+                                        MappingIterator<HdssSociodemo> iterator = mapper.readerFor(HdssSociodemo.class).with(schema).readValues(unzippedFile);
+                                        progress.setCancelable(false);
+                                        progress.setCanceledOnTouchOutside(false);
+                                        progress.show();
+                                        AtomicInteger counts = new AtomicInteger();
+                                        AppDatabase.databaseWriteExecutor.execute(() -> {
+                                            int batchSize = 5000;
+                                            List<HdssSociodemo> hdssSociodemos = new ArrayList<>();
+                                            int batchCount = 0;
+                                            while (iterator.hasNext()) {
+                                                HdssSociodemo hdssSociodemo = iterator.next();
+                                                if (hdssSociodemo != null) {
+                                                    runOnUiThread(new Runnable() {
+                                                        public void run() {
+                                                            progress.setMessage("Saving " + counts.incrementAndGet() + " of the SES");
+                                                        }
+                                                    });
+                                                    hdssSociodemos.add(hdssSociodemo);
+                                                    batchCount++;
+                                                    if (batchCount == batchSize) {
+                                                        hdssSociodemoDao.insert(hdssSociodemos);
+                                                        hdssSociodemos.clear();
+                                                        batchCount = 0;
                                                     }
-                                                });
-                                                hdssSociodemos.add(hdssSociodemo);
-                                                batchCount++;
-                                                if (batchCount == batchSize) {
-                                                    hdssSociodemoDao.insert(hdssSociodemos);
-                                                    hdssSociodemos.clear();
-                                                    batchCount = 0;
                                                 }
                                             }
-                                        }
-                                        if (batchCount > 0) {
-                                            hdssSociodemoDao.insert(hdssSociodemos);
-                                        }
-                                        progress.dismiss();
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                textView_SyncSes.setText("Total SES Saved: " + counts);
-                                                textView_SyncSes.setTextColor(Color.GREEN);
+                                            if (batchCount > 0) {
+                                                hdssSociodemoDao.insert(hdssSociodemos);
                                             }
+                                            progress.dismiss();
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    textView_SyncSes.setText("Total Profile Saved: " + counts);
+                                                    textView_SyncSes.setTextColor(Color.GREEN);
+                                                }
+                                            });
+
                                         });
-
-                                    });
-                                }
-
-                                File cacheDir = getExternalCacheDir();
-                                if (cacheDir != null && cacheDir.isDirectory()) {
-                                    File[] files = cacheDir.listFiles();
-                                    for (File filez : files) {
-                                        String fileName = filez.getName();
-                                        if (fileName.endsWith(".zip") || fileName.endsWith(".csv")) {
-                                            filez.delete();
-                                        }
                                     }
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
 
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
 
                         }
 
-                    }
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            // Show error message
+                            progress.dismiss();
+                            textView_SyncSes.setText("Profile Download Error! Retry or Contact Administrator");
+                            textView_SyncSes.setTextColor(Color.RED);
+                        }
+                    });
+                } else {
+                    // File already exists, proceed with unzipping and inserting the data
+                    try {
+                        // Unzip the file
+                        ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                        ZipEntry zipEntry = zipInputStream.getNextEntry();
+                        while (zipEntry != null) {
+                            String fileName = zipEntry.getName();
+                            if (fileName.equals(extractedFileName)) {
+                                File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                FileOutputStream fos = new FileOutputStream(newFile);
+                                byte[] buffer = new byte[1024];
+                                int len;
+                                while ((len = zipInputStream.read(buffer)) > 0) {
+                                    fos.write(buffer, 0, len);
+                                }
+                                fos.close();
+                                break;
+                            }
+                            zipEntry = zipInputStream.getNextEntry();
+                        }
+                        zipInputStream.close();
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        // Show error message
+                        // Insert the unzipped data into the Room database
+                        AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                        hdssSociodemoDao = appDatabase.hdssSociodemoDao();
+
+                        // Import the unzipped CSV file into the Room database
+                        if (hdssSociodemoDao != null) {
+                            File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                            CsvMapper mapper = new CsvMapper();
+                            CsvSchema schema = CsvSchema.builder().addColumn("socialgroup_uuid")
+                                    .addColumn("aircon_fcorres").addColumn("aircon_num_fcorres").addColumn("animal_othr_fcorres").addColumn("animal_othr_num_fcorres")
+                                    .addColumn("animal_othr_spfy_fcorres").addColumn("bike_fcorres").addColumn("bike_num_fcorres").addColumn("blender_fcorres")
+                                    .addColumn("blender_num_fcorres").addColumn("boat_fcorres").addColumn("boat_num_fcorres").addColumn("cabinets_fcorres")
+                                    .addColumn("cabinets_num_fcorres").addColumn("car_fcorres").addColumn("car_num_fcorres").addColumn("cart_fcorres")
+                                    .addColumn("cart_num_fcorres").addColumn("cattle_fcorres").addColumn("cattle_num_fcorres").addColumn("cethnic")
+                                    .addColumn("chew_bnut_oecoccur").addColumn("chew_oecoccur").addColumn("computer_fcorres").addColumn("computer_num_fcorres")
+                                    .addColumn("cooking_inside_fcorres").addColumn("cooking_loc_fcorres").addColumn("cooking_room_fcorres").addColumn("cooking_vent_fcorres")
+                                    .addColumn("donkey_fcorres").addColumn("donkey_num_fcorres").addColumn("drink_oecoccur").addColumn("dvd_cd_fcorres")
+                                    .addColumn("dvd_cd_num_fcorres").addColumn("electricity_fcorres").addColumn("ext_wall_fcorres").addColumn("ext_wall_spfy_fcorres")
+                                    .addColumn("floor_fcorres").addColumn("floor_spfy_fcorres").addColumn("foam_matt_fcorres").addColumn("foam_matt_num_fcorres")
+                                    .addColumn("form_comments_txt").addColumn("form_comments_yn").addColumn("formcompldate").addColumn("fridge_fcorres").addColumn("fridge_num_fcorres")
+                                    .addColumn("fw_uuid").addColumn("goat_fcorres").addColumn("goat_num_fcorres")
+                                    .addColumn("h2o_dist_fcorres").addColumn("h2o_fcorres").addColumn("h2o_hours_fcorres")
+                                    .addColumn("h2o_mins_fcorres").addColumn("h2o_prep_fcorres").addColumn("h2o_prep_spfy_fcorres_1")
+                                    .addColumn("h2o_prep_spfy_fcorres_2").addColumn("h2o_prep_spfy_fcorres_3")
+                                    .addColumn("h2o_prep_spfy_fcorres_4").addColumn("h2o_prep_spfy_fcorres_5").addColumn("h2o_spfy_fcorres")
+                                    .addColumn("head_hh_fcorres").addColumn("head_hh_spfy_fcorres").addColumn("horse_fcorres")
+                                    .addColumn("horse_num_fcorres").addColumn("house_occ_ge5_fcorres").addColumn("house_occ_lt5_fcorres")
+                                    .addColumn("house_occ_tot_fcorres").addColumn("house_room_child_fcorres")
+                                    .addColumn("house_rooms_fcorres").addColumn("insertDate")
+                                    .addColumn("internet_fcorres").addColumn("job_busown_spfy_scorres").addColumn("job_othr_spfy_scorres")
+                                    .addColumn("job_salary_spfy_scorres").addColumn("job_scorres").addColumn("job_skilled_spfy_scorres")
+                                    .addColumn("job_smbus_spfy_scorres").addColumn("job_unskilled_spfy_scorres").addColumn("land_fcorres")
+                                    .addColumn("land_use_fcorres_1").addColumn("land_use_fcorres_2").addColumn("land_use_fcorres_3")
+                                    .addColumn("land_use_fcorres_4").addColumn("land_use_fcorres_5").addColumn("land_use_fcorres_88")
+                                    .addColumn("land_use_spfy_fcorres_88").addColumn("landline_fcorres").addColumn("lantern_fcorres")
+                                    .addColumn("lantern_num_fcorres").addColumn("livestock_fcorres")
+                                    .addColumn("marital_age").addColumn("marital_scorres")
+                                    .addColumn("mobile_access_fcorres").addColumn("mobile_fcorres").addColumn("mobile_num_fcorres")
+                                    .addColumn("mosquito_net_fcorres").addColumn("mosquito_net_num_fcorres").addColumn("motorcycle_fcorres")
+                                    .addColumn("motorcycle_num_fcorres").addColumn("nth_trb_spfy_cethnic")
+                                    .addColumn("othr_trb_spfy_cethnic").addColumn("own_rent_scorres").addColumn("own_rent_spfy_scorres")
+                                    .addColumn("pig_fcorres").addColumn("pig_num_fcorres").addColumn("plough_fcorres")
+                                    .addColumn("plough_num_fcorres").addColumn("poultry_fcorres").addColumn("poultry_num_fcorres")
+                                    .addColumn("ptr_busown_spfy_scorres").addColumn("ptr_othr_spfy_scorres")
+                                    .addColumn("ptr_salary_spfy_scorres").addColumn("ptr_scorres").addColumn("ptr_skilled_spfy_scorres")
+                                    .addColumn("ptr_smbus_spfy_scorres").addColumn("ptr_unskilled_spfy_scorres").addColumn("radio_fcorres")
+                                    .addColumn("radio_num_fcorres").addColumn("religion_scorres").addColumn("religion_spfy_scorres")
+                                    .addColumn("roof_fcorres").addColumn("roof_spfy_fcorres").addColumn("sat_dish_fcorres")
+                                    .addColumn("sat_dish_num_fcorres").addColumn("sd_obsstdat").addColumn("sew_fcorres")
+                                    .addColumn("sew_num_fcorres").addColumn("sheep_fcorres").addColumn("sheep_num_fcorres")
+                                    .addColumn("smoke_hhold_in_oecdosfrq").addColumn("smoke_hhold_oecoccur").addColumn("smoke_in_oecdosfrq")
+                                    .addColumn("smoke_oecoccur").addColumn("sofa_fcorres").addColumn("sofa_num_fcorres")
+                                    .addColumn("solar_fcorres").addColumn("spring_matt_fcorres").addColumn("spring_matt_num_fcorres")
+                                    .addColumn("stove_fcorres").addColumn("stove_fuel_fcorres_1").addColumn("stove_fuel_fcorres_10")
+                                    .addColumn("stove_fuel_fcorres_11").addColumn("stove_fuel_fcorres_12")
+                                    .addColumn("stove_fuel_fcorres_13").addColumn("stove_fuel_fcorres_14").addColumn("stove_fuel_fcorres_2")
+                                    .addColumn("stove_fuel_fcorres_3").addColumn("stove_fuel_fcorres_4").addColumn("stove_fuel_fcorres_5")
+                                    .addColumn("stove_fuel_fcorres_6").addColumn("stove_fuel_fcorres_7").addColumn("stove_fuel_fcorres_8")
+                                    .addColumn("stove_fuel_fcorres_88").addColumn("stove_fuel_fcorres_9")
+                                    .addColumn("stove_fuel_spfy_fcorres_88").addColumn("stove_spfy_fcorres").addColumn("straw_matt_fcorres")
+                                    .addColumn("straw_matt_num_fcorres").addColumn("tables_fcorres").addColumn("tables_num_fcorres")
+                                    .addColumn("toilet_fcorres").addColumn("toilet_loc_fcorres").addColumn("toilet_loc_spfy_fcorres")
+                                    .addColumn("toilet_share_fcorres").addColumn("toilet_share_num_fcorres")
+                                    .addColumn("toilet_spfy_fcorres").addColumn("tractor_fcorres").addColumn("tractor_num_fcorres")
+                                    .addColumn("tricycles_fcorres").addColumn("tricycles_num_fcorres").addColumn("tv_fcorres")
+                                    .addColumn("tv_num_fcorres").addColumn("uuid").addColumn("wash_fcorres").addColumn("wash_num_fcorres")
+                                    .addColumn("watch_fcorres")
+                                    .addColumn("watch_num_fcorres").addColumn("individual_uuid").addColumn("location_uuid").build();
+                            MappingIterator<HdssSociodemo> iterator = mapper.readerFor(HdssSociodemo.class).with(schema).readValues(unzippedFile);
+                            progress.setCancelable(false);
+                            progress.setCanceledOnTouchOutside(false);
+                            progress.show();
+                            AtomicInteger counts = new AtomicInteger();
+                            AppDatabase.databaseWriteExecutor.execute(() -> {
+                                int batchSize = 5000;
+                                List<HdssSociodemo> hdssSociodemos = new ArrayList<>();
+                                int batchCount = 0;
+                                while (iterator.hasNext()) {
+                                    HdssSociodemo hdssSociodemo = iterator.next();
+                                    if (hdssSociodemo != null) {
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                progress.setMessage("Saving " + counts.incrementAndGet() + " of the Profile");
+                                            }
+                                        });
+                                        hdssSociodemos.add(hdssSociodemo);
+                                        batchCount++;
+                                        if (batchCount == batchSize) {
+                                            hdssSociodemoDao.insert(hdssSociodemos);
+                                            hdssSociodemos.clear();
+                                            batchCount = 0;
+                                        }
+                                    }
+                                }
+                                if (batchCount > 0) {
+                                    hdssSociodemoDao.insert(hdssSociodemos);
+                                }
+                                progress.dismiss();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        textView_SyncSes.setText("Total Profile Saved: " + counts);
+                                        textView_SyncSes.setTextColor(Color.GREEN);
+                                    }
+                                });
+
+                            });
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                         progress.dismiss();
-                        textView_SyncSes.setText("SES Download Error! Retry or Contact Administrator");
+                        textView_SyncSes.setText("Error while unzipping or inserting data.");
                         textView_SyncSes.setTextColor(Color.RED);
                     }
-
-
-                });
-
-
+                }
             }
-
         });
 
 
@@ -1344,147 +1995,257 @@ public class PullActivity extends AppCompatActivity {
         final Button button_DownloadVac = findViewById(R.id.button_SyncVac);
         final TextView textView_SyncVac = findViewById(R.id.textView_SyncVac);
         button_DownloadVac.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 progress.show();
                 progress.setMessage("Downloading Vaccination...");
-                Call<ResponseBody> call = dao.downloadVaccination();
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        //progress.show();
-                        if (response.isSuccessful()) {
-                            progress.setMessage("Contacting Server...");
-                            try {
-                                // Read the response body into a file
-                                progress.setMessage("Downloading Vaccination Zip File...");
-                                InputStream inputStream = response.body().byteStream();
-                                File file = new File(getExternalCacheDir(), "vaccination.zip");
-                                if (file.exists()) {
-                                    file.delete();
-                                }
-                                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                                fileOutputStream.write(response.body().bytes());
-                                fileOutputStream.close();
 
-                                byte[] buffer = new byte[1024];
-                                int read;
-                                while ((read = inputStream.read(buffer)) != -1) {
-                                    fileOutputStream.write(buffer, 0, read);
-                                }
-                                fileOutputStream.close();
+                // Specify the file names
+                String zipFileName = "vaccination.zip";
+                String extractedFileName = "vaccination.csv";
 
-                                // Unzip the file
-                                progress.setMessage("Unzipping Vaccination File...");
-                                ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
-                                ZipEntry zipEntry = zipInputStream.getNextEntry();
-                                while (zipEntry != null) {
-                                    String fileName = zipEntry.getName();
-                                    File newFile = new File(getExternalCacheDir() + File.separator + fileName);
-                                    FileOutputStream fos = new FileOutputStream(newFile);
-                                    int len;
-                                    while ((len = zipInputStream.read(buffer)) > 0) {
-                                        fos.write(buffer, 0, len);
+                // File path for the downloaded location file
+                File file = new File(getExternalCacheDir(), zipFileName);
+
+                // Check if the file already exists
+                if (!file.exists()) {
+                    // File doesn't exist, proceed with download, unzip, and insert
+
+                    Call<ResponseBody> call = dao.downloadVaccination();
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            //progress.show();
+                            if (response.isSuccessful()) {
+                                try {
+                                    // Read the response body into a file
+                                    InputStream inputStream = response.body().byteStream();
+                                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+                                    byte[] buffer = new byte[1024];
+                                    int read;
+                                    while ((read = inputStream.read(buffer)) != -1) {
+                                        fileOutputStream.write(buffer, 0, read);
                                     }
-                                    fos.close();
-                                    zipEntry = zipInputStream.getNextEntry();
-                                }
-                                zipInputStream.close();
+                                    fileOutputStream.close();
 
-                                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
-                                vaccinationDao = appDatabase.vaccinationDao();
-                                // Import the unzipped CSV file into the Room database
-                                if (vaccinationDao != null) {
-                                    File unzippedFile = new File(getExternalCacheDir() + File.separator + "vaccination.csv");
-                                    CsvMapper mapper = new CsvMapper();
-                                    CsvSchema schema = CsvSchema.builder().addColumn("individual_uuid").addColumn("admission")
-                                            .addColumn("bcg").addColumn("dob").addColumn("dpt_hepb_hib1").addColumn("dpt_hepb_hib2")
-                                            .addColumn("dpt_hepb_hib3").addColumn("fw_uuid").addColumn("hcard").addColumn("hl").addColumn("hod")
-                                            .addColumn("hom").addColumn("insertDate").addColumn("ipv").addColumn("itn").addColumn("location_uuid")
-                                            .addColumn("measles_rubella1").addColumn("measles_rubella2").addColumn("menA").addColumn("nhis")
-                                            .addColumn("onet").addColumn("opv0").addColumn("opv1").addColumn("opv2").addColumn("opv3")
-                                            .addColumn("pneumo1").addColumn("pneumo2").addColumn("pneumo3").addColumn("rea").addColumn("rea_oth")
-                                            .addColumn("reason").addColumn("reason_oth")
-                                            .addColumn("rota1").addColumn("rota2").addColumn("rota3").addColumn("rtss18").addColumn("rtss6")
-                                            .addColumn("rtss7").addColumn("rtss9").addColumn("sbf").addColumn("socialgroup_uuid").addColumn("stm")
-                                            .addColumn("sty").addColumn("uuid").addColumn("vitaminA12").addColumn("vitaminA18")
-                                            .addColumn("vitaminA6").addColumn("yellow_fever").build();
-                                    MappingIterator<Vaccination> iterator = mapper.readerFor(Vaccination.class).with(schema).readValues(unzippedFile);
-                                    progress.show();
-                                    AtomicInteger counts = new AtomicInteger();
-                                    AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 5000;
-                                        List<Vaccination> vaccinations = new ArrayList<>();
-                                        int batchCount = 0;
-                                        while (iterator.hasNext()) {
-                                            Vaccination vaccination = iterator.next();
-                                            if (vaccination != null) {
-                                                runOnUiThread(new Runnable() {
-                                                    public void run() {
-                                                        progress.setMessage("Saving " + counts.incrementAndGet() + " of the vaccination");
+                                    // Unzip the file
+                                    ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                                    ZipEntry zipEntry = zipInputStream.getNextEntry();
+                                    while (zipEntry != null) {
+                                        String fileName = zipEntry.getName();
+                                        if (fileName.equals(extractedFileName)) {
+                                            File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                            FileOutputStream fos = new FileOutputStream(newFile);
+                                            int len;
+                                            while ((len = zipInputStream.read(buffer)) > 0) {
+                                                fos.write(buffer, 0, len);
+                                            }
+                                            fos.close();
+                                            break;
+                                        }
+                                        zipEntry = zipInputStream.getNextEntry();
+                                    }
+                                    zipInputStream.close();
+
+                                    AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                                    vaccinationDao = appDatabase.vaccinationDao();
+                                    // Import the unzipped CSV file into the Room database
+                                    if (vaccinationDao != null) {
+                                        File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                                        CsvMapper mapper = new CsvMapper();
+                                        CsvSchema schema = CsvSchema.builder().addColumn("individual_uuid").addColumn("admission")
+                                                .addColumn("bcg").addColumn("dob").addColumn("dpt_hepb_hib1").addColumn("dpt_hepb_hib2")
+                                                .addColumn("dpt_hepb_hib3").addColumn("fw_uuid").addColumn("hcard").addColumn("hl").addColumn("hod")
+                                                .addColumn("hom").addColumn("insertDate").addColumn("ipv").addColumn("itn").addColumn("location_uuid")
+                                                .addColumn("measles_rubella1").addColumn("measles_rubella2").addColumn("menA").addColumn("nhis")
+                                                .addColumn("onet").addColumn("opv0").addColumn("opv1").addColumn("opv2").addColumn("opv3")
+                                                .addColumn("pneumo1").addColumn("pneumo2").addColumn("pneumo3").addColumn("rea").addColumn("rea_oth")
+                                                .addColumn("reason").addColumn("reason_oth")
+                                                .addColumn("rota1").addColumn("rota2").addColumn("rota3").addColumn("rtss18").addColumn("rtss6")
+                                                .addColumn("rtss7").addColumn("rtss9").addColumn("sbf").addColumn("socialgroup_uuid").addColumn("stm")
+                                                .addColumn("sty").addColumn("uuid").addColumn("vitaminA12").addColumn("vitaminA18")
+                                                .addColumn("vitaminA6").addColumn("yellow_fever").build();
+                                        MappingIterator<Vaccination> iterator = mapper.readerFor(Vaccination.class).with(schema).readValues(unzippedFile);
+                                        progress.setCancelable(false);
+                                        progress.setCanceledOnTouchOutside(false);
+                                        progress.show();
+                                        AtomicInteger counts = new AtomicInteger();
+                                        AppDatabase.databaseWriteExecutor.execute(() -> {
+                                            int batchSize = 5000;
+                                            List<Vaccination> vaccinations = new ArrayList<>();
+                                            int batchCount = 0;
+                                            while (iterator.hasNext()) {
+                                                Vaccination vaccination = iterator.next();
+                                                if (vaccination != null) {
+                                                    runOnUiThread(new Runnable() {
+                                                        public void run() {
+                                                            progress.setMessage("Saving " + counts.incrementAndGet() + " of the Vaccination");
+                                                        }
+                                                    });
+                                                    vaccinations.add(vaccination);
+                                                    batchCount++;
+                                                    if (batchCount == batchSize) {
+                                                        vaccinationDao.insert(vaccinations);
+                                                        vaccinations.clear();
+                                                        batchCount = 0;
                                                     }
-                                                });
-                                                vaccinations.add(vaccination);
-                                                batchCount++;
-                                                if (batchCount == batchSize) {
-                                                    vaccinationDao.insert(vaccinations);
-                                                    vaccinations.clear();
-                                                    batchCount = 0;
                                                 }
                                             }
-                                        }
-                                        if (batchCount > 0) {
-                                            vaccinationDao.insert(vaccinations);
-                                        }
-                                        progress.dismiss();
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                textView_SyncVac.setText("Total Vaccination Saved: " + counts);
-                                                textView_SyncVac.setTextColor(Color.GREEN);
+                                            if (batchCount > 0) {
+                                                vaccinationDao.insert(vaccinations);
                                             }
+                                            progress.dismiss();
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    textView_SyncVac.setText("Total Vaccination Saved: " + counts);
+                                                    textView_SyncVac.setTextColor(Color.GREEN);
+                                                }
+                                            });
+
                                         });
-
-                                    });
-                                }
-
-                                File cacheDir = getExternalCacheDir();
-                                if (cacheDir != null && cacheDir.isDirectory()) {
-                                    File[] files = cacheDir.listFiles();
-                                    for (File filez : files) {
-                                        String fileName = filez.getName();
-                                        if (fileName.endsWith(".zip") || fileName.endsWith(".csv")) {
-                                            filez.delete();
-                                        }
                                     }
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
 
-
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
 
                         }
 
-                    }
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            // Show error message
+                            progress.dismiss();
+                            textView_SyncVac.setText("Vaccination Download Error! Retry or Contact Administrator");
+                            textView_SyncVac.setTextColor(Color.RED);
+                        }
+                    });
+                } else {
+                    // File already exists, proceed with unzipping and inserting the data
+                    try {
+                        // Unzip the file
+                        ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
+                        ZipEntry zipEntry = zipInputStream.getNextEntry();
+                        while (zipEntry != null) {
+                            String fileName = zipEntry.getName();
+                            if (fileName.equals(extractedFileName)) {
+                                File newFile = new File(getExternalCacheDir() + File.separator + fileName);
+                                FileOutputStream fos = new FileOutputStream(newFile);
+                                byte[] buffer = new byte[1024];
+                                int len;
+                                while ((len = zipInputStream.read(buffer)) > 0) {
+                                    fos.write(buffer, 0, len);
+                                }
+                                fos.close();
+                                break;
+                            }
+                            zipEntry = zipInputStream.getNextEntry();
+                        }
+                        zipInputStream.close();
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        // Show error message
+                        // Insert the unzipped data into the Room database
+                        AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                        vaccinationDao = appDatabase.vaccinationDao();
+
+                        // Import the unzipped CSV file into the Room database
+                        if (vaccinationDao != null) {
+                            File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
+                            CsvMapper mapper = new CsvMapper();
+                            CsvSchema schema = CsvSchema.builder().addColumn("individual_uuid").addColumn("admission")
+                                    .addColumn("bcg").addColumn("dob").addColumn("dpt_hepb_hib1").addColumn("dpt_hepb_hib2")
+                                    .addColumn("dpt_hepb_hib3").addColumn("fw_uuid").addColumn("hcard").addColumn("hl").addColumn("hod")
+                                    .addColumn("hom").addColumn("insertDate").addColumn("ipv").addColumn("itn").addColumn("location_uuid")
+                                    .addColumn("measles_rubella1").addColumn("measles_rubella2").addColumn("menA").addColumn("nhis")
+                                    .addColumn("onet").addColumn("opv0").addColumn("opv1").addColumn("opv2").addColumn("opv3")
+                                    .addColumn("pneumo1").addColumn("pneumo2").addColumn("pneumo3").addColumn("rea").addColumn("rea_oth")
+                                    .addColumn("reason").addColumn("reason_oth")
+                                    .addColumn("rota1").addColumn("rota2").addColumn("rota3").addColumn("rtss18").addColumn("rtss6")
+                                    .addColumn("rtss7").addColumn("rtss9").addColumn("sbf").addColumn("socialgroup_uuid").addColumn("stm")
+                                    .addColumn("sty").addColumn("uuid").addColumn("vitaminA12").addColumn("vitaminA18")
+                                    .addColumn("vitaminA6").addColumn("yellow_fever").build();
+                            MappingIterator<Vaccination> iterator = mapper.readerFor(Vaccination.class).with(schema).readValues(unzippedFile);
+                            progress.setCancelable(false);
+                            progress.setCanceledOnTouchOutside(false);
+                            progress.show();
+                            AtomicInteger counts = new AtomicInteger();
+                            AppDatabase.databaseWriteExecutor.execute(() -> {
+                                int batchSize = 5000;
+                                List<Vaccination> vaccinations = new ArrayList<>();
+                                int batchCount = 0;
+                                while (iterator.hasNext()) {
+                                    Vaccination vaccination = iterator.next();
+                                    if (vaccination != null) {
+                                        runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                progress.setMessage("Saving " + counts.incrementAndGet() + " of the Vaccination");
+                                            }
+                                        });
+                                        vaccinations.add(vaccination);
+                                        batchCount++;
+                                        if (batchCount == batchSize) {
+                                            vaccinationDao.insert(vaccinations);
+                                            vaccinations.clear();
+                                            batchCount = 0;
+                                        }
+                                    }
+                                }
+                                if (batchCount > 0) {
+                                    vaccinationDao.insert(vaccinations);
+                                }
+                                progress.dismiss();
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        textView_SyncVac.setText("Total Vaccination Saved: " + counts);
+                                        textView_SyncVac.setTextColor(Color.GREEN);
+                                    }
+                                });
+
+                            });
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                         progress.dismiss();
-                        textView_SyncVac.setText("Vaccination Download Error! Retry or Contact Administrator");
+                        textView_SyncVac.setText("Error while unzipping or inserting data.");
                         textView_SyncVac.setTextColor(Color.RED);
                     }
-
-
-                });
-
-
+                }
             }
-
         });
 
+
+        final Button button_Complete = findViewById(R.id.button_Complete);
+        final TextView textView_Complete = findViewById(R.id.textView_Complete);
+        button_Complete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProgressDialog progressDialog = new ProgressDialog(PullActivity.this);
+                progressDialog.setMessage("Completing Files...");
+                progressDialog.setIndeterminate(true);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+                File cacheDir = getExternalCacheDir();
+                if (cacheDir != null && cacheDir.isDirectory()) {
+                    File[] files = cacheDir.listFiles();
+                    for (File file : files) {
+                        String fileName = file.getName();
+                        if (fileName.endsWith(".zip") || fileName.endsWith(".csv")) {
+                            file.delete();
+                        }
+                    }
+                }
+
+                progressDialog.dismiss();
+            }
+        });
+
+
     }
+
 
     @Override
     public void onBackPressed() {

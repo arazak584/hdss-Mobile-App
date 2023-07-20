@@ -46,15 +46,24 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/searchVillage"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="start"
                 android:layout_weight="1"
-                android:padding="28dp"
-                android:contentDescription="@string/village"
-                android:spinnerMode="dialog"
-                tools:ignore="DuplicateSpeakableTextCheck"/>
+                android:padding="5dp"
+                android:hint="@string/village"
+                android:text="@string/village">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/searchVillage"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapCharacters"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.HdssSociodemoDao;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 
 import java.util.Date;

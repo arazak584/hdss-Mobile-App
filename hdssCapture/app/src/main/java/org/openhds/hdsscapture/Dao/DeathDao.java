@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -37,7 +38,9 @@ public interface DeathDao {
     List<Death> retrieveVpmSync();
 
     @Query("SELECT a.* FROM death as a INNER JOIN socialgroup as b ON a.individual_uuid=b.individual_uuid " +
-            " INNER JOIN residency as c on b.uuid=c.socialgroup_uuid where c.endType=1 GROUP BY a.individual_uuid")
+            " INNER JOIN residency as c on b.uuid=c.socialgroup_uuid " +
+            " INNER JOIN individual as d on c.individual_uuid=d.uuid " +
+            "where c.endType=1 and a.firstName!='Still' AND d.firstName!='FAKE' GROUP BY a.individual_uuid")
     List<Death> error();
 
     @Query("SELECT COUNT(*) FROM death a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +

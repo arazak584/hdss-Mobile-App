@@ -2,13 +2,16 @@ package org.openhds.hdsscapture.Activity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -39,12 +42,35 @@ public class LoginActivity extends AppCompatActivity  {
     private Fieldworker fieldworkerData;
     private AppJson appJson;
 
+    public static boolean isScreenSizeGreaterThanEqual7Inch(Context context) {
+        WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics metrics = new DisplayMetrics();
+        if (windowManager != null) {
+            windowManager.getDefaultDisplay().getMetrics(metrics);
+
+            // Calculate the physical screen size in inches
+            double physicalWidth = metrics.widthPixels / (double) metrics.xdpi;
+            double physicalHeight = metrics.heightPixels / (double) metrics.ydpi;
+            double screenSizeInInches = Math.sqrt(physicalWidth * physicalWidth + physicalHeight * physicalHeight);
+
+            return screenSizeInInches >= 7.0;
+        }
+        return false;
+    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Check the screen size before proceeding
+        if (!isScreenSizeGreaterThanEqual7Inch(this)) {
+            // Display a message for small screens
+            Toast.makeText(this, "Enabled on Tablet Only", Toast.LENGTH_LONG).show();
+            finish(); // Finish the activity and prevent the user from proceeding
+            return;
+        }
 
         appJson = AppJson.getInstance(this);
 
@@ -132,10 +158,10 @@ public class LoginActivity extends AppCompatActivity  {
             final Intent i = new Intent(this, MainActivity.class);
             startActivity(i);
 
-
-
         });
     }
+
+
 
     public AppJson getAppJson() {
         return appJson;

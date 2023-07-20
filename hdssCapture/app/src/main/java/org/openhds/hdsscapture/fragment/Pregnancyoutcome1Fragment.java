@@ -76,6 +76,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
     private FragmentOutcomeBinding binding;
     private EventForm eventForm;
     private CaseItem caseItem;
+    private Pregnancyoutcome pregnancyoutcome;
     private ProgressDialog progressDialog;
 
     public Pregnancyoutcome1Fragment() {
@@ -126,7 +127,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentOutcomeBinding.inflate(inflater, container, false);
-        binding.setIndividual(individual);
+        binding.setPregoutcome(pregnancyoutcome);
 
         final TextView ex = binding.getRoot().findViewById(R.id.exts);
         final Spinner extra = binding.getRoot().findViewById(R.id.extras);
@@ -664,6 +665,72 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 e.printStackTrace();
             }
 
+            boolean total = false;
+            if (finalData.first_nb == 2 && !binding.lBirth.getText().toString().trim().isEmpty()) {
+                int totalbirth = Integer.parseInt(binding.lBirth.getText().toString().trim());
+                if (totalbirth < 1) {
+                    total = true;
+                    binding.lBirth.setError("Cannot be less than 1");
+                    return;
+                }
+            }
+
+            boolean month = false;
+            if (finalData.rec_anc == 1 && !binding.monthPg.getText().toString().trim().isEmpty()) {
+                int totalmth = Integer.parseInt(binding.monthPg.getText().toString().trim());
+                if (totalmth > 9) {
+                    month = true;
+                    binding.monthPg.setError("Months Pregnant Before ANC Cannot be More than 9");
+                    Toast.makeText(getActivity(), "Months Pregnant Before ANC Cannot be More than 9", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            boolean anc = false;
+            if (finalData.rec_anc == 1 && !binding.numAnc.getText().toString().trim().isEmpty()) {
+                int totalmth = Integer.parseInt(binding.numAnc.getText().toString().trim());
+                if (totalmth > 15) {
+                    anc = true;
+                    binding.numAnc.setError("Maximum Number of ANC Visit is 15");
+                    Toast.makeText(getActivity(), "Maximum Number of ANC Visit is 15", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            boolean ipt = false;
+            if (finalData.rec_ipt == 1 && !binding.firstRec.getText().toString().trim().isEmpty()) {
+                int totalmth = Integer.parseInt(binding.firstRec.getText().toString().trim());
+                if (totalmth > 9) {
+                    ipt = true;
+                    binding.firstRec.setError("Months Pregnant for IPT Cannot be More than 9");
+                    Toast.makeText(getActivity(), "Months Pregnant for IPT Cannot be More than 9", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            boolean iptt = false;
+            if (finalData.rec_ipt == 1 && !binding.manyIpt.getText().toString().trim().isEmpty()) {
+                int totalmth = Integer.parseInt(binding.manyIpt.getText().toString().trim());
+                if (totalmth > 3) {
+                    iptt = true;
+                    binding.manyIpt.setError("Number of IPT taken Cannot be More than 3");
+                    Toast.makeText(getActivity(), "Number of IPT taken Cannot be More than 3", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            boolean weight = false;
+            if (finalData.chd_weight == 1 && !binding.weigHcard.getText().toString().trim().isEmpty()) {
+                double childWeight = Double.parseDouble(binding.weigHcard.getText().toString().trim());
+                if (childWeight > 5.0) {
+                    weight = true;
+                    binding.weigHcard.setError("Child Weight Cannot be More than 5 Kilograms");
+                    Toast.makeText(getContext(), "Child Weight Cannot be More than 5 Kilograms", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+
             try {
                 if (!binding.lastPreg.getText().toString().trim().isEmpty() && !binding.editTextOutcomeDate.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -902,7 +969,103 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
                 }
 
-                if (binding.getPregoutcome1().type == 2 || binding.getPregoutcome2().type == 2 || binding.getPregoutcome3().type == 2 || binding.getPregoutcome4().type == 2) {
+                if (!binding.childFetus1.individual1FirstName.getText().toString().trim().isEmpty()) {
+                    boolean val = false;
+                    String firstName = binding.childFetus1.individual1FirstName.getText().toString();
+                    if (firstName.charAt(0) == ' ' || firstName.charAt(firstName.length() - 1) == ' ') {
+                        binding.childFetus1.individual1FirstName.setError("Spaces are not allowed before or after the Name");
+                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                        val = true;
+                        return;
+                    } else {
+                        binding.childFetus1.individual1FirstName.setError(null); // Clear the error if the input is valid
+                    }
+
+                    boolean vals = false;
+                    String lastName = binding.childFetus1.individual1LastName.getText().toString();
+                    if (lastName.charAt(0) == ' ' || lastName.charAt(lastName.length() - 1) == ' ') {
+                        binding.childFetus1.individual1LastName.setError("Spaces are not allowed before or after the Name");
+                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                        vals = true;
+                        return;
+                    } else {
+                        binding.childFetus1.individual1LastName.setError(null); // Clear the error if the input is valid
+                    }
+                }
+
+                if (!binding.childFetus2.individual1FirstName.getText().toString().trim().isEmpty()) {
+                    boolean val = false;
+                    String firstName = binding.childFetus2.individual1FirstName.getText().toString();
+                    if (firstName.charAt(0) == ' ' || firstName.charAt(firstName.length() - 1) == ' ') {
+                        binding.childFetus2.individual1FirstName.setError("Spaces are not allowed before or after the Name");
+                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                        val = true;
+                        return;
+                    } else {
+                        binding.childFetus2.individual1FirstName.setError(null); // Clear the error if the input is valid
+                    }
+
+                    boolean vals = false;
+                    String lastName = binding.childFetus2.individual1LastName.getText().toString();
+                    if (lastName.charAt(0) == ' ' || lastName.charAt(lastName.length() - 1) == ' ') {
+                        binding.childFetus2.individual1LastName.setError("Spaces are not allowed before or after the Name");
+                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                        vals = true;
+                        return;
+                    } else {
+                        binding.childFetus2.individual1LastName.setError(null); // Clear the error if the input is valid
+                    }
+                }
+
+                if (!binding.childFetus3.individual1FirstName.getText().toString().trim().isEmpty()) {
+                    boolean val = false;
+                    String firstName = binding.childFetus3.individual1FirstName.getText().toString();
+                    if (firstName.charAt(0) == ' ' || firstName.charAt(firstName.length() - 1) == ' ') {
+                        binding.childFetus3.individual1FirstName.setError("Spaces are not allowed before or after the Name");
+                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                        val = true;
+                        return;
+                    } else {
+                        binding.childFetus3.individual1FirstName.setError(null); // Clear the error if the input is valid
+                    }
+
+                    boolean vals = false;
+                    String lastName = binding.childFetus3.individual1LastName.getText().toString();
+                    if (lastName.charAt(0) == ' ' || lastName.charAt(lastName.length() - 1) == ' ') {
+                        binding.childFetus3.individual1LastName.setError("Spaces are not allowed before or after the Name");
+                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                        vals = true;
+                        return;
+                    } else {
+                        binding.childFetus3.individual1LastName.setError(null); // Clear the error if the input is valid
+                    }
+                }
+
+                if (!binding.childFetus4.individual1FirstName.getText().toString().trim().isEmpty()) {
+                    boolean val = false;
+                    String firstName = binding.childFetus4.individual1FirstName.getText().toString();
+                    if (firstName.charAt(0) == ' ' || firstName.charAt(firstName.length() - 1) == ' ') {
+                        binding.childFetus4.individual1FirstName.setError("Spaces are not allowed before or after the Name");
+                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                        val = true;
+                        return;
+                    } else {
+                        binding.childFetus4.individual1FirstName.setError(null); // Clear the error if the input is valid
+                    }
+
+                    boolean vals = false;
+                    String lastName = binding.childFetus4.individual1LastName.getText().toString();
+                    if (lastName.charAt(0) == ' ' || lastName.charAt(lastName.length() - 1) == ' ') {
+                        binding.childFetus4.individual1LastName.setError("Spaces are not allowed before or after the Name");
+                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                        vals = true;
+                        return;
+                    } else {
+                        binding.childFetus4.individual1LastName.setError(null); // Clear the error if the input is valid
+                    }
+                }
+
+                if (finalData.stillbirth == 1 || finalData.stillbirth == 2) {
 
                     try {
                         if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.vpm.dthDob.getText().toString().trim().isEmpty()
@@ -938,10 +1101,6 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
                 }
 
-            }
-            if (hasErrors) {
-                Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
-                return;
             }
 
             viewModel.add(finalData);

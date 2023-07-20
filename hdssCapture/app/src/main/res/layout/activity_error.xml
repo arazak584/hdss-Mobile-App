@@ -35,7 +35,7 @@
                     android:layout_weight="1"
                     android:textColor="@color/white"
                     android:backgroundTint="@color/Astrosnavy"
-                    android:text="@string/reserror" />
+                    android:text="@string/queries" />
 
             </LinearLayout>
 

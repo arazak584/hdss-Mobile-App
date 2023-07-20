@@ -122,7 +122,7 @@ public abstract class AppDatabase extends RoomDatabase {
             public void run() {
                 // Delete all data from the tables
                 individualDao().deleteAll();
-                codeBookDao().deleteAll();
+                //codeBookDao().deleteAll();
                 locationDao().deleteAll();
                 deathDao().deleteAll();
                 demographicDao().deleteAll();

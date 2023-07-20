@@ -68,9 +68,6 @@ public class HouseMembersFragment extends Fragment {
     private FragmentHouseMembersBinding binding;
     private ProgressDialog progress;
 
-    private Hierarchy level6Data;
-    private ArrayAdapter<Hierarchy> level6Adapter;
-    private List<Hierarchy> level6List = new ArrayList<>();
 
     public HouseMembersFragment() {
         // Required empty public constructor
@@ -122,35 +119,6 @@ public class HouseMembersFragment extends Fragment {
         // Get the Context object
 //        Context context = requireContext();
 
-        final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(this).get(HierarchyViewModel.class);
-        final Spinner level6Spinner = binding.getRoot().findViewById(R.id.searchVillage);
-        level6Spinner.setAdapter(level6Adapter);
-
-        level6Adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item);
-        level6Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        level6Spinner.setAdapter(level6Adapter);
-
-        // Load level 1 data
-        try {
-            List<Hierarchy> level6Data = hierarchyViewModel.retrieveVillage();
-            level6Adapter.addAll(level6Data);
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-            Toast.makeText(getActivity(), "Error loading data", Toast.LENGTH_SHORT).show();
-        }
-
-        level6Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                level6Data = level6Adapter.getItem(position);
-
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
 
         final TextView hh = binding.getRoot().findViewById(R.id.textView_compextId);
         final TextView name = binding.getRoot().findViewById(R.id.textView_compname);
@@ -178,8 +146,8 @@ public class HouseMembersFragment extends Fragment {
                     @Override
                     public void run() {
                         // Get the selected item from the spinner
-                        Spinner searchSpinner = binding.getRoot().findViewById(R.id.searchVillage);
-                        String selectedSpinnerItem = searchSpinner.getSelectedItem().toString();
+                        TextInputEditText searchSpinner = binding.getRoot().findViewById(R.id.searchVillage);
+                        String selectedSpinnerItem = searchSpinner.getText().toString();
 
                         // Get the search text from the search input field
                         TextInputEditText searchInput = binding.getRoot().findViewById(R.id.search_indivdual);

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.HdssSociodemoRepository;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 
 import java.util.Date;

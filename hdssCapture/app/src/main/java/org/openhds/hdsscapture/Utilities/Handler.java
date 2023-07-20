@@ -19,6 +19,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.InverseBindingAdapter;
@@ -80,9 +81,11 @@ public class Handler {
         }
     }
 
+
     public static void colorLayouts(Context context, ViewGroup vg) {
         Resources res = context.getResources();
         Drawable drawable = ResourcesCompat.getDrawable(res, R.drawable.border_shape, null);
+
 
         int children = vg.getChildCount();
         for (int i = 0; i < children; i++) {
