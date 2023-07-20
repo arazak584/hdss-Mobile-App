@@ -80,9 +80,11 @@ public class ClusterAdapter extends RecyclerView.Adapter<ClusterAdapter.ViewHold
                 // Get the text field
                 EditText clustercode = activity.requireActivity().findViewById(R.id.villcode);
                 EditText parent = activity.requireActivity().findViewById(R.id.cluster_code);
+                EditText village = activity.requireActivity().findViewById(R.id.village);
                 // Set the cluster ID in the text field
                 clustercode.setText(hierarchy.getExtId());
                 parent.setText(hierarchy.getUuid());
+                village.setText(hierarchy.getName());
 
                 // Hide the MotherDialogFragment
                 activity.dismiss();
