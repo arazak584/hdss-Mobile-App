@@ -1,32 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.UrlFragment">
+    android:id="@+id/url_fragments">
+
+    <data>
+
+        <variable
+            name="apiUrl"
+            type="org.openhds.hdsscapture.entity.ApiUrl" />
+
+        <variable
+            name="eventname"
+            type="String" />
+    </data>
 
     <LinearLayout
-        android:id="@+id/linearLayout_mother"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="20dp"
+        tools:context=".fragment.UrlFragment">
+
+        <ScrollView
+            android:id="@+id/URL_LAYOUT"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/server_setup"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
 
         <View
             android:layout_width="wrap_content"
             android:layout_height="2dp"
             android:layout_margin="5dp"
             android:background="@color/colorPrimaryDark" />
-
-
-        <LinearLayout
-            android:id="@+id/layout_server"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
@@ -41,14 +66,17 @@
                     android:id="@+id/text_url"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@={apiUrl.codeUrl}"
                     android:inputType="textPersonName"/>
             </com.google.android.material.textfield.TextInputLayout>
 
 
-        </LinearLayout>
+            </LinearLayout>
+            </LinearLayout>
 
+        </ScrollView>
 
 
     </LinearLayout>
 
-</FrameLayout>
+</layout>

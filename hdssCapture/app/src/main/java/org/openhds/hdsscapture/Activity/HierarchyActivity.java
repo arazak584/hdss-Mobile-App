@@ -50,6 +50,8 @@ public class HierarchyActivity extends AppCompatActivity {
     private List<Hierarchy> level5List = new ArrayList<>();
     private List<Hierarchy> level6List = new ArrayList<>();
 
+
+
     public static final String ROUND_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.ROUND_DATA";
     public static final String LEVEL5_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.LEVEL5_DATA";
     public static final String LEVEL6_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.LEVEL6_DATA";
@@ -59,6 +61,8 @@ public class HierarchyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hierarchy);
+
+
 
         final FieldworkerViewModel fieldworkerViewModel = new ViewModelProvider(this).get(FieldworkerViewModel.class);
         final RoundViewModel roundViewModel = new ViewModelProvider(this).get(RoundViewModel.class);
@@ -134,6 +138,8 @@ public class HierarchyActivity extends AppCompatActivity {
 
             }
         });
+
+        roundSpinner.setEnabled(false);
 
         // Load level 1 data
         try {
@@ -297,6 +303,8 @@ public class HierarchyActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 level6Data = level6Adapter.getItem(position);
+                //level6Adapter.clear();
+
             }
 
             @Override
@@ -306,7 +314,7 @@ public class HierarchyActivity extends AppCompatActivity {
 
         final ExtendedFloatingActionButton start = findViewById(R.id.btn_location);
         start.setOnClickListener(v -> {
-            if (level6Adapter == null || level6Spinner.getAdapter().isEmpty()) {
+            if (level6Spinner.getSelectedItemPosition() == 0 || level6Spinner.getAdapter().isEmpty()) {
                 Toast.makeText(this, "Please Select All Fields", Toast.LENGTH_LONG).show();
                 return;
             }
@@ -345,6 +353,8 @@ public class HierarchyActivity extends AppCompatActivity {
             intent.putExtra(FIELDWORKER_DATA, fieldworkerData);
             startActivity(intent);
         });
+
+
 
 
         final ExtendedFloatingActionButton base = findViewById(R.id.btn_baseline);

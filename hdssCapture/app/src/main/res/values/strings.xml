@@ -88,7 +88,7 @@
     <string name="gender">Gender of Individual</string>
     <string name="tribe">Ethnicity of Individual</string>
     <string name="tribe_other">Other ethnicity specified</string>
-    <string name="save">Save Record</string>
+    <string name="save">Save</string>
     <string name="individualOLD">Individual</string>
     <string name="occupations">Occupation</string>
     <string name="religion">Select Religion</string>
@@ -596,6 +596,7 @@
     <string name="duplicate">Duplicate Registration</string>
     <string name="complete">Complete</string>
     <string name="queries">Generate Queries</string>
+    <string name="exit">Exit</string>
 
     //SocioDemo End
 

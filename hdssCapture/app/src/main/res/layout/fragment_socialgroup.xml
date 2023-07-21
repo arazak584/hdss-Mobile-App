@@ -98,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/socialgroupid">
+                android:hint="@string/socialgroupid"
                 android:text="@string/socialgroupid">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -118,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/visituuid">
+                android:hint="@string/visituuid"
                 android:text="@string/visituuid">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -146,7 +146,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/socialgroupname">
+                android:hint="@string/socialgroupname"
                 android:text="@string/socialgroupname">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -165,7 +165,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/ind_extid">
+                android:hint="@string/ind_extid"
                 android:text="@string/ind_extid">
 
                 <com.google.android.material.textfield.TextInputEditText
