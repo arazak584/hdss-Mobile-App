@@ -43,7 +43,7 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual where extId =:id ")
     Individual retrieve(String id);
 
-    @Query("SELECT * FROM individual WHERE complete=1")
+    @Query("SELECT * FROM individual WHERE complete=1 order by dob")
     List<Individual> retrieveToSync();
 
     @Query("SELECT * FROM individual")
