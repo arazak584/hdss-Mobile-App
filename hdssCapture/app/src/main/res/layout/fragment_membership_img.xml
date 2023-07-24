@@ -233,6 +233,8 @@
             android:text="@string/migration_date">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:id="@+id/img_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

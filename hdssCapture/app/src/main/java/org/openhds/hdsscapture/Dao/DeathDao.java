@@ -34,7 +34,7 @@ public interface DeathDao {
     @Query("SELECT * FROM death WHERE complete=1")
     List<Death> retrieveToSync();
 
-    @Query("SELECT * FROM death WHERE vpmcomplete=1")
+    @Query("SELECT * FROM death WHERE vpmcomplete=1 AND deathDate IS NOT NULL")
     List<Death> retrieveVpmSync();
 
     @Query("SELECT a.* FROM death as a INNER JOIN socialgroup as b ON a.individual_uuid=b.individual_uuid " +

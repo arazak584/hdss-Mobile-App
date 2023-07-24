@@ -212,17 +212,13 @@ public class Individual extends BaseObservable implements Parcelable {
     }
 
     public void setInsertDate(String insertDate) {
-        if(insertDate == null) this.insertDate = null;
-        else
         try {
             this.insertDate = f.parse(insertDate);
         } catch (ParseException e) {
-            try {
-                this.insertDate = new Date(Long.parseLong(insertDate));
-            } catch (NumberFormatException ne) {
-            }
+            System.out.println("Date error " + e.getMessage());
         }
     }
+
 
     @Bindable
     public String getFirstName() {

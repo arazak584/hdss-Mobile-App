@@ -698,7 +698,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             }
 
             boolean ipt = false;
-            if (finalData.rec_ipt == 1 && !binding.firstRec.getText().toString().trim().isEmpty()) {
+            if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.firstRec.getText().toString().trim().isEmpty()) {
                 int totalmth = Integer.parseInt(binding.firstRec.getText().toString().trim());
                 if (totalmth > 9) {
                     ipt = true;
@@ -709,7 +709,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             }
 
             boolean iptt = false;
-            if (finalData.rec_ipt == 1 && !binding.manyIpt.getText().toString().trim().isEmpty()) {
+            if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.manyIpt.getText().toString().trim().isEmpty()) {
                 int totalmth = Integer.parseInt(binding.manyIpt.getText().toString().trim());
                 if (totalmth > 3) {
                     iptt = true;
@@ -1065,7 +1065,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     }
                 }
 
-                if (finalData.stillbirth == 1 || finalData.stillbirth == 2) {
+                if (finalData.stillbirth == 1) {
 
                     try {
                         if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.vpm.dthDob.getText().toString().trim().isEmpty()
@@ -1102,7 +1102,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 }
 
             }
-
+            finalData.complete=1;
             viewModel.add(finalData);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 

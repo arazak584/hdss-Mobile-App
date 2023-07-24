@@ -158,13 +158,12 @@ public class HierarchyActivity extends AppCompatActivity {
                 Hierarchy selectedLevel1 = level1Adapter.getItem(position);
 
                 // Reset level 3 spinner
+                level2Adapter.clear();
                 level3Adapter.clear();
                 level4Adapter.clear();
                 level5Adapter.clear();
                 level6Adapter.clear();
 
-                // Load level 2 data
-                if(position==0)
                 try {
                     List<Hierarchy> level2Data = hierarchyViewModel.retrieveLevel2(selectedLevel1.getUuid());
                     level2Data.add(0,new Hierarchy("","Select Region"));
@@ -189,16 +188,24 @@ public class HierarchyActivity extends AppCompatActivity {
                 Hierarchy selectedLevel2 = level2Adapter.getItem(position);
 
                 // Reset level 3 spinner
+                level3Adapter.clear();
                 level4Adapter.clear();
                 level5Adapter.clear();
                 level6Adapter.clear();
+
+                if (position == 0) {
+                    // If the first item is selected in level3Spinner, reset the lower-level spinners to position 0
+                    level3Spinner.setSelection(0);
+                    level4Spinner.setSelection(0);
+                    level5Spinner.setSelection(0);
+                    level6Spinner.setSelection(0);
+                }
+
                 // Load level 3 data
                 try {
                     List<Hierarchy> level3Data = hierarchyViewModel.retrieveLevel3(selectedLevel2.getUuid());
-                    if(position == 0){ level3Data = null;} else{
                     level3Data.add(0,new Hierarchy("","Select District"));
-                    level3Adapter.clear();
-                    level3Adapter.addAll(level3Data);}
+                    level3Adapter.addAll(level3Data);
                 } catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
                     Toast.makeText(HierarchyActivity.this, "Error loading data", Toast.LENGTH_SHORT).show();
@@ -219,23 +226,33 @@ public class HierarchyActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Hierarchy selectedLevel3 = level3Adapter.getItem(position);
 
-                // Reset level 4 spinner and below
                 level4Adapter.clear();
                 level5Adapter.clear();
                 level6Adapter.clear();
 
+                // Reset level 4 spinner to position 0
+                level4Spinner.setSelection(0);
+                // Reset level 5 spinner to position 0
+                level5Spinner.setSelection(0);
+                // Reset level 6 spinner to position 0
+                level6Spinner.setSelection(0);
+
+                if (position == 0) {
+                    // If the first item ("Select District") is selected in level 3 spinner,
+                    // do not load lower-level data and simply return
+                    return;
+                }
+
                 // Load level 4 data
                 try {
                     List<Hierarchy> level4Data = hierarchyViewModel.retrieveLevel4(selectedLevel3.getUuid());
-                    if(position == 0){ level4Data = null;} else{
-                    level4Data.add(0,new Hierarchy("","Select SubDistrict"));
+                    level4Data.add(0, new Hierarchy("", "Select SubDistrict"));
                     level4Adapter.clear();
-                    level4Adapter.addAll(level4Data);}
+                    level4Adapter.addAll(level4Data);
                 } catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
                     Toast.makeText(HierarchyActivity.this, "Error loading data", Toast.LENGTH_SHORT).show();
                 }
-
             }
 
             @Override
@@ -243,8 +260,9 @@ public class HierarchyActivity extends AppCompatActivity {
             }
         });
 
+
         // Set listener for level 4 spinner
-        level4Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+       level4Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Hierarchy selectedLevel4 = level4Adapter.getItem(position);
@@ -252,13 +270,23 @@ public class HierarchyActivity extends AppCompatActivity {
                 level5Adapter.clear();
                 level6Adapter.clear();
 
+                // Reset level 5 spinner to position 0
+                level5Spinner.setSelection(0);
+                // Reset level 6 spinner to position 0
+                level6Spinner.setSelection(0);
+
+                if (position == 0) {
+                    // If the first item ("Select District") is selected in level 3 spinner,
+                    // do not load lower-level data and simply return
+                    return;
+                }
+
                 // Load level 5 data
                 try {
                     List<Hierarchy> level5Data = hierarchyViewModel.retrieveLevel5(selectedLevel4.getUuid());
-                    if(position == 0){ level5Data = null;} else{
-                    level5Data.add(0,new Hierarchy("","Select Village"));
+                    level5Data.add(0, new Hierarchy("", "Select Village"));
                     level5Adapter.clear();
-                    level5Adapter.addAll(level5Data);}
+                    level5Adapter.addAll(level5Data);
                 } catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
                     Toast.makeText(HierarchyActivity.this, "Error loading data", Toast.LENGTH_SHORT).show();
@@ -275,18 +303,23 @@ public class HierarchyActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 level5Data = level5Adapter.getItem(position);
+                //Hierarchy selectedLevel5 = level5Adapter.getItem(position);
 
-                level6Adapter.clear();
+                // Reset level 6 spinner to position 0
+                level6Spinner.setSelection(0);
+
+                if (position == 0) {
+                    // If the first item ("Select District") is selected in level 3 spinner,
+                    // do not load lower-level data and simply return
+                    return;
+                }
 
                 // Load level 6 data
                 try {
                     List<Hierarchy> level6Data = hierarchyViewModel.retrieveLevel6(level5Data.getUuid());
-                    if(position == 0){ level6Data = null;}
-                    else{
-                        level6Data.add(0,new Hierarchy("","Select Cluster"));
-                        level6Adapter.clear();
-                        level6Adapter.addAll(level6Data);}
-
+                    level6Data.add(0, new Hierarchy("", "Select Sub Village"));
+                    level6Adapter.clear();
+                    level6Adapter.addAll(level6Data);
                 } catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
                     Toast.makeText(HierarchyActivity.this, "Error loading data", Toast.LENGTH_SHORT).show();

@@ -453,6 +453,8 @@ public class IndividualFragment extends Fragment {
                 return;
             }
 
+            finalData.complete=1;
+
             IndividualViewModel viewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
             viewModel.add(finalData);
 

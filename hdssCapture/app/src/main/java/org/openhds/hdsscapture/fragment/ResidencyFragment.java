@@ -690,7 +690,7 @@ public class ResidencyFragment extends Fragment {
 //            socialgroupViewModel.update(socialgroupA);
 //
 //            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
-
+            finalData.complete=1;
             viewModel.add(finalData);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 

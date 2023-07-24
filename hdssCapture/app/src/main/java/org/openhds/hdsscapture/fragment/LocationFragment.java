@@ -389,8 +389,6 @@ public class LocationFragment extends Fragment {
             }
 
 
-
-
             locationViewModel.add(locations);
             Toast.makeText(v.getContext(), "Saved Successfully", Toast.LENGTH_LONG).show();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,

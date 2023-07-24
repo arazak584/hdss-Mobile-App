@@ -248,6 +248,8 @@
             android:text="@string/dod">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:id="@+id/dth_deathDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

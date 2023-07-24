@@ -635,12 +635,19 @@
                 tools:ignore="Autofill,LabelFor" />
         </LinearLayout>
 
+    <LinearLayout
+        goneUnless="@{sociodemo.stove_fcorres!=10}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/COOKING_INSIDE_FCORRES_SOCIO" />
 
         <RadioGroup
+            goneUnless="@{sociodemo.stove_fcorres!=10}"
             android:id="@+id/COOKING_INSIDE_FCORRES"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -671,6 +678,8 @@
                 android:tag="0"/>
 
         </RadioGroup>
+
+    </LinearLayout>
 
         <LinearLayout
             goneUnless="@{sociodemo.cooking_inside_fcorres==1}"
@@ -718,16 +727,24 @@
         </LinearLayout>
 
         <TextView
+            goneUnless="@{sociodemo.stove_fcorres!=10}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/COOKING_LOC_FCORRES_SOCIO" />
 
         <Spinner
+            goneUnless="@{sociodemo.stove_fcorres!=10}"
             android:id="@+id/COOKING_LOC_FCORRES"
             selection="@{sociodemo.cooking_loc_fcorres}"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:onItemSelected="@{sociodemo::setCooking_loc_fcorres}" />
+
+    <LinearLayout
+        goneUnless="@{sociodemo.stove_fcorres!=10}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
@@ -773,6 +790,7 @@
                 android:tag="0"/>
 
         </RadioGroup>
+    </LinearLayout>
     </LinearLayout>
 
 </layout>

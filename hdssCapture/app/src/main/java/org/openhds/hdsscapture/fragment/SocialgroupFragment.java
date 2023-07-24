@@ -197,7 +197,7 @@ public class SocialgroupFragment extends Fragment {
             if (finalData.complete != null) {
 
             }
-
+            finalData.complete=1;
             SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             viewModel.add(finalData);
         }
