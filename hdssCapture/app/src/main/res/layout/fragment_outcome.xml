@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/date">
+                    android:hint="@string/date"
                     android:text="@string/date">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -132,13 +132,6 @@
                     android:text="@={pregoutcome.insertDate}"
                     android:textSize="20sp"
                     tools:ignore="TextContrastCheck" />
-
-                <Button
-                    android:id="@+id/button_individual_mother"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mother_extid"
-                    tools:ignore="DuplicateSpeakableTextCheck"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
@@ -421,39 +414,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:text="@string/first_nb"/>
-
-                <Spinner
-                    android:id="@+id/first_nb"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textColor="#000301"
-                    selection="@{pregoutcome.first_nb}"
-                    android:onItemSelected="@{pregoutcome::setFirst_nb}"
-                    android:padding="10dp"/>
-
-
-                <TextView
-                    goneUnless="@{pregoutcome.first_nb==2}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/l_birth" />
-
-                <EditText
-                    goneUnless="@{pregoutcome.first_nb==2}"
-                    android:id="@+id/l_birth"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:ems="10"
-                    android:inputType="number"
-                    android:text="@={pregoutcome.l_birth}" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
                     android:text="@string/rec_anc"/>
 
                 <Spinner
@@ -622,55 +582,6 @@
                     android:inputType="number"
                     android:text="@={pregoutcome.many_ipt}" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:text="@string/chd_weight"/>
-
-                <Spinner
-                    android:id="@+id/chd_weight"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textColor="#000301"
-                    selection="@{pregoutcome.chd_weight}"
-                    android:onItemSelected="@{pregoutcome::setChd_weight}"
-                    android:padding="10dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:text="@string/chd_size"/>
-
-                <Spinner
-                    android:id="@+id/chd_size"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:textColor="#000301"
-                    selection="@{pregoutcome.chd_size}"
-                    android:onItemSelected="@{pregoutcome::setChd_size}"
-                    android:padding="10dp"/>
-
-                <TextView
-                    goneUnless="@{pregoutcome.chd_weight==1}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/weig_hcard" />
-
-                <EditText
-                    goneUnless="@{pregoutcome.chd_weight==1}"
-                    android:id="@+id/weig_hcard"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:ems="10"
-                    android:inputType="numberDecimal"
-                    android:text="@={pregoutcome.weig_hcard}" />
-
                 <Button
                     android:id="@+id/button_outcome_conception"
                     android:layout_width="match_parent"
@@ -815,6 +726,111 @@
                             bind:pregoutcome4="@{pregoutcome4}" />
 
                     </LinearLayout>
+
+                    <TextView
+                        goneUnless="@{pregoutcome1.type==1 || pregoutcome2.type==1 || pregoutcome3.type==1 || pregoutcome4.type==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:text="@string/first_nb"/>
+
+                    <Spinner
+                        goneUnless="@{pregoutcome1.type==1 || pregoutcome2.type==1 || pregoutcome3.type==1 || pregoutcome4.type==1}"
+                        android:id="@+id/first_nb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:textColor="#000301"
+                        selection="@{pregoutcome.first_nb}"
+                        android:onItemSelected="@{pregoutcome::setFirst_nb}"
+                        android:padding="10dp"/>
+
+
+                    <TextView
+                        goneUnless="@{pregoutcome.first_nb==2}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/l_birth" />
+
+                    <EditText
+                        goneUnless="@{pregoutcome.first_nb==2}"
+                        android:id="@+id/l_birth"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:ems="10"
+                        android:inputType="number"
+                        android:text="@={pregoutcome.l_birth}" />
+
+                    <TextView
+                        goneUnless="@{pregoutcome1.type==1 || pregoutcome2.type==1 || pregoutcome3.type==1 || pregoutcome4.type==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:text="@string/chd_weight"/>
+
+                    <Spinner
+                        goneUnless="@{pregoutcome1.type==1 || pregoutcome2.type==1 || pregoutcome3.type==1 || pregoutcome4.type==1}"
+                        android:id="@+id/chd_weight"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:textColor="#000301"
+                        selection="@{pregoutcome.chd_weight}"
+                        android:onItemSelected="@{pregoutcome::setChd_weight}"
+                        android:padding="10dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:text="@string/chd_size"/>
+
+                    <Spinner
+                        android:id="@+id/chd_size"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:textColor="#000301"
+                        selection="@{pregoutcome.chd_size}"
+                        android:onItemSelected="@{pregoutcome::setChd_size}"
+                        android:padding="10dp"/>
+
+                    <TextView
+                        goneUnless="@{pregoutcome.chd_weight==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/weig_hcard" />
+
+                    <EditText
+                        goneUnless="@{pregoutcome.chd_weight==1}"
+                        android:id="@+id/weig_hcard"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:ems="10"
+                        android:inputType="numberDecimal"
+                        android:text="@={pregoutcome.weig_hcard}" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/numberOfLiveBirths"
+                        android:text="@string/numberOfLiveBirths">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:id="@+id/numberOfLiveBirths"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={pregoutcome.numberOfLiveBirths}"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout
                         goneUnless="@{pregoutcome1.type==2 || pregoutcome2.type==2 || pregoutcome3.type==2 || pregoutcome4.type==2}"

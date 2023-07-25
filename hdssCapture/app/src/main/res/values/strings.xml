@@ -276,7 +276,7 @@
     <string name="ass_del">Who assisted you during deivery?</string>
     <string name="how_del">How was the child delivered?</string>
     <string name="first_nb">Is this your first live birth?</string>
-    <string name="l_birth">How many previous pregnancies have you had?</string>
+    <string name="l_birth">How many previous live births have you had?</string>
     <string name="rec_anc">During the time that you were pregnant, did you receive any Antenatal Care?</string>
     <string name="why_no_anc">Why, No?</string>
     <string name="where_anc">Where did you receive the ANC?</string>
@@ -597,6 +597,7 @@
     <string name="complete">Complete</string>
     <string name="queries">Generate Queries</string>
     <string name="exit">Exit</string>
+    <string name="numberOfLiveBirths">Number of Live Births</string>
 
     //SocioDemo End
 

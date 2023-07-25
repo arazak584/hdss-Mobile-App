@@ -291,6 +291,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.complete = 1;
                 data.extra = 2;
                 data.id = 2;
+                binding.numberOfLiveBirths.setVisibility(View.GONE);
 
                 binding.setPregoutcome(data);
                 binding.getPregoutcome().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
@@ -666,11 +667,12 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             }
 
             boolean total = false;
-            if (finalData.first_nb == 2 && !binding.lBirth.getText().toString().trim().isEmpty()) {
+            if (finalData.first_nb!=null && finalData.first_nb == 2 && !binding.lBirth.getText().toString().trim().isEmpty()) {
                 int totalbirth = Integer.parseInt(binding.lBirth.getText().toString().trim());
                 if (totalbirth < 1) {
                     total = true;
                     binding.lBirth.setError("Cannot be less than 1");
+                    Toast.makeText(getActivity(), "Previous Live Births Cannot be less than 1", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -720,7 +722,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             }
 
             boolean weight = false;
-            if (finalData.chd_weight == 1 && !binding.weigHcard.getText().toString().trim().isEmpty()) {
+            if (finalData.chd_weight!=null && finalData.chd_weight == 1 && !binding.weigHcard.getText().toString().trim().isEmpty()) {
                 double childWeight = Double.parseDouble(binding.weigHcard.getText().toString().trim());
                 if (childWeight > 5.0) {
                     weight = true;
@@ -756,6 +758,37 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             if (hasErrors) {
                 Toast.makeText(requireContext(), "All fields are Required", Toast.LENGTH_LONG).show();
                 return;
+            }
+
+            int count = 0; // Initialize a count variable to keep track of the number of occurrences where 'type' is 1
+
+            if (binding.getPregoutcome1().type !=null && binding.getPregoutcome1().type == 1) {
+                count++;
+            }
+
+            if (binding.getPregoutcome2().type !=null && binding.getPregoutcome2().type == 1) {
+                count++;
+            }
+
+            if (binding.getPregoutcome3().type !=null && binding.getPregoutcome3().type == 1) {
+                count++;
+            }
+
+            if (binding.getPregoutcome4().type !=null && binding.getPregoutcome4().type == 1) {
+                count++;
+            }
+
+            // Set finalData.numberOfLiveBirths based on the count value
+            if (count == 4) {
+                finalData.numberOfLiveBirths = 4;
+            } else if (count == 3) {
+                finalData.numberOfLiveBirths = 3;
+            } else if (count == 2) {
+                finalData.numberOfLiveBirths = 2;
+            } else if (count == 1) {
+                finalData.numberOfLiveBirths = 1;
+            } else {
+                finalData.numberOfLiveBirths = 0;
             }
 
 

@@ -7,7 +7,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -18,6 +17,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -55,6 +55,9 @@ public class Pregnancyoutcome extends BaseObservable {
 
     @Expose
     public Integer numberofBirths;
+
+    @Expose
+    public Integer numberOfLiveBirths;
 
     @Expose
     public String fw_uuid;
@@ -427,6 +430,16 @@ public class Pregnancyoutcome extends BaseObservable {
         this.complete = complete;
     }
 
+    public String getNumberOfLiveBirths() {
+        return numberOfLiveBirths == null ? "" : String.valueOf(numberOfLiveBirths);
+    }
+
+    public void setNumberOfLiveBirths(String numberOfLiveBirths) {
+        try {
+            this.numberOfLiveBirths = (numberOfLiveBirths == null) ? null : Integer.valueOf(numberOfLiveBirths);
+        } catch (NumberFormatException e) {
+        }
+    }
 
     //SPINNERS ENTITY
     public void setB_place (AdapterView<?> parent, View view, int position, long id) {
