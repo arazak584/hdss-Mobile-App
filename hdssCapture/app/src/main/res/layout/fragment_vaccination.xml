@@ -923,6 +923,7 @@
         </LinearLayout>
 
         <TextView
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -931,6 +932,7 @@
             android:text="@string/form_complete"/>
 
         <Spinner
+            android:visibility="gone"
             android:id="@+id/vac_complete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

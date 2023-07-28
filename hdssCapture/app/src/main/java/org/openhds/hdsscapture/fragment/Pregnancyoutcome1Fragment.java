@@ -607,7 +607,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         loadCodeData(binding.notDel, codeBookViewModel, "notdel");
         loadCodeData(binding.whyNoAnc, codeBookViewModel, "notdel");
         loadCodeData(binding.firstNb, codeBookViewModel, "complete");
-        loadCodeData(binding.recAnc, codeBookViewModel, "complete");
+        loadCodeData(binding.recAnc, codeBookViewModel, "yn_anc");
         loadCodeData(binding.recIpt, codeBookViewModel, "complete");
         loadCodeData(binding.chdWeight, codeBookViewModel, "complete");
         loadCodeData(binding.assDel, codeBookViewModel, "assist");
@@ -713,10 +713,10 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             boolean iptt = false;
             if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.manyIpt.getText().toString().trim().isEmpty()) {
                 int totalmth = Integer.parseInt(binding.manyIpt.getText().toString().trim());
-                if (totalmth > 3) {
+                if (totalmth > 5) {
                     iptt = true;
-                    binding.manyIpt.setError("Number of IPT taken Cannot be More than 3");
-                    Toast.makeText(getActivity(), "Number of IPT taken Cannot be More than 3", Toast.LENGTH_SHORT).show();
+                    binding.manyIpt.setError("Number of IPT taken Cannot be More than 5");
+                    Toast.makeText(getActivity(), "Number of IPT taken Cannot be More than 5", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -1096,6 +1096,44 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     } else {
                         binding.childFetus4.individual1LastName.setError(null); // Clear the error if the input is valid
                     }
+                }
+
+                try {
+                    if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
+                        final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                        Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                        Date recordedDate = f.parse(binding.editTextConception.getText().toString().trim());
+
+                        Calendar startCalendar = Calendar.getInstance();
+                        startCalendar.setTime(recordedDate);
+
+                        Calendar endCalendar = Calendar.getInstance();
+                        endCalendar.setTime(outcomeDate);
+
+                        int yearDiff = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+                        int monthDiff = endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+                        int dayDiff = endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH);
+
+                        // Adjust the difference based on the day component
+                        if (dayDiff < 0) {
+                            monthDiff--;
+                        }
+
+                        // Calculate the total difference in months
+                        int totalDiffMonths = yearDiff * 12 + monthDiff;
+
+                        if (totalDiffMonths < 1 || totalDiffMonths > 12) {
+                            binding.editTextConception.setError("The difference between outcome and conception Date should be between 1 and 12 months");
+                            Toast.makeText(getActivity(), "The difference between outcome and conception Date should be between 1 and 12 months", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        // Clear error if validation passes
+                        binding.editTextConception.setError(null);
+                    }
+                } catch (ParseException e) {
+                    Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
                 }
 
                 if (finalData.stillbirth == 1) {

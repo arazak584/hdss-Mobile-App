@@ -112,6 +112,7 @@ public class DemographicFragment extends Fragment {
         binding = FragmentDemographicBinding.inflate(inflater, container, false);
         binding.setDemographic(demographic);
 
+
         //final TextView compno = binding.getRoot().findViewById(R.id.textView2_extid);
         //final TextView compname = binding.getRoot().findViewById(R.id.textView2_firstname);
         //final TextView cluster = binding.getRoot().findViewById(R.id.textView2_lastname);

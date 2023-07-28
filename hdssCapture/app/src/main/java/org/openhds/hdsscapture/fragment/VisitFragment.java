@@ -131,6 +131,9 @@ public class VisitFragment extends Fragment {
             if (data != null) {
                 binding.setVisit(data);
                 data.visitDate = new Date();
+                if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)){
+                    data.respondent = "UNK";
+                }
             } else {
                 data = new Visit();
 
@@ -145,6 +148,11 @@ public class VisitFragment extends Fragment {
                 data.complete = 1;
                 data.houseExtId = socialgroup.extId;
                 data.socialgroup_uuid =socialgroup.uuid;
+
+                if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)){
+                    data.respondent = "UNK";
+                }
+
                 if(roundData.roundNumber < 10) {
                     data.extId = data.houseExtId + "00" + roundData.getRoundNumber();
                 }else {
@@ -194,13 +202,24 @@ public class VisitFragment extends Fragment {
                     Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
                     return;
                 }
+
+                if (finalData.respondent == "UNK"){
+                    finalData.complete =2;
+                }else {
+                    finalData.complete =1;
+                }
+
+
             viewModel.add(finalData);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
         }
-        if (close) {
+        if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     HouseMembersFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+        }else {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    BlankFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }
     }
 

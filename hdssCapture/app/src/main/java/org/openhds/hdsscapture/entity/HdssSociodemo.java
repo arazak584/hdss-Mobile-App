@@ -2560,6 +2560,25 @@ public class HdssSociodemo extends BaseObservable {
                 animal_othr_fcorres = AppConstants.NOSELECT;
             }
 
+            if (stove_fcorres == null || stove_fcorres == AppConstants.LPG || stove_fcorres ==AppConstants.non) {
+
+                stove_fuel_fcorres_1 = AppConstants.NOSELECT;
+                stove_fuel_fcorres_2 = AppConstants.NOSELECT;
+                stove_fuel_fcorres_3 = AppConstants.NOSELECT;
+                stove_fuel_fcorres_4 = AppConstants.NOSELECT;
+                stove_fuel_fcorres_5 = AppConstants.NOSELECT;
+                stove_fuel_fcorres_6 = AppConstants.NOSELECT;
+                stove_fuel_fcorres_7 = AppConstants.NOSELECT;
+                stove_fuel_fcorres_8 = AppConstants.NOSELECT;
+                stove_fuel_fcorres_9 = AppConstants.NOSELECT;
+                stove_fuel_fcorres_10 = AppConstants.NOSELECT;
+                stove_fuel_fcorres_11 = AppConstants.NOSELECT;
+                stove_fuel_fcorres_12 = AppConstants.NOSELECT;
+                stove_fuel_fcorres_13 = AppConstants.NOSELECT;
+                stove_fuel_fcorres_14 = AppConstants.NOSELECT;
+                stove_fuel_fcorres_88 = AppConstants.NOSELECT;
+            }
+
             if (cattle_fcorres == null || cattle_fcorres != AppConstants.YES)
                 setCattle_num_fcorres(null);
 

@@ -2,7 +2,7 @@ package org.openhds.hdsscapture;
 
 public class AppConstants {
 
-    public static final int NO = 0, YES = 1, UK = 8, NA = 9, RUR = 1, URB = 2;
+    public static final int NO = 0, YES = 1, UK = 8, NA = 9, RUR = 1, URB = 2, LPG =3, non=10;
     public static final int OTHER_SPECIFY = 77;
 
     public static final String MARKED_COMPLETE="MARKED AS COMPLETED";

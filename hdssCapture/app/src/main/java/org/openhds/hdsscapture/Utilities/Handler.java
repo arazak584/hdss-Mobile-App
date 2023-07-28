@@ -117,7 +117,7 @@ public class Handler {
             }
 
             if (v instanceof Spinner) {
-                v.setBackgroundColor(Color.WHITE);
+                v.setBackgroundColor(Color.TRANSPARENT);
             }
 
             if (v instanceof RadioButton) {

@@ -112,6 +112,7 @@ public class LocationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
         if (getArguments() != null) {
 
             cluster_id = getArguments().getParcelable(ARG_CLUSTER_IDS);
@@ -304,7 +305,7 @@ public class LocationFragment extends Fragment {
 
                 if (comp.contains(" ")) {
                     binding.locationcompno.setError("Spaces are not allowed");
-                    Toast.makeText(getActivity(), "Spaces are not allowed in Compound Number", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Spaces are not allowed in Compound Number", Toast.LENGTH_LONG).show();
                     val = true;
                     return;
                 }
@@ -313,17 +314,17 @@ public class LocationFragment extends Fragment {
 
                 if (binding.getLocations().site == 1 && comp.length() != 6) {
                     binding.locationcompno.setError("Must be 6 characters in length");
-                    Toast.makeText(getActivity(), "Must be 6 characters in length", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Must be 6 characters in length", Toast.LENGTH_LONG).show();
                     val = true;
                     return;
                 } else if (binding.getLocations().site == 2 && comp.length() != 6) {
                     binding.locationcompno.setError("Must be 6 characters in length");
-                    Toast.makeText(getActivity(), "Must be 6 characters in length", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Must be 6 characters in length", Toast.LENGTH_LONG).show();
                     val = true;
                     return;
                 } else if (binding.getLocations().site == 3 && comp.length() != 7) {
                     binding.locationcompno.setError("Must be 7 characters in length");
-                    Toast.makeText(getActivity(), "Must be 7 characters in length", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Must be 7 characters in length", Toast.LENGTH_LONG).show();
                     val = true;
                     return;
                 }
@@ -342,7 +343,7 @@ public class LocationFragment extends Fragment {
                     if (locations1 != null && this.locations.edit==1) {
                         isExists = true;
                         binding.locationcompno.setError("Already Exists");
-                        Toast.makeText(getActivity(), "Compound Number Already Exists", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Compound Number Already Exists", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -382,13 +383,13 @@ public class LocationFragment extends Fragment {
                         dhrc = true;
                     }
 
-                    Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
                     binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
                     return;
                 }
             }
 
-
+            locations.complete = 1;
             locationViewModel.add(locations);
             Toast.makeText(v.getContext(), "Saved Successfully", Toast.LENGTH_LONG).show();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,

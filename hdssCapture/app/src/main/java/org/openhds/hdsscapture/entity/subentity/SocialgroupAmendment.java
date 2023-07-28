@@ -5,4 +5,5 @@ public class SocialgroupAmendment {
     public String uuid;
     public String groupName;
     public String individual_uuid;
+    public Integer complete;
 }

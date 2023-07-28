@@ -374,14 +374,14 @@ public class IndividualFragment extends Fragment {
                     Date stdate = f.parse(binding.dob.getText().toString().trim());
                     if (stdate.after(currentDate)) {
                         binding.dob.setError("Date of Birth Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Date of Birth Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date of Birth Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     // clear error if validation passes
                     binding.dob.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -394,7 +394,7 @@ public class IndividualFragment extends Fragment {
                 if (fAgeValue - individidAgeValue < 10) {
                     agedif = true;
                     binding.fatherAge.setError("Father selected is too young to be the father of this Individual");
-                    Toast.makeText(getActivity(), "Father selected is too young to be the father of this Individual", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Father selected is too young to be the father of this Individual", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -405,7 +405,7 @@ public class IndividualFragment extends Fragment {
                 if (mthgeValue - individidAge < 10) {
                     modif = true;
                     binding.motherAge.setError("Mother selected is too young to be the mother of this Individual");
-                    Toast.makeText(getActivity(), "Mother selected is too young to be the mother of this Individual", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Mother selected is too young to be the mother of this Individual", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -419,7 +419,7 @@ public class IndividualFragment extends Fragment {
 
                 if (!input.matches(regex)) {
                     gh = true;
-                    Toast.makeText(getActivity(), "Ghana Card Number or format is incorrect", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Ghana Card Number or format is incorrect", Toast.LENGTH_LONG).show();
                     binding.ghanacard.setError("Format Should Be GHA-XXXXXXXXX-X");
                     return;
                 }
@@ -429,7 +429,7 @@ public class IndividualFragment extends Fragment {
             String firstName = binding.individualFirstName.getText().toString();
             if (firstName.charAt(0) == ' ' || firstName.charAt(firstName.length() - 1) == ' ') {
                 binding.individualFirstName.setError("Spaces are not allowed before or after the Name");
-                Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
                 val = true;
                 return;
             } else {
@@ -440,7 +440,7 @@ public class IndividualFragment extends Fragment {
             String lastName = binding.individualLastName.getText().toString();
             if (lastName.charAt(0) == ' ' || lastName.charAt(lastName.length() - 1) == ' ') {
                 binding.individualLastName.setError("Spaces are not allowed before or after the Name");
-                Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
                 vals = true;
                 return;
             } else {
@@ -468,6 +468,13 @@ public class IndividualFragment extends Fragment {
         }
 
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
 
     private <T> void callable(Spinner spinner, T[] array) {
 

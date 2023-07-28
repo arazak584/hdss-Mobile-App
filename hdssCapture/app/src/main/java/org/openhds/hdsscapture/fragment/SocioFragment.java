@@ -200,14 +200,35 @@ public class SocioFragment extends Fragment {
                 hasErrors = hasErrors || new Handler().hasInvalidInput(binding.sociog.MAINLAYOUT, validateOnComplete, false);
                 hasErrors = hasErrors || new Handler().hasInvalidInput(binding.socioz.MAINLAYOUT, validateOnComplete, false);
                 if (hasErrors) {
-                    data.complete = 2;
                     Toast.makeText(requireActivity(), R.string.incomplete, Toast.LENGTH_LONG).show();
-                    //return;
-                }else {
-                    data.complete = 1;
+                    return;
                 }
 
             data.formcompldate = new Date();
+            data.complete = 1;
+
+            boolean mar = false;
+            boolean val = false;
+            if (data.marital_scorres == 1 && !binding.socioa.MARITALAGE.getText().toString().trim().isEmpty()) {
+                int totalmth = Integer.parseInt(binding.socioa.MARITALAGE.getText().toString().trim());
+                if (totalmth < 10) {
+                    mar = true;
+                    binding.socioa.MARITALAGE.setError("Maximum Age Allowed is 10");
+                    Toast.makeText(getActivity(), "Maximum Age Allowed is 10", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            if (!binding.socioa.HOUSEOCCTOTFCORRES.getText().toString().trim().isEmpty() && !binding.socioa.HOUSEOCCLT5FCORRES.getText().toString().trim().isEmpty()) {
+                int totalpeople = Integer.parseInt(binding.socioa.HOUSEOCCTOTFCORRES.getText().toString().trim());
+                int total5 = Integer.parseInt(binding.socioa.HOUSEOCCLT5FCORRES.getText().toString().trim());
+                if (totalpeople < total5) {
+                    val = true;
+                    binding.socioa.HOUSEOCCLT5FCORRES.setError("Children aged five cannot be more than total Individuals in household");
+                    Toast.makeText(getActivity(), "Children aged five cannot be more than total Individuals in household", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
 
 
             //get the hour and minute on first fill

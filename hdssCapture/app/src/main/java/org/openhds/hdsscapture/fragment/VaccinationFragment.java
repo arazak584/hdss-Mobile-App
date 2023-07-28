@@ -910,24 +910,24 @@ public class VaccinationFragment extends Fragment {
                     Date opv3 = f.parse(binding.opv3.getText().toString().trim());
                     if (opv0.after(currentDate)) {
                         binding.opv0.setError("Date Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     if (opv1.before(opv0)) {
                         binding.opv1.setError("OPV1 Date Cannot Be Less than OPV0 Date");
-                        Toast.makeText(getActivity(), "OPV1 Date Cannot Be Less than OPV0 Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "OPV1 Date Cannot Be Less than OPV0 Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     if (opv2.before(opv1)) {
                         binding.opv2.setError("OPV2 Date Cannot Be Less than OPV1 Date");
-                        Toast.makeText(getActivity(), "OPV2 Date Cannot Be Less than OPV1 Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "OPV2 Date Cannot Be Less than OPV1 Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     if (opv3.before(opv3)) {
                         binding.opv3.setError("OPV3 Date Cannot Be Less than OPV2 Date");
-                        Toast.makeText(getActivity(), "OPV3 Date Cannot Be Less than OPV2 Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "OPV3 Date Cannot Be Less than OPV2 Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -935,7 +935,7 @@ public class VaccinationFragment extends Fragment {
                     binding.opv1.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -949,18 +949,18 @@ public class VaccinationFragment extends Fragment {
                     Date DPTHepBHib3 = f.parse(binding.DPTHepBHib3.getText().toString().trim());
                     if (DPTHepBHib1.after(currentDate)) {
                         binding.DPTHepBHib1.setError("Date Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     if (DPTHepBHib2.before(DPTHepBHib1)) {
                         binding.DPTHepBHib2.setError("Date Cannot Be Less than Previous Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     if (DPTHepBHib3.before(DPTHepBHib2)) {
                         binding.DPTHepBHib3.setError("Date Cannot Be Less than Previous Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -968,7 +968,7 @@ public class VaccinationFragment extends Fragment {
                     binding.DPTHepBHib1.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -983,18 +983,18 @@ public class VaccinationFragment extends Fragment {
                     Date pneumo3 = f.parse(binding.pneumo3.getText().toString().trim());
                     if (pneumo1.after(currentDate)) {
                         binding.pneumo1.setError("Date Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     if (pneumo2.before(pneumo1)) {
                         binding.pneumo2.setError("Date Cannot Be Less than Previous Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     if (pneumo3.before(pneumo2)) {
                         binding.pneumo3.setError("Date Cannot Be Less than Previous Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -1002,7 +1002,7 @@ public class VaccinationFragment extends Fragment {
                     binding.pneumo1.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -1016,18 +1016,18 @@ public class VaccinationFragment extends Fragment {
                     Date rota3 = f.parse(binding.rota3.getText().toString().trim());
                     if (rota1.after(currentDate)) {
                         binding.rota1.setError("Date Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     if (rota2.before(rota1)) {
                         binding.rota2.setError("Date Cannot Be Less than Previous Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     if (rota3.before(rota2)) {
                         binding.rota3.setError("Date Cannot Be Less than Previous Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -1035,7 +1035,7 @@ public class VaccinationFragment extends Fragment {
                     binding.rota1.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -1047,7 +1047,7 @@ public class VaccinationFragment extends Fragment {
                     Date ipv = f.parse(binding.ipv.getText().toString().trim());
                     if (ipv.after(currentDate)) {
                         binding.ipv.setError("Date Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -1055,7 +1055,7 @@ public class VaccinationFragment extends Fragment {
                     binding.ipv.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -1069,18 +1069,18 @@ public class VaccinationFragment extends Fragment {
                     Date vita3 = f.parse(binding.vitaminA18.getText().toString().trim());
                     if (vita1.after(currentDate)) {
                         binding.vitaminA6.setError("Date Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     if (vita2.before(vita1)) {
                         binding.vitaminA12.setError("Date Cannot Be Less than Previous Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     if (vita3.before(vita2)) {
                         binding.vitaminA18.setError("Date Cannot Be Less than Previous Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -1088,7 +1088,7 @@ public class VaccinationFragment extends Fragment {
                     binding.vitaminA6.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -1104,24 +1104,24 @@ public class VaccinationFragment extends Fragment {
                     Date rtss4 = f.parse(binding.rtss18.getText().toString().trim());
                     if (rtss1.after(currentDate)) {
                         binding.rtss6.setError("Date Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     if (rtss2.before(rtss1)) {
                         binding.rtss6.setError("Date Cannot Be Less than Previous Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     if (rtss3.before(rtss2)) {
                         binding.rtss9.setError("Date Cannot Be Less than Previous Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     if (rtss4.before(rtss3)) {
                         binding.rtss18.setError("Date Cannot Be Less than Previous Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -1129,7 +1129,7 @@ public class VaccinationFragment extends Fragment {
                     binding.rtss6.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -1141,12 +1141,12 @@ public class VaccinationFragment extends Fragment {
                     Date measles2 = f.parse(binding.measles2.getText().toString().trim());
                     if (measles1.after(currentDate)) {
                         binding.measles1.setError("Date Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     if (measles2.before(measles1)) {
                         binding.measles2.setError("Date Cannot Be Less than Previous Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -1154,7 +1154,7 @@ public class VaccinationFragment extends Fragment {
                     binding.measles1.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -1165,7 +1165,7 @@ public class VaccinationFragment extends Fragment {
                     Date yf = f.parse(binding.yellowFever.getText().toString().trim());
                     if (yf.after(currentDate)) {
                         binding.yellowFever.setError("Date Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -1173,7 +1173,7 @@ public class VaccinationFragment extends Fragment {
                     binding.yellowFever.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -1184,7 +1184,7 @@ public class VaccinationFragment extends Fragment {
                     Date men = f.parse(binding.menA.getText().toString().trim());
                     if (men.after(currentDate)) {
                         binding.menA.setError("Date Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -1192,7 +1192,7 @@ public class VaccinationFragment extends Fragment {
                     binding.menA.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -1203,7 +1203,7 @@ public class VaccinationFragment extends Fragment {
                     Date itn = f.parse(binding.itn.getText().toString().trim());
                     if (itn.after(currentDate)) {
                         binding.itn.setError("Date Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -1211,7 +1211,7 @@ public class VaccinationFragment extends Fragment {
                     binding.itn.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 

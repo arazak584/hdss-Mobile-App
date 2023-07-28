@@ -203,7 +203,7 @@ public class DupFragment extends Fragment {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
                 return;
             }
-
+            finalData.complete=1;
             viewModel.add(finalData);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
         }
@@ -212,11 +212,6 @@ public class DupFragment extends Fragment {
                     EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
         }
 
-    }
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 
     private <T> void callable(Spinner spinner, T[] array) {

@@ -497,14 +497,14 @@ public class ResidencyFragment extends Fragment {
                     Date edate = f.parse(binding.currentdob.getText().toString().trim());
                     if (edate.after(stdate)) {
                         binding.editTextStartDate.setError("Start Date Cannot Be Less than Date of Birth");
-                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Date of Birth", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Date of Birth", Toast.LENGTH_LONG).show();
                         return;
                     }
                     // clear error if validation passes
                     binding.editTextStartDate.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -521,7 +521,7 @@ public class ResidencyFragment extends Fragment {
 
                     if (stdate.before(minStartDate)) {
                         binding.editTextStartDate.setError("Start Date must be at least three days after the previous start date " + f.format(minStartDate));
-                        Toast.makeText(getActivity(), "Start Date must be at least three days after the previous start date " + f.format(minStartDate), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Start Date must be at least three days after the previous start date " + f.format(minStartDate), Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -529,7 +529,7 @@ public class ResidencyFragment extends Fragment {
                     binding.editTextStartDate.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -542,20 +542,20 @@ public class ResidencyFragment extends Fragment {
                     String formattedDate = f.format(edate);
                     if (edate.after(stdate)) {
                         binding.editTextStartDate.setError("Start Date Cannot Be Less than Or Equal to " + formattedDate);
-                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Or Equal to " + formattedDate, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Or Equal to " + formattedDate, Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     if (edate.equals(stdate)) {
                         binding.editTextStartDate.setError("Start Date Cannot Be Less than Or Equal to " + formattedDate);
-                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Or Equal to " + formattedDate, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Or Equal to " + formattedDate, Toast.LENGTH_LONG).show();
                         return;
                     }
                     // clear error if validation passes
                     binding.editTextStartDate.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -568,19 +568,19 @@ public class ResidencyFragment extends Fragment {
                     Date edate = f.parse(binding.editTextEndDate.getText().toString().trim());
                     if (edate.after(currentDate)) {
                         binding.editTextEndDate.setError("End Date Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "End Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "End Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     if (edate.before(stdate)) {
                         binding.editTextEndDate.setError("End Date Cannot Be Less than Start Date");
-                        Toast.makeText(getActivity(), "End Date Cannot Be Less than Start Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "End Date Cannot Be Less than Start Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     // clear error if validation passes
                     binding.editTextEndDate.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -592,14 +592,14 @@ public class ResidencyFragment extends Fragment {
                     Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
                     if (stdate.after(currentDate)) {
                         binding.editTextStartDate.setError("Start Date Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Start Date Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Start Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     // clear error if validation passes
                     binding.editTextStartDate.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -624,7 +624,7 @@ public class ResidencyFragment extends Fragment {
                     if (!binding.editTextEndDate.getText().toString().trim().equals(binding.dth.dthDeathDate.getText().toString().trim())) {
                         dthdate = true;
                         binding.dth.dthDeathDate.setError("End Date Not Equal to Date of Death");
-                        Toast.makeText(getActivity(), "End Date Not Equal to Date of Death", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "End Date Not Equal to Date of Death", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -640,7 +640,7 @@ public class ResidencyFragment extends Fragment {
                     if (!binding.editTextStartDate.getText().toString().trim().equals(binding.img.imgDate.getText().toString().trim())) {
                         imgdate = true;
                         binding.img.imgDate.setError("Migration Date Not Equal to Start Date");
-                        Toast.makeText(getActivity(), "Migration Date Not Equal to Start Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Migration Date Not Equal to Start Date", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -657,7 +657,7 @@ public class ResidencyFragment extends Fragment {
                     if (!binding.editTextEndDate.getText().toString().trim().equals(binding.omg.omgDate.getText().toString().trim())) {
                         omgdate = true;
                         binding.omg.omgDate.setError("End Date Not Equal to Date of Outmigration");
-                        Toast.makeText(getActivity(), "End Date Not Equal to Date of Outmigration", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "End Date Not Equal to Date of Outmigration", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -703,6 +703,7 @@ public class ResidencyFragment extends Fragment {
                     socialgroupAmendment.individual_uuid = individual.uuid;
                     socialgroupAmendment.groupName = individual.getFirstName() + ' ' + individual.getLastName();
                     socialgroupAmendment.uuid = socialgroup.uuid;
+                    socialgroupAmendment.complete =1;
 
                     socialgroupViewModel.update(socialgroupAmendment);
                 }
@@ -809,6 +810,11 @@ public class ResidencyFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 
     private <T> void callable(Spinner spinner, T[] array) {
 

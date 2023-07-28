@@ -54,6 +54,12 @@
                 tools:ignore="Autofill,LabelFor" />
         </LinearLayout>
 
+    <LinearLayout
+        goneUnless="@{sociodemo.stove_fcorres!=3 &amp; sociodemo.stove_fcorres!=10}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -613,6 +619,7 @@
                 android:tag="0"/>
 
         </RadioGroup>
+    </LinearLayout>
 
         <LinearLayout
             goneUnless="@{sociodemo.stove_fuel_fcorres_88==1}"

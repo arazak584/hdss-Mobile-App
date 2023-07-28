@@ -120,6 +120,10 @@ public class HouseholdFragment extends Fragment {
                     data.complete = 2;
                 }
 
+                if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)){
+                    data.complete = 2;
+                }
+
                 if (data.visit_uuid==null){
 
                     String visits = UUID.randomUUID().toString();
@@ -164,7 +168,8 @@ public class HouseholdFragment extends Fragment {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
                 return;
             }
-            finalData.complete=1;
+
+
             SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             viewModel.add(finalData);
         }

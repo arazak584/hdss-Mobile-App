@@ -146,6 +146,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 amendmentDao().deleteAll();
                 vaccinationDao().deleteAll();
                 duplicateDao().deleteAll();
+                fieldworkerDao().deleteAll();
 
                 // Perform any other necessary cleanup or initialization
 
