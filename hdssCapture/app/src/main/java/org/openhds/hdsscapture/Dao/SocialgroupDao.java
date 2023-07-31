@@ -62,7 +62,7 @@ public interface SocialgroupDao {
 
 
     @Query("SELECT COUNT(*) FROM socialgroup a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
-            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
+            " WHERE groupName!='UNK' AND insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
     @Query("SELECT * FROM socialgroup where groupName='UNK' AND complete=1 ")

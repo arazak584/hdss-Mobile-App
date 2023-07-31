@@ -65,7 +65,8 @@ public interface ResidencyDao {
     Residency amend(String id);
 
     @Query("SELECT COUNT(*) FROM residency a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
-            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
+            " INNER JOIN individual as c on a.individual_uuid=c.uuid " +
+            " WHERE c.firstName!='FAKE' AND a.insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
 }

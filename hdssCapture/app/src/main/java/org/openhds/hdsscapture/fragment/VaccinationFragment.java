@@ -1221,7 +1221,7 @@ public class VaccinationFragment extends Fragment {
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
-                return;
+                //return;
             }
             finalData.complete=1;
             viewModel.add(finalData);

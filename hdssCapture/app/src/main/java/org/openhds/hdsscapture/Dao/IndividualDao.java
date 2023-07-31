@@ -132,10 +132,16 @@ public interface IndividualDao {
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username AND a.firstName!='FAKE'")
     long countIndividuals(Date startDate, Date endDate, String username);
 
-    @Query("SELECT * FROM sociodemo as a INNER JOIN socialgroup as b ON a.socialgroup_uuid=b.uuid " +
-            " INNER JOIN residency as c on b.uuid=c.socialgroup_uuid " +
-            " INNER JOIN individual as d on c.individual_uuid=d.uuid " +
-            "where c.endType=1 and a.complete=2 AND d.firstName!='FAKE' AND compextId is not null GROUP BY a.socialgroup_uuid order by dob")
+//    @Query("SELECT * FROM sociodemo as a INNER JOIN socialgroup as b ON a.socialgroup_uuid=b.uuid " +
+//            " INNER JOIN residency as c on b.uuid=c.socialgroup_uuid " +
+//            " INNER JOIN individual as d on c.individual_uuid=d.uuid " +
+//            "where c.endType=1 and a.complete=2 AND d.firstName!='FAKE' AND compextId is not null GROUP BY a.socialgroup_uuid order by dob")
+//    List<Individual> error();
+
+    @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
+            " INNER JOIN socialgroup as d on a.uuid=d.individual_uuid " +
+            " WHERE b.endType=1 and firstName!='FAKE' and " +
+            " date('now', '-15 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
     List<Individual> error();
 
 

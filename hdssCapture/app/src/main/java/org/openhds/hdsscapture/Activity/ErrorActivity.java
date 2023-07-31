@@ -91,19 +91,19 @@ public class ErrorActivity extends AppCompatActivity {
 
             final SimpleDateFormat f = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
 
-            int c=1;
-            for (Socialgroup e : socialgroupViewModel.error()) {
-                String formattedDate = f.format(e.insertDate);
-                Queries r1 = new Queries();
-                r1.name = "Socialgroup " ;
-                r1.extid = "" + e.extId;
-                r1.date = "" + formattedDate;
-                r1.error = "Incomplete Socialgroup";
-                r1.index = c;
-
-                list.add(r1);
-
-            }
+//            int c=1;
+//            for (Socialgroup e : socialgroupViewModel.error()) {
+//                String formattedDate = f.format(e.insertDate);
+//                Queries r1 = new Queries();
+//                r1.name = "Socialgroup " ;
+//                r1.extid = "" + e.extId;
+//                r1.date = "" + formattedDate;
+//                r1.error = "Incomplete Socialgroup";
+//                r1.index = c;
+//
+//                list.add(r1);
+//
+//            }
 
             int d=1;
             for (Death e : deathViewModel.error()) {
@@ -123,10 +123,10 @@ public class ErrorActivity extends AppCompatActivity {
             for (Individual e : individualViewModel.error()) {
                 String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
-                r1.name = "Profile " ;
+                r1.name = "Socialgroup " ;
                 r1.extid = "" + e.compextId + " - " +e.firstName + " " + e.lastName;
                 r1.date = "" + e.houseExtId;
-                r1.error = "Incomplete Profile";
+                r1.error = "Household Head is a Minor";
                 r1.index = g;
 
                 list.add(r1);

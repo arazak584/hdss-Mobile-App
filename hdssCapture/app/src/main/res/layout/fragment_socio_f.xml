@@ -748,7 +748,7 @@
             android:onItemSelected="@{sociodemo::setCooking_loc_fcorres}" />
 
     <LinearLayout
-        goneUnless="@{sociodemo.stove_fcorres!=10}"
+        goneUnless="@{sociodemo.cooking_loc_fcorres==1}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
