@@ -116,6 +116,9 @@ public class BasesocialgroupFragment extends Fragment {
             if (data.complete==null){
                 data.complete = 2;
             }
+            if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)){
+                data.complete = 2;
+            }
 
             if (data.visit_uuid==null){
 
@@ -161,6 +164,7 @@ public class BasesocialgroupFragment extends Fragment {
                 return;
             }
 
+            finalData.complete=1;
             SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             viewModel.add(finalData);
         }

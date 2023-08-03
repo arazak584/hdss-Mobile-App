@@ -219,8 +219,8 @@ public class NewhouseholdFragment extends Fragment {
             binding.getIndividual().lastName = "FAKE";
         }
 
-        if(individual.dob==null){
-            binding.getIndividual().dob = new Date(2003-12-15);
+        if (individual.dob == null) {
+            binding.getIndividual().dob = new Date("2003-12-15");
         }
 
         if(individual.gender==null){
@@ -383,7 +383,7 @@ public class NewhouseholdFragment extends Fragment {
             Socialgroup soc = binding.getSocialgroup();
             //finalData.modified = AppConstants.YES;
 
-
+            soc.complete=1;
             IndividualViewModel viewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
             viewModel.add(finalData);
 

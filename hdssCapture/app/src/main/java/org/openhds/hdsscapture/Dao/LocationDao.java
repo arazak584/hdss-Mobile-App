@@ -49,8 +49,14 @@ public interface LocationDao {
     @Query("SELECT * FROM Locations WHERE locationLevel_uuid=:id order by compno")
     List<Locations> retrieveByClusterId(String id);
 
+    @Query("SELECT * FROM Locations WHERE locationLevel_uuid=:id AND (compno LIKE:ids OR locationName LIKE:ids OR compno LIKE:ids) order by compno")
+    List<Locations> retrieveBySearch(String id, String ids);
+
     @Query("SELECT * FROM Locations WHERE compno LIKE:id OR locationName LIKE:id OR compno LIKE:id order by compno")
-    List<Locations> retrieveBySearch(String id);
+    List<Locations> retrieveBySearchs(String id);
+
+    @Query("SELECT * FROM Locations WHERE compno LIKE:id OR locationName LIKE:id OR compno LIKE:id order by compno")
+    List<Locations> filter(String id);
 
 
     @Query("SELECT a.* FROM Locations as a " + "INNER JOIN locationhierarchy as b ON a.locationLevel_uuid = b.uuid " +

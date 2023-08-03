@@ -135,12 +135,10 @@ public class Locations extends BaseObservable implements Parcelable {
     }
 
     public void setInsertDate(String insertDate) {
-        if(insertDate == null ) this.insertDate=null;
-        else
         try {
             this.insertDate = f.parse(insertDate);
         } catch (ParseException e) {
-//            System.out.println("Visit Date Error " + e.getMessage());
+            System.out.println("Visit Date Error " + e.getMessage());
         }
     }
 

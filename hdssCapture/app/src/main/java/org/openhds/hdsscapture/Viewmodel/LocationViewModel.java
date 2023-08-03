@@ -30,6 +30,14 @@ public class LocationViewModel extends AndroidViewModel {
         return locationRepository.findByClusterId(id);
     }
 
+    public List<Locations> findBySearch(String id,String ids) throws ExecutionException, InterruptedException {
+        return locationRepository.findBySearch(id,"%" + ids + "%");
+    }
+
+    public List<Locations> retrieveBySearchs(String id) throws ExecutionException, InterruptedException {
+        return locationRepository.retrieveBySearchs("%" + id + "%");
+    }
+
     public List<Locations> retrieveByVillage(String id) throws ExecutionException, InterruptedException {
         return locationRepository.retrieveByVillage(id);
     }
@@ -42,8 +50,8 @@ public class LocationViewModel extends AndroidViewModel {
         return locationRepository.findToSync();
     }
 
-    public List<Locations> findBySearch(String id) throws ExecutionException, InterruptedException {
-        return locationRepository.findBySearch("%" + id + "%");
+    public List<Locations> filter(String id) throws ExecutionException, InterruptedException {
+        return locationRepository.filter("%" + id + "%");
     }
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {

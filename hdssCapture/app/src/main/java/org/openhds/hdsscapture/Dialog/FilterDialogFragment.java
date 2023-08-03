@@ -1,48 +1,42 @@
-package org.openhds.hdsscapture.fragment;
+package org.openhds.hdsscapture.Dialog;
 
-import android.app.ProgressDialog;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.SearchView;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.SearchView;
 
+import org.openhds.hdsscapture.Adapter.FatherAdapter;
+import org.openhds.hdsscapture.Adapter.FilterAdapter;
 import org.openhds.hdsscapture.Adapter.LocationAdapter;
-import org.openhds.hdsscapture.Dialog.FilterDialogFragment;
-import org.openhds.hdsscapture.Dialog.PregnancyDialogFragment;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.entity.Hierarchy;
-import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Residency;
-import org.openhds.hdsscapture.entity.Socialgroup;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ClusterFragment#newInstance} factory method to
+ * Use the {@link FilterDialogFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ClusterFragment extends Fragment {
+public class FilterDialogFragment extends DialogFragment {
 
     private static final String ARG_CLUSTER_ID = "ARG_CLUSTER_ID";
     private Hierarchy level6Data;
-    private Socialgroup socialgroup;
-    private Residency residency;
-    private Individual individual;
+    private Locations locations;
 
-
-    public ClusterFragment() {
+    public FilterDialogFragment() {
         // Required empty public constructor
     }
 
@@ -51,11 +45,11 @@ public class ClusterFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param level6Data Parameter 1.
-     * @return A new instance of fragment ClusterFragment.
+     * @return A new instance of fragment FilterDialogFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ClusterFragment newInstance(Hierarchy level6Data) {
-        ClusterFragment fragment = new ClusterFragment();
+    public static FilterDialogFragment newInstance(Hierarchy level6Data) {
+        FilterDialogFragment fragment = new FilterDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_CLUSTER_ID, level6Data);
         fragment.setArguments(args);
@@ -74,24 +68,19 @@ public class ClusterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_cluster, container, false);
+        View view = inflater.inflate(R.layout.fragment_filter_dialog, container, false);
 
-        Button showDialogButton = view.findViewById(R.id.button_filter);
+        Button closeButton = view.findViewById(R.id.button_exit);
 
-        // Set a click listener on the button for pregnancies
-        showDialogButton.setOnClickListener(new View.OnClickListener() {
+        closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                // Show the dialog fragment
-                FilterDialogFragment.newInstance(level6Data)
-                        .show(getChildFragmentManager(), "FilterDialogFragment");
-
+                dismiss();
             }
         });
 
-        final RecyclerView recyclerView = view.findViewById(R.id.compoundsview);
-        final LocationAdapter adapter = new LocationAdapter(this, level6Data);
+        final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_filter);
+        final FilterAdapter adapter = new FilterAdapter(this, level6Data);
         final LocationViewModel locationViewModel = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
 
         //recyclerView.setHasFixedSize(true);
@@ -105,8 +94,8 @@ public class ClusterFragment extends Fragment {
         adapter.filter("", locationViewModel);
 
         // Locate the EditText in listview_main.xml
-        final SearchView editSearch = view.findViewById(R.id.comp_search);
-        // below line is to call set on query text listener method.
+        final SearchView editSearch = view.findViewById(R.id.filter_search);
+
         editSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -120,15 +109,6 @@ public class ClusterFragment extends Fragment {
                 adapter.filter(newText, locationViewModel);
                 return false;
             }
-        });
-
-        final ExtendedFloatingActionButton add_location = view.findViewById(R.id.button_new_location);
-        add_location.setOnClickListener(v -> {
-
-            final Locations locations = new Locations();
-
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    LocationFragment.newInstance(level6Data, locations, socialgroup, residency,individual)).commit();
         });
 
         return view;

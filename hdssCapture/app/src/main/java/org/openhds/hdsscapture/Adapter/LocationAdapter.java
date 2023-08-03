@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Adapter;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -101,13 +102,14 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         return locationsList.size();
     }
 
+    @SuppressLint("SuspiciousIndentation")
     public void filter(String charText, LocationViewModel locationViewModel) {
         locationsList.clear();
         if (charText != null && charText.length() > 2) {
             charText = charText.toLowerCase(Locale.getDefault());
 
             try {
-                List<Locations> list = locationViewModel.findBySearch(charText);
+                List<Locations> list = locationViewModel.findBySearch(level6Data.getUuid(),charText);
 
                 if (list != null) {
                     locationsList.addAll(list);

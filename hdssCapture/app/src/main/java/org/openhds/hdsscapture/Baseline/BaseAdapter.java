@@ -99,7 +99,7 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ViewHolder>{
             charText = charText.toLowerCase(Locale.getDefault());
 
             try {
-                List<Locations> list = locationViewModel.findBySearch(charText);
+                List<Locations> list = locationViewModel.retrieveBySearchs(charText);
 
                 if (list != null) {
                     locationsList.addAll(list);

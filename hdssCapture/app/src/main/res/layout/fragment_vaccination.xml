@@ -160,33 +160,33 @@
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/month" />
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/month" />-->
 
-        <EditText
-            android:id="@+id/month_age"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:ems="10"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:inputType="number" />
+<!--        <EditText-->
+<!--            android:id="@+id/month_age"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:ems="10"-->
+<!--            android:focusable="false"-->
+<!--            android:focusableInTouchMode="false"-->
+<!--            android:inputType="number" />-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/week" />
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/week" />-->
 
-        <EditText
-            android:id="@+id/week_age"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:ems="10"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:inputType="number" />
+<!--        <EditText-->
+<!--            android:id="@+id/week_age"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:ems="10"-->
+<!--            android:focusable="false"-->
+<!--            android:focusableInTouchMode="false"-->
+<!--            android:inputType="number" />-->
 
         <TextView
             android:layout_width="match_parent"
@@ -248,7 +248,26 @@
                     android:inputType="textCapCharacters"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/bednett"/>
+
+            <Spinner
+                android:id="@+id/bednet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{vaccination.bednet}"
+                android:onItemSelected="@{vaccination::setBednet}"
+                android:gravity="left"
+                android:textColor="#000301"
+                android:padding="15dp"/>
+
         <TextView
+            goneUnless="@{vaccination.bednet==1}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -257,6 +276,7 @@
             android:text="@string/onet"/>
 
         <Spinner
+            goneUnless="@{vaccination.bednet==1}"
             android:id="@+id/onet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -265,6 +285,210 @@
             android:gravity="left"
             android:textColor="#000301"
             android:padding="15dp"/>
+
+            <TextView
+                goneUnless="@{vaccination.bednet==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/slpbednet"/>
+
+            <Spinner
+                goneUnless="@{vaccination.bednet==1}"
+                android:id="@+id/slpbednet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{vaccination.slpbednet}"
+                android:onItemSelected="@{vaccination::setSlpbednet}"
+                android:gravity="left"
+                android:textColor="#000301"
+                android:padding="15dp"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                goneUnless="@{vaccination.bednet==1}"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/chlbednet"
+                android:text="@string/chlbednet">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/chlbednet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={vaccination.chlbednet}"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/weight"
+                android:text="@string/weight">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/weight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={vaccination.weight}"
+                    android:inputType="numberDecimal"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="10dp"
+                android:textColor="@color/black"
+                android:text="@string/scar"/>
+
+            <Spinner
+                android:id="@+id/scar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{vaccination.scar}"
+                android:onItemSelected="@{vaccination::setScar}"
+                android:gravity="left"
+                android:textColor="#000301"
+                android:padding="15dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/fever"/>
+
+            <Spinner
+                android:id="@+id/fever"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{vaccination.fever}"
+                android:onItemSelected="@{vaccination::setFever}"
+                android:gravity="left"
+                android:textColor="#000301"
+                android:padding="15dp"/>
+
+            <TextView
+                goneUnless="@{vaccination.fever==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/treat"/>
+
+            <Spinner
+                goneUnless="@{vaccination.fever==1}"
+                android:id="@+id/fevertreat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{vaccination.fevertreat}"
+                android:onItemSelected="@{vaccination::setFevertreat}"
+                android:gravity="left"
+                android:textColor="#000301"
+                android:padding="15dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/diarrhoea"/>
+
+            <Spinner
+                android:id="@+id/diarrhoea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{vaccination.diarrhoea}"
+                android:onItemSelected="@{vaccination::setDiarrhoea}"
+                android:gravity="left"
+                android:textColor="#000301"
+                android:padding="15dp"/>
+
+            <TextView
+                goneUnless="@{vaccination.diarrhoea==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/treat"/>
+
+            <Spinner
+                goneUnless="@{vaccination.diarrhoea==1}"
+                android:id="@+id/diarrhoeatreat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{vaccination.diarrhoeatreat}"
+                android:onItemSelected="@{vaccination::setDiarrhoeatreat}"
+                android:gravity="left"
+                android:textColor="#000301"
+                android:padding="15dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/arti"/>
+
+            <Spinner
+                android:id="@+id/arti"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{vaccination.arti}"
+                android:onItemSelected="@{vaccination::setArti}"
+                android:gravity="left"
+                android:textColor="#000301"
+                android:padding="15dp"/>
+
+            <TextView
+                goneUnless="@{vaccination.arti==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/treat"/>
+
+            <Spinner
+                goneUnless="@{vaccination.arti==1}"
+                android:id="@+id/artitreat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{vaccination.artitreat}"
+                android:onItemSelected="@{vaccination::setArtitreat}"
+                android:gravity="left"
+                android:textColor="#000301"
+                android:padding="15dp"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/muac"
+                android:text="@string/muac">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/muac"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={vaccination.muac}"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -303,6 +527,26 @@
             android:gravity="left"
             android:textColor="#000301"
             android:padding="15dp"/>
+
+            <Button
+                goneUnless="@{vaccination.admission==1}"
+                android:id="@+id/btn_admitDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Date of Admission"
+                android:textColor="@color/white"
+                app:icon="@drawable/ic_baseline_calendar_month_24" />
+
+            <TextView
+                goneUnless="@{vaccination.admission==1}"
+                android:id="@+id/admitDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={vaccination.admitDate}"
+                android:ems="10"
+                android:minHeight="30dp"
+                android:textSize="20sp"
+                tools:ignore="TextContrastCheck" />
 
             <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{vaccination.rea==5}"

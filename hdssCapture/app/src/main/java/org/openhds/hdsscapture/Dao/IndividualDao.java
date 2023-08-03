@@ -71,9 +71,10 @@ public interface IndividualDao {
             "INNER JOIN Locations AS c ON b.location_uuid = c.uuid " +
             "INNER JOIN locationhierarchy as d on c.locationLevel_uuid=d.uuid " +
             "LEFT JOIN locationhierarchy as e on d.parent_uuid=e.uuid " +
-            "WHERE b.endType != 3 AND firstName != 'FAKE' AND e.name LIKE :id AND (fullName LIKE :searchText OR c.compno LIKE :searchText OR ghanacard LIKE :searchText) " +
+            "WHERE b.endType != 3 AND firstName != 'FAKE' AND d.name LIKE :id AND (fullName LIKE :searchText OR c.compno LIKE :searchText OR ghanacard LIKE :searchText) " +
             "ORDER BY dob")
     List<Individual> retrieveBySearch(String id, String searchText);
+
 
     @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
             " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
@@ -138,9 +139,8 @@ public interface IndividualDao {
 //            "where c.endType=1 and a.complete=2 AND d.firstName!='FAKE' AND compextId is not null GROUP BY a.socialgroup_uuid order by dob")
 //    List<Individual> error();
 
-    @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
-            " INNER JOIN socialgroup as d on a.uuid=d.individual_uuid " +
-            " WHERE b.endType=1 and firstName!='FAKE' and " +
+    @Query("SELECT a.* FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
+            " WHERE firstName!='FAKE' and groupName!='UNK' and " +
             " date('now', '-15 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
     List<Individual> error();
 

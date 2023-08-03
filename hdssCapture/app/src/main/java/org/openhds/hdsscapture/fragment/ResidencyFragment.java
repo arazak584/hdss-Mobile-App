@@ -756,6 +756,7 @@ public class ResidencyFragment extends Fragment {
                 omg.insertDate = finalData.insertDate;
                 omg.destination = binding.getInmigration().origin;
                 omg.reason = binding.getInmigration().reason;
+                omg.reason_oth = binding.getInmigration().reason_oth;
                 omg.residency_uuid = binding.getOmgg().old_residency;
                 omg.fw_uuid = finalData.fw_uuid;
                 omg.complete = 1;

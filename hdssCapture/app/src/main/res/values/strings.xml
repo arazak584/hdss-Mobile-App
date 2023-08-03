@@ -575,7 +575,7 @@
     <string name="genders">Gender</string>
     <string name="card">Ghana card</string>
     <string name="get_vac">Get Vaccination</string>
-    <string name="hcard">HC (Hcard)</string>
+    <string name="hcard">Do you have Health card or Vaccination Document/Booklet</string>
     <string name="vareason">Reason not vaccinated for BCG, Polio, Penta, and MV</string>
     <string name="onet">How often does the baby sleep under a bednet?</string>
     <string name="lastpreg">Last Pregnancy Date</string>
@@ -598,6 +598,18 @@
     <string name="queries">Generate Queries</string>
     <string name="exit">Exit</string>
     <string name="numberOfLiveBirths">Number of Live Births</string>
+    <string name="bednett">Does your household have a bednet?</string>
+    <string name="slpbednet">Did the baby sleep under bednet last Night?</string>
+    <string name="chlbednet">How many children sleep under the bednet?</string>
+    <string name="weight">Weight of child at birth in Kg?</string>
+    <string name="scar">Does the child have the BCG scar? (Observe)</string>
+    <string name="fever">In the last two weeks did the child report Fever</string>
+    <string name="treat">Did you seek for treatment?</string>
+    <string name="diarrhoea">In the last two weeks did the child report diarrhoea?</string>
+    <string name="arti">In the last two weeks did the child report ARTI?</string>
+    <string name="muac">Mid-Upper Arm circumference (MUAC)</string>
+    <string name="filter">Filter</string>
+    <string name="extid">Cluster</string>
 
     //SocioDemo End
 

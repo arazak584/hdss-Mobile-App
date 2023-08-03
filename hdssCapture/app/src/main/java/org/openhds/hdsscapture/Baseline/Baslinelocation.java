@@ -230,8 +230,17 @@ public class Baslinelocation extends DialogFragment {
         }
 
         if (binding.getLocations().site == null) {
+            // If site is null, set it to the default available option (in this case, 1).
+            binding.getLocations().site = 1;
+        } else if (binding.getLocations().site == 1 || binding.getLocations().site == 2 || binding.getLocations().site == 3) {
+            // If site is already set to 1, 2, or 3, do nothing as it's a valid option.
+            // No need to change the value.
+        } else {
+            // If site is not null and not one of the valid options (1, 2, or 3), you can handle the error or set it to another default value.
+            // For example, you can set it to 1 as the default:
             binding.getLocations().site = 1;
         }
+
 
         final CodeBookViewModel codeBookViewModel = new ViewModelProvider(this).get(CodeBookViewModel.class);
         loadCodeData(binding.locationstatus, codeBookViewModel, "status");
@@ -257,19 +266,32 @@ public class Baslinelocation extends DialogFragment {
 
             boolean val = false;
 
-            if (!binding.locationcompno.getText().toString().trim().isEmpty()) {
-                String comp = binding.locationcompno.getText().toString().trim();
+            if (!binding.locationcompno.getText().toString().isEmpty()) {
+                String comp = binding.locationcompno.getText().toString();
+
+                if (comp.contains(" ")) {
+                    binding.locationcompno.setError("Spaces are not allowed");
+                    Toast.makeText(getActivity(), "Spaces are not allowed in Compound Number", Toast.LENGTH_LONG).show();
+                    val = true;
+                    return;
+                }
+
+                comp = comp.trim();
+
                 if (binding.getLocations().site == 1 && comp.length() != 6) {
+                    binding.locationcompno.setError("Must be 6 characters in length");
+                    Toast.makeText(getActivity(), "Must be 6 characters in length", Toast.LENGTH_LONG).show();
                     val = true;
-                    binding.locationcompno.setError("Must be 6 Character Length");
                     return;
-                }else if (binding.getLocations().site == 2 && comp.length() != 6) {
+                } else if (binding.getLocations().site == 2 && comp.length() != 6) {
+                    binding.locationcompno.setError("Must be 6 characters in length");
+                    Toast.makeText(getActivity(), "Must be 6 characters in length", Toast.LENGTH_LONG).show();
                     val = true;
-                    binding.locationcompno.setError("Must be 6 Character Length");
                     return;
-                }else if (binding.getLocations().site == 3 && comp.length() != 7) {
+                } else if (binding.getLocations().site == 3 && comp.length() != 7) {
+                    binding.locationcompno.setError("Must be 7 characters in length");
+                    Toast.makeText(getActivity(), "Must be 7 characters in length", Toast.LENGTH_LONG).show();
                     val = true;
-                    binding.locationcompno.setError("Must be 7 Character Length");
                     return;
                 }
             }
@@ -284,6 +306,7 @@ public class Baslinelocation extends DialogFragment {
                     if (locations1 != null && this.locations.edit==1) {
                         isExists = true;
                         binding.locationcompno.setError("Already Exists");
+                        Toast.makeText(getActivity(), "Compound Number Already Exists", Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -323,15 +346,13 @@ public class Baslinelocation extends DialogFragment {
                         dhrc = true;
                     }
 
-                    Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
                     binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
                     return;
                 }
             }
 
-
-
-
+            locations.complete = 1;
             locationViewModel.add(locations);
             Toast.makeText(v.getContext(), "Saved Successfully", Toast.LENGTH_LONG).show();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,

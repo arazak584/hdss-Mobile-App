@@ -270,8 +270,17 @@ public class LocationFragment extends Fragment {
         }
 
         if (binding.getLocations().site == null) {
+            // If site is null, set it to the default available option (in this case, 1).
+            binding.getLocations().site = 1;
+        } else if (binding.getLocations().site == 1 || binding.getLocations().site == 2 || binding.getLocations().site == 3) {
+            // If site is already set to 1, 2, or 3, do nothing as it's a valid option.
+            // No need to change the value.
+        } else {
+            // If site is not null and not one of the valid options (1, 2, or 3), you can handle the error or set it to another default value.
+            // For example, you can set it to 1 as the default:
             binding.getLocations().site = 1;
         }
+
 
         final CodeBookViewModel codeBookViewModel = new ViewModelProvider(this).get(CodeBookViewModel.class);
         loadCodeData(binding.locationstatus, codeBookViewModel, "status");

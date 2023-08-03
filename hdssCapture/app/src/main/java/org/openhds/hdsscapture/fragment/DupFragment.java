@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -194,6 +195,15 @@ public class DupFragment extends Fragment {
 
         if (save) {
             Duplicate finalData = binding.getDup();
+
+            boolean sameID = false;
+
+            if (binding.uuid.getText().toString().trim().equals(binding.dupUuid.getText().toString().trim())) {
+                sameID = true;
+                binding.dupFname.setError("Same Individual Selected as Duplicate");
+                Toast.makeText(requireContext(), "Same Individual Selected as Duplicate", Toast.LENGTH_LONG).show();
+                return;
+            }
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);

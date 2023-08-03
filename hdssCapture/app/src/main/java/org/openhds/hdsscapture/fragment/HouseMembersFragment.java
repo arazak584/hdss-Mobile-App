@@ -67,6 +67,7 @@ public class HouseMembersFragment extends Fragment {
     private EventForm eventForm;
     private FragmentHouseMembersBinding binding;
     private ProgressDialog progress;
+    private ProgressDialog progres;
 
 
     public HouseMembersFragment() {
@@ -194,18 +195,19 @@ public class HouseMembersFragment extends Fragment {
                     @Override
                     public void run() {
                         adapter.pull(individualViewModel);
+                        progres.dismiss();
                     }
                 }, 500); // change delay time as needed
             }
 
             public void showLoadingDialog() {
-                if (progress == null) {
-                    progress = new ProgressDialog(requireContext());
-                    progress.setTitle("Loading Individuals...");
-                    progress.setMessage(getString(R.string.please_wait_lbl));
-                    progress.setCancelable(false);
+                if (progres == null) {
+                    progres = new ProgressDialog(requireContext());
+                    progres.setTitle("Loading Individuals...");
+                    progres.setMessage(getString(R.string.please_wait_lbl));
+                    progres.setCancelable(false);
                 }
-                progress.show();
+                progres.show();
             }
         });
 
@@ -238,6 +240,12 @@ public class HouseMembersFragment extends Fragment {
     }
 
     public void dismissLoadingDialog() {
+        if (progres != null) {
+            progres.dismiss();
+        }
+    }
+
+    public void dismissLoadingDialogs() {
         if (progress != null) {
             progress.dismiss();
         }

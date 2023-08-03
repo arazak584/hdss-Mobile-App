@@ -70,6 +70,24 @@ public class LocationRepository {
         return future.get();
     }
 
+    public List<Locations> findBySearch(String id,String ids) throws ExecutionException, InterruptedException {
+
+        Callable<List<Locations>> callable = () -> dao.retrieveBySearch(id, ids);
+
+        Future<List<Locations>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Locations> retrieveBySearchs(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Locations>> callable = () -> dao.retrieveBySearchs(id);
+
+        Future<List<Locations>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Locations> retrieveByVillage(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Locations>> callable = () -> dao.retrieveByVillage(id);
@@ -88,9 +106,9 @@ public class LocationRepository {
         return future.get();
     }
 
-    public List<Locations> findBySearch(String id) throws ExecutionException, InterruptedException {
+    public List<Locations> filter(String id) throws ExecutionException, InterruptedException {
 
-        Callable<List<Locations>> callable = () -> dao.retrieveBySearch(id);
+        Callable<List<Locations>> callable = () -> dao.filter(id);
 
         Future<List<Locations>> future = Executors.newSingleThreadExecutor().submit(callable);
 

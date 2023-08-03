@@ -136,10 +136,31 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
     }
 
 
+//    public void search(String selectedSpinnerItem, String searchText, IndividualViewModel individualViewModel) {
+//        individualList.clear();
+//        if (searchText != null && selectedSpinnerItem!= null) {
+//            searchText = searchText.toLowerCase(Locale.getDefault());
+//
+//            try {
+//                List<Individual> searchResults = individualViewModel.retrieveBySearch(selectedSpinnerItem, searchText);
+//                individualList.addAll(searchResults);
+//            } catch (ExecutionException | InterruptedException e) {
+//                e.printStackTrace();
+//                Toast.makeText(activity.getActivity(), "Error searching individuals", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//        notifyDataSetChanged();
+//        activity.dismissLoadingDialog();
+//    }
+
     public void search(String selectedSpinnerItem, String searchText, IndividualViewModel individualViewModel) {
         individualList.clear();
-        if (searchText != null) {
-            searchText = searchText.toLowerCase(Locale.getDefault());
+
+        // Check if either selectedSpinnerItem or searchText is not empty (non-null and non-empty) before proceeding with the search
+        if ((selectedSpinnerItem != null && !selectedSpinnerItem.isEmpty()) && (searchText != null && !searchText.isEmpty())) {
+            if (searchText != null) {
+                searchText = searchText.toLowerCase(Locale.getDefault());
+            }
 
             try {
                 List<Individual> searchResults = individualViewModel.retrieveBySearch(selectedSpinnerItem, searchText);
@@ -149,9 +170,12 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
                 Toast.makeText(activity.getActivity(), "Error searching individuals", Toast.LENGTH_SHORT).show();
             }
         }
+
         notifyDataSetChanged();
         activity.dismissLoadingDialog();
     }
+
+
 
 
     public void pull(IndividualViewModel individualViewModel) {
@@ -174,7 +198,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
                 e.printStackTrace();
             }
         notifyDataSetChanged();
-        activity.dismissLoadingDialog();
+        activity.dismissLoadingDialogs();
     }
 
 

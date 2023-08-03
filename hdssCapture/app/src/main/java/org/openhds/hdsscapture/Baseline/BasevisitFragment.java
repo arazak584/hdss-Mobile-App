@@ -123,6 +123,9 @@ public class BasevisitFragment extends Fragment {
             if (data != null) {
                 binding.setVisit(data);
                 data.visitDate = new Date();
+                if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)){
+                    data.respondent = "UNK";
+                }
             } else {
                 data = new Visit();
 
@@ -138,6 +141,10 @@ public class BasevisitFragment extends Fragment {
                 data.houseExtId = socialgroup.extId;
                 data.socialgroup_uuid =socialgroup.uuid;
                 data.extId = data.houseExtId + "000";
+
+                if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)){
+                    data.respondent = "UNK";
+                }
 
                 binding.setVisit(data);
                 binding.getVisit().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
@@ -181,6 +188,11 @@ public class BasevisitFragment extends Fragment {
             if (hasErrors) {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
                 return;
+            }
+            if (finalData.respondent == "UNK"){
+                finalData.complete =2;
+            }else {
+                finalData.complete =1;
             }
             viewModel.add(finalData);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();

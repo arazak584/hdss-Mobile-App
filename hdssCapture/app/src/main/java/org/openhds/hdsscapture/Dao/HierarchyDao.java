@@ -52,9 +52,14 @@ public interface HierarchyDao {
             " on a.parent_uuid=b.uuid where a.level_uuid='hierarchyLevelId6' and a.parent_uuid=:id ")
     List<Hierarchy> retrieveLevel6(String id);
 
-    @Query("SELECT b.extId,b.name,b.uuid FROM Locations as a INNER JOIN locationhierarchy as b ON a.locationLevel_uuid = b.uuid " +
-            " INNER JOIN locationhierarchy as c on b.parent_uuid=c.uuid " +
-            " where b.parent_uuid=:id GROUP BY b.extId order by c.name")
+//    @Query("SELECT b.extId,b.name,b.uuid FROM Locations as a INNER JOIN locationhierarchy as b ON a.locationLevel_uuid = b.uuid " +
+//            " INNER JOIN locationhierarchy as c on b.parent_uuid=c.uuid " +
+//            " where b.parent_uuid=:id GROUP BY b.extId order by c.name")
+//    List<Hierarchy> clusters(String id);
+
+    @Query("SELECT b.extId,b.name,b.uuid FROM locationhierarchy as a INNER JOIN locationhierarchy as b ON a.uuid = b.parent_uuid " +
+            " LEFT JOIN locations as c on b.uuid=c.locationLevel_uuid " +
+            " where b.parent_uuid=:id GROUP BY b.extId order by b.name")
     List<Hierarchy> clusters(String id);
 
     @Query("SELECT * FROM locationhierarchy where level_uuid='hierarchyLevelId6' order by name")

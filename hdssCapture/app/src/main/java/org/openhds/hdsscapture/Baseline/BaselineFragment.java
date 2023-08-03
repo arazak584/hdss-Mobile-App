@@ -343,28 +343,126 @@ public class BaselineFragment extends Fragment {
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.BASELINELAYOUT, validateOnComplete, false);
 
+            boolean val = false;
+            String firstName = binding.individualFirstName.getText().toString();
+            if (firstName.charAt(0) == ' ' || firstName.charAt(firstName.length() - 1) == ' ') {
+                binding.individualFirstName.setError("Spaces are not allowed before or after the Name");
+                Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
+                val = true;
+                return;
+            } else {
+                binding.individualFirstName.setError(null); // Clear the error if the input is valid
+            }
+
+            boolean vals = false;
+            String lastName = binding.individualLastName.getText().toString();
+            if (lastName.charAt(0) == ' ' || lastName.charAt(lastName.length() - 1) == ' ') {
+                binding.individualLastName.setError("Spaces are not allowed before or after the Name");
+                Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
+                vals = true;
+                return;
+            } else {
+                binding.individualLastName.setError(null); // Clear the error if the input is valid
+            }
+
+            boolean gh = false;
+
+            if (!binding.ghanacard.getText().toString().trim().isEmpty()) {
+                String input = binding.ghanacard.getText().toString().trim();
+                String regex = "[A-Z]{3}-\\d{9}-\\d";
+
+                if (!input.matches(regex)) {
+                    gh = true;
+                    Toast.makeText(getActivity(), "Ghana Card Number or format is incorrect", Toast.LENGTH_LONG).show();
+                    binding.ghanacard.setError("Format Should Be GHA-XXXXXXXXX-X");
+                    return;
+                }
+            }
+
+            boolean agedif = false;
+            boolean modif = false;
+
+            if (!binding.fatherAge.getText().toString().trim().isEmpty() && !binding.individAge.getText().toString().trim().isEmpty()) {
+                int fAgeValue = Integer.parseInt(binding.fatherAge.getText().toString().trim());
+                int individidAgeValue = Integer.parseInt(binding.individAge.getText().toString().trim());
+                if (fAgeValue - individidAgeValue < 10) {
+                    agedif = true;
+                    binding.fatherAge.setError("Father selected is too young to be the father of this Individual");
+                    Toast.makeText(getActivity(), "Father selected is too young to be the father of this Individual", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+
+            if (!binding.motherAge.getText().toString().trim().isEmpty() && !binding.individAge.getText().toString().trim().isEmpty()) {
+                int mthgeValue = Integer.parseInt(binding.motherAge.getText().toString().trim());
+                int individidAge = Integer.parseInt(binding.individAge.getText().toString().trim());
+                if (mthgeValue - individidAge < 10) {
+                    modif = true;
+                    binding.motherAge.setError("Mother selected is too young to be the mother of this Individual");
+                    Toast.makeText(getActivity(), "Mother selected is too young to be the mother of this Individual", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+
+            try {
+                if (!binding.dob.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date stdate = f.parse(binding.dob.getText().toString().trim());
+                    if (stdate.after(currentDate)) {
+                        binding.dob.setError("Date of Birth Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date of Birth Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.dob.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+
             if (hasErrors) {
                 Toast.makeText(requireContext(), "All fields are Required", Toast.LENGTH_LONG).show();
                 return;
             }
 
-
+            finalData.complete=1;
             viewModel.add(finalData);
             individualViewModel.add(Data);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
-            SocialgroupAmendment socialgroupA = new SocialgroupAmendment();
-
-            if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)) {
-                socialgroupA.individual_uuid = binding.getIndividual().getUuid();
-                socialgroupA.groupName = binding.getIndividual().firstName +' '+ binding.getIndividual().lastName;
-                socialgroupA.uuid = socialgroup.uuid;
-            }
+//            SocialgroupAmendment socialgroupA = new SocialgroupAmendment();
+//
+//            if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)) {
+//                socialgroupA.individual_uuid = binding.getIndividual().getUuid();
+//                socialgroupA.groupName = binding.getIndividual().firstName +' '+ binding.getIndividual().lastName;
+//                socialgroupA.uuid = socialgroup.uuid;
+//            }
+//
+//            SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+//            socialgroupViewModel.update(socialgroupA);
+//
+//            Toast.makeText(requireActivity(), R.string.updated, Toast.LENGTH_LONG).show();
 
             SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-            socialgroupViewModel.update(socialgroupA);
+            try {
+                Socialgroup data = socialgroupViewModel.find(socialgroup.uuid);
+                if (data !=null) {
+                    SocialgroupAmendment socialgroupAmendment = new SocialgroupAmendment();
+                    socialgroupAmendment.individual_uuid = individual.uuid;
+                    socialgroupAmendment.groupName = individual.getFirstName() + ' ' + individual.getLastName();
+                    socialgroupAmendment.uuid = socialgroup.uuid;
+                    socialgroupAmendment.complete =1;
 
-            Toast.makeText(requireActivity(), R.string.updated, Toast.LENGTH_LONG).show();
+                    socialgroupViewModel.update(socialgroupAmendment);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
 
 

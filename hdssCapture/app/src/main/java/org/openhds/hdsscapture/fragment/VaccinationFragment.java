@@ -250,6 +250,11 @@ public class VaccinationFragment extends Fragment {
                 final String result = bundle.getString(DATE_BUNDLES.ITN.getBundleKey());
                 binding.itn.setText(result);
             }
+
+            if (bundle.containsKey((DATE_BUNDLES.ADMIT.getBundleKey()))) {
+                final String result = bundle.getString(DATE_BUNDLES.ADMIT.getBundleKey());
+                binding.admitDate.setText(result);
+            }
         });
 
         binding.btnBcg.setOnClickListener(v -> {
@@ -414,6 +419,12 @@ public class VaccinationFragment extends Fragment {
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
+        binding.btnAdmitDate.setOnClickListener(v -> {
+            final Calendar c = Calendar.getInstance();
+            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.ADMIT.getBundleKey(), c);
+            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+        });
+
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
@@ -505,171 +516,183 @@ public class VaccinationFragment extends Fragment {
                     binding.btnItn.setEnabled(false);
                 }
 
-                if (binding.getVaccination().dob != null) {
-                    Date dob = binding.getVaccination().dob;
-                    final long millisecondsPerMonth = 30 * 24 * 60 * 60 * 1000L;
-                    final long ageInMillis = new Date().getTime() - dob.getTime();
-                    final int estimatedAgeInMonths = (int) Math.ceil(ageInMillis / (double) millisecondsPerMonth);
-                    binding.monthAge.setText(String.valueOf(estimatedAgeInMonths));
-                    binding.dob.setError(null);
+//                final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                if (binding.getVaccination().dob != null) {
+//                    Date dob = binding.getVaccination().dob;
+//                    int agemonths = 0;
+//                    try {
+//                        Date lddate = f.parse(individual.getDob());
+//                        long difference = Math.abs(lddate.getTime() - new Date().getTime());
+//                        long daysDifference = difference / (24 * 60 * 60 * 1000);
+//                        agemonths = (int) (daysDifference / 30);
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                    final int estimatedAgeInMonths =  (int) agemonths;
+//
+//
+//                    //final int estimatedAgeInMonths = (int) Math.ceil(ageInMillis / (double) millisecondsPerMonth);
+//                    binding.monthAge.setText(String.valueOf(estimatedAgeInMonths));
+//                    binding.dob.setError(null);
+//
+//                    //6 MONTHS
+//                    if (estimatedAgeInMonths >= 6) {
+//                        binding.vitaminA6.setVisibility(View.VISIBLE);
+//                        binding.btnVitaminA6.setVisibility(View.VISIBLE);
+//                        binding.rtss6.setVisibility(View.VISIBLE);
+//                        binding.btnRtss6.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.vitaminA6.setVisibility(View.GONE);
+//                        binding.btnVitaminA6.setVisibility(View.GONE);
+//                        binding.rtss6.setVisibility(View.GONE);
+//                        binding.btnRtss6.setVisibility(View.GONE);
+//                    }
+//
+//                    //7 MONTHS
+//                    if (estimatedAgeInMonths >= 7) {
+//                        binding.rtss7.setVisibility(View.VISIBLE);
+//                        binding.btnRtss7.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.rtss7.setVisibility(View.GONE);
+//                        binding.btnRtss7.setVisibility(View.GONE);
+//                    }
+//
+//                    //9 MONTHS
+//                    if (estimatedAgeInMonths >= 9) {
+//                        binding.rtss9.setVisibility(View.VISIBLE);
+//                        binding.btnRtss9.setVisibility(View.VISIBLE);
+//                        binding.measles1.setVisibility(View.VISIBLE);
+//                        binding.btnMeasles1.setVisibility(View.VISIBLE);
+//                        binding.yellowFever.setVisibility(View.VISIBLE);
+//                        binding.btnYellow.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.rtss9.setVisibility(View.GONE);
+//                        binding.btnRtss9.setVisibility(View.GONE);
+//                        binding.measles1.setVisibility(View.GONE);
+//                        binding.btnMeasles1.setVisibility(View.GONE);
+//                        binding.yellowFever.setVisibility(View.GONE);
+//                        binding.btnYellow.setVisibility(View.GONE);
+//                    }
+//
+//                    //12 MONTHS
+//                    if (estimatedAgeInMonths >= 12) {
+//                        binding.vitaminA12.setVisibility(View.VISIBLE);
+//                        binding.btnVitaminA12.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.vitaminA12.setVisibility(View.GONE);
+//                        binding.btnVitaminA12.setVisibility(View.GONE);
+//                    }
+//
+//                    //18 MONTHS
+//                    if (estimatedAgeInMonths >= 18) {
+//                        binding.measles2.setVisibility(View.VISIBLE);
+//                        binding.btnMeasles2.setVisibility(View.VISIBLE);
+//                        binding.menA.setVisibility(View.VISIBLE);
+//                        binding.btnMenA.setVisibility(View.VISIBLE);
+//                        binding.vitaminA18.setVisibility(View.VISIBLE);
+//                        binding.btnVitaminA18.setVisibility(View.VISIBLE);
+//                        binding.itn.setVisibility(View.VISIBLE);
+//                        binding.btnItn.setVisibility(View.VISIBLE);
+//                        binding.rtss18.setVisibility(View.VISIBLE);
+//                        binding.btnRtss18.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.measles2.setVisibility(View.GONE);
+//                        binding.btnMeasles2.setVisibility(View.GONE);
+//                        binding.menA.setVisibility(View.GONE);
+//                        binding.btnMenA.setVisibility(View.GONE);
+//                        binding.vitaminA18.setVisibility(View.GONE);
+//                        binding.btnVitaminA18.setVisibility(View.GONE);
+//                        binding.itn.setVisibility(View.GONE);
+//                        binding.btnItn.setVisibility(View.GONE);
+//                        binding.rtss18.setVisibility(View.GONE);
+//                        binding.btnRtss18.setVisibility(View.GONE);
+//                    }
+//                }
 
-                    //6 MONTHS
-                    if (estimatedAgeInMonths >= 6) {
-                        binding.vitaminA6.setVisibility(View.VISIBLE);
-                        binding.btnVitaminA6.setVisibility(View.VISIBLE);
-                        binding.rtss6.setVisibility(View.VISIBLE);
-                        binding.btnRtss6.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.vitaminA6.setVisibility(View.GONE);
-                        binding.btnVitaminA6.setVisibility(View.GONE);
-                        binding.rtss6.setVisibility(View.GONE);
-                        binding.btnRtss6.setVisibility(View.GONE);
-                    }
-
-                    //7 MONTHS
-                    if (estimatedAgeInMonths >= 7) {
-                        binding.rtss7.setVisibility(View.VISIBLE);
-                        binding.btnRtss7.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.rtss7.setVisibility(View.GONE);
-                        binding.btnRtss7.setVisibility(View.GONE);
-                    }
-
-                    //9 MONTHS
-                    if (estimatedAgeInMonths >= 9) {
-                        binding.rtss9.setVisibility(View.VISIBLE);
-                        binding.btnRtss9.setVisibility(View.VISIBLE);
-                        binding.measles1.setVisibility(View.VISIBLE);
-                        binding.btnMeasles1.setVisibility(View.VISIBLE);
-                        binding.yellowFever.setVisibility(View.VISIBLE);
-                        binding.btnYellow.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.rtss9.setVisibility(View.GONE);
-                        binding.btnRtss9.setVisibility(View.GONE);
-                        binding.measles1.setVisibility(View.GONE);
-                        binding.btnMeasles1.setVisibility(View.GONE);
-                        binding.yellowFever.setVisibility(View.GONE);
-                        binding.btnYellow.setVisibility(View.GONE);
-                    }
-
-                    //12 MONTHS
-                    if (estimatedAgeInMonths >= 12) {
-                        binding.vitaminA12.setVisibility(View.VISIBLE);
-                        binding.btnVitaminA12.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.vitaminA12.setVisibility(View.GONE);
-                        binding.btnVitaminA12.setVisibility(View.GONE);
-                    }
-
-                    //18 MONTHS
-                    if (estimatedAgeInMonths >= 18) {
-                        binding.measles2.setVisibility(View.VISIBLE);
-                        binding.btnMeasles2.setVisibility(View.VISIBLE);
-                        binding.menA.setVisibility(View.VISIBLE);
-                        binding.btnMenA.setVisibility(View.VISIBLE);
-                        binding.vitaminA18.setVisibility(View.VISIBLE);
-                        binding.btnVitaminA18.setVisibility(View.VISIBLE);
-                        binding.itn.setVisibility(View.VISIBLE);
-                        binding.btnItn.setVisibility(View.VISIBLE);
-                        binding.rtss18.setVisibility(View.VISIBLE);
-                        binding.btnRtss18.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.measles2.setVisibility(View.GONE);
-                        binding.btnMeasles2.setVisibility(View.GONE);
-                        binding.menA.setVisibility(View.GONE);
-                        binding.btnMenA.setVisibility(View.GONE);
-                        binding.vitaminA18.setVisibility(View.GONE);
-                        binding.btnVitaminA18.setVisibility(View.GONE);
-                        binding.itn.setVisibility(View.GONE);
-                        binding.btnItn.setVisibility(View.GONE);
-                        binding.rtss18.setVisibility(View.GONE);
-                        binding.btnRtss18.setVisibility(View.GONE);
-                    }
-                }
-
-                if (binding.getVaccination().dob != null) {
-                    Date dob = binding.getVaccination().dob;
-                    final long millisecondsPerWeek = 7 * 24 * 60 * 60 * 1000L;
-                    final long ageInMillis = new Date().getTime() - dob.getTime();
-                    final int estimatedAgeInWeeks = (int) Math.ceil(ageInMillis / (double) millisecondsPerWeek);
-                    binding.weekAge.setText(String.valueOf(estimatedAgeInWeeks));
-                    binding.dob.setError(null);
-
-                    if (estimatedAgeInWeeks >= 0) {
-                        binding.bcg.setVisibility(View.VISIBLE);
-                        binding.btnBcg.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.bcg.setVisibility(View.GONE);
-                        binding.btnBcg.setVisibility(View.GONE);
-                    }
-
-                    //6 WEEKS
-                    if (estimatedAgeInWeeks >= 6) {
-                        binding.opv1.setVisibility(View.VISIBLE);
-                        binding.btnOpv1.setVisibility(View.VISIBLE);
-                        binding.DPTHepBHib1.setVisibility(View.VISIBLE);
-                        binding.btnDPTHepBHib1.setVisibility(View.VISIBLE);
-                        binding.pneumo1.setVisibility(View.VISIBLE);
-                        binding.btnPneumo1.setVisibility(View.VISIBLE);
-                        binding.rota1.setVisibility(View.VISIBLE);
-                        binding.btnRota1.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.opv1.setVisibility(View.GONE);
-                        binding.btnOpv1.setVisibility(View.GONE);
-                        binding.DPTHepBHib1.setVisibility(View.GONE);
-                        binding.btnDPTHepBHib1.setVisibility(View.GONE);
-                        binding.pneumo1.setVisibility(View.GONE);
-                        binding.btnPneumo1.setVisibility(View.GONE);
-                        binding.rota1.setVisibility(View.GONE);
-                        binding.btnRota1.setVisibility(View.GONE);
-                    }
-
-                    //10 WEEKS
-                    if (estimatedAgeInWeeks >= 10) {
-                        binding.opv2.setVisibility(View.VISIBLE);
-                        binding.btnOpv2.setVisibility(View.VISIBLE);
-                        binding.DPTHepBHib2.setVisibility(View.VISIBLE);
-                        binding.btnDPTHepBHib2.setVisibility(View.VISIBLE);
-                        binding.pneumo2.setVisibility(View.VISIBLE);
-                        binding.btnPneumo2.setVisibility(View.VISIBLE);
-                        binding.rota2.setVisibility(View.VISIBLE);
-                        binding.btnRota2.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.opv2.setVisibility(View.GONE);
-                        binding.btnOpv2.setVisibility(View.GONE);
-                        binding.DPTHepBHib2.setVisibility(View.GONE);
-                        binding.btnDPTHepBHib2.setVisibility(View.GONE);
-                        binding.pneumo2.setVisibility(View.GONE);
-                        binding.btnPneumo2.setVisibility(View.GONE);
-                        binding.rota2.setVisibility(View.GONE);
-                        binding.btnRota2.setVisibility(View.GONE);
-                    }
-
-                    //14 WEEKS
-                    if (estimatedAgeInWeeks >= 14) {
-                        binding.opv3.setVisibility(View.VISIBLE);
-                        binding.btnOpv3.setVisibility(View.VISIBLE);
-                        binding.DPTHepBHib3.setVisibility(View.VISIBLE);
-                        binding.btnDPTHepBHib3.setVisibility(View.VISIBLE);
-                        binding.pneumo3.setVisibility(View.VISIBLE);
-                        binding.btnPneumo3.setVisibility(View.VISIBLE);
-                        binding.rota3.setVisibility(View.VISIBLE);
-                        binding.btnRota3.setVisibility(View.VISIBLE);
-                        binding.ipv.setVisibility(View.VISIBLE);
-                        binding.btnIpv.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.opv3.setVisibility(View.GONE);
-                        binding.btnOpv3.setVisibility(View.GONE);
-                        binding.DPTHepBHib3.setVisibility(View.GONE);
-                        binding.btnDPTHepBHib3.setVisibility(View.GONE);
-                        binding.pneumo3.setVisibility(View.GONE);
-                        binding.btnPneumo3.setVisibility(View.GONE);
-                        binding.rota3.setVisibility(View.GONE);
-                        binding.btnRota3.setVisibility(View.GONE);
-                        binding.ipv.setVisibility(View.GONE);
-                        binding.btnIpv.setVisibility(View.GONE);
-                    }
-                }
+//                if (binding.getVaccination().dob != null) {
+//                    Date dob = binding.getVaccination().dob;
+//                    final long millisecondsPerWeek = 7 * 24 * 60 * 60 * 1000L;
+//                    final long ageInMillis = new Date().getTime() - dob.getTime();
+//                    final int estimatedAgeInWeeks = (int) Math.ceil(ageInMillis / (double) millisecondsPerWeek);
+//                    binding.weekAge.setText(String.valueOf(estimatedAgeInWeeks));
+//                    binding.dob.setError(null);
+//
+//                    if (estimatedAgeInWeeks >= 0) {
+//                        binding.bcg.setVisibility(View.VISIBLE);
+//                        binding.btnBcg.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.bcg.setVisibility(View.GONE);
+//                        binding.btnBcg.setVisibility(View.GONE);
+//                    }
+//
+//                    //6 WEEKS
+//                    if (estimatedAgeInWeeks >= 6) {
+//                        binding.opv1.setVisibility(View.VISIBLE);
+//                        binding.btnOpv1.setVisibility(View.VISIBLE);
+//                        binding.DPTHepBHib1.setVisibility(View.VISIBLE);
+//                        binding.btnDPTHepBHib1.setVisibility(View.VISIBLE);
+//                        binding.pneumo1.setVisibility(View.VISIBLE);
+//                        binding.btnPneumo1.setVisibility(View.VISIBLE);
+//                        binding.rota1.setVisibility(View.VISIBLE);
+//                        binding.btnRota1.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.opv1.setVisibility(View.GONE);
+//                        binding.btnOpv1.setVisibility(View.GONE);
+//                        binding.DPTHepBHib1.setVisibility(View.GONE);
+//                        binding.btnDPTHepBHib1.setVisibility(View.GONE);
+//                        binding.pneumo1.setVisibility(View.GONE);
+//                        binding.btnPneumo1.setVisibility(View.GONE);
+//                        binding.rota1.setVisibility(View.GONE);
+//                        binding.btnRota1.setVisibility(View.GONE);
+//                    }
+//
+//                    //10 WEEKS
+//                    if (estimatedAgeInWeeks >= 10) {
+//                        binding.opv2.setVisibility(View.VISIBLE);
+//                        binding.btnOpv2.setVisibility(View.VISIBLE);
+//                        binding.DPTHepBHib2.setVisibility(View.VISIBLE);
+//                        binding.btnDPTHepBHib2.setVisibility(View.VISIBLE);
+//                        binding.pneumo2.setVisibility(View.VISIBLE);
+//                        binding.btnPneumo2.setVisibility(View.VISIBLE);
+//                        binding.rota2.setVisibility(View.VISIBLE);
+//                        binding.btnRota2.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.opv2.setVisibility(View.GONE);
+//                        binding.btnOpv2.setVisibility(View.GONE);
+//                        binding.DPTHepBHib2.setVisibility(View.GONE);
+//                        binding.btnDPTHepBHib2.setVisibility(View.GONE);
+//                        binding.pneumo2.setVisibility(View.GONE);
+//                        binding.btnPneumo2.setVisibility(View.GONE);
+//                        binding.rota2.setVisibility(View.GONE);
+//                        binding.btnRota2.setVisibility(View.GONE);
+//                    }
+//
+//                    //14 WEEKS
+//                    if (estimatedAgeInWeeks >= 14) {
+//                        binding.opv3.setVisibility(View.VISIBLE);
+//                        binding.btnOpv3.setVisibility(View.VISIBLE);
+//                        binding.DPTHepBHib3.setVisibility(View.VISIBLE);
+//                        binding.btnDPTHepBHib3.setVisibility(View.VISIBLE);
+//                        binding.pneumo3.setVisibility(View.VISIBLE);
+//                        binding.btnPneumo3.setVisibility(View.VISIBLE);
+//                        binding.rota3.setVisibility(View.VISIBLE);
+//                        binding.btnRota3.setVisibility(View.VISIBLE);
+//                        binding.ipv.setVisibility(View.VISIBLE);
+//                        binding.btnIpv.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.opv3.setVisibility(View.GONE);
+//                        binding.btnOpv3.setVisibility(View.GONE);
+//                        binding.DPTHepBHib3.setVisibility(View.GONE);
+//                        binding.btnDPTHepBHib3.setVisibility(View.GONE);
+//                        binding.pneumo3.setVisibility(View.GONE);
+//                        binding.btnPneumo3.setVisibility(View.GONE);
+//                        binding.rota3.setVisibility(View.GONE);
+//                        binding.btnRota3.setVisibility(View.GONE);
+//                        binding.ipv.setVisibility(View.GONE);
+//                        binding.btnIpv.setVisibility(View.GONE);
+//                    }
+//                }
 
 
 
@@ -693,173 +716,173 @@ public class VaccinationFragment extends Fragment {
                 binding.setVaccination(data);
                 binding.getVaccination().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 
-                if (binding.getVaccination().dob != null) {
-                    Date dob = binding.getVaccination().dob;
-                    final long millisecondsPerMonth = 30 * 24 * 60 * 60 * 1000L;
-                    final long ageInMillis = new Date().getTime() - dob.getTime();
-                    final int estimatedAgeInMonths = (int) Math.ceil(ageInMillis / (double) millisecondsPerMonth);
-                    binding.monthAge.setText(String.valueOf(estimatedAgeInMonths));
-                    binding.dob.setError(null);
-
-                    //6 MONTHS
-                    if (estimatedAgeInMonths >= 6) {
-                        binding.vitaminA6.setVisibility(View.VISIBLE);
-                        binding.btnVitaminA6.setVisibility(View.VISIBLE);
-                        binding.rtss6.setVisibility(View.VISIBLE);
-                        binding.btnRtss6.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.vitaminA6.setVisibility(View.GONE);
-                        binding.btnVitaminA6.setVisibility(View.GONE);
-                        binding.rtss6.setVisibility(View.GONE);
-                        binding.btnRtss6.setVisibility(View.GONE);
-                    }
-
-                    //7 MONTHS
-                    if (estimatedAgeInMonths >= 7) {
-                        binding.rtss7.setVisibility(View.VISIBLE);
-                        binding.btnRtss7.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.rtss7.setVisibility(View.GONE);
-                        binding.btnRtss7.setVisibility(View.GONE);
-                    }
-
-                    //9 MONTHS
-                    if (estimatedAgeInMonths >= 9) {
-                        binding.rtss9.setVisibility(View.VISIBLE);
-                        binding.btnRtss9.setVisibility(View.VISIBLE);
-                        binding.measles1.setVisibility(View.VISIBLE);
-                        binding.btnMeasles1.setVisibility(View.VISIBLE);
-                        binding.yellowFever.setVisibility(View.VISIBLE);
-                        binding.btnYellow.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.rtss9.setVisibility(View.GONE);
-                        binding.btnRtss9.setVisibility(View.GONE);
-                        binding.measles1.setVisibility(View.GONE);
-                        binding.btnMeasles1.setVisibility(View.GONE);
-                        binding.yellowFever.setVisibility(View.GONE);
-                        binding.btnYellow.setVisibility(View.GONE);
-                    }
-
-                    //12 MONTHS
-                    if (estimatedAgeInMonths >= 12) {
-                        binding.vitaminA12.setVisibility(View.VISIBLE);
-                        binding.btnVitaminA12.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.vitaminA12.setVisibility(View.GONE);
-                        binding.btnVitaminA12.setVisibility(View.GONE);
-                    }
-
-                    //18 MONTHS
-                    if (estimatedAgeInMonths >= 18) {
-                        binding.measles2.setVisibility(View.VISIBLE);
-                        binding.btnMeasles2.setVisibility(View.VISIBLE);
-                        binding.menA.setVisibility(View.VISIBLE);
-                        binding.btnMenA.setVisibility(View.VISIBLE);
-                        binding.vitaminA18.setVisibility(View.VISIBLE);
-                        binding.btnVitaminA18.setVisibility(View.VISIBLE);
-                        binding.itn.setVisibility(View.VISIBLE);
-                        binding.btnItn.setVisibility(View.VISIBLE);
-                        binding.rtss18.setVisibility(View.VISIBLE);
-                        binding.btnRtss18.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.measles2.setVisibility(View.GONE);
-                        binding.btnMeasles2.setVisibility(View.GONE);
-                        binding.menA.setVisibility(View.GONE);
-                        binding.btnMenA.setVisibility(View.GONE);
-                        binding.vitaminA18.setVisibility(View.GONE);
-                        binding.btnVitaminA18.setVisibility(View.GONE);
-                        binding.itn.setVisibility(View.GONE);
-                        binding.btnItn.setVisibility(View.GONE);
-                        binding.rtss18.setVisibility(View.GONE);
-                        binding.btnRtss18.setVisibility(View.GONE);
-                    }
-                }
-
-                if (binding.getVaccination().dob != null) {
-                    Date dob = binding.getVaccination().dob;
-                    final long millisecondsPerWeek = 7 * 24 * 60 * 60 * 1000L;
-                    final long ageInMillis = new Date().getTime() - dob.getTime();
-                    final int estimatedAgeInWeeks = (int) Math.ceil(ageInMillis / (double) millisecondsPerWeek);
-                    binding.weekAge.setText(String.valueOf(estimatedAgeInWeeks));
-                    binding.dob.setError(null);
-
-                    if (estimatedAgeInWeeks >= 0) {
-                        binding.bcg.setVisibility(View.VISIBLE);
-                        binding.btnBcg.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.bcg.setVisibility(View.GONE);
-                        binding.btnBcg.setVisibility(View.GONE);
-                    }
-
-                    //6 WEEKS
-                    if (estimatedAgeInWeeks >= 6) {
-                        binding.opv1.setVisibility(View.VISIBLE);
-                        binding.btnOpv1.setVisibility(View.VISIBLE);
-                        binding.DPTHepBHib1.setVisibility(View.VISIBLE);
-                        binding.btnDPTHepBHib1.setVisibility(View.VISIBLE);
-                        binding.pneumo1.setVisibility(View.VISIBLE);
-                        binding.btnPneumo1.setVisibility(View.VISIBLE);
-                        binding.rota1.setVisibility(View.VISIBLE);
-                        binding.btnRota1.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.opv1.setVisibility(View.GONE);
-                        binding.btnOpv1.setVisibility(View.GONE);
-                        binding.DPTHepBHib1.setVisibility(View.GONE);
-                        binding.btnDPTHepBHib1.setVisibility(View.GONE);
-                        binding.pneumo1.setVisibility(View.GONE);
-                        binding.btnPneumo1.setVisibility(View.GONE);
-                        binding.rota1.setVisibility(View.GONE);
-                        binding.btnRota1.setVisibility(View.GONE);
-                    }
-
-                    //10 WEEKS
-                    if (estimatedAgeInWeeks >= 10) {
-                        binding.opv2.setVisibility(View.VISIBLE);
-                        binding.btnOpv2.setVisibility(View.VISIBLE);
-                        binding.DPTHepBHib2.setVisibility(View.VISIBLE);
-                        binding.btnDPTHepBHib2.setVisibility(View.VISIBLE);
-                        binding.pneumo2.setVisibility(View.VISIBLE);
-                        binding.btnPneumo2.setVisibility(View.VISIBLE);
-                        binding.rota2.setVisibility(View.VISIBLE);
-                        binding.btnRota2.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.opv2.setVisibility(View.GONE);
-                        binding.btnOpv2.setVisibility(View.GONE);
-                        binding.DPTHepBHib2.setVisibility(View.GONE);
-                        binding.btnDPTHepBHib2.setVisibility(View.GONE);
-                        binding.pneumo2.setVisibility(View.GONE);
-                        binding.btnPneumo2.setVisibility(View.GONE);
-                        binding.rota2.setVisibility(View.GONE);
-                        binding.btnRota2.setVisibility(View.GONE);
-                    }
-
-                    //14 WEEKS
-                    if (estimatedAgeInWeeks >= 14) {
-                        binding.opv3.setVisibility(View.VISIBLE);
-                        binding.btnOpv3.setVisibility(View.VISIBLE);
-                        binding.DPTHepBHib3.setVisibility(View.VISIBLE);
-                        binding.btnDPTHepBHib3.setVisibility(View.VISIBLE);
-                        binding.pneumo3.setVisibility(View.VISIBLE);
-                        binding.btnPneumo3.setVisibility(View.VISIBLE);
-                        binding.rota3.setVisibility(View.VISIBLE);
-                        binding.btnRota3.setVisibility(View.VISIBLE);
-                        binding.ipv.setVisibility(View.VISIBLE);
-                        binding.btnIpv.setVisibility(View.VISIBLE);
-                    } else {
-                        binding.opv3.setVisibility(View.GONE);
-                        binding.btnOpv3.setVisibility(View.GONE);
-                        binding.DPTHepBHib3.setVisibility(View.GONE);
-                        binding.btnDPTHepBHib3.setVisibility(View.GONE);
-                        binding.pneumo3.setVisibility(View.GONE);
-                        binding.btnPneumo3.setVisibility(View.GONE);
-                        binding.rota3.setVisibility(View.GONE);
-                        binding.btnRota3.setVisibility(View.GONE);
-                        binding.ipv.setVisibility(View.GONE);
-                        binding.btnIpv.setVisibility(View.GONE);
-                    }
-
-
-                }
+//                if (binding.getVaccination().dob != null) {
+//                    Date dob = binding.getVaccination().dob;
+//                    final long millisecondsPerMonth = 30 * 24 * 60 * 60 * 1000L;
+//                    final long ageInMillis = new Date().getTime() - dob.getTime();
+//                    final int estimatedAgeInMonths = (int) Math.ceil(ageInMillis / (double) millisecondsPerMonth);
+//                    binding.monthAge.setText(String.valueOf(estimatedAgeInMonths));
+//                    binding.dob.setError(null);
+//
+//                    //6 MONTHS
+//                    if (estimatedAgeInMonths >= 6) {
+//                        binding.vitaminA6.setVisibility(View.VISIBLE);
+//                        binding.btnVitaminA6.setVisibility(View.VISIBLE);
+//                        binding.rtss6.setVisibility(View.VISIBLE);
+//                        binding.btnRtss6.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.vitaminA6.setVisibility(View.GONE);
+//                        binding.btnVitaminA6.setVisibility(View.GONE);
+//                        binding.rtss6.setVisibility(View.GONE);
+//                        binding.btnRtss6.setVisibility(View.GONE);
+//                    }
+//
+//                    //7 MONTHS
+//                    if (estimatedAgeInMonths >= 7) {
+//                        binding.rtss7.setVisibility(View.VISIBLE);
+//                        binding.btnRtss7.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.rtss7.setVisibility(View.GONE);
+//                        binding.btnRtss7.setVisibility(View.GONE);
+//                    }
+//
+//                    //9 MONTHS
+//                    if (estimatedAgeInMonths >= 9) {
+//                        binding.rtss9.setVisibility(View.VISIBLE);
+//                        binding.btnRtss9.setVisibility(View.VISIBLE);
+//                        binding.measles1.setVisibility(View.VISIBLE);
+//                        binding.btnMeasles1.setVisibility(View.VISIBLE);
+//                        binding.yellowFever.setVisibility(View.VISIBLE);
+//                        binding.btnYellow.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.rtss9.setVisibility(View.GONE);
+//                        binding.btnRtss9.setVisibility(View.GONE);
+//                        binding.measles1.setVisibility(View.GONE);
+//                        binding.btnMeasles1.setVisibility(View.GONE);
+//                        binding.yellowFever.setVisibility(View.GONE);
+//                        binding.btnYellow.setVisibility(View.GONE);
+//                    }
+//
+//                    //12 MONTHS
+//                    if (estimatedAgeInMonths >= 12) {
+//                        binding.vitaminA12.setVisibility(View.VISIBLE);
+//                        binding.btnVitaminA12.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.vitaminA12.setVisibility(View.GONE);
+//                        binding.btnVitaminA12.setVisibility(View.GONE);
+//                    }
+//
+//                    //18 MONTHS
+//                    if (estimatedAgeInMonths >= 18) {
+//                        binding.measles2.setVisibility(View.VISIBLE);
+//                        binding.btnMeasles2.setVisibility(View.VISIBLE);
+//                        binding.menA.setVisibility(View.VISIBLE);
+//                        binding.btnMenA.setVisibility(View.VISIBLE);
+//                        binding.vitaminA18.setVisibility(View.VISIBLE);
+//                        binding.btnVitaminA18.setVisibility(View.VISIBLE);
+//                        binding.itn.setVisibility(View.VISIBLE);
+//                        binding.btnItn.setVisibility(View.VISIBLE);
+//                        binding.rtss18.setVisibility(View.VISIBLE);
+//                        binding.btnRtss18.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.measles2.setVisibility(View.GONE);
+//                        binding.btnMeasles2.setVisibility(View.GONE);
+//                        binding.menA.setVisibility(View.GONE);
+//                        binding.btnMenA.setVisibility(View.GONE);
+//                        binding.vitaminA18.setVisibility(View.GONE);
+//                        binding.btnVitaminA18.setVisibility(View.GONE);
+//                        binding.itn.setVisibility(View.GONE);
+//                        binding.btnItn.setVisibility(View.GONE);
+//                        binding.rtss18.setVisibility(View.GONE);
+//                        binding.btnRtss18.setVisibility(View.GONE);
+//                    }
+//                }
+//
+//                if (binding.getVaccination().dob != null) {
+//                    Date dob = binding.getVaccination().dob;
+//                    final long millisecondsPerWeek = 7 * 24 * 60 * 60 * 1000L;
+//                    final long ageInMillis = new Date().getTime() - dob.getTime();
+//                    final int estimatedAgeInWeeks = (int) Math.ceil(ageInMillis / (double) millisecondsPerWeek);
+//                    binding.weekAge.setText(String.valueOf(estimatedAgeInWeeks));
+//                    binding.dob.setError(null);
+//
+//                    if (estimatedAgeInWeeks >= 0) {
+//                        binding.bcg.setVisibility(View.VISIBLE);
+//                        binding.btnBcg.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.bcg.setVisibility(View.GONE);
+//                        binding.btnBcg.setVisibility(View.GONE);
+//                    }
+//
+//                    //6 WEEKS
+//                    if (estimatedAgeInWeeks >= 6) {
+//                        binding.opv1.setVisibility(View.VISIBLE);
+//                        binding.btnOpv1.setVisibility(View.VISIBLE);
+//                        binding.DPTHepBHib1.setVisibility(View.VISIBLE);
+//                        binding.btnDPTHepBHib1.setVisibility(View.VISIBLE);
+//                        binding.pneumo1.setVisibility(View.VISIBLE);
+//                        binding.btnPneumo1.setVisibility(View.VISIBLE);
+//                        binding.rota1.setVisibility(View.VISIBLE);
+//                        binding.btnRota1.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.opv1.setVisibility(View.GONE);
+//                        binding.btnOpv1.setVisibility(View.GONE);
+//                        binding.DPTHepBHib1.setVisibility(View.GONE);
+//                        binding.btnDPTHepBHib1.setVisibility(View.GONE);
+//                        binding.pneumo1.setVisibility(View.GONE);
+//                        binding.btnPneumo1.setVisibility(View.GONE);
+//                        binding.rota1.setVisibility(View.GONE);
+//                        binding.btnRota1.setVisibility(View.GONE);
+//                    }
+//
+//                    //10 WEEKS
+//                    if (estimatedAgeInWeeks >= 10) {
+//                        binding.opv2.setVisibility(View.VISIBLE);
+//                        binding.btnOpv2.setVisibility(View.VISIBLE);
+//                        binding.DPTHepBHib2.setVisibility(View.VISIBLE);
+//                        binding.btnDPTHepBHib2.setVisibility(View.VISIBLE);
+//                        binding.pneumo2.setVisibility(View.VISIBLE);
+//                        binding.btnPneumo2.setVisibility(View.VISIBLE);
+//                        binding.rota2.setVisibility(View.VISIBLE);
+//                        binding.btnRota2.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.opv2.setVisibility(View.GONE);
+//                        binding.btnOpv2.setVisibility(View.GONE);
+//                        binding.DPTHepBHib2.setVisibility(View.GONE);
+//                        binding.btnDPTHepBHib2.setVisibility(View.GONE);
+//                        binding.pneumo2.setVisibility(View.GONE);
+//                        binding.btnPneumo2.setVisibility(View.GONE);
+//                        binding.rota2.setVisibility(View.GONE);
+//                        binding.btnRota2.setVisibility(View.GONE);
+//                    }
+//
+//                    //14 WEEKS
+//                    if (estimatedAgeInWeeks >= 14) {
+//                        binding.opv3.setVisibility(View.VISIBLE);
+//                        binding.btnOpv3.setVisibility(View.VISIBLE);
+//                        binding.DPTHepBHib3.setVisibility(View.VISIBLE);
+//                        binding.btnDPTHepBHib3.setVisibility(View.VISIBLE);
+//                        binding.pneumo3.setVisibility(View.VISIBLE);
+//                        binding.btnPneumo3.setVisibility(View.VISIBLE);
+//                        binding.rota3.setVisibility(View.VISIBLE);
+//                        binding.btnRota3.setVisibility(View.VISIBLE);
+//                        binding.ipv.setVisibility(View.VISIBLE);
+//                        binding.btnIpv.setVisibility(View.VISIBLE);
+//                    } else {
+//                        binding.opv3.setVisibility(View.GONE);
+//                        binding.btnOpv3.setVisibility(View.GONE);
+//                        binding.DPTHepBHib3.setVisibility(View.GONE);
+//                        binding.btnDPTHepBHib3.setVisibility(View.GONE);
+//                        binding.pneumo3.setVisibility(View.GONE);
+//                        binding.btnPneumo3.setVisibility(View.GONE);
+//                        binding.rota3.setVisibility(View.GONE);
+//                        binding.btnRota3.setVisibility(View.GONE);
+//                        binding.ipv.setVisibility(View.GONE);
+//                        binding.btnIpv.setVisibility(View.GONE);
+//                    }
+//
+//
+//                }
 
 
             }
@@ -877,6 +900,15 @@ public class VaccinationFragment extends Fragment {
         loadCodeData(binding.hcard, "HC");
         loadCodeData(binding.reason, "reavac");
         loadCodeData(binding.admission, "complete");
+        loadCodeData(binding.bednet, "complete");
+        loadCodeData(binding.scar, "scar");
+        loadCodeData(binding.fever, "complete");
+        loadCodeData(binding.fevertreat, "complete");
+        loadCodeData(binding.diarrhoea, "complete");
+        loadCodeData(binding.diarrhoeatreat, "complete");
+        loadCodeData(binding.arti, "complete");
+        loadCodeData(binding.artitreat, "complete");
+        loadCodeData(binding.slpbednet, "complete");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
@@ -900,7 +932,7 @@ public class VaccinationFragment extends Fragment {
             Vaccination finalData = binding.getVaccination();
 
             try {
-                if (!binding.opv0.getText().toString().trim().isEmpty() && !binding.opv1.getText().toString().trim().isEmpty() ||
+                if (!binding.dob.getText().toString().trim().isEmpty() && !binding.opv0.getText().toString().trim().isEmpty() && !binding.opv1.getText().toString().trim().isEmpty() ||
                         !binding.opv2.getText().toString().trim().isEmpty() || !binding.opv3.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date currentDate = new Date();
@@ -908,9 +940,15 @@ public class VaccinationFragment extends Fragment {
                     Date opv1 = f.parse(binding.opv1.getText().toString().trim());
                     Date opv2 = f.parse(binding.opv2.getText().toString().trim());
                     Date opv3 = f.parse(binding.opv3.getText().toString().trim());
+                    Date dob = f.parse(binding.dob.getText().toString().trim());
                     if (opv0.after(currentDate)) {
                         binding.opv0.setError("Date Cannot Be a Future Date");
                         Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (opv0.before(dob)) {
+                        binding.opv0.setError("Date Cannot Be Less than DOB");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than DOB", Toast.LENGTH_LONG).show();
                         return;
                     }
                     if (opv1.before(opv0)) {
@@ -940,16 +978,22 @@ public class VaccinationFragment extends Fragment {
             }
 
             try {
-                if (!binding.DPTHepBHib1.getText().toString().trim().isEmpty() && !binding.DPTHepBHib2.getText().toString().trim().isEmpty() ||
+                if (!binding.dob.getText().toString().trim().isEmpty() && !binding.DPTHepBHib1.getText().toString().trim().isEmpty() && !binding.DPTHepBHib2.getText().toString().trim().isEmpty() ||
                         !binding.DPTHepBHib3.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date currentDate = new Date();
                     Date DPTHepBHib1 = f.parse(binding.DPTHepBHib1.getText().toString().trim());
                     Date DPTHepBHib2 = f.parse(binding.DPTHepBHib2.getText().toString().trim());
                     Date DPTHepBHib3 = f.parse(binding.DPTHepBHib3.getText().toString().trim());
+                    Date dob = f.parse(binding.dob.getText().toString().trim());
                     if (DPTHepBHib1.after(currentDate)) {
                         binding.DPTHepBHib1.setError("Date Cannot Be a Future Date");
                         Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (DPTHepBHib1.before(dob)) {
+                        binding.DPTHepBHib1.setError("Date Cannot Be Less than DOB");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than DOB", Toast.LENGTH_LONG).show();
                         return;
                     }
                     if (DPTHepBHib2.before(DPTHepBHib1)) {
@@ -974,16 +1018,22 @@ public class VaccinationFragment extends Fragment {
 
 
             try {
-                if (!binding.pneumo1.getText().toString().trim().isEmpty() && !binding.pneumo2.getText().toString().trim().isEmpty() ||
+                if (!binding.dob.getText().toString().trim().isEmpty() && !binding.pneumo1.getText().toString().trim().isEmpty() && !binding.pneumo2.getText().toString().trim().isEmpty() ||
                         !binding.pneumo3.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date currentDate = new Date();
                     Date pneumo1 = f.parse(binding.pneumo1.getText().toString().trim());
                     Date pneumo2 = f.parse(binding.pneumo2.getText().toString().trim());
                     Date pneumo3 = f.parse(binding.pneumo3.getText().toString().trim());
+                    Date dob = f.parse(binding.dob.getText().toString().trim());
                     if (pneumo1.after(currentDate)) {
                         binding.pneumo1.setError("Date Cannot Be a Future Date");
                         Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (pneumo1.before(dob)) {
+                        binding.pneumo1.setError("Date Cannot Be Less than DOB");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than DOB", Toast.LENGTH_LONG).show();
                         return;
                     }
                     if (pneumo2.before(pneumo1)) {
@@ -1007,16 +1057,22 @@ public class VaccinationFragment extends Fragment {
             }
 
             try {
-                if (!binding.rota1.getText().toString().trim().isEmpty() && !binding.rota2.getText().toString().trim().isEmpty() ||
+                if (!binding.dob.getText().toString().trim().isEmpty() && !binding.rota1.getText().toString().trim().isEmpty() && !binding.rota2.getText().toString().trim().isEmpty() ||
                         !binding.rota3.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date currentDate = new Date();
                     Date rota1 = f.parse(binding.rota1.getText().toString().trim());
                     Date rota2 = f.parse(binding.rota2.getText().toString().trim());
                     Date rota3 = f.parse(binding.rota3.getText().toString().trim());
+                    Date dob = f.parse(binding.dob.getText().toString().trim());
                     if (rota1.after(currentDate)) {
                         binding.rota1.setError("Date Cannot Be a Future Date");
                         Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (rota1.before(dob)) {
+                        binding.rota1.setError("Date Cannot Be Less than DOB");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than DOB", Toast.LENGTH_LONG).show();
                         return;
                     }
                     if (rota2.before(rota1)) {
@@ -1041,13 +1097,19 @@ public class VaccinationFragment extends Fragment {
 
 
             try {
-                if (!binding.ipv.getText().toString().trim().isEmpty()) {
+                if (!binding.dob.getText().toString().trim().isEmpty() && !binding.ipv.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date currentDate = new Date();
                     Date ipv = f.parse(binding.ipv.getText().toString().trim());
+                    Date dob = f.parse(binding.dob.getText().toString().trim());
                     if (ipv.after(currentDate)) {
                         binding.ipv.setError("Date Cannot Be a Future Date");
                         Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (ipv.before(dob)) {
+                        binding.ipv.setError("Date Cannot Be Less than DOB");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than DOB", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -1060,13 +1122,39 @@ public class VaccinationFragment extends Fragment {
             }
 
             try {
-                if (!binding.vitaminA6.getText().toString().trim().isEmpty() && !binding.vitaminA12.getText().toString().trim().isEmpty() ||
+                if (!binding.dob.getText().toString().trim().isEmpty() && !binding.admitDate.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
+                    Date admit = f.parse(binding.admitDate.getText().toString().trim());
+                    Date dob = f.parse(binding.dob.getText().toString().trim());
+                    if (admit.after(currentDate)) {
+                        binding.ipv.setError("Date Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (admit.before(dob)) {
+                        binding.ipv.setError("Date Cannot Be Less than DOB");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than DOB", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    // clear error if validation passes
+                    binding.ipv.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+
+            try {
+                if (!binding.dob.getText().toString().trim().isEmpty() && !binding.vitaminA6.getText().toString().trim().isEmpty() && !binding.vitaminA12.getText().toString().trim().isEmpty() ||
                         !binding.vitaminA18.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date currentDate = new Date();
                     Date vita1 = f.parse(binding.vitaminA6.getText().toString().trim());
                     Date vita2 = f.parse(binding.vitaminA12.getText().toString().trim());
                     Date vita3 = f.parse(binding.vitaminA18.getText().toString().trim());
+                    Date dob = f.parse(binding.dob.getText().toString().trim());
                     if (vita1.after(currentDate)) {
                         binding.vitaminA6.setError("Date Cannot Be a Future Date");
                         Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
@@ -1075,6 +1163,11 @@ public class VaccinationFragment extends Fragment {
                     if (vita2.before(vita1)) {
                         binding.vitaminA12.setError("Date Cannot Be Less than Previous Date");
                         Toast.makeText(getActivity(), "Date Cannot Be Less than Previous Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (vita1.before(dob)) {
+                        binding.vitaminA6.setError("Date Cannot Be Less than DOB");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than DOB", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -1094,7 +1187,7 @@ public class VaccinationFragment extends Fragment {
 
 
             try {
-                if (!binding.rtss6.getText().toString().trim().isEmpty() && !binding.rtss6.getText().toString().trim().isEmpty() ||
+                if (!binding.dob.getText().toString().trim().isEmpty() && !binding.rtss6.getText().toString().trim().isEmpty() && !binding.rtss6.getText().toString().trim().isEmpty() ||
                         !binding.rtss9.getText().toString().trim().isEmpty() || !binding.rtss18.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date currentDate = new Date();
@@ -1102,9 +1195,15 @@ public class VaccinationFragment extends Fragment {
                     Date rtss2 = f.parse(binding.rtss7.getText().toString().trim());
                     Date rtss3 = f.parse(binding.rtss9.getText().toString().trim());
                     Date rtss4 = f.parse(binding.rtss18.getText().toString().trim());
+                    Date dob = f.parse(binding.dob.getText().toString().trim());
                     if (rtss1.after(currentDate)) {
                         binding.rtss6.setError("Date Cannot Be a Future Date");
                         Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (rtss1.before(dob)) {
+                        binding.rtss6.setError("Date Cannot Be Less than DOB");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than DOB", Toast.LENGTH_LONG).show();
                         return;
                     }
                     if (rtss2.before(rtss1)) {
@@ -1134,14 +1233,20 @@ public class VaccinationFragment extends Fragment {
             }
 
             try {
-                if (!binding.measles1.getText().toString().trim().isEmpty() && !binding.measles2.getText().toString().trim().isEmpty()) {
+                if (!binding.dob.getText().toString().trim().isEmpty() && !binding.measles1.getText().toString().trim().isEmpty() && !binding.measles2.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date currentDate = new Date();
                     Date measles1 = f.parse(binding.measles1.getText().toString().trim());
                     Date measles2 = f.parse(binding.measles2.getText().toString().trim());
+                    Date dob = f.parse(binding.dob.getText().toString().trim());
                     if (measles1.after(currentDate)) {
                         binding.measles1.setError("Date Cannot Be a Future Date");
                         Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (measles1.before(dob)) {
+                        binding.measles1.setError("Date Cannot Be Less than DOB");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than DOB", Toast.LENGTH_LONG).show();
                         return;
                     }
                     if (measles2.before(measles1)) {
@@ -1159,13 +1264,19 @@ public class VaccinationFragment extends Fragment {
             }
 
             try {
-                if (!binding.yellowFever.getText().toString().trim().isEmpty()) {
+                if (!binding.dob.getText().toString().trim().isEmpty() && !binding.yellowFever.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date currentDate = new Date();
                     Date yf = f.parse(binding.yellowFever.getText().toString().trim());
+                    Date dob = f.parse(binding.dob.getText().toString().trim());
                     if (yf.after(currentDate)) {
                         binding.yellowFever.setError("Date Cannot Be a Future Date");
                         Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (yf.before(dob)) {
+                        binding.yellowFever.setError("Date Cannot Be Less than DOB");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than DOB", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -1178,13 +1289,19 @@ public class VaccinationFragment extends Fragment {
             }
 
             try {
-                if (!binding.menA.getText().toString().trim().isEmpty()) {
+                if (!binding.dob.getText().toString().trim().isEmpty() && !binding.menA.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date currentDate = new Date();
                     Date men = f.parse(binding.menA.getText().toString().trim());
+                    Date dob = f.parse(binding.dob.getText().toString().trim());
                     if (men.after(currentDate)) {
                         binding.menA.setError("Date Cannot Be a Future Date");
                         Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (men.before(dob)) {
+                        binding.menA.setError("Date Cannot Be Less than DOB");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than DOB", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -1197,13 +1314,19 @@ public class VaccinationFragment extends Fragment {
             }
 
             try {
-                if (!binding.itn.getText().toString().trim().isEmpty()) {
+                if (!binding.dob.getText().toString().trim().isEmpty() && !binding.itn.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date currentDate = new Date();
                     Date itn = f.parse(binding.itn.getText().toString().trim());
+                    Date dob = f.parse(binding.dob.getText().toString().trim());
                     if (itn.after(currentDate)) {
                         binding.itn.setError("Date Cannot Be a Future Date");
                         Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (itn.before(dob)) {
+                        binding.itn.setError("Date Cannot Be Less than DOB");
+                        Toast.makeText(getActivity(), "Date Cannot Be Less than DOB", Toast.LENGTH_LONG).show();
                         return;
                     }
 
@@ -1298,6 +1421,7 @@ public class VaccinationFragment extends Fragment {
         MEASLES2 ("MEASLES2"),
         YF ("YF"),
         MENA ("MENA"),
+        ADMIT ("ADMIT"),
         ITN ("ITN");
 
         private final String bundleKey;

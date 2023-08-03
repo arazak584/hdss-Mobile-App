@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -14,7 +15,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
+import org.openhds.hdsscapture.Activity.LocationActivity;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Locations;
 
@@ -32,6 +35,11 @@ public class BaselineActivity extends AppCompatActivity {
 
         final Intent i = getIntent();
         final Hierarchy level6Data = i.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
+
+        final Intent f = getIntent();
+        final Fieldworker fieldworkerData = f.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
+        Toast.makeText(BaselineActivity.this, "Welcome " + fieldworkerData.firstName + " " + fieldworkerData.lastName, Toast.LENGTH_LONG).show();
 
 
         final TextView level5 = findViewById(R.id.level5);
