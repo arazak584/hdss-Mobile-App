@@ -201,7 +201,7 @@ public class AmendmentFragment extends Fragment {
 
             save(false, true, viewModel);
         });
-
+        
         binding.setEventname(eventForm.event_name);
         Handler.colorLayouts(requireContext(), binding.AMENDLAYOUT);
         View view = binding.getRoot();
