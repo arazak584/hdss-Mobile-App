@@ -175,7 +175,17 @@ public class EventsFragment extends Fragment {
                             }
 
                             //Adult Female
-                            if (individual.gender==2 && yrs>=12) {
+                            if (individual.gender==2 && yrs>55) {
+                                showDemographicForm(eventForms);
+                                showRelationshipForm(eventForms);
+                                showResidencyForm(eventForms);
+                                showAmendment(eventForms);
+                                showDup(eventForms);
+
+                            }
+
+                            //Adult Female
+                            if (individual.gender==2 && yrs>=12 && yrs<=55) {
                                 showDemographicForm(eventForms);
                                 showRelationshipForm(eventForms);
                                 showPregnancyForm(eventForms);

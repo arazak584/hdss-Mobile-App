@@ -194,12 +194,14 @@ public class HierarchyActivity extends AppCompatActivity {
                 level5Adapter.clear();
                 level6Adapter.clear();
 
+                level3Spinner.setSelection(0);
+                level4Spinner.setSelection(0);
+                level5Spinner.setSelection(0);
+                level6Spinner.setSelection(0);
+
                 if (position == 0) {
                     // If the first item is selected in level3Spinner, reset the lower-level spinners to position 0
-                    level3Spinner.setSelection(0);
-                    level4Spinner.setSelection(0);
-                    level5Spinner.setSelection(0);
-                    level6Spinner.setSelection(0);
+                    return;
                 }
 
                 // Load level 3 data
