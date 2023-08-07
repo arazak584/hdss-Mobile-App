@@ -91,19 +91,19 @@ public class ErrorActivity extends AppCompatActivity {
 
             final SimpleDateFormat f = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
 
-//            int c=1;
-//            for (Socialgroup e : socialgroupViewModel.error()) {
-//                String formattedDate = f.format(e.insertDate);
-//                Queries r1 = new Queries();
-//                r1.name = "Socialgroup " ;
-//                r1.extid = "" + e.extId;
-//                r1.date = "" + formattedDate;
-//                r1.error = "Incomplete Socialgroup";
-//                r1.index = c;
-//
-//                list.add(r1);
-//
-//            }
+            int c=1;
+            for (Socialgroup e : socialgroupViewModel.error()) {
+                String formattedDate = f.format(e.insertDate);
+                Queries r1 = new Queries();
+                r1.name = "Visit " ;
+                r1.extid = "" + e.extId;
+                r1.date = "" + e.groupName;
+                r1.error = "UNK as Respondent";
+                r1.index = c;
+
+                list.add(r1);
+
+            }
 
             int d=1;
             for (Death e : deathViewModel.error()) {

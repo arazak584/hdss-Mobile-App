@@ -54,8 +54,8 @@ public class ResidencyViewModel extends AndroidViewModel {
         return residencyRepository.fetch(id);
     }
 
-    public Residency fetchs(String id) throws ExecutionException, InterruptedException {
-        return residencyRepository.fetchs(id);
+    public Residency fetchs(String id, String locid) throws ExecutionException, InterruptedException {
+        return residencyRepository.fetchs(id, locid);
     }
 
     public Residency amend(String id) throws ExecutionException, InterruptedException {

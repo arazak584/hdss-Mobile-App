@@ -201,7 +201,7 @@ public class AmendmentFragment extends Fragment {
 
             save(false, true, viewModel);
         });
-        
+
         binding.setEventname(eventForm.event_name);
         Handler.colorLayouts(requireContext(), binding.AMENDLAYOUT);
         View view = binding.getRoot();
@@ -220,7 +220,7 @@ public class AmendmentFragment extends Fragment {
                     Date dob = f.parse(binding.replDob.getText().toString().trim());
                     if (dob.after(stdate)) {
                         binding.replDob.setError("Date of Birth Cannot Be Greater than Start Date");
-                        Toast.makeText(getActivity(), "Date of Birth Cannot Be Greater than Start Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date of Birth Cannot Be Greater than Start Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     // clear error if validation passes

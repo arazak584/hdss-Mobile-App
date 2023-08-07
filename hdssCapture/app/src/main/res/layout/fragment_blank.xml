@@ -71,6 +71,7 @@
         </LinearLayout>
 
         <Button
+            android:visibility="gone"
             android:id="@+id/button_pregnancy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

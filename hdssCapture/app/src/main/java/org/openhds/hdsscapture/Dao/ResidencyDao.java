@@ -58,8 +58,8 @@ public interface ResidencyDao {
     @Query("SELECT * FROM residency WHERE uuid=:id AND location_uuid!=loc")
     Residency fetch(String id);
 
-    @Query("SELECT * FROM residency as a INNER JOIN outmigration as b on a.uuid=b.residency_uuid WHERE a.individual_uuid=:id AND endType=1")
-    Residency fetchs(String id);
+    @Query("SELECT * FROM residency WHERE individual_uuid=:id AND location_uuid!=:locid AND endType=1")
+    Residency fetchs(String id, String locid);
 
     @Query("SELECT * FROM residency where individual_uuid=:id ORDER BY startDate ASC LIMIT 1")
     Residency amend(String id);

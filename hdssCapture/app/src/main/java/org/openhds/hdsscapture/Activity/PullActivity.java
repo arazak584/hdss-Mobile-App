@@ -32,10 +32,12 @@ import org.openhds.hdsscapture.Dao.VaccinationDao;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Repositories.IndividualRepository;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
 import org.openhds.hdsscapture.entity.CodeBook;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
@@ -159,6 +161,16 @@ public class PullActivity extends AppCompatActivity {
                        CodeBook[] co = response.body().getData().toArray(new CodeBook[0]);
                        codeBook.add(co);
 
+                           //Sync Fieldworker
+                           progress.setMessage("Updating Fieldworker...");
+                           final FieldworkerViewModel fieldworkerViewModel = new ViewModelProvider(PullActivity.this).get(FieldworkerViewModel.class);
+                           Call<DataWrapper<Fieldworker>> c_callable = dao.getFw();
+                           c_callable.enqueue(new Callback<DataWrapper<Fieldworker>>() {
+                               @Override
+                           public void onResponse(Call<DataWrapper<Fieldworker>> call, Response<DataWrapper<Fieldworker>> response) {
+                           Fieldworker[] fw = response.body().getData().toArray(new Fieldworker[0]);
+                           fieldworkerViewModel.add(fw);
+
 
                         progress.dismiss();
                          textView_SyncHierarchyData.setText("Codebook and Locationhierarchy updated Successfully");
@@ -166,6 +178,14 @@ public class PullActivity extends AppCompatActivity {
                                 //textView_SyncHierarchyData.setTextColor(Color.rgb(0, 114, 133));
                             }
 
+                               @Override
+                               public void onFailure(Call<DataWrapper<Fieldworker>> call, Throwable t) {
+                                   progress.dismiss();
+                                   textView_SyncHierarchyData.setText("Fieldworker Sync Error!");
+                                   textView_SyncHierarchyData.setTextColor(Color.RED);
+                               }
+                           });
+                       }
 
                           @Override
                           public void onFailure(Call<DataWrapper<CodeBook>> call, Throwable t) {

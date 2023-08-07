@@ -228,7 +228,7 @@ public class NewSocialgroupFragment extends Fragment {
         }
 
         if (individual.dob == null) {
-            binding.getIndividual().dob = new Date("2003-12-15");
+            binding.getIndividual().dob = new Date(2003-12-15);
         }
 
         if(individual.gender==null){

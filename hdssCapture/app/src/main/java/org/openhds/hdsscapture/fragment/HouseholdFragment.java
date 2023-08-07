@@ -14,14 +14,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.Dialog.PregnancyDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.databinding.FragmentHouseholdBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.CaseItem;
@@ -58,6 +61,7 @@ public class HouseholdFragment extends Fragment {
     private FragmentHouseholdBinding binding;
     private CaseItem caseItem;
     private EventForm eventForm;
+    private Pregnancy pregnancy;
 
     public HouseholdFragment() {
         // Required empty public constructor
@@ -109,6 +113,7 @@ public class HouseholdFragment extends Fragment {
         //View view = inflater.inflate(R.layout.fragment_house_visit, container, false);
         binding.setSocialgroup(socialgroup);
 
+
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
@@ -134,6 +139,20 @@ public class HouseholdFragment extends Fragment {
 
             }
 
+        PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
+
+        try {
+            List<Pregnancy> pregnancyList = pregnancyViewModel.retrievePregnancy(locations.getCompextId());
+            if (pregnancyList != null && !pregnancyList.isEmpty()) {
+                showPregnancyDialog();
+            }
+
+        }catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         //LOAD SPINNERS
         loadCodeData(binding.selectGroupType, "groupType");
         loadCodeData(binding.residencyComplete, "submit");
@@ -154,6 +173,7 @@ public class HouseholdFragment extends Fragment {
         View v = binding.getRoot();
         return v;
     }
+
 
     private void save(boolean save, boolean close) {
 
@@ -180,6 +200,11 @@ public class HouseholdFragment extends Fragment {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     BlankFragment.newInstance(individual, residency, locations, socialgroup)).commit();
         }
+    }
+
+    private void showPregnancyDialog() {
+        PregnancyDialogFragment.newInstance(individual, residency, locations, socialgroup)
+                .show(getChildFragmentManager(), "PregnancyDialogFragment");
     }
 
     @Override

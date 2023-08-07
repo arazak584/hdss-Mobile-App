@@ -107,9 +107,9 @@ public class ResidencyRepository {
         return future.get();
     }
 
-    public Residency fetchs(String id) throws ExecutionException, InterruptedException {
+    public Residency fetchs(String id, String locid) throws ExecutionException, InterruptedException {
 
-        Callable<Residency> callable = () -> dao.fetchs(id);
+        Callable<Residency> callable = () -> dao.fetchs(id, locid);
 
         Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
 

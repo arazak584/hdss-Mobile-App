@@ -305,18 +305,15 @@ public class ResidencyFragment extends Fragment {
             Residency datae = esViewModel.findEnd(individual.uuid, locations.uuid);
             if (datae != null) {
                 binding.setOmgg(datae);
-                if (binding.getOmgg().old_residency == null) {
-                    binding.getOmgg().loc = datae.getLocation_uuid();
-                    binding.getOmgg().old_residency = datae.getUuid();
-                    binding.getOmgg().startDate = datae.startDate;
-                    binding.getResidency().old_residency =datae.getUuid();
-                }
-
-
+                binding.getOmgg().loc = datae.getLocation_uuid();
+                binding.getOmgg().old_residency = datae.getUuid();
+                binding.getOmgg().startDate = datae.startDate;
+                binding.getResidency().old_residency = datae.getUuid();
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
+
 
         try {
             Death datadth = deathViewModel.find(individual.uuid);
@@ -737,7 +734,8 @@ public class ResidencyFragment extends Fragment {
             OutmigrationViewModel omgModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
             try {
                 Outmigration data = omgModel.createOmg(individual.uuid, locations.uuid);
-            if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim())) {
+//                if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim()))
+                    if (data != null) {
 
                 Outmigration omg = new Outmigration();
 
@@ -772,8 +770,9 @@ public class ResidencyFragment extends Fragment {
 
             ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
             try {
-                Residency data = resModel.fetchs(individual.uuid);
-                if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim())) {
+                Residency data = resModel.fetchs(individual.uuid, locations.uuid);
+//                if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim()))
+                if (data != null) {
 
                     ResidencyAmendment residencyAmendment = new ResidencyAmendment();
 

@@ -120,7 +120,7 @@ public class BlankFragment extends Fragment {
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_pregnancy);
 
-        // Set a click listener on the button for pregnancies
+         //Set a click listener on the button for pregnancies
         showDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

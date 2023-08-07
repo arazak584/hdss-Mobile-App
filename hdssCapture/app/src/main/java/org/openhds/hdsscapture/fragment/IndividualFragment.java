@@ -164,13 +164,13 @@ public class IndividualFragment extends Fragment {
             binding.getIndividual().complete = 1;
         }
 
-        if (individual.compextId == null) {
-            binding.getIndividual().compextId = locations.compextId;
-        }
-
-        if (individual.houseExtId == null) {
-            binding.getIndividual().houseExtId = socialgroup.extId;
-        }
+//        if (individual.compextId == null) {
+//            binding.getIndividual().compextId = locations.compextId;
+//        }
+//
+//        if (individual.houseExtId == null) {
+//            binding.getIndividual().houseExtId = socialgroup.extId;
+//        }
 
         if (individual.ghanacard != null && individual.gh ==null) {
             binding.getIndividual().gh=1;
