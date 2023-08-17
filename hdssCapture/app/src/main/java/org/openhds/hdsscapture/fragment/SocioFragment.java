@@ -239,9 +239,7 @@ public class SocioFragment extends Fragment {
 
 
             viewModel.add(data);
-
-
-            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+            //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,

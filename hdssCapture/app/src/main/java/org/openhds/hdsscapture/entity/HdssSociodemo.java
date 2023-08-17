@@ -2416,11 +2416,11 @@ public class HdssSociodemo extends BaseObservable {
 
             if (h2o_prep_fcorres == null || h2o_prep_fcorres != AppConstants.YES) {
 
-                h2o_prep_spfy_fcorres_1 = AppConstants.NO;
-                h2o_prep_spfy_fcorres_2 = AppConstants.NO;
-                h2o_prep_spfy_fcorres_3 = AppConstants.NO;
-                h2o_prep_spfy_fcorres_4 = AppConstants.NO;
-                h2o_prep_spfy_fcorres_5 = AppConstants.NO;
+                h2o_prep_spfy_fcorres_1 = null;
+                h2o_prep_spfy_fcorres_2 = null;
+                h2o_prep_spfy_fcorres_3 = null;
+                h2o_prep_spfy_fcorres_4 = null;
+                h2o_prep_spfy_fcorres_5 = null;
 
             }
 
@@ -2428,8 +2428,8 @@ public class HdssSociodemo extends BaseObservable {
                 toilet_spfy_fcorres = "";
 
             if (toilet_fcorres == null || toilet_fcorres == 12) {
-                toilet_loc_fcorres = AppConstants.NO;
-                toilet_share_fcorres = AppConstants.NO;
+                toilet_loc_fcorres = null;
+                toilet_share_fcorres = null;
             }
 
             if (toilet_loc_fcorres == null || toilet_loc_fcorres != AppConstants.OTHER_SPECIFY)
@@ -2536,12 +2536,12 @@ public class HdssSociodemo extends BaseObservable {
                 own_rent_spfy_scorres = "";
 
             if (land_fcorres == null || land_fcorres != AppConstants.YES) {
-                land_use_fcorres_1 = AppConstants.NO;
-                land_use_fcorres_2 = AppConstants.NO;
-                land_use_fcorres_3 = AppConstants.NO;
-                land_use_fcorres_4 = AppConstants.NO;
-                land_use_fcorres_5 = AppConstants.NO;
-                land_use_fcorres_88 = AppConstants.NO;
+                land_use_fcorres_1 = null;
+                land_use_fcorres_2 = null;
+                land_use_fcorres_3 = null;
+                land_use_fcorres_4 = null;
+                land_use_fcorres_5 = null;
+                land_use_fcorres_88 = null;
 
             }
 
@@ -2550,33 +2550,33 @@ public class HdssSociodemo extends BaseObservable {
 
             if (livestock_fcorres == null || livestock_fcorres != AppConstants.YES) {
 
-                cattle_fcorres = AppConstants.NO;
-                goat_fcorres = AppConstants.NO;
-                sheep_fcorres = AppConstants.NO;
-                poultry_fcorres = AppConstants.NO;
-                pig_fcorres = AppConstants.NO;
-                donkey_fcorres = AppConstants.NO;
-                horse_fcorres = AppConstants.NO;
-                animal_othr_fcorres = AppConstants.NO;
+                cattle_fcorres = null;
+                goat_fcorres = null;
+                sheep_fcorres = null;
+                poultry_fcorres = null;
+                pig_fcorres = null;
+                donkey_fcorres = null;
+                horse_fcorres = null;
+                animal_othr_fcorres = null;
             }
 
             if (stove_fcorres == null || stove_fcorres == AppConstants.LPG || stove_fcorres ==AppConstants.non) {
 
-                stove_fuel_fcorres_1 = AppConstants.NO;
-                stove_fuel_fcorres_2 = AppConstants.NO;
-                stove_fuel_fcorres_3 = AppConstants.NO;
-                stove_fuel_fcorres_4 = AppConstants.NO;
-                stove_fuel_fcorres_5 = AppConstants.NO;
-                stove_fuel_fcorres_6 = AppConstants.NO;
-                stove_fuel_fcorres_7 = AppConstants.NO;
-                stove_fuel_fcorres_8 = AppConstants.NO;
-                stove_fuel_fcorres_9 = AppConstants.NO;
-                stove_fuel_fcorres_10 = AppConstants.NO;
-                stove_fuel_fcorres_11 = AppConstants.NO;
-                stove_fuel_fcorres_12 = AppConstants.NO;
-                stove_fuel_fcorres_13 = AppConstants.NO;
-                stove_fuel_fcorres_14 = AppConstants.NO;
-                stove_fuel_fcorres_88 = AppConstants.NO;
+                stove_fuel_fcorres_1 = null;
+                stove_fuel_fcorres_2 = null;
+                stove_fuel_fcorres_3 = null;
+                stove_fuel_fcorres_4 = null;
+                stove_fuel_fcorres_5 = null;
+                stove_fuel_fcorres_6 = null;
+                stove_fuel_fcorres_7 = null;
+                stove_fuel_fcorres_8 = null;
+                stove_fuel_fcorres_9 = null;
+                stove_fuel_fcorres_10 = null;
+                stove_fuel_fcorres_11 = null;
+                stove_fuel_fcorres_12 = null;
+                stove_fuel_fcorres_13 = null;
+                stove_fuel_fcorres_14 = null;
+                stove_fuel_fcorres_88 = null;
             }
 
             if (cattle_fcorres == null || cattle_fcorres != AppConstants.YES)
@@ -2618,13 +2618,13 @@ public class HdssSociodemo extends BaseObservable {
                 stove_fuel_spfy_fcorres_88 = "";
 
             if (cooking_inside_fcorres == null || cooking_inside_fcorres != AppConstants.YES)
-                cooking_room_fcorres = AppConstants.NO;
+                cooking_room_fcorres = null;
 
             if (smoke_oecoccur == null || smoke_oecoccur != AppConstants.YES)
-                smoke_in_oecdosfrq = AppConstants.NO;
+                smoke_in_oecdosfrq = null;
 
             if (smoke_hhold_oecoccur == null || smoke_hhold_oecoccur != AppConstants.YES)
-                smoke_hhold_in_oecdosfrq = AppConstants.NO;
+                smoke_hhold_in_oecdosfrq = null;
 
 
             notifyPropertyChanged(BR._all);

@@ -231,7 +231,7 @@
             android:padding="15dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
-                goneUnless="@{vaccination.reason==7}"
+                goneUnless="@{vaccination.reason==77}"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -549,7 +549,7 @@
                 tools:ignore="TextContrastCheck" />
 
             <com.google.android.material.textfield.TextInputLayout
-                goneUnless="@{vaccination.rea==5}"
+                goneUnless="@{vaccination.rea==77}"
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

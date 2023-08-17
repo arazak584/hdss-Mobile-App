@@ -215,7 +215,7 @@ public class DupFragment extends Fragment {
             }
             finalData.complete=1;
             viewModel.add(finalData);
-            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+            //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,

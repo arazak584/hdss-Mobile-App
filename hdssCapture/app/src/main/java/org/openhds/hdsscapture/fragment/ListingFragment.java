@@ -186,7 +186,7 @@ public class ListingFragment extends Fragment {
             }
             finalData.complete=1;
             viewModel.add(finalData);
-            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+            //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
             LocationAmendment location = new LocationAmendment();
             location.uuid = finalData.location_uuid;

@@ -284,7 +284,7 @@ public class AmendmentFragment extends Fragment {
             finalData.complete=1;
 
             viewModel.add(finalData);
-            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+            //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
             if (!binding.replFirstName.getText().toString().trim().isEmpty()) {
                 amend.firstName = binding.getAmendment().repl_firstName;

@@ -306,7 +306,7 @@
     <string name="savecondata">Save &amp; Continue</string>
     <string name="closecontinue"><![CDATA[Close & Continue]]></string>
     <string name="version">ARN CAPTURE</string>b
-    <string name="versions">v2023.0.2</string>
+    <string name="versions">v2023.0.1</string>
     <string name="mar">Is this the first marriage of the woman?</string>
     <string name="tnbch">Total Number of biological children</string>
     <string name="nchdm">Number of biological children from this marriage or relationship</string>
@@ -610,6 +610,7 @@
     <string name="muac">Mid-Upper Arm circumference (MUAC)</string>
     <string name="filter">Filter</string>
     <string name="extid">Cluster</string>
+    <string name="other_specify">Other, Specify</string>
 
     //SocioDemo End
 

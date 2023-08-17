@@ -7,7 +7,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -18,6 +17,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -728,20 +728,20 @@ public class Pregnancyoutcome extends BaseObservable {
 
         if (view != null) {
 
-            if(not_del == null || not_del!=15){
+            if(not_del == null || not_del!=77){
                 setNot_del_other(null);
             }
 
-            if(ass_del == null || ass_del!=6){
+            if(ass_del == null || ass_del!=77){
                 setAss_del_other(null);
             }
 
-            if(how_del == null || how_del!=4){
+            if(how_del == null || how_del!=77){
                 setHow_del_other(null);
             }
 
             if(first_nb == null || first_nb!=2){
-                l_birth = AppConstants.NOSELECT;
+                l_birth = null;
             }
 
             if(rec_anc == null || rec_anc!=2){
@@ -752,7 +752,7 @@ public class Pregnancyoutcome extends BaseObservable {
                 setWhere_anc(null);
             }
 
-            if(where_anc == null || where_anc!=6){
+            if(where_anc == null || where_anc!=77){
                 setWhere_anc_Other(null);
             }
 

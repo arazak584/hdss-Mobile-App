@@ -641,6 +641,25 @@ public class ResidencyFragment extends Fragment {
                         return;
                     }
 
+                    try {
+                        if (!binding.editTextStartDate.getText().toString().trim().isEmpty() && !binding.img.imgDate.getText().toString().trim().isEmpty()) {
+                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                            String edateStr = "2018-01-01"; // Assuming edate is a String in the format "yyyy-MM-dd"
+                            Date edate = f.parse(edateStr);
+                            Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
+                            if (stdate.before(edate)) {
+                                binding.editTextStartDate.setError("Start Date Cannot Be Less than Earliest migration date");
+                                Toast.makeText(getActivity(), "Start Date Cannot Be Less than Earliest migration date", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                            // clear error if validation passes
+                            binding.editTextStartDate.setError(null);
+                        }
+                    } catch (ParseException e) {
+                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+
                     final Inmigration img = binding.getInmigration();
                     img.complete = 1;
                     inmigrationViewModel.add(img);
@@ -689,7 +708,7 @@ public class ResidencyFragment extends Fragment {
 //            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
             finalData.complete=1;
             viewModel.add(finalData);
-            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+            //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
 
             SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);

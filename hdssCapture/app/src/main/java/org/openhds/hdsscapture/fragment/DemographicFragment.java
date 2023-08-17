@@ -179,6 +179,17 @@ public class DemographicFragment extends Fragment {
         if (save) {
             Demographic finalData = binding.getDemographic();
 
+            boolean compyrs = false;
+            if (!binding.compYrs.getText().toString().trim().isEmpty()) {
+                int yrs = Integer.parseInt(binding.compYrs.getText().toString().trim());
+                if (yrs < 0 || yrs > 30) {
+                    compyrs = true;
+                    binding.compYrs.setError("Cannot be less than 1 or More than 30");
+                    Toast.makeText(getActivity(), "Cannot be less than 1 or More than 30", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.DEMOGRAPHICLAYOUT, validateOnComplete, false);
 
@@ -188,7 +199,7 @@ public class DemographicFragment extends Fragment {
             }
             finalData.complete=1;
             viewModel.add(finalData);
-            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+            //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
         }
         if (close) {

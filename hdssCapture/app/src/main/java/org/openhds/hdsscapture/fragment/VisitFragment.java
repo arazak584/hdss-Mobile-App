@@ -211,7 +211,7 @@ public class VisitFragment extends Fragment {
 
 
             viewModel.add(finalData);
-            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+            //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
         }
         if (save) {

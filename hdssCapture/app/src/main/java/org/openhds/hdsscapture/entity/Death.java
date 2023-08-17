@@ -18,6 +18,7 @@ import com.google.gson.annotations.Expose;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -66,6 +67,9 @@ public class Death extends BaseObservable implements Parcelable {
 
     @Expose
     public Integer deathPlace;
+
+    @Expose
+    public String deathPlace_oth;
 
     @Expose
     public String respondent;
@@ -282,6 +286,14 @@ public class Death extends BaseObservable implements Parcelable {
         this.fw_uuid = fw_uuid;
     }
 
+    public String getDeathPlace_oth() {
+        return deathPlace_oth;
+    }
+
+    public void setDeathPlace_oth(String deathPlace_oth) {
+        this.deathPlace_oth = deathPlace_oth;
+    }
+
     public Integer getAgeAtDeath() {
 
         if (dob == null && deathDate==null) {
@@ -317,6 +329,7 @@ public class Death extends BaseObservable implements Parcelable {
         this.visit_uuid = in.readString();
         this.deathCause = in.readInt();
         this.deathPlace = in.readInt();
+        this.deathPlace_oth = in.readString();
         this.respondent = in.readString();
         this.househead = in.readString();
         this.fw_uuid = in.readString();
@@ -356,6 +369,7 @@ public class Death extends BaseObservable implements Parcelable {
         dest.writeString(this.visit_uuid);
         dest.writeInt(this.deathCause);
         dest.writeInt(this.deathPlace);
+        dest.writeString(this.deathPlace_oth);
         dest.writeString(this.respondent);
         dest.writeString(this.househead);
         dest.writeString(this.fw_uuid);
@@ -394,7 +408,7 @@ public class Death extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }
-
+        patternSkipper(view);
     }
 
     //SPINNERS ENTITY FOR DEATH CAUSE
@@ -412,5 +426,17 @@ public class Death extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }
 
+    }
+
+    private void patternSkipper(View view) {
+
+        if (view != null) {
+
+            if(deathPlace == null || deathPlace!=77){
+                setDeathPlace_oth(null);
+            }
+
+            notifyPropertyChanged(BR._all);
+        }
     }
 }

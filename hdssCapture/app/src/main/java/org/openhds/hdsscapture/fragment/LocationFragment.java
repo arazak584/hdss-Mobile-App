@@ -396,7 +396,7 @@ public class LocationFragment extends Fragment {
 
             locations.complete = 1;
             locationViewModel.add(locations);
-            Toast.makeText(v.getContext(), "Saved Successfully", Toast.LENGTH_LONG).show();
+            //Toast.makeText(v.getContext(), "Saved Successfully", Toast.LENGTH_LONG).show();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                  BlankFragment.newInstance(individual, residency, locations, socialgroup)).commit();
 

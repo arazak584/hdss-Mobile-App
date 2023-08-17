@@ -119,6 +119,7 @@
             android:textSize="15sp" />
 
         <Button
+            android:visibility="gone"
             android:id="@+id/button_SyncSes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -126,6 +127,7 @@
             app:icon="@drawable/pull"/>
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/textView_SyncSes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

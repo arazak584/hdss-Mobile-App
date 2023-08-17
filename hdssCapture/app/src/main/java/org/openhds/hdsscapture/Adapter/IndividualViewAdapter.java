@@ -120,6 +120,10 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
             holder.permid.setTextColor(Color.BLUE);
             holder.firstname.setTextColor(Color.BLUE);
             holder.lastname.setTextColor(Color.BLUE);
+        }else {
+            holder.permid.setTextColor(Color.BLACK);
+            holder.firstname.setTextColor(Color.BLACK);
+            holder.lastname.setTextColor(Color.BLACK);
         }
 
 

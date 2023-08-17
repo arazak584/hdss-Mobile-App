@@ -87,6 +87,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         if (st != null) {
             holder.compno.setTextColor(Color.BLUE);
             holder.locationname.setTextColor(Color.BLUE);
+        } else {
+            holder.compno.setTextColor(Color.MAGENTA);
+            holder.locationname.setTextColor(Color.MAGENTA);
         }
 
         holder.linearLayout.setOnClickListener(v -> {
