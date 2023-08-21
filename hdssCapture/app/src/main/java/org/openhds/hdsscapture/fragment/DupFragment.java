@@ -224,6 +224,12 @@ public class DupFragment extends Fragment {
 
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
     private <T> void callable(Spinner spinner, T[] array) {
 
         final ArrayAdapter<T> adapter = new ArrayAdapter<T>(requireActivity(),

@@ -46,7 +46,7 @@ public interface SocialgroupDao {
     @Query("SELECT * FROM socialgroup where uuid=:id and groupName='UNK' ")
     Socialgroup find(String id);
 
-    @Query("SELECT * FROM socialgroup WHERE complete=1")
+    @Query("SELECT * FROM socialgroup WHERE complete=1 AND groupName!='UNK'")
     List<Socialgroup> retrieveToSync();
 
     @Query("SELECT * FROM socialgroup WHERE insertDate BETWEEN :startDate AND :endDate")

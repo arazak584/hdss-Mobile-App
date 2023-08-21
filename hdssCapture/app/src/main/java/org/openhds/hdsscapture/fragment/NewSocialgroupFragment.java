@@ -161,7 +161,7 @@ public class NewSocialgroupFragment extends Fragment {
         }
 
         if(socialgroup.complete==null){
-            binding.getSocialgroup().complete = 1;
+            binding.getSocialgroup().complete = 2;
         }
 
         if(residency.complete==null){

@@ -153,7 +153,7 @@ public class NewhouseholdFragment extends Fragment {
         }
 
         if(socialgroup.complete==null){
-            binding.getSocialgroup().complete = 1;
+            binding.getSocialgroup().complete = 2;
         }
 
         if(residency.complete==null){
@@ -401,6 +401,12 @@ public class NewhouseholdFragment extends Fragment {
                     Baselinehousehold.newInstance(individual,residency, locations, socialgroup)).commit();
         }
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     private <T> void callable(Spinner spinner, T[] array) {
