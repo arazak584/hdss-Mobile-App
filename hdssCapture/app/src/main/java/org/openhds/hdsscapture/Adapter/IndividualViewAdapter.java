@@ -1,7 +1,5 @@
 package org.openhds.hdsscapture.Adapter;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +17,6 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 import org.openhds.hdsscapture.fragment.IndividualFragment;
 
@@ -36,14 +33,10 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
     private Socialgroup socialgroup;
     private Residency residency;
     private List<Individual> individualList;
-    private CaseItem caseItem;
-    private ProgressDialog progress;
-    private Context context;
 
-    public IndividualViewAdapter(HouseMembersFragment activity, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public IndividualViewAdapter(HouseMembersFragment activity, Locations locations, Socialgroup socialgroup) {
         this.activity = activity;
         this.locations = locations;
-        this.residency = residency;
         this.socialgroup = socialgroup;
         individualList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
@@ -130,7 +123,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
 
         holder.linearLayout.setOnClickListener(v -> {
             activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    IndividualFragment.newInstance( individual, residency, locations, socialgroup,caseItem )).commit();
+                    IndividualFragment.newInstance( individual,residency, locations, socialgroup )).commit();
         });
     }
 

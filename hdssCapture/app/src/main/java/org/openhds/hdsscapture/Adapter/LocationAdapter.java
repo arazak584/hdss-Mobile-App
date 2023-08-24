@@ -32,9 +32,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     LayoutInflater inflater;
     private List<Locations> locationsList;
     private Hierarchy level6Data;
-    private Socialgroup socialgroup;
-    private Residency residency;
-    private Individual individual;
 
     public LocationAdapter(ClusterFragment activity, Hierarchy level6Data) {
         this.activity = activity;
@@ -94,7 +91,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
         holder.linearLayout.setOnClickListener(v -> {
             activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    LocationFragment.newInstance(level6Data, locations, socialgroup, residency, individual)).commit();
+                    LocationFragment.newInstance(level6Data, locations)).commit();
         });
 
     }

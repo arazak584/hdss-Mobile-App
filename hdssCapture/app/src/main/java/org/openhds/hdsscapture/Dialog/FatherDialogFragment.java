@@ -18,12 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.openhds.hdsscapture.Adapter.FatherAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
-import org.openhds.hdsscapture.databinding.FragmentFatherDialogBinding;
-import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,18 +29,11 @@ import org.openhds.hdsscapture.entity.subentity.CaseItem;
 public class FatherDialogFragment extends DialogFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
-    private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String SOCIAL_ID = "SOCIAL_ID";
-    private final String TAG = "INDIVIDUAL.TAG";
 
     private Locations locations;
-    private Residency residency;
     private Socialgroup socialgroup;
-    private Individual individual;
-    private FragmentFatherDialogBinding binding;
-    private CaseItem caseItem;
 
     public FatherDialogFragment() {
         // Required empty public constructor
@@ -55,19 +44,15 @@ public class FatherDialogFragment extends DialogFragment {
      * this fragment using the provided parameters.
      *
      * @param locations Parameter 1.
-     * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
-     * @param individual Parameter 4.
      * @return A new instance of fragment FatherDialogFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static FatherDialogFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public static FatherDialogFragment newInstance(Locations locations, Socialgroup socialgroup) {
         FatherDialogFragment fragment = new FatherDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
-        args.putParcelable(INDIVIDUAL_ID, individual);
         fragment.setArguments(args);
         return fragment;
     }
@@ -77,9 +62,7 @@ public class FatherDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
-            individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
     }
 
@@ -108,7 +91,7 @@ public class FatherDialogFragment extends DialogFragment {
 
         //Load Father Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_father);
-        final FatherAdapter adapter = new FatherAdapter(this, residency, locations, socialgroup,caseItem );
+        final FatherAdapter adapter = new FatherAdapter(this, locations);
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
         //recyclerView.setHasFixedSize(true);

@@ -37,7 +37,6 @@ public class HouseholdDialogFragment extends DialogFragment {
     private final String TAG = "INDIVIDUAL.TAG";
 
     private Locations locations;
-    private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentHouseholdDialogBinding binding;
@@ -53,17 +52,15 @@ public class HouseholdDialogFragment extends DialogFragment {
      * this fragment using the provided parameters.
      *
      * @param locations Parameter 1.
-     * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
      * @return A new instance of fragment HouseholdDialogFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HouseholdDialogFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public static HouseholdDialogFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
         HouseholdDialogFragment fragment = new HouseholdDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
         fragment.setArguments(args);
@@ -75,7 +72,6 @@ public class HouseholdDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
@@ -107,7 +103,7 @@ public class HouseholdDialogFragment extends DialogFragment {
 
         //Load Socialgroup Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_house);
-        final SocialgroupAdapter adapter = new SocialgroupAdapter(this,residency, locations, individual);
+        final SocialgroupAdapter adapter = new SocialgroupAdapter(this,locations, individual);
         final SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(requireActivity()).get(SocialgroupViewModel.class);
 
         //recyclerView.setHasFixedSize(true);

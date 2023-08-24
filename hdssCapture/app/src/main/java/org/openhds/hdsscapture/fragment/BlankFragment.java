@@ -26,12 +26,8 @@ import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.databinding.FragmentBlankBinding;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.Visit;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
-import org.openhds.hdsscapture.entity.subqueries.EventForm;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,22 +37,13 @@ import org.openhds.hdsscapture.entity.subqueries.EventForm;
 public class BlankFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_CLUSTER_IDS = "ARG_CLUSTER_IDS";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String SOCIAL_ID = "SOCIAL_ID";
-    private static final String RESIDENCY_ID = "RESIDENCY_ID";
-    private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private final String TAG = "SOCIAL.TAG";
 
 
     private Locations locations;
     private Socialgroup socialgroup;
-    private Residency residency;
-    private Individual individual;
-    private Pregnancy pregnancy;
-    private CaseItem caseItem;
-    private EventForm eventForm;
-    private Visit visit;
     private FragmentBlankBinding binding;
     private ProgressDialog progress;
     private Button buttonHousehold;
@@ -71,20 +58,16 @@ public class BlankFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      //* @param cluster_id  Parameter 1.
-     * @param individual Parameter 5.
-     * @param residency Parameter 4.
      * @param locations    Parameter 2.
      * @param socialgroup Parameter 3.
      * @return A new instance of fragment BlankFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BlankFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public static BlankFragment newInstance(Locations locations, Socialgroup socialgroup) {
         BlankFragment fragment = new BlankFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(SOCIAL_ID, socialgroup);
-        args.putParcelable(RESIDENCY_ID, residency);
-        args.putParcelable(INDIVIDUAL_ID, individual);
         fragment.setArguments(args);
         return fragment;
     }
@@ -94,8 +77,6 @@ public class BlankFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             this.socialgroup = getArguments().getParcelable(SOCIAL_ID);
-            this.residency = getArguments().getParcelable(RESIDENCY_ID);
-            this.individual = getArguments().getParcelable(INDIVIDUAL_ID);
             this.locations = getArguments().getParcelable(LOC_LOCATION_IDS);
         }
     }
@@ -141,7 +122,7 @@ public class BlankFragment extends Fragment {
                 }, 500);
 
                 // Show the dialog fragment
-                PregnancyDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                PregnancyDialogFragment.newInstance(locations,socialgroup)
                         .show(getChildFragmentManager(), "PregnancyDialogFragment");
 
             }
@@ -149,7 +130,7 @@ public class BlankFragment extends Fragment {
 
 
         final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_householdid);
-        final HouseholdAdapter adapter = new HouseholdAdapter(this, residency, locations, individual, visit);
+        final HouseholdAdapter adapter = new HouseholdAdapter(this, locations);
         final SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(requireActivity()).get(SocialgroupViewModel.class);
 
         //recyclerView.setHasFixedSize(true);

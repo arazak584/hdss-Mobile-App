@@ -18,7 +18,6 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 
 import java.util.ArrayList;
@@ -34,7 +33,6 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.ViewHolder>{
     private List<Socialgroup> socialgroupList;
     private Residency residency;
     private Individual individual;
-    private CaseItem caseItem;
     private EventForm eventForm;
     private Visit visit;
 

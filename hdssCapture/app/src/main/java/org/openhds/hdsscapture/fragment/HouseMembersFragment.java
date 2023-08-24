@@ -2,18 +2,13 @@ package org.openhds.hdsscapture.fragment;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,19 +21,15 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentHouseMembersBinding;
-import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -60,14 +51,11 @@ public class HouseMembersFragment extends Fragment {
 
     private Locations locations;
     private Socialgroup socialgroup;
-    private Residency residency;
-    private Individual individual;
-    private Pregnancy pregnancy;
-    private CaseItem caseItem;
-    private EventForm eventForm;
     private FragmentHouseMembersBinding binding;
     private ProgressDialog progress;
     private ProgressDialog progres;
+    private Residency residency;
+    private Individual individual;
 
 
     public HouseMembersFragment() {
@@ -79,21 +67,17 @@ public class HouseMembersFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      //* @param cluster_id  Parameter 1.
-     * @param individual Parameter 5.
-     * @param residency Parameter 4.
      * @param locations    Parameter 2.
      * @param socialgroup Parameter 3.
      *
      * @return A new instance of fragment HouseMembersFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HouseMembersFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public static HouseMembersFragment newInstance( Locations locations, Socialgroup socialgroup) {
         HouseMembersFragment fragment = new HouseMembersFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(SOCIAL_ID, socialgroup);
-        args.putParcelable(RESIDENCY_ID, residency);
-        args.putParcelable(INDIVIDUAL_ID, individual);
         fragment.setArguments(args);
         return fragment;
     }
@@ -105,8 +89,6 @@ public class HouseMembersFragment extends Fragment {
         if (getArguments() != null) {
             //this.cluster_id = getArguments().getParcelable(ARG_CLUSTER_IDS);
             this.socialgroup = getArguments().getParcelable(SOCIAL_ID);
-            this.residency = getArguments().getParcelable(RESIDENCY_ID);
-            this.individual = getArguments().getParcelable(INDIVIDUAL_ID);
             this.locations = getArguments().getParcelable(LOC_LOCATION_IDS);
         }
     }
@@ -128,7 +110,7 @@ public class HouseMembersFragment extends Fragment {
         name.setText(socialgroup.getGroupName());
 
         final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_household);
-        final IndividualViewAdapter adapter = new IndividualViewAdapter(this, residency, locations, socialgroup );
+        final IndividualViewAdapter adapter = new IndividualViewAdapter(this, locations, socialgroup );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
         //recyclerView.setHasFixedSize(true);
@@ -218,7 +200,7 @@ public class HouseMembersFragment extends Fragment {
         addback.setOnClickListener(v -> {
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    BlankFragment.newInstance(individual,residency,locations, socialgroup)).commit();
+                    BlankFragment.newInstance(locations, socialgroup)).commit();
         });
 
 
@@ -228,7 +210,7 @@ public class HouseMembersFragment extends Fragment {
             final Individual individual = new Individual();
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    IndividualFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
+                    IndividualFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         });
 
 

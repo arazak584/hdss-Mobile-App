@@ -37,9 +37,6 @@ public class ClusterFragment extends Fragment {
 
     private static final String ARG_CLUSTER_ID = "ARG_CLUSTER_ID";
     private Hierarchy level6Data;
-    private Socialgroup socialgroup;
-    private Residency residency;
-    private Individual individual;
 
 
     public ClusterFragment() {
@@ -128,7 +125,7 @@ public class ClusterFragment extends Fragment {
             final Locations locations = new Locations();
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    LocationFragment.newInstance(level6Data, locations, socialgroup, residency,individual)).commit();
+                    LocationFragment.newInstance(level6Data, locations)).commit();
         });
 
         return view;

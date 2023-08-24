@@ -28,7 +28,6 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
@@ -36,7 +35,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -60,7 +58,6 @@ public class DupFragment extends Fragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentDupBinding binding;
-    private CaseItem caseItem;
     private EventForm eventForm;
     private ProgressDialog progressDialog;
 
@@ -100,7 +97,6 @@ public class DupFragment extends Fragment {
             residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            caseItem = getArguments().getParcelable(CASE_ID);
             eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
@@ -219,7 +215,7 @@ public class DupFragment extends Fragment {
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
+                    EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }
 
     }

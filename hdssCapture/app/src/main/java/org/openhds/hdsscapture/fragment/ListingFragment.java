@@ -47,18 +47,11 @@ import java.util.concurrent.ExecutionException;
 public class ListingFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_CLUSTER_IDS = "ARG_CLUSTER_IDS";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
-    private static final String LISTING_ID = "LISTING_ID";
 
     private Locations locations;
-    private Listing listing;
-    private FragmentListingBinding binding;
-    private Individual individual;
     private Socialgroup socialgroup;
-    private Residency residency;
-    private Hierarchy hierarchy;
-    private ProgressDialog progressDialog;
+    private FragmentListingBinding binding;
 
     public ListingFragment() {
         // Required empty public constructor
@@ -93,7 +86,6 @@ public class ListingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentListingBinding.inflate(inflater, container, false);
-        binding.setListing(listing);
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_change_cluster);
 
@@ -102,7 +94,7 @@ public class ListingFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Show the dialog fragment
-                ClusterDialogFragment.newInstance(hierarchy, locations)
+                ClusterDialogFragment.newInstance(locations)
                         .show(getChildFragmentManager(), "ClusterDialogFragment");
             }
         });
@@ -207,7 +199,7 @@ public class ListingFragment extends Fragment {
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    BlankFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    BlankFragment.newInstance(locations, socialgroup)).commit();
         }
     }
 

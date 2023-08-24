@@ -39,7 +39,6 @@ import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
@@ -77,7 +76,6 @@ public class ResidencyFragment extends Fragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentMembershipBinding binding;
-    private CaseItem caseItem;
     private EventForm eventForm;
     private Visit visit;
     private ProgressDialog progressDialog;
@@ -95,19 +93,17 @@ public class ResidencyFragment extends Fragment {
      * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
-     * @param caseItem parameter 5.
      * @param eventForm Parameter 7.
      * @return A new instance of fragment ResidencyFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ResidencyFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup,CaseItem caseItem, EventForm eventForm) {
+    public static ResidencyFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup,EventForm eventForm) {
         ResidencyFragment fragment = new ResidencyFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
-        args.putParcelable(CASE_ID, caseItem);
         args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
@@ -122,7 +118,6 @@ public class ResidencyFragment extends Fragment {
             residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            caseItem = getArguments().getParcelable(CASE_ID);
             eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
@@ -162,7 +157,7 @@ public class ResidencyFragment extends Fragment {
                 }, 500);
 
                 // Show the dialog fragment
-                HouseholdDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                HouseholdDialogFragment.newInstance(individual, locations,socialgroup)
                         .show(getChildFragmentManager(), "HouseholdDialogFragment");
             }
         });
@@ -818,14 +813,14 @@ public class ResidencyFragment extends Fragment {
         }
         if (save && binding.getResidency().endType==1) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
+                    EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }else if (save && binding.getResidency().endType==2 || binding.getResidency().endType==3){
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseMembersFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    HouseMembersFragment.newInstance(locations, socialgroup)).commit();
         }
         else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    IndividualFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
+                    IndividualFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }
     }
 

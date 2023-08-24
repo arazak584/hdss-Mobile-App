@@ -17,7 +17,6 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +30,6 @@ public class ChildAdapter extends RecyclerView.Adapter<ChildAdapter.ViewHolder> 
     private Socialgroup socialgroup;
     private Residency residency;
     private List<Individual> individualList;
-    private CaseItem caseItem;
-
     boolean isFirstField = true;
 
     public interface ChildSelectionListener {

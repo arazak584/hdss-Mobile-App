@@ -39,7 +39,6 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.SimpleDateFormat;
@@ -59,9 +58,6 @@ public class LocationFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_CLUSTER_IDS = "ARG_CLUSTER_IDS";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
-    private static final String SOCIAL_ID = "SOCIAL_ID";
-    private static final String RESIDENCY_ID = "RESIDENCY_ID";
-    private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private final String TAG = "LOCATION.TAG";
 
     private Hierarchy cluster_id;
@@ -70,8 +66,6 @@ public class LocationFragment extends Fragment {
     private Residency residency;
     private Individual individual;
     private FragmentLocationBinding binding;
-    private CaseItem caseItem;
-
     private LocationManager locationManager;
     private Location currentLocation;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
@@ -88,21 +82,15 @@ public class LocationFragment extends Fragment {
      *
      * @param cluster_id  Parameter 1.
      * @param locations    Parameter 2.
-     * @param socialgroup Parameter 3.
-     * @param residency Parameter 4.
-     * @param individual Parameter 5.
      * @return A new instance of fragment LocationFragment.
      */
 
-    public static LocationFragment newInstance(Hierarchy cluster_id, Locations locations, Socialgroup socialgroup, Residency residency, Individual individual) {
+    public static LocationFragment newInstance(Hierarchy cluster_id, Locations locations) {
 
         LocationFragment fragment = new LocationFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_CLUSTER_IDS, cluster_id);
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(SOCIAL_ID, socialgroup);
-        args.putParcelable(RESIDENCY_ID, residency);
-        args.putParcelable(INDIVIDUAL_ID, individual);
         fragment.setArguments(args);
         return fragment;
     }
@@ -116,9 +104,6 @@ public class LocationFragment extends Fragment {
 
             cluster_id = getArguments().getParcelable(ARG_CLUSTER_IDS);
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            socialgroup = getArguments().getParcelable(SOCIAL_ID);
-            residency = getArguments().getParcelable(RESIDENCY_ID);
-            individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
     }
 
@@ -204,9 +189,6 @@ public class LocationFragment extends Fragment {
 
         final Intent intent = getActivity().getIntent();
         final Hierarchy level6Data = intent.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
-
-        final Intent j = getActivity().getIntent();
-        final Hierarchy level5Data = j.getParcelableExtra(HierarchyActivity.LEVEL5_DATA);
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
@@ -398,7 +380,7 @@ public class LocationFragment extends Fragment {
             locationViewModel.add(locations);
             //Toast.makeText(v.getContext(), "Saved Successfully", Toast.LENGTH_LONG).show();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                 BlankFragment.newInstance(individual, residency, locations, socialgroup)).commit();
+                 BlankFragment.newInstance(locations, socialgroup)).commit();
 
 
         });

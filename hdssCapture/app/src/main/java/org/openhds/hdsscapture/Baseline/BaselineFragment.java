@@ -141,7 +141,7 @@ public class BaselineFragment extends Fragment {
                 }, 500);
 
                 // Show the dialog fragment
-                MotherDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                MotherDialogFragment.newInstance(locations,socialgroup)
                         .show(getChildFragmentManager(), "MotherDialogFragment");
             }
         });
@@ -167,7 +167,7 @@ public class BaselineFragment extends Fragment {
                 }, 500);
 
                 // Show the dialog fragment
-                FatherDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                FatherDialogFragment.newInstance(locations,socialgroup)
                         .show(getChildFragmentManager(), "FatherDialogFragment");
             }
         });

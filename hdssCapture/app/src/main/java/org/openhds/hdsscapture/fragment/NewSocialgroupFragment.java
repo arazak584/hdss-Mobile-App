@@ -403,10 +403,10 @@ public class NewSocialgroupFragment extends Fragment {
         }
         if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseholdFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    HouseholdFragment.newInstance(locations, socialgroup)).commit();
         } else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    BlankFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    BlankFragment.newInstance(locations, socialgroup)).commit();
         }
 
     }

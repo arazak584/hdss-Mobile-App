@@ -10,7 +10,6 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 
 import java.util.Date;
@@ -43,7 +42,7 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual where extId =:id ")
     Individual retrieve(String id);
 
-    @Query("SELECT * FROM individual WHERE complete=1 order by dob")
+    @Query("SELECT a.* FROM individual as a inner join residency as b on a.uuid=b.individual_uuid WHERE a.complete=1 order by dob")
     List<Individual> retrieveToSync();
 
     @Query("SELECT * FROM individual")
@@ -109,10 +108,6 @@ public interface IndividualDao {
             "date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) AND " +
             "(firstName LIKE :id OR lastName LIKE :id OR c.compno LIKE :id OR ghanacard LIKE :id)")
     List<Individual> retrieveByFatherSearch(String id);
-
-    @Query("SELECT uuid,extId,dob,age,gender,firstName,lastName FROM individual " +
-            " WHERE uuid=:id")
-    LiveData<List<CaseItem>> retrieveByIndividual(String id);
 
     @Query("SELECT * FROM individual where uuid=:id")
     Individual find(String id);

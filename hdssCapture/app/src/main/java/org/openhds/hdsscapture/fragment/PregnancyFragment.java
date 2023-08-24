@@ -26,7 +26,6 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
@@ -64,7 +63,6 @@ public class PregnancyFragment extends Fragment {
     private Individual individual;
     private FragmentPregnancyBinding binding;
     private EventForm eventForm;
-    private CaseItem caseItem;
 
 
     public PregnancyFragment() {
@@ -80,18 +78,16 @@ public class PregnancyFragment extends Fragment {
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
      * @param eventForm Parameter 7.
-     * @param caseItem Parameter 6.
      * @return A new instance of fragment PregnancyFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PregnancyFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem, EventForm eventForm) {
+    public static PregnancyFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup,EventForm eventForm) {
         PregnancyFragment fragment = new PregnancyFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
-        args.putParcelable(CASE_ID, caseItem);
         args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
@@ -105,7 +101,6 @@ public class PregnancyFragment extends Fragment {
             residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            caseItem = getArguments().getParcelable(CASE_ID);
             eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
@@ -460,7 +455,7 @@ public class PregnancyFragment extends Fragment {
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
+                    EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }
     }
 

@@ -19,7 +19,6 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,6 @@ public class IndividualAdaptor extends RecyclerView.Adapter<IndividualAdaptor.Vi
     private Socialgroup socialgroup;
     private Residency residency;
     private List<Individual> individualList;
-    private CaseItem caseItem;
     private ProgressDialog progress;
     private Context context;
 

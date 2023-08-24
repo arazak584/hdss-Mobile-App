@@ -26,7 +26,6 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
@@ -61,7 +60,6 @@ public class VaccinationFragment extends Fragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentVaccinationBinding binding;
-    private CaseItem caseItem;
     private EventForm eventForm;
     private Vaccination vaccination;
 
@@ -1353,7 +1351,7 @@ public class VaccinationFragment extends Fragment {
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
+                    EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }
     }
 

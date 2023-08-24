@@ -25,15 +25,12 @@ import org.openhds.hdsscapture.Utilities.Calculators;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
-import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.databinding.FragmentIndividualBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
-import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
@@ -70,9 +67,8 @@ public class IndividualFragment extends Fragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentIndividualBinding binding;;
-    private CaseItem caseItem;
-    private EventForm eventForm;
     private ProgressDialog progressDialog;
+    private EventForm eventForm;
 
 
     public IndividualFragment() {
@@ -89,11 +85,10 @@ public class IndividualFragment extends Fragment {
      * @param residency Parameter 2.
      * @param locations Parameter 1.
      * @param socialgroup Parameter 3.
-     * @param caseItem Parameter 5.
      * @return A new instance of fragment IndividualFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static IndividualFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem) {
+    public static IndividualFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
         IndividualFragment fragment = new IndividualFragment();
         Bundle args = new Bundle();
 
@@ -242,7 +237,7 @@ public class IndividualFragment extends Fragment {
                 }, 500);
 
                 // Show the dialog fragment
-                MotherDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                MotherDialogFragment.newInstance(locations,socialgroup)
                         .show(getChildFragmentManager(), "MotherDialogFragment");
             }
         });
@@ -268,7 +263,7 @@ public class IndividualFragment extends Fragment {
                 }, 500);
 
                 // Show the dialog fragment
-                FatherDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                FatherDialogFragment.newInstance(locations,socialgroup)
                         .show(getChildFragmentManager(), "FatherDialogFragment");
             }
         });
@@ -461,10 +456,10 @@ public class IndividualFragment extends Fragment {
             }
         if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    ResidencyFragment.newInstance(individual,residency, locations, socialgroup,caseItem,eventForm)).commit();
+                    ResidencyFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
         }else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseMembersFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    HouseMembersFragment.newInstance(locations, socialgroup)).commit();
         }
 
     }

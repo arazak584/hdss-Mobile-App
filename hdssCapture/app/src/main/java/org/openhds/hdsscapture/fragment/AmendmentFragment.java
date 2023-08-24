@@ -28,7 +28,6 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
@@ -65,7 +64,6 @@ public class AmendmentFragment extends Fragment {
     private Individual individual;
     private FragmentAmendmentBinding binding;
     private EventForm eventForm;
-    private CaseItem caseItem;
 
     public AmendmentFragment() {
         // Required empty public constructor
@@ -330,7 +328,7 @@ public class AmendmentFragment extends Fragment {
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
+                    EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }
     }
 

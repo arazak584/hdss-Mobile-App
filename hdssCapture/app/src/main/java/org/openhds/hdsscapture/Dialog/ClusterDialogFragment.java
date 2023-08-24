@@ -30,12 +30,8 @@ import org.openhds.hdsscapture.entity.Locations;
 public class ClusterDialogFragment extends DialogFragment {
 
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
-    private static final String HIERARCHY_ID = "HIERARCHY_ID";
 
-    private Hierarchy hierarchy;
     private Locations locations;
-    private FragmentClusterDialogBinding binding;
-    private AdapterView.OnItemClickListener listener;
 
     public ClusterDialogFragment() {
         // Required empty public constructor
@@ -46,15 +42,13 @@ public class ClusterDialogFragment extends DialogFragment {
      * this fragment using the provided parameters.
      *
      * @param locations Parameter 1.
-     * @param hierarchy Parameter 2.
      * @return A new instance of fragment ClusterDialogFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ClusterDialogFragment newInstance(Hierarchy hierarchy, Locations locations) {
+    public static ClusterDialogFragment newInstance(Locations locations) {
         ClusterDialogFragment fragment = new ClusterDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(HIERARCHY_ID, hierarchy);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,7 +58,6 @@ public class ClusterDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            hierarchy = getArguments().getParcelable(HIERARCHY_ID);
         }
     }
 

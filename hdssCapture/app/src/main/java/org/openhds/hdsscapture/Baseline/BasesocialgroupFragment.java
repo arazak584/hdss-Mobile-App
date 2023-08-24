@@ -24,7 +24,6 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
@@ -56,7 +55,6 @@ public class BasesocialgroupFragment extends Fragment {
     private Residency residency;
     private Individual individual;
     private FragmentBasesocialgroupBinding binding;
-    private CaseItem caseItem;
     private EventForm eventForm;
 
     public BasesocialgroupFragment() {
@@ -93,7 +91,6 @@ public class BasesocialgroupFragment extends Fragment {
             residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            caseItem = getArguments().getParcelable(CASE_ID);
             eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }

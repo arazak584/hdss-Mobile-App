@@ -25,7 +25,6 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
@@ -57,7 +56,6 @@ public class DemographicFragment extends Fragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentDemographicBinding binding;
-    private CaseItem caseItem;
     private EventForm eventForm;
     private Demographic demographic;
 
@@ -73,19 +71,17 @@ public class DemographicFragment extends Fragment {
      * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
-     * @param caseItem Parameter 6.
      * @param eventForm Parameter 7.
      * @return A new instance of fragment DemographicFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DemographicFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem, EventForm eventForm) {
+    public static DemographicFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup,EventForm eventForm) {
         DemographicFragment fragment = new DemographicFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
-        args.putParcelable(CASE_ID, caseItem);
         args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
@@ -100,7 +96,6 @@ public class DemographicFragment extends Fragment {
             residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            caseItem = getArguments().getParcelable(CASE_ID);
             eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
@@ -204,7 +199,7 @@ public class DemographicFragment extends Fragment {
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup,caseItem)).commit();
+                    EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }
     }
 

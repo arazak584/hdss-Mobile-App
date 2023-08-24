@@ -23,7 +23,6 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,7 +43,6 @@ public class DupDialogFragment extends DialogFragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentDupDialogBinding binding;
-    private CaseItem caseItem;
 
     public DupDialogFragment() {
         // Required empty public constructor
@@ -108,7 +106,7 @@ public class DupDialogFragment extends DialogFragment {
 
         //Load Father Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_duplicate);
-        final DupAdapter adapter = new DupAdapter(this, residency, locations, socialgroup,caseItem );
+        final DupAdapter adapter = new DupAdapter(this, residency, locations, socialgroup );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
 

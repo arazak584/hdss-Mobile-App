@@ -31,13 +31,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.Visit;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.fragment.AmendmentFragment;
 import org.openhds.hdsscapture.fragment.DemographicFragment;
@@ -62,19 +58,15 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
     private Residency residency;
     private Individual individual;
     private final List<EventForm> eventForms;
-    private CaseItem caseItem;
-    private Visit visit;
     private final EventsFragment activity;
-    private Inmigration inmigration;
-    private Outmigration outmigration;
 
-    public EventFormAdapter(Locations locations, Socialgroup socialgroup, Residency residency, Individual individual, CaseItem caseItem, List<EventForm> eventForms, EventsFragment activity) {
+
+    public EventFormAdapter(Locations locations, Socialgroup socialgroup, Residency residency, Individual individual,List<EventForm> eventForms, EventsFragment activity) {
         this.locations = locations;
         this.socialgroup = socialgroup;
         this.residency = residency;
         this.individual = individual;
         this.eventForms = eventForms;
-        this.caseItem = caseItem;
         this.activity = activity;
 
     }
@@ -118,15 +110,15 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
         holder.textView_event.setText(eventForm.event_name);
         holder.textView_form.setText(eventForm.form_name);
         holder.textView_status.setText(status);
-        holder.linearLayout.setOnClickListener(view -> formFactory(individual, residency, locations, socialgroup,caseItem, eventForm));
+        holder.linearLayout.setOnClickListener(view -> formFactory(individual, residency, locations, socialgroup, eventForm));
 
     }
 
-    private void formFactory(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem, EventForm eventForm) {
+    private void formFactory(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, EventForm eventForm) {
         switch (eventForm.event_name) {
             case EVENT_HDSS1: {
                 activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        ResidencyFragment.newInstance(individual,residency, locations,socialgroup,caseItem,eventForm)).commit();
+                        ResidencyFragment.newInstance(individual,residency, locations,socialgroup,eventForm)).commit();
 
                 break;
             }
@@ -134,7 +126,7 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
             case EVENT_HDSS3: {
 
                 activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        SocialgroupFragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
+                        SocialgroupFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
 
                 break;
             }
@@ -142,7 +134,7 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
             case EVENT_HDSS4: {
 
                 activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        DemographicFragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
+                        DemographicFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
 
                 break;
             }
@@ -150,7 +142,7 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
             case EVENT_HDSS7: {
 
                 activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        RelationshipFragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
+                        RelationshipFragment.newInstance(individual,residency, locations, socialgroup,eventForm)).commit();
 
                 break;
             }
@@ -159,7 +151,7 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
             case EVENT_HDSS10: {
 
                 activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        PregnancyFragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
+                        PregnancyFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
 
                 break;
             }
@@ -167,7 +159,7 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
             case EVENT_HDSS13: {
 
                 activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        PregnancyExtraFragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
+                        PregnancyExtraFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
 
                 break;
             }
@@ -175,7 +167,7 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
             case EVENT_SOCIO: {
 
                 activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        SocioFragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
+                        SocioFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
 
                 break;
             }
@@ -183,7 +175,7 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
             case EVENT_HDSS11: {
 
                 activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        PregnancyoutcomeFragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
+                        PregnancyoutcomeFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
 
                 break;
             }
@@ -191,7 +183,7 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
             case EVENT_HDSS12: {
 
                 activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        Pregnancyoutcome1Fragment.newInstance(individual,residency, locations, socialgroup,caseItem, eventForm)).commit();
+                        Pregnancyoutcome1Fragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
 
                 break;
             }

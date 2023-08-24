@@ -42,10 +42,9 @@ public class SocialgroupAdapter extends RecyclerView.Adapter<SocialgroupAdapter.
         this.listener = listener;
     }
 
-    public SocialgroupAdapter(HouseholdDialogFragment activity, Residency residency, Locations locations, Individual individual) {
+    public SocialgroupAdapter(HouseholdDialogFragment activity, Locations locations, Individual individual) {
         this.activity = activity;
         this.locations = locations;
-        this.residency = residency;
         this.individual = individual;
         socialgroupList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());

@@ -28,7 +28,6 @@ import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 
 /**
@@ -50,7 +49,6 @@ public class Baselinehousehold extends Fragment {
     private Residency residency;
     private Individual individual;
     private Pregnancy pregnancy;
-    private CaseItem caseItem;
     private EventForm eventForm;
     private Visit visit;
     private FragmentBaselinehouseholdBinding binding;

@@ -1,18 +1,15 @@
 package org.openhds.hdsscapture.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.PregnancyDialogFragment;
 import org.openhds.hdsscapture.R;
@@ -21,14 +18,11 @@ import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.databinding.FragmentHouseholdBinding;
-import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
-import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.util.ArrayList;
@@ -49,8 +43,6 @@ public class HouseholdFragment extends Fragment {
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
-    private static final String CASE_ID = "CASE_ID";
-    private static final String EVENT_ID = "EVENT_ID";
     private final String TAG = "LOCATION.TAG";
 
     //private Cluster cluster_id;
@@ -59,9 +51,6 @@ public class HouseholdFragment extends Fragment {
     private Residency residency;
     private Individual individual;
     private FragmentHouseholdBinding binding;
-    private CaseItem caseItem;
-    private EventForm eventForm;
-    private Pregnancy pregnancy;
 
     public HouseholdFragment() {
         // Required empty public constructor
@@ -73,20 +62,16 @@ public class HouseholdFragment extends Fragment {
      *
      //* @param cluster_id  Parameter 1.
      * @param locations Parameter 1.
-     * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
-     * @param individual Parameter 4.
      * @return A new instance of fragment HouseholdFragment.
      */
 
-    public static HouseholdFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public static HouseholdFragment newInstance(Locations locations, Socialgroup socialgroup) {
 
         HouseholdFragment fragment = new HouseholdFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
-        args.putParcelable(INDIVIDUAL_ID, individual);
         fragment.setArguments(args);
         return fragment;
     }
@@ -97,11 +82,8 @@ public class HouseholdFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
-            individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            caseItem = getArguments().getParcelable(CASE_ID);
-            eventForm = getArguments().getParcelable(EVENT_ID);
+
         }
     }
 
@@ -112,10 +94,6 @@ public class HouseholdFragment extends Fragment {
         binding = FragmentHouseholdBinding.inflate(inflater, container, false);
         //View view = inflater.inflate(R.layout.fragment_house_visit, container, false);
         binding.setSocialgroup(socialgroup);
-
-
-        final Intent i = getActivity().getIntent();
-        final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
         SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             Socialgroup data = binding.getSocialgroup();
@@ -179,16 +157,6 @@ public class HouseholdFragment extends Fragment {
         if (save) {
             Socialgroup finalData = binding.getSocialgroup();
 
-
-            final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.HOUSEHOLDLAYOUT, validateOnComplete, false);
-
-            if (hasErrors) {
-                Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
-                return;
-            }
-
-
             SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             viewModel.add(finalData);
         }
@@ -197,12 +165,12 @@ public class HouseholdFragment extends Fragment {
                     VisitFragment.newInstance(individual, residency, locations, socialgroup)).commit();
         }else{
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    BlankFragment.newInstance(individual, residency, locations, socialgroup)).commit();
+                    BlankFragment.newInstance(locations, socialgroup)).commit();
         }
     }
 
     private void showPregnancyDialog() {
-        PregnancyDialogFragment.newInstance(individual, residency, locations, socialgroup)
+        PregnancyDialogFragment.newInstance(locations, socialgroup)
                 .show(getChildFragmentManager(), "PregnancyDialogFragment");
     }
 

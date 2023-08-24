@@ -13,13 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
-import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.Visit;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
-import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.fragment.BlankFragment;
 import org.openhds.hdsscapture.fragment.HouseholdFragment;
 
@@ -33,19 +28,11 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
     LayoutInflater inflater;
     private Locations locations;
     private List<Socialgroup> socialgroupList;
-    private Residency residency;
-    private Individual individual;
-    private CaseItem caseItem;
-    private EventForm eventForm;
-    private Visit visit;
 
 
-    public HouseholdAdapter(BlankFragment activity, Residency residency, Locations locations, Individual individual, Visit visit) {
+    public HouseholdAdapter(BlankFragment activity, Locations locations) {
         this.activity = activity;
         this.locations = locations;
-        this.residency = residency;
-        this.individual = individual;
-        this.visit = visit;
         socialgroupList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -93,7 +80,7 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
 
         holder.linearLayout.setOnClickListener(v -> {
             activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                   HouseholdFragment.newInstance(individual, residency, locations, socialgroup)).commit();
+                   HouseholdFragment.newInstance(locations, socialgroup)).commit();
         });
     }
 

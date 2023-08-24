@@ -7,9 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.IndividualRepository;
-import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 
 import java.util.Date;
@@ -79,10 +77,6 @@ public class IndividualViewModel extends AndroidViewModel {
 
     public List<Individual> retrieveHOH(String id) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveHOH(id);
-    }
-
-    public LiveData<List<CaseItem>> retrieveByIndividual(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveByIndividual(id);
     }
 
     public Individual find(String id) throws ExecutionException, InterruptedException {

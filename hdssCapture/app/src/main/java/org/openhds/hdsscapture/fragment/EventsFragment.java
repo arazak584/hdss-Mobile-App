@@ -39,7 +39,6 @@ import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
-import org.openhds.hdsscapture.entity.subentity.CaseItem;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 
 import java.text.ParseException;
@@ -69,9 +68,7 @@ public class EventsFragment extends Fragment {
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
-    private CaseItem caseItem;
     private FragmentEventsBinding binding;
-    private boolean isAllFabsVisible;
 
     public EventsFragment() {
         // Required empty public constructor
@@ -85,18 +82,16 @@ public class EventsFragment extends Fragment {
      * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
-     * @param caseItem Parameter 4.
      * @return A new instance of fragment EventsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EventsFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, CaseItem caseItem) {
+    public static EventsFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
         EventsFragment fragment = new EventsFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_LOC_LOCATION_IDS, locations);
         args.putParcelable(ARG_RESIDENCY_ID, residency);
         args.putParcelable(ARG_SOCIAL_ID, socialgroup);
         args.putParcelable(ARG_INDIVIDUAL_ID, individual);
-        args.putParcelable(ARG_CASE_ITEM, caseItem);
         fragment.setArguments(args);
         return fragment;
     }
@@ -109,7 +104,6 @@ public class EventsFragment extends Fragment {
             residency = getArguments().getParcelable(ARG_RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(ARG_SOCIAL_ID);
             individual = getArguments().getParcelable(ARG_INDIVIDUAL_ID);
-            caseItem = getArguments().getParcelable(ARG_CASE_ITEM);
         }
     }
 
@@ -123,7 +117,7 @@ public class EventsFragment extends Fragment {
         binding.addMenuFab.setOnClickListener(view -> {
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseMembersFragment.newInstance(individual, residency, locations, socialgroup)).commit();
+                    HouseMembersFragment.newInstance(locations, socialgroup)).commit();
         });
 
         //final SimpleDateFormat f = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
@@ -230,7 +224,7 @@ public class EventsFragment extends Fragment {
         final View view = binding.getRoot();
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView_events);
-        EventFormAdapter adapter = new EventFormAdapter(locations, socialgroup,residency, individual,caseItem, eventForms, this);
+        EventFormAdapter adapter = new EventFormAdapter(locations, socialgroup,residency, individual,eventForms, this);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 RecyclerView.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);

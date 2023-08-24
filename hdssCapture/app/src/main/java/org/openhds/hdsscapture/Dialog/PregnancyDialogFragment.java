@@ -55,19 +55,15 @@ public class PregnancyDialogFragment extends DialogFragment {
      * this fragment using the provided parameters.
      *
      * @param locations Parameter 1.
-     * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
-     * @param individual Parameter 4.
      * @return A new instance of fragment PregnancyDialogFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PregnancyDialogFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public static PregnancyDialogFragment newInstance(Locations locations, Socialgroup socialgroup) {
         PregnancyDialogFragment fragment = new PregnancyDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
-        args.putParcelable(INDIVIDUAL_ID, individual);
         fragment.setArguments(args);
         return fragment;
     }
