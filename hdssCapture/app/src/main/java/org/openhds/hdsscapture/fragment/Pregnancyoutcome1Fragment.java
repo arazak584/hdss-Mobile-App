@@ -664,7 +664,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             boolean total = false;
             if (finalData.first_nb!=null && finalData.first_nb == 2 && !binding.lBirth.getText().toString().trim().isEmpty()) {
                 int totalbirth = Integer.parseInt(binding.lBirth.getText().toString().trim());
-                if (totalbirth < 1) {
+                if (totalbirth < 1 || totalbirth > 15) {
                     total = true;
                     binding.lBirth.setError("Cannot be less than 1");
                     Toast.makeText(getActivity(), "Previous Live Births Cannot be less than 1", Toast.LENGTH_SHORT).show();
@@ -675,10 +675,10 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             boolean month = false;
             if (finalData.rec_anc == 1 && !binding.monthPg.getText().toString().trim().isEmpty()) {
                 int totalmth = Integer.parseInt(binding.monthPg.getText().toString().trim());
-                if (totalmth > 9) {
+                if (totalmth < 1 || totalmth > 12) {
                     month = true;
-                    binding.monthPg.setError("Months Pregnant Before ANC Cannot be More than 9");
-                    Toast.makeText(getActivity(), "Months Pregnant Before ANC Cannot be More than 9", Toast.LENGTH_SHORT).show();
+                    binding.monthPg.setError("Months Pregnant Before ANC Cannot be More than 12");
+                    Toast.makeText(getActivity(), "Months Pregnant Before ANC Cannot be More than 12", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -686,7 +686,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             boolean anc = false;
             if (finalData.rec_anc == 1 && !binding.numAnc.getText().toString().trim().isEmpty()) {
                 int totalmth = Integer.parseInt(binding.numAnc.getText().toString().trim());
-                if (totalmth > 15) {
+                if (totalmth < 1 || totalmth > 15) {
                     anc = true;
                     binding.numAnc.setError("Maximum Number of ANC Visit is 15");
                     Toast.makeText(getActivity(), "Maximum Number of ANC Visit is 15", Toast.LENGTH_SHORT).show();
@@ -697,10 +697,10 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             boolean ipt = false;
             if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.firstRec.getText().toString().trim().isEmpty()) {
                 int totalmth = Integer.parseInt(binding.firstRec.getText().toString().trim());
-                if (totalmth > 9) {
+                if (totalmth < 1 || totalmth > 12) {
                     ipt = true;
-                    binding.firstRec.setError("Months Pregnant for IPT Cannot be More than 9");
-                    Toast.makeText(getActivity(), "Months Pregnant for IPT Cannot be More than 9", Toast.LENGTH_SHORT).show();
+                    binding.firstRec.setError("Months Pregnant for IPT Cannot be More than 12");
+                    Toast.makeText(getActivity(), "Months Pregnant for IPT Cannot be More than 12", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -708,7 +708,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             boolean iptt = false;
             if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.manyIpt.getText().toString().trim().isEmpty()) {
                 int totalmth = Integer.parseInt(binding.manyIpt.getText().toString().trim());
-                if (totalmth > 5) {
+                if (totalmth < 1 || totalmth > 5) {
                     iptt = true;
                     binding.manyIpt.setError("Number of IPT taken Cannot be More than 5");
                     Toast.makeText(getActivity(), "Number of IPT taken Cannot be More than 5", Toast.LENGTH_SHORT).show();
@@ -719,10 +719,10 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             boolean weight = false;
             if (finalData.chd_weight!=null && finalData.chd_weight == 1 && !binding.weigHcard.getText().toString().trim().isEmpty()) {
                 double childWeight = Double.parseDouble(binding.weigHcard.getText().toString().trim());
-                if (childWeight > 5.0) {
+                if (childWeight < 1.5 || childWeight > 4.5) {
                     weight = true;
-                    binding.weigHcard.setError("Child Weight Cannot be More than 5 Kilograms");
-                    Toast.makeText(getContext(), "Child Weight Cannot be More than 5 Kilograms", Toast.LENGTH_SHORT).show();
+                    binding.weigHcard.setError("Child Weight Cannot be More than 4.5 Kilograms");
+                    Toast.makeText(getContext(), "Child Weight Cannot be More than 4.5 Kilograms", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }

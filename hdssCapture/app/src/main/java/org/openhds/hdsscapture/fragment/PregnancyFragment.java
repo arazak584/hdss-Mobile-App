@@ -269,10 +269,10 @@ public class PregnancyFragment extends Fragment {
             boolean total = false;
             if (finalData.anteNatalClinic == 1 && !binding.ageOfPregFromPregNotes.getText().toString().trim().isEmpty()) {
                 int totalweeks = Integer.parseInt(binding.ageOfPregFromPregNotes.getText().toString().trim());
-                if (totalweeks > 52) {
+                if (totalweeks < 4 || totalweeks > 52) {
                     total = true;
-                    binding.ageOfPregFromPregNotes.setError("Maximum Number of Weeks Allowed is 52");
-                    Toast.makeText(getActivity(), "Maximum Number of Weeks Allowed is 52", Toast.LENGTH_LONG).show();
+                    binding.ageOfPregFromPregNotes.setError("Maximum Number of Weeks Allowed is 4 - 52");
+                    Toast.makeText(getActivity(), "Maximum Number of Weeks Allowed is 4 - 52 ", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -280,10 +280,10 @@ public class PregnancyFragment extends Fragment {
             boolean totalm = false;
             if (finalData.anteNatalClinic == 1 && !binding.estimatedAgeOfPreg.getText().toString().trim().isEmpty()) {
                 int totalmnth = Integer.parseInt(binding.estimatedAgeOfPreg.getText().toString().trim());
-                if (totalmnth > 13) {
+                if (totalmnth < 1 || totalmnth > 12) {
                     totalm = true;
-                    binding.estimatedAgeOfPreg.setError("Maximum Number of Months Allowed is 13");
-                    Toast.makeText(getActivity(), "Maximum Number of Months Allowed is 13", Toast.LENGTH_LONG).show();
+                    binding.estimatedAgeOfPreg.setError("Maximum Number of Months Allowed is 12");
+                    Toast.makeText(getActivity(), "Maximum Number of Months Allowed is 12", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -309,10 +309,10 @@ public class PregnancyFragment extends Fragment {
             boolean totalmths = false;
             if (finalData.anteNatalClinic == 1 && !binding.firstRec.getText().toString().trim().isEmpty()) {
                 int totalmnth = Integer.parseInt(binding.firstRec.getText().toString().trim());
-                if (totalmnth > 9) {
+                if (totalmnth < 1 || totalmnth > 12) {
                     totalmths = true;
-                    binding.firstRec.setError("Maximum Number of Months Allowed is 9");
-                    Toast.makeText(getActivity(), "Maximum Number of Months Allowed is 9", Toast.LENGTH_LONG).show();
+                    binding.firstRec.setError("Maximum Number of Months Allowed is 12");
+                    Toast.makeText(getActivity(), "Maximum Number of Months Allowed is 12", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -320,7 +320,7 @@ public class PregnancyFragment extends Fragment {
             boolean bed = false;
             if (finalData.own_bnet == 1 && !binding.howMany.getText().toString().trim().isEmpty()) {
                 int totalmnth = Integer.parseInt(binding.howMany.getText().toString().trim());
-                if (totalmnth > 10) {
+                if (totalmnth < 1 || totalmnth > 10) {
                     bed = true;
                     binding.howMany.setError("Maximum Number of Bednets is 10");
                     Toast.makeText(getActivity(), "Maximum Number of Bednets is 10", Toast.LENGTH_LONG).show();
@@ -331,7 +331,7 @@ public class PregnancyFragment extends Fragment {
             boolean pregs = false;
             if (finalData.first_preg == 2 && !binding.pregnancyNumber.getText().toString().trim().isEmpty()) {
                 int totalbirth = Integer.parseInt(binding.pregnancyNumber.getText().toString().trim());
-                if (totalbirth < 2) {
+                if (totalbirth < 2 || totalbirth > 15) {
                     pregs = true;
                     binding.pregnancyNumber.setError("Cannot be less than 2");
                     Toast.makeText(getActivity(), "Total Pregnancies Cannot be less than 2", Toast.LENGTH_LONG).show();
