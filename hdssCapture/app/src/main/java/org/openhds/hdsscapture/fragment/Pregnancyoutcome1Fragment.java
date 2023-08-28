@@ -283,7 +283,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.uuid = uuidString;
                 data.mother_uuid = individual.getUuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
-                data.complete = 1;
+//                data.complete = 1;
                 data.extra = 2;
                 data.id = 2;
                 binding.numberOfLiveBirths.setVisibility(View.GONE);
@@ -842,8 +842,6 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 }
 
                 if (finalData.numberofBirths >= 2) {
-
-
 
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus2.OUTCOMELAYOUT, validateOnComplete, false);
 

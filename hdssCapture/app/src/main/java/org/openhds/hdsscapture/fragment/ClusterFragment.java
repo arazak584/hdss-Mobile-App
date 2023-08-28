@@ -1,8 +1,6 @@
 package org.openhds.hdsscapture.fragment;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +17,10 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 
 import org.openhds.hdsscapture.Adapter.LocationAdapter;
 import org.openhds.hdsscapture.Dialog.FilterDialogFragment;
-import org.openhds.hdsscapture.Dialog.PregnancyDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.entity.Hierarchy;
-import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Residency;
-import org.openhds.hdsscapture.entity.Socialgroup;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -160,7 +160,6 @@ public class AmendmentFragment extends Fragment {
                 data.orig_dob = individual.dob;
                 data.orig_gender = individual.gender;
                 data.individual_uuid = individual.getUuid();
-                data.complete = 1;
 
                 binding.amendFirstName.setEnabled(false);
                 binding.amendLastName.setEnabled(false);
@@ -279,8 +278,8 @@ public class AmendmentFragment extends Fragment {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
                 return;
             }
-            finalData.complete=1;
 
+            finalData.complete=1;
             viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 

@@ -188,7 +188,6 @@ public class PregnancyExtraFragment extends Fragment {
                 data.uuid = uuidString;
                 data.individual_uuid = individual.getUuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
-                data.complete = 1;
                 data.extra = 2;
                 data.id = 2;
                 data.first_preg = 2;

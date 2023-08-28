@@ -91,13 +91,14 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
+                android:visibility="gone"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
                     android:inputType="text"
-                    android:hint="@string/ind_extid">
+                    android:hint="@string/ind_extid"
                     android:text="@string/ind_extid">
 
                     <com.google.android.material.textfield.TextInputEditText

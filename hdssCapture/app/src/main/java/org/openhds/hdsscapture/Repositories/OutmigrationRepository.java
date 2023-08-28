@@ -5,7 +5,6 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.OutmigrationDao;
 import org.openhds.hdsscapture.entity.Outmigration;
-import org.openhds.hdsscapture.entity.Relationship;
 
 import java.util.Date;
 import java.util.List;

@@ -38,7 +38,7 @@ public interface RelationshipDao {
     @Query("SELECT * FROM relationship")
     List<Relationship> retrieve();
 
-    @Query("SELECT * FROM relationship WHERE complete=1 ")
+    @Query("SELECT * FROM relationship WHERE complete=1")
     List<Relationship> retrieveToSync();
 
     @Query("SELECT * FROM relationship where individualA_uuid=:id")

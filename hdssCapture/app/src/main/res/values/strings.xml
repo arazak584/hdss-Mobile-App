@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">OpenAB</string>
+    <string name="app_name">R-HealthTrend</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>

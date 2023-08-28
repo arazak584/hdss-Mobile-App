@@ -7,7 +7,6 @@ import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.OutmigrationRepository;
 import org.openhds.hdsscapture.entity.Outmigration;
-import org.openhds.hdsscapture.entity.Relationship;
 
 import java.util.Date;
 import java.util.List;

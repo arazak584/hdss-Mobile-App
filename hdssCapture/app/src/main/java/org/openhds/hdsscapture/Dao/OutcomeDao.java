@@ -27,7 +27,7 @@ OutcomeDao {
     @Query("SELECT * FROM outcome")
     List<Outcome> retrieve();
 
-    @Query("SELECT * FROM outcome WHERE complete=1")
+    @Query("SELECT * FROM outcome as a inner join pregnancyoutcome as b on a.preg_uuid=b.uuid WHERE a.complete=1")
     List<Outcome> retrieveToSync();
 
     @Query("SELECT * FROM outcome where uuid=:id")

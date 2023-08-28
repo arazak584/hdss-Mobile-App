@@ -25,10 +25,8 @@ import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentHouseMembersBinding;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subqueries.EventForm;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;

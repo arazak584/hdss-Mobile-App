@@ -1,6 +1,5 @@
 package org.openhds.hdsscapture.fragment;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,10 +24,8 @@ import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.databinding.FragmentListingBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
-import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.LocationAmendment;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
@@ -120,7 +117,6 @@ public class ListingFragment extends Fragment {
                 data = new Listing();
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.complete = 1;
                 data.compextId = locations.getCompextId();
                 data.compno = locations.getCompno();
                 data.status = locations.getStatus();
@@ -195,6 +191,8 @@ public class ListingFragment extends Fragment {
             location.complete = 1;
             LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
             locationViewModel.update(location);
+
+            finalData.complete=1;
 
         }
         if (close) {

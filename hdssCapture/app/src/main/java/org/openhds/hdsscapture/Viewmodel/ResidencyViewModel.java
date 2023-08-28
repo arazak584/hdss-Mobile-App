@@ -7,7 +7,6 @@ import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.ResidencyRepository;
 import org.openhds.hdsscapture.entity.Residency;
-import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 
 import java.util.Date;

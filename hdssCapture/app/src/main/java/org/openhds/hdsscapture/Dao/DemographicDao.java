@@ -9,6 +9,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.DemographicAmendment;
 
 import java.util.Date;
@@ -42,7 +43,7 @@ public interface DemographicDao {
     @Query("SELECT * FROM demographic")
     List<Demographic> retrieve();
 
-    @Query("SELECT * FROM demographic WHERE complete=1")
+    @Query("SELECT * FROM demographic as a inner join individual as b on a.individual_uuid=b.uuid WHERE a.complete=1")
     List<Demographic> retrieveToSync();
 
     @Query("SELECT * FROM demographic where individual_uuid=:id")
@@ -51,4 +52,7 @@ public interface DemographicDao {
     @Query("SELECT COUNT(*) FROM demographic a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE a.insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
+
+    @Query("SELECT * FROM demographic as a inner join individual as b on a.individual_uuid=b.uuid WHERE a.complete=1 ")
+    List<Demographic> error();
 }

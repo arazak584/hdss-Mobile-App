@@ -1,15 +1,11 @@
 package org.openhds.hdsscapture.Dao;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import org.openhds.hdsscapture.entity.ApiUrl;
-import org.openhds.hdsscapture.entity.Round;
-
-import java.util.List;
 
 @Dao
 public interface ApiUrlDao {

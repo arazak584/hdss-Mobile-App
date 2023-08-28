@@ -5,7 +5,6 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.ResidencyDao;
 import org.openhds.hdsscapture.entity.Residency;
-import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 
 import java.util.Date;

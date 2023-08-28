@@ -12,8 +12,6 @@ import com.google.gson.annotations.Expose;
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
 
-import java.util.Date;
-
 @Entity(tableName = "apiurl")
 public class ApiUrl extends BaseObservable implements Parcelable {
 

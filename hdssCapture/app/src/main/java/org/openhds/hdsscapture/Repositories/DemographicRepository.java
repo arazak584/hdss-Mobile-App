@@ -5,6 +5,7 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.DemographicDao;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Socialgroup;
 
 import java.util.Date;
 import java.util.List;
@@ -58,6 +59,15 @@ public class DemographicRepository {
         Callable<Demographic> callable = () -> dao.find(id);
 
         Future<Demographic> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Demographic> error() throws ExecutionException, InterruptedException {
+
+        Callable<List<Demographic>> callable = () -> dao.error();
+
+        Future<List<Demographic>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }

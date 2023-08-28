@@ -11,13 +11,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.openhds.hdsscapture.Dialog.HouseholdDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.Dialog.HouseholdDialogFragment;
 
 import java.util.ArrayList;
 import java.util.List;

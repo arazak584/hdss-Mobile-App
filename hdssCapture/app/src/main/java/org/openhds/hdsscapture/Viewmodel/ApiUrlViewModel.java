@@ -6,13 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.ApiUrlRepository;
-import org.openhds.hdsscapture.Repositories.CodeBookRepository;
 import org.openhds.hdsscapture.entity.ApiUrl;
-import org.openhds.hdsscapture.entity.CodeBook;
-import org.openhds.hdsscapture.entity.Duplicate;
-import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class ApiUrlViewModel extends AndroidViewModel {

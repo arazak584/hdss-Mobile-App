@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
-import org.openhds.hdsscapture.Baseline.BaselineActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;

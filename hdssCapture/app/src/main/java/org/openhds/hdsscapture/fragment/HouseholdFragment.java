@@ -103,9 +103,9 @@ public class HouseholdFragment extends Fragment {
                     data.complete = 2;
                 }
 
-                if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)){
-                    data.complete = 2;
-                }
+//                if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)){
+//                    data.complete = 2;
+//                }
                 if (data.visit_uuid==null){
 
                     String visits = UUID.randomUUID().toString();

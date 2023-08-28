@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.DemographicRepository;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Socialgroup;
 
 import java.util.Date;
 import java.util.List;
@@ -39,6 +40,9 @@ public class DemographicViewModel extends AndroidViewModel {
         return demographicRepository.count(startDate, endDate, username);
     }
 
+    public List<Demographic> error() throws ExecutionException, InterruptedException {
+        return demographicRepository.error();
+    }
     public void add(Demographic data){ demographicRepository.create(data);}
 
     public void add(Demographic... data){

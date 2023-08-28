@@ -4,13 +4,8 @@ import android.app.Application;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.ApiUrlDao;
-import org.openhds.hdsscapture.Dao.CodeBookDao;
 import org.openhds.hdsscapture.entity.ApiUrl;
-import org.openhds.hdsscapture.entity.CodeBook;
-import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;

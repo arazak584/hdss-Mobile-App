@@ -12,15 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Adapter.ErrorAdapter;
-import org.openhds.hdsscapture.Dao.HdssSociodemoDao;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Queries;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
-import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
+import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.entity.Death;
-import org.openhds.hdsscapture.entity.HdssSociodemo;
+import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
@@ -35,6 +34,7 @@ public class ErrorActivity extends AppCompatActivity {
     private SocialgroupViewModel socialgroupViewModel;
     private DeathViewModel deathViewModel;
     private IndividualViewModel individualViewModel;
+    private DemographicViewModel demographicViewModel;
     private ProgressDialog progress;
 
     private ErrorAdapter errorAdapter;
@@ -47,6 +47,7 @@ public class ErrorActivity extends AppCompatActivity {
         socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
         deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+        demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
 
         Button generateQueryButton = findViewById(R.id.btn_query);
         generateQueryButton.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +133,20 @@ public class ErrorActivity extends AppCompatActivity {
                 list.add(r1);
 
             }
+
+//            int h=1;
+//            for (Demographic e : demographicViewModel.error()) {
+//                String formattedDate = f.format(e.insertDate);
+//                Queries r1 = new Queries();
+//                r1.name = "Demo " ;
+//                r1.extid = "" + e.individual_uuid;
+//                r1.date = "" + formattedDate;
+//                r1.error = "Demo";
+//                r1.index = h;
+//
+//                list.add(r1);
+//
+//            }
 
             errorAdapter = new ErrorAdapter(this);
             errorAdapter.setQueries(list);

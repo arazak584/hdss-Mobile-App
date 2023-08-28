@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
-import org.openhds.hdsscapture.Activity.LocationActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;

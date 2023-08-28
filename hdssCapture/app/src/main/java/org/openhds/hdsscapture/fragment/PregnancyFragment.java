@@ -183,7 +183,6 @@ public class PregnancyFragment extends Fragment {
                 data.uuid = uuidString;
                 data.individual_uuid = individual.getUuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
-                data.complete = 1;
 
                 binding.setPregnancy(data);
                 binding.getPregnancy().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));

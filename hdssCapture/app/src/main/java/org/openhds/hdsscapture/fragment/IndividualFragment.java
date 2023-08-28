@@ -322,7 +322,6 @@ public class IndividualFragment extends Fragment {
             individual.setUuid(this.individual.getUuid());
 
 
-
         });
 
         //LOAD SPINNERS

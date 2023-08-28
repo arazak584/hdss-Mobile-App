@@ -19,9 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.openhds.hdsscapture.Adapter.MotherAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
-import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
 /**

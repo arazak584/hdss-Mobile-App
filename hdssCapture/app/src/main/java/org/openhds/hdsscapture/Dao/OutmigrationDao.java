@@ -6,7 +6,6 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import org.openhds.hdsscapture.entity.Outmigration;
-import org.openhds.hdsscapture.entity.Residency;
 
 import java.util.Date;
 import java.util.List;

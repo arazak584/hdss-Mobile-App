@@ -7,9 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
-import org.openhds.hdsscapture.entity.Individual;
 
 import java.util.Date;
 import java.util.List;

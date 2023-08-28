@@ -2,8 +2,6 @@ package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
 
-import androidx.lifecycle.LiveData;
-
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.IndividualDao;
 import org.openhds.hdsscapture.entity.Individual;
