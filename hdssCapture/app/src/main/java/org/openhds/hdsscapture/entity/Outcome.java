@@ -110,7 +110,6 @@ public class Outcome extends BaseObservable {
         }
     }
 
-    @Bindable
     public String getInsertDate() {
         if (insertDate == null) return null;
         return f.format(insertDate);
@@ -120,7 +119,7 @@ public class Outcome extends BaseObservable {
         try {
             this.insertDate = f.parse(insertDate);
         } catch (ParseException e) {
-            System.out.println("Date error " + e.getMessage());
+            System.out.println("Visit Date Error " + e.getMessage());
         }
     }
 

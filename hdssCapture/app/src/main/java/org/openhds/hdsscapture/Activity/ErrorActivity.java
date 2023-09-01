@@ -142,8 +142,13 @@ public class ErrorActivity extends AppCompatActivity {
                 //String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
                 r1.name = "Outcome " ;
-                r1.extid = "" + e.preg_uuid;
-                r1.date = "" + e.extId;
+                r1.extid = "PermID" + e.extId;
+                if (e.extId != null && e.extId.length() >= 9) {
+                    r1.date = "Compno" + e.extId.substring(0, 9); // Extract the first nine characters of extId
+                } else {
+                    r1.date = ""; // Handle cases where extId is null or less than nine characters
+                }
+                //r1.date = "Compno" + e.extId;
                 r1.error = "Outcome Error";
                 r1.index = i;
 

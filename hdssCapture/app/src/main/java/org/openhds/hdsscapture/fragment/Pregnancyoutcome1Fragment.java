@@ -310,6 +310,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             final String child_id = individual.uuid + AppConstants.CHILD5 + + eventForm.event_name_id + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
+                data.preg_uuid = binding.getPregoutcome().getUuid();
                 binding.setPregoutcome1(data);
             } else {
                 data = new Outcome();
@@ -369,6 +370,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             final String child_id = individual.uuid + AppConstants.CHILD6 + eventForm.event_name_id + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
+                data.preg_uuid = binding.getPregoutcome().getUuid();
                 binding.setPregoutcome2(data);
             } else {
                 data = new Outcome();
@@ -430,6 +432,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             final String child_id = individual.uuid + AppConstants.CHILD7 + eventForm.event_name_id + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
+                data.preg_uuid = binding.getPregoutcome().getUuid();
                 binding.setPregoutcome3(data);
             } else {
                 data = new Outcome();
@@ -492,6 +495,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             final String child_id = individual.uuid + AppConstants.CHILD8 + eventForm.event_name_id + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
+                data.preg_uuid = binding.getPregoutcome().getUuid();
                 binding.setPregoutcome4(data);
             } else {
                 data = new Outcome();
