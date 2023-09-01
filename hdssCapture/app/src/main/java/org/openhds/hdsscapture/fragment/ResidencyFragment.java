@@ -128,11 +128,13 @@ public class ResidencyFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentMembershipBinding.inflate(inflater, container, false);
 
+        //FETCH FIELDWORKER USER DETAIL
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
+        //FETCH VILLAGE
         final Intent j = getActivity().getIntent();
-        final Hierarchy level5Data = j.getParcelableExtra(HierarchyActivity.LEVEL5_DATA);
+        final Hierarchy level6Data = j.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
 
         // Find the button view
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_change_hh);
@@ -329,12 +331,13 @@ public class ResidencyFragment extends Fragment {
                 datadth.extId = individual.getExtId();
                 datadth.compname = locations.getLocationName();
                 datadth.individual_uuid = individual.getUuid();
-                datadth.villname = level5Data.getName();
-                datadth.villcode = level5Data.getExtId();
+                datadth.villname = level6Data.getName();
+                datadth.villcode = level6Data.getExtId();
                 datadth.visit_uuid = socialgroup.getVisit_uuid();
                 datadth.deathDate = binding.getResidency().endDate;
                 datadth.vpmcomplete=1;
                 datadth.complete = 1;
+                //datadth.sttime = new Date();
                 datadth.househead = socialgroup.getGroupName();
 
 

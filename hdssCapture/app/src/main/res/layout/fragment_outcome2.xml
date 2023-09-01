@@ -60,7 +60,7 @@
                 android:id="@+id/preg2_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome2.preg_uuid}"
+                android:text="@{pregoutcome2.preg_uuid}"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="textPersonName"/>

@@ -5,6 +5,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Outcome;
 
 import java.util.List;
@@ -27,8 +28,11 @@ OutcomeDao {
     @Query("SELECT * FROM outcome")
     List<Outcome> retrieve();
 
-    @Query("SELECT * FROM outcome as a inner join pregnancyoutcome as b on a.preg_uuid=b.uuid WHERE a.complete=1")
+    @Query("SELECT * FROM outcome WHERE complete=1")
     List<Outcome> retrieveToSync();
+
+    @Query("SELECT * FROM outcome as a left join pregnancyoutcome as b on a.preg_uuid=b.uuid WHERE b.uuid is null ")
+    List<Outcome> error();
 
     @Query("SELECT * FROM outcome where uuid=:id")
     Outcome find(String id);

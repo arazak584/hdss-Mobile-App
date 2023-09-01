@@ -38,7 +38,7 @@ public interface PregnancyDao {
     @Query("SELECT * FROM Pregnancy")
     List<Pregnancy> retrieve();
 
-    @Query("SELECT * FROM pregnancy as a inner join individual as b on a.individual_uuid=b.uuid WHERE a.complete=1")
+    @Query("SELECT * FROM pregnancy WHERE complete=1")
     List<Pregnancy> retrieveToSync();
 
     @Query("SELECT * FROM pregnancy where individual_uuid=:id AND outcome IS NOT NULL ORDER BY recordedDate ASC LIMIT 1")

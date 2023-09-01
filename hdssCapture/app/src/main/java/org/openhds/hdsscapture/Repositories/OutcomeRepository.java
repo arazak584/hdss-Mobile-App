@@ -4,6 +4,7 @@ import android.app.Application;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.OutcomeDao;
+import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Outcome;
 
 import java.util.List;
@@ -47,6 +48,15 @@ public class OutcomeRepository {
     public List<Outcome> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Outcome>> callable = () -> dao.retrieveToSync();
+
+        Future<List<Outcome>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Outcome> error() throws ExecutionException, InterruptedException {
+
+        Callable<List<Outcome>> callable = () -> dao.error();
 
         Future<List<Outcome>> future = Executors.newSingleThreadExecutor().submit(callable);
 

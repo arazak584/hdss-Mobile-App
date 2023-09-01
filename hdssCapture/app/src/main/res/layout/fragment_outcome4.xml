@@ -40,7 +40,7 @@
                 android:id="@+id/out4_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome4.uuid}"
+                android:text="@{pregoutcome4.uuid}"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="textPersonName"/>
@@ -60,7 +60,7 @@
                 android:id="@+id/preg4_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome4.preg_uuid}"
+                android:text="@{pregoutcome4.preg_uuid}"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="textPersonName"/>

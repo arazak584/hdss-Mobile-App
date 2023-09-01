@@ -17,10 +17,12 @@ import org.openhds.hdsscapture.Utilities.Queries;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
 import java.text.SimpleDateFormat;
@@ -35,6 +37,7 @@ public class ErrorActivity extends AppCompatActivity {
     private DeathViewModel deathViewModel;
     private IndividualViewModel individualViewModel;
     private DemographicViewModel demographicViewModel;
+    private OutcomeViewModel outcomeViewModel;
     private ProgressDialog progress;
 
     private ErrorAdapter errorAdapter;
@@ -48,6 +51,7 @@ public class ErrorActivity extends AppCompatActivity {
         deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
         demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
+        outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
 
         Button generateQueryButton = findViewById(R.id.btn_query);
         generateQueryButton.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +133,19 @@ public class ErrorActivity extends AppCompatActivity {
                 r1.date = "" + e.houseExtId;
                 r1.error = "Household Head is a Minor";
                 r1.index = g;
+                list.add(r1);
+
+            }
+
+            int i=1;
+            for (Outcome e : outcomeViewModel.error()) {
+                //String formattedDate = f.format(e.insertDate);
+                Queries r1 = new Queries();
+                r1.name = "Outcome " ;
+                r1.extid = "" + e.preg_uuid;
+                r1.date = "" + e.extId;
+                r1.error = "Outcome Error";
+                r1.index = i;
 
                 list.add(r1);
 

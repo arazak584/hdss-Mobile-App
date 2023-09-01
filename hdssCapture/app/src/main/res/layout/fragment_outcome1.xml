@@ -61,7 +61,7 @@
                 android:id="@+id/preg1_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome1.preg_uuid}"
+                android:text="@{pregoutcome1.preg_uuid}"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="textPersonName"/>
@@ -81,11 +81,12 @@
                 android:id="@+id/out1_preguuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome1.mother_uuid}"
+                android:text="@{pregoutcome1.mother_uuid}"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
+
 
         <TextView
             android:layout_width="match_parent"

@@ -259,7 +259,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
         final Intent j = getActivity().getIntent();
-        final Hierarchy level5Data = j.getParcelableExtra(HierarchyActivity.LEVEL5_DATA);
+        final Hierarchy level6Data = j.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
 
         PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         OutcomeViewModel outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
@@ -334,7 +334,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber();
                 data.complete = 1;
-                data.preg_uuid = binding.getPregoutcome().uuid;
+                data.preg_uuid = binding.getPregoutcome().getUuid();
 
 
                 binding.setPregoutcome1(data);
@@ -393,7 +393,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber();
                 data.complete = 1;
-                data.preg_uuid = binding.getPregoutcome().uuid;
+                data.preg_uuid = binding.getPregoutcome().getUuid();
 
                 binding.setPregoutcome2(data);
                 binding.getPregoutcome2().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
@@ -454,7 +454,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber();
                 data.complete = 1;
-                data.preg_uuid = binding.getPregoutcome().uuid;
+                data.preg_uuid = binding.getPregoutcome().getUuid();
 
                 binding.setPregoutcome3(data);
                 binding.getPregoutcome3().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
@@ -516,7 +516,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber() ;
                 data.complete = 1;
-                data.preg_uuid = binding.getPregoutcome().uuid;
+                data.preg_uuid = binding.getPregoutcome().getUuid();
 
 
                 binding.setPregoutcome4(data);
@@ -569,8 +569,8 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.extId = individual.getExtId();
                 data.compname = locations.getLocationName();
                 data.individual_uuid = individual.getUuid();
-                data.villname = level5Data.getName();
-                data.villcode = level5Data.getExtId();
+                data.villname = level6Data.getName();
+                data.villcode = level6Data.getExtId();
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.respondent = individual.getFirstName() +" "+ individual.getLastName();
                 data.househead = individual.getFirstName() +" "+ individual.getLastName();
