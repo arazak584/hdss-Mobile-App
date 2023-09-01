@@ -302,7 +302,7 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 data.individual_uuid = uuidString;
                 data.childuuid = uuidString;
-                data.mother_uuid = individual.uuid;
+                //data.mother_uuid = individual.uuid;
                 data.residency_uuid = rsi;
 
                 data.mother_uuid = individual.getUuid();
@@ -361,7 +361,7 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 data.individual_uuid = uuidString;
                 data.childuuid = uuidString;
-                data.mother_uuid = individual.uuid;
+                //data.mother_uuid = individual.uuid;
                 data.residency_uuid = rsi;
 
                 data.mother_uuid = individual.getUuid();
@@ -423,7 +423,7 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 data.individual_uuid = uuidString;
                 data.childuuid = uuidString;
-                data.mother_uuid = individual.uuid;
+                //data.mother_uuid = individual.uuid;
                 data.residency_uuid = rsi;
 
                 data.mother_uuid = individual.getUuid();
@@ -486,7 +486,7 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 data.individual_uuid = uuidString;
                 data.childuuid = uuidString;
-                data.mother_uuid = individual.uuid;
+                //data.mother_uuid = individual.uuid;
                 data.residency_uuid = rsi;
 
                 data.mother_uuid = individual.getUuid();

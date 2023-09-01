@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.ResidencyRepository;
+import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 
@@ -65,6 +66,9 @@ public class ResidencyViewModel extends AndroidViewModel {
         return residencyRepository.count(startDate, endDate, username);
     }
 
+    public List<Residency> error() throws ExecutionException, InterruptedException {
+        return residencyRepository.error();
+    }
     public void add(Residency data){ residencyRepository.create(data);}
 
     public void add(Residency... data){

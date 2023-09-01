@@ -153,12 +153,12 @@ public class AmendmentFragment extends Fragment {
                 String uuidString = uuid.toString().replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
-                data.orig_firstName = individual.firstName;
-                data.orig_lastName = individual.lastName;
-                data.orig_otherName = individual.otherName;
-                data.orig_ghanacard = individual.ghanacard;
+                data.orig_firstName = individual.getFirstName();
+                data.orig_lastName = individual.getLastName();
+                data.orig_otherName = individual.getOtherName();
+                data.orig_ghanacard = individual.getGhanacard();
                 data.orig_dob = individual.dob;
-                data.orig_gender = individual.gender;
+                data.orig_gender = individual.getGender();
                 data.individual_uuid = individual.getUuid();
 
                 binding.amendFirstName.setEnabled(false);

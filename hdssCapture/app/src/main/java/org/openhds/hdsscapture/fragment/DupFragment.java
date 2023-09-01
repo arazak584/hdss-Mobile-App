@@ -150,9 +150,9 @@ public class DupFragment extends Fragment {
                 data = new Duplicate();
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.individual_uuid = individual.uuid;
-                data.fname = individual.firstName;
-                data.lname = individual.lastName;
+                data.individual_uuid = individual.getUuid();
+                data.fname = individual.getFirstName();
+                data.lname = individual.getLastName();
                 data.dob = individual.dob;
 
                 binding.fname.setEnabled(false);

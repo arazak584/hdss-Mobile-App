@@ -18,11 +18,13 @@ import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
+import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Outcome;
+import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
 import java.text.SimpleDateFormat;
@@ -38,9 +40,11 @@ public class ErrorActivity extends AppCompatActivity {
     private IndividualViewModel individualViewModel;
     private DemographicViewModel demographicViewModel;
     private OutcomeViewModel outcomeViewModel;
+    private ResidencyViewModel residencyViewModel;
     private ProgressDialog progress;
 
     private ErrorAdapter errorAdapter;
+    private String lastName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,7 @@ public class ErrorActivity extends AppCompatActivity {
         individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
         demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
         outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
+        residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
 
         Button generateQueryButton = findViewById(R.id.btn_query);
         generateQueryButton.setOnClickListener(new View.OnClickListener() {
@@ -142,19 +147,20 @@ public class ErrorActivity extends AppCompatActivity {
                 //String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
                 r1.name = "Outcome " ;
-                r1.extid = "PermID" + e.extId;
+                r1.extid = "PermID" + " " + e.extId;
                 if (e.extId != null && e.extId.length() >= 9) {
-                    r1.date = "Compno" + e.extId.substring(0, 9); // Extract the first nine characters of extId
+                    r1.date = "Compno" + " " + e.extId.substring(0, 9); // Extract the first nine characters of extId
                 } else {
-                    r1.date = ""; // Handle cases where extId is null or less than nine characters
+                    r1.date = "";
                 }
                 //r1.date = "Compno" + e.extId;
-                r1.error = "Outcome Error";
+                r1.error = "Outcome Error (Open Pregnancy Outcome and Save)";
                 r1.index = i;
 
                 list.add(r1);
 
             }
+            
 
 //            int h=1;
 //            for (Demographic e : demographicViewModel.error()) {

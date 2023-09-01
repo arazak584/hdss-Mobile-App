@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 
@@ -66,5 +67,8 @@ public interface ResidencyDao {
             " INNER JOIN individual as c on a.individual_uuid=c.uuid " +
             " WHERE c.firstName!='FAKE' AND a.insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
+
+    @Query("SELECT a.*,b.groupName FROM residency as a left join socialgroup as b on a.socialgroup_uuid=b.uuid WHERE b.uuid is null ")
+    List<Residency> error();
 
 }

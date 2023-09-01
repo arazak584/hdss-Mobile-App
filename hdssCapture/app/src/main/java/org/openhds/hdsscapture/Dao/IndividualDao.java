@@ -41,7 +41,7 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual where extId =:id ")
     Individual retrieve(String id);
 
-    @Query("SELECT a.* FROM individual as a inner join residency as b on a.uuid=b.individual_uuid WHERE a.complete=1 order by dob")
+    @Query("SELECT a.* FROM individual as a inner join residency as b on a.uuid=b.individual_uuid WHERE a.complete=1 GROUP BY a.uuid order by dob")
     List<Individual> retrieveToSync();
 
     @Query("SELECT * FROM individual")

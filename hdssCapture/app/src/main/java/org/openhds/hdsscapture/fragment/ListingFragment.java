@@ -122,10 +122,10 @@ public class ListingFragment extends Fragment {
                 data.status = locations.getStatus();
                 data.village = level6Data.getName();
                 data.fw_name = fieldworkerData.getFirstName() + ' ' + fieldworkerData.lastName ;
-                data.locationName = locations.locationName;
-                data.location_uuid = locations.uuid;
+                data.locationName = locations.getLocationName();
+                data.location_uuid = locations.getUuid();
                 data.vill_extId = locations.getExtId();
-                data.cluster_id = locations.locationLevel_uuid;
+                data.cluster_id = locations.getLocationLevel_uuid();
 
                 binding.locationName.setEnabled(false);
                 binding.clusterCode.setEnabled(false);
