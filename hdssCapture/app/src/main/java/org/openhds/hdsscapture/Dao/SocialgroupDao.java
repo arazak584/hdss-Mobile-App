@@ -51,9 +51,6 @@ public interface SocialgroupDao {
     @Query("SELECT * FROM socialgroup WHERE insertDate BETWEEN :startDate AND :endDate")
     List<Socialgroup> retrieve(Date startDate, Date endDate);
 
-    @Query("SELECT * FROM socialgroup")
-    List<Socialgroup> getAll();
-
     @Query("SELECT a.*,compextId FROM socialgroup as a " + "INNER JOIN residency as b ON a.uuid = b.socialgroup_uuid" +
             " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
             " WHERE b.endType=1 and c.compextId=:id GROUP BY a.extId ")

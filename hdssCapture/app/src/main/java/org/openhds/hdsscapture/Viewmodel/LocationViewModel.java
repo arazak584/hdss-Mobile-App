@@ -42,10 +42,6 @@ public class LocationViewModel extends AndroidViewModel {
         return locationRepository.retrieveByVillage(id);
     }
 
-    public List<Locations> findAll() throws ExecutionException, InterruptedException {
-        return locationRepository.findAll();
-    }
-
     public List<Locations> findToSync() throws ExecutionException, InterruptedException {
         return locationRepository.findToSync();
     }

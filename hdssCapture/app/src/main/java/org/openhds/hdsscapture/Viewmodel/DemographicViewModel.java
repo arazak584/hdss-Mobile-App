@@ -23,11 +23,6 @@ public class DemographicViewModel extends AndroidViewModel {
         demographicRepository = new DemographicRepository(application);
     }
 
-
-    public List<Demographic> findAll() throws ExecutionException, InterruptedException {
-        return demographicRepository.findAll();
-    }
-
     public List<Demographic> findToSync() throws ExecutionException, InterruptedException {
         return demographicRepository.findToSync();
     }

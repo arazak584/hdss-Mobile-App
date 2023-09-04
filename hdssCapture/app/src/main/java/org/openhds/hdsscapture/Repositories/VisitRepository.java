@@ -29,16 +29,6 @@ public class VisitRepository {
         AppDatabase.databaseWriteExecutor.execute(() -> dao.create(data));
     }
 
-
-    public List<Visit> findAll() throws ExecutionException, InterruptedException {
-
-        Callable<List<Visit>> callable = () -> dao.retrieve();
-
-        Future<List<Visit>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
     public Visit find(String id) throws ExecutionException, InterruptedException {
 
         Callable<Visit> callable = () -> dao.find(id);

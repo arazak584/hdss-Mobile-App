@@ -21,11 +21,6 @@ public interface DeathDao {
     @Query("DELETE FROM death")
     void deleteAll();
 
-    @Query("SELECT * FROM death")
-    List<Death> getAll();
-
-    @Query("SELECT * FROM death")
-    List<Death> retrieve();
 
     @Query("SELECT * FROM death where individual_uuid=:id")
     Death find(String id);

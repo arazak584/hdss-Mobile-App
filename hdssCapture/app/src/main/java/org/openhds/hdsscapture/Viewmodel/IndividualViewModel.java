@@ -53,10 +53,6 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.findToSync();
     }
 
-    public List<Individual> findAll() throws ExecutionException, InterruptedException {
-        return individualRepository.findAll();
-    }
-
     public List<Individual> retrieveBySearch(String id, String searchText) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveBySearch( "%" + id + "%", "%" + searchText + "%");
     }

@@ -44,16 +44,6 @@ public class FieldworkerRepository {
     }
 
 
-    public List<Fieldworker> findAll() throws ExecutionException, InterruptedException {
-
-        Callable<List<Fieldworker>> callable = () -> dao.retrieve();
-
-        Future<List<Fieldworker>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
-
     public Fieldworker finds(String id) throws ExecutionException, InterruptedException {
         Callable<Fieldworker> callable = () -> dao.retrieves(id);
 

@@ -24,11 +24,6 @@ public class ResidencyViewModel extends AndroidViewModel {
         residencyRepository = new ResidencyRepository(application);
     }
 
-
-    public List<Residency> findAll() throws ExecutionException, InterruptedException {
-        return residencyRepository.findAll();
-    }
-
     public List<Residency> find(String id) throws ExecutionException, InterruptedException {
         return residencyRepository.find(id);
     }

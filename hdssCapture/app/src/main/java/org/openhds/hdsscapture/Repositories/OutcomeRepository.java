@@ -35,16 +35,6 @@ public class OutcomeRepository {
         });
     }
 
-
-    public List<Outcome> findAll() throws ExecutionException, InterruptedException {
-
-        Callable<List<Outcome>> callable = () -> dao.retrieve();
-
-        Future<List<Outcome>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
     public List<Outcome> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Outcome>> callable = () -> dao.retrieveToSync();

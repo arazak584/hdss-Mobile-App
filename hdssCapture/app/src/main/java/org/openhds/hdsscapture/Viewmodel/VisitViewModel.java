@@ -22,10 +22,6 @@ public class VisitViewModel extends AndroidViewModel {
         visitRepository = new VisitRepository(application);
     }
 
-    public List<Visit> findAll() throws ExecutionException, InterruptedException {
-        return visitRepository.findAll();
-    }
-
     public Visit find(String id) throws ExecutionException, InterruptedException {
         return visitRepository.find(id);
     }

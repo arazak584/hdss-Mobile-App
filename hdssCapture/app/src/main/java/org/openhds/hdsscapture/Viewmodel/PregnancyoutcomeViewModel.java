@@ -22,11 +22,6 @@ public class PregnancyoutcomeViewModel extends AndroidViewModel {
         pregnancyoutcomeRepository = new PregnancyoutcomeRepository(application);
     }
 
-
-    public List<Pregnancyoutcome> findAll() throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.findAll();
-    }
-
     public List<Pregnancyoutcome> findToSync() throws ExecutionException, InterruptedException {
         return pregnancyoutcomeRepository.findToSync();
     }

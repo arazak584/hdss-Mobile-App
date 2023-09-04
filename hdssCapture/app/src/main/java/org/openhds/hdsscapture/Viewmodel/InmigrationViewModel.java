@@ -22,11 +22,6 @@ public class InmigrationViewModel extends AndroidViewModel {
         inmigrationRepository = new InmigrationRepository(application);
     }
 
-
-    public List<Inmigration> findAll() throws ExecutionException, InterruptedException {
-        return inmigrationRepository.findAll();
-    }
-
     public List<Inmigration> findToSync() throws ExecutionException, InterruptedException {
         return inmigrationRepository.findToSync();
     }

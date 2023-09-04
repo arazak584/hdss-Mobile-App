@@ -42,15 +42,6 @@ public class RelationshipRepository {
         return row.intValue();
     }
 
-    public List<Relationship> findAll() throws ExecutionException, InterruptedException {
-
-        Callable<List<Relationship>> callable = () -> dao.retrieve();
-
-        Future<List<Relationship>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
     public List<Relationship> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Relationship>> callable = () -> dao.retrieveToSync();

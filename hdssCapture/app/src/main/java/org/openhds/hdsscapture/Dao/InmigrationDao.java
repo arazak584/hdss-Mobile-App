@@ -22,12 +22,6 @@ public interface InmigrationDao {
     @Query("DELETE FROM inmigration")
     void deleteAll();
 
-    @Query("SELECT * FROM inmigration")
-    List<Inmigration> getAll();
-
-    @Query("SELECT * FROM inmigration")
-    List<Inmigration> retrieve();
-
     @Query("SELECT * FROM inmigration WHERE complete=1")
     List<Inmigration> retrieveimgToSync();
 

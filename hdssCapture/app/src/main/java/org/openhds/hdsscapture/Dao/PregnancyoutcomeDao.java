@@ -22,12 +22,6 @@ PregnancyoutcomeDao {
     @Query("DELETE FROM pregnancyoutcome")
     void deleteAll();
 
-    @Query("SELECT * FROM pregnancyoutcome ")
-    List<Pregnancyoutcome> getAll();
-
-    @Query("SELECT * FROM pregnancyoutcome")
-    List<Pregnancyoutcome> retrieve();
-
     @Query("SELECT * FROM pregnancyoutcome WHERE complete=1")
     List<Pregnancyoutcome> retrieveToSync();
 

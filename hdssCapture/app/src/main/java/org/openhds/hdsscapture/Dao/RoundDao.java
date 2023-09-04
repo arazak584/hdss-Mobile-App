@@ -21,10 +21,6 @@ public interface RoundDao {
     @Query("DELETE FROM round")
     void deleteAll();
 
-
-    @Query("SELECT * from round")
-    List<Round> getAll();
-
     @Query("SELECT * FROM round")
     List<Round> retrieve();
 

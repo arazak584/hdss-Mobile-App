@@ -22,16 +22,10 @@ OutcomeDao {
     @Query("DELETE FROM outcome")
     void deleteAll();
 
-    @Query("SELECT * FROM outcome ")
-    List<Outcome> getAll();
-
-    @Query("SELECT * FROM outcome")
-    List<Outcome> retrieve();
-
     @Query("SELECT * FROM outcome WHERE complete=1")
     List<Outcome> retrieveToSync();
 
-    @Query("SELECT * FROM outcome as a left join pregnancyoutcome as b on a.preg_uuid=b.uuid WHERE b.uuid is null ")
+    @Query("SELECT a.* FROM outcome as a left join pregnancyoutcome as b on a.preg_uuid=b.uuid WHERE b.uuid is null ")
     List<Outcome> error();
 
     @Query("SELECT * FROM outcome where uuid=:id")

@@ -23,11 +23,6 @@ public class RelationshipViewModel extends AndroidViewModel {
         relationshipRepository = new RelationshipRepository(application);
     }
 
-
-    public List<Relationship> findAll() throws ExecutionException, InterruptedException {
-        return relationshipRepository.findAll();
-    }
-
     public List<Relationship> findToSync() throws ExecutionException, InterruptedException {
         return relationshipRepository.findToSync();
     }

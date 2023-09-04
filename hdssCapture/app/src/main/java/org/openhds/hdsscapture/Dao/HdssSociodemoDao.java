@@ -42,9 +42,6 @@ public interface HdssSociodemoDao {
     @Query("SELECT * FROM sociodemo WHERE complete=1")
     List<HdssSociodemo> retrieveToSync();
 
-    @Query("SELECT * FROM sociodemo")
-    List<HdssSociodemo> retrieveAll();
-
     @Query("SELECT COUNT(*) FROM sociodemo a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);

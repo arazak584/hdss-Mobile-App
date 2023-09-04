@@ -28,10 +28,6 @@ public class FieldworkerViewModel extends AndroidViewModel {
         return userTableRepository.finds(id);
     }
 
-    public List<Fieldworker> findAll() throws ExecutionException, InterruptedException {
-        return userTableRepository.findAll();
-    }
-
     public void add(Fieldworker data){
         userTableRepository.create(data);
     }

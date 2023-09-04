@@ -35,16 +35,6 @@ public class OutmigrationRepository {
         });
     }
 
-
-    public List<Outmigration> findAll() throws ExecutionException, InterruptedException {
-
-        Callable<List<Outmigration>> callable = () -> dao.retrieve();
-
-        Future<List<Outmigration>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
     public List<Outmigration> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Outmigration>> callable = () -> dao.retrieveomgToSync();

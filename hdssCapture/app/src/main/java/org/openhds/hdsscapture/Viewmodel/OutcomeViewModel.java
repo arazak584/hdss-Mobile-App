@@ -22,11 +22,6 @@ public class OutcomeViewModel extends AndroidViewModel {
         outcomeRepository = new OutcomeRepository(application);
     }
 
-
-    public List<Outcome> findAll() throws ExecutionException, InterruptedException {
-        return outcomeRepository.findAll();
-    }
-
     public List<Outcome> findToSync() throws ExecutionException, InterruptedException {
         return outcomeRepository.findToSync();
     }

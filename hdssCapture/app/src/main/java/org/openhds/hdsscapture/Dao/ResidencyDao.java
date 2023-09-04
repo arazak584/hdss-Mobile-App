@@ -33,12 +33,6 @@ public interface ResidencyDao {
     @Query("DELETE FROM residency")
     void deleteAll();
 
-    @Query("SELECT * FROM residency")
-    List<Residency> getAll();
-
-    @Query("SELECT * FROM residency")
-    List<Residency> retrieve();
-
     @Query("SELECT * FROM residency where individual_uuid=:id")
     List<Residency> find(String id);
 

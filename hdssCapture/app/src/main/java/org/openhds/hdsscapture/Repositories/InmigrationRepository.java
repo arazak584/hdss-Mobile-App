@@ -34,18 +34,6 @@ public class InmigrationRepository {
         });
     }
 
-
-
-
-    public List<Inmigration> findAll() throws ExecutionException, InterruptedException {
-
-        Callable<List<Inmigration>> callable = () -> dao.retrieve();
-
-        Future<List<Inmigration>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
     public Inmigration find(String id) throws ExecutionException, InterruptedException {
 
         Callable<Inmigration> callable = () -> dao.find(id);

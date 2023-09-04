@@ -32,12 +32,6 @@ public interface PregnancyDao {
     @Update(entity = Pregnancy.class)
     int update (PregnancyobsAmendment pregnancyobsAmendment);
 
-    @Query("SELECT * FROM Pregnancy")
-    List<Pregnancy> getAll();
-
-    @Query("SELECT * FROM Pregnancy")
-    List<Pregnancy> retrieve();
-
     @Query("SELECT * FROM pregnancy WHERE complete=1")
     List<Pregnancy> retrieveToSync();
 

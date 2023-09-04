@@ -22,15 +22,6 @@ public interface OutmigrationDao {
     @Query("DELETE FROM outmigration")
     void deleteAll();
 
-    @Query("SELECT * FROM outmigration")
-    List<Outmigration> getAll();
-
-    @Query("SELECT * FROM outmigration")
-    List<Outmigration> retrieve();
-
-//    @Query("SELECT * FROM outmigration as a INNER JOIN residency as b on a.residency_uuid=b.uuid WHERE a.individual_uuid=:id AND endType=1")
-//    Outmigration createOmg(String id);
-
     @Query("SELECT * FROM residency as a LEFT JOIN outmigration as b on a.uuid=b.residency_uuid" +
             " where b.residency_uuid IS NULL AND a.individual_uuid=:id and location_uuid!=:locid and endType=1")
     Outmigration createOmg(String id, String locid);

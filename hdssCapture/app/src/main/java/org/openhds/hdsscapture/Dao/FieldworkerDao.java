@@ -32,9 +32,6 @@ public interface FieldworkerDao {
     @Query("SELECT * FROM fieldworker WHERE username=:id AND password=:password")
     Fieldworker retrieve(String id, String password);
 
-    @Query("SELECT * FROM fieldworker")
-    List<Fieldworker> retrieve();
-
     @Query("SELECT * FROM fieldworker WHERE username=:id")
     Fieldworker retrieves(String id);
 }

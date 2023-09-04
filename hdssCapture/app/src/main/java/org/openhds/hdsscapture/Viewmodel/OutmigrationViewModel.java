@@ -23,11 +23,6 @@ public class OutmigrationViewModel extends AndroidViewModel {
     }
 
 
-    public List<Outmigration> findAll() throws ExecutionException, InterruptedException {
-        return outmigrationRepository.findAll();
-    }
-
-
     public void add(Outmigration data){ outmigrationRepository.create(data);}
 
     public void add(Outmigration... data){outmigrationRepository.create(data);  }

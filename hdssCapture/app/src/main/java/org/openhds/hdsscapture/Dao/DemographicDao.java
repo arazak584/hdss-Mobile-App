@@ -39,10 +39,6 @@ public interface DemographicDao {
     @Delete
     void Delete(Demographic user);
 
-
-    @Query("SELECT * FROM demographic")
-    List<Demographic> retrieve();
-
     @Query("SELECT * FROM demographic as a inner join individual as b on a.individual_uuid=b.uuid WHERE a.complete=1")
     List<Demographic> retrieveToSync();
 

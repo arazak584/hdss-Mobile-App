@@ -35,16 +35,6 @@ public class PregnancyoutcomeRepository {
         });
     }
 
-
-    public List<Pregnancyoutcome> findAll() throws ExecutionException, InterruptedException {
-
-        Callable<List<Pregnancyoutcome>> callable = () -> dao.retrieve();
-
-        Future<List<Pregnancyoutcome>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
     public List<Pregnancyoutcome> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Pregnancyoutcome>> callable = () -> dao.retrieveToSync();

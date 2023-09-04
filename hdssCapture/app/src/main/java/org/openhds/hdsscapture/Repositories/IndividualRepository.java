@@ -62,15 +62,6 @@ public class IndividualRepository {
         return future.get();
     }
 
-    public List<Individual> findAll() throws ExecutionException, InterruptedException {
-
-        Callable<List<Individual>> callable = () -> dao.retrieve();
-
-        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
     public List<Individual> retrieveByLocationId(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Individual>> callable = () -> dao.retrieveByLocationId(id);

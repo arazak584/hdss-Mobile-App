@@ -34,16 +34,6 @@ public class PregnancyRepository {
         });
     }
 
-
-    public List<Pregnancy> findAll() throws ExecutionException, InterruptedException {
-
-        Callable<List<Pregnancy>> callable = () -> dao.retrieve();
-
-        Future<List<Pregnancy>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
     public List<Pregnancy> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Pregnancy>> callable = () -> dao.retrieveToSync();

@@ -26,12 +26,6 @@ public interface VaccinationDao {
     @Query("DELETE FROM vaccination")
     void deleteAll();
 
-    @Query("SELECT * FROM vaccination")
-    List<Vaccination> getAll();
-
-    @Query("SELECT * FROM vaccination")
-    List<Vaccination> retrieve();
-
     @Query("SELECT * FROM vaccination WHERE complete=1")
     List<Vaccination> retrieveSync();
 

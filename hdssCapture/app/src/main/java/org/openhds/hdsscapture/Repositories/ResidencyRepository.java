@@ -43,15 +43,6 @@ public class ResidencyRepository {
         return row.intValue();
     }
 
-    public List<Residency> findAll() throws ExecutionException, InterruptedException {
-
-        Callable<List<Residency>> callable = () -> dao.retrieve();
-
-        Future<List<Residency>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
     public List<Residency> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Residency>> callable = () -> dao.retrieveToSync();

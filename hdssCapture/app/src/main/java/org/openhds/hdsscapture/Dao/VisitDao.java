@@ -25,16 +25,8 @@ public interface VisitDao {
     @Update
     void update(Visit visit);
 
-
-    @Query("SELECT * FROM visit")
-    List<Visit> getAll();
-
     @Query("SELECT * FROM visit where socialgroup_uuid=:id")
     Visit find(String id);
-
-
-    @Query("SELECT * FROM visit")
-    List<Visit> retrieve();
 
     @Query("SELECT * FROM visit WHERE complete=1")
     List<Visit> retrieveToSync();

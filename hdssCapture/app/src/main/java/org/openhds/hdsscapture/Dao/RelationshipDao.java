@@ -34,10 +34,6 @@ public interface RelationshipDao {
     @Update(entity = Relationship.class)
     int update(RelationshipUpdate s);
 
-
-    @Query("SELECT * FROM relationship")
-    List<Relationship> retrieve();
-
     @Query("SELECT * FROM relationship WHERE complete=1")
     List<Relationship> retrieveToSync();
 

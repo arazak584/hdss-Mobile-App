@@ -44,9 +44,6 @@ public interface IndividualDao {
     @Query("SELECT a.* FROM individual as a inner join residency as b on a.uuid=b.individual_uuid WHERE a.complete=1 GROUP BY a.uuid order by dob")
     List<Individual> retrieveToSync();
 
-    @Query("SELECT * FROM individual")
-    List<Individual> retrieve();
-
     @Query("SELECT a.*,d.extId as houseExtId,b.endType FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
             " INNER JOIN socialgroup as d on b.socialgroup_uuid=d.uuid " +
             " WHERE b.endType=1 and firstName!='FAKE' and d.extId=:id order by dob")

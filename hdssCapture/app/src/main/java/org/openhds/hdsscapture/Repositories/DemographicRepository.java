@@ -35,16 +35,6 @@ public class DemographicRepository {
         });
     }
 
-
-    public List<Demographic> findAll() throws ExecutionException, InterruptedException {
-
-        Callable<List<Demographic>> callable = () -> dao.retrieve();
-
-        Future<List<Demographic>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
     public List<Demographic> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Demographic>> callable = () -> dao.retrieveToSync();

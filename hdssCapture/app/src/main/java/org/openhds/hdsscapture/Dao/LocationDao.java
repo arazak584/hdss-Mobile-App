@@ -40,9 +40,6 @@ public interface LocationDao {
     @Query("SELECT * FROM Locations WHERE compno=:id")
     Locations retrieve(String id);
 
-    @Query("SELECT * FROM Locations ")
-    List<Locations> retrieve();
-
     @Query("SELECT * FROM Locations WHERE complete=1")
     List<Locations> retrieveToSync();
 
