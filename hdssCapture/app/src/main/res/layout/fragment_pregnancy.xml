@@ -306,6 +306,7 @@
                  <TextView
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
+                     android:textColor="@color/black"
                      android:text="@string/ageOfPregFromPregNotes" />
 
                  <EditText
@@ -319,6 +320,7 @@
                  <TextView
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
+                     android:textColor="@color/black"
                      android:text="@string/estimatedAgeOfPreg" />
 
                  <EditText
@@ -351,6 +353,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="5dp"
+                        android:textColor="@color/black"
                         android:text="@string/attend_you"/>
 
                     <Spinner
@@ -386,6 +389,7 @@
                      android:layout_height="wrap_content"
                      android:gravity="start"
                      android:padding="5dp"
+                     android:textColor="@color/black"
                      android:text="@string/ttinjection"/>
 
                  <Spinner
@@ -402,6 +406,7 @@
                  <TextView
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
+                     android:textColor="@color/black"
                      android:text="@string/first_rec" />
 
                  <EditText
@@ -415,6 +420,7 @@
                  <TextView
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
+                     android:textColor="@color/black"
                      android:text="@string/anc_visits" />
 
                  <EditText
@@ -465,6 +471,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:text="@string/how_many" />
 
                     <EditText
@@ -480,6 +487,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="5dp"
+                        android:textColor="@color/black"
                         android:text="@string/bnet_sou"/>
 
                     <Spinner
@@ -515,6 +523,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="5dp"
+                        android:textColor="@color/black"
                         android:text="@string/bnet_loc"/>
 
                     <Spinner
@@ -551,6 +560,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="5dp"
+                        android:textColor="@color/black"
                         android:text="@string/slp_bednet"/>
 
                     <Spinner
@@ -569,6 +579,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="5dp"
+                        android:textColor="@color/black"
                         android:text="@string/trt_bednet"/>
 
                     <Spinner
@@ -590,6 +601,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/healthfacility"/>
 
                 <Spinner
@@ -607,6 +619,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/medicineforpregnancy"/>
 
                 <Spinner
@@ -624,6 +637,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/first_preg"/>
 
                 <Spinner
@@ -641,6 +655,7 @@
                     goneUnless="@{pregnancy.first_preg==2}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/pregnancyNumber" />
 
                 <EditText
@@ -657,6 +672,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/outcome"/>
 
                 <Spinner

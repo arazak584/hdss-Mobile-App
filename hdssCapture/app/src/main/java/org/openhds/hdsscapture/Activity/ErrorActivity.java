@@ -142,6 +142,19 @@ public class ErrorActivity extends AppCompatActivity {
 
             }
 
+            int k=1;
+            for (Individual e : individualViewModel.errors()) {
+                String formattedDate = f.format(e.insertDate);
+                Queries r1 = new Queries();
+                r1.name = "Individual " + " - " + e.extId;
+                r1.extid = "" + e.compextId + " - " +e.firstName + " " + e.lastName;
+                r1.date = "" + e.houseExtId;
+                r1.error = "Only Minors Left in Household";
+                r1.index = k;
+                list.add(r1);
+
+            }
+
             int i=1;
             for (Outcome e : outcomeViewModel.error()) {
                 //String formattedDate = f.format(e.insertDate);

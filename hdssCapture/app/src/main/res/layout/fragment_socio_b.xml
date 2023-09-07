@@ -20,11 +20,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="@string/drink_water" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="@string/H2O_FCORRES_SOCIO" />
 
         <Spinner
@@ -43,6 +45,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="@string/H2O_SPFY_FCORRES_SOCIO" />
 
             <EditText
@@ -58,6 +61,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="@string/H2O_DIST_FCORRES_SOCIO" />
 
         <LinearLayout
@@ -77,6 +81,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="@string/meters" />
 
         </LinearLayout>
@@ -84,6 +89,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="@string/H2O_HOURS_FCORRES_SOCIO" />
 
         <LinearLayout
@@ -103,6 +109,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="@string/text_hrs" />
 
             <EditText
@@ -117,12 +124,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="@string/text_min" />
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="@string/H2O_PREP_FCORRES_SOCIO" />
 
         <RadioGroup
@@ -165,6 +174,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="@string/H2O_PREP_SPFY_FCORRES_SOCIO" />
 
             <TableLayout
@@ -180,6 +190,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:text="@string/H2O_PREP_SPFY_FCORRES_1_SOCIO"
+                        android:textColor="@color/black"
                         android:textAlignment="gravity" />
 
                     <RadioGroup
@@ -225,6 +236,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:text="@string/H2O_PREP_SPFY_FCORRES_2_SOCIO"
+                        android:textColor="@color/black"
                         android:textAlignment="gravity" />
 
                     <RadioGroup
@@ -268,6 +280,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:text="@string/H2O_PREP_SPFY_FCORRES_3_SOCIO"
+                        android:textColor="@color/black"
                         android:textAlignment="gravity" />
 
                     <RadioGroup
@@ -311,6 +324,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:text="@string/H2O_PREP_SPFY_FCORRES_4_SOCIO"
+                        android:textColor="@color/black"
                         android:textAlignment="gravity" />
 
                     <RadioGroup
@@ -353,6 +367,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:textColor="@color/black"
                         android:text="@string/H2O_PREP_SPFY_FCORRES_5_SOCIO"
                         android:textAlignment="gravity" />
 
@@ -395,11 +410,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="@string/toilet_facility" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="@string/TOILET_FCORRES_SOCIO" />
 
         <Spinner
@@ -424,6 +441,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/TOILET_SPFY_FCORRES_SOCIO" />
 
                 <EditText
@@ -441,6 +459,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/TOILET_LOC_FCORRES_SOCIO"
+                android:textColor="@color/black"
                 tools:ignore="TooManyViews" />
 
             <Spinner
@@ -459,6 +478,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/TOILET_LOC_SPFY_FCORRES_SOCIO" />
 
                 <EditText
@@ -474,6 +494,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="@string/TOILET_SHARE_FCORRES_SOCIO" />
 
             <RadioGroup
@@ -516,6 +537,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/TOILET_SHARE_NUM_FCORRES_SOCIO" />
 
                 <Spinner
@@ -531,11 +553,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="@string/hh_asset" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="@string/EXT_WALL_FCORRES_SOCIO" />
 
         <Spinner
@@ -554,6 +578,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="@string/EXT_WALL_SPFY_FCORRES_SOCIO" />
 
             <EditText
@@ -569,6 +594,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="@string/FLOOR_FCORRES_SOCIO" />
 
         <Spinner
@@ -587,6 +613,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="@string/FLOOR_SPFY_FCORRES_SOCIO" />
 
             <EditText
@@ -602,6 +629,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="@string/ROOF_FCORRES_SOCIO" />
 
         <Spinner
@@ -620,6 +648,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="@string/ROOF_SPFY_FCORRES_SOCIO" />
 
             <EditText

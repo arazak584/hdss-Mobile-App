@@ -86,7 +86,7 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
         final String status;
 
             if (eventForm.complete == null ) {
-                holder.linearLayout.setBackgroundColor(Color.TRANSPARENT);
+                holder.linearLayout.setBackgroundColor(Color.WHITE);
                  status = NOT_DONE;
             } else if (eventForm.complete != null) {
                 if (eventForm.complete == COMPLETE ) {
@@ -97,8 +97,8 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
                     status = UPDATE;
                 }else {
                     holder.linearLayout.setBackgroundColor(Color.BLUE);
-                    holder.textView_status.setTextColor(Color.WHITE);
-                    holder.textView_event.setTextColor(Color.WHITE);
+                    holder.textView_status.setTextColor(Color.parseColor("#FF4500"));
+                    holder.textView_event.setTextColor(Color.parseColor("#FF4500"));
                     status = SUBMITTED;
                 }
             }else {

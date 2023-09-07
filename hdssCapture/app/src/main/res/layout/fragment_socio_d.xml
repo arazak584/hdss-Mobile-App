@@ -17,14 +17,16 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/land_asset" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/LAND_FCORRES_SOCIO" />
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textColor="@color/black"
+          android:text="@string/LAND_FCORRES_SOCIO" />
 
         <RadioGroup
             android:id="@+id/LAND_FCORRES"
@@ -65,13 +67,15 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/LAND_USE_FCORRES_SOCIO" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/LAND_USE_FCORRES_1_SOCIO" />
 
             <RadioGroup
@@ -106,8 +110,9 @@
             </RadioGroup>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/LAND_USE_FCORRES_2_SOCIO" />
 
             <RadioGroup
@@ -142,8 +147,9 @@
             </RadioGroup>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/LAND_USE_FCORRES_3_SOCIO" />
 
             <RadioGroup
@@ -178,8 +184,9 @@
             </RadioGroup>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/LAND_USE_FCORRES_4_SOCIO" />
 
             <RadioGroup
@@ -214,8 +221,9 @@
             </RadioGroup>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/LAND_USE_FCORRES_5_SOCIO" />
 
             <RadioGroup
@@ -250,8 +258,9 @@
             </RadioGroup>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/LAND_USE_FCORRES_88_SOCIO" />
 
             <RadioGroup
@@ -294,6 +303,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/ANIMAL_OTHR_FCORRES_SOCIO_SPFY" />
 
                 <EditText
@@ -308,8 +318,9 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/LIVESTOCK_FCORRES_SOCIO" />
 
         <RadioGroup
@@ -351,8 +362,9 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/CATTLE_FCORRES_SOCIO" />
 
             <RadioGroup
@@ -396,6 +408,7 @@
                     android:id="@+id/cattle_num"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/Black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -409,8 +422,9 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/GOAT_FCORRES_SOCIO" />
 
             <RadioGroup
@@ -453,6 +467,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -466,8 +481,9 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/SHEEP_FCORRES_SOCIO" />
 
             <RadioGroup
@@ -510,6 +526,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -523,8 +540,9 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/POULTRY_FCORRES_SOCIO" />
 
             <RadioGroup
@@ -567,6 +585,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -580,8 +599,9 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/PIG_FCORRES_SOCIO" />
 
             <RadioGroup
@@ -626,6 +646,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/item_other"
+                    android:textColor="@color/Black"
                     android:textSize="16sp" />
 
                 <EditText
@@ -639,8 +660,9 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/DONKEY_FCORRES_SOCIO" />
 
             <RadioGroup
@@ -683,6 +705,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -696,8 +719,9 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/HORSE_FCORRES_SOCIO" />
 
             <RadioGroup
@@ -740,6 +764,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -753,8 +778,9 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/ANIMAL_OTHR_FCORRES_SOCIO" />
 
             <RadioGroup
@@ -797,6 +823,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other_88" />
 
                 <EditText
@@ -811,6 +838,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other_num" />
 
                 <EditText

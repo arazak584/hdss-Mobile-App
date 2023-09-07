@@ -24,6 +24,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/Black"
             android:text="@string/JOB_SCORRES_SOCIO" />
 
         <Spinner
@@ -42,6 +43,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/Black"
                 android:text="@string/item_other_text" />
 
             <EditText
@@ -60,6 +62,7 @@
             goneUnless="@{sociodemo.marital_scorres==1}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textColor="@color/Black"
             android:text="@string/PTR_SCORRES_SOCIO" />
 
         <Spinner
@@ -79,6 +82,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/Black"
                 android:text="@string/item_other_text" />
 
             <EditText

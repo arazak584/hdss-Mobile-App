@@ -6,8 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardElevation="16dp"
     app:cardCornerRadius="16dp"
-    android:layout_margin="8dp"
-    android:backgroundTint="#efefef">
+    android:layout_margin="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,15 +24,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Househead Name: "
-                android:textSize="12dp"
-                android:textColor="@color/black"
+                android:textSize="20dp"
                 android:textStyle="bold"/>
             <TextView
                 android:id="@+id/hhead_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
-                android:textSize="12dp"/>
+                android:textSize="20dp"/>
 
         </LinearLayout>
 
@@ -48,14 +46,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Household ID: "
-                android:textSize="12dp"
-                android:textColor="@color/black"
+                android:textSize="20dp"
                 android:textStyle="bold"/>
             <TextView
                 android:id="@+id/hhid_head"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"/>
+                android:textSize="20dp"/>
         </LinearLayout>
 
 

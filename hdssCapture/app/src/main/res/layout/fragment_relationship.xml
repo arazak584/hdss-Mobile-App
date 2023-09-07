@@ -180,6 +180,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/starttype"/>
 
                 <Spinner
@@ -216,6 +217,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/endtype"/>
 
                 <Spinner
@@ -272,6 +274,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/tnbch" />
 
                 <EditText
@@ -285,6 +288,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/nchdm" />
 
                 <EditText
@@ -319,6 +323,7 @@
                     goneUnless="@{relationship.polygamous==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/nwive" />
 
                 <EditText
@@ -354,6 +359,7 @@
                     goneUnless="@{relationship.polygamous==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/mrank" />
 
                 <EditText

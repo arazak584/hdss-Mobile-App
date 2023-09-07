@@ -249,6 +249,7 @@
                     goneUnless="@{demographic.education!=1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/comp_yrs" />
 
                 <EditText

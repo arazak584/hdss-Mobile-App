@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/MidnightBlue"
+    android:background="@color/white"
+    android:padding="20dp"
     tools:context=".Activity.PushActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@color/MidnightBlue"
         android:padding="10dp">
 
         <TextView
@@ -28,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_location"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -42,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_visit"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -56,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_list"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -70,7 +72,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_individual"
-        android:backgroundTint="@color/DarkSlateGray"
+        android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -84,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_socialgroup"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -99,7 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_relationship"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -113,7 +115,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_pregnancy"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -127,7 +129,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_pregoutcome"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -141,7 +143,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_outcome"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -156,7 +158,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_demography"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -170,7 +172,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_death"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -184,7 +186,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_profile"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -198,7 +200,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_residency"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -212,7 +214,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_inmigration"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -226,7 +228,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_outmigration"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -240,7 +242,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_amendment"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -254,7 +256,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_vaccination"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView
@@ -268,7 +270,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/send_duplicate"
-            android:backgroundTint="@color/DarkSlateGray"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/push"/>
 
         <TextView

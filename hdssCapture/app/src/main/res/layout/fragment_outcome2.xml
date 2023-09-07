@@ -230,6 +230,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
+            android:textColor="@color/black"
             android:text="@string/rltn_head"/>
 
         <Spinner

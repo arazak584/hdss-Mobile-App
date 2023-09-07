@@ -107,8 +107,8 @@
     <string name="endtype">Select End Type</string>
     <string name="enddate">Select End Date</string>
     <string name="hierarchy">Locations Selection</string>
-    <string name="region">Select Region</string>
-    <string name="district">Select District</string>
+    <string name="region">Region</string>
+    <string name="district">District</string>
     <string name="subdistrict">Sub District</string>
     <string name="village">Village/Sector</string>
     <string name="cluster">Cluster</string>

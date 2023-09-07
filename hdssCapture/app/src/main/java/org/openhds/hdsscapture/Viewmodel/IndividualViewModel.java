@@ -86,6 +86,10 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.error();
     }
 
+    public List<Individual> errors() throws ExecutionException, InterruptedException {
+        return individualRepository.errors();
+    }
+
     public void add(Individual data){ individualRepository.create(data);}
 
     public void add(Individual... data){

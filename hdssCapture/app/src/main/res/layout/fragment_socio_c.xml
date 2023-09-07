@@ -18,14 +18,18 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/hh_amenities" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/amenities" />
+
+
 
         <TableLayout
             android:layout_width="match_parent"
@@ -38,9 +42,11 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/ELECTRICITY_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
+
 
                 <RadioGroup
                     android:id="@+id/ELECTRICITY_FCORRES"
@@ -83,6 +89,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/SOLAR_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -126,6 +133,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/INTERNET_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -170,6 +178,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/LANDLINE_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -212,6 +221,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/Black"
             android:text="@string/MOBILE_FCORRES_SOCIO" />
 
         <RadioGroup
@@ -252,8 +262,9 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/MOBILE_NUM_FCORRES_SOCIO" />
 
             <EditText
@@ -267,8 +278,9 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/MOBILE_ACCESS_FCORRES_SOCIO" />
 
         <Spinner
@@ -279,8 +291,9 @@
             android:onItemSelected="@{sociodemo::setMobile_access_fcorres}" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/any_items" />
 
         <TableLayout
@@ -294,6 +307,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/RADIO_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -336,8 +350,9 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -357,6 +372,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/TV_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -399,8 +415,9 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -420,6 +437,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/FRIDGE_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -463,8 +481,9 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -484,6 +503,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/COMPUTER_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -527,8 +547,9 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -548,6 +569,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/WATCH_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -591,8 +613,9 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -612,6 +635,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/BIKE_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -654,8 +678,9 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -675,6 +700,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/MOTORCYCLE_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -719,8 +745,9 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -740,6 +767,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/CAR_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -786,8 +814,9 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -807,6 +836,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/BOAT_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -853,8 +883,9 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -874,6 +905,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/CART_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -918,8 +950,9 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -939,6 +972,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/PLOUGH_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -984,8 +1018,9 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -1005,6 +1040,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/FOAM_MATT_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -1050,8 +1086,9 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -1071,6 +1108,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/STRAW_MATT_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -1116,8 +1154,9 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -1138,6 +1177,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/SPRING_MATT_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -1183,8 +1223,9 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -1205,6 +1246,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/SOFA_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -1250,8 +1292,9 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -1272,6 +1315,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/LANTERN_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -1317,8 +1361,9 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -1340,6 +1385,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/SEW_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -1385,8 +1431,9 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -1406,6 +1453,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/WASH_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -1454,6 +1502,7 @@
                     android:id="@+id/item_other18"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/Black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -1473,6 +1522,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/BLENDER_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -1517,8 +1567,9 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -1538,6 +1589,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/MOSQUITO_NET_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -1582,8 +1634,9 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -1603,6 +1656,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/TRICYCLES_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -1647,8 +1701,9 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -1668,6 +1723,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/TABLES_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -1712,8 +1768,9 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -1733,6 +1790,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/CABINETS_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -1778,8 +1836,9 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -1799,6 +1858,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/SAT_DISH_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -1844,8 +1904,9 @@
 
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -1865,6 +1926,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/DVD_CD_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -1912,6 +1974,7 @@
                     android:id="@+id/item_other25"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/Black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -1931,6 +1994,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/AIRCON_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -1978,6 +2042,7 @@
                     android:id="@+id/item_other26"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/Black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -1997,6 +2062,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:gravity="center_vertical"
                     android:text="@string/TRACTOR_FCORRES_SOCIO"
                     android:textAlignment="gravity" />
@@ -2041,8 +2107,9 @@
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -2059,8 +2126,9 @@
         </TableLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/OWN_RENT_SCORRES_SOCIO" />
 
         <Spinner
@@ -2079,6 +2147,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/Black"
                 android:text="@string/item_other_text" />
 
             <EditText
@@ -2092,8 +2161,9 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/HOUSE_ROOMS_FCORRES_SOCIO" />
 
         <EditText
@@ -2106,8 +2176,9 @@
             tools:ignore="Autofill,LabelFor" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/HOUSE_ROOM_CHILD_FCORRES_SOCIO" />
 
         <RadioGroup

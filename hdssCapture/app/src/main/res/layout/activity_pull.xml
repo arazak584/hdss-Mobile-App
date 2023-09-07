@@ -4,12 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/MidnightBlue"
+    android:background="@color/white"
+    android:padding="20dp"
     tools:context=".Activity.PullActivity">
 
-    <LinearLayout android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@color/MidnightBlue"
         android:padding="20dp">
 
         <Button
@@ -17,6 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/get_codebook"
+                android:backgroundTint="@color/pop"
                 app:icon="@drawable/pull"/>
 
         <TextView
@@ -31,6 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/get_location"
+                android:backgroundTint="@color/pop"
                 app:icon="@drawable/pull"/>
 
         <TextView
@@ -44,6 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/get_individual"
+                android:backgroundTint="@color/pop"
                 app:icon="@drawable/pull"/>
 
 
@@ -58,6 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/get_residency"
+                android:backgroundTint="@color/pop"
                 app:icon="@drawable/pull"/>
 
         <TextView
@@ -71,6 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/get_relationship"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/pull"/>
 
         <TextView
@@ -84,6 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/get_socialgroup"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/pull"/>
 
         <TextView
@@ -97,6 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/get_pregobservation"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/pull"/>
 
         <TextView
@@ -110,6 +120,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/get_demography"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/pull"/>
 
         <TextView
@@ -124,6 +135,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/get_ses"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/pull"/>
 
         <TextView
@@ -138,6 +150,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/get_vac"
+            android:backgroundTint="@color/pop"
             app:icon="@drawable/pull"/>
 
         <TextView
@@ -150,6 +163,7 @@
             android:id="@+id/button_Complete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/SeaGreen"
             android:text="@string/complete"/>
 
         <TextView

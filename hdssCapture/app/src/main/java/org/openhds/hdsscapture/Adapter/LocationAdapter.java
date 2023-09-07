@@ -79,11 +79,15 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
         Integer st = locations.complete;
         if (st != null) {
-            holder.compno.setTextColor(Color.BLUE);
-            holder.locationname.setTextColor(Color.BLUE);
+            holder.compno.setTextColor(Color.parseColor("#32CD32"));
+            holder.locationname.setTextColor(Color.parseColor("#32CD32"));
+//            holder.longitude.setTextColor(Color.GREEN);
+//            holder.latitude.setTextColor(Color.GREEN);
         } else {
-            holder.compno.setTextColor(Color.MAGENTA);
-            holder.locationname.setTextColor(Color.MAGENTA);
+            holder.compno.setTextColor(Color.parseColor("#FF4500"));
+            holder.locationname.setTextColor(Color.parseColor("#FF4500"));
+//            holder.longitude.setTextColor(Color.parseColor("#FF4500"));
+//            holder.latitude.setTextColor(Color.parseColor("#FF4500"));
         }
 
         holder.linearLayout.setOnClickListener(v -> {

@@ -130,10 +130,33 @@ public interface IndividualDao {
 //            "where c.endType=1 and a.complete=2 AND d.firstName!='FAKE' AND compextId is not null GROUP BY a.socialgroup_uuid order by dob")
 //    List<Individual> error();
 
-    @Query("SELECT a.* FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
+    @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
+            " INNER JOIN residency c on a.uuid=c.individual_uuid INNER JOIN locations d " +
+            " ON c.location_uuid=d.uuid " +
             " WHERE firstName!='FAKE' and groupName!='UNK' and " +
             " date('now', '-14 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
     List<Individual> error();
+
+//    @Query("SELECT * FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
+//            " INNER JOIN locations c on b.location_uuid=c.uuid " +
+//            " WHERE firstName!='FAKE' and " +
+//            " date('now', '-14 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
+//    List<Individual> errors();
+
+    @Query("SELECT a.*,c.compextId,d.extId as houseExtId FROM individual AS a INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
+            " INNER JOIN locations c on b.location_uuid=c.uuid " +
+            " INNER JOIN socialgroup d on b.socialgroup_uuid = d.uuid " +
+            "WHERE a.firstName != 'FAKE' AND b.endType = 1 AND c.complete IS NOT NULL " +
+            "AND b.socialgroup_uuid IN ( " +
+            "    SELECT b2.socialgroup_uuid " +
+            "    FROM individual AS a2 " +
+            "    INNER JOIN residency AS b2 ON a2.uuid = b2.individual_uuid " +
+            "    WHERE b2.endType = 1 " +
+            "    GROUP BY b2.socialgroup_uuid " +
+            "    HAVING MAX(STRFTIME('%Y', 'now') - STRFTIME('%Y', DATE(a2.dob/1000, 'unixepoch'))) < 14" +
+            ") " +
+            "ORDER BY c.compextId")
+    List<Individual> errors();
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

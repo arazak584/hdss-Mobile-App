@@ -24,6 +24,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/Black"
             android:text="@string/SMOKE_OECOCCUR_SOCIO" />
 
         <RadioGroup
@@ -67,6 +68,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/Black"
                 android:text="@string/SMOKE_IN_OECDOSFRQ_SOCIO" />
 
             <Spinner
@@ -81,6 +83,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/Black"
             android:text="@string/SMOKE_HHOLD_OECOCCUR_SOCIO" />
 
         <RadioGroup
@@ -124,6 +127,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="@color/Black"
                 android:text="@string/SMOKE_HHOLD_IN_OECDOSFRQ_SOCIO" />
 
             <Spinner
@@ -138,6 +142,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/Black"
             android:text="@string/CHEW_OECOCCUR_SOCIO" />
 
         <RadioGroup
@@ -175,6 +180,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/Black"
             android:text="@string/CHEW_BNUT_OECOCCUR_SOCIO" />
 
         <RadioGroup
@@ -213,6 +219,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/Black"
             android:text="@string/DRINK_OECOCCUR_SOCIO" />
 
         <RadioGroup

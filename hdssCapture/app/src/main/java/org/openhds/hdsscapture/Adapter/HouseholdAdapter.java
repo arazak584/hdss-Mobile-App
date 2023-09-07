@@ -65,16 +65,15 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
 
         holder.name.setText(socialgroup.getGroupName());
         holder.hhid.setText(socialgroup.getExtId());
-        holder.hhid.setTextColor(Color.RED);
 
         Integer visit = socialgroup.complete;
 
         if (visit != null) {
-            holder.hhid.setTextColor(Color.BLUE);
-            holder.name.setTextColor(Color.BLUE);
+            holder.hhid.setTextColor(Color.parseColor("#32CD32"));
+            holder.name.setTextColor(Color.parseColor("#32CD32"));
         }else {
-            holder.hhid.setTextColor(Color.RED);
-            holder.name.setTextColor(Color.RED);
+            holder.hhid.setTextColor(Color.parseColor("#FF4500"));
+            holder.name.setTextColor(Color.parseColor("#FF4500"));
         }
 
 

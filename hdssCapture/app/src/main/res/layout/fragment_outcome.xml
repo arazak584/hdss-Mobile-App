@@ -240,6 +240,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:text="@string/childeverborn" />
 
                     <RadioGroup
@@ -289,6 +290,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/birthplace"/>
 
                 <Spinner
@@ -307,6 +309,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/not_del"/>
 
                 <Spinner
@@ -343,6 +346,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/ass_del"/>
 
                 <Spinner
@@ -379,6 +383,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/how_del"/>
 
                 <Spinner
@@ -414,6 +419,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/rec_anc"/>
 
                 <Spinner
@@ -432,6 +438,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/why_no_anc"/>
 
                 <Spinner
@@ -451,6 +458,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/where_anc"/>
 
                 <Spinner
@@ -488,6 +496,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/who_anc"/>
 
                 <Spinner
@@ -505,6 +514,7 @@
                     goneUnless="@{pregoutcome.rec_anc==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/month_pg" />
 
                 <EditText
@@ -520,6 +530,7 @@
                     goneUnless="@{pregoutcome.rec_anc==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/num_anc" />
 
                 <EditText
@@ -537,6 +548,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/rec_ipt"/>
 
                 <Spinner
@@ -555,6 +567,7 @@
                     goneUnless="@{pregoutcome.rec_ipt==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/first_recs" />
 
                 <EditText
@@ -571,6 +584,7 @@
                     goneUnless="@{pregoutcome.rec_ipt==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/many_ipt" />
 
                 <EditText
@@ -634,6 +648,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/stillbirth"/>
 
                 <RadioGroup
@@ -733,6 +748,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="5dp"
+                        android:textColor="@color/black"
                         android:text="@string/first_nb"/>
 
                     <Spinner
@@ -751,6 +767,7 @@
                         goneUnless="@{pregoutcome.first_nb==2}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:text="@string/l_birth" />
 
                     <EditText
@@ -768,6 +785,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="5dp"
+                        android:textColor="@color/black"
                         android:text="@string/chd_weight"/>
 
                     <Spinner
@@ -787,6 +805,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="5dp"
+                        android:textColor="@color/black"
                         android:text="@string/chd_size"/>
 
                     <Spinner
@@ -804,6 +823,7 @@
                         goneUnless="@{pregoutcome.chd_weight==1}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         android:text="@string/weig_hcard" />
 
                     <EditText

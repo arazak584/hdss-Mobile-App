@@ -178,4 +178,13 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public List<Individual> errors() throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.errors();
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
 }

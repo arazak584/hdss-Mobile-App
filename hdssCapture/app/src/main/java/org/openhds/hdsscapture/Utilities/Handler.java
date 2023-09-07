@@ -100,7 +100,7 @@ public class Handler {
                         v.setBackground(drawable);
                     } else if (((TextView) v).getTypeface().isBold()) {
                         ((TextView) v).setTextColor(Color.WHITE);
-                        v.setBackgroundColor(Color.DKGRAY);
+                        v.setBackgroundColor(Color.parseColor("#FF4500"));
                         v.setPadding(5, 5, 5, 5);
                         v.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 

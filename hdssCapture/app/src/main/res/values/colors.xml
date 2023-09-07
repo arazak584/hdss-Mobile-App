@@ -162,7 +162,10 @@
     <color name="DarkBlue">#00008B</color>
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
-
+    <color name="pop">#FF4500</color>
+    <color name="transparent">#0000ffff</color>
+    <color name="home">#8A080D</color>
+    <color name="back">#F5F5F5</color>
 
 
 </resources>

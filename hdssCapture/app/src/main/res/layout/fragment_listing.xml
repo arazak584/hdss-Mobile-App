@@ -30,7 +30,6 @@
             android:gravity="center"
             android:padding="10dp"
             android:text="@string/listing"
-            android:textColor="@color/colorPrimary"
             android:textSize="30sp"
             android:textStyle="bold" />
         <View
@@ -189,6 +188,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/correctcompname"/>
 
 
@@ -199,7 +199,6 @@
                     selection="@{listing.correct_yn}"
                     android:onItemSelected="@{listing::setCorrect_yn}"
                     android:gravity="left"
-                    android:textColor="#000301"
                     android:padding="20dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -227,9 +226,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/changecluster"
-                    tools:ignore="DuplicateSpeakableTextCheck"
-                    android:backgroundTint="@color/black"
-                    android:textColor="@color/white" />
+                    tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
@@ -314,6 +311,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/location_status"/>
 
 
@@ -324,7 +322,6 @@
                     selection="@{listing.status}"
                     android:onItemSelected="@{listing::setStatus}"
                     android:gravity="left"
-                    android:textColor="#000301"
                     android:padding="20dp"/>
 
 
@@ -342,7 +339,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textColor="#000301"
                     selection="@{listing.complete}"
                     android:onItemSelected="@{listing::setComplete}"
                     android:padding="20dp"/>

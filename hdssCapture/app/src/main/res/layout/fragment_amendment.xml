@@ -187,6 +187,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:text="FirstName"
+                        android:textColor="@color/black"
                         android:textAlignment="gravity" />
 
                     <RadioGroup
@@ -232,6 +233,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:text="@string/surname"
+                        android:textColor="@color/black"
                         android:textAlignment="gravity" />
 
                     <RadioGroup
@@ -275,6 +277,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:text="@string/othername"
+                        android:textColor="@color/black"
                         android:textAlignment="gravity" />
 
                     <RadioGroup
@@ -318,6 +321,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:text="@string/genders"
+                        android:textColor="@color/black"
                         android:textAlignment="gravity" />
 
                     <RadioGroup
@@ -361,6 +365,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:text="@string/actual_dob"
+                        android:textColor="@color/black"
                         android:textAlignment="gravity" />
 
                     <RadioGroup
@@ -405,6 +410,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:text="@string/card"
+                        android:textColor="@color/black"
                         android:textAlignment="gravity" />
 
                     <RadioGroup
@@ -449,7 +455,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/firstname">
+                    android:hint="@string/firstname"
                     android:text="@string/firstname">
 
                     <com.google.android.material.textfield.TextInputEditText

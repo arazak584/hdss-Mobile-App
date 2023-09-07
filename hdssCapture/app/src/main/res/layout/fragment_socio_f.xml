@@ -17,13 +17,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/exposure" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/STOVE_FCORRES_SOCIO" />
 
         <Spinner
@@ -40,8 +42,9 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/other_specify" />
 
             <EditText
@@ -61,13 +64,15 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/STOVE_FUEL_FCORRES_SOCIO" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:textColor="@color/Black"
             android:text="@string/STOVE_FUEL_FCORRES_1_SOCIO" />
 
         <RadioGroup
@@ -103,8 +108,9 @@
         </RadioGroup>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/STOVE_FUEL_FCORRES_2_SOCIO" />
 
         <RadioGroup
@@ -140,8 +146,9 @@
         </RadioGroup>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/STOVE_FUEL_FCORRES_3_SOCIO" />
 
         <RadioGroup
@@ -177,8 +184,9 @@
         </RadioGroup>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/STOVE_FUEL_FCORRES_4_SOCIO" />
 
         <RadioGroup
@@ -214,8 +222,9 @@
         </RadioGroup>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/STOVE_FUEL_FCORRES_5_SOCIO" />
 
         <RadioGroup
@@ -251,8 +260,9 @@
         </RadioGroup>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/STOVE_FUEL_FCORRES_6_SOCIO" />
 
         <RadioGroup
@@ -288,8 +298,9 @@
         </RadioGroup>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/STOVE_FUEL_FCORRES_7_SOCIO" />
 
         <RadioGroup
@@ -325,8 +336,9 @@
         </RadioGroup>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/STOVE_FUEL_FCORRES_8_SOCIO" />
 
         <RadioGroup
@@ -362,8 +374,9 @@
         </RadioGroup>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/STOVE_FUEL_FCORRES_9_SOCIO" />
 
         <RadioGroup
@@ -399,8 +412,9 @@
         </RadioGroup>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/STOVE_FUEL_FCORRES_10_SOCIO" />
 
         <RadioGroup
@@ -436,8 +450,9 @@
         </RadioGroup>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/STOVE_FUEL_FCORRES_11_SOCIO" />
 
         <RadioGroup
@@ -473,8 +488,9 @@
         </RadioGroup>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/STOVE_FUEL_FCORRES_12_SOCIO" />
 
         <RadioGroup
@@ -510,8 +526,9 @@
         </RadioGroup>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/STOVE_FUEL_FCORRES_13_SOCIO" />
 
         <RadioGroup
@@ -547,8 +564,9 @@
         </RadioGroup>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/STOVE_FUEL_FCORRES_14_SOCIO" />
 
         <RadioGroup
@@ -584,8 +602,9 @@
         </RadioGroup>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/STOVE_FUEL_FCORRES_88_SOCIO" />
 
         <RadioGroup
@@ -628,8 +647,9 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/item_other_text" />
 
             <EditText
@@ -649,8 +669,9 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/COOKING_INSIDE_FCORRES_SOCIO" />
 
         <RadioGroup
@@ -695,8 +716,9 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                 android:text="@string/COOKING_ROOM_FCORRES_SOCIO" />
 
             <RadioGroup
@@ -737,6 +759,7 @@
             goneUnless="@{sociodemo.stove_fcorres!=10}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/Black"
             android:text="@string/COOKING_LOC_FCORRES_SOCIO" />
 
         <Spinner
@@ -754,8 +777,9 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
             android:text="@string/COOKING_VENT_FCORRES_SOCIO" />
 
         <RadioGroup

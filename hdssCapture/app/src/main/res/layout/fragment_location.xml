@@ -186,6 +186,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/site"/>
 
                 <Spinner
@@ -322,6 +323,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/location_status"/>
 
 
@@ -340,6 +342,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:textColor="@color/black"
                     android:text="@string/locationtype"/>
 
                 <Spinner
@@ -411,8 +414,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:backgroundTint="#246EE9"
-                android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:text="@string/text_submit"
                 android:textSize="20sp" />

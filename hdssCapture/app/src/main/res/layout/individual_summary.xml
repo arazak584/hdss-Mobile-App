@@ -33,7 +33,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@{individual.firstName}"
-                android:textColor="@color/design_default_color_on_secondary"
                 android:textStyle="normal" />
             <TextView
                 android:id="@+id/textView_lname"
@@ -41,7 +40,6 @@
                 android:layout_height="wrap_content"
                 android:text="@{individual.lastName}"
                 android:layout_weight="1"
-                android:textColor="@color/design_default_color_on_secondary"
                 android:textStyle="normal" />
 
             <TextView
@@ -51,7 +49,6 @@
                 android:layout_weight="1"
                 android:text="@{individual.houseExtId}"
                 android:textAlignment="textEnd"
-                android:textColor="@color/design_default_color_on_secondary"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -79,8 +76,7 @@
                     android:id="@+id/textView_permid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{individual.extId}"
-                    android:textColor="@color/design_default_color_on_secondary" />
+                    android:text="@{individual.extId}" />
 
             </LinearLayout>
 
@@ -100,8 +96,7 @@
                     android:id="@+id/textView_dob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{individual.dob}"
-                    android:textColor="@color/design_default_color_on_secondary" />
+                    android:text="@{individual.dob}"/>
             </LinearLayout>
 
             <LinearLayout
@@ -120,8 +115,7 @@
                     android:id="@+id/textView_age"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@{Integer.toString(individual.age)}"
-                    android:textColor="@color/design_default_color_on_secondary" />
+                    android:text="@{Integer.toString(individual.age)}" />
             </LinearLayout>
 
 

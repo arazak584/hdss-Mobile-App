@@ -26,8 +26,8 @@
                 android:layout_height="wrap_content"
                 android:text="Househead Name: "
                 android:textSize="12dp"
-                android:textColor="@color/black"
                 android:textStyle="bold"/>
+
             <TextView
                 android:id="@+id/newhead_fname"
                 android:layout_width="wrap_content"
@@ -58,7 +58,6 @@
                 android:layout_height="wrap_content"
                 android:text="Perm ID: "
                 android:textSize="12dp"
-                android:textColor="@color/black"
                 android:textStyle="bold"/>
             <TextView
                 android:id="@+id/permid_head"

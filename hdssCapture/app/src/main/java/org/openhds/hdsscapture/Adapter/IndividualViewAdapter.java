@@ -103,20 +103,20 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         Integer status = individual.endType;
         if (status == 1) {
             holder.status.setText("(" + "Active" + ")");
-            holder.status.setTextColor(Color.MAGENTA);
+            holder.status.setTextColor(Color.parseColor("#32CD32"));
         } else {
             holder.status.setText("(" + "Outmigrated" + ")");
             holder.status.setTextColor(Color.RED);
         }
         Integer st = individual.complete;
         if (st != null) {
-            holder.permid.setTextColor(Color.BLUE);
-            holder.firstname.setTextColor(Color.BLUE);
-            holder.lastname.setTextColor(Color.BLUE);
+            holder.permid.setTextColor(Color.parseColor("#32CD32"));
+            holder.firstname.setTextColor(Color.parseColor("#32CD32"));
+            holder.lastname.setTextColor(Color.parseColor("#32CD32"));
         }else {
-            holder.permid.setTextColor(Color.BLACK);
-            holder.firstname.setTextColor(Color.BLACK);
-            holder.lastname.setTextColor(Color.BLACK);
+            holder.permid.setTextColor(Color.parseColor("#FF4500"));
+            holder.firstname.setTextColor(Color.parseColor("#FF4500"));
+            holder.lastname.setTextColor(Color.parseColor("#FF4500"));
         }
 
 

@@ -6,151 +6,215 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:paddingRight="50dp"
-    android:paddingLeft="50dp"
-    android:paddingTop="20dp"
-    android:background="@color/MidnightBlue"
+    android:padding="20dp"
     tools:context=".Activity.HierarchyActivity">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_gravity="fill">
+
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="fill"
+            android:gravity="center"
+            android:elevation="10dp"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:visibility="visible">
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/text_location_note"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/round"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="25dp"
                 android:text="@string/text_round" />
 
             <Spinner
                 android:id="@+id/spRound"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@color/white"
+                android:layout_height="match_parent"
                 android:contentDescription="@string/text_round"
+                android:layout_weight="1"
+                android:textSize="25dp"
                 android:spinnerMode="dialog"
                 tools:ignore="DuplicateSpeakableTextCheck" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/country"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/white"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="25dp"
                 android:text="@string/text_country" />
 
             <Spinner
                 android:id="@+id/spCountry"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@color/white"
+                android:layout_height="match_parent"
                 android:contentDescription="@string/text_country"
+                android:layout_weight="1"
+                android:textSize="25dp"
                 android:spinnerMode="dialog"
                 tools:ignore="DuplicateSpeakableTextCheck" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/region"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:textSize="25dp"
                 android:text="@string/region" />
 
             <Spinner
                 android:id="@+id/spRegion"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:textColor="@color/white"
-                android:background="@color/white"
+                android:layout_height="match_parent"
                 android:contentDescription="@string/region"
+                android:layout_weight="1"
+                android:textSize="25dp"
                 android:spinnerMode="dialog"
                 tools:ignore="DuplicateSpeakableTextCheck" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dist"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:textSize="25dp"
                 android:text="@string/district" />
 
             <Spinner
                 android:id="@+id/spDistrict"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/white"
-                android:contentDescription="@string/region"
+                android:contentDescription="@string/district"
+                android:layout_weight="1"
+                android:textSize="25dp"
                 android:spinnerMode="dialog"
                 tools:ignore="DuplicateSpeakableTextCheck" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/sub"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:textSize="25dp"
                 android:text="@string/subdistrict" />
 
             <Spinner
                 android:id="@+id/spSubdistrict"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/white"
-                android:contentDescription="@string/region"
+                android:contentDescription="@string/subdistrict"
+                android:layout_weight="1"
+                android:textSize="25dp"
                 android:spinnerMode="dialog"
                 tools:ignore="DuplicateSpeakableTextCheck" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/vill"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:textSize="25dp"
                 android:text="@string/village" />
 
             <Spinner
                 android:id="@+id/spVillage"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/white"
                 android:contentDescription="@string/village"
+                android:layout_weight="1"
+                android:textSize="25dp"
                 android:spinnerMode="dialog"
                 tools:ignore="DuplicateSpeakableTextCheck" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/clus"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/textView8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:textSize="25dp"
                 android:text="@string/cluster" />
 
             <Spinner
                 android:id="@+id/spCluster"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/white"
                 android:contentDescription="@string/cluster"
+                android:layout_weight="1"
+                android:textSize="25dp"
                 android:spinnerMode="dialog"
                 tools:ignore="DuplicateSpeakableTextCheck" />
+
+        </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="start"
-                app:boxBackgroundColor="@color/white"
-                android:paddingTop="10dp"
+                android:padding="10dp"
                 android:hint="@string/username"
                 android:text="@string/username">
 
@@ -161,34 +225,38 @@
                     android:inputType="textCapCharacters"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+        <LinearLayout
+            android:id="@+id/up"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/btn_location"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="10dp"
                 android:textAlignment="center"
-                app:fabSize="mini"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:text="Update" />
+                android:text="Update"
+                android:layout_gravity="center" />
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/btn_baseline"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:textAlignment="center"
-                app:fabSize="mini"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:layout_gravity="center"
                 android:text="Enumeration" />
-
+        </LinearLayout>
 
 
         </LinearLayout>
