@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:padding="20dp"
     tools:context=".Activity.PushActivity">
 
@@ -12,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/MidnightBlue"
         android:padding="10dp">
 
         <TextView
@@ -21,263 +19,372 @@
             android:layout_height="wrap_content"
             android:text="@string/text_send_to_server"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textColor="@color/pop"
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendLocation"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_location"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
 
-        <Button
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendLocation"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendVisit"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_visit"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendVisit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendVisit"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendList"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_list"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendList"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
 
-    <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendIndividual"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_individual"
-        android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendIndividual"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendIndividual"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendSocialgroup"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_socialgroup"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendSocialgroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendSocialgroup"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
 
-
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendRelationship"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_relationship"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendRelationship"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendRelationship"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendPregnancy"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_pregnancy"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendPregnancy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendPregnancy"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendOutcome"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_pregoutcome"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendOutcome"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendOutcome"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendOutcomes"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_outcome"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendOutcomes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendOutcomes"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
 
-
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendDemography"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_demography"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendDemography"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
 
-        <Button
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendDemography"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendEnd"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_death"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendEnd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendEnd"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendSocio"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_profile"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendSocio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendSocio"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendResidency"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_residency"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendResidency"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendResidency"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendImg"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_inmigration"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendImg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendImg"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendOmg"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_outmigration"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendOmg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendOmg"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendAmend"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_amendment"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendAmend"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendAmend"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendVac"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_vaccination"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendVac"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendVac"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/buttonSendDup"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_duplicate"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/push"/>
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
 
-        <TextView
-            android:id="@+id/textViewSendDup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSendDup"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textAlignment="center"-->
+<!--            android:textSize="20sp" />-->
 
 
     </LinearLayout>

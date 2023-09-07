@@ -84,7 +84,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH LOCATION
         final Button buttonSendLocationdata = findViewById(R.id.buttonSendLocation);
-        final TextView textViewSendLocationdata = findViewById(R.id.textViewSendLocation);
+        //final TextView textViewSendLocationdata = findViewById(R.id.textViewSendLocation);
         final LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
 
         //GET MODIFIED DATA
@@ -92,10 +92,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             locationsList.addAll(locationViewModel.findToSync());
             buttonSendLocationdata.setText("Locations(" + locationsList.size() + ") to send");
-            textViewSendLocationdata.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendLocationdata.setTextColor(Color.BLACK);
             if (locationsList.isEmpty()) {
                 buttonSendLocationdata.setVisibility(View.GONE);
-                textViewSendLocationdata.setVisibility(View.GONE);
+                //textViewSendLocationdata.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -129,9 +129,9 @@ public class PushActivity extends AppCompatActivity {
 
 
                             progress.dismiss();
-                            textViewSendLocationdata.setText("Sent " + d.length + " record(s)");
+                            buttonSendLocationdata.setText("Sent " + d.length + " record(s)");
                             //textViewSendLocationdata.setTextColor(Color.rgb(0, 114, 133));
-                            textViewSendLocationdata.setTextColor(Color.GREEN);
+                            buttonSendLocationdata.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -151,7 +151,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH VISIT DATA
         final Button buttonSendVisit = findViewById(R.id.buttonSendVisit);
-        final TextView textViewSendVisit = findViewById(R.id.textViewSendVisit);
+        //final TextView textViewSendVisit = findViewById(R.id.textViewSendVisit);
         final VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
 
         //GET MODIFIED DATA
@@ -159,10 +159,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             visitList.addAll(visitViewModel.findToSync());
             buttonSendVisit.setText("Visit(" + visitList.size() + ") to send");
-            textViewSendVisit.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendVisit.setTextColor(Color.BLACK);
             if (visitList.isEmpty()) {
                 buttonSendVisit.setVisibility(View.GONE);
-                textViewSendVisit.setVisibility(View.GONE);
+               // textViewSendVisit.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -195,8 +195,8 @@ public class PushActivity extends AppCompatActivity {
                             visitViewModel.add(d);
 
                             progress.dismiss();
-                            textViewSendVisit.setText("Sent " + d.length + " record(s)");
-                            textViewSendVisit.setTextColor(Color.GREEN);
+                            buttonSendVisit.setText("Sent " + d.length + " record(s)");
+                            buttonSendVisit.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -216,7 +216,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH LISTING DATA
         final Button buttonSendList = findViewById(R.id.buttonSendList);
-        final TextView textViewSendList = findViewById(R.id.textViewSendList);
+        //final TextView textViewSendList = findViewById(R.id.textViewSendList);
         final ListingViewModel listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
 
         //GET MODIFIED DATA
@@ -224,10 +224,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             listingList.addAll(listingViewModel.findToSync());
             buttonSendList.setText("Listing(" + listingList.size() + ") to send");
-            textViewSendList.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendList.setTextColor(Color.BLACK);
             if (listingList.isEmpty()) {
                 buttonSendList.setVisibility(View.GONE);
-                textViewSendList.setVisibility(View.GONE);
+                //textViewSendList.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -260,8 +260,8 @@ public class PushActivity extends AppCompatActivity {
                             listingViewModel.add(d);
 
                             progress.dismiss();
-                            textViewSendList.setText("Sent " + d.length + " record(s)");
-                            textViewSendList.setTextColor(Color.GREEN);
+                            buttonSendList.setText("Sent " + d.length + " record(s)");
+                            buttonSendList.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -281,7 +281,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH INDIVIDUAL
         final Button buttonSendIndividualdata = findViewById(R.id.buttonSendIndividual);
-        final TextView textViewSendIndividualdata = findViewById(R.id.textViewSendIndividual);
+        //final TextView textViewSendIndividualdata = findViewById(R.id.textViewSendIndividual);
         final IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
 
         //GET MODIFIED DATA
@@ -289,10 +289,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             individualList.addAll(individualViewModel.findToSync());
             buttonSendIndividualdata.setText("Individuals(" + individualList.size() + ") to send");
-            textViewSendIndividualdata.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendIndividualdata.setTextColor(Color.BLACK);
             if (individualList.isEmpty()) {
                 buttonSendIndividualdata.setVisibility(View.GONE);
-                textViewSendIndividualdata.setVisibility(View.GONE);
+                //textViewSendIndividualdata.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -328,8 +328,8 @@ public class PushActivity extends AppCompatActivity {
                             individualViewModel.add(d);
 
                             progress.dismiss();
-                            textViewSendIndividualdata.setText("Sent " + d.length + " Individual record(s)");
-                            textViewSendIndividualdata.setTextColor(Color.GREEN);
+                            buttonSendIndividualdata.setText("Sent " + d.length + " Individual record(s)");
+                            buttonSendIndividualdata.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -349,7 +349,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH SOCIALGROUP
         final Button buttonSendSocialgroupdata = findViewById(R.id.buttonSendSocialgroup);
-        final TextView textViewSendSocialgroupdata = findViewById(R.id.textViewSendSocialgroup);
+        //final TextView textViewSendSocialgroupdata = findViewById(R.id.textViewSendSocialgroup);
         final SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
 
         //GET MODIFIED DATA
@@ -357,10 +357,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             socialgroupList.addAll(socialgroupViewModel.findToSync());
             buttonSendSocialgroupdata.setText("Socialgroup (" + socialgroupList.size() + ") to send");
-            textViewSendSocialgroupdata.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendSocialgroupdata.setTextColor(Color.BLACK);
             if (socialgroupList.isEmpty()) {
                 buttonSendSocialgroupdata.setVisibility(View.GONE);
-                textViewSendSocialgroupdata.setVisibility(View.GONE);
+                //textViewSendSocialgroupdata.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -394,8 +394,8 @@ public class PushActivity extends AppCompatActivity {
                             socialgroupViewModel.add(d);
 
                             progress.dismiss();
-                            textViewSendSocialgroupdata.setText("Sent " + d.length + " Socialgroup record(s)");
-                            textViewSendSocialgroupdata.setTextColor(Color.GREEN);
+                            buttonSendSocialgroupdata.setText("Sent " + d.length + " Socialgroup record(s)");
+                            buttonSendSocialgroupdata.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -415,7 +415,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH Relationship
         final Button buttonSendRelationshipdata = findViewById(R.id.buttonSendRelationship);
-        final TextView textViewSendRelationshipdata = findViewById(R.id.textViewSendRelationship);
+        //final TextView textViewSendRelationshipdata = findViewById(R.id.textViewSendRelationship);
         final RelationshipViewModel relationshipViewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
 
         //GET MODIFIED DATA
@@ -423,10 +423,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             relationshipList.addAll(relationshipViewModel.findToSync());
             buttonSendRelationshipdata.setText("Relationship (" + relationshipList.size() + ") to send");
-            textViewSendRelationshipdata.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendRelationshipdata.setTextColor(Color.BLACK);
             if (relationshipList.isEmpty()) {
                 buttonSendRelationshipdata.setVisibility(View.GONE);
-                textViewSendRelationshipdata.setVisibility(View.GONE);
+                //textViewSendRelationshipdata.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -460,8 +460,8 @@ public class PushActivity extends AppCompatActivity {
                             relationshipViewModel.add(d);
 
                             progress.dismiss();
-                            textViewSendRelationshipdata.setText("Sent " + d.length + " Relationship record(s)");
-                            textViewSendRelationshipdata.setTextColor(Color.GREEN);
+                            buttonSendRelationshipdata.setText("Sent " + d.length + " Relationship record(s)");
+                            buttonSendRelationshipdata.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -481,7 +481,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH Pregnancy
         final Button buttonSendPregnancydata = findViewById(R.id.buttonSendPregnancy);
-        final TextView textViewSendPregnancydata = findViewById(R.id.textViewSendPregnancy);
+        //final TextView textViewSendPregnancydata = findViewById(R.id.textViewSendPregnancy);
         final PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
 
         //GET MODIFIED DATA
@@ -489,10 +489,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             pregnancyList.addAll(pregnancyViewModel.findToSync());
             buttonSendPregnancydata.setText("Pregnancy (" + pregnancyList.size() + ") to send");
-            textViewSendPregnancydata.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendPregnancydata.setTextColor(Color.BLACK);
             if (pregnancyList.isEmpty()) {
                 buttonSendPregnancydata.setVisibility(View.GONE);
-                textViewSendPregnancydata.setVisibility(View.GONE);
+                //textViewSendPregnancydata.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -525,8 +525,8 @@ public class PushActivity extends AppCompatActivity {
                             pregnancyViewModel.add(d);
 
                             progress.dismiss();
-                            textViewSendPregnancydata.setText("Sent " + d.length + " Pregnancy record(s)");
-                            textViewSendPregnancydata.setTextColor(Color.GREEN);
+                            buttonSendPregnancydata.setText("Sent " + d.length + " Pregnancy record(s)");
+                            buttonSendPregnancydata.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -546,7 +546,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH Pregnancyoutcome
         final Button buttonSendOutcomedata = findViewById(R.id.buttonSendOutcome);
-        final TextView textViewSendOutcomedata = findViewById(R.id.textViewSendOutcome);
+        //final TextView textViewSendOutcomedata = findViewById(R.id.textViewSendOutcome);
         final PregnancyoutcomeViewModel pregnancyoutcomeViewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
 
         //GET MODIFIED DATA
@@ -554,10 +554,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             pregnancyoutcomeList.addAll(pregnancyoutcomeViewModel.findToSync());
             buttonSendOutcomedata.setText("Pregnancy Outcome (" + pregnancyoutcomeList.size() + ") to send");
-            textViewSendOutcomedata.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendOutcomedata.setTextColor(Color.BLACK);
             if (pregnancyoutcomeList.isEmpty()) {
                 buttonSendOutcomedata.setVisibility(View.GONE);
-                textViewSendOutcomedata.setVisibility(View.GONE);
+                //textViewSendOutcomedata.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -590,8 +590,8 @@ public class PushActivity extends AppCompatActivity {
                             pregnancyoutcomeViewModel.add(d);
 
                             progress.dismiss();
-                            textViewSendOutcomedata.setText("Sent " + d.length + " Pregnancy Outcome record(s)");
-                            textViewSendOutcomedata.setTextColor(Color.GREEN);
+                            buttonSendOutcomedata.setText("Sent " + d.length + " Pregnancy Outcome record(s)");
+                            buttonSendOutcomedata.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -610,7 +610,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH Pregnancyoutcomes
         final Button buttonSendOutcomesdata = findViewById(R.id.buttonSendOutcomes);
-        final TextView textViewSendOutcomesdata = findViewById(R.id.textViewSendOutcomes);
+        //final TextView textViewSendOutcomesdata = findViewById(R.id.textViewSendOutcomes);
         final OutcomeViewModel outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
 
         //GET MODIFIED DATA
@@ -618,10 +618,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             outcomeList.addAll(outcomeViewModel.findToSync());
             buttonSendOutcomesdata.setText("Outcome (" + outcomeList.size() + ") to send");
-            textViewSendOutcomesdata.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendOutcomesdata.setTextColor(Color.BLACK);
             if (outcomeList.isEmpty()) {
                 buttonSendOutcomesdata.setVisibility(View.GONE);
-                textViewSendOutcomesdata.setVisibility(View.GONE);
+                //textViewSendOutcomesdata.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -654,8 +654,8 @@ public class PushActivity extends AppCompatActivity {
                             outcomeViewModel.add(d);
 
                             progress.dismiss();
-                            textViewSendOutcomesdata.setText("Sent " + d.length + " Outcome record(s)");
-                            textViewSendOutcomesdata.setTextColor(Color.GREEN);
+                            buttonSendOutcomesdata.setText("Sent " + d.length + " Outcome record(s)");
+                            buttonSendOutcomesdata.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -675,7 +675,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH Demographic
         final Button buttonSendDemographicdata = findViewById(R.id.buttonSendDemography);
-        final TextView textViewSendDemographicdata = findViewById(R.id.textViewSendDemography);
+        //final TextView textViewSendDemographicdata = findViewById(R.id.textViewSendDemography);
         final DemographicViewModel demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
 
         //GET MODIFIED DATA
@@ -683,10 +683,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             demographicList.addAll(demographicViewModel.findToSync());
             buttonSendDemographicdata.setText("Demographic (" + demographicList.size() + ") to send");
-            textViewSendDemographicdata.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendDemographicdata.setTextColor(Color.BLACK);
             if (demographicList.isEmpty()) {
                 buttonSendDemographicdata.setVisibility(View.GONE);
-                textViewSendDemographicdata.setVisibility(View.GONE);
+               // textViewSendDemographicdata.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -720,8 +720,8 @@ public class PushActivity extends AppCompatActivity {
                             demographicViewModel.add(d);
 
                             progress.dismiss();
-                            textViewSendDemographicdata.setText("Sent " + d.length + " Demographic record(s)");
-                            textViewSendDemographicdata.setTextColor(Color.GREEN);
+                            buttonSendDemographicdata.setText("Sent " + d.length + " Demographic record(s)");
+                            buttonSendDemographicdata.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -741,11 +741,10 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH DEATH DATA (DEATH, VPM)
         final Button buttonSendEnd = findViewById(R.id.buttonSendEnd);
-        final TextView textViewSendEnd = findViewById(R.id.textViewSendEnd);
+        //final TextView textViewSendEnd = findViewById(R.id.textViewSendEnd);
 
         final DeathViewModel death = new ViewModelProvider(this).get(DeathViewModel.class);
         final DeathViewModel vpms = new ViewModelProvider(this).get(DeathViewModel.class);
-
         final List<Death> listDeath = new ArrayList<>();
         final List<Death> listVpm = new ArrayList<>();
 
@@ -758,9 +757,10 @@ public class PushActivity extends AppCompatActivity {
                             ", VPM(" + listVpm.size() + ")" +
                             " to send"
             );
+            buttonSendEnd.setTextColor(Color.BLACK);
             if (listDeath.isEmpty() && listVpm.isEmpty()) {
                 buttonSendEnd.setVisibility(View.GONE);
-                textViewSendEnd.setVisibility(View.GONE);
+                //textViewSendEnd.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -777,9 +777,9 @@ public class PushActivity extends AppCompatActivity {
             if (dataDeath.getData() != null && !dataDeath.getData().isEmpty()) {
                 progress.setMessage("Sending " + dataDeath.getData().size() + " of Death record(s)...");
 
-//                for (Death elem : dataDeath.getData()) {
-//                    elem.complete = 3;
-//                }
+                for (Death elem : dataDeath.getData()) {
+                    elem.complete = 0;
+                }
 
                 final Call<DataWrapper<Death>> c_callable = dao.sendDeathdata(dataDeath);
                 c_callable.enqueue(new Callback<DataWrapper<Death>>() {
@@ -796,12 +796,12 @@ public class PushActivity extends AppCompatActivity {
                             death.add(d23[0]);
 
                             progress.dismiss();
-                            textViewSendEnd.setText(
+                            buttonSendEnd.setText(
                                     "Death(" + d23[0].length + " of " + listDeath.size() + ")" +
                                             ", VPM(" + d24[0].length + " of " + listVpm.size() + ")" +
                                             " sent"
                             );
-                            textViewSendEnd.setTextColor(Color.GREEN);
+                            buttonSendEnd.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -818,30 +818,30 @@ public class PushActivity extends AppCompatActivity {
                 progress.dismiss();
             }
 
-            final DataWrapper<Death> dataMnh24 = new DataWrapper<>(listVpm);
-            if (dataMnh24.getData() != null && !dataMnh24.getData().isEmpty()) {
-                progress.setMessage("Sending " + dataMnh24.getData().size() + " VPM record(s)...");
+            final DataWrapper<Death> datavpm = new DataWrapper<>(listVpm);
+            if (datavpm.getData() != null && !datavpm.getData().isEmpty()) {
+                progress.setMessage("Sending " + datavpm.getData().size() + " VPM record(s)...");
 
 
-                final Call<DataWrapper<Death>> c_callable = dao.sendVpmdata(dataMnh24);
+                final Call<DataWrapper<Death>> c_callable = dao.sendVpmdata(datavpm);
                 c_callable.enqueue(new Callback<DataWrapper<Death>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            d24[0] = dataMnh24.getData().toArray(new Death[0]);
+                            d24[0] = datavpm.getData().toArray(new Death[0]);
                             for (Death elem : d24[0]) {
                                 elem.vpmcomplete = 0;
                             }
                             vpms.add(d24[0]);
                             progress.dismiss();
-                            textViewSendEnd.setText(
+                            buttonSendEnd.setText(
                                     "Death(" + d23[0].length + " of " + listDeath.size() + ")" +
                                             ", VPM(" + d24[0].length + " of " + listVpm.size() + ")" +
                                             " sent"
                             );
-                            textViewSendEnd.setTextColor(Color.GREEN);
+                            buttonSendEnd.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -863,7 +863,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH SES DATA
         final Button buttonSendSocio = findViewById(R.id.buttonSendSocio);
-        final TextView textViewSendSocio = findViewById(R.id.textViewSendSocio);
+        //final TextView textViewSendSocio = findViewById(R.id.textViewSendSocio);
         final HdssSociodemoViewModel hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
 
         //GET MODIFIED DATA
@@ -871,10 +871,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             hdssSociodemoList.addAll(hdssSociodemoViewModel.findToSync());
             buttonSendSocio.setText("Profiles[SES] (" + hdssSociodemoList.size() + ") to send");
-            textViewSendSocio.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendSocio.setTextColor(Color.BLACK);
             if (hdssSociodemoList.isEmpty()) {
                 buttonSendSocio.setVisibility(View.GONE);
-                textViewSendSocio.setVisibility(View.GONE);
+                //textViewSendSocio.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -907,8 +907,8 @@ public class PushActivity extends AppCompatActivity {
                             hdssSociodemoViewModel.add(d);
 
                             progress.dismiss();
-                            textViewSendSocio.setText("Sent " + d.length + " record(s)");
-                            textViewSendSocio.setTextColor(Color.GREEN);
+                            buttonSendSocio.setText("Sent " + d.length + " record(s)");
+                            buttonSendSocio.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -929,7 +929,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH Residency
         final Button buttonSendRes = findViewById(R.id.buttonSendResidency);
-        final TextView textViewSendRes = findViewById(R.id.textViewSendResidency);
+        //final TextView textViewSendRes = findViewById(R.id.textViewSendResidency);
         final ResidencyViewModel residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
 
         //GET MODIFIED DATA
@@ -937,10 +937,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             residencyList.addAll(residencyViewModel.findToSync());
             buttonSendRes.setText("Residency (" + residencyList.size() + ") to send");
-            textViewSendRes.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendRes.setTextColor(Color.BLACK);
             if (residencyList.isEmpty()) {
                 buttonSendRes.setVisibility(View.GONE);
-                textViewSendRes.setVisibility(View.GONE);
+                //textViewSendRes.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -974,8 +974,8 @@ public class PushActivity extends AppCompatActivity {
                             residencyViewModel.add(d);
 
                             progress.dismiss();
-                            textViewSendRes.setText("Sent " + d.length + " Residency record(s)");
-                            textViewSendRes.setTextColor(Color.GREEN);
+                            buttonSendRes.setText("Sent " + d.length + " Residency record(s)");
+                            buttonSendRes.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -995,7 +995,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH Inmigration
         final Button buttonSendImg = findViewById(R.id.buttonSendImg);
-        final TextView textViewSendImg = findViewById(R.id.textViewSendImg);
+        //final TextView textViewSendImg = findViewById(R.id.textViewSendImg);
         final InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
 
         //GET MODIFIED DATA
@@ -1003,10 +1003,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             inmigrationList.addAll(inmigrationViewModel.findToSync());
             buttonSendImg.setText("Inmigration (" + inmigrationList.size() + ") to send");
-            textViewSendImg.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendImg.setTextColor(Color.BLACK);
             if (inmigrationList.isEmpty()) {
                 buttonSendImg.setVisibility(View.GONE);
-                textViewSendImg.setVisibility(View.GONE);
+                //textViewSendImg.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -1039,8 +1039,8 @@ public class PushActivity extends AppCompatActivity {
                             inmigrationViewModel.add(d);
 
                             progress.dismiss();
-                            textViewSendImg.setText("Sent " + d.length + " Inmigration record(s)");
-                            textViewSendImg.setTextColor(Color.GREEN);
+                            buttonSendImg.setText("Sent " + d.length + " Inmigration record(s)");
+                            buttonSendImg.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -1060,7 +1060,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH Outmigration
         final Button buttonSendOmg = findViewById(R.id.buttonSendOmg);
-        final TextView textViewSendOmg = findViewById(R.id.textViewSendOmg);
+        //final TextView textViewSendOmg = findViewById(R.id.textViewSendOmg);
         final OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
 
         //GET MODIFIED DATA
@@ -1068,10 +1068,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             outmigrationList.addAll(outmigrationViewModel.findToSync());
             buttonSendOmg.setText("Outmigration (" + outmigrationList.size() + ") to send");
-            textViewSendOmg.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendOmg.setTextColor(Color.BLACK);
             if (outmigrationList.isEmpty()) {
                 buttonSendOmg.setVisibility(View.GONE);
-                textViewSendOmg.setVisibility(View.GONE);
+                //textViewSendOmg.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -1105,8 +1105,8 @@ public class PushActivity extends AppCompatActivity {
                             outmigrationViewModel.add(d);
 
                             progress.dismiss();
-                            textViewSendOmg.setText("Sent " + d.length + " Outmigration record(s)");
-                            textViewSendOmg.setTextColor(Color.GREEN);
+                            buttonSendOmg.setText("Sent " + d.length + " Outmigration record(s)");
+                            buttonSendOmg.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -1128,7 +1128,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH Amendment
         final Button buttonSendAmend = findViewById(R.id.buttonSendAmend);
-        final TextView textViewSendAmend = findViewById(R.id.textViewSendAmend);
+        //final TextView textViewSendAmend = findViewById(R.id.textViewSendAmend);
         final AmendmentViewModel amendmentViewModel = new ViewModelProvider(this).get(AmendmentViewModel.class);
 
         //GET MODIFIED DATA
@@ -1136,10 +1136,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             amendmentList.addAll(amendmentViewModel.findToSync());
             buttonSendAmend.setText("Amendment (" + amendmentList.size() + ") to send");
-            textViewSendAmend.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendAmend.setTextColor(Color.BLACK);
             if (amendmentList.isEmpty()) {
                 buttonSendAmend.setVisibility(View.GONE);
-                textViewSendAmend.setVisibility(View.GONE);
+                //textViewSendAmend.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -1173,8 +1173,8 @@ public class PushActivity extends AppCompatActivity {
                             amendmentViewModel.add(d);
 
                             progress.dismiss();
-                            textViewSendAmend.setText("Sent " + d.length + " Amendment record(s)");
-                            textViewSendAmend.setTextColor(Color.GREEN);
+                            buttonSendAmend.setText("Sent " + d.length + " Amendment record(s)");
+                            buttonSendAmend.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -1195,7 +1195,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH Vaccination
         final Button buttonSendVac = findViewById(R.id.buttonSendVac);
-        final TextView textViewSendVac = findViewById(R.id.textViewSendVac);
+        //final TextView textViewSendVac = findViewById(R.id.textViewSendVac);
         final VaccinationViewModel vaccinationViewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
 
         //GET MODIFIED DATA
@@ -1203,10 +1203,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             vaccinationList.addAll(vaccinationViewModel.findToSync());
             buttonSendVac.setText("Vaccination (" + vaccinationList.size() + ") to send");
-            textViewSendVac.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendVac.setTextColor(Color.BLACK);
             if (vaccinationList.isEmpty()) {
                 buttonSendVac.setVisibility(View.GONE);
-                textViewSendVac.setVisibility(View.GONE);
+                //textViewSendVac.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -1240,8 +1240,8 @@ public class PushActivity extends AppCompatActivity {
                             vaccinationViewModel.add(d);
 
                             progress.dismiss();
-                            textViewSendVac.setText("Sent " + d.length + " Vaccination record(s)");
-                            textViewSendVac.setTextColor(Color.GREEN);
+                            buttonSendVac.setText("Sent " + d.length + " Vaccination record(s)");
+                            buttonSendVac.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 
@@ -1260,7 +1260,7 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH Duplicates
         final Button buttonSendDup = findViewById(R.id.buttonSendDup);
-        final TextView textViewSendDup = findViewById(R.id.textViewSendDup);
+        //final TextView textViewSendDup = findViewById(R.id.textViewSendDup);
         final DuplicateViewModel duplicateViewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
 
         //GET MODIFIED DATA
@@ -1268,10 +1268,10 @@ public class PushActivity extends AppCompatActivity {
         try {
             duplicateList.addAll(duplicateViewModel.findToSync());
             buttonSendDup.setText("Duplicate (" + duplicateList.size() + ") to send");
-            textViewSendDup.setTextColor(Color.rgb(0, 114, 133));
+            buttonSendDup.setTextColor(Color.BLACK);
             if (duplicateList.isEmpty()) {
                 buttonSendDup.setVisibility(View.GONE);
-                textViewSendDup.setVisibility(View.GONE);
+                //textViewSendDup.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -1305,8 +1305,8 @@ public class PushActivity extends AppCompatActivity {
                             duplicateViewModel.add(d);
 
                             progress.dismiss();
-                            textViewSendDup.setText("Sent " + d.length + " Duplicate record(s)");
-                            textViewSendDup.setTextColor(Color.GREEN);
+                            buttonSendDup.setText("Sent " + d.length + " Duplicate record(s)");
+                            buttonSendDup.setTextColor(Color.parseColor("#FF4500"));
                         }
                     }
 

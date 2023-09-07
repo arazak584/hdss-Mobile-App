@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:padding="20dp"
     tools:context=".Activity.PullActivity">
 
@@ -12,164 +11,236 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/MidnightBlue"
         android:padding="20dp">
 
-        <Button
-                android:id="@+id/button_SyncHierarchyData"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/get_codebook"
-                android:backgroundTint="@color/pop"
-                app:icon="@drawable/pull"/>
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/button_SyncHierarchyData"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/get_codebook"
+            app:icon="@drawable/pull"
+            android:layout_gravity="center" />
+
 
         <TextView
             android:id="@+id/textView_SyncHierarchyData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:textAlignment="center"
             android:textSize="15sp" />
 
-            <Button
-                android:id="@+id/button_SyncLocationData"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/get_location"
-                android:backgroundTint="@color/pop"
-                app:icon="@drawable/pull"/>
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/button_SyncLocationData"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/get_location"
+            app:icon="@drawable/pull"
+            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/textView_SyncLocationData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:textSize="15sp" />
 
-            <Button
-                android:id="@+id/button_SyncIndividualData"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/get_individual"
-                android:backgroundTint="@color/pop"
-                app:icon="@drawable/pull"/>
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/button_SyncIndividualData"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/get_individual"
+            app:icon="@drawable/pull"
+            android:layout_gravity="center" />
 
 
         <TextView
             android:id="@+id/textView_SyncIndividualData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:textSize="15sp" />
 
-        <Button
-                android:id="@+id/button_SyncResidency"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/get_residency"
-                android:backgroundTint="@color/pop"
-                app:icon="@drawable/pull"/>
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/button_SyncResidency"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/get_residency"
+            app:icon="@drawable/pull"
+            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/textView_SyncResidency"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:textSize="15sp" />
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/button_SyncRelationship"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/get_relationship"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/pull"/>
+            app:icon="@drawable/pull"
+            android:layout_gravity="center" />
+
 
         <TextView
             android:id="@+id/textView_SyncRelationship"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:textSize="15sp" />
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/button_SyncSocialgroup"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/get_socialgroup"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/pull"/>
+            app:icon="@drawable/pull"
+            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/textView_SyncSocialgroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:textSize="15sp" />
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/button_SyncPregnancy"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/get_pregobservation"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/pull"/>
+            app:icon="@drawable/pull"
+            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/textView_SyncPregnancy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:textSize="15sp" />
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/button_SyncDemography"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/get_demography"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/pull"/>
+            app:icon="@drawable/pull"
+            android:layout_gravity="center" />
+
 
         <TextView
             android:id="@+id/textView_SyncDemography"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:textSize="15sp" />
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:visibility="gone"
             android:id="@+id/button_SyncSes"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/get_ses"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/pull"/>
+            app:icon="@drawable/pull"
+            android:layout_gravity="center" />
+
 
         <TextView
             android:visibility="gone"
             android:id="@+id/textView_SyncSes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:textSize="15sp" />
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/button_SyncVac"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/get_vac"
-            android:backgroundTint="@color/pop"
-            app:icon="@drawable/pull"/>
+            app:icon="@drawable/pull"
+            android:layout_gravity="center" />
+
 
         <TextView
             android:id="@+id/textView_SyncVac"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:textSize="15sp" />
 
-        <Button
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/button_Complete"
-            android:layout_width="match_parent"
+            android:layout_width="400dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/SeaGreen"
-            android:text="@string/complete"/>
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/complete"
+            app:icon="@drawable/pull"
+            android:backgroundTint="@color/white"
+            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/textView_Complete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAlignment="center"
             android:textSize="15sp" />
 
 
