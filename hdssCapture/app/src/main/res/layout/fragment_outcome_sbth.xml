@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:hint="@string/ind_extid">
+            android:hint="@string/ind_extid"
             android:text="@string/ind_extid">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -111,7 +111,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:hint="@string/uuid">
+            android:hint="@string/uuid"
             android:text="@string/uuid">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -131,7 +131,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:hint="@string/location_select">
+            android:hint="@string/location_select"
             android:text="@string/location_select">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -151,7 +151,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:hint="@string/visitid">
+            android:hint="@string/visitid"
             android:text="@string/visitid">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -171,7 +171,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:hint="@string/firstname">
+            android:hint="@string/firstname"
             android:text="@string/firstname">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -273,7 +273,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:textColor="#000301"
+            android:spinnerMode="dialog"
             selection="@{death.deathCause}"
             android:onItemSelected="@{death::setDeathCause}"
             android:padding="20dp"/>
@@ -288,13 +288,14 @@
 
         <Spinner
             android:id="@+id/dth_deathPlace"
+            selection="@{death.deathPlace}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:textColor="#000301"
-            selection="@{death.deathPlace}"
+            android:minHeight="48dp"
             android:onItemSelected="@{death::setDeathPlace}"
-            android:padding="20dp"/>
+            android:padding="20dp"
+            android:spinnerMode="dialog" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"

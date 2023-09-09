@@ -14,6 +14,7 @@
         android:id="@+id/MAIN_LAYOUT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:orientation="vertical">
 
         <TextView
@@ -33,6 +34,7 @@
             selection="@{sociodemo.stove_fcorres}"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:spinnerMode="dialog"
             android:onItemSelected="@{sociodemo::setStove_fcorres}" />
 
         <LinearLayout
@@ -768,6 +770,7 @@
             selection="@{sociodemo.cooking_loc_fcorres}"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:spinnerMode="dialog"
             android:onItemSelected="@{sociodemo::setCooking_loc_fcorres}" />
 
     <LinearLayout

@@ -456,7 +456,10 @@ public class PregnancyExtraFragment extends Fragment {
             viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
         }
-        if (close) {
+        if (save && binding.getPregnancy().outcome==1) {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    Pregnancyoutcome1Fragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
+        }else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }

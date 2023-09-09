@@ -114,7 +114,7 @@
                     android:gravity="start"
                     android:padding="5dp"
                     android:inputType="text"
-                    android:hint="@string/ind_extid">
+                    android:hint="@string/ind_extid"
                     android:text="@string/ind_extid">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/firstname">
+                    android:hint="@string/firstname"
                     android:text="@string/firstname">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -173,13 +173,14 @@
 
                 <Spinner
                     android:id="@+id/other"
+                    selection="@{individual.other}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    selection="@{individual.other}"
-                    android:onItemSelected="@{individual::setOther}"
                     android:gravity="left"
-                    android:textColor="#000301"
-                    android:padding="15dp"/>
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{individual::setOther}"
+                    android:padding="15dp"
+                    android:spinnerMode="dialog" />
 
                 <TextView
                     goneUnless="@{individual.other==1}"
@@ -207,13 +208,15 @@
 
                 <Spinner
                     android:id="@+id/gh"
+                    selection="@{individual.gh}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    selection="@{individual.gh}"
-                    android:onItemSelected="@{individual::setGh}"
+                    android:contentDescription="@string/gh"
                     android:gravity="left"
-                    android:textColor="#000301"
-                    android:padding="15dp"/>
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{individual::setGh}"
+                    android:padding="15dp"
+                    android:spinnerMode="dialog" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{individual.gh==1}"
@@ -274,14 +277,15 @@
 
                 <Spinner
                     android:id="@+id/dobAspect"
+                    selection="@{individual.dobAspect}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    selection="@{individual.dobAspect}"
-                    android:onItemSelected="@{individual::setDobAspects}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{individual::setDobAspects}"
+                    android:padding="10dp"
                     android:required="true"
-                    android:padding="10dp"/>
+                    android:spinnerMode="dialog" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
@@ -290,7 +294,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/age">
+                    android:hint="@string/age"
                     android:text="@string/age">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -312,14 +316,16 @@
 
                 <Spinner
                     android:id="@+id/gender"
+                    selection="@{individual.gender}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onItemSelected="@{individual::setGenders}"
-                    selection="@{individual.gender}"
+                    android:contentDescription="@string/gender"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{individual::setGenders}"
+                    android:padding="10dp"
                     android:required="true"
-                    android:padding="10dp"/>
+                    android:spinnerMode="dialog" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -331,13 +337,14 @@
 
                 <Spinner
                     android:id="@+id/mother"
+                    selection="@{individual.mother}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    selection="@{individual.mother}"
-                    android:onItemSelected="@{individual::setMother}"
                     android:gravity="left"
-                    android:textColor="#000301"
-                    android:padding="15dp"/>
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{individual::setMother}"
+                    android:padding="15dp"
+                    android:spinnerMode="dialog" />
 
                 <Button
                     goneUnless="@{individual.mother==1}"
@@ -355,7 +362,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/motherid">
+                    android:hint="@string/motherid"
                     android:text="@string/motherid">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -389,13 +396,15 @@
 
                 <Spinner
                     android:id="@+id/father"
+                    selection="@{individual.father}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    selection="@{individual.father}"
-                    android:onItemSelected="@{individual::setFather}"
+                    android:contentDescription="@string/father"
                     android:gravity="left"
-                    android:textColor="#000301"
-                    android:padding="15dp"/>
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{individual::setFather}"
+                    android:padding="15dp"
+                    android:spinnerMode="dialog" />
 
                 <Button
                     goneUnless="@{individual.father==1}"
@@ -413,7 +422,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/fatherid">
+                    android:hint="@string/fatherid"
                     android:text="@string/fatherid">
 
                     <com.google.android.material.textfield.TextInputEditText

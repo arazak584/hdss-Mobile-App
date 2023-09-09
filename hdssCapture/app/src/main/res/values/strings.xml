@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">R-HealthTrend</string>
+    <string name="versions">v2023.0.2</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>
@@ -305,8 +306,7 @@
     <string name="savedata">Save Changes</string>
     <string name="savecondata">Save &amp; Continue</string>
     <string name="closecontinue"><![CDATA[Close & Continue]]></string>
-    <string name="version">ARN CAPTURE</string>b
-    <string name="versions">v2023.0.1</string>
+    <string name="version">ARN CAPTURE</string>
     <string name="mar">Is this the first marriage of the woman?</string>
     <string name="tnbch">Total Number of biological children</string>
     <string name="nchdm">Number of biological children from this marriage or relationship</string>

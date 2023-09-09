@@ -17,12 +17,14 @@ import org.openhds.hdsscapture.Utilities.Queries;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -41,6 +43,7 @@ public class ErrorActivity extends AppCompatActivity {
     private DemographicViewModel demographicViewModel;
     private OutcomeViewModel outcomeViewModel;
     private ResidencyViewModel residencyViewModel;
+    private ListingViewModel listingViewModel;
     private ProgressDialog progress;
 
     private ErrorAdapter errorAdapter;
@@ -57,6 +60,7 @@ public class ErrorActivity extends AppCompatActivity {
         demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
         outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
         residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+        listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
 
         Button generateQueryButton = findViewById(R.id.btn_query);
         generateQueryButton.setOnClickListener(new View.OnClickListener() {
@@ -106,8 +110,8 @@ public class ErrorActivity extends AppCompatActivity {
                 String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
                 r1.name = "Visit " ;
-                r1.extid = "" + e.extId;
-                r1.date = "" + e.groupName;
+                r1.extid = "" + e.visit_uuid + " " + e.groupName;
+                r1.date = "" + e.extId;
                 r1.error = "UNK as Respondent";
                 r1.index = c;
 
@@ -170,6 +174,19 @@ public class ErrorActivity extends AppCompatActivity {
                 r1.error = "Outcome Error (Open Pregnancy Outcome and Save)";
                 r1.index = i;
 
+                list.add(r1);
+
+            }
+
+            int l=1;
+            for (Listing e : listingViewModel.error()) {
+                String formattedDate = f.format(e.insertDate);
+                Queries r1 = new Queries();
+                r1.name = "Listing " + " - " + e.compno;
+                r1.extid = "" + e.compextId + " - " +e.locationName;
+                r1.date = "" + formattedDate;
+                r1.error = "Listing Not Picked";
+                r1.index = l;
                 list.add(r1);
 
             }

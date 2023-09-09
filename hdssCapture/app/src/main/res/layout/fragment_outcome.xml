@@ -167,7 +167,7 @@
                     selection="@{pregoutcome.father}"
                     android:onItemSelected="@{pregoutcome::setFather}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="15dp"/>
 
                 <Button
@@ -300,7 +300,7 @@
                     selection="@{pregoutcome.b_place}"
                     android:onItemSelected="@{pregoutcome::setB_place}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="10dp"/>
 
                 <TextView
@@ -318,7 +318,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     selection="@{pregoutcome.not_del}"
                     android:onItemSelected="@{pregoutcome::setNot_del}"
                     android:padding="10dp"/>
@@ -354,7 +354,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     selection="@{pregoutcome.ass_del}"
                     android:onItemSelected="@{pregoutcome::setAss_del}"
                     android:padding="10dp"/>
@@ -391,7 +391,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     selection="@{pregoutcome.how_del}"
                     android:onItemSelected="@{pregoutcome::setHow_del}"
                     android:padding="10dp"/>
@@ -427,7 +427,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     selection="@{pregoutcome.rec_anc}"
                     android:onItemSelected="@{pregoutcome::setRec_anc}"
                     android:padding="10dp"/>
@@ -447,7 +447,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     selection="@{pregoutcome.why_no_anc}"
                     android:onItemSelected="@{pregoutcome::setWhy_no_anc}"
                     android:padding="10dp"/>
@@ -467,7 +467,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     selection="@{pregoutcome.where_anc}"
                     android:onItemSelected="@{pregoutcome::setWhere_anc}"
                     android:padding="10dp"/>
@@ -505,7 +505,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     selection="@{pregoutcome.who_anc}"
                     android:onItemSelected="@{pregoutcome::setWho_anc}"
                     android:padding="10dp"/>
@@ -557,7 +557,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     selection="@{pregoutcome.rec_ipt}"
                     android:onItemSelected="@{pregoutcome::setRec_ipt}"
                     android:padding="10dp"/>
@@ -757,7 +757,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:textColor="#000301"
+                        android:spinnerMode="dialog"
                         selection="@{pregoutcome.first_nb}"
                         android:onItemSelected="@{pregoutcome::setFirst_nb}"
                         android:padding="10dp"/>
@@ -794,7 +794,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:textColor="#000301"
+                        android:spinnerMode="dialog"
                         selection="@{pregoutcome.chd_weight}"
                         android:onItemSelected="@{pregoutcome::setChd_weight}"
                         android:padding="10dp"/>
@@ -814,7 +814,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="left"
-                        android:textColor="#000301"
+                        android:spinnerMode="dialog"
                         selection="@{pregoutcome.chd_size}"
                         android:onItemSelected="@{pregoutcome::setChd_size}"
                         android:padding="10dp"/>
@@ -885,7 +885,7 @@
                     selection="@{pregoutcome.extra}"
                     android:onItemSelected="@{pregoutcome::setExtra}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="15dp"/>
 
                 <TextView
@@ -905,7 +905,7 @@
                     selection="@{pregoutcome.complete}"
                     android:onItemSelected="@{pregoutcome::setComplete}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="15dp"/>
 
             </LinearLayout>

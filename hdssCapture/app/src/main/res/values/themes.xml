@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.HdssCapture" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.HdssCapture" parent="Theme.MaterialComponents.Light">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/Astrosnavy</item>
         <item name="colorPrimaryVariant">@color/teal_700</item>
@@ -18,6 +18,11 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
+    <style name="Widget.App.Button" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/Astrosnavy</item>
+    </style>
+
 
     <style name="Theme.HdssCapture.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

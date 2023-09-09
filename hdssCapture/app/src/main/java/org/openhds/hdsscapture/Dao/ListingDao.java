@@ -7,6 +7,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Listing;
+import org.openhds.hdsscapture.entity.Socialgroup;
 
 import java.util.Date;
 import java.util.List;
@@ -36,5 +37,9 @@ public interface ListingDao {
     @Query("SELECT COUNT(*) FROM listing a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE a.insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
+
+    @Query("SELECT a.* FROM locations as a LEFT JOIN listing as b ON a.compno=b.compno" +
+            " where b.compno IS NULL AND a.complete IS NOT NULL ")
+    List<Listing> error();
 
 }

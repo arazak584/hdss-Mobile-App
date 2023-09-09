@@ -14,7 +14,7 @@
         android:id="@+id/MAIN_LAYOUT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
+        android:padding="10dp"
         android:orientation="vertical">
 
         <TextView
@@ -34,6 +34,7 @@
             selection="@{sociodemo.h2o_fcorres}"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:spinnerMode="dialog"
             android:onItemSelected="@{sociodemo::setH2o_fcorres}" />
 
         <LinearLayout
@@ -54,6 +55,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="text"
+                android:minHeight="48dp"
                 android:text="@={sociodemo.h2o_spfy_fcorres}"
                 tools:ignore="Autofill,LabelFor" />
         </LinearLayout>
@@ -424,6 +426,7 @@
             selection="@{sociodemo.toilet_fcorres}"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:spinnerMode="dialog"
             android:onItemSelected="@{sociodemo::setToilet_fcorres}" />
 
         <LinearLayout
@@ -467,6 +470,7 @@
                 selection="@{sociodemo.toilet_loc_fcorres}"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:spinnerMode="dialog"
                 android:onItemSelected="@{sociodemo::setToilet_loc_fcorres}" />
 
             <LinearLayout
@@ -545,6 +549,7 @@
                     selection="@{sociodemo.toilet_share_num_fcorres}"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:spinnerMode="dialog"
                     android:onItemSelected="@{sociodemo::setToilet_share_num_fcorres}" />
 
             </LinearLayout>
@@ -567,6 +572,7 @@
             selection="@{sociodemo.ext_wall_fcorres}"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:spinnerMode="dialog"
             android:onItemSelected="@{sociodemo::setExt_wall_fcorres}" />
 
         <LinearLayout
@@ -602,6 +608,7 @@
             selection="@{sociodemo.floor_fcorres}"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:spinnerMode="dialog"
             android:onItemSelected="@{sociodemo::setFloor_fcorres}" />
 
         <LinearLayout
@@ -637,6 +644,7 @@
             selection="@{sociodemo.roof_fcorres}"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:spinnerMode="dialog"
             android:onItemSelected="@{sociodemo::setRoof_fcorres}" />
 
         <LinearLayout

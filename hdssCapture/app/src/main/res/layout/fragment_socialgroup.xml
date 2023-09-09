@@ -189,13 +189,14 @@
 
             <Spinner
                 android:id="@+id/select_groupType"
+                selection="@{socialgroup.groupType}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:textColor="#000301"
-                selection="@{socialgroup.groupType}"
+                android:minHeight="48dp"
                 android:onItemSelected="@{socialgroup::setGroupTypes}"
-                android:padding="20dp"/>
+                android:padding="20dp"
+                android:spinnerMode="dialog" />
 
             <TextView
                 android:visibility="gone"

@@ -198,13 +198,14 @@
 
         <Spinner
             android:id="@+id/hcard"
+            selection="@{vaccination.hcard}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            selection="@{vaccination.hcard}"
-            android:onItemSelected="@{vaccination::setHcard}"
             android:gravity="left"
-            android:textColor="#000301"
-            android:padding="15dp"/>
+            android:minHeight="48dp"
+            android:onItemSelected="@{vaccination::setHcard}"
+            android:padding="15dp"
+            android:spinnerMode="dialog" />
 
         <LinearLayout
             goneUnless="@{vaccination.hcard==1}"
@@ -220,15 +221,16 @@
             android:textColor="@color/black"
             android:text="@string/vareason"/>
 
-        <Spinner
-            android:id="@+id/reason"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            selection="@{vaccination.reason}"
-            android:onItemSelected="@{vaccination::setReason}"
-            android:gravity="left"
-            android:textColor="#000301"
-            android:padding="15dp"/>
+            <Spinner
+                android:id="@+id/reason"
+                selection="@{vaccination.reason}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:minHeight="48dp"
+                android:onItemSelected="@{vaccination::setReason}"
+                android:padding="15dp"
+                android:spinnerMode="dialog" />
 
             <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{vaccination.reason==77}"
@@ -258,13 +260,14 @@
 
             <Spinner
                 android:id="@+id/bednet"
+                selection="@{vaccination.bednet}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                selection="@{vaccination.bednet}"
-                android:onItemSelected="@{vaccination::setBednet}"
                 android:gravity="left"
-                android:textColor="#000301"
-                android:padding="15dp"/>
+                android:minHeight="48dp"
+                android:onItemSelected="@{vaccination::setBednet}"
+                android:padding="15dp"
+                android:spinnerMode="dialog" />
 
         <TextView
             goneUnless="@{vaccination.bednet==1}"
@@ -275,16 +278,17 @@
             android:textColor="@color/black"
             android:text="@string/onet"/>
 
-        <Spinner
-            goneUnless="@{vaccination.bednet==1}"
-            android:id="@+id/onet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            selection="@{vaccination.onet}"
-            android:onItemSelected="@{vaccination::setOnet}"
-            android:gravity="left"
-            android:textColor="#000301"
-            android:padding="15dp"/>
+            <Spinner
+                android:id="@+id/onet"
+                goneUnless="@{vaccination.bednet==1}"
+                selection="@{vaccination.onet}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:minHeight="48dp"
+                android:onItemSelected="@{vaccination::setOnet}"
+                android:padding="15dp"
+                android:spinnerMode="dialog" />
 
             <TextView
                 goneUnless="@{vaccination.bednet==1}"
@@ -296,15 +300,16 @@
                 android:text="@string/slpbednet"/>
 
             <Spinner
-                goneUnless="@{vaccination.bednet==1}"
                 android:id="@+id/slpbednet"
+                goneUnless="@{vaccination.bednet==1}"
+                selection="@{vaccination.slpbednet}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                selection="@{vaccination.slpbednet}"
-                android:onItemSelected="@{vaccination::setSlpbednet}"
                 android:gravity="left"
-                android:textColor="#000301"
-                android:padding="15dp"/>
+                android:minHeight="48dp"
+                android:onItemSelected="@{vaccination::setSlpbednet}"
+                android:padding="15dp"
+                android:spinnerMode="dialog" />
 
             <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{vaccination.bednet==1}"
@@ -356,7 +361,7 @@
                 selection="@{vaccination.scar}"
                 android:onItemSelected="@{vaccination::setScar}"
                 android:gravity="left"
-                android:textColor="#000301"
+                android:spinnerMode="dialog"
                 android:padding="15dp"/>
 
             <TextView
@@ -374,7 +379,7 @@
                 selection="@{vaccination.fever}"
                 android:onItemSelected="@{vaccination::setFever}"
                 android:gravity="left"
-                android:textColor="#000301"
+                android:spinnerMode="dialog"
                 android:padding="15dp"/>
 
             <TextView
@@ -394,7 +399,7 @@
                 selection="@{vaccination.fevertreat}"
                 android:onItemSelected="@{vaccination::setFevertreat}"
                 android:gravity="left"
-                android:textColor="#000301"
+                android:spinnerMode="dialog"
                 android:padding="15dp"/>
 
             <TextView
@@ -412,7 +417,7 @@
                 selection="@{vaccination.diarrhoea}"
                 android:onItemSelected="@{vaccination::setDiarrhoea}"
                 android:gravity="left"
-                android:textColor="#000301"
+                android:spinnerMode="dialog"
                 android:padding="15dp"/>
 
             <TextView
@@ -432,7 +437,7 @@
                 selection="@{vaccination.diarrhoeatreat}"
                 android:onItemSelected="@{vaccination::setDiarrhoeatreat}"
                 android:gravity="left"
-                android:textColor="#000301"
+                android:spinnerMode="dialog"
                 android:padding="15dp"/>
 
             <TextView
@@ -450,7 +455,7 @@
                 selection="@{vaccination.arti}"
                 android:onItemSelected="@{vaccination::setArti}"
                 android:gravity="left"
-                android:textColor="#000301"
+                android:spinnerMode="dialog"
                 android:padding="15dp"/>
 
             <TextView
@@ -470,7 +475,7 @@
                 selection="@{vaccination.artitreat}"
                 android:onItemSelected="@{vaccination::setArtitreat}"
                 android:gravity="left"
-                android:textColor="#000301"
+                android:spinnerMode="dialog"
                 android:padding="15dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -505,7 +510,7 @@
                 selection="@{vaccination.admission}"
                 android:onItemSelected="@{vaccination::setAdmission}"
                 android:gravity="left"
-                android:textColor="#000301"
+                android:spinnerMode="dialog"
                 android:padding="15dp"/>
 
         <TextView
@@ -525,7 +530,7 @@
             selection="@{vaccination.rea}"
             android:onItemSelected="@{vaccination::setRea}"
             android:gravity="left"
-            android:textColor="#000301"
+            android:spinnerMode="dialog"
             android:padding="15dp"/>
 
             <Button
@@ -581,7 +586,7 @@
             selection="@{vaccination.hl}"
             android:onItemSelected="@{vaccination::setHl}"
             android:gravity="left"
-            android:textColor="#000301"
+            android:spinnerMode="dialog"
             android:padding="15dp"/>
 
         <TextView
@@ -625,7 +630,7 @@
             selection="@{vaccination.sbf}"
             android:onItemSelected="@{vaccination::setSbf}"
             android:gravity="left"
-            android:textColor="#000301"
+            android:spinnerMode="dialog"
             android:padding="15dp"/>
 
 
@@ -675,7 +680,7 @@
             selection="@{vaccination.nhis}"
             android:onItemSelected="@{vaccination::setNhis}"
             android:gravity="left"
-            android:textColor="#000301"
+            android:spinnerMode="dialog"
             android:padding="15dp"/>
 
         <Button
@@ -1183,7 +1188,7 @@
             selection="@{vaccination.complete}"
             android:onItemSelected="@{vaccination::setComplete}"
             android:gravity="left"
-            android:textColor="#000301"
+            android:spinnerMode="dialog"
             android:padding="15dp"/>
 
 

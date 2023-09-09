@@ -304,13 +304,14 @@
 
                 <Spinner
                     android:id="@+id/starttype"
+                    selection="@{residency.startType}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    selection="@{residency.startType}"
-                    android:onItemSelected="@{residency::setStartType}"
+                    android:contentDescription="@string/starttype"
                     android:gravity="left"
-                    android:textColor="#000301"
-                    android:padding="10dp"/>
+                    android:onItemSelected="@{residency::setStartType}"
+                    android:padding="10dp"
+                    android:spinnerMode="dialog" />
 
                 <EditText
                     android:visibility="gone"
@@ -336,6 +337,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:ems="10"
+                    android:hint="@string/startdate"
                     android:inputType="textPersonName"
                     android:text="@={residency.startDate}" />
 
@@ -350,13 +352,14 @@
 
                 <Spinner
                     android:id="@+id/endtype"
+                    selection="@{residency.endType}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    selection="@{residency.endType}"
-                    android:onItemSelected="@{residency::setEndType}"
+                    android:contentDescription="@string/endtype"
                     android:gravity="left"
-                    android:textColor="#000301"
-                    android:padding="10dp"/>
+                    android:onItemSelected="@{residency::setEndType}"
+                    android:padding="10dp"
+                    android:spinnerMode="dialog" />
 
                 <Button
                     goneUnless="@{residency.endType==2 || residency.endType==3}"
@@ -396,13 +399,14 @@
 
                 <Spinner
                     android:id="@+id/rltn_head"
+                    selection="@{residency.rltn_head}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/rltn_head"
                     android:gravity="left"
-                    selection="@{residency.rltn_head}"
                     android:onItemSelected="@{residency::setRltn_head}"
-                    android:textColor="#000301"
-                    android:padding="10dp"/>
+                    android:padding="10dp"
+                    android:spinnerMode="dialog" />
 
                 <TextView
                     android:visibility="gone"

@@ -98,13 +98,14 @@
 
         <Spinner
             android:id="@+id/out1_type"
+            selection="@{pregoutcome1.type}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            selection="@{pregoutcome1.type}"
-            android:onItemSelected="@{pregoutcome1::setType}"
             android:gravity="left"
-            android:textColor="#000301"
-            android:padding="15dp"/>
+            android:minHeight="48dp"
+            android:onItemSelected="@{pregoutcome1::setType}"
+            android:padding="15dp"
+            android:spinnerMode="dialog" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
@@ -216,16 +217,17 @@
             android:text="@string/gender"/>
 
         <Spinner
-            goneUnless="@{pregoutcome1.type==1}"
             android:id="@+id/gender"
+            goneUnless="@{pregoutcome1.type==1}"
+            selection="@{pregoutcome1.gender}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onItemSelected="@{pregoutcome1::setGenders}"
-            selection="@{pregoutcome1.gender}"
             android:gravity="left"
-            android:textColor="#000301"
+            android:minHeight="48dp"
+            android:onItemSelected="@{pregoutcome1::setGenders}"
+            android:padding="10dp"
             android:required="true"
-            android:padding="10dp"/>
+            android:spinnerMode="dialog" />
 
         <TextView
             goneUnless="@{pregoutcome1.type==1}"
@@ -237,15 +239,16 @@
             android:text="@string/rltn_head"/>
 
         <Spinner
-            goneUnless="@{pregoutcome1.type==1}"
             android:id="@+id/rltn_head"
+            goneUnless="@{pregoutcome1.type==1}"
+            selection="@{pregoutcome1.rltn_head}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            selection="@{pregoutcome1.rltn_head}"
+            android:minHeight="48dp"
             android:onItemSelected="@{pregoutcome1::setRltn_head}"
-            android:textColor="#000301"
-            android:padding="10dp"/>
+            android:padding="10dp"
+            android:spinnerMode="dialog" />
 
     </LinearLayout>
 

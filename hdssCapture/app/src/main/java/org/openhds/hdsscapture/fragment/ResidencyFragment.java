@@ -260,6 +260,7 @@ public class ResidencyFragment extends Fragment {
                 dataRes.dobs = individual.dob;
                 dataRes.age = individual.getAge();
                 dataRes.startType = 1;
+                dataRes.endType = 1;
                 binding.starttype.setEnabled(false);
 
                 if (dataRes!=null){
@@ -804,6 +805,28 @@ public class ResidencyFragment extends Fragment {
                     residencyAmendment.complete = 1;
 
                     resModel.update(residencyAmendment);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            ResidencyViewModel unks = new ViewModelProvider(this).get(ResidencyViewModel.class);
+            try {
+                Residency datas = unks.unk(socialgroup.uuid);
+//                if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim()))
+                if (datas != null) {
+
+                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+
+                    residencyAmendment.endType = 2;
+                    residencyAmendment.endDate = new Date();
+                    residencyAmendment.uuid = datas.uuid;
+                    residencyAmendment.complete = 2;
+
+                    unks.update(residencyAmendment);
                 }
 
             } catch (ExecutionException e) {

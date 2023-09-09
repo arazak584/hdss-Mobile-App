@@ -33,6 +33,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import org.openhds.hdsscapture.fragment.DatePickerFragment;
@@ -456,6 +457,28 @@ public class BaselineFragment extends Fragment {
                     socialgroupAmendment.complete =1;
 
                     socialgroupViewModel.update(socialgroupAmendment);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            ResidencyViewModel unks = new ViewModelProvider(this).get(ResidencyViewModel.class);
+            try {
+                Residency datas = unks.unk(socialgroup.uuid);
+//                if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim()))
+                if (datas != null) {
+
+                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+
+                    residencyAmendment.endType = 2;
+                    residencyAmendment.endDate = new Date();
+                    residencyAmendment.uuid = datas.uuid;
+                    residencyAmendment.complete = 2;
+
+                    unks.update(residencyAmendment);
                 }
 
             } catch (ExecutionException e) {

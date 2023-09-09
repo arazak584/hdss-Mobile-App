@@ -242,6 +242,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="Update"
+                android:textColor="@color/DarkOrchid"
                 android:layout_gravity="center" />
 
             <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -255,6 +256,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_gravity="center"
+                android:textColor="@color/DarkOrchid"
                 android:text="Enumeration" />
         </LinearLayout>
 

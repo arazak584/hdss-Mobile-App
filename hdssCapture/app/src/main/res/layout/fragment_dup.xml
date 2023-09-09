@@ -92,7 +92,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/uuid">
+                    android:hint="@string/uuid"
                     android:text="@string/uuid">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -112,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/actual_dob">
+                    android:hint="@string/actual_dob"
                     android:text="@string/actual_dob">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -129,7 +129,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/firstname">
+                    android:hint="@string/firstname"
                     android:text="@string/firstname">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -146,7 +146,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/lastname">
+                    android:hint="@string/lastname"
                     android:text="@string/firstname">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -172,7 +172,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/ind_extid">
+                    android:hint="@string/ind_extid"
                     android:text="@string/ind_extid">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -192,7 +192,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/actual_dob">
+                    android:hint="@string/actual_dob"
                     android:text="@string/actual_dob">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -209,7 +209,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/firstname">
+                    android:hint="@string/firstname"
                     android:text="@string/firstname">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -226,7 +226,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/lastname">
+                    android:hint="@string/lastname"
                     android:text="@string/firstname">
 
                     <com.google.android.material.textfield.TextInputEditText

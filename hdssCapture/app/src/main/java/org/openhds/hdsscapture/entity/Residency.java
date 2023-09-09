@@ -59,7 +59,7 @@ public class Residency extends BaseObservable implements Parcelable {
     public String socialgroup_uuid;
 
     @Expose
-    public Integer endType=1;
+    public Integer endType;
 
     @Expose
     public Integer startType;

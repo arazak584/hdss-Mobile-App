@@ -64,7 +64,8 @@ public interface SocialgroupDao {
 //    @Query("SELECT * FROM socialgroup where groupName='UNK' AND complete=1 ")
 //    List<Socialgroup> error();
 
-    @Query("SELECT a.* FROM socialgroup as a INNER JOIN visit as b ON a.visit_uuid=b.uuid" +
+    @Query("SELECT a.*,c.compextId as visit_uuid FROM socialgroup as a INNER JOIN visit as b ON a.visit_uuid=b.uuid" +
+            " INNER JOIN locations c on b.location_uuid=c.uuid " +
             " where respondent='UNK' AND a.groupName!='UNK' ")
     List<Socialgroup> error();
 

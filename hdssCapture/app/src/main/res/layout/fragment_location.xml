@@ -194,9 +194,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textColor="#000301"
                     selection="@{locations.site}"
                     android:onItemSelected="@{locations::setSite}"
+                    android:spinnerMode="dialog"
                     android:padding="20dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -329,13 +329,14 @@
 
                 <Spinner
                     android:id="@+id/locationstatus"
+                    selection="@{locations.status}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    selection="@{locations.status}"
-                    android:onItemSelected="@{locations::setStatus}"
                     android:gravity="left"
-                    android:textColor="#000301"
-                    android:padding="20dp"/>
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{locations::setStatus}"
+                    android:padding="20dp"
+                    android:spinnerMode="dialog"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -347,13 +348,13 @@
 
                 <Spinner
                     android:id="@+id/locationtype"
+                    selection="@{locations.locationType}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    selection="@{locations.locationType}"
                     android:onItemSelected="@{locations::setLocationType}"
-                    android:textColor="#000301"
-                    android:padding="20dp"/>
+                    android:padding="20dp"
+                    android:spinnerMode="dialog" />
 
                 <TextView
                     android:visibility="gone"

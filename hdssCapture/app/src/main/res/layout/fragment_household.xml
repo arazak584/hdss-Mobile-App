@@ -92,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/socialgroupid">
+                android:hint="@string/socialgroupid"
                 android:text="@string/socialgroupid">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -112,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/visituuid">
+                android:hint="@string/visituuid"
                 android:text="@string/visituuid">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -131,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/socialgroupname">
+                android:hint="@string/socialgroupname"
                 android:text="@string/socialgroupname">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/ind_extid">
+                android:hint="@string/ind_extid"
                 android:text="@string/ind_extid">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -174,13 +174,14 @@
 
             <Spinner
                 android:id="@+id/select_groupType"
+                selection="@{socialgroup.groupType}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:textColor="#000301"
-                selection="@{socialgroup.groupType}"
+                android:minHeight="48dp"
                 android:onItemSelected="@{socialgroup::setGroupTypes}"
-                android:padding="20dp"/>
+                android:padding="20dp"
+                android:textColor="#000301" />
 
             <TextView
                 android:visibility="gone"
@@ -216,7 +217,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:text="@string/saveclosedata" />
+                    android:text="@string/savecontinuedata" />
 
                 <Button
                     android:id="@+id/buttonClose"

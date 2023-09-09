@@ -14,7 +14,7 @@
         android:id="@+id/MAIN_LAYOUT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
+        android:padding="10dp"
         android:orientation="vertical">
 
         <TextView
@@ -288,6 +288,7 @@
             selection="@{sociodemo.mobile_access_fcorres}"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:spinnerMode="dialog"
             android:onItemSelected="@{sociodemo::setMobile_access_fcorres}" />
 
         <TextView
@@ -2136,6 +2137,7 @@
             selection="@{sociodemo.own_rent_scorres}"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:spinnerMode="dialog"
             android:onItemSelected="@{sociodemo::setOwn_rent_scorres}" />
 
         <LinearLayout

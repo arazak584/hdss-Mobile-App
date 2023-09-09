@@ -107,6 +107,15 @@ public class ResidencyRepository {
         return future.get();
     }
 
+    public Residency unk(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Residency> callable = () -> dao.unk(id);
+
+        Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public Residency amend(String id) throws ExecutionException, InterruptedException {
 
         Callable<Residency> callable = () -> dao.amend(id);

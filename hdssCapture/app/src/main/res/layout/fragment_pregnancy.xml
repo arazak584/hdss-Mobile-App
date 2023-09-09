@@ -127,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/uuid">
+                    android:hint="@string/uuid"
                     android:text="@string/uuid">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -146,7 +146,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/ind_uuid">
+                    android:hint="@string/ind_uuid"
                     android:text="@string/ind_uuid">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -164,7 +164,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/visitid">
+                    android:hint="@string/visitid"
                     android:text="@string/visitid">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -189,7 +189,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/conception">
+                    android:hint="@string/conception"
                     android:text="@string/conception">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -218,7 +218,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/expectedDelivery">
+                    android:hint="@string/expectedDelivery"
                     android:text="@string/expectedDelivery">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -244,7 +244,7 @@
                     selection="@{pregnancy.anteNatalClinic}"
                     android:onItemSelected="@{pregnancy::setAnteNatalClinic}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="15dp"/>
 
                 <TextView
@@ -264,7 +264,7 @@
                     selection="@{pregnancy.why_no}"
                     android:onItemSelected="@{pregnancy::setWhy_no}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="15dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -274,7 +274,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/attend_you_other">
+                    android:hint="@string/attend_you_other"
                     android:text="@string/attend_you_other">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -363,7 +363,7 @@
                         selection="@{pregnancy.attend_you}"
                         android:onItemSelected="@{pregnancy::setAttend_you}"
                         android:gravity="left"
-                        android:textColor="#000301"
+                        android:spinnerMode="dialog"
                         android:padding="20dp"/>
 
                  <com.google.android.material.textfield.TextInputLayout
@@ -373,7 +373,7 @@
                      android:layout_height="wrap_content"
                      android:gravity="start"
                      android:padding="5dp"
-                     android:hint="@string/attend_you_other">
+                     android:hint="@string/attend_you_other"
                      android:text="@string/attend_you_other">
 
                      <com.google.android.material.textfield.TextInputEditText
@@ -399,7 +399,7 @@
                      selection="@{pregnancy.ttinjection}"
                      android:onItemSelected="@{pregnancy::setTtinjection}"
                      android:gravity="left"
-                     android:textColor="#000301"
+                     android:spinnerMode="dialog"
                      android:padding="20dp"/>
 
 
@@ -448,7 +448,7 @@
                     selection="@{pregnancy.own_bnet}"
                     android:onItemSelected="@{pregnancy::setOwn_bnet}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="15dp"/>
 
                 <LinearLayout
@@ -497,7 +497,7 @@
                         selection="@{pregnancy.bnet_sou}"
                         android:onItemSelected="@{pregnancy::setBnet_sou}"
                         android:gravity="left"
-                        android:textColor="#000301"
+                        android:spinnerMode="dialog"
                         android:padding="20dp"/>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -507,7 +507,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="5dp"
-                        android:hint="@string/attend_you_other">
+                        android:hint="@string/attend_you_other"
                         android:text="@string/attend_you_other">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -533,7 +533,7 @@
                         selection="@{pregnancy.bnet_loc}"
                         android:onItemSelected="@{pregnancy::setBnet_loc}"
                         android:gravity="left"
-                        android:textColor="#000301"
+                        android:spinnerMode="dialog"
                         android:padding="20dp"/>
 
 
@@ -544,7 +544,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="5dp"
-                        android:hint="@string/attend_you_other">
+                        android:hint="@string/attend_you_other"
                         android:text="@string/attend_you_other">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -570,7 +570,7 @@
                         selection="@{pregnancy.slp_bednet}"
                         android:onItemSelected="@{pregnancy::setSlp_bednet}"
                         android:gravity="left"
-                        android:textColor="#000301"
+                        android:spinnerMode="dialog"
                         android:padding="20dp"/>
 
                     <TextView
@@ -590,7 +590,7 @@
                         selection="@{pregnancy.trt_bednet}"
                         android:onItemSelected="@{pregnancy::setTrt_bednet}"
                         android:gravity="left"
-                        android:textColor="#000301"
+                        android:spinnerMode="dialog"
                         android:padding="20dp"/>
 
                 </LinearLayout>
@@ -611,7 +611,7 @@
                     selection="@{pregnancy.healthfacility}"
                     android:onItemSelected="@{pregnancy::setHealthfacility}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="20dp"/>
 
                 <TextView
@@ -629,7 +629,7 @@
                     selection="@{pregnancy.medicineforpregnancy}"
                     android:onItemSelected="@{pregnancy::setMedicineforpregnancy}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="20dp"/>
 
                 <TextView
@@ -647,7 +647,7 @@
                     selection="@{pregnancy.first_preg}"
                     android:onItemSelected="@{pregnancy::setFirst_preg}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="20dp"/>
 
 
@@ -682,7 +682,7 @@
                     selection="@{pregnancy.outcome}"
                     android:onItemSelected="@{pregnancy::setOutcome}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="10dp"/>
 
                 <Button
@@ -724,7 +724,7 @@
                     selection="@{pregnancy.extra}"
                     android:onItemSelected="@{pregnancy::setExtra}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="15dp"/>
 
                 <TextView
@@ -744,7 +744,7 @@
                     selection="@{pregnancy.complete}"
                     android:onItemSelected="@{pregnancy::setComplete}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="15dp"/>
 
 

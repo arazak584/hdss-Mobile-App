@@ -53,6 +53,10 @@ public class ResidencyViewModel extends AndroidViewModel {
         return residencyRepository.fetchs(id, locid);
     }
 
+    public Residency unk(String id) throws ExecutionException, InterruptedException {
+        return residencyRepository.unk(id);
+    }
+
     public Residency amend(String id) throws ExecutionException, InterruptedException {
         return residencyRepository.amend(id);
     }

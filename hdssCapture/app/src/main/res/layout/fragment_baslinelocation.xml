@@ -150,7 +150,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/cluster">
+                    android:hint="@string/cluster"
                     android:text="@string/cluster">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -170,7 +170,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/compoundnumber">
+                    android:hint="@string/compoundnumber"
                     android:text="@string/compoundnumber">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -191,13 +191,14 @@
 
                 <Spinner
                     android:id="@+id/site"
+                    selection="@{locations.site}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    android:textColor="#000301"
-                    selection="@{locations.site}"
+                    android:minHeight="48dp"
                     android:onItemSelected="@{locations::setSite}"
-                    android:padding="20dp"/>
+                    android:padding="20dp"
+                    android:spinnerMode="dialog" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
@@ -328,13 +329,14 @@
 
                 <Spinner
                     android:id="@+id/locationstatus"
+                    selection="@{locations.status}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    selection="@{locations.status}"
-                    android:onItemSelected="@{locations::setStatus}"
                     android:gravity="left"
-                    android:textColor="#000301"
-                    android:padding="20dp"/>
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{locations::setStatus}"
+                    android:padding="20dp"
+                    android:spinnerMode="dialog" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -345,13 +347,14 @@
 
                 <Spinner
                     android:id="@+id/locationtype"
+                    selection="@{locations.locationType}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    selection="@{locations.locationType}"
+                    android:minHeight="48dp"
                     android:onItemSelected="@{locations::setLocationType}"
-                    android:textColor="#000301"
-                    android:padding="20dp"/>
+                    android:padding="20dp"
+                    android:spinnerMode="dialog" />
 
                 <TextView
                     android:visibility="gone"

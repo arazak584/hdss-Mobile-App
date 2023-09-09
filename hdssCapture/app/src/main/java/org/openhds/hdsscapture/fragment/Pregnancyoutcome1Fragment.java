@@ -1175,7 +1175,10 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
         }
-        if (close) {
+        if (save && binding.getPregoutcome().stillbirth != null) {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    PregnancyExtraFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
+        }else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }

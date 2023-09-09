@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.ListingRepository;
 import org.openhds.hdsscapture.entity.Listing;
+import org.openhds.hdsscapture.entity.Socialgroup;
 
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,10 @@ public class ListingViewModel extends AndroidViewModel {
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         return listingRepository.count(startDate, endDate, username);
+    }
+
+    public List<Listing> error() throws ExecutionException, InterruptedException {
+        return listingRepository.error();
     }
 
     public void add(Listing data){

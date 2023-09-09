@@ -119,13 +119,15 @@
 
                 <Spinner
                     android:id="@+id/demo_phone"
+                    selection="@{demographic.phone}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    selection="@{demographic.phone}"
-                    android:onItemSelected="@{demographic::setPhone}"
                     android:gravity="left"
-                    android:textColor="#000301"
-                    android:padding="15dp"/>
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{demographic::setPhone}"
+                    android:padding="15dp"
+                    android:spinnerMode="dialog"
+                    android:textColor="#000301" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{demographic.phone==1}"
@@ -155,13 +157,14 @@
 
                 <Spinner
                     android:id="@+id/tribe"
+                    selection="@{demographic.tribe}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    selection="@{demographic.tribe}"
-                    android:onItemSelected="@{demographic::setTribes}"
                     android:gravity="left"
-                    android:textColor="#000301"
-                    android:padding="10dp"/>
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{demographic::setTribes}"
+                    android:padding="10dp"
+                    android:textColor="#000301" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{demographic.tribe==77}"
@@ -192,13 +195,14 @@
 
                 <Spinner
                     android:id="@+id/religion"
+                    selection="@{demographic.religion}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    selection="@{demographic.religion}"
+                    android:minHeight="48dp"
                     android:onItemSelected="@{demographic::setReligions}"
-                    android:textColor="#000301"
-                    android:padding="15dp"/>
+                    android:padding="15dp"
+                    android:textColor="#000301" />
 
             <LinearLayout
                 goneUnless="@{demographic.religion==77}"
@@ -236,14 +240,15 @@
 
                 <Spinner
                     android:id="@+id/education"
+                    selection="@{demographic.education}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    selection="@{demographic.education}"
+                    android:minHeight="48dp"
                     android:onItemSelected="@{demographic::setEducations}"
+                    android:padding="15dp"
                     android:spinnerMode="dialog"
-                    android:textColor="#000301"
-                    android:padding="15dp"/>
+                    android:textColor="#000301" />
 
                 <TextView
                     goneUnless="@{demographic.education!=1}"
@@ -271,14 +276,15 @@
 
                 <Spinner
                     android:id="@+id/occupation"
+                    selection="@{demographic.occupation}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    selection="@{demographic.occupation}"
-                    android:onItemSelected="@{demographic::setOccupations}"
                     android:gravity="left"
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{demographic::setOccupations}"
+                    android:padding="15dp"
                     android:spinnerMode="dropdown"
-                    android:textColor="#000301"
-                    android:padding="15dp"/>
+                    android:textColor="#000301" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{demographic.occupation==77}"

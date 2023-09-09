@@ -242,6 +242,25 @@ public class PregnancyFragment extends Fragment {
             Pregnancy finalData = binding.getPregnancy();
 
             try {
+                if (!binding.editTextRecordedDate.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    String edateStr = "2018-01-01"; // Assuming edate is a String in the format "yyyy-MM-dd"
+                    Date edate = f.parse(edateStr);
+                    Date stdate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
+                    if (stdate.before(edate)) {
+                        binding.editTextRecordedDate.setError("Conception Date Cannot Be Less than Earliest migration date 2018");
+                        Toast.makeText(getActivity(), "Conception Date Cannot Be Less than Earliest migration date 2018", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.editTextRecordedDate.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+
+            try {
                 if (!binding.editTextRecordedDate.getText().toString().trim().isEmpty() && !binding.editTextLastClinicVisitDate.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date currentDate = new Date();
@@ -452,10 +471,14 @@ public class PregnancyFragment extends Fragment {
             viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
         }
-        if (close) {
+        if (save && binding.getPregnancy().outcome==1) {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    PregnancyoutcomeFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
+        }else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }
+
     }
 
     @Override

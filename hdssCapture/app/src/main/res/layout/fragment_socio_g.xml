@@ -14,11 +14,13 @@
         android:id="@+id/MAIN_LAYOUT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/Black"
             android:text="@string/health_behave" />
 
         <TextView
@@ -76,6 +78,7 @@
                 selection="@{sociodemo.smoke_in_oecdosfrq}"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:spinnerMode="dialog"
                 android:onItemSelected="@{sociodemo::setSmoke_in_oecdosfrq}" />
 
         </LinearLayout>
@@ -135,6 +138,7 @@
                 selection="@{sociodemo.smoke_hhold_in_oecdosfrq}"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:spinnerMode="dialog"
                 android:onItemSelected="@{sociodemo::setSmoke_hhold_in_oecdosfrq}" />
 
         </LinearLayout>

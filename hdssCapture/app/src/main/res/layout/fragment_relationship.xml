@@ -94,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/uuid">
+                    android:hint="@string/uuid"
                     android:text="@string/uuid">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -116,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/actual_dob">
+                    android:hint="@string/actual_dob"
                     android:text="@string/actual_dob">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/ind_extid">
+                    android:hint="@string/ind_extid"
                     android:text="@string/ind_extid">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -162,7 +162,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/partner">
+                    android:hint="@string/partner"
                     android:text="@string/ind_extid">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -185,13 +185,14 @@
 
                 <Spinner
                     android:id="@+id/rel_starttype"
+                    selection="@{relationship.aIsToB}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    selection="@{relationship.aIsToB}"
-                    android:onItemSelected="@{relationship::setAIsToB}"
                     android:gravity="left"
-                    android:textColor="#000301"
-                    android:padding="10dp"/>
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{relationship::setAIsToB}"
+                    android:padding="10dp"
+                    android:spinnerMode="dialog" />
 
                 <Button
                     android:id="@+id/button_rel_startDate"
@@ -222,13 +223,14 @@
 
                 <Spinner
                     android:id="@+id/rel_endtype"
+                    selection="@{relationship.endType}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    selection="@{relationship.endType}"
-                    android:onItemSelected="@{relationship::setEndType}"
                     android:gravity="left"
-                    android:textColor="#000301"
-                    android:padding="10dp"/>
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{relationship::setEndType}"
+                    android:padding="10dp"
+                    android:spinnerMode="dialog" />
 
                 <Button
                     goneUnless="@{relationship.endType!=1}"
@@ -268,7 +270,7 @@
                     selection="@{relationship.mar}"
                     android:onItemSelected="@{relationship::setMar}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="10dp"/>
 
                 <TextView
@@ -316,7 +318,7 @@
                     selection="@{relationship.polygamous}"
                     android:onItemSelected="@{relationship::setPolygamous}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="10dp"/>
 
                 <TextView
@@ -352,7 +354,7 @@
                     selection="@{relationship.lcow}"
                     android:onItemSelected="@{relationship::setLcow}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="10dp"/>
 
                 <TextView
@@ -388,7 +390,7 @@
                     selection="@{relationship.complete}"
                     android:onItemSelected="@{relationship::setComplete}"
                     android:gravity="left"
-                    android:textColor="#000301"
+                    android:spinnerMode="dialog"
                     android:padding="15dp"/>
 
 

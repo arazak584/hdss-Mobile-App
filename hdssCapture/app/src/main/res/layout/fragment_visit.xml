@@ -236,13 +236,14 @@
 
         <Spinner
             android:id="@+id/realVisit"
+            selection="@{visit.realVisit}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:textColor="#000301"
-            selection="@{visit.realVisit}"
+            android:minHeight="48dp"
             android:onItemSelected="@{visit::setRealVisit}"
-            android:padding="20dp"/>
+            android:padding="20dp"
+            android:spinnerMode="dialog" />
 
         <TextView
             android:visibility="gone"

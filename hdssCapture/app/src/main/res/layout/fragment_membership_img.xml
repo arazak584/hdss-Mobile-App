@@ -81,7 +81,7 @@
             android:gravity="start"
             android:padding="5dp"
             android:inputType="text"
-            android:hint="@string/uuid">
+            android:hint="@string/uuid"
             android:text="@string/ind_extid">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -99,7 +99,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:hint="@string/resuuid">
+            android:hint="@string/resuuid"
             android:text="@string/resuuid">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -117,7 +117,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:hint="@string/ind_extid">
+            android:hint="@string/ind_extid"
             android:text="@string/ind_extid">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -135,7 +135,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
-            android:hint="@string/visitid">
+            android:hint="@string/visitid"
             android:text="@string/household_select">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -156,13 +156,14 @@
 
         <Spinner
             android:id="@+id/migtype"
+            selection="@{inmigration.migType}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            selection="@{inmigration.migType}"
+            android:minHeight="48dp"
             android:onItemSelected="@{inmigration::setMigType}"
-            android:textColor="#000301"
-            android:padding="20dp"/>
+            android:padding="20dp"
+            android:spinnerMode="dialog" />
 
         <TextView
             android:layout_width="match_parent"
@@ -174,13 +175,14 @@
 
         <Spinner
             android:id="@+id/origin"
+            selection="@{inmigration.origin}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            selection="@{inmigration.origin}"
+            android:minHeight="48dp"
             android:onItemSelected="@{inmigration::setOrigin}"
-            android:textColor="#000301"
-            android:padding="20dp"/>
+            android:padding="20dp"
+            android:spinnerMode="dialog" />
 
         <TextView
             android:layout_width="match_parent"
@@ -192,13 +194,14 @@
 
         <Spinner
             android:id="@+id/reason"
+            selection="@{inmigration.reason}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            selection="@{inmigration.reason}"
+            android:minHeight="48dp"
             android:onItemSelected="@{inmigration::setReason}"
-            android:textColor="#000301"
-            android:padding="20dp"/>
+            android:padding="20dp"
+            android:spinnerMode="dialog" />
 
         <com.google.android.material.textfield.TextInputLayout
             goneUnless="@{inmigration.reason==77}"

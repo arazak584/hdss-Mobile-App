@@ -131,9 +131,9 @@ public interface IndividualDao {
 //    List<Individual> error();
 
     @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
-            " INNER JOIN residency c on a.uuid=c.individual_uuid INNER JOIN locations d " +
+            " INNER JOIN residency c on b.uuid=c.socialgroup_uuid INNER JOIN locations d " +
             " ON c.location_uuid=d.uuid " +
-            " WHERE firstName!='FAKE' and groupName!='UNK' and " +
+            " WHERE firstName!='FAKE' and groupName!='UNK' and c.endType=1 and " +
             " date('now', '-14 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
     List<Individual> error();
 
@@ -146,7 +146,7 @@ public interface IndividualDao {
     @Query("SELECT a.*,c.compextId,d.extId as houseExtId FROM individual AS a INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
             " INNER JOIN locations c on b.location_uuid=c.uuid " +
             " INNER JOIN socialgroup d on b.socialgroup_uuid = d.uuid " +
-            "WHERE a.firstName != 'FAKE' AND b.endType = 1 AND c.complete IS NOT NULL " +
+            "WHERE a.firstName != 'FAKE' AND b.endType = 1 " +
             "AND b.socialgroup_uuid IN ( " +
             "    SELECT b2.socialgroup_uuid " +
             "    FROM individual AS a2 " +

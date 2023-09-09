@@ -5,6 +5,7 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.ListingDao;
 import org.openhds.hdsscapture.entity.Listing;
+import org.openhds.hdsscapture.entity.Socialgroup;
 
 import java.util.Date;
 import java.util.List;
@@ -57,6 +58,15 @@ public class ListingRepository {
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         Callable<Long> callable = () -> dao.count(startDate, endDate, username);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    public List<Listing> error() throws ExecutionException, InterruptedException {
+
+        Callable<List<Listing>> callable = () -> dao.error();
+
+        Future<List<Listing>> future = Executors.newSingleThreadExecutor().submit(callable);
+
         return future.get();
     }
 

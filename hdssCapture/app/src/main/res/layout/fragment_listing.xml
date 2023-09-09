@@ -110,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/compoundnumber">
+                    android:hint="@string/compoundnumber"
                     android:text="@string/compoundnumber">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -130,7 +130,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/location_uuid">
+                    android:hint="@string/location_uuid"
                     android:text="@string/location_uuid">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -194,12 +194,14 @@
 
                 <Spinner
                     android:id="@+id/correct"
+                    selection="@{listing.correct_yn}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    selection="@{listing.correct_yn}"
-                    android:onItemSelected="@{listing::setCorrect_yn}"
                     android:gravity="left"
-                    android:padding="20dp"/>
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{listing::setCorrect_yn}"
+                    android:spinnerMode="dialog"
+                    android:padding="20dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{listing.correct_yn==2}"
@@ -317,12 +319,14 @@
 
                 <Spinner
                     android:id="@+id/locationstatus"
+                    selection="@{listing.status}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    selection="@{listing.status}"
-                    android:onItemSelected="@{listing::setStatus}"
                     android:gravity="left"
-                    android:padding="20dp"/>
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{listing::setStatus}"
+                    android:padding="20dp"
+                    android:spinnerMode="dialog" />
 
 
                 <TextView

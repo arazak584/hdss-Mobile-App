@@ -473,7 +473,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:hint="@string/replfirstname">
+                    android:hint="@string/replfirstname"
                     android:text="@string/replfirstname">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -491,7 +491,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/lastname">
+                android:hint="@string/lastname"
                 android:text="@string/lastname">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -509,7 +509,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/repllastname">
+                android:hint="@string/repllastname"
                 android:text="@string/repllastname">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -527,7 +527,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/othername">
+                android:hint="@string/othername"
                 android:text="@string/othername">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -545,7 +545,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/replothname">
+                android:hint="@string/replothname"
                 android:text="@string/replothname">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -563,7 +563,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/ghanacard">
+                android:hint="@string/ghanacard"
                 android:text="@string/ghanacard">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -581,7 +581,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/replghcard">
+                android:hint="@string/replghcard"
                 android:text="@string/replghcard">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -602,15 +602,17 @@
                 android:text="@string/gender"/>
 
             <Spinner
-                goneUnless="@{amendment.yn_gender==1}"
                 android:id="@+id/amend_gender"
+                goneUnless="@{amendment.yn_gender==1}"
+                selection="@{amendment.orig_gender}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onItemSelected="@{amendment::setGenders}"
-                selection="@{amendment.orig_gender}"
+                android:contentDescription="@string/gender"
                 android:gravity="left"
-                android:required="true"
-                android:padding="10dp"/>
+                android:minHeight="48dp"
+                android:onItemSelected="@{amendment::setGenders}"
+                android:padding="10dp"
+                android:spinnerMode="dialog" />
 
             <TextView
                 goneUnless="@{amendment.yn_gender==1}"
@@ -622,14 +624,17 @@
                 android:text="@string/replgender"/>
 
             <Spinner
-                goneUnless="@{amendment.yn_gender==1}"
                 android:id="@+id/repl_gender"
+                goneUnless="@{amendment.yn_gender==1}"
+                selection="@{amendment.repl_gender}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onItemSelected="@{amendment::setGender}"
-                selection="@{amendment.repl_gender}"
+                android:contentDescription="@string/replgender"
                 android:gravity="left"
-                android:padding="10dp"/>
+                android:minHeight="48dp"
+                android:onItemSelected="@{amendment::setGender}"
+                android:padding="10dp"
+                android:spinnerMode="dialog" />
 
             <TextView
                 goneUnless="@{amendment.yn_dob==1}"

@@ -184,11 +184,11 @@ public class IndividualFragment extends Fragment {
             binding.buttonIndividualDob.setEnabled(false);
         }
 
-        if (individual.ghanacard != null && individual.ghanacard =="") {
+        if (individual.ghanacard != null && individual.ghanacard !="") {
             binding.ghanacard.setEnabled(false);
         }
 
-        if (individual.otherName != null && individual.otherName =="") {
+        if (individual.otherName != null && individual.otherName !="") {
             binding.individualNickName.setEnabled(false);
         }
 
