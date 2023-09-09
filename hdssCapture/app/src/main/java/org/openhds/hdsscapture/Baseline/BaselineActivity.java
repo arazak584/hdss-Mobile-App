@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Baseline;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -38,11 +39,12 @@ public class BaselineActivity extends AppCompatActivity {
         final Intent f = getIntent();
         final Fieldworker fieldworkerData = f.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
-        Toast.makeText(BaselineActivity.this, "Welcome " + fieldworkerData.firstName + " " + fieldworkerData.lastName, Toast.LENGTH_LONG).show();
+        //Toast.makeText(BaselineActivity.this, "Welcome " + fieldworkerData.firstName + " " + fieldworkerData.lastName, Toast.LENGTH_LONG).show();
 
 
         final TextView level5 = findViewById(R.id.level5);
         final TextView level6 = findViewById(R.id.level6);
+        final TextView fw = findViewById(R.id.fw_loc);
 
         if (level5Data != null) {
             level5.setText(level5Data.getName());
@@ -52,10 +54,17 @@ public class BaselineActivity extends AppCompatActivity {
         }
 
         if (level6Data != null) {
-            level6.setText(level6Data.getExtId());
+            level6.setText(level6Data.getName());
         } else {
             // Handle the case where location is null
             level6.setText("Error loading Locations data");
+        }
+
+        if (fw != null) {
+            fw.setText(fieldworkerData.firstName + " " + fieldworkerData.lastName);
+        } else {
+            // Handle the case where location is null
+            fw.setText("Error loading Fieldworker data");
         }
 
 
