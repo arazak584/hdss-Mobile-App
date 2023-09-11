@@ -71,10 +71,13 @@ public interface IndividualDao {
     List<Individual> retrieveBySearch(String id, String searchText);
 
 
-    @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
-            " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
-            " WHERE b.endType=1 and gender=2 and c.compextId=:id and " +
-            " date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
+    @Query("SELECT * FROM individual WHERE uuid IN (SELECT a.uuid FROM individual AS a " +
+            "INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
+            "INNER JOIN Locations AS c ON b.location_uuid = c.uuid " +
+            "WHERE b.endType = 1 AND gender = 2 AND c.compextId = :id " +
+            "AND date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob / 1000, 'unixepoch')) " +
+            "UNION " +
+            "SELECT uuid FROM individual WHERE extId = 'UNK') order by dob DESC")
     List<Individual> retrieveByMother(String id);
 
     @Query("SELECT a.* FROM individual AS a " +
@@ -85,10 +88,14 @@ public interface IndividualDao {
             "(firstName LIKE :id OR lastName LIKE :id OR c.compno LIKE :id)")
     List<Individual> retrieveByMotherSearch(String id);
 
-    @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
-            " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
-            " WHERE b.endType=1 and gender=1 and c.compextId=:id and firstName!='FAKE' and " +
-            " date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
+
+    @Query("SELECT * FROM individual WHERE uuid IN (SELECT a.uuid FROM individual AS a " +
+            "INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
+            "INNER JOIN Locations AS c ON b.location_uuid = c.uuid " +
+            "WHERE b.endType = 1 AND gender = 1 AND c.compextId = :id " +
+            "AND date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob / 1000, 'unixepoch')) " +
+            "UNION " +
+            "SELECT uuid FROM individual WHERE extId = 'UNK') order by dob DESC")
     List<Individual> retrieveByFather(String id);
 
     @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +

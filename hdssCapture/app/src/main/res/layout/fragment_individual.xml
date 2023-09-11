@@ -347,6 +347,7 @@
                     android:spinnerMode="dialog" />
 
                 <TextView
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -355,6 +356,7 @@
                     android:text="@string/mother"/>
 
                 <Spinner
+                    android:visibility="gone"
                     android:id="@+id/mother"
                     selection="@{individual.mother}"
                     android:layout_width="match_parent"
@@ -366,7 +368,6 @@
                     android:spinnerMode="dialog" />
 
                 <Button
-                    goneUnless="@{individual.mother==1}"
                     android:id="@+id/button_individual_mother"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -375,7 +376,6 @@
                     app:icon="@drawable/ic_baseline_pregnant_woman_24" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    goneUnless="@{individual.mother==1}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -406,12 +406,12 @@
                     android:inputType="number" />
 
                 <include
-                    goneUnless="@{individual.mother==1}"
                     android:id="@+id/mothers"
                     layout="@layout/fragment_individual_mother"
                     bind:mother="@{mother}" />
 
                 <TextView
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -420,6 +420,7 @@
                     android:text="@string/father"/>
 
                 <Spinner
+                    android:visibility="gone"
                     android:id="@+id/father"
                     selection="@{individual.father}"
                     android:layout_width="match_parent"
@@ -432,7 +433,6 @@
                     android:spinnerMode="dialog" />
 
                 <Button
-                    goneUnless="@{individual.father==1}"
                     android:id="@+id/button_individual_father"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -441,7 +441,6 @@
                     app:icon="@drawable/ic_baseline_person_24" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    goneUnless="@{individual.father==1}"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -461,7 +460,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <include
-                    goneUnless="@{individual.father==1}"
                     android:id="@+id/fathers"
                     layout="@layout/fragment_individual_father"
                     bind:father="@{father}" />

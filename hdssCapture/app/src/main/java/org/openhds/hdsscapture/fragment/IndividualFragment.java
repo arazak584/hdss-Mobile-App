@@ -339,10 +339,6 @@ public class IndividualFragment extends Fragment {
                 name.setText(datae.firstName + " " + datae.lastName);
                 dob.setText(datae.getDob());
                 age.setText(String.valueOf(datae.getAge()));
-            }else {
-                binding.mothers.motherName.setVisibility(View.GONE);
-                binding.mothers.motherDob.setVisibility(View.GONE);
-                binding.mothers.mothersAge.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -359,10 +355,6 @@ public class IndividualFragment extends Fragment {
                 name.setText(data.firstName + " " + data.lastName);
                 dob.setText(data.getDob());
                 age.setText(String.valueOf(data.getAge()));
-            }else {
-                binding.fathers.fatherName.setVisibility(View.GONE);
-                binding.fathers.fatherDob.setVisibility(View.GONE);
-                binding.fathers.fathersAge.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();

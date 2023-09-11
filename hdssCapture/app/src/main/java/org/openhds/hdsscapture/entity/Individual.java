@@ -514,9 +514,6 @@ public class Individual extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);
         }
-        if(mother != null && mother==2){
-            this.mother_uuid=AppConstants.Mother;
-        }
 
     }
 
@@ -534,9 +531,6 @@ public class Individual extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);
-        }
-        if(father != null && father==2){
-            this.father_uuid=AppConstants.Father;
         }
 
     }
