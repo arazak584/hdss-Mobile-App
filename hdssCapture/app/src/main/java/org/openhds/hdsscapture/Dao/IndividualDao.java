@@ -143,7 +143,7 @@ public interface IndividualDao {
 //            " date('now', '-14 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
 //    List<Individual> errors();
 
-    @Query("SELECT a.*,c.compextId,d.extId as houseExtId FROM individual AS a INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
+    @Query("SELECT a.*,c.compextId,d.extId as houseExtId,groupName as lastName FROM individual AS a INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
             " INNER JOIN locations c on b.location_uuid=c.uuid " +
             " INNER JOIN socialgroup d on b.socialgroup_uuid = d.uuid " +
             "WHERE a.firstName != 'FAKE' AND b.endType = 1 " +
@@ -154,7 +154,7 @@ public interface IndividualDao {
             "    WHERE b2.endType = 1 " +
             "    GROUP BY b2.socialgroup_uuid " +
             "    HAVING MAX(STRFTIME('%Y', 'now') - STRFTIME('%Y', DATE(a2.dob/1000, 'unixepoch'))) < 14" +
-            ") " +
+            ") GROUP BY socialgroup_uuid " +
             "ORDER BY c.compextId")
     List<Individual> errors();
 

@@ -47,7 +47,6 @@ public class ErrorActivity extends AppCompatActivity {
     private ProgressDialog progress;
 
     private ErrorAdapter errorAdapter;
-    private String lastName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,8 +109,8 @@ public class ErrorActivity extends AppCompatActivity {
                 String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
                 r1.name = "Visit " ;
-                r1.extid = "" + e.visit_uuid + " " + e.groupName;
-                r1.date = "" + e.extId;
+                r1.extid = "Cluster: " + e.visit_uuid + " - Household Head: " + e.groupName;
+                r1.date = "Household ID" + e.extId;
                 r1.error = "UNK as Respondent";
                 r1.index = c;
 
@@ -123,8 +122,8 @@ public class ErrorActivity extends AppCompatActivity {
             for (Death e : deathViewModel.error()) {
                 String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
-                r1.name = "Death " ;
-                r1.extid = "" + e.compno + " - " +e.firstName + " " + e.lastName;
+                r1.name = "Compno: " + e.compno ;
+                r1.extid = "Household ID: " + e.lastName + " - Household Head: " +e.firstName;
                 r1.date = "" + formattedDate;
                 r1.error = "Change Head of Household";
                 r1.index = d;
@@ -150,9 +149,9 @@ public class ErrorActivity extends AppCompatActivity {
             for (Individual e : individualViewModel.errors()) {
                 String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
-                r1.name = "Individual " + " - " + e.extId;
-                r1.extid = "" + e.compextId + " - " +e.firstName + " " + e.lastName;
-                r1.date = "" + e.houseExtId;
+                r1.name = "Household ID" + " - " + e.houseExtId;
+                r1.extid = "Compno: " + e.compextId + " - Househead: " + e.lastName;
+                r1.date = "" + formattedDate;
                 r1.error = "Only Minors Left in Household";
                 r1.index = k;
                 list.add(r1);
@@ -182,8 +181,8 @@ public class ErrorActivity extends AppCompatActivity {
             for (Listing e : listingViewModel.error()) {
                 String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
-                r1.name = "Listing " + " - " + e.compno;
-                r1.extid = "" + e.compextId + " - " +e.locationName;
+                r1.name = "Compno " + " - " + e.compno;
+                r1.extid = "Cluster: " + e.compextId + " - Compound Name: " +e.locationName;
                 r1.date = "" + formattedDate;
                 r1.error = "Listing Not Picked";
                 r1.index = l;
