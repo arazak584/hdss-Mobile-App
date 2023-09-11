@@ -61,12 +61,6 @@
                 android:textAlignment="center"/>
         </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_margin="5dp"
-        android:background="@color/colorPrimaryDark" />
-
 
     <ScrollView
         android:layout_width="match_parent"
