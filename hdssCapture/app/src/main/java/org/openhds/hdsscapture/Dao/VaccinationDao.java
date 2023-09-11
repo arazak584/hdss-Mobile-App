@@ -19,7 +19,7 @@ public interface VaccinationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Vaccination... vaccination);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(List<Vaccination> vaccination);
 
 

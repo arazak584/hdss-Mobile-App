@@ -21,7 +21,7 @@ public interface SocialgroupDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create (Socialgroup socialgroup);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(List<Socialgroup> socialgroup);
 
     @Update

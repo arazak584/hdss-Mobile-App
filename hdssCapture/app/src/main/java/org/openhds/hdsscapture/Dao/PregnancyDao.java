@@ -20,7 +20,7 @@ public interface PregnancyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Pregnancy... pregnancy);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert (List<Pregnancy> pregnancies);
 
     @Query("DELETE FROM pregnancy")

@@ -31,7 +31,7 @@ public interface LocationDao {
     @Update(entity = Locations.class)
     int update(LocationAmendment s);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(List<Locations> locations);
 
     @Delete

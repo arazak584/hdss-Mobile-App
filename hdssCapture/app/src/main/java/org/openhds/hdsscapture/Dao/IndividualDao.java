@@ -23,7 +23,7 @@ public interface IndividualDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Individual individual);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(Individual individual);
 
     @Update

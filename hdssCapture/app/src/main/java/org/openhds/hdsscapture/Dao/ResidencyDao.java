@@ -21,7 +21,7 @@ public interface ResidencyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create (Residency residency);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(List<Residency> residency);
 
     @Update

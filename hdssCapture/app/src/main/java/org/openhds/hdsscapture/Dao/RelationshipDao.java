@@ -22,7 +22,7 @@ public interface RelationshipDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Relationship relationship);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(List<Relationship> relationships);
 
     @Query("DELETE FROM relationship")
