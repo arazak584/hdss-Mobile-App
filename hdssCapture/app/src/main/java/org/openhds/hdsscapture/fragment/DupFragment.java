@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -108,6 +109,9 @@ public class DupFragment extends Fragment {
         binding = FragmentDupBinding.inflate(inflater, container, false);
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_dup);
+
+        final TextView ind = binding.getRoot().findViewById(R.id.ind);
+        ind.setText(individual.firstName + " " + individual.lastName);
 
         // Set a click listener on the button for partner
         showDialogButton.setOnClickListener(new View.OnClickListener() {

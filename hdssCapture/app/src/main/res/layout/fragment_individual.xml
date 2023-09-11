@@ -10,6 +10,14 @@
             name="individual"
             type="org.openhds.hdsscapture.entity.Individual" />
 
+        <variable
+            name="mother"
+            type="org.openhds.hdsscapture.entity.Individual" />
+
+        <variable
+            name="father"
+            type="org.openhds.hdsscapture.entity.Individual" />
+
         <import type="android.view.View" />
 
         <variable
@@ -24,6 +32,17 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:context=".fragment.IndividualFragment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/individual"
+            android:textColor="@color/colorPrimary"
+            android:textAllCaps="true"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
 
 
@@ -386,6 +405,12 @@
                     android:focusableInTouchMode="false"
                     android:inputType="number" />
 
+                <include
+                    goneUnless="@{individual.mother==1}"
+                    android:id="@+id/mothers"
+                    layout="@layout/fragment_individual_mother"
+                    bind:mother="@{mother}" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -434,6 +459,12 @@
                         android:focusableInTouchMode="false"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <include
+                    goneUnless="@{individual.father==1}"
+                    android:id="@+id/fathers"
+                    layout="@layout/fragment_individual_father"
+                    bind:father="@{father}" />
 
                 <EditText
                     android:visibility="gone"

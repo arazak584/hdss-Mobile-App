@@ -39,9 +39,27 @@
             android:gravity="center"
             android:padding="10dp"
             android:text="Amendment"
+            android:textAllCaps="true"
             android:textColor="@color/colorPrimary"
             android:textSize="30sp"
             android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="25dp"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/ind"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textAlignment="center"/>
+        </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -136,6 +154,7 @@
                 app:icon="@drawable/ic_baseline_calendar_month_24" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/individual_insertDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

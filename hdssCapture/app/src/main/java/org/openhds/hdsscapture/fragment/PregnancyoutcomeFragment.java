@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
@@ -120,6 +121,9 @@ public class PregnancyoutcomeFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentOutcomeBinding.inflate(inflater, container, false);
         binding.setIndividual(individual);
+
+        final TextView ind = binding.getRoot().findViewById(R.id.ind);
+        ind.setText(individual.firstName + " " + individual.lastName);
 
         final Intent intent = getActivity().getIntent();
         final Round roundData = intent.getParcelableExtra(HierarchyActivity.ROUND_DATA);
@@ -290,6 +294,34 @@ public class PregnancyoutcomeFragment extends Fragment {
             if (data != null) {
                 data.preg_uuid = binding.getPregoutcome().getUuid();
                 binding.setPregoutcome1(data);
+
+                if (data.childuuid == null){
+                    String uuid = UUID.randomUUID().toString();
+                    String uuidString = uuid.toString().replaceAll("-", "");
+
+                    data.childuuid = uuidString;
+                    data.individual_uuid = uuidString;
+                }
+
+                if (binding.getPregoutcome1().extId == null) {
+                    final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
+                    int sequenceNumber = 1;
+                    String id = locations.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
+                    while (true) {
+                        try {
+                            if (!(individualViewModels.findAll(id) != null)) break;
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } // check if ID already exists in ViewModel
+                        sequenceNumber++; // increment sequence number if ID exists
+                        id = locations.compextId + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
+                    }
+                    binding.getPregoutcome1().extId = id; // set the generated ID to the extId property of the Individual object
+                }
+
+
             } else {
                 data = new Outcome();
 
@@ -349,6 +381,36 @@ public class PregnancyoutcomeFragment extends Fragment {
             if (data != null) {
                 data.preg_uuid = binding.getPregoutcome().getUuid();
                 binding.setPregoutcome2(data);
+
+                if (data.childuuid == null){
+                    String uuid = UUID.randomUUID().toString();
+                    String uuidString = uuid.toString().replaceAll("-", "");
+
+                    data.childuuid = uuidString;
+                    data.individual_uuid = uuidString;
+                }
+
+                if (binding.getPregoutcome2().extId == null) {
+                    final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
+                    String pregoutcome1Id = binding.getPregoutcome1().extId;
+                    int sequenceNumber = Integer.parseInt(pregoutcome1Id.substring(pregoutcome1Id.length() - 3));
+                    sequenceNumber += 1; // Increment the sequence number by 2
+
+                    String id = locations.compextId + String.format("%03d", sequenceNumber);
+                    while (true) {
+                        try {
+                            if (!(individualViewModels.findAll(id) != null)) break;
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        sequenceNumber += 1;
+                        id = locations.compextId + String.format("%03d", sequenceNumber);
+                    }
+                    binding.getPregoutcome2().extId = id;
+                }
+
             } else {
                 data = new Outcome();
 
@@ -411,6 +473,36 @@ public class PregnancyoutcomeFragment extends Fragment {
             if (data != null) {
                 data.preg_uuid = binding.getPregoutcome().getUuid();
                 binding.setPregoutcome3(data);
+
+                if (data.childuuid == null){
+                    String uuid = UUID.randomUUID().toString();
+                    String uuidString = uuid.toString().replaceAll("-", "");
+
+                    data.childuuid = uuidString;
+                    data.individual_uuid = uuidString;
+                }
+
+                if (binding.getPregoutcome3().extId == null) {
+                    final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
+                    String pregoutcome1Id = binding.getPregoutcome1().extId;
+                    int sequenceNumber = Integer.parseInt(pregoutcome1Id.substring(pregoutcome1Id.length() - 3));
+                    sequenceNumber += 2; // Increment the sequence number by 2
+
+                    String id = locations.compextId + String.format("%03d", sequenceNumber);
+                    while (true) {
+                        try {
+                            if (!(individualViewModels.findAll(id) != null)) break;
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        sequenceNumber += 2;
+                        id = locations.compextId + String.format("%03d", sequenceNumber);
+                    }
+                    binding.getPregoutcome3().extId = id;
+                }
+
             } else {
                 data = new Outcome();
 
@@ -474,6 +566,36 @@ public class PregnancyoutcomeFragment extends Fragment {
             if (data != null) {
                 data.preg_uuid = binding.getPregoutcome().getUuid();
                 binding.setPregoutcome4(data);
+
+                if (data.childuuid == null){
+                    String uuid = UUID.randomUUID().toString();
+                    String uuidString = uuid.toString().replaceAll("-", "");
+
+                    data.childuuid = uuidString;
+                    data.individual_uuid = uuidString;
+                }
+
+                if (binding.getPregoutcome4().extId == null) {
+                    final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
+                    String pregoutcome1Id = binding.getPregoutcome1().extId;
+                    int sequenceNumber = Integer.parseInt(pregoutcome1Id.substring(pregoutcome1Id.length() - 3));
+                    sequenceNumber += 3; // Increment the sequence number by 2
+
+                    String id = locations.compextId + String.format("%03d", sequenceNumber);
+                    while (true) {
+                        try {
+                            if (!(individualViewModels.findAll(id) != null)) break;
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        sequenceNumber += 3;
+                        id = locations.compextId + String.format("%03d", sequenceNumber);
+                    }
+                    binding.getPregoutcome4().extId = id;
+                }
+
             } else {
                 data = new Outcome();
 
@@ -780,6 +902,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
+                        inf.extId = null;
                     }
                     outcomeViewModel.add(inf);
 
@@ -833,6 +956,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
+                        inf.extId = null;
                     }
                     outcomeViewModel.add(inf);
 
@@ -885,6 +1009,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
+                        inf.extId = null;
                     }
                     outcomeViewModel.add(inf);
 
@@ -937,6 +1062,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
+                        inf.extId = null;
                     }
                     outcomeViewModel.add(inf);
 

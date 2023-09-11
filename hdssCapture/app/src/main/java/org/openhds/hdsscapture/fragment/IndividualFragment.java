@@ -16,6 +16,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.FatherDialogFragment;
@@ -24,6 +26,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Calculators;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentIndividualBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
@@ -324,6 +327,47 @@ public class IndividualFragment extends Fragment {
 
         });
 
+        IndividualViewModel ind = new ViewModelProvider(this).get(IndividualViewModel.class);
+        try {
+            Individual datae = ind.mother(individual.uuid);
+            if (datae != null) {
+                binding.setMother(datae);
+
+                TextInputEditText name = binding.getRoot().findViewById(R.id.mother_name);
+                TextInputEditText dob = binding.getRoot().findViewById(R.id.mother_dob);
+                TextInputEditText age = binding.getRoot().findViewById(R.id.mothers_age);
+                name.setText(datae.firstName + " " + datae.lastName);
+                dob.setText(datae.getDob());
+                age.setText(String.valueOf(datae.getAge()));
+            }else {
+                binding.mothers.motherName.setVisibility(View.GONE);
+                binding.mothers.motherDob.setVisibility(View.GONE);
+                binding.mothers.mothersAge.setVisibility(View.GONE);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Individual data = ind.father(individual.uuid);
+            if (data != null) {
+                binding.setFather(data);
+
+                TextInputEditText name = binding.getRoot().findViewById(R.id.father_name);
+                TextInputEditText dob = binding.getRoot().findViewById(R.id.father_dob);
+                TextInputEditText age = binding.getRoot().findViewById(R.id.fathers_age);
+                name.setText(data.firstName + " " + data.lastName);
+                dob.setText(data.getDob());
+                age.setText(String.valueOf(data.getAge()));
+            }else {
+                binding.fathers.fatherName.setVisibility(View.GONE);
+                binding.fathers.fatherDob.setVisibility(View.GONE);
+                binding.fathers.fathersAge.setVisibility(View.GONE);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
         //LOAD SPINNERS
         loadCodeData(binding.dobAspect, "complete");
         loadCodeData(binding.individualComplete,  "submit");
@@ -382,23 +426,23 @@ public class IndividualFragment extends Fragment {
             boolean agedif = false;
             boolean modif = false;
 
-            if (!binding.fatherAge.getText().toString().trim().isEmpty() && !binding.individAge.getText().toString().trim().isEmpty()) {
-                int fAgeValue = Integer.parseInt(binding.fatherAge.getText().toString().trim());
+            if (!binding.fathers.fathersAge.getText().toString().trim().isEmpty() && !binding.individAge.getText().toString().trim().isEmpty()) {
+                int fAgeValue = Integer.parseInt(binding.fathers.fathersAge.getText().toString().trim());
                 int individidAgeValue = Integer.parseInt(binding.individAge.getText().toString().trim());
                 if (fAgeValue - individidAgeValue < 10) {
                     agedif = true;
-                    binding.fatherAge.setError("Father selected is too young to be the father of this Individual");
+                    binding.fathers.fathersAge.setError("Father selected is too young to be the father of this Individual");
                     Toast.makeText(getActivity(), "Father selected is too young to be the father of this Individual", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
 
-            if (!binding.motherAge.getText().toString().trim().isEmpty() && !binding.individAge.getText().toString().trim().isEmpty()) {
-                int mthgeValue = Integer.parseInt(binding.motherAge.getText().toString().trim());
+            if (!binding.mothers.mothersAge.getText().toString().trim().isEmpty() && !binding.individAge.getText().toString().trim().isEmpty()) {
+                int mthgeValue = Integer.parseInt(binding.mothers.mothersAge.getText().toString().trim());
                 int individidAge = Integer.parseInt(binding.individAge.getText().toString().trim());
                 if (mthgeValue - individidAge < 10) {
                     modif = true;
-                    binding.motherAge.setError("Mother selected is too young to be the mother of this Individual");
+                    binding.mothers.mothersAge.setError("Mother selected is too young to be the mother of this Individual");
                     Toast.makeText(getActivity(), "Mother selected is too young to be the mother of this Individual", Toast.LENGTH_LONG).show();
                     return;
                 }

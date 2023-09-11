@@ -170,7 +170,7 @@
     <string name="description">Description</string>
     <string name="amount">Amount</string>
     <string name="date">Date:</string>
-    <string name="pick_date">Pick Date</string>
+    <string name="pick_date">Pick Start Date</string>
     <string name="_04_11_2022">04/11/2022</string>
     <string name="inmigration">Inmigration</string>
     <string name="residency_uuid">Residency uuid</string>
@@ -196,7 +196,7 @@
     <string name="login_form_password">Password</string>
     <string name="login_form_username">username</string>
     <string name="login_form_title">"Fieldworker Login "</string>
-    <string name="login_form">Fieldworker Login</string>
+    <string name="login_form">User Login</string>
     <string name="syncFieldworker">Sync Fieldworker</string>
     <string name="staffcode">Staff Code</string>
     <string name="text_household">Select Household to Continue Interview</string>
@@ -222,7 +222,7 @@
     <string name="type">Outcome Type</string>
     <string name="childeverborn">Number of Outcomes</string>
     <string name="livebirth">Number of Live Birth</string>
-    <string name="text_send_to_server">SEND DATA TO SERVER</string>
+    <string name="text_send_to_server">SYNC DATA</string>
     <string name="init_syncing">Initialize sync process…</string>
     <string name="send_event">Send Events</string>
     <string name="send_vpm">Send vpm</string>
@@ -612,6 +612,13 @@
     <string name="extid">Cluster</string>
     <string name="other_specify">Other, Specify</string>
     <string name="visitDates">Date of Visit</string>
+    <string name="pick_end">Pick End Date</string>
+    <string name="mother_name">Mother\'s Name</string>
+    <string name="mother_dob">Mother\'s DOB</string>
+    <string name="mother_age">Mother\'s age</string>
+    <string name="father_age">Father\'s age</string>
+    <string name="father_dob">Father\'s DOB</string>
+    <string name="father_name">Father\'s Name</string>
 
     //SocioDemo End
 

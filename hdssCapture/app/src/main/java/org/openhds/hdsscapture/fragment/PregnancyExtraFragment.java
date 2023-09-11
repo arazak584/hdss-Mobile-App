@@ -113,6 +113,9 @@ public class PregnancyExtraFragment extends Fragment {
         binding = FragmentPregnancyBinding.inflate(inflater, container, false);
         binding.setPregnancy(pregnancy);
 
+        final TextView ind = binding.getRoot().findViewById(R.id.ind);
+        ind.setText(individual.firstName + " " + individual.lastName);
+
         final TextView ex = binding.getRoot().findViewById(R.id.ext);
         final Spinner extra = binding.getRoot().findViewById(R.id.extra);
 

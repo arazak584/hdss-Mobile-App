@@ -329,21 +329,21 @@ public class ReportActivity extends AppCompatActivity {
 
 
 
-    @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.exit_confirmation_title))
-                .setMessage(getString(R.string.exiting_lbl))
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        try{
-                            ReportActivity.this.finish();
-                        }
-                        catch(Exception e){}
-                    }
-                })
-                .setNegativeButton(getString(R.string.no), null)
-                .show();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        new AlertDialog.Builder(this)
+//                .setTitle(getString(R.string.exit_confirmation_title))
+//                .setMessage(getString(R.string.exiting_lbl))
+//                .setCancelable(false)
+//                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        try{
+//                            ReportActivity.this.finish();
+//                        }
+//                        catch(Exception e){}
+//                    }
+//                })
+//                .setNegativeButton(getString(R.string.no), null)
+//                .show();
+//    }
 }

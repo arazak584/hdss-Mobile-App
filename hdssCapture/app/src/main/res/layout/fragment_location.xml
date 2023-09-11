@@ -27,6 +27,7 @@
             android:padding="10dp"
             android:text="@string/locations"
             android:textColor="@color/colorPrimary"
+            android:textAllCaps="true"
             android:textSize="30sp"
             android:textStyle="bold" />
         <View

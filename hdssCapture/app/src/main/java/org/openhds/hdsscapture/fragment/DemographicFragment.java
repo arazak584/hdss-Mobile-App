@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -110,9 +111,9 @@ public class DemographicFragment extends Fragment {
 
         //final TextView compno = binding.getRoot().findViewById(R.id.textView2_extid);
         //final TextView compname = binding.getRoot().findViewById(R.id.textView2_firstname);
-        //final TextView cluster = binding.getRoot().findViewById(R.id.textView2_lastname);
+        final TextView ind = binding.getRoot().findViewById(R.id.ind);
 
-        //compno.setText(locations.getCompno());
+        ind.setText(individual.firstName + " " + individual.lastName);
         //compname.setText(locations.getLocationName());
         //cluster.setText(locations.villcode);
 
@@ -178,6 +179,19 @@ public class DemographicFragment extends Fragment {
                     compyrs = true;
                     binding.compYrs.setError("Cannot be less than 1 or More than 30");
                     Toast.makeText(getActivity(), "Cannot be less than 1 or More than 30", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            boolean ph = false;
+            if (!binding.phone1.getText().toString().trim().isEmpty()) {
+                String input = binding.phone1.getText().toString().trim();
+                String regex = "[0-9]{10}";
+
+                if (!input.matches(regex)) {
+                    ph = true;
+                    Toast.makeText(getActivity(), "Phone Number is incorrect", Toast.LENGTH_LONG).show();
+                    binding.phone1.setError("Phone Number is incorrect");
                     return;
                 }
             }

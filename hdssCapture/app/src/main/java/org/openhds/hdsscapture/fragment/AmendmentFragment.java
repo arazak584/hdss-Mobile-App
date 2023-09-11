@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
@@ -111,6 +112,9 @@ public class AmendmentFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentAmendmentBinding.inflate(inflater, container, false);
         //binding.setIndividual(individual);
+
+        final TextView ind = binding.getRoot().findViewById(R.id.ind);
+        ind.setText(individual.firstName + " " + individual.lastName);
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -224,7 +228,7 @@ public class AmendmentFragment extends Fragment {
                     binding.replDob.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -242,7 +246,7 @@ public class AmendmentFragment extends Fragment {
 
                 if (!input.matches(regex)) {
                     gh = true;
-                    Toast.makeText(getActivity(), "Ghana Card Number or format is incorrect", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Ghana Card Number or format is incorrect", Toast.LENGTH_LONG).show();
                     binding.replGhanacard.setError("Format Should Be GHA-XXXXXXXXX-X");
                     return;
                 }
@@ -253,7 +257,7 @@ public class AmendmentFragment extends Fragment {
                 String firstName = binding.replFirstName.getText().toString();
                 if (firstName.charAt(0) == ' ' || firstName.charAt(firstName.length() - 1) == ' ') {
                     binding.replFirstName.setError("Spaces are not allowed before or after the Name");
-                    Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
                     val = true;
                     return;
                 } else {
@@ -266,7 +270,7 @@ public class AmendmentFragment extends Fragment {
                 String lastName = binding.replLastName.getText().toString();
                 if (lastName.charAt(0) == ' ' || lastName.charAt(lastName.length() - 1) == ' ') {
                     binding.replLastName.setError("Spaces are not allowed before or after the Name");
-                    Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
                     vals = true;
                     return;
                 } else {

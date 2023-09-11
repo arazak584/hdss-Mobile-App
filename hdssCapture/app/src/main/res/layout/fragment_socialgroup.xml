@@ -47,7 +47,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="10dp"
-                android:text="@string/socialgroup"
+                android:text="@string/changehoh"
+                android:textAllCaps="true"
                 android:textColor="@color/colorPrimary"
                 android:textSize="30sp"
                 android:textStyle="bold" />

@@ -131,6 +131,7 @@ public class VisitFragment extends Fragment {
                 if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)){
                     data.respondent = "UNK";
                 }
+                    data.uuid = socialgroup.getVisit_uuid();
             } else {
                 data = new Visit();
 

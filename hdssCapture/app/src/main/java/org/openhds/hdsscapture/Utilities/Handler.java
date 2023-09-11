@@ -99,8 +99,8 @@ public class Handler {
                     if (!(v instanceof RadioButton) && ((TextView) v).getMaxEms() <= 0 && !((TextView) v).getTypeface().isBold()) {
                         v.setBackground(drawable);
                     } else if (((TextView) v).getTypeface().isBold()) {
-                        ((TextView) v).setTextColor(Color.WHITE);
-                        v.setBackgroundColor(Color.parseColor("#FF4500"));
+                        //((TextView) v).setTextColor(Color.BLACK);
+                        v.setBackgroundColor(Color.TRANSPARENT);
                         v.setPadding(5, 5, 5, 5);
                         v.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 

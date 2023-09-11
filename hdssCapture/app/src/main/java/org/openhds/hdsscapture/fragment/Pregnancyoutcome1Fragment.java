@@ -124,6 +124,9 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         binding = FragmentOutcomeBinding.inflate(inflater, container, false);
         binding.setPregoutcome(pregnancyoutcome);
 
+        final TextView ind = binding.getRoot().findViewById(R.id.ind);
+        ind.setText(individual.firstName + " " + individual.lastName);
+
         final TextView ex = binding.getRoot().findViewById(R.id.exts);
         final Spinner extra = binding.getRoot().findViewById(R.id.extras);
 
@@ -312,6 +315,33 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             if (data != null) {
                 data.preg_uuid = binding.getPregoutcome().getUuid();
                 binding.setPregoutcome1(data);
+
+                if (data.childuuid == null){
+                    String uuid = UUID.randomUUID().toString();
+                    String uuidString = uuid.toString().replaceAll("-", "");
+
+                    data.childuuid = uuidString;
+                    data.individual_uuid = uuidString;
+                }
+
+                if (binding.getPregoutcome1().extId == null) {
+                    final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
+                    int sequenceNumber = 1;
+                    String id = locations.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
+                    while (true) {
+                        try {
+                            if (!(individualViewModels.findAll(id) != null)) break;
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } // check if ID already exists in ViewModel
+                        sequenceNumber++; // increment sequence number if ID exists
+                        id = locations.compextId + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
+                    }
+                    binding.getPregoutcome1().extId = id; // set the generated ID to the extId property of the Individual object
+                }
+
             } else {
                 data = new Outcome();
 
@@ -372,6 +402,36 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             if (data != null) {
                 data.preg_uuid = binding.getPregoutcome().getUuid();
                 binding.setPregoutcome2(data);
+
+                if (data.childuuid == null){
+                    String uuid = UUID.randomUUID().toString();
+                    String uuidString = uuid.toString().replaceAll("-", "");
+
+                    data.childuuid = uuidString;
+                    data.individual_uuid = uuidString;
+                }
+
+                if (binding.getPregoutcome2().extId == null) {
+                    final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
+                    String pregoutcome1Id = binding.getPregoutcome1().extId;
+                    int sequenceNumber = Integer.parseInt(pregoutcome1Id.substring(pregoutcome1Id.length() - 3));
+                    sequenceNumber += 1; // Increment the sequence number by 2
+
+                    String id = locations.compextId + String.format("%03d", sequenceNumber);
+                    while (true) {
+                        try {
+                            if (!(individualViewModels.findAll(id) != null)) break;
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        sequenceNumber += 1;
+                        id = locations.compextId + String.format("%03d", sequenceNumber);
+                    }
+                    binding.getPregoutcome2().extId = id;
+                }
+
             } else {
                 data = new Outcome();
 
@@ -434,6 +494,36 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             if (data != null) {
                 data.preg_uuid = binding.getPregoutcome().getUuid();
                 binding.setPregoutcome3(data);
+
+                if (data.childuuid == null){
+                    String uuid = UUID.randomUUID().toString();
+                    String uuidString = uuid.toString().replaceAll("-", "");
+
+                    data.childuuid = uuidString;
+                    data.individual_uuid = uuidString;
+                }
+
+                if (binding.getPregoutcome3().extId == null) {
+                    final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
+                    String pregoutcome1Id = binding.getPregoutcome1().extId;
+                    int sequenceNumber = Integer.parseInt(pregoutcome1Id.substring(pregoutcome1Id.length() - 3));
+                    sequenceNumber += 2; // Increment the sequence number by 2
+
+                    String id = locations.compextId + String.format("%03d", sequenceNumber);
+                    while (true) {
+                        try {
+                            if (!(individualViewModels.findAll(id) != null)) break;
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        sequenceNumber += 2;
+                        id = locations.compextId + String.format("%03d", sequenceNumber);
+                    }
+                    binding.getPregoutcome3().extId = id;
+                }
+
             } else {
                 data = new Outcome();
 
@@ -497,6 +587,36 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             if (data != null) {
                 data.preg_uuid = binding.getPregoutcome().getUuid();
                 binding.setPregoutcome4(data);
+
+                if (data.childuuid == null){
+                    String uuid = UUID.randomUUID().toString();
+                    String uuidString = uuid.toString().replaceAll("-", "");
+
+                    data.childuuid = uuidString;
+                    data.individual_uuid = uuidString;
+                }
+
+                if (binding.getPregoutcome4().extId == null) {
+                    final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
+                    String pregoutcome1Id = binding.getPregoutcome1().extId;
+                    int sequenceNumber = Integer.parseInt(pregoutcome1Id.substring(pregoutcome1Id.length() - 3));
+                    sequenceNumber += 3; // Increment the sequence number by 2
+
+                    String id = locations.compextId + String.format("%03d", sequenceNumber);
+                    while (true) {
+                        try {
+                            if (!(individualViewModels.findAll(id) != null)) break;
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        sequenceNumber += 3;
+                        id = locations.compextId + String.format("%03d", sequenceNumber);
+                    }
+                    binding.getPregoutcome4().extId = id;
+                }
+
             } else {
                 data = new Outcome();
 
@@ -649,19 +769,19 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     Date edate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
                     if (edate.after(currentDate)) {
                         binding.editTextOutcomeDate.setError("Date of Delivery Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Date of Delivery Cannot Be a Future Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Date of Delivery Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     if (edate.before(stdate)) {
                         binding.editTextConception.setError("Delivery Date Cannot Be Less than Conception Date");
-                        Toast.makeText(getActivity(), "Delivery Date Cannot Be Less than Conception Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Delivery Date Cannot Be Less than Conception Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     // clear error if validation passes
                     binding.editTextConception.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -671,7 +791,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 if (totalbirth < 1 || totalbirth > 15) {
                     total = true;
                     binding.lBirth.setError("Cannot be less than 1");
-                    Toast.makeText(getActivity(), "Previous Live Births Cannot be less than 1", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Previous Live Births Cannot be less than 1", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -682,7 +802,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 if (totalmth < 1 || totalmth > 12) {
                     month = true;
                     binding.monthPg.setError("Months Pregnant Before ANC Cannot be More than 12");
-                    Toast.makeText(getActivity(), "Months Pregnant Before ANC Cannot be More than 12", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Months Pregnant Before ANC Cannot be More than 12", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -693,7 +813,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 if (totalmth < 1 || totalmth > 15) {
                     anc = true;
                     binding.numAnc.setError("Maximum Number of ANC Visit is 15");
-                    Toast.makeText(getActivity(), "Maximum Number of ANC Visit is 15", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Maximum Number of ANC Visit is 15", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -704,7 +824,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 if (totalmth < 1 || totalmth > 12) {
                     ipt = true;
                     binding.firstRec.setError("Months Pregnant for IPT Cannot be More than 12");
-                    Toast.makeText(getActivity(), "Months Pregnant for IPT Cannot be More than 12", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Months Pregnant for IPT Cannot be More than 12", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -715,7 +835,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 if (totalmth < 1 || totalmth > 5) {
                     iptt = true;
                     binding.manyIpt.setError("Number of IPT taken Cannot be More than 5");
-                    Toast.makeText(getActivity(), "Number of IPT taken Cannot be More than 5", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Number of IPT taken Cannot be More than 5", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -726,7 +846,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 if (childWeight < 1.5 || childWeight > 4.5) {
                     weight = true;
                     binding.weigHcard.setError("Child Weight Cannot be More than 4.5 Kilograms");
-                    Toast.makeText(getContext(), "Child Weight Cannot be More than 4.5 Kilograms", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Child Weight Cannot be More than 4.5 Kilograms", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -740,14 +860,14 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String formattedDate = f.format(stdate);
                     if (edate.before(stdate)) {
                         binding.editTextOutcomeDate.setError("Outcome with a later Date exist " + formattedDate);
-                        Toast.makeText(getActivity(), "Outcome with a later Date exist " + formattedDate, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Outcome with a later Date exist " + formattedDate, Toast.LENGTH_LONG).show();
                         return;
                     }
                     // clear error if validation passes
                     binding.editTextOutcomeDate.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -802,6 +922,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
+                        inf.extId = null;
                     }
                     outcomeViewModel.add(inf);
 
@@ -853,6 +974,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
+                        inf.extId = null;
                     }
                     outcomeViewModel.add(inf);
 
@@ -905,6 +1027,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
+                        inf.extId = null;
                     }
                     outcomeViewModel.add(inf);
 
@@ -956,6 +1079,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
+                        inf.extId = null;
                     }
                     outcomeViewModel.add(inf);
 
@@ -1004,7 +1128,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String firstName = binding.childFetus1.individual1FirstName.getText().toString();
                     if (firstName.charAt(0) == ' ' || firstName.charAt(firstName.length() - 1) == ' ') {
                         binding.childFetus1.individual1FirstName.setError("Spaces are not allowed before or after the Name");
-                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
                         val = true;
                         return;
                     } else {
@@ -1015,7 +1139,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String lastName = binding.childFetus1.individual1LastName.getText().toString();
                     if (lastName.charAt(0) == ' ' || lastName.charAt(lastName.length() - 1) == ' ') {
                         binding.childFetus1.individual1LastName.setError("Spaces are not allowed before or after the Name");
-                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
                         vals = true;
                         return;
                     } else {
@@ -1028,7 +1152,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String firstName = binding.childFetus2.individual1FirstName.getText().toString();
                     if (firstName.charAt(0) == ' ' || firstName.charAt(firstName.length() - 1) == ' ') {
                         binding.childFetus2.individual1FirstName.setError("Spaces are not allowed before or after the Name");
-                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
                         val = true;
                         return;
                     } else {
@@ -1039,7 +1163,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String lastName = binding.childFetus2.individual1LastName.getText().toString();
                     if (lastName.charAt(0) == ' ' || lastName.charAt(lastName.length() - 1) == ' ') {
                         binding.childFetus2.individual1LastName.setError("Spaces are not allowed before or after the Name");
-                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
                         vals = true;
                         return;
                     } else {
@@ -1052,7 +1176,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String firstName = binding.childFetus3.individual1FirstName.getText().toString();
                     if (firstName.charAt(0) == ' ' || firstName.charAt(firstName.length() - 1) == ' ') {
                         binding.childFetus3.individual1FirstName.setError("Spaces are not allowed before or after the Name");
-                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
                         val = true;
                         return;
                     } else {
@@ -1063,7 +1187,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String lastName = binding.childFetus3.individual1LastName.getText().toString();
                     if (lastName.charAt(0) == ' ' || lastName.charAt(lastName.length() - 1) == ' ') {
                         binding.childFetus3.individual1LastName.setError("Spaces are not allowed before or after the Name");
-                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
                         vals = true;
                         return;
                     } else {
@@ -1076,7 +1200,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String firstName = binding.childFetus4.individual1FirstName.getText().toString();
                     if (firstName.charAt(0) == ' ' || firstName.charAt(firstName.length() - 1) == ' ') {
                         binding.childFetus4.individual1FirstName.setError("Spaces are not allowed before or after the Name");
-                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
                         val = true;
                         return;
                     } else {
@@ -1087,7 +1211,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String lastName = binding.childFetus4.individual1LastName.getText().toString();
                     if (lastName.charAt(0) == ' ' || lastName.charAt(lastName.length() - 1) == ' ') {
                         binding.childFetus4.individual1LastName.setError("Spaces are not allowed before or after the Name");
-                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
                         vals = true;
                         return;
                     } else {
@@ -1144,19 +1268,19 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                             Date edate = f.parse(binding.vpm.dthDeathDate.getText().toString().trim());
                             if (!edate.equals(stdate)) {
                                 binding.vpm.dthDeathDate.setError("Date of Outcome Not Equal to Date of Birth");
-                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_LONG).show();
                                 return;
                             }
                             if (!dob.equals(stdate)) {
                                 binding.vpm.dthDob.setError("Date of Death Not Equal to Date of Birth");
-                                Toast.makeText(getActivity(), "Date of Death Not Equal to Date of Birth", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Date of Death Not Equal to Date of Birth", Toast.LENGTH_LONG).show();
                                 return;
                             }
                             // clear error if validation passes
                             binding.vpm.dthDob.setError(null);
                         }
                     } catch (ParseException e) {
-                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                         e.printStackTrace();
                     }
 

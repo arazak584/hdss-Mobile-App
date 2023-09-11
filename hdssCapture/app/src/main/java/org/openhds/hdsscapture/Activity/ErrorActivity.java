@@ -206,6 +206,19 @@ public class ErrorActivity extends AppCompatActivity {
 //
 //            }
 
+//            int m=1;
+//            for (Individual e : individualViewModel.err()) {
+//                String formattedDate = f.format(e.insertDate);
+//                Queries r1 = new Queries();
+//                r1.name = "Individual " + " - " + e.extId;
+//                r1.extid = "" + e.compextId + " - " +e.firstName + " " + e.lastName;
+//                r1.date = "" + e.houseExtId;
+//                r1.error = "Duplicate";
+//                r1.index = m;
+//                list.add(r1);
+//
+//            }
+
             errorAdapter = new ErrorAdapter(this);
             errorAdapter.setQueries(list);
             RecyclerView recyclerView = findViewById(R.id.my_recycler_view_query);

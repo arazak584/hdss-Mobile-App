@@ -174,7 +174,7 @@ public class PullActivity extends AppCompatActivity {
 
                         progress.dismiss();
                          textView_SyncHierarchyData.setText("Codebook and Locationhierarchy updated Successfully");
-                           textView_SyncHierarchyData.setTextColor(Color.GREEN);
+                           textView_SyncHierarchyData.setTextColor(Color.parseColor("#32CD32"));
                                 //textView_SyncHierarchyData.setTextColor(Color.rgb(0, 114, 133));
                             }
 
@@ -317,7 +317,7 @@ public class PullActivity extends AppCompatActivity {
                                                 @Override
                                                 public void run() {
                                                     textView_SyncIndividual.setText("Total Individuals Saved: " + counts);
-                                                    textView_SyncIndividual.setTextColor(Color.GREEN);
+                                                    textView_SyncIndividual.setTextColor(Color.parseColor("#32CD32"));
                                                 }
                                             });
 
@@ -408,7 +408,7 @@ public class PullActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         textView_SyncIndividual.setText("Total Individuals Saved: " + counts);
-                                        textView_SyncIndividual.setTextColor(Color.GREEN);
+                                        textView_SyncIndividual.setTextColor(Color.parseColor("#32CD32"));
                                     }
                                 });
 
@@ -525,7 +525,7 @@ public class PullActivity extends AppCompatActivity {
                                                 @Override
                                                 public void run() {
                                                     textView_SyncLocation.setText("Total Compounds Saved: " + counts);
-                                                    textView_SyncLocation.setTextColor(Color.GREEN);
+                                                    textView_SyncLocation.setTextColor(Color.parseColor("#32CD32"));
                                                 }
                                             });
 
@@ -616,7 +616,7 @@ public class PullActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         textView_SyncLocation.setText("Total Compounds Saved: " + counts);
-                                        textView_SyncLocation.setTextColor(Color.GREEN);
+                                        textView_SyncLocation.setTextColor(Color.parseColor("#32CD32"));
                                     }
                                 });
 
@@ -734,7 +734,7 @@ public class PullActivity extends AppCompatActivity {
                                                 @Override
                                                 public void run() {
                                                     textView_SyncResidency.setText("Total Membership Saved: " + counts);
-                                                    textView_SyncResidency.setTextColor(Color.GREEN);
+                                                    textView_SyncResidency.setTextColor(Color.parseColor("#32CD32"));
                                                 }
                                             });
 
@@ -826,7 +826,7 @@ public class PullActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         textView_SyncResidency.setText("Total Membership Saved: " + counts);
-                                        textView_SyncResidency.setTextColor(Color.GREEN);
+                                        textView_SyncResidency.setTextColor(Color.parseColor("#32CD32"));
                                     }
                                 });
 
@@ -944,7 +944,7 @@ public class PullActivity extends AppCompatActivity {
                                                 @Override
                                                 public void run() {
                                                     textView_SyncRelationship.setText("Total Relationship Saved: " + counts);
-                                                    textView_SyncRelationship.setTextColor(Color.GREEN);
+                                                    textView_SyncRelationship.setTextColor(Color.parseColor("#32CD32"));
                                                 }
                                             });
 
@@ -1036,7 +1036,7 @@ public class PullActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         textView_SyncRelationship.setText("Total Relationship Saved: " + counts);
-                                        textView_SyncRelationship.setTextColor(Color.GREEN);
+                                        textView_SyncRelationship.setTextColor(Color.parseColor("#32CD32"));
                                     }
                                 });
 
@@ -1154,7 +1154,7 @@ public class PullActivity extends AppCompatActivity {
                                                 @Override
                                                 public void run() {
                                                     textView_SyncSocialgroup.setText("Total Socialgroup Saved: " + counts);
-                                                    textView_SyncSocialgroup.setTextColor(Color.GREEN);
+                                                    textView_SyncSocialgroup.setTextColor(Color.parseColor("#32CD32"));
                                                 }
                                             });
 
@@ -1245,7 +1245,7 @@ public class PullActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         textView_SyncSocialgroup.setText("Total Socialgroup Saved: " + counts);
-                                        textView_SyncSocialgroup.setTextColor(Color.GREEN);
+                                        textView_SyncSocialgroup.setTextColor(Color.parseColor("#32CD32"));
                                     }
                                 });
 
@@ -1366,7 +1366,7 @@ public class PullActivity extends AppCompatActivity {
                                                 @Override
                                                 public void run() {
                                                     textView_SyncPregnancy.setText("Total Pregnancy Saved: " + counts);
-                                                    textView_SyncPregnancy.setTextColor(Color.GREEN);
+                                                    textView_SyncPregnancy.setTextColor(Color.parseColor("#32CD32"));
                                                 }
                                             });
 
@@ -1461,7 +1461,7 @@ public class PullActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         textView_SyncPregnancy.setText("Total Pregnancy Saved: " + counts);
-                                        textView_SyncPregnancy.setTextColor(Color.GREEN);
+                                        textView_SyncPregnancy.setTextColor(Color.parseColor("#32CD32"));
                                     }
                                 });
 
@@ -1579,7 +1579,7 @@ public class PullActivity extends AppCompatActivity {
                                                 @Override
                                                 public void run() {
                                                     textView_SyncDemography.setText("Total Demographic Saved: " + counts);
-                                                    textView_SyncDemography.setTextColor(Color.GREEN);
+                                                    textView_SyncDemography.setTextColor(Color.parseColor("#32CD32"));
                                                 }
                                             });
 
@@ -1671,7 +1671,7 @@ public class PullActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         textView_SyncDemography.setText("Total Demographic Saved: " + counts);
-                                        textView_SyncDemography.setTextColor(Color.GREEN);
+                                        textView_SyncDemography.setTextColor(Color.parseColor("#32CD32"));
                                     }
                                 });
 
@@ -1845,7 +1845,7 @@ public class PullActivity extends AppCompatActivity {
                                                 @Override
                                                 public void run() {
                                                     textView_SyncSes.setText("Total Profile Saved: " + counts);
-                                                    textView_SyncSes.setTextColor(Color.GREEN);
+                                                    textView_SyncSes.setTextColor(Color.parseColor("#32CD32"));
                                                 }
                                             });
 
@@ -1993,7 +1993,7 @@ public class PullActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         textView_SyncSes.setText("Total Profile Saved: " + counts);
-                                        textView_SyncSes.setTextColor(Color.GREEN);
+                                        textView_SyncSes.setTextColor(Color.parseColor("#32CD32"));
                                     }
                                 });
 
@@ -2122,7 +2122,7 @@ public class PullActivity extends AppCompatActivity {
                                                 @Override
                                                 public void run() {
                                                     textView_SyncVac.setText("Total Vaccination Saved: " + counts);
-                                                    textView_SyncVac.setTextColor(Color.GREEN);
+                                                    textView_SyncVac.setTextColor(Color.parseColor("#32CD32"));
                                                 }
                                             });
 
@@ -2222,7 +2222,7 @@ public class PullActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         textView_SyncVac.setText("Total Vaccination Saved: " + counts);
-                                        textView_SyncVac.setTextColor(Color.GREEN);
+                                        textView_SyncVac.setTextColor(Color.parseColor("#32CD32"));
                                     }
                                 });
 
@@ -2269,23 +2269,23 @@ public class PullActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.exit_confirmation_title))
-                .setMessage(getString(R.string.exiting_lbl))
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        try{
-                            PullActivity.this.finish();
-                        }
-                        catch(Exception e){}
-                    }
-                })
-                .setNegativeButton(getString(R.string.no), null)
-                .show();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        new AlertDialog.Builder(this)
+//                .setTitle(getString(R.string.exit_confirmation_title))
+//                .setMessage(getString(R.string.exiting_lbl))
+//                .setCancelable(false)
+//                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        try{
+//                            PullActivity.this.finish();
+//                        }
+//                        catch(Exception e){}
+//                    }
+//                })
+//                .setNegativeButton(getString(R.string.no), null)
+//                .show();
+//    }
 
 
 }

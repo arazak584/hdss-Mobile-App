@@ -78,6 +78,14 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.find(id);
     }
 
+    public Individual mother(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.mother(id);
+    }
+
+    public Individual father(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.father(id);
+    }
+
     public long countIndividuals(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
         return individualRepository.countIndividuals(startDate, endDate, username);
     }
@@ -88,6 +96,10 @@ public class IndividualViewModel extends AndroidViewModel {
 
     public List<Individual> errors() throws ExecutionException, InterruptedException {
         return individualRepository.errors();
+    }
+
+    public List<Individual> err() throws ExecutionException, InterruptedException {
+        return individualRepository.err();
     }
 
     public void add(Individual data){ individualRepository.create(data);}

@@ -91,14 +91,16 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
             } else if (eventForm.complete != null) {
                 if (eventForm.complete == COMPLETE ) {
                     holder.linearLayout.setBackgroundColor(Color.GREEN);
+                    holder.textView_status.setTextColor(Color.BLACK);
+                    holder.textView_event.setTextColor(Color.BLACK);
                     status = MARKED_COMPLETE;
                 } else if (eventForm.complete == UPDATED) {
                     holder.linearLayout.setBackgroundColor(Color.YELLOW);
                     status = UPDATE;
                 }else {
                     holder.linearLayout.setBackgroundColor(Color.BLUE);
-                    holder.textView_status.setTextColor(Color.parseColor("#FF4500"));
-                    holder.textView_event.setTextColor(Color.parseColor("#FF4500"));
+                    holder.textView_status.setTextColor(Color.WHITE);
+                    holder.textView_event.setTextColor(Color.WHITE);
                     status = SUBMITTED;
                 }
             }else {

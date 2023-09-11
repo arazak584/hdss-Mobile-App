@@ -24,6 +24,7 @@
             android:gravity="center"
             android:padding="10dp"
             android:text="Death"
+            android:textAllCaps="true"
             android:textColor="@color/colorPrimary"
             android:textSize="30sp"
             android:textStyle="bold" />

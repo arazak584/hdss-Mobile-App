@@ -162,6 +162,24 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public Individual mother(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Individual> callable = () -> dao.mother(id);
+
+        Future<Individual> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Individual father(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Individual> callable = () -> dao.father(id);
+
+        Future<Individual> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public long countIndividuals(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         Callable<Long> callable = () -> dao.countIndividuals(startDate, endDate, username);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
@@ -186,5 +204,16 @@ public class IndividualRepository {
 
         return future.get();
     }
+
+    public List<Individual> err() throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.err();
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+
 
 }

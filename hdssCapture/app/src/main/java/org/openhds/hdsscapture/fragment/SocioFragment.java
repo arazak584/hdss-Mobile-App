@@ -209,7 +209,7 @@ public class SocioFragment extends Fragment {
                 if (totalmth < 10) {
                     mar = true;
                     binding.socioa.MARITALAGE.setError("Maximum Age Allowed is 10");
-                    Toast.makeText(getActivity(), "Maximum Age Allowed is 10", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Maximum Age Allowed is 10", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -220,7 +220,7 @@ public class SocioFragment extends Fragment {
                 if (totalpeople < total5) {
                     val = true;
                     binding.socioa.HOUSEOCCLT5FCORRES.setError("Children aged five cannot be more than total Individuals in household");
-                    Toast.makeText(getActivity(), "Children aged five cannot be more than total Individuals in household", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Children aged five cannot be more than total Individuals in household", Toast.LENGTH_LONG).show();
                     return;
                 }
             }

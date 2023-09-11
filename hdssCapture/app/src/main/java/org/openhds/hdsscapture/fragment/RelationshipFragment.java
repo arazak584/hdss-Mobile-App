@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
@@ -112,6 +113,9 @@ public class RelationshipFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentRelationshipBinding.inflate(inflater, container, false);
+
+        final TextView ind = binding.getRoot().findViewById(R.id.ind);
+        ind.setText(individual.firstName + " " + individual.lastName);
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_partner);
 
@@ -259,14 +263,14 @@ public class RelationshipFragment extends Fragment {
                     Date edate = f.parse(binding.womanDob.getText().toString().trim());
                     if (edate.after(stdate)) {
                         binding.relStartDate.setError("Start Date Cannot Be Less than Date of Birth");
-                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Date of Birth", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Date of Birth", Toast.LENGTH_LONG).show();
                         return;
                     }
                     // clear error if validation passes
                     binding.relStartDate.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 
@@ -277,14 +281,14 @@ public class RelationshipFragment extends Fragment {
                     Date edate = f.parse(binding.relEndDate.getText().toString().trim());
                     if (edate.before(stdate)) {
                         binding.relEndDate.setError("End Date Cannot Be Less than Start Date");
-                        Toast.makeText(getActivity(), "End Date Cannot Be Less than Start Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "End Date Cannot Be Less than Start Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     // clear error if validation passes
                     binding.relEndDate.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
 

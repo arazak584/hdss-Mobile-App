@@ -38,7 +38,7 @@ public interface IndividualDao {
     @Delete
     void Delete(Individual user);
 
-    @Query("SELECT * FROM individual where extId =:id ")
+    @Query("SELECT * FROM individual where extId=:id ")
     Individual retrieve(String id);
 
     @Query("SELECT a.* FROM individual as a inner join residency as b on a.uuid=b.individual_uuid WHERE a.complete=1 GROUP BY a.uuid order by dob")
@@ -157,6 +157,17 @@ public interface IndividualDao {
             ") " +
             "ORDER BY c.compextId")
     List<Individual> errors();
+
+    @Query("SELECT * FROM individual where extId='XDA000005001'")
+    List<Individual> err();
+
+    @Query("SELECT b.* FROM individual as a LEFT JOIN individual as b on a.mother_uuid=b.uuid" +
+            " where a.uuid=:id")
+    Individual mother(String id);
+
+    @Query("SELECT b.* FROM individual as a LEFT JOIN individual as b on a.father_uuid=b.uuid" +
+            " where a.uuid=:id")
+    Individual father(String id);
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

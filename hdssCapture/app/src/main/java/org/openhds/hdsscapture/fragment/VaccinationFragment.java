@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
@@ -109,6 +110,9 @@ public class VaccinationFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentVaccinationBinding.inflate(inflater, container, false);
         binding.setVaccination(vaccination);
+
+        final TextView ind = binding.getRoot().findViewById(R.id.ind);
+        ind.setText(individual.firstName + " " + individual.lastName);
 
 
         //CHOOSING THE DATE
