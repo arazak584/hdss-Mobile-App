@@ -259,7 +259,7 @@
             goneUnless="@{sociodemo.mobile_fcorres==1}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
                     android:layout_width="match_parent"
@@ -271,7 +271,7 @@
                 android:id="@+id/MOBILE_NUM_FCORRES"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:ems="10"
+                android:ems="4"
                 android:inputType="number"
                 android:text="@={sociodemo.mobile_num_fcorres}"
                 tools:ignore="Autofill,LabelFor" />

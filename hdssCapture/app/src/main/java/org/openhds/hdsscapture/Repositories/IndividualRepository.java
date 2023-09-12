@@ -143,6 +143,15 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public List<Individual> retrievePartner(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.retrievePartner(id);
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Individual> retrieveDup(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Individual>> callable = () -> dao.retrieveDup(id);

@@ -126,7 +126,7 @@ public class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapte
 
             if(locations != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveByFather(locations.getCompextId());
+                    List<Individual> list = individualViewModel.retrievePartner(locations.getCompextId());
 
                     if (list != null) {
                         individualList.addAll(list);

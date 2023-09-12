@@ -172,7 +172,6 @@ public class ErrorActivity extends AppCompatActivity {
                 //r1.date = "Compno" + e.extId;
                 r1.error = "Outcome Error (Open Pregnancy Outcome and Save)";
                 r1.index = i;
-
                 list.add(r1);
 
             }

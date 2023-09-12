@@ -103,6 +103,12 @@ public interface IndividualDao {
             " WHERE b.endType!=3 and c.compextId=:id and firstName!='FAKE' order by dob ")
     List<Individual> retrieveDup(String id);
 
+    @Query("SELECT a.* FROM individual as a " + " LEFT JOIN residency as b ON a.uuid = b.individual_uuid " +
+            " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
+            " WHERE b.endType=1 and gender=1 and c.compextId=:id and firstName!='FAKE' and " +
+            " date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
+    List<Individual> retrievePartner(String id);
+
 
     @Query("SELECT a.* FROM individual AS a " +
             "INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +

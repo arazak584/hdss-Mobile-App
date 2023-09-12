@@ -772,10 +772,6 @@ public class Pregnancyoutcome extends BaseObservable {
                 setWeig_hcard(null);
             }
 
-            if(father != null && father==2){
-                this.father_uuid=AppConstants.Father;
-            }
-
             notifyPropertyChanged(BR._all);
         }
     }

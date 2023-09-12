@@ -61,8 +61,10 @@ public interface SocialgroupDao {
             " WHERE groupName!='UNK' AND insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
-//    @Query("SELECT * FROM socialgroup where groupName='UNK' AND complete=1 ")
-//    List<Socialgroup> error();
+//    @Query("SELECT a.* FROM socialgroup as a INNER JOIN residency as b on a.uuid=b.socialgroup_uuid" +
+//            " INNER JOIN individual as c ON b.individual_uuid=c.uuid " +
+//            " where groupName='UNK' AND c.firstName!='FAKE'")
+//    List<Socialgroup> errors();
 
     @Query("SELECT a.*,c.compextId as visit_uuid FROM socialgroup as a INNER JOIN visit as b ON a.visit_uuid=b.uuid" +
             " INNER JOIN locations c on b.location_uuid=c.uuid " +
