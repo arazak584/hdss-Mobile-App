@@ -265,8 +265,8 @@ public class Outmigration extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);
         }
-        if(reason != null && reason!=77){
-            this.reason_oth=null;
+        if(reason == null || reason!=77){
+            setReason_oth(null);
         }
 
     }

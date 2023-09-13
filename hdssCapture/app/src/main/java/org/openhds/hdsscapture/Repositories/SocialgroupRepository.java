@@ -116,6 +116,23 @@ public class SocialgroupRepository {
         return future.get();
     }
 
+    public List<Socialgroup> errors() throws ExecutionException, InterruptedException {
+
+        Callable<List<Socialgroup>> callable = () -> dao.errors();
+
+        Future<List<Socialgroup>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Socialgroup> repo() throws ExecutionException, InterruptedException {
+
+        Callable<List<Socialgroup>> callable = () -> dao.repo();
+
+        Future<List<Socialgroup>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
 
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {

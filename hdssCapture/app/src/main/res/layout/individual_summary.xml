@@ -34,13 +34,6 @@
                 android:layout_weight="1"
                 android:text="@{individual.firstName}"
                 android:textStyle="bold" />
-            <TextView
-                android:id="@+id/textView_lname"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@{individual.lastName}"
-                android:layout_weight="1"
-                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView_hhid"
@@ -48,8 +41,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@{individual.houseExtId}"
-                android:textAlignment="textEnd"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView_dob"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:textAlignment="textEnd"
+                android:text="@{individual.dob}"/>
+
+
 
         </LinearLayout>
 
@@ -59,31 +62,34 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/textView_permid"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:layout_weight="1"
-                    android:text="@{individual.extId}" />
+            <TextView
+                android:id="@+id/textView_lname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{individual.lastName}"
+                android:layout_weight="1"
+                android:textStyle="bold" />
 
 
-                <TextView
-                    android:id="@+id/textView_dob"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textStyle="bold"
-                    android:text="@{individual.dob}"/>
 
-                <TextView
-                    android:id="@+id/textView_age"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:layout_weight="1"
-                    android:textAlignment="textEnd"
-                    android:text="@{Integer.toString(individual.age)}" />
+            <TextView
+                android:id="@+id/textView_permid"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:text="@{individual.extId}" />
+
+            <TextView
+                android:id="@+id/textView_age"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:textAlignment="textEnd"
+                android:text="@{Integer.toString(individual.age)}" />
+
+
 
 
         </LinearLayout>

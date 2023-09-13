@@ -268,7 +268,9 @@ public class Demographic extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);
         }
-
+        if(tribe == null || tribe!=77){
+            setTribe_oth(null);
+        }
     }
 
     //SPINNERS ENTITY Religion
@@ -285,6 +287,9 @@ public class Demographic extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);
+        }
+        if(religion == null || religion!=77){
+            setReligion_oth(null);
         }
 
     }
@@ -325,7 +330,9 @@ public class Demographic extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);
         }
-
+        if(occupation == null || occupation!=77){
+            setOccupation_oth(null);
+        }
     }
 
     //SPINNERS ENTITY Marital

@@ -99,9 +99,6 @@ public class HouseholdFragment extends Fragment {
             Socialgroup data = binding.getSocialgroup();
             if (data != null) {
                 binding.selectGroupType.setEnabled(false);
-                if (data.complete==null){
-                    data.complete = 2;
-                }
 
 //                if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)){
 //                    data.complete = 2;
@@ -159,6 +156,10 @@ public class HouseholdFragment extends Fragment {
 
             SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             viewModel.add(finalData);
+
+            if (socialgroup.groupName!= null && !"UNK".equals(socialgroup.groupName)){
+                finalData.complete = 1;
+            }
         }
         if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
@@ -167,6 +168,8 @@ public class HouseholdFragment extends Fragment {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     BlankFragment.newInstance(locations, socialgroup)).commit();
         }
+
+
     }
 
     private void showPregnancyDialog() {

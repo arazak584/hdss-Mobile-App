@@ -1,15 +1,21 @@
 package org.openhds.hdsscapture.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import org.openhds.hdsscapture.Adapter.ErrorAdapter;
 import org.openhds.hdsscapture.R;
@@ -45,13 +51,24 @@ public class ErrorActivity extends AppCompatActivity {
     private ResidencyViewModel residencyViewModel;
     private ListingViewModel listingViewModel;
     private ProgressDialog progress;
+    private RecyclerView recyclerView;
 
     private ErrorAdapter errorAdapter;
+    private List<Queries> filterAll;
+    private SearchView searchView;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_error);
+
+        searchView = findViewById(R.id.search);
+
+        // Set a query hint
+        searchView.setQueryHint(getString(R.string.search));
 
         socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
         deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
@@ -62,6 +79,7 @@ public class ErrorActivity extends AppCompatActivity {
         listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
 
         Button generateQueryButton = findViewById(R.id.btn_query);
+
         generateQueryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +135,20 @@ public class ErrorActivity extends AppCompatActivity {
                 list.add(r1);
 
             }
+
+//            int n=1;
+//            for (Socialgroup e : socialgroupViewModel.error()) {
+//                //String formattedDate = f.format(e.insertDate);
+//                Queries r1 = new Queries();
+//                r1.name = "Household " ;
+//                r1.extid = "Cluster: " + e.extId + " - Household Head: " + e.groupName;
+//                r1.date = "Household ID" + e.complete;
+//                r1.error = "New Households Created ";
+//                r1.index = n;
+//
+//                list.add(r1);
+//
+//            }
 
             int d=1;
             for (Death e : deathViewModel.error()) {
@@ -205,17 +237,19 @@ public class ErrorActivity extends AppCompatActivity {
 //            }
 
 //            int m=1;
-//            for (Individual e : individualViewModel.err()) {
-//                String formattedDate = f.format(e.insertDate);
+//            for (Residency e : residencyViewModel.error()) {
+////                String formattedDate = f.format(e.insertDate);
 //                Queries r1 = new Queries();
-//                r1.name = "Individual " + " - " + e.extId;
-//                r1.extid = "" + e.compextId + " - " +e.firstName + " " + e.lastName;
-//                r1.date = "" + e.houseExtId;
-//                r1.error = "Duplicate";
+//                r1.name = "Residency " + " - " + e.socialgroup_uuid;
+//                r1.extid = "" + e.uuid + " - " +e.location_uuid;
+//                r1.date = "" + e.socialgroup_uuid;
+//                r1.error = "No Socialgroup";
 //                r1.index = m;
 //                list.add(r1);
 //
 //            }
+
+            filterAll = new ArrayList<>(list);
 
             errorAdapter = new ErrorAdapter(this);
             errorAdapter.setQueries(list);
@@ -228,6 +262,59 @@ public class ErrorActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Handle search query submission if needed
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Handle search query changes here
+                sFilter(newText);
+                return true;
+            }
+        });
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.search, menu);
+//        MenuItem item = menu.findItem(R.id.app_bar_search);
+//        SearchView searchView = (SearchView) item.getActionView();
+//        searchView.setQueryHint("Search Notes Here...");
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String s) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String s) {
+//                sFilter(s);
+//                return false;
+//            }
+//        });
+//        return super.onCreateOptionsMenu(menu);
+//    }
+
+    private void sFilter(String s) {
+        ArrayList<Queries> filterNames = new ArrayList<>();
+        String searchQuery = s.toLowerCase(); // Convert the search query to lowercase for case-insensitive search
+        for (Queries query : filterAll) {
+            // Convert extid, name, and error to lowercase before comparison
+            if (query.extid.toLowerCase().contains(searchQuery) ||
+                    query.name.toLowerCase().contains(searchQuery) ||
+                    query.date.toLowerCase().contains(searchQuery) ||
+                    query.error.toLowerCase().contains(searchQuery)) {
+                filterNames.add(query);
+            }
+        }
+        errorAdapter.setQueries(filterNames); // Update the adapter with filtered data
+    }
+
+
 
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.LocationRepository;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.LocationAmendment;
 
 import java.util.Date;
@@ -52,6 +53,10 @@ public class LocationViewModel extends AndroidViewModel {
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         return locationRepository.count(startDate, endDate, username);
+    }
+
+    public List<Locations> repo() throws ExecutionException, InterruptedException {
+        return locationRepository.repo();
     }
 
     public void add(Locations data){

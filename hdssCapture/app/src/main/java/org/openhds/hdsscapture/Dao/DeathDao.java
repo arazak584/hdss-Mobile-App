@@ -38,6 +38,6 @@ public interface DeathDao {
     List<Death> error();
 
     @Query("SELECT COUNT(*) FROM death a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
-            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
+            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username AND a.complete IS NOT NULL")
     long count(Date startDate, Date endDate, String username);
 }

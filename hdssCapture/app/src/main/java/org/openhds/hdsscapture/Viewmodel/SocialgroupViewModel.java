@@ -55,6 +55,14 @@ public class SocialgroupViewModel extends AndroidViewModel {
         return socialgroupRepository.error();
     }
 
+    public List<Socialgroup> errors() throws ExecutionException, InterruptedException {
+        return socialgroupRepository.errors();
+    }
+
+    public List<Socialgroup> repo() throws ExecutionException, InterruptedException {
+        return socialgroupRepository.repo();
+    }
+
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         return socialgroupRepository.count(startDate, endDate, username);
     }

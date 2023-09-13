@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.openhds.hdsscapture.Activity.ErrorActivity;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
+import org.openhds.hdsscapture.Activity.NewActivity;
 import org.openhds.hdsscapture.Activity.PullActivity;
 import org.openhds.hdsscapture.Activity.PushActivity;
 import org.openhds.hdsscapture.Activity.RemainderActivity;
@@ -59,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
         final Button query = findViewById(R.id.btnquerry);
         query.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(), ErrorActivity.class);
+            startActivity(i);
+        });
+
+        final Button views = findViewById(R.id.btnloc);
+        views.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), NewActivity.class);
             startActivity(i);
         });
 

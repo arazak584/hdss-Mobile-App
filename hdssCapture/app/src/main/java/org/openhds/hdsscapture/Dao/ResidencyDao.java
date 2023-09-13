@@ -66,7 +66,16 @@ public interface ResidencyDao {
             " WHERE c.firstName!='FAKE' AND a.insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
-    @Query("SELECT a.*,b.groupName FROM residency as a left join socialgroup as b on a.socialgroup_uuid=b.uuid WHERE b.uuid is null ")
+//    @Query("SELECT a.uuid,a.age as extId, a.loc as firstName,a.location_uuid as lastName,a.fw_uuid as compextId FROM residency as a LEFT JOIN individual as b on a.individual_uuid=b.uuid" +
+//            " LEFT JOIN socialgroup as c on a.socialgroup_uuid=c.uuid WHERE c.uuid is null ")
+//    List<Residency> error();
+
+//    @Query("SELECT b.uuid,a.firstName as socialgroup_uuid,a.extId as location_uuid,b.individual_uuid as compextId,b.socialgroup_uuid FROM individual as a INNER JOIN residency as b on a.uuid=b.individual_uuid" +
+//            " INNER JOIN socialgroup as c on b.socialgroup_uuid=c.uuid WHERE groupName='UNK' ")
+//    List<Residency> error();
+
+    @Query("SELECT b.uuid,a.location_uuid as extId FROM residency as a INNER JOIN socialgroup as b on a.socialgroup_uuid=b.uuid WHERE b.insertDate>'2023-08-15'" +
+            " GROUP BY a.socialgroup_uuid")
     List<Residency> error();
 
 }

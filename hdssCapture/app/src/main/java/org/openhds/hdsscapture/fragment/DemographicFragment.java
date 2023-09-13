@@ -125,6 +125,7 @@ public class DemographicFragment extends Fragment {
             Demographic data = viewModel.find(individual.uuid);
             if (data != null) {
                 binding.setDemographic(data);
+                binding.getDemographic().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                 data.individual_uuid = individual.getUuid();
                 if(data.phone1 !=null){
                     data.phone=1;

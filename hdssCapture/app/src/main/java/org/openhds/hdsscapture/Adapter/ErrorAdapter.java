@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -24,7 +25,15 @@ public class ErrorAdapter extends RecyclerView.Adapter<ErrorAdapter.ViewHolder>{
     LayoutInflater inflater;
     private List<Queries> queries;
 
+    private List<Queries> filter;
+
     private Context context;
+
+    public ErrorAdapter(Context context) {
+        this.context = context;
+        this.queries = new ArrayList<>();
+    }
+
 
     public ErrorAdapter(ErrorActivity activity) {
         this.activity = activity;
@@ -33,12 +42,25 @@ public class ErrorAdapter extends RecyclerView.Adapter<ErrorAdapter.ViewHolder>{
         context = activity;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    public void searchNotes(List<Queries> filterName) {
+        if (filterName != null) {
+            this.filter = filterName;
+        } else {
+            this.filter = new ArrayList<>(); // Reset to an empty list if null
+        }
+        notifyDataSetChanged();
+    }
+
+
     public List<Queries> getQueries() {
         return queries;
     }
 
-    public void setQueries(List<Queries> queries) {
+    public void setQueries(List<Queries> queries)
+    {
         this.queries = queries;
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

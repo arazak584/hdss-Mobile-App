@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="20dp"
     android:orientation="vertical"
-    tools:context=".Activity.ErrorActivity">
+    tools:context=".Activity.NewActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,17 +15,17 @@
         android:background="@color/white"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btn_query"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:padding="15dp"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/Astrosnavy"
-            android:text="@string/queries" />
 
+        <TextView
+            android:id="@+id/app"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:text="@string/new_hl"
+            android:textAlignment="center"
+            android:textColor="@color/black"/>
 
 
     </LinearLayout>
@@ -42,10 +42,9 @@
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="visible">
-            
 
             <SearchView
-                android:id="@+id/search"
+                android:id="@+id/searchloc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="48dip"
@@ -57,7 +56,7 @@
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/my_recycler_view_query"
+                android:id="@+id/my_recycler_view_all"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"

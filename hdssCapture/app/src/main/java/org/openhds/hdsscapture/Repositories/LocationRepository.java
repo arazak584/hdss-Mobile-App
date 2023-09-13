@@ -5,6 +5,7 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.LocationDao;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.LocationAmendment;
 
 import java.util.Date;
@@ -109,6 +110,15 @@ public class LocationRepository {
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         Callable<Long> callable = () -> dao.count(startDate, endDate, username);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    public List<Locations> repo() throws ExecutionException, InterruptedException {
+
+        Callable<List<Locations>> callable = () -> dao.repo();
+
+        Future<List<Locations>> future = Executors.newSingleThreadExecutor().submit(callable);
+
         return future.get();
     }
 
