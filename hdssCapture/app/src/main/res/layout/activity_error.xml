@@ -23,7 +23,6 @@
             android:layout_weight="1"
             android:padding="15dp"
             android:textColor="@color/white"
-            android:backgroundTint="@color/Astrosnavy"
             android:text="@string/queries" />
 
 
@@ -42,7 +41,7 @@
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="visible">
-            
+
 
             <SearchView
                 android:id="@+id/search"

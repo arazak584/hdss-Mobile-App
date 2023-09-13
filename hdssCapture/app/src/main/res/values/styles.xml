@@ -16,5 +16,26 @@
         <item name="colorAccent">@color/orange</item> <!--define your color here-->
     </style>
 
+    <style name="CustomDatePickerStyle">
+        <!-- Customize the appearance of the DatePicker here -->
+        <!-- For example, you can set text color, background, etc. -->
+        <item name="android:textColor">@color/pop</item>
+        <!-- Add other custom attributes here -->
+    </style>
+
+    <style name="CustomDatePickerButtonStyle" parent="Widget.AppCompat.Button">
+        <!-- Customize the text color for the button here -->
+        <item name="android:textColor">@color/pop</item>
+        <!-- Add other custom button attributes here -->
+    </style>
+
+
+
+    <style name="CustomDatePickerDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:datePickerStyle">@style/CustomDatePickerStyle</item>
+    </style>
+
+
+
 
 </resources>

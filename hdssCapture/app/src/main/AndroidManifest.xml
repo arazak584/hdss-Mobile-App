@@ -46,7 +46,7 @@
         <activity
             android:name=".Activity.ReportActivity"
             android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:theme="@style/Theme.MaterialComponents.DayNight.Dialog.MinWidth" />
         <activity
             android:name=".Activity.LocationActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
