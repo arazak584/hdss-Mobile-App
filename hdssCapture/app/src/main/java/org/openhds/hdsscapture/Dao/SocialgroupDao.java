@@ -76,6 +76,6 @@ public interface SocialgroupDao {
     @Query("SELECT * from socialgroup WHERE insertDate>'2023-08-15' ")
     List<Socialgroup> errors();
 
-    @Query("SELECT * FROM socialgroup WHERE insertDate > (SELECT startDate FROM round LIMIT 1) order by insertDate")
+    @Query("SELECT * FROM socialgroup WHERE insertDate > (SELECT startDate FROM round LIMIT 1) order by insertDate DESC")
     List<Socialgroup> repo();
 }

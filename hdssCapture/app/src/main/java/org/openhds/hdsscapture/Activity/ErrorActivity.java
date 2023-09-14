@@ -124,16 +124,16 @@ public class ErrorActivity extends AppCompatActivity {
 
             int c=1;
             for (Socialgroup e : socialgroupViewModel.error()) {
-                String formattedDate = f.format(e.insertDate);
+                //String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
-                r1.name = "Visit " ;
-                r1.extid = "Cluster: " + e.visit_uuid + " - Household Head: " + e.groupName;
-                r1.date = "Household ID" + e.extId;
+                r1.name = c + ". Household ID: " + e.extId;
+                r1.extid = "Compno: " + e.visit_uuid + " - Household Head: " + e.groupName;
+                r1.date = "";
                 r1.error = "UNK as Respondent";
                 r1.index = c;
 
                 list.add(r1);
-
+                c++;
             }
 
 //            int n=1;
@@ -152,41 +152,44 @@ public class ErrorActivity extends AppCompatActivity {
 
             int d=1;
             for (Death e : deathViewModel.error()) {
-                String formattedDate = f.format(e.insertDate);
+                //String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
-                r1.name = "Compno: " + e.compno ;
+                r1.name = d + ". Compno: " + e.compno ;
                 r1.extid = "Household ID: " + e.lastName + " - Household Head: " +e.firstName;
-                r1.date = "" + formattedDate;
+                r1.date = "";
                 r1.error = "Change Head of Household";
                 r1.index = d;
 
                 list.add(r1);
+                d++;
 
             }
 
             int g=1;
             for (Individual e : individualViewModel.error()) {
-                String formattedDate = f.format(e.insertDate);
+                //String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
-                r1.name = "Socialgroup " ;
+                r1.name = g + ". Household ID: " + e.houseExtId;
                 r1.extid = "" + e.compextId + " - " +e.firstName + " " + e.lastName;
-                r1.date = "" + e.houseExtId;
+                r1.date = "";
                 r1.error = "Household Head is a Minor";
                 r1.index = g;
                 list.add(r1);
+                g++;
 
             }
 
             int k=1;
             for (Individual e : individualViewModel.errors()) {
-                String formattedDate = f.format(e.insertDate);
+                //String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
-                r1.name = "Household ID" + " - " + e.houseExtId;
+                r1.name = k + ". Household ID: " +  e.houseExtId;
                 r1.extid = "Compno: " + e.compextId + " - Househead: " + e.lastName;
-                r1.date = "" + formattedDate;
+                r1.date = "";
                 r1.error = "Only Minors Left in Household";
                 r1.index = k;
                 list.add(r1);
+                k++;
 
             }
 
@@ -210,14 +213,15 @@ public class ErrorActivity extends AppCompatActivity {
 
             int l=1;
             for (Listing e : listingViewModel.error()) {
-                String formattedDate = f.format(e.insertDate);
+                //String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
-                r1.name = "Compno " + " - " + e.compno;
+                r1.name = l + ". Compno: " + e.compno;
                 r1.extid = "Cluster: " + e.compextId + " - Compound Name: " +e.locationName;
-                r1.date = "" + formattedDate;
+                r1.date = "";
                 r1.error = "Listing Not Picked";
                 r1.index = l;
                 list.add(r1);
+                l++;
 
             }
             

@@ -817,27 +817,28 @@ public class ResidencyFragment extends Fragment {
                 e.printStackTrace();
             }
 
-//            ResidencyViewModel unks = new ViewModelProvider(this).get(ResidencyViewModel.class);
-//            try {
-//                Residency datas = unks.unk(socialgroup.uuid);
-////                if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim()))
-//                if (datas != null) {
-//
-//                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
-//
-//                    residencyAmendment.endType = 2;
-//                    residencyAmendment.endDate = new Date();
-//                    residencyAmendment.uuid = datas.uuid;
-//                    residencyAmendment.complete = 2;
-//
-//                    unks.update(residencyAmendment);
-//                }
-//
-//            } catch (ExecutionException e) {
-//                e.printStackTrace();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
+            //Update Fake Individual's Residency that was used to create the socialgroup
+            ResidencyViewModel unks = new ViewModelProvider(this).get(ResidencyViewModel.class);
+            try {
+                Residency datas = unks.unk(socialgroup.uuid);
+//                if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim()))
+                if (datas != null) {
+
+                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+
+                    residencyAmendment.endType = 2;
+                    residencyAmendment.endDate = new Date();
+                    residencyAmendment.uuid = datas.uuid;
+                    residencyAmendment.complete = 2;
+
+                    unks.update(residencyAmendment);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
 
         }

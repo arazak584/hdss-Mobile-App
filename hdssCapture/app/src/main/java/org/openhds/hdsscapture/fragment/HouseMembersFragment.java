@@ -8,7 +8,12 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,8 +26,10 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentHouseMembersBinding;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
@@ -54,6 +61,8 @@ public class HouseMembersFragment extends Fragment {
     private ProgressDialog progres;
     private Residency residency;
     private Individual individual;
+    private Hierarchy level6Data;
+    private ArrayAdapter<Hierarchy> level6Adapter;
 
 
     public HouseMembersFragment() {
@@ -107,6 +116,8 @@ public class HouseMembersFragment extends Fragment {
         hh.setText(socialgroup.getExtId());
         name.setText(socialgroup.getGroupName());
 
+        final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(this).get(HierarchyViewModel.class);
+
         final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_household);
         final IndividualViewAdapter adapter = new IndividualViewAdapter(this, locations, socialgroup );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
@@ -118,6 +129,29 @@ public class HouseMembersFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
         recyclerView.setAdapter(adapter);
 
+        //Call Village Data
+        AutoCompleteTextView level6Spinner = binding.getRoot().findViewById(R.id.autoVillage);
+        level6Spinner.setAdapter(level6Adapter);
+
+        level6Adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line);
+        level6Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        level6Spinner.setAdapter(level6Adapter);
+
+        try {
+            List<Hierarchy> level6Data = hierarchyViewModel.retrieveLevel7();
+            level6Adapter.addAll(level6Data);
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            //Toast.makeText(this, "Error loading data", Toast.LENGTH_SHORT).show();
+        }
+
+        level6Spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                level6Data = level6Adapter.getItem(position);
+            }
+        });
+
         // In your onCreateView() or onViewCreated() method
         binding.buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,17 +161,22 @@ public class HouseMembersFragment extends Fragment {
                     @Override
                     public void run() {
                         // Get the selected item from the spinner
-                        TextInputEditText searchSpinner = binding.getRoot().findViewById(R.id.searchVillage);
-                        String selectedSpinnerItem = searchSpinner.getText().toString();
+//                        TextInputEditText searchSpinner = binding.getRoot().findViewById(R.id.searchVillage);
+//                        String selectedSpinnerItem = searchSpinner.getText().toString();
+
+                        //String selectedSpinnerItem = level6Data.getText().toString();
+                        AutoCompleteTextView level6Spinner = binding.getRoot().findViewById(R.id.autoVillage);
+                        String selectedText = level6Spinner.getText().toString();
 
                         // Get the search text from the search input field
-                        TextInputEditText searchInput = binding.getRoot().findViewById(R.id.search_indivdual);
+//                        TextInputEditText searchInput = binding.getRoot().findViewById(R.id.search_indivdual);
+                        EditText searchInput = binding.getRoot().findViewById(R.id.search_indivdual);
                         String searchText = searchInput.getText().toString();
 
                         // Perform search based on the selected item and search text
                         List<Individual> searchResults = null;
                         try {
-                            searchResults = individualViewModel.retrieveBySearch(selectedSpinnerItem, searchText);
+                            searchResults = individualViewModel.retrieveBySearch(selectedText, searchText);
                         } catch (ExecutionException e) {
                             throw new RuntimeException(e);
                         } catch (InterruptedException e) {
@@ -145,7 +184,7 @@ public class HouseMembersFragment extends Fragment {
                         }
 
                         // Pass the search results to the adapter
-                        adapter.search(selectedSpinnerItem, searchText, individualViewModel);
+                        adapter.search(selectedText, searchText, individualViewModel);
 
 
                         // Dismiss the progress dialog

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -35,10 +36,11 @@ public class RemainderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_remainder);
 
         final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(this).get(HierarchyViewModel.class);
-        final Spinner level6Spinner = findViewById(R.id.spinnerRVillage);
+        //final Spinner level6Spinner = findViewById(R.id.spinnerRVillage);
+        AutoCompleteTextView level6Spinner = findViewById(R.id.autoCompleteRVillage);
         level6Spinner.setAdapter(level6Adapter);
 
-        level6Adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        level6Adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line);
         level6Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         level6Spinner.setAdapter(level6Adapter);
 
@@ -52,18 +54,23 @@ public class RemainderActivity extends AppCompatActivity {
         }
 
         // Set listener for level 6 spinner
-        level6Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//        level6Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                level6Data = level6Adapter.getItem(position);
+//            }
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//            }
+//        });
+
+        level6Spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 level6Data = level6Adapter.getItem(position);
-
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
 
         final ExtendedFloatingActionButton start = findViewById(R.id.btn_remain_location);
         start.setOnClickListener(v -> {

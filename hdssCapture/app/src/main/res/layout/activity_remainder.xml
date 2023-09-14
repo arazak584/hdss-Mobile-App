@@ -65,14 +65,24 @@
             android:textAlignment="center"
             android:text="@string/village" />
 
-        <Spinner
-            android:id="@+id/spinnerRVillage"
+<!--        <Spinner-->
+<!--            android:id="@+id/spinnerRVillage"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:contentDescription="@string/village"-->
+<!--            android:spinnerMode="dropdown"-->
+<!--            android:paddingLeft="10dp"-->
+<!--            tools:ignore="DuplicateSpeakableTextCheck"/>-->
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteRVillage"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/village"
-            android:spinnerMode="dropdown"
             android:paddingLeft="10dp"
-            tools:ignore="DuplicateSpeakableTextCheck"/>
+            android:hint="Search Village" />
+
+
 
 
     </LinearLayout>

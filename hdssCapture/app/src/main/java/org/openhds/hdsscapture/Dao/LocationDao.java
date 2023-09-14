@@ -57,7 +57,8 @@ public interface LocationDao {
 
 
     @Query("SELECT a.* FROM Locations as a " + "INNER JOIN locationhierarchy as b ON a.locationLevel_uuid = b.uuid " +
-            " LEFT JOIN listing as d on a.uuid=d.location_uuid where b.name=:id and d.location_uuid is null order by a.compno")
+            " LEFT JOIN locationhierarchy c on b.parent_uuid=c.uuid " +
+            " LEFT JOIN listing as d on a.uuid=d.location_uuid where c.name=:id and d.location_uuid is null order by a.compno")
     List<Locations> retrieveByVillage(String id);
 
 
@@ -65,7 +66,7 @@ public interface LocationDao {
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
-    @Query("SELECT * FROM locations WHERE insertDate > (SELECT startDate FROM round LIMIT 1) order by insertDate")
+    @Query("SELECT * FROM locations WHERE insertDate > (SELECT startDate FROM round LIMIT 1) order by insertDate DESC")
     List<Locations> repo();
 
 }

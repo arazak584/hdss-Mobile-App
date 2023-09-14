@@ -64,7 +64,7 @@ public class UrlFragment extends DialogFragment {
 
     public String getBaseUrl() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        return preferences.getString("BASE_URL", "http://ksurvey.org:2200");
+        return preferences.getString("BASE_URL", "http://ksurvey.org:1100");
     }
 
     public void saveBaseUrl(String baseUrl) {
