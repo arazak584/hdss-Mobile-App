@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
@@ -47,6 +48,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView firstname, lastname, nickname, permid, dob, compno, gender,status;
         LinearLayout linearLayout;
+        CardView cardView;
 
         public ViewHolder(View view) {
             super(view);
@@ -58,7 +60,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
             this.gender = view.findViewById(R.id.text_gender);
             this.compno = view.findViewById(R.id.text_compno);
             this.status = view.findViewById(R.id.text_status);
-            this.linearLayout = view.findViewById(R.id.searchedIindividual);
+            this.cardView = view.findViewById(R.id.searchedIindividual);
         }
     }
 
@@ -121,7 +123,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
 
 
 
-        holder.linearLayout.setOnClickListener(v -> {
+        holder.cardView.setOnClickListener(v -> {
             activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     IndividualFragment.newInstance( individual,residency, locations, socialgroup )).commit();
         });

@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Activity.RemainderActivity;
@@ -40,6 +41,7 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView locationname, compno,extid, longitude, latitude, itemNumber;
         LinearLayout linearLayout;
+        CardView cardView;
 
         public ViewHolder(View view) {
             super(view);
@@ -47,9 +49,9 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
             this.locationname = view.findViewById(R.id.Location_rname);
             this.compno = view.findViewById(R.id.location_rcompno);
             this.extid = view.findViewById(R.id.location_extids);
-            this.longitude = view.findViewById(R.id.rlongitude);
-            this.latitude = view.findViewById(R.id.rlatitude);
-            this.linearLayout = view.findViewById(R.id.remainderItem);
+//            this.longitude = view.findViewById(R.id.rlongitude);
+//            this.latitude = view.findViewById(R.id.rlatitude);
+            this.cardView = view.findViewById(R.id.remainderItem);
         }
     }
 
@@ -70,14 +72,14 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
         final Locations locations = locationsList.get(position);
 
         int itemNumber = position + 1;
-        holder.itemNumber.setText(itemNumber + ".");
+        holder.itemNumber.setText(itemNumber + "");
 
         //holder.extId.setText(locations.getCompextId());
         holder.locationname.setText(locations.getLocationName());
         holder.compno.setText(locations.getCompno());
         holder.extid.setText(locations.getCompextId());
-        holder.longitude.setText(locations.getLongitude());
-        holder.latitude.setText(locations.getLatitude());
+//        holder.longitude.setText(locations.getLongitude());
+//        holder.latitude.setText(locations.getLatitude());
 
     }
 
@@ -96,6 +98,11 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
             try {
                 List<Locations> filteredLocations = locationViewModel.retrieveByVillage(charText);
                 locationsList.addAll(filteredLocations); // Add filtered data to locationsList
+
+                if (filteredLocations.isEmpty()) {
+                    Toast.makeText(activity, "No Compound(s) Found", Toast.LENGTH_SHORT).show();
+                }
+
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
                 Toast.makeText(activity, "Error Getting Remainder", Toast.LENGTH_SHORT).show();

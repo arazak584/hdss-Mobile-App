@@ -80,6 +80,7 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/village"
             android:paddingLeft="10dp"
+            android:textAllCaps="true"
             android:hint="Search Village" />
 
 
