@@ -40,7 +40,7 @@ public class LocationViewModel extends AndroidViewModel {
     }
 
     public List<Locations> retrieveByVillage(String id) throws ExecutionException, InterruptedException {
-        return locationRepository.retrieveByVillage(id);
+        return locationRepository.retrieveByVillage("%" + id + "%");
     }
 
     public List<Locations> findToSync() throws ExecutionException, InterruptedException {

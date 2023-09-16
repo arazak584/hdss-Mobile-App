@@ -35,6 +35,7 @@
                 android:layout_weight="1"
                 android:textColor="@color/design_default_color_on_secondary"
                 android:textSize="15sp"
+                android:textAlignment="textEnd"
                 android:textStyle="bold"/>
 
         </LinearLayout>
@@ -71,6 +72,7 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/village"
                 android:paddingLeft="10dp"
+                android:inputType="textCapCharacters"
                 android:hint="Search Village" />
 
             <EditText

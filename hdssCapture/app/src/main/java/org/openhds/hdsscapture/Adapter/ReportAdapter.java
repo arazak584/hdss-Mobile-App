@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Activity.ReportActivity;
@@ -44,11 +45,13 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
         TextView indcnt, title;
         LinearLayout linearLayout;
 
+        CardView cardView;
+
         public ViewHolder(View view) {
             super(view);
             this.indcnt = view.findViewById(R.id.report_count);
             this.title = view.findViewById(R.id.report_title);
-            this.linearLayout = view.findViewById(R.id.hdssReport);
+            this.cardView = view.findViewById(R.id.hdssReport);
 
         }
     }

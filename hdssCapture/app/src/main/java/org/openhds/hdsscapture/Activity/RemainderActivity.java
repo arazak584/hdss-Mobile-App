@@ -1,24 +1,37 @@
 package org.openhds.hdsscapture.Activity;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
+import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
+import org.openhds.hdsscapture.Adapter.RemainderAdapter;
+import org.openhds.hdsscapture.Adapter.ReportAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.entity.Hierarchy;
+import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Locations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +41,8 @@ public class RemainderActivity extends AppCompatActivity {
 
     private Hierarchy level6Data;
     private ArrayAdapter<Hierarchy> level6Adapter;
+    private ProgressDialog progress;
+    private RemainderAdapter remainderAdapter;
     private List<Hierarchy> level6List = new ArrayList<>();
     public static final String LEVEL6_DATA = "org.openhds.hdsscapture.activity.RemainderActivity.LEVEL5_DATA";
     @Override
@@ -35,10 +50,22 @@ public class RemainderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remainder);
 
+
         final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(this).get(HierarchyViewModel.class);
         //final Spinner level6Spinner = findViewById(R.id.spinnerRVillage);
         AutoCompleteTextView level6Spinner = findViewById(R.id.autoCompleteRVillage);
         level6Spinner.setAdapter(level6Adapter);
+
+        final RecyclerView recyclerView = findViewById(R.id.recyclerView_remainder);
+        final RemainderAdapter adapter = new RemainderAdapter(this, level6Data);
+        final LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
+
+        //recyclerView.setHasFixedSize(true);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                RecyclerView.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
 
         level6Adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line);
         level6Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -53,17 +80,6 @@ public class RemainderActivity extends AppCompatActivity {
             Toast.makeText(this, "Error loading data", Toast.LENGTH_SHORT).show();
         }
 
-        // Set listener for level 6 spinner
-//        level6Spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                level6Data = level6Adapter.getItem(position);
-//            }
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//            }
-//        });
-
         level6Spinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -71,16 +87,65 @@ public class RemainderActivity extends AppCompatActivity {
             }
         });
 
+        final ExtendedFloatingActionButton remainder = findViewById(R.id.btn_remain_location);
+        remainder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLoadingDialog();
 
-        final ExtendedFloatingActionButton start = findViewById(R.id.btn_remain_location);
-        start.setOnClickListener(v -> {
+                // Simulate long operation
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
 
-            final Intent i = new Intent(this, ListActivity.class);
+                        AutoCompleteTextView level6Spinner = findViewById(R.id.autoCompleteRVillage);
+                        String charText = level6Spinner.getText().toString();
 
-            i.putExtra(LEVEL6_DATA, level6Data);
-            startActivity(i);
+                        // Perform search based on the selected item and search text
+                        List<Locations> searchResults = null;
+                        try {
+                            searchResults = locationViewModel.retrieveByVillage(charText);
+                        } catch (ExecutionException e) {
+                            throw new RuntimeException(e);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        // Pass the search results to the adapter
+                        adapter.filter(charText, locationViewModel);
+                        // Dismiss the progress dialog
+                        progress.dismiss();
+                        hideLoadingDialog(); // Dismiss the progress dialog after generating the report
+                    }
+                }, 500);
+
+            }
+
+            public void showLoadingDialog() {
+                if (progress == null) {
+                    progress = new ProgressDialog(RemainderActivity.this);
+                    progress.setTitle("Generating Remaining Compounds...");
+                    progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    progress.setMessage(getString(R.string.please_wait_lbl));
+                    progress.setCancelable(false);
+                }
+                progress.show();
+            }
+
+            public void hideLoadingDialog() {
+                if (progress != null && progress.isShowing()) {
+                    progress.dismiss();
+                }
+            }
         });
 
+
+    }
+
+    public void dismissLoadingDialog() {
+        if (progress != null) {
+            progress.dismiss();
+        }
     }
 
 //    @Override

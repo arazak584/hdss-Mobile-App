@@ -58,7 +58,7 @@ public interface LocationDao {
 
     @Query("SELECT a.* FROM Locations as a " + "INNER JOIN locationhierarchy as b ON a.locationLevel_uuid = b.uuid " +
             " LEFT JOIN locationhierarchy c on b.parent_uuid=c.uuid " +
-            " LEFT JOIN listing as d on a.uuid=d.location_uuid where c.name=:id and d.location_uuid is null order by a.compno")
+            " LEFT JOIN listing as d on a.uuid=d.location_uuid where b.name LIKE:id and d.location_uuid is null order by a.compextId")
     List<Locations> retrieveByVillage(String id);
 
 

@@ -5,42 +5,45 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.openhds.hdsscapture.Activity.RemainderActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.entity.Hierarchy;
+import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.fragment.RemainderFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.ViewHolder>{
 
-    RemainderFragment activity;
+    RemainderActivity activity;
     LayoutInflater inflater;
     private List<Locations> locationsList;
     private Hierarchy level6Data;
 
 
-    public RemainderAdapter(RemainderFragment activity, Hierarchy level6Data) {
+    public RemainderAdapter(RemainderActivity activity, Hierarchy level6Data) {
         this.activity = activity;
         this.level6Data = level6Data;
         locationsList = new ArrayList<>();
-        inflater = LayoutInflater.from(activity.requireContext());
+        inflater = LayoutInflater.from(activity);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView extId, locationname, compno,extid, longitude, latitude;
+        TextView locationname, compno,extid, longitude, latitude, itemNumber;
         LinearLayout linearLayout;
 
         public ViewHolder(View view) {
             super(view);
-            //this.extId = view.findViewById(R.id.locationView_rextid);
+            this.itemNumber = view.findViewById(R.id.item_number);
             this.locationname = view.findViewById(R.id.Location_rname);
             this.compno = view.findViewById(R.id.location_rcompno);
             this.extid = view.findViewById(R.id.location_extids);
@@ -66,6 +69,9 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
     public void onBindViewHolder(@NonNull RemainderAdapter.ViewHolder holder, int position) {
         final Locations locations = locationsList.get(position);
 
+        int itemNumber = position + 1;
+        holder.itemNumber.setText(itemNumber + ".");
+
         //holder.extId.setText(locations.getCompextId());
         holder.locationname.setText(locations.getLocationName());
         holder.compno.setText(locations.getCompno());
@@ -82,22 +88,21 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
     }
 
     public void filter(String charText, LocationViewModel locationViewModel) {
-        locationsList.clear();
+        locationsList.clear(); // Clear the existing data
 
-            if(level6Data != null)
-                try {
-                    List<Locations> list = locationViewModel.retrieveByVillage(level6Data.getName());
+        if (charText != null && !charText.isEmpty()) {
+            charText = charText.toLowerCase(Locale.getDefault());
 
-                    if (list != null) {
-                        locationsList.addAll(list);
-                    }
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
+            try {
+                List<Locations> filteredLocations = locationViewModel.retrieveByVillage(charText);
+                locationsList.addAll(filteredLocations); // Add filtered data to locationsList
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(activity, "Error Getting Remainder", Toast.LENGTH_SHORT).show();
+            }
+        }
 
         notifyDataSetChanged();
     }
+
 }

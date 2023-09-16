@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Activity.ErrorActivity;
@@ -25,6 +26,7 @@ public class ViewsAdapter extends RecyclerView.Adapter<ViewsAdapter.ViewHolder>{
 
     NewActivity activity;
     LayoutInflater inflater;
+    CardView cardView;
     private List<Newloc> newlocs;
 
     private List<Newloc> filter;
@@ -61,6 +63,7 @@ public class ViewsAdapter extends RecyclerView.Adapter<ViewsAdapter.ViewHolder>{
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView title,id2 , id3,id4;
         LinearLayout linearLayout;
+        CardView cardView;
 
         public ViewHolder(View view) {
             super(view);
@@ -68,7 +71,7 @@ public class ViewsAdapter extends RecyclerView.Adapter<ViewsAdapter.ViewHolder>{
             this.id2 = view.findViewById(R.id.txt_id2);
             this.id3 = view.findViewById(R.id.txt_id3);
             this.id4 = view.findViewById(R.id.txt_id4);
-            this.linearLayout = view.findViewById(R.id.newLoc);
+            this.cardView = view.findViewById(R.id.newLoc);
 
         }
     }

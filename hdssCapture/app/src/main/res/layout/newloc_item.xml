@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/newLoc"
     android:layout_width="match_parent"
@@ -47,4 +47,4 @@
 
 
 
-</LinearLayout>
+</androidx.cardview.widget.CardView>

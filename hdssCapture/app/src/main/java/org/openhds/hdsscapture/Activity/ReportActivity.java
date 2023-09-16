@@ -315,9 +315,12 @@ public class ReportActivity extends AppCompatActivity {
             reportAdapter = new ReportAdapter(this);
             reportAdapter.setReportCounter(list);
             RecyclerView recyclerView = findViewById(R.id.my_recycler_view_report);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-           // recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.HORIZONTAL));
 
+            //recyclerView.setHasFixedSize(true);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                    RecyclerView.VERTICAL);
+            recyclerView.addItemDecoration(dividerItemDecoration);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(reportAdapter);
 
         } catch (ExecutionException e) {

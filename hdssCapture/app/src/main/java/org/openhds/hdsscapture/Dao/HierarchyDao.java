@@ -62,7 +62,7 @@ public interface HierarchyDao {
             " where b.parent_uuid=:id GROUP BY b.extId order by b.name")
     List<Hierarchy> clusters(String id);
 
-    @Query("SELECT * FROM locationhierarchy where level_uuid='hierarchyLevelId5' order by name")
+    @Query("SELECT * FROM locationhierarchy where level_uuid='hierarchyLevelId6' order by name")
     List<Hierarchy> retrieveLevel7();
 
     @Query("SELECT * FROM locationhierarchy where level_uuid='hierarchyLevelId5' order by name")
