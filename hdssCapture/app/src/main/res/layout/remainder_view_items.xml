@@ -31,6 +31,7 @@
             android:layout_toStartOf="@id/item_number"
             android:ellipsize="end"
             android:maxLines="1"
+            android:textIsSelectable="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             tools:ignore="HardcodedText" />
 

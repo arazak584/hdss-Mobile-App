@@ -49,6 +49,7 @@
                 android:textAlignment="textEnd"
                 android:textSize="15sp"
                 android:paddingRight="2dp"
+                android:textIsSelectable="true"
                 android:textStyle="bold" />
 
             <TextView
@@ -59,6 +60,7 @@
                 android:layout_weight="1"
                 android:textAlignment="textEnd"
                 android:textSize="15sp"
+                android:textIsSelectable="true"
                 android:textStyle="bold" />
 
 

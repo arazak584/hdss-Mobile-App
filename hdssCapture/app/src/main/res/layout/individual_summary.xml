@@ -78,6 +78,7 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:layout_weight="1"
+                android:textIsSelectable="true"
                 android:text="@{individual.extId}" />
 
             <TextView
