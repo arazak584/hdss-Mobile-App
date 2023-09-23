@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
@@ -41,15 +42,16 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView locationname, compno, longitude, latitude;
+        TextView locationname, compno, gps, latitude;
         LinearLayout linearLayout;
+        CardView cardView;
 
         public ViewHolder(View view) {
             super(view);
             this.locationname = view.findViewById(R.id.Location_name);
             this.compno = view.findViewById(R.id.location_compno);
-            this.longitude = view.findViewById(R.id.longitude);
-            this.latitude = view.findViewById(R.id.latitude);
+            this.gps = view.findViewById(R.id.longitude);
+            //this.latitude = view.findViewById(R.id.latitude);
             this.linearLayout = view.findViewById(R.id.searchedItem);
         }
     }
@@ -74,8 +76,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
         holder.locationname.setText(locations.getLocationName());
         holder.compno.setText(locations.getCompno());
-        holder.longitude.setText(locations.getLongitude());
-        holder.latitude.setText(locations.getLatitude());
+        holder.gps.setText(locations.getLatitude()  + "," + locations.getLongitude());
+        //holder.latitude.setText(locations.getLatitude());
 
         Integer st = locations.complete;
         if (st != null) {
@@ -89,6 +91,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 //            holder.longitude.setTextColor(Color.parseColor("#FF4500"));
 //            holder.latitude.setTextColor(Color.parseColor("#FF4500"));
         }
+
+        holder.gps.setTextIsSelectable(true);
+        //holder.latitude.setTextIsSelectable(true);
 
         holder.linearLayout.setOnClickListener(v -> {
             activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,

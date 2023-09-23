@@ -55,7 +55,7 @@ public interface IndividualDao {
             " ( fullName LIKE:id OR c.compno LIKE:id OR ghanacard LIKE :id) ORDER BY dob ")
     List<Individual> retrieveBy(String id);
 
-    @Query("SELECT a.*, compno, c.compextId, firstName || ' ' || lastName as fullName, b.endType " +
+    @Query("SELECT a.*, compno as compextId, firstName || ' ' || lastName as fullName, b.endType " +
             "FROM individual AS a " +
             "INNER JOIN ( " +
             "   SELECT individual_uuid, MAX(startDate) AS maxStartDate " +

@@ -172,8 +172,7 @@ public class ListingFragment extends Fragment {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
                 return;
             }
-            finalData.complete=1;
-            viewModel.add(finalData);
+
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
             LocationAmendment location = new LocationAmendment();
@@ -188,11 +187,35 @@ public class ListingFragment extends Fragment {
             location.locationLevel_uuid = finalData.cluster_id;
             location.extId = finalData.vill_extId;
 
+            // Assuming vill_extId is a String
+            String villExtId = finalData.vill_extId;
+            String compExtId = finalData.compextId;
+
+            // Determine the desired format for compExtId based on the length of villExtId
+            if (villExtId.length() == 3) {
+                // If vill_extId has 3 characters, pick the last 6 numbers from finalData.compextId
+                int startIndex = Math.max(finalData.compextId.length() - 6, 0);
+                compExtId = villExtId + finalData.compextId.substring(startIndex);
+            } else if (villExtId.length() == 4) {
+                // If vill_extId has 4 characters, pick the last 5 numbers from finalData.compextId
+                int startIndex = Math.max(finalData.compextId.length() - 5, 0);
+                compExtId = villExtId + finalData.compextId.substring(startIndex);
+            } else {
+                // Handle other cases or validation as needed
+                compExtId = finalData.compextId; // Keep the original value
+            }
+
+            location.compextId = compExtId;
+
+
+
             location.complete = 1;
             LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
             locationViewModel.update(location);
 
             finalData.complete=1;
+            finalData.compextId = compExtId;
+            viewModel.add(finalData);
 
         }
         if (close) {

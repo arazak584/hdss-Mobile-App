@@ -8,4 +8,5 @@ public class LocationAmendment {
     public Integer complete;
     public String locationLevel_uuid;
     public String extId;
+    public String compextId;
 }

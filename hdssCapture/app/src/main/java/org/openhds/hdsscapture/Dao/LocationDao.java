@@ -52,7 +52,7 @@ public interface LocationDao {
     @Query("SELECT * FROM Locations WHERE compno LIKE:id OR locationName LIKE:id OR compno LIKE:id order by compno")
     List<Locations> retrieveBySearchs(String id);
 
-    @Query("SELECT * FROM Locations WHERE compno LIKE:id OR locationName LIKE:id OR compno LIKE:id order by compno")
+    @Query("SELECT * FROM Locations WHERE compno LIKE:id OR locationName LIKE:id OR compextId LIKE:id order by compno")
     List<Locations> filter(String id);
 
 
