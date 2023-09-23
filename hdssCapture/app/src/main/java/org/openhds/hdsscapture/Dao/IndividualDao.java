@@ -92,7 +92,7 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual WHERE uuid IN (SELECT a.uuid FROM individual AS a " +
             "INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
             "INNER JOIN Locations AS c ON b.location_uuid = c.uuid " +
-            "WHERE b.endType = 1 AND gender = 1 AND c.compextId = :id " +
+            "WHERE b.endType = 1 AND gender = 1 AND c.compextId = :id AND firstName!='FAKE'" +
             "AND date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob / 1000, 'unixepoch')) " +
             "UNION " +
             "SELECT uuid FROM individual WHERE extId = 'UNK') order by dob DESC")
