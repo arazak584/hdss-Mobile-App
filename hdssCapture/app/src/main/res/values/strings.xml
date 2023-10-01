@@ -621,6 +621,12 @@
     <string name="father_name">Father\'s Name</string>
     <string name="new_hl"><![CDATA[New Households & Locations]]></string>
     <string name="gpss">GPS</string>
+    <string name="farm">What is the main reason you moved (migrated) to do farming in this place?</string>
+    <string name="food_yn">Do you grow food crops?</string>
+    <string name="food_crops">For what purpose?</string>
+    <string name="cash_yn">Do you grow cash crops?</string>
+    <string name="livestock_yn">Do you rear livestock?</string>
+    <string name="acres">What is the size of your farm? (in acres)</string>
 
     //SocioDemo End
 

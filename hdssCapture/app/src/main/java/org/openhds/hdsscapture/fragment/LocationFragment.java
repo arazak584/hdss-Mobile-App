@@ -228,6 +228,7 @@ public class LocationFragment extends Fragment {
 
         if(locations.insertDate==null){
             binding.getLocations().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            locations.sttime = new Date();
         }
 
         if(locations.compno!=null){
@@ -376,6 +377,9 @@ public class LocationFragment extends Fragment {
                 }
             }
 
+            if (locations.sttime !=null && locations.edtime==null){
+                locations.edtime = new Date();
+            }
             locations.complete = 1;
             locationViewModel.add(locations);
             //Toast.makeText(v.getContext(), "Saved Successfully", Toast.LENGTH_LONG).show();

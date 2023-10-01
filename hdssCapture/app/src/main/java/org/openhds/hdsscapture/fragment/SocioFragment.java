@@ -128,6 +128,7 @@ public class SocioFragment extends Fragment {
                 data.location_uuid = locations.getUuid();
                 data.socialgroup_uuid = socialgroup.getUuid();
                 data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.sttime = new Date();
 
                 //get the hour and minute on first fill
                 Calendar cal = Calendar.getInstance();
@@ -232,7 +233,9 @@ public class SocioFragment extends Fragment {
             int mm = cal.get(Calendar.MINUTE);
 
 
-
+            if (data.sttime !=null && data.edtime==null){
+                data.edtime = new Date();
+            }
             viewModel.add(data);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
         }

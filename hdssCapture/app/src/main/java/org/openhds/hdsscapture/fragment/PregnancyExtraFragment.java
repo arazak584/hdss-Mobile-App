@@ -194,6 +194,7 @@ public class PregnancyExtraFragment extends Fragment {
                 data.extra = 2;
                 data.id = 2;
                 data.first_preg = 2;
+                data.sttime = new Date();
 
                 binding.setPregnancy(data);
                 binding.getPregnancy().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
@@ -454,6 +455,9 @@ public class PregnancyExtraFragment extends Fragment {
             if (hasErrors) {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
                 return;
+            }
+            if (finalData.sttime !=null && finalData.edtime==null){
+                finalData.edtime = new Date();
             }
             finalData.complete=1;
             viewModel.add(finalData);

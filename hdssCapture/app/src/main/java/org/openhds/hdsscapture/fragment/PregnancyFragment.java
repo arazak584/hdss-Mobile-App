@@ -186,6 +186,7 @@ public class PregnancyFragment extends Fragment {
                 data.uuid = uuidString;
                 data.individual_uuid = individual.getUuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
+                data.sttime = new Date();
 
                 binding.setPregnancy(data);
                 binding.getPregnancy().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
@@ -469,6 +470,9 @@ public class PregnancyFragment extends Fragment {
             if (hasErrors) {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
                 return;
+            }
+            if (finalData.sttime !=null && finalData.edtime==null){
+                finalData.edtime = new Date();
             }
             finalData.complete=1;
             viewModel.add(finalData);

@@ -148,6 +148,7 @@ public class IndividualFragment extends Fragment {
 
         if(individual.insertDate==null){
             binding.getIndividual().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            individual.sttime = new Date();
         }
 
         if (individual.mother_uuid != null) {
@@ -483,6 +484,9 @@ public class IndividualFragment extends Fragment {
                 return;
             }
 
+            if (finalData.sttime !=null && finalData.edtime==null){
+                finalData.edtime = new Date();
+            }
             finalData.complete=1;
 
             IndividualViewModel viewModel = new ViewModelProvider(this).get(IndividualViewModel.class);

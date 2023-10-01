@@ -193,6 +193,7 @@ public class RelationshipFragment extends Fragment {
 
                 data.individualA_uuid = individual.getUuid();
                 data.dob = individual.dob;
+                data.sttime = new Date();
 
 
                 binding.setRelationship(data);
@@ -296,6 +297,9 @@ public class RelationshipFragment extends Fragment {
             if (hasErrors) {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
                 return;
+            }
+            if (finalData.sttime !=null && finalData.edtime==null){
+                finalData.edtime = new Date();
             }
             finalData.complete=1;
             viewModel.add(finalData);

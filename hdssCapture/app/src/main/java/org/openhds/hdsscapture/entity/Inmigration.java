@@ -8,7 +8,6 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -19,6 +18,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -55,6 +55,9 @@ public class Inmigration extends BaseObservable implements Parcelable {
     public Integer origin;
 
     @Expose
+    public Integer farm;
+
+    @Expose
     public Date recordedDate;
 
     @Expose
@@ -73,6 +76,23 @@ public class Inmigration extends BaseObservable implements Parcelable {
 
     @Expose
     public Date edtime;
+    @Expose
+    public Integer livestock;
+    @Expose
+    public String farm_other;
+    @Expose
+    public Integer food_yn;
+    @Expose
+    public Integer cash_yn;
+    @Expose
+    public Integer cash_crops;
+
+    @Expose
+    public Integer livestock_yn;
+    @Expose
+    public Integer acres;
+    @Expose
+    public Integer food_crops;
 
     public Inmigration(){}
 
@@ -204,6 +224,82 @@ public class Inmigration extends BaseObservable implements Parcelable {
         this.origin = origin;
     }
 
+    public Integer getFarm() {
+        return farm;
+    }
+
+    public void setFarm(Integer farm) {
+        this.farm = farm;
+    }
+
+    public Integer getLivestock() {
+        return livestock;
+    }
+
+    public void setLivestock(Integer livestock) {
+        this.livestock = livestock;
+    }
+
+    public String getFarm_other() {
+        return farm_other;
+    }
+
+    public void setFarm_other(String farm_other) {
+        this.farm_other = farm_other;
+    }
+
+    public Integer getFood_yn() {
+        return food_yn;
+    }
+
+    public void setFood_yn(Integer food_yn) {
+        this.food_yn = food_yn;
+    }
+
+    public Integer getCash_yn() {
+        return cash_yn;
+    }
+
+    public void setCash_yn(Integer cash_yn) {
+        this.cash_yn = cash_yn;
+    }
+
+    public Integer getCash_crops() {
+        return cash_crops;
+    }
+
+    public void setCash_crops(Integer cash_crops) {
+        this.cash_crops = cash_crops;
+    }
+
+    public Integer getLivestock_yn() {
+        return livestock_yn;
+    }
+
+    public void setLivestock_yn(Integer livestock_yn) {
+        this.livestock_yn = livestock_yn;
+    }
+
+    public String getAcres() {
+        return acres == null ? "" : String.valueOf(acres);
+    }
+
+    public void setAcres(String acres) {
+        if (acres == null) this.acres = null;
+        else
+            try {
+                this.acres = Integer.valueOf(acres);
+            } catch (NumberFormatException e) {
+            }
+    }
+
+    public Integer getFood_crops() {
+        return food_crops;
+    }
+
+    public void setFood_crops(Integer food_crops) {
+        this.food_crops = food_crops;
+    }
 
     protected Inmigration(Parcel in) {
         this.uuid = in.readString();
@@ -279,11 +375,9 @@ public class Inmigration extends BaseObservable implements Parcelable {
             reason = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
         }
-        if(reason == null || reason!=77){
-            setReason_oth(null);
-        }
+        patternSkipper(view);
+
 
     }
 
@@ -319,5 +413,150 @@ public class Inmigration extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }
 
+    }
+
+    public void setFarm(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            farm = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            farm = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+    }
+
+    public void setLivestock(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            livestock = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            livestock = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+    }
+
+    public void setLivestock_yn(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            livestock_yn = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            livestock_yn = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+    }
+
+    public void setFood_yn(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            food_yn = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            food_yn = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+    }
+
+    public void setFood_crops(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            food_crops = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            food_crops = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+    }
+
+    public void setCash_yn(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            cash_yn = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            cash_yn = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+    }
+
+    public void setCash_crops(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            cash_crops = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            cash_crops = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+    }
+
+    private void patternSkipper(View view) {
+
+        if (view != null) {
+
+            if(reason == null || reason!=77)
+                setReason_oth(null);
+
+            if(reason == null || reason != 9) {
+                setFarm(null);
+                setLivestock(null);
+                setFarm_other(null);
+                setFood_yn(null);
+                setCash_yn(null);
+                setCash_crops(null);
+                setLivestock_yn(null);
+                setAcres(null);
+                setFood_crops(null);
+            }
+
+            if(farm == null || farm!=77)
+                setFarm_other(null);
+
+            if(food_yn == null || food_yn!=1)
+                setFood_crops(null);
+
+            if(cash_yn == null || cash_yn!=1)
+                setCash_crops(null);
+
+            if(livestock_yn == null || livestock_yn!=1)
+                setLivestock(null);
+
+
+            notifyPropertyChanged(BR._all);
+        }
     }
 }

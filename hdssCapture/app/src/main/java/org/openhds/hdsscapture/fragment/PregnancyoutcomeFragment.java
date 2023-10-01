@@ -278,6 +278,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.mother_uuid = individual.getUuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
+                data.sttime = new Date();
                 binding.numberOfLiveBirths.setVisibility(View.GONE);
 
                 binding.setPregoutcome(data);
@@ -1277,6 +1278,9 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 }
 
+            }
+            if (finalData.sttime !=null && finalData.edtime==null){
+                finalData.edtime = new Date();
             }
             finalData.complete=1;
             viewModel.add(finalData);

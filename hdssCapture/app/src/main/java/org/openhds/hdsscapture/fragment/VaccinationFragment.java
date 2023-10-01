@@ -713,6 +713,7 @@ public class VaccinationFragment extends Fragment {
                 data.socialgroup_uuid = socialgroup.uuid;
                 data.dob = individual.dob;
                 data.complete = 1;
+                data.sttime = new Date();
 
 
                 binding.setVaccination(data);
@@ -1347,6 +1348,9 @@ public class VaccinationFragment extends Fragment {
             if (hasErrors) {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
                 //return;
+            }
+            if (finalData.sttime !=null && finalData.edtime==null){
+                finalData.edtime = new Date();
             }
             finalData.complete=1;
             viewModel.add(finalData);

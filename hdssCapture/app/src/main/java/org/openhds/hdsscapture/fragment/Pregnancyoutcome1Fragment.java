@@ -289,6 +289,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 //                data.complete = 1;
                 data.extra = 2;
                 data.id = 2;
+                data.sttime = new Date();
                 binding.numberOfLiveBirths.setVisibility(View.GONE);
 
                 binding.setPregoutcome(data);
@@ -1293,6 +1294,9 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
                 }
 
+            }
+            if (finalData.sttime !=null && finalData.edtime==null){
+                finalData.edtime = new Date();
             }
             finalData.complete=1;
             viewModel.add(finalData);

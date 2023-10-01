@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -18,6 +17,7 @@ import com.google.gson.annotations.Expose;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -97,27 +97,30 @@ public class Demographic extends BaseObservable implements Parcelable {
 
     @Ignore
     private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    @Ignore
+    private transient final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+
 
     public String getSttime() {
         if (sttime == null) return null;
-        return f.format(sttime);
+        return g.format(sttime);
     }
 
     public void setSttime(String sttime) {
         try {
-            this.sttime = f.parse(sttime);
+            this.sttime = g.parse(sttime);
         } catch (ParseException e) {
         }
     }
 
     public String getEdtime() {
         if (edtime == null) return null;
-        return f.format(edtime);
+        return g.format(edtime);
     }
 
     public void setEdtime(String edtime) {
         try {
-            this.edtime = f.parse(edtime);
+            this.edtime = g.parse(edtime);
         } catch (ParseException e) {
         }
     }
@@ -249,6 +252,8 @@ public class Demographic extends BaseObservable implements Parcelable {
         this.phone1 = in.readString();
         this.phone2 = in.readString();
         this.fw_uuid = in.readString();
+        this.edtime = (Date) in.readSerializable();
+        this.sttime = (Date) in.readSerializable();
     }
 
     public static final Creator<Demographic> CREATOR = new Creator<Demographic>() {
@@ -280,6 +285,8 @@ public class Demographic extends BaseObservable implements Parcelable {
         dest.writeString(this.phone1);
         dest.writeString(this.phone2);
         dest.writeString(this.fw_uuid);
+        dest.writeSerializable(this.edtime);
+        dest.writeSerializable(this.sttime);
     }
 
     //SPINNERS ENTITY TRIBE
