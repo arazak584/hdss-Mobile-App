@@ -108,7 +108,7 @@ public class Pregnancyoutcome extends BaseObservable {
     @Expose
     public Integer chd_size;//How much did the child weigh (estimated baby size)
     @Expose
-    public Integer weig_hcard;//Record weight in kilograms from Health Card
+    public String weig_hcard;//Record weight in kilograms from Health Card
     @Expose
     public Integer stillbirth;
     @Expose
@@ -122,6 +122,11 @@ public class Pregnancyoutcome extends BaseObservable {
 
     @Expose
     public Integer id;
+    @Expose
+    public Date sttime;
+
+    @Expose
+    public Date edtime;
 
     public Pregnancyoutcome(){}
 
@@ -136,6 +141,30 @@ public class Pregnancyoutcome extends BaseObservable {
 
     public void setUuid(@NotNull String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getSttime() {
+        if (sttime == null) return null;
+        return f.format(sttime);
+    }
+
+    public void setSttime(String sttime) {
+        try {
+            this.sttime = f.parse(sttime);
+        } catch (ParseException e) {
+        }
+    }
+
+    public String getEdtime() {
+        if (edtime == null) return null;
+        return f.format(edtime);
+    }
+
+    public void setEdtime(String edtime) {
+        try {
+            this.edtime = f.parse(edtime);
+        } catch (ParseException e) {
+        }
     }
 
     public String getMother_uuid() {
@@ -410,16 +439,12 @@ public class Pregnancyoutcome extends BaseObservable {
 
     }
 
-
     public String getWeig_hcard() {
-        return  weig_hcard == null ? "" : String.valueOf(weig_hcard);
+        return weig_hcard;
     }
 
     public void setWeig_hcard(String weig_hcard) {
-        try {
-            this.weig_hcard = (weig_hcard == null) ? null : Integer.valueOf(weig_hcard);
-        } catch (NumberFormatException e) {
-        }
+        this.weig_hcard = weig_hcard;
     }
 
     public Integer getComplete() {

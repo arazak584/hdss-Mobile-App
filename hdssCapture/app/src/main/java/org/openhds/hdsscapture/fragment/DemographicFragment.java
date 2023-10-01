@@ -136,6 +136,7 @@ public class DemographicFragment extends Fragment {
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.individual_uuid = individual.getUuid();
                 data.phone = 1;
+                data.sttime = new Date();
 
                 binding.setDemographic(data);
                 binding.getDemographic().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
@@ -204,6 +205,10 @@ public class DemographicFragment extends Fragment {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
                 return;
             }
+            if (finalData.sttime !=null && finalData.edtime==null){
+                finalData.edtime = new Date();
+            }
+
             finalData.complete=1;
             viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();

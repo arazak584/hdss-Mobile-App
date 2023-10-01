@@ -48,6 +48,12 @@ public class Death extends BaseObservable implements Parcelable {
     public Date insertDate;
 
     @Expose
+    public Date sttime;
+
+    @Expose
+    public Date edtime;
+
+    @Expose
     public String firstName;
 
     @Expose
@@ -129,6 +135,32 @@ public class Death extends BaseObservable implements Parcelable {
     public void setIndividual_uuid(String individual_uuid) {
         this.individual_uuid = individual_uuid;
     }
+
+    public String getSttime() {
+        if (sttime == null) return null;
+        return f.format(sttime);
+    }
+
+    public void setSttime(String sttime) {
+        try {
+            this.sttime = f.parse(sttime);
+        } catch (ParseException e) {
+        }
+    }
+
+    public String getEdtime() {
+        if (edtime == null) return null;
+        return f.format(edtime);
+    }
+
+    public void setEdtime(String edtime) {
+        try {
+            this.edtime = f.parse(edtime);
+        } catch (ParseException e) {
+        }
+    }
+
+
 
     public String getDeathDate() {
         if (deathDate == null) return "";

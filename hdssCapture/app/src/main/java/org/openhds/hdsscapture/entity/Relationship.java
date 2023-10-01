@@ -81,6 +81,11 @@ public class Relationship extends BaseObservable implements Parcelable {
     public Integer lcow;//Does women live in the same household with co-wife(s)
     @Expose
     public Integer mrank;//Woman's rank (In current marriage)
+    @Expose
+    public Date sttime;
+
+    @Expose
+    public Date edtime;
 
 
     public Relationship(){}
@@ -95,6 +100,30 @@ public class Relationship extends BaseObservable implements Parcelable {
 
     public void setUuid(@NotNull String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getSttime() {
+        if (sttime == null) return null;
+        return f.format(sttime);
+    }
+
+    public void setSttime(String sttime) {
+        try {
+            this.sttime = f.parse(sttime);
+        } catch (ParseException e) {
+        }
+    }
+
+    public String getEdtime() {
+        if (edtime == null) return null;
+        return f.format(edtime);
+    }
+
+    public void setEdtime(String edtime) {
+        try {
+            this.edtime = f.parse(edtime);
+        } catch (ParseException e) {
+        }
     }
 
     public String getIndividualA_uuid() {

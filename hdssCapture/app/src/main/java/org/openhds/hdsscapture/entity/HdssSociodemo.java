@@ -405,6 +405,11 @@ public class HdssSociodemo extends BaseObservable {
     public Integer chew_bnut_oecoccur;
     @Expose
     public Integer drink_oecoccur;
+    @Expose
+    public Date sttime;
+
+    @Expose
+    public Date edtime;
 
 
     public HdssSociodemo() {
@@ -417,6 +422,30 @@ public class HdssSociodemo extends BaseObservable {
 
     public void setIndividual_uuid(@NotNull String individual_uuid) {
         this.individual_uuid = individual_uuid;
+    }
+
+    public String getSttime() {
+        if (sttime == null) return null;
+        return f.format(sttime);
+    }
+
+    public void setSttime(String sttime) {
+        try {
+            this.sttime = f.parse(sttime);
+        } catch (ParseException e) {
+        }
+    }
+
+    public String getEdtime() {
+        if (edtime == null) return null;
+        return f.format(edtime);
+    }
+
+    public void setEdtime(String edtime) {
+        try {
+            this.edtime = f.parse(edtime);
+        } catch (ParseException e) {
+        }
     }
 
     public String getSocialgroup_uuid() {

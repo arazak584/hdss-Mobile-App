@@ -130,6 +130,12 @@ public class Individual extends BaseObservable implements Parcelable {
     @Expose
     public Integer m_age=150;
 
+    @Expose
+    public Date sttime;
+
+    @Expose
+    public Date edtime;
+
     public Individual(){}
 
     @Ignore
@@ -169,6 +175,30 @@ public class Individual extends BaseObservable implements Parcelable {
 
     @Ignore
     private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+
+    public String getSttime() {
+        if (sttime == null) return null;
+        return f.format(sttime);
+    }
+
+    public void setSttime(String sttime) {
+        try {
+            this.sttime = f.parse(sttime);
+        } catch (ParseException e) {
+        }
+    }
+
+    public String getEdtime() {
+        if (edtime == null) return null;
+        return f.format(edtime);
+    }
+
+    public void setEdtime(String edtime) {
+        try {
+            this.edtime = f.parse(edtime);
+        } catch (ParseException e) {
+        }
+    }
 
     @Bindable
     public String getDob() {
