@@ -49,6 +49,6 @@ public interface DemographicDao {
             " WHERE a.insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
-    @Query("SELECT * FROM demographic as a inner join individual as b on a.individual_uuid=b.uuid WHERE a.complete=1 ")
+    @Query("SELECT * FROM demographic where individual_uuid='7bfeb156db724f56808cb87551a16cd7'")
     List<Demographic> error();
 }

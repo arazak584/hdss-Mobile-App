@@ -175,27 +175,28 @@ public class Individual extends BaseObservable implements Parcelable {
 
     @Ignore
     private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-
+    @Ignore
+    private transient final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
     public String getSttime() {
         if (sttime == null) return null;
-        return f.format(sttime);
+        return g.format(sttime);
     }
 
     public void setSttime(String sttime) {
         try {
-            this.sttime = f.parse(sttime);
+            this.sttime = g.parse(sttime);
         } catch (ParseException e) {
         }
     }
 
     public String getEdtime() {
         if (edtime == null) return null;
-        return f.format(edtime);
+        return g.format(edtime);
     }
 
     public void setEdtime(String edtime) {
         try {
-            this.edtime = f.parse(edtime);
+            this.edtime = g.parse(edtime);
         } catch (ParseException e) {
         }
     }

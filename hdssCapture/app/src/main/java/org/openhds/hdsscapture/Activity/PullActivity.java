@@ -282,7 +282,8 @@ public class PullActivity extends AppCompatActivity {
                                         CsvMapper mapper = new CsvMapper();
                                         CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("dob").addColumn("dobAspect").addColumn("extId")
                                                 .addColumn("firstName").addColumn("fw_uuid").addColumn("gender").addColumn("ghanacard").addColumn("insertDate")
-                                                .addColumn("lastName").addColumn("otherName").addColumn("father_uuid").addColumn("mother_uuid").build();
+                                                .addColumn("lastName").addColumn("otherName").addColumn("father_uuid").addColumn("mother_uuid")
+                                                .addColumn("sttime").addColumn("edtime").build();
                                         MappingIterator<Individual> iterator = mapper.readerFor(Individual.class).with(schema).readValues(unzippedFile);
                                         progress.setCancelable(false);
                                         progress.setCanceledOnTouchOutside(false);
@@ -373,7 +374,8 @@ public class PullActivity extends AppCompatActivity {
                             CsvMapper mapper = new CsvMapper();
                             CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("dob").addColumn("dobAspect").addColumn("extId")
                                     .addColumn("firstName").addColumn("fw_uuid").addColumn("gender").addColumn("ghanacard").addColumn("insertDate")
-                                    .addColumn("lastName").addColumn("otherName").addColumn("father_uuid").addColumn("mother_uuid").build();
+                                    .addColumn("lastName").addColumn("otherName").addColumn("father_uuid").addColumn("mother_uuid")
+                                    .addColumn("sttime").addColumn("edtime").build();
                             MappingIterator<Individual> iterator = mapper.readerFor(Individual.class).with(schema).readValues(unzippedFile);
                             progress.setCancelable(false);
                             progress.setCanceledOnTouchOutside(false);
@@ -490,7 +492,7 @@ public class PullActivity extends AppCompatActivity {
                                         CsvMapper mapper = new CsvMapper();
                                         CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("accuracy").addColumn("compextId").addColumn("compno")
                                                 .addColumn("fw_uuid").addColumn("insertDate").addColumn("latitude").addColumn("locationLevel_uuid").addColumn("locationName")
-                                                .addColumn("locationType").addColumn("longitude").addColumn("status").build();
+                                                .addColumn("locationType").addColumn("longitude").addColumn("status").addColumn("sttime").addColumn("edtime").build();
                                         MappingIterator<Locations> iterator = mapper.readerFor(Locations.class).with(schema).readValues(unzippedFile);
                                         progress.setCancelable(false);
                                         progress.setCanceledOnTouchOutside(false);
@@ -581,7 +583,7 @@ public class PullActivity extends AppCompatActivity {
                             CsvMapper mapper = new CsvMapper();
                             CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("accuracy").addColumn("compextId").addColumn("compno")
                                     .addColumn("fw_uuid").addColumn("insertDate").addColumn("latitude").addColumn("locationLevel_uuid").addColumn("locationName")
-                                    .addColumn("locationType").addColumn("longitude").addColumn("status").build();
+                                    .addColumn("locationType").addColumn("longitude").addColumn("status").addColumn("sttime").addColumn("edtime").build();
                             MappingIterator<Locations> iterator = mapper.readerFor(Locations.class).with(schema).readValues(unzippedFile);
                             progress.setCancelable(false);
                             progress.setCanceledOnTouchOutside(false);
@@ -699,7 +701,7 @@ public class PullActivity extends AppCompatActivity {
                                         CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("endDate").addColumn("endType")
                                                 .addColumn("fw_uuid").addColumn("insertDate").addColumn("rltn_head")
                                                 .addColumn("startDate").addColumn("startType")
-                                                .addColumn("individual_uuid").addColumn("location_uuid").addColumn("socialgroup_uuid").build();
+                                                .addColumn("individual_uuid").addColumn("location_uuid").addColumn("socialgroup_uuid").addColumn("sttime").addColumn("edtime").build();
                                         MappingIterator<Residency> iterator = mapper.readerFor(Residency.class).with(schema).readValues(unzippedFile);
                                         progress.setCancelable(false);
                                         progress.setCanceledOnTouchOutside(false);
@@ -791,7 +793,7 @@ public class PullActivity extends AppCompatActivity {
                             CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("endDate").addColumn("endType")
                                     .addColumn("fw_uuid").addColumn("insertDate").addColumn("rltn_head")
                                     .addColumn("startDate").addColumn("startType")
-                                    .addColumn("individual_uuid").addColumn("location_uuid").addColumn("socialgroup_uuid").build();
+                                    .addColumn("individual_uuid").addColumn("location_uuid").addColumn("socialgroup_uuid").addColumn("sttime").addColumn("edtime").build();
                             MappingIterator<Residency> iterator = mapper.readerFor(Residency.class).with(schema).readValues(unzippedFile);
                             progress.setCancelable(false);
                             progress.setCanceledOnTouchOutside(false);
@@ -909,7 +911,7 @@ public class PullActivity extends AppCompatActivity {
                                         CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("aIsToB").addColumn("endDate").addColumn("endType")
                                                 .addColumn("fw_uuid").addColumn("individualA_uuid").addColumn("individualB_uuid").addColumn("insertDate").addColumn("lcow").addColumn("mar")
                                                 .addColumn("mrank").addColumn("nchdm").addColumn("nwive").addColumn("polygamous")
-                                                .addColumn("startDate").addColumn("tnbch").build();
+                                                .addColumn("startDate").addColumn("tnbch").addColumn("sttime").addColumn("edtime").build();
                                         MappingIterator<Relationship> iterator = mapper.readerFor(Relationship.class).with(schema).readValues(unzippedFile);
                                         progress.setCancelable(false);
                                         progress.setCanceledOnTouchOutside(false);
@@ -1001,7 +1003,7 @@ public class PullActivity extends AppCompatActivity {
                             CsvSchema schema = CsvSchema.builder().addColumn("uuid").addColumn("aIsToB").addColumn("endDate").addColumn("endType")
                                     .addColumn("fw_uuid").addColumn("individualA_uuid").addColumn("individualB_uuid").addColumn("insertDate").addColumn("lcow").addColumn("mar")
                                     .addColumn("mrank").addColumn("nchdm").addColumn("nwive").addColumn("polygamous")
-                                    .addColumn("startDate").addColumn("tnbch").build();
+                                    .addColumn("startDate").addColumn("tnbch").addColumn("sttime").addColumn("edtime").build();
                             MappingIterator<Relationship> iterator = mapper.readerFor(Relationship.class).with(schema).readValues(unzippedFile);
                             progress.setCancelable(false);
                             progress.setCanceledOnTouchOutside(false);
@@ -1331,7 +1333,7 @@ public class PullActivity extends AppCompatActivity {
                                                 .addColumn("fw_uuid").addColumn("healthfacility").addColumn("how_many").addColumn("insertDate").addColumn("lastClinicVisitDate")
                                                 .addColumn("medicineforpregnancy").addColumn("outcome").addColumn("outcome_date").addColumn("own_bnet")
                                                 .addColumn("pregnancyNumber").addColumn("recordedDate").addColumn("slp_bednet").addColumn("trt_bednet").addColumn("ttinjection")
-                                                .addColumn("why_no").addColumn("why_no_other").addColumn("individual_uuid").addColumn("visit_uuid").build();
+                                                .addColumn("why_no").addColumn("why_no_other").addColumn("individual_uuid").addColumn("visit_uuid").addColumn("sttime").addColumn("edtime").build();
                                         MappingIterator<Pregnancy> iterator = mapper.readerFor(Pregnancy.class).with(schema).readValues(unzippedFile);
                                         progress.setCancelable(false);
                                         progress.setCanceledOnTouchOutside(false);
@@ -1426,7 +1428,7 @@ public class PullActivity extends AppCompatActivity {
                                     .addColumn("fw_uuid").addColumn("healthfacility").addColumn("how_many").addColumn("insertDate").addColumn("lastClinicVisitDate")
                                     .addColumn("medicineforpregnancy").addColumn("outcome").addColumn("outcome_date").addColumn("own_bnet")
                                     .addColumn("pregnancyNumber").addColumn("recordedDate").addColumn("slp_bednet").addColumn("trt_bednet").addColumn("ttinjection")
-                                    .addColumn("why_no").addColumn("why_no_other").addColumn("individual_uuid").addColumn("visit_uuid").build();
+                                    .addColumn("why_no").addColumn("why_no_other").addColumn("individual_uuid").addColumn("visit_uuid").addColumn("sttime").addColumn("edtime").build();
                             MappingIterator<Pregnancy> iterator = mapper.readerFor(Pregnancy.class).with(schema).readValues(unzippedFile);
                             progress.setCancelable(false);
                             progress.setCanceledOnTouchOutside(false);
@@ -1544,7 +1546,7 @@ public class PullActivity extends AppCompatActivity {
                                         CsvSchema schema = CsvSchema.builder().addColumn("individual_uuid").addColumn("comp_yrs").addColumn("education").addColumn("fw_uuid")
                                                 .addColumn("insertDate").addColumn("marital").addColumn("occupation").addColumn("occupation_oth")
                                                 .addColumn("phone1").addColumn("phone2")
-                                                .addColumn("religion").addColumn("religion_oth").addColumn("tribe").addColumn("tribe_oth").build();
+                                                .addColumn("religion").addColumn("religion_oth").addColumn("tribe").addColumn("tribe_oth").addColumn("sttime").addColumn("edtime").build();
                                         MappingIterator<Demographic> iterator = mapper.readerFor(Demographic.class).with(schema).readValues(unzippedFile);
                                         progress.setCancelable(false);
                                         progress.setCanceledOnTouchOutside(false);
@@ -1636,7 +1638,7 @@ public class PullActivity extends AppCompatActivity {
                             CsvSchema schema = CsvSchema.builder().addColumn("individual_uuid").addColumn("comp_yrs").addColumn("education").addColumn("fw_uuid")
                                     .addColumn("insertDate").addColumn("marital").addColumn("occupation").addColumn("occupation_oth")
                                     .addColumn("phone1").addColumn("phone2")
-                                    .addColumn("religion").addColumn("religion_oth").addColumn("tribe").addColumn("tribe_oth").build();
+                                    .addColumn("religion").addColumn("religion_oth").addColumn("tribe").addColumn("tribe_oth").addColumn("sttime").addColumn("edtime").build();
                             MappingIterator<Demographic> iterator = mapper.readerFor(Demographic.class).with(schema).readValues(unzippedFile);
                             progress.setCancelable(false);
                             progress.setCanceledOnTouchOutside(false);
@@ -1810,7 +1812,7 @@ public class PullActivity extends AppCompatActivity {
                                                 .addColumn("tricycles_fcorres").addColumn("tricycles_num_fcorres").addColumn("tv_fcorres")
                                                 .addColumn("tv_num_fcorres").addColumn("uuid").addColumn("wash_fcorres").addColumn("wash_num_fcorres")
                                                 .addColumn("watch_fcorres")
-                                                .addColumn("watch_num_fcorres").addColumn("individual_uuid").addColumn("location_uuid").build();
+                                                .addColumn("watch_num_fcorres").addColumn("individual_uuid").addColumn("location_uuid").addColumn("sttime").addColumn("edtime").build();
                                         MappingIterator<HdssSociodemo> iterator = mapper.readerFor(HdssSociodemo.class).with(schema).readValues(unzippedFile);
                                         progress.setCancelable(false);
                                         progress.setCanceledOnTouchOutside(false);
@@ -1958,7 +1960,7 @@ public class PullActivity extends AppCompatActivity {
                                     .addColumn("tricycles_fcorres").addColumn("tricycles_num_fcorres").addColumn("tv_fcorres")
                                     .addColumn("tv_num_fcorres").addColumn("uuid").addColumn("wash_fcorres").addColumn("wash_num_fcorres")
                                     .addColumn("watch_fcorres")
-                                    .addColumn("watch_num_fcorres").addColumn("individual_uuid").addColumn("location_uuid").build();
+                                    .addColumn("watch_num_fcorres").addColumn("individual_uuid").addColumn("location_uuid").addColumn("sttime").addColumn("edtime").build();
                             MappingIterator<HdssSociodemo> iterator = mapper.readerFor(HdssSociodemo.class).with(schema).readValues(unzippedFile);
                             progress.setCancelable(false);
                             progress.setCanceledOnTouchOutside(false);
@@ -2087,7 +2089,7 @@ public class PullActivity extends AppCompatActivity {
                                                 .addColumn("rota3").addColumn("rtss18").addColumn("rtss6").addColumn("rtss7").addColumn("rtss9")
                                                 .addColumn("sbf").addColumn("scar").addColumn("slpbednet").addColumn("socialgroup_uuid")
                                                 .addColumn("stm").addColumn("sty").addColumn("uuid").addColumn("vitaminA12").addColumn("vitaminA18")
-                                                .addColumn("vitaminA6").addColumn("weight").addColumn("yellow_fever").build();
+                                                .addColumn("vitaminA6").addColumn("weight").addColumn("yellow_fever").addColumn("sttime").addColumn("edtime").build();
                                         MappingIterator<Vaccination> iterator = mapper.readerFor(Vaccination.class).with(schema).readValues(unzippedFile);
                                         progress.setCancelable(false);
                                         progress.setCanceledOnTouchOutside(false);
@@ -2187,7 +2189,7 @@ public class PullActivity extends AppCompatActivity {
                                     .addColumn("rota1").addColumn("rota2").addColumn("rota3").addColumn("rtss18").addColumn("rtss6")
                                     .addColumn("rtss7").addColumn("rtss9").addColumn("sbf").addColumn("socialgroup_uuid").addColumn("stm")
                                     .addColumn("sty").addColumn("uuid").addColumn("vitaminA12").addColumn("vitaminA18")
-                                    .addColumn("vitaminA6").addColumn("yellow_fever").build();
+                                    .addColumn("vitaminA6").addColumn("yellow_fever").addColumn("sttime").addColumn("edtime").build();
                             MappingIterator<Vaccination> iterator = mapper.readerFor(Vaccination.class).with(schema).readValues(unzippedFile);
                             progress.setCancelable(false);
                             progress.setCanceledOnTouchOutside(false);

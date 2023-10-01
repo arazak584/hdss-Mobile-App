@@ -121,6 +121,7 @@ public class ErrorActivity extends AppCompatActivity {
         try {
 
             final SimpleDateFormat f = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
+            final SimpleDateFormat z = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 
             int c=1;
             for (Socialgroup e : socialgroupViewModel.error()) {
@@ -228,12 +229,12 @@ public class ErrorActivity extends AppCompatActivity {
 
 //            int h=1;
 //            for (Demographic e : demographicViewModel.error()) {
-//                String formattedDate = f.format(e.insertDate);
+//                String formattedDate = z.format(e.sttime);
 //                Queries r1 = new Queries();
-//                r1.name = "Demo " ;
+//                r1.name = "Demo " + e.sttime;
 //                r1.extid = "" + e.individual_uuid;
-//                r1.date = "" + formattedDate;
-//                r1.error = "Demo";
+//                r1.date = "" ;
+//                r1.error = "Demo" + formattedDate;
 //                r1.index = h;
 //
 //                list.add(r1);

@@ -98,29 +98,28 @@ public class Demographic extends BaseObservable implements Parcelable {
     @Ignore
     private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
     @Ignore
-    private transient final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-
+    private transient final SimpleDateFormat z = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 
     public String getSttime() {
         if (sttime == null) return null;
-        return g.format(sttime);
+        return z.format(sttime);
     }
 
     public void setSttime(String sttime) {
         try {
-            this.sttime = g.parse(sttime);
+            this.sttime = z.parse(sttime);
         } catch (ParseException e) {
         }
     }
 
     public String getEdtime() {
         if (edtime == null) return null;
-        return g.format(edtime);
+        return z.format(edtime);
     }
 
     public void setEdtime(String edtime) {
         try {
-            this.edtime = g.parse(edtime);
+            this.edtime = z.parse(edtime);
         } catch (ParseException e) {
         }
     }
@@ -252,8 +251,8 @@ public class Demographic extends BaseObservable implements Parcelable {
         this.phone1 = in.readString();
         this.phone2 = in.readString();
         this.fw_uuid = in.readString();
-        this.edtime = (Date) in.readSerializable();
-        this.sttime = (Date) in.readSerializable();
+//        this.edtime = (Date) in.readSerializable();
+//        this.sttime = (Date) in.readSerializable();
     }
 
     public static final Creator<Demographic> CREATOR = new Creator<Demographic>() {
@@ -285,8 +284,8 @@ public class Demographic extends BaseObservable implements Parcelable {
         dest.writeString(this.phone1);
         dest.writeString(this.phone2);
         dest.writeString(this.fw_uuid);
-        dest.writeSerializable(this.edtime);
-        dest.writeSerializable(this.sttime);
+//        dest.writeSerializable(this.edtime);
+//        dest.writeSerializable(this.sttime);
     }
 
     //SPINNERS ENTITY TRIBE

@@ -127,7 +127,7 @@ public class VisitFragment extends Fragment {
             Visit data = viewModel.find(socialgroup.uuid);
             if (data != null) {
                 binding.setVisit(data);
-                binding.getVisit().setVisitDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+//                binding.getVisit().setVisitDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                 if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)){
                     data.respondent = "UNK";
                 }
@@ -207,7 +207,7 @@ public class VisitFragment extends Fragment {
                     finalData.complete =1;
                 }
 
-
+            finalData.visitDate = new Date(System.currentTimeMillis());
             viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 

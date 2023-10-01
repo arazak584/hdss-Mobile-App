@@ -210,6 +210,7 @@ public class DemographicFragment extends Fragment {
             }
 
             finalData.complete=1;
+            //binding.getDemographic().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 

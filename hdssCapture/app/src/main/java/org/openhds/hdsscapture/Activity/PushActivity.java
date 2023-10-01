@@ -716,6 +716,7 @@ public class PushActivity extends AppCompatActivity {
 
                             for (Demographic elem : d) {
                                 elem.complete = 0;
+                                Log.e("PUSH.tag", "Has value " + elem.getSttime());
                             }
                             demographicViewModel.add(d);
 

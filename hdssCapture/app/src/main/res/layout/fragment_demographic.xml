@@ -97,7 +97,7 @@
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:id="@+id/demo_insertDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -339,23 +339,6 @@
                     android:gravity="left"
                     android:spinnerMode="dialog"
                     android:padding="15dp"/>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/attend_you_other"
-                    android:text="@string/attend_you_other">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/st"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={demographic.sttime}"
-                        android:inputType="textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <TextView
