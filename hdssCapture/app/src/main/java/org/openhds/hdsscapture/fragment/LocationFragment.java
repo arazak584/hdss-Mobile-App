@@ -122,9 +122,9 @@ public class LocationFragment extends Fragment {
         // Create a location request with maximum accuracy of 10
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(10000); // 10 seconds
+        locationRequest.setInterval(1000); // 10 seconds
         locationRequest.setFastestInterval(5000); // 5 seconds
-        locationRequest.setSmallestDisplacement(10); // 10 meters
+        locationRequest.setSmallestDisplacement(50); // 10 meters
 
 
         // Get a reference to the progress bar view

@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
@@ -86,25 +87,25 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
         final String status;
 
             if (eventForm.complete == null ) {
-                holder.linearLayout.setBackgroundColor(Color.WHITE);
+                holder.cardView.setBackgroundColor(Color.WHITE);
                  status = NOT_DONE;
             } else if (eventForm.complete != null) {
                 if (eventForm.complete == COMPLETE ) {
-                    holder.linearLayout.setBackgroundColor(Color.GREEN);
+                    holder.cardView.setBackgroundColor(Color.GREEN);
                     holder.textView_status.setTextColor(Color.BLACK);
                     holder.textView_event.setTextColor(Color.BLACK);
                     status = MARKED_COMPLETE;
                 } else if (eventForm.complete == UPDATED) {
-                    holder.linearLayout.setBackgroundColor(Color.YELLOW);
+                    holder.cardView.setBackgroundColor(Color.YELLOW);
                     status = UPDATE;
                 }else {
-                    holder.linearLayout.setBackgroundColor(Color.BLUE);
+                    holder.cardView.setBackgroundColor(Color.BLUE);
                     holder.textView_status.setTextColor(Color.WHITE);
                     holder.textView_event.setTextColor(Color.WHITE);
                     status = SUBMITTED;
                 }
             }else {
-                holder.linearLayout.setBackgroundColor(Color.TRANSPARENT);
+                holder.cardView.setBackgroundColor(Color.TRANSPARENT);
                 status = NOT_DONE;
             }
 
@@ -112,7 +113,7 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
         holder.textView_event.setText(eventForm.event_name);
         holder.textView_form.setText(eventForm.form_name);
         holder.textView_status.setText(status);
-        holder.linearLayout.setOnClickListener(view -> formFactory(individual, residency, locations, socialgroup, eventForm));
+        holder.cardView.setOnClickListener(view -> formFactory(individual, residency, locations, socialgroup, eventForm));
 
     }
 
@@ -226,13 +227,14 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView textView_event, textView_form, textView_status;
         public LinearLayout linearLayout;
+        public CardView cardView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.textView_event = itemView.findViewById(R.id.textView_event);
             this.textView_form = itemView.findViewById(R.id.textView_form);
             this.textView_status = itemView.findViewById(R.id.textView_status);
-            linearLayout = itemView.findViewById(R.id.linearLayout_eventform);
+            cardView = itemView.findViewById(R.id.linearLayout_eventform);
         }
     }
 }

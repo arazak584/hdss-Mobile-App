@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,9 +85,13 @@ public class SocialgroupAdapter extends RecyclerView.Adapter<SocialgroupAdapter.
             public void onClick(View v) {
                 // Get the text field in the IndividualFragment where you want to insert the mother's ID
                 EditText householdIdField = activity.requireActivity().findViewById(R.id.socialgroup_uuid);
+                Spinner compSpinner = activity.requireActivity().findViewById(R.id.membership_complete);
 
-                // Set the mother's ID in the text field
+                // Set the household ID in the text field
                 householdIdField.setText(socialgroup.getUuid());
+                compSpinner.setVisibility(View.VISIBLE);
+                compSpinner.setEnabled(false);
+                compSpinner.setSelection(1);
 
                 // Hide the MotherDialogFragment
                 activity.dismiss();

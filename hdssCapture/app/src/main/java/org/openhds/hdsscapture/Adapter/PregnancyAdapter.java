@@ -78,10 +78,10 @@ public class PregnancyAdapter extends RecyclerView.Adapter<PregnancyAdapter.View
         holder.firstname.setText(pregnancy.firstName);
         holder.lastname.setText(pregnancy.lastName);
 
-        holder.linearLayout.setOnClickListener(v -> {
-            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    PregnancyDialogFragment.newInstance(locations, socialgroup )).commit();
-        });
+//        holder.linearLayout.setOnClickListener(v -> {
+//            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                    PregnancyDialogFragment.newInstance(locations, socialgroup )).commit();
+//        });
     }
 
     @Override

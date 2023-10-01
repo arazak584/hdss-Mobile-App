@@ -157,8 +157,12 @@ public class HouseholdFragment extends Fragment {
             SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             viewModel.add(finalData);
 
-            if (socialgroup.groupName!= null && !"UNK".equals(socialgroup.groupName)){
-                finalData.complete = 1;
+//            if (socialgroup.groupName!= null && !"UNK".equals(socialgroup.groupName)){
+//                finalData.complete = 1;
+//            }
+
+            if (socialgroup.complete== null){
+                finalData.complete = 2;
             }
         }
         if (save) {

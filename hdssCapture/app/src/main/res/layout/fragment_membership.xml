@@ -445,6 +445,25 @@
                     android:textColor="#000301"
                     android:padding="15dp"/>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/rltn_head"
+                    android:text="@string/rltn_head">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/rltn"
+                        android:text="@{Integer.toString(residency.rltn_head)}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
 
@@ -514,6 +533,7 @@
                     android:gravity="left"
                     android:textColor="#000301"
                     android:padding="15dp"/>
+
 
             </LinearLayout>
             </LinearLayout>

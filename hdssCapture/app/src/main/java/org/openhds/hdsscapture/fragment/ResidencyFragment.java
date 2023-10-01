@@ -3,6 +3,7 @@ package org.openhds.hdsscapture.fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
@@ -53,6 +56,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -246,6 +250,7 @@ public class ResidencyFragment extends Fragment {
                 if(dataRes.img ==null){
                     dataRes.img = 2;
                 }
+
                 binding.starttype.setEnabled(false);
                 binding.editTextStartDate.setEnabled(false);
                 binding.residencyImg.setEnabled(false);
@@ -266,6 +271,7 @@ public class ResidencyFragment extends Fragment {
                 dataRes.startType = 1;
                 dataRes.endType = 1;
                 binding.starttype.setEnabled(false);
+                binding.rltn.setVisibility(View.GONE);
 
                 if (dataRes!=null){
                     dataRes.img=1;
@@ -693,8 +699,21 @@ public class ResidencyFragment extends Fragment {
                 return;
             }
 
-            if(finalData.endType==2 || finalData.endType==3){
-                finalData.complete=1;
+            String rltnText = binding.rltn.getText().toString(); // Get the text from TextInputEditText
+            Integer rltnValue = Integer.parseInt(rltnText); // Convert the text to an Integer (assuming it's an Integer)
+
+            if (finalData.endType == 2 || finalData.endType == 3) {
+                finalData.complete = 1;
+            } else if (finalData.complete == null && !finalData.rltn_head.equals(rltnValue)) {
+                finalData.complete = 1;
+            }else if (finalData.complete == null && finalData.endType == 1) {
+                finalData.complete = 2;
+            }else if (finalData.complete != null && finalData.rltn_head.equals(rltnValue) && finalData.complete == 1) {
+                // No action needed, as finalData.complete is already 1
+            } else if (finalData.complete != null && !finalData.rltn_head.equals(rltnValue) && finalData.complete == 2){
+                finalData.complete = 1;
+            }else{
+                finalData.complete = finalData.complete;
             }
 
 //            SocialgroupAmendment socialgroupA = new SocialgroupAmendment();
@@ -709,7 +728,7 @@ public class ResidencyFragment extends Fragment {
 //            socialgroupViewModel.update(socialgroupA);
 //
 //            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
-            finalData.complete=1;
+//            finalData.complete=1;
             viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 

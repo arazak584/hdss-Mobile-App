@@ -188,10 +188,6 @@ public class SocialgroupFragment extends Fragment {
         if (save) {
             Socialgroup finalData = binding.getSocialgroup();
 
-
-            if (finalData.complete != null) {
-
-            }
             finalData.complete=1;
             SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             viewModel.add(finalData);

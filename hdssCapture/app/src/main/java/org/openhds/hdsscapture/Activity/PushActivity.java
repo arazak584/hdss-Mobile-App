@@ -789,12 +789,7 @@ public class PushActivity extends AppCompatActivity {
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
                             d23[0] = dataDeath.getData().toArray(new Death[0]);
-
-                            for (Death elem : d23[0]) {
-                                elem.complete = 0;
-                            }
                             death.add(d23[0]);
-
                             progress.dismiss();
                             buttonSendEnd.setText(
                                     "Death(" + d23[0].length + " of " + listDeath.size() + ")" +
@@ -822,6 +817,9 @@ public class PushActivity extends AppCompatActivity {
             if (datavpm.getData() != null && !datavpm.getData().isEmpty()) {
                 progress.setMessage("Sending " + datavpm.getData().size() + " VPM record(s)...");
 
+                for (Death elem : datavpm.getData()) {
+                    elem.vpmcomplete = 0;
+                }
 
                 final Call<DataWrapper<Death>> c_callable = dao.sendVpmdata(datavpm);
                 c_callable.enqueue(new Callback<DataWrapper<Death>>() {
@@ -830,10 +828,7 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            d24[0] = datavpm.getData().toArray(new Death[0]);
-                            for (Death elem : d24[0]) {
-                                elem.vpmcomplete = 0;
-                            }
+                            d24[0] = response.body().getData().toArray(new Death[0]);
                             vpms.add(d24[0]);
                             progress.dismiss();
                             buttonSendEnd.setText(
