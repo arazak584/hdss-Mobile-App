@@ -270,9 +270,20 @@ public class ResidencyFragment extends Fragment {
                 dataRes.age = individual.getAge();
                 dataRes.startType = 1;
                 dataRes.endType = 1;
-                dataRes.sttime = new Date();
                 binding.starttype.setEnabled(false);
                 binding.rltn.setVisibility(View.GONE);
+
+                Date currentDate = new Date(); // Get the current date and time
+                // Create a Calendar instance and set it to the current date and time
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(currentDate);
+                // Extract the hour, minute, and second components
+                int hh = cal.get(Calendar.HOUR_OF_DAY);
+                int mm = cal.get(Calendar.MINUTE);
+                int ss = cal.get(Calendar.SECOND);
+                // Format the components into a string with leading zeros
+                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
+                dataRes.sttime = timeString;
 
                 if (dataRes!=null){
                     dataRes.img=1;
@@ -349,8 +360,19 @@ public class ResidencyFragment extends Fragment {
                 datadth.deathDate = binding.getResidency().endDate;
                 datadth.vpmcomplete=1;
                 datadth.complete = 1;
-                datadth.sttime = new Date();
                 datadth.househead = socialgroup.getGroupName();
+
+                Date currentDate = new Date(); // Get the current date and time
+                // Create a Calendar instance and set it to the current date and time
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(currentDate);
+                // Extract the hour, minute, and second components
+                int hh = cal.get(Calendar.HOUR_OF_DAY);
+                int mm = cal.get(Calendar.MINUTE);
+                int ss = cal.get(Calendar.SECOND);
+                // Format the components into a string with leading zeros
+                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
+                datadth.sttime = timeString;
 
 
                 binding.setDeath(datadth);
@@ -389,7 +411,18 @@ public class ResidencyFragment extends Fragment {
                 dataimg.visit_uuid = socialgroup.getVisit_uuid();
                 dataimg.recordedDate = binding.getResidency().startDate;
                 dataimg.complete = 1;
-                dataimg.sttime = new Date();
+
+                Date currentDate = new Date(); // Get the current date and time
+                // Create a Calendar instance and set it to the current date and time
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(currentDate);
+                // Extract the hour, minute, and second components
+                int hh = cal.get(Calendar.HOUR_OF_DAY);
+                int mm = cal.get(Calendar.MINUTE);
+                int ss = cal.get(Calendar.SECOND);
+                // Format the components into a string with leading zeros
+                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
+                dataimg.sttime = timeString;
 
                 if (binding.getMig() == null || binding.getMig().individual_uuid == null) {
                     if (dataimg.migType == null) {
@@ -429,7 +462,18 @@ public class ResidencyFragment extends Fragment {
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.recordedDate = binding.getResidency().endDate;
                 data.complete = 1;
-                data.sttime = new Date();
+
+                Date currentDate = new Date(); // Get the current date and time
+                // Create a Calendar instance and set it to the current date and time
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(currentDate);
+                // Extract the hour, minute, and second components
+                int hh = cal.get(Calendar.HOUR_OF_DAY);
+                int mm = cal.get(Calendar.MINUTE);
+                int ss = cal.get(Calendar.SECOND);
+                // Format the components into a string with leading zeros
+                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
+                data.sttime = timeString;
 
 
                 binding.setOutmigration(data);
@@ -645,8 +689,19 @@ public class ResidencyFragment extends Fragment {
                     }
 
                     final Death dth = binding.getDeath();
+                    Date end = new Date(); // Get the current date and time
+                    // Create a Calendar instance and set it to the current date and time
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(end);
+                    // Extract the hour, minute, and second components
+                    int hh = cal.get(Calendar.HOUR_OF_DAY);
+                    int mm = cal.get(Calendar.MINUTE);
+                    int ss = cal.get(Calendar.SECOND);
+                    // Format the components into a string with leading zeros
+                    String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
+
                     if (dth.sttime !=null && dth.edtime==null){
-                        dth.edtime = new Date();
+                        dth.edtime = endtime;
                     }
                     dth.complete = 1;
                     deathViewModel.add(dth);
@@ -683,8 +738,19 @@ public class ResidencyFragment extends Fragment {
                     }
 
                     final Inmigration img = binding.getInmigration();
+                    Date end = new Date(); // Get the current date and time
+                    // Create a Calendar instance and set it to the current date and time
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(end);
+                    // Extract the hour, minute, and second components
+                    int hh = cal.get(Calendar.HOUR_OF_DAY);
+                    int mm = cal.get(Calendar.MINUTE);
+                    int ss = cal.get(Calendar.SECOND);
+                    // Format the components into a string with leading zeros
+                    String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
+
                     if (img.sttime !=null && img.edtime==null){
-                        img.edtime = new Date();
+                        img.edtime = endtime;
                     }
                     img.complete = 1;
                     inmigrationViewModel.add(img);
@@ -703,8 +769,19 @@ public class ResidencyFragment extends Fragment {
                     }
 
                     final Outmigration omg = binding.getOutmigration();
+                    Date end = new Date(); // Get the current date and time
+                    // Create a Calendar instance and set it to the current date and time
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(end);
+                    // Extract the hour, minute, and second components
+                    int hh = cal.get(Calendar.HOUR_OF_DAY);
+                    int mm = cal.get(Calendar.MINUTE);
+                    int ss = cal.get(Calendar.SECOND);
+                    // Format the components into a string with leading zeros
+                    String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
+
                     if (omg.sttime !=null && omg.edtime==null){
-                        omg.edtime = new Date();
+                        omg.edtime = endtime;
                     }
                     omg.complete = 1;
                     outmigrationViewModel.add(omg);
@@ -748,8 +825,19 @@ public class ResidencyFragment extends Fragment {
 //
 //            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 //            finalData.complete=1;
+            Date end = new Date(); // Get the current date and time
+            // Create a Calendar instance and set it to the current date and time
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(end);
+            // Extract the hour, minute, and second components
+            int hh = cal.get(Calendar.HOUR_OF_DAY);
+            int mm = cal.get(Calendar.MINUTE);
+            int ss = cal.get(Calendar.SECOND);
+            // Format the components into a string with leading zeros
+            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
+
             if (finalData.sttime !=null && finalData.edtime==null){
-                finalData.edtime = new Date();
+                finalData.edtime = endtime;
             }
             viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();

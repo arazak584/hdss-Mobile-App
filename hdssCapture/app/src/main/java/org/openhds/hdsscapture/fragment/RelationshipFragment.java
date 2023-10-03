@@ -193,7 +193,18 @@ public class RelationshipFragment extends Fragment {
 
                 data.individualA_uuid = individual.getUuid();
                 data.dob = individual.dob;
-                data.sttime = new Date();
+
+                Date currentDate = new Date(); // Get the current date and time
+                // Create a Calendar instance and set it to the current date and time
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(currentDate);
+                // Extract the hour, minute, and second components
+                int hh = cal.get(Calendar.HOUR_OF_DAY);
+                int mm = cal.get(Calendar.MINUTE);
+                int ss = cal.get(Calendar.SECOND);
+                // Format the components into a string with leading zeros
+                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
+                data.sttime = timeString;
 
 
                 binding.setRelationship(data);
@@ -298,8 +309,19 @@ public class RelationshipFragment extends Fragment {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
                 return;
             }
+            Date end = new Date(); // Get the current date and time
+            // Create a Calendar instance and set it to the current date and time
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(end);
+            // Extract the hour, minute, and second components
+            int hh = cal.get(Calendar.HOUR_OF_DAY);
+            int mm = cal.get(Calendar.MINUTE);
+            int ss = cal.get(Calendar.SECOND);
+            // Format the components into a string with leading zeros
+            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
+
             if (finalData.sttime !=null && finalData.edtime==null){
-                finalData.edtime = new Date();
+                finalData.edtime = endtime;
             }
             finalData.complete=1;
             viewModel.add(finalData);
