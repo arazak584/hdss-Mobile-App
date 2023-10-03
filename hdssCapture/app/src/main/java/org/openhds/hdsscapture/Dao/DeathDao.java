@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import org.openhds.hdsscapture.entity.Death;
+import org.openhds.hdsscapture.entity.Locations;
 
 import java.util.Date;
 import java.util.List;
@@ -40,4 +41,7 @@ public interface DeathDao {
     @Query("SELECT COUNT(*) FROM death a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username AND a.complete IS NOT NULL")
     long count(Date startDate, Date endDate, String username);
+
+    @Query("SELECT * FROM death WHERE insertDate > (SELECT startDate FROM round LIMIT 1) AND complete IS NOT NULL order by insertDate DESC")
+    List<Death> repo();
 }
