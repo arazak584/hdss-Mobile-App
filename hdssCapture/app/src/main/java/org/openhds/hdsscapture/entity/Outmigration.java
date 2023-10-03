@@ -68,10 +68,10 @@ public class Outmigration extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "complete")
     public Integer complete;
     @Expose
-    public Date sttime;
+    public String sttime;
 
     @Expose
-    public Date edtime;
+    public String edtime;
 
     public Outmigration(){}
 
@@ -89,27 +89,19 @@ public class Outmigration extends BaseObservable implements Parcelable {
     }
 
     public String getSttime() {
-        if (sttime == null) return null;
-        return f.format(sttime);
+        return sttime;
     }
 
     public void setSttime(String sttime) {
-        try {
-            this.sttime = f.parse(sttime);
-        } catch (ParseException e) {
-        }
+        this.sttime = sttime;
     }
 
     public String getEdtime() {
-        if (edtime == null) return null;
-        return f.format(edtime);
+        return edtime;
     }
 
     public void setEdtime(String edtime) {
-        try {
-            this.edtime = f.parse(edtime);
-        } catch (ParseException e) {
-        }
+        this.edtime = edtime;
     }
     @NotNull
     public String getIndividual_uuid() {

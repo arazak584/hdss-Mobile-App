@@ -406,11 +406,10 @@ public class HdssSociodemo extends BaseObservable {
     @Expose
     public Integer drink_oecoccur;
     @Expose
-    public Date sttime;
+    public String sttime;
 
     @Expose
-    public Date edtime;
-
+    public String edtime;
 
     public HdssSociodemo() {
     }
@@ -425,27 +424,19 @@ public class HdssSociodemo extends BaseObservable {
     }
 
     public String getSttime() {
-        if (sttime == null) return null;
-        return f.format(sttime);
+        return sttime;
     }
 
     public void setSttime(String sttime) {
-        try {
-            this.sttime = f.parse(sttime);
-        } catch (ParseException e) {
-        }
+        this.sttime = sttime;
     }
 
     public String getEdtime() {
-        if (edtime == null) return null;
-        return f.format(edtime);
+        return edtime;
     }
 
     public void setEdtime(String edtime) {
-        try {
-            this.edtime = f.parse(edtime);
-        } catch (ParseException e) {
-        }
+        this.edtime = edtime;
     }
 
     public String getSocialgroup_uuid() {

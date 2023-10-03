@@ -10,9 +10,6 @@
             name="demographic"
             type="org.openhds.hdsscapture.entity.Demographic" />
 
-        <variable
-            name="individual"
-            type="org.openhds.hdsscapture.entity.Individual" />
 
     </data>
 

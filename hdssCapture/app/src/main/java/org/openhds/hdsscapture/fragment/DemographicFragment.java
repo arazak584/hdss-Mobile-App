@@ -31,8 +31,10 @@ import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -126,20 +128,32 @@ public class DemographicFragment extends Fragment {
             if (data != null) {
                 binding.setDemographic(data);
                 binding.getDemographic().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-                data.individual_uuid = individual.getUuid();
+                //data.individual_uuid = individual.getUuid();
                 if(data.phone1 !=null){
                     data.phone=1;
                 }
             } else {
                 data = new Demographic();
-
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.individual_uuid = individual.getUuid();
                 data.phone = 1;
-                data.sttime = new Date();
+                //data.sttime = new Date();
+
+                Date currentDate = new Date(); // Get the current date and time
+                // Create a Calendar instance and set it to the current date and time
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(currentDate);
+                // Extract the hour, minute, and second components
+                int hh = cal.get(Calendar.HOUR_OF_DAY);
+                int mm = cal.get(Calendar.MINUTE);
+                int ss = cal.get(Calendar.SECOND);
+                // Format the components into a string with leading zeros
+                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
+                data.sttime = timeString;
 
                 binding.setDemographic(data);
                 binding.getDemographic().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                //binding.getDemographic().setSttime(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date()));
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -205,8 +219,19 @@ public class DemographicFragment extends Fragment {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
                 return;
             }
+            Date end = new Date(); // Get the current date and time
+            // Create a Calendar instance and set it to the current date and time
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(end);
+            // Extract the hour, minute, and second components
+            int hh = cal.get(Calendar.HOUR_OF_DAY);
+            int mm = cal.get(Calendar.MINUTE);
+            int ss = cal.get(Calendar.SECOND);
+            // Format the components into a string with leading zeros
+            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
+
             if (finalData.sttime !=null && finalData.edtime==null){
-                finalData.edtime = new Date();
+                finalData.edtime = endtime;
             }
 
             finalData.complete=1;

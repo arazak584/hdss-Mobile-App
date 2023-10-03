@@ -3,6 +3,7 @@ package org.openhds.hdsscapture.entity;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
@@ -37,10 +38,10 @@ public class Demographic extends BaseObservable implements Parcelable {
     public Date insertDate;
 
     @Expose
-    public Date sttime;
+    public String sttime;
 
     @Expose
-    public Date edtime;
+    public String edtime;
 
     @Expose
     public Integer religion;
@@ -99,30 +100,6 @@ public class Demographic extends BaseObservable implements Parcelable {
     private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
     @Ignore
     private transient final SimpleDateFormat z = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
-
-    public String getSttime() {
-        if (sttime == null) return null;
-        return z.format(sttime);
-    }
-
-    public void setSttime(String sttime) {
-        try {
-            this.sttime = z.parse(sttime);
-        } catch (ParseException e) {
-        }
-    }
-
-    public String getEdtime() {
-        if (edtime == null) return null;
-        return z.format(edtime);
-    }
-
-    public void setEdtime(String edtime) {
-        try {
-            this.edtime = z.parse(edtime);
-        } catch (ParseException e) {
-        }
-    }
 
     @Bindable
     public String getInsertDate() {
@@ -238,6 +215,22 @@ public class Demographic extends BaseObservable implements Parcelable {
 
     public void setOccupation_oth(String occupation_oth) {
         this.occupation_oth = occupation_oth;
+    }
+
+    public String getSttime() {
+        return sttime;
+    }
+
+    public void setSttime(String sttime) {
+        this.sttime = sttime;
+    }
+
+    public String getEdtime() {
+        return edtime;
+    }
+
+    public void setEdtime(String edtime) {
+        this.edtime = edtime;
     }
 
     protected Demographic(Parcel in) {
