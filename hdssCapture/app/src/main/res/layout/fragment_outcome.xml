@@ -804,62 +804,6 @@
                         android:inputType="number"
                         android:text="@={pregoutcome.l_birth}" />
 
-                    <TextView
-                        goneUnless="@{pregoutcome1.type==1 || pregoutcome2.type==1 || pregoutcome3.type==1 || pregoutcome4.type==1}"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:textColor="@color/black"
-                        android:text="@string/chd_weight"/>
-
-                    <Spinner
-                        goneUnless="@{pregoutcome1.type==1 || pregoutcome2.type==1 || pregoutcome3.type==1 || pregoutcome4.type==1}"
-                        android:id="@+id/chd_weight"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:spinnerMode="dialog"
-                        selection="@{pregoutcome.chd_weight}"
-                        android:onItemSelected="@{pregoutcome::setChd_weight}"
-                        android:padding="10dp"/>
-
-                    <TextView
-                        goneUnless="@{pregoutcome1.type==1 || pregoutcome2.type==1 || pregoutcome3.type==1 || pregoutcome4.type==1}"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:textColor="@color/black"
-                        android:text="@string/chd_size"/>
-
-                    <Spinner
-                        goneUnless="@{pregoutcome1.type==1 || pregoutcome2.type==1 || pregoutcome3.type==1 || pregoutcome4.type==1}"
-                        android:id="@+id/chd_size"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:spinnerMode="dialog"
-                        selection="@{pregoutcome.chd_size}"
-                        android:onItemSelected="@{pregoutcome::setChd_size}"
-                        android:padding="10dp"/>
-
-                    <TextView
-                        goneUnless="@{pregoutcome.chd_weight==1}"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="@string/weig_hcard" />
-
-                    <EditText
-                        goneUnless="@{pregoutcome.chd_weight==1}"
-                        android:id="@+id/weig_hcard"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:ems="10"
-                        android:inputType="numberDecimal"
-                        android:text="@={pregoutcome.weig_hcard}" />
-
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                         android:layout_width="match_parent"

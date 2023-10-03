@@ -248,6 +248,62 @@
             android:padding="10dp"
             android:spinnerMode="dialog" />
 
+        <TextView
+            goneUnless="@{pregoutcome2.type==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="@string/chd_weight"/>
+
+        <Spinner
+            goneUnless="@{pregoutcome2.type==1}"
+            android:id="@+id/chd_weight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:spinnerMode="dialog"
+            selection="@{pregoutcome2.chd_weight}"
+            android:onItemSelected="@{pregoutcome2::setChd_weight}"
+            android:padding="10dp"/>
+
+        <TextView
+            goneUnless="@{pregoutcome2.chd_weight==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="@string/weig_hcard" />
+
+        <EditText
+            goneUnless="@{pregoutcome2.chd_weight==1}"
+            android:id="@+id/weig_hcard"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text="@={pregoutcome2.weig_hcard}" />
+
+        <TextView
+            goneUnless="@{pregoutcome2.type==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="@string/chd_size"/>
+
+        <Spinner
+            goneUnless="@{pregoutcome2.type==1}"
+            android:id="@+id/chd_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:spinnerMode="dialog"
+            selection="@{pregoutcome2.chd_size}"
+            android:onItemSelected="@{pregoutcome2::setChd_size}"
+            android:padding="10dp"/>
+
     </LinearLayout>
 
 </layout>

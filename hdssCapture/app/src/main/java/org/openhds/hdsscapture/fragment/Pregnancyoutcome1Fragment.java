@@ -740,16 +740,22 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         loadCodeData(binding.firstNb, codeBookViewModel, "complete");
         loadCodeData(binding.recAnc, codeBookViewModel, "yn_anc");
         loadCodeData(binding.recIpt, codeBookViewModel, "complete");
-        loadCodeData(binding.chdWeight, codeBookViewModel, "complete");
         loadCodeData(binding.assDel, codeBookViewModel, "assist");
         loadCodeData(binding.howDel, codeBookViewModel, "howdel");
         loadCodeData(binding.whereAnc, codeBookViewModel, "birthPlace");
         loadCodeData(binding.whoAnc, codeBookViewModel, "assist");
-        loadCodeData(binding.chdSize, codeBookViewModel, "size");
         loadCodeData(binding.individualComplete, codeBookViewModel, "submit");
         loadCodeData(binding.vpm.dthDeathPlace, codeBookViewModel, "deathPlace");
         loadCodeData(binding.vpm.dthDeathCause, codeBookViewModel, "deathCause");
         loadCodeData(binding.father, codeBookViewModel, "complete");
+        loadCodeData(binding.childFetus1.chdWeight, codeBookViewModel, "complete");
+        loadCodeData(binding.childFetus1.chdSize, codeBookViewModel, "size");
+        loadCodeData(binding.childFetus2.chdWeight, codeBookViewModel, "complete");
+        loadCodeData(binding.childFetus2.chdSize, codeBookViewModel, "size");
+        loadCodeData(binding.childFetus3.chdWeight, codeBookViewModel, "complete");
+        loadCodeData(binding.childFetus3.chdSize, codeBookViewModel, "size");
+        loadCodeData(binding.childFetus4.chdWeight, codeBookViewModel, "complete");
+        loadCodeData(binding.childFetus4.chdSize, codeBookViewModel, "size");
 
 
         binding.buttonSaveClose.setOnClickListener(v -> {
@@ -852,18 +858,6 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 }
             }
 
-            boolean weight = false;
-            if (finalData.chd_weight!=null && finalData.chd_weight == 1 && !binding.weigHcard.getText().toString().trim().isEmpty()) {
-                double childWeight = Double.parseDouble(binding.weigHcard.getText().toString().trim());
-                if (childWeight < 1.5 || childWeight > 4.5) {
-                    weight = true;
-                    binding.weigHcard.setError("Child Weight Cannot be More than 4.5 Kilograms");
-                    Toast.makeText(getContext(), "Child Weight Cannot be More than 4.5 Kilograms", Toast.LENGTH_LONG).show();
-                    return;
-                }
-            }
-
-
             try {
                 if (!binding.lastPreg.getText().toString().trim().isEmpty() && !binding.editTextOutcomeDate.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -931,6 +925,17 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus1.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome1();
+
+                    boolean weight = false;
+                    if (inf.chd_weight!=null && inf.chd_weight == 1 && !binding.childFetus1.weigHcard.getText().toString().trim().isEmpty()) {
+                        double childWeight = Double.parseDouble(binding.childFetus1.weigHcard.getText().toString().trim());
+                        if (childWeight < 1.5 || childWeight > 4.5) {
+                            weight = true;
+                            binding.childFetus1.weigHcard.setError("Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5");
+                            Toast.makeText(getContext(), "Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
@@ -983,6 +988,17 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus2.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome2();
+
+                    boolean weight = false;
+                    if (inf.chd_weight!=null && inf.chd_weight == 1 && !binding.childFetus2.weigHcard.getText().toString().trim().isEmpty()) {
+                        double childWeight = Double.parseDouble(binding.childFetus2.weigHcard.getText().toString().trim());
+                        if (childWeight < 1.5 || childWeight > 4.5) {
+                            weight = true;
+                            binding.childFetus2.weigHcard.setError("Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5");
+                            Toast.makeText(getContext(), "Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
@@ -1036,6 +1052,17 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus3.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome3();
+
+                    boolean weight = false;
+                    if (inf.chd_weight!=null && inf.chd_weight == 1 && !binding.childFetus3.weigHcard.getText().toString().trim().isEmpty()) {
+                        double childWeight = Double.parseDouble(binding.childFetus3.weigHcard.getText().toString().trim());
+                        if (childWeight < 1.5 || childWeight > 4.5) {
+                            weight = true;
+                            binding.childFetus3.weigHcard.setError("Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5");
+                            Toast.makeText(getContext(), "Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
@@ -1088,6 +1115,17 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus4.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome4();
+
+                    boolean weight = false;
+                    if (inf.chd_weight!=null && inf.chd_weight == 1 && !binding.childFetus4.weigHcard.getText().toString().trim().isEmpty()) {
+                        double childWeight = Double.parseDouble(binding.childFetus4.weigHcard.getText().toString().trim());
+                        if (childWeight < 1.5 || childWeight > 4.5) {
+                            weight = true;
+                            binding.childFetus4.weigHcard.setError("Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5");
+                            Toast.makeText(getContext(), "Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;

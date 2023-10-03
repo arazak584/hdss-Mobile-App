@@ -89,7 +89,12 @@ public class Outcome extends BaseObservable {
     @Expose
     public Integer rltn_head;
 
-
+    @Expose
+    public Integer chd_weight;//Was the child weighed at birth?
+    @Expose
+    public Integer chd_size;//How much did the child weigh (estimated baby size)
+    @Expose
+    public String weig_hcard;//Record weight in kilograms from Health Card
 
     public Outcome(){}
 
@@ -172,6 +177,32 @@ public class Outcome extends BaseObservable {
         this.preg_uuid = preg_uuid;
     }
 
+    public Integer getChd_weight() {
+        return chd_weight;
+    }
+
+    public void setChd_weight(Integer chd_weight) {
+        this.chd_weight = chd_weight;
+    }
+
+    public Integer getChd_size() {
+        return  chd_size;
+    }
+
+    public void setChd_size(Integer chd_size) {
+
+        this.chd_size = chd_size ;
+
+    }
+
+    public String getWeig_hcard() {
+        return weig_hcard;
+    }
+
+    public void setWeig_hcard(String weig_hcard) {
+        this.weig_hcard = weig_hcard;
+    }
+
     //SPINNERS ENTITY
     public void setType(AdapterView<?> parent, View view, int position, long id) {
 
@@ -223,5 +254,57 @@ public class Outcome extends BaseObservable {
 
     }
 
+    //During the time that you were pregnant, did you receive IPT infront of a nurse?
+    public void setChd_weight(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            chd_weight = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            chd_weight = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+
+    }
+
+    //During the time that you were pregnant, did you receive IPT infront of a nurse?
+    public void setChd_size(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            chd_size = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            chd_size = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    private void patternSkipper(View view) {
+
+        if (view != null) {
+
+            if(chd_weight == null || chd_weight!=1){
+                setWeig_hcard(null);
+            }
+
+            if(type == null || type!=1){
+                setWeig_hcard(null);
+                setChd_size(null);
+                setChd_weight(null);
+            }
+
+            notifyPropertyChanged(BR._all);
+        }
+    }
 
 }
