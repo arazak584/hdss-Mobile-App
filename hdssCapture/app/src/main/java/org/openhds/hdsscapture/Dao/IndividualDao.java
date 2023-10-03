@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 
@@ -181,6 +182,9 @@ public interface IndividualDao {
     @Query("SELECT b.* FROM individual as a LEFT JOIN individual as b on a.father_uuid=b.uuid" +
             " where a.uuid=:id")
     Individual father(String id);
+
+    @Query("SELECT * FROM individual WHERE insertDate > (SELECT startDate FROM round LIMIT 1) order by insertDate DESC")
+    List<Individual> repo();
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

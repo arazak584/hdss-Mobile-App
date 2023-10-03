@@ -4,6 +4,7 @@ import android.app.Application;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.IndividualDao;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 
@@ -223,6 +224,14 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public List<Individual> repo() throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.repo();
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
 
 
 }
