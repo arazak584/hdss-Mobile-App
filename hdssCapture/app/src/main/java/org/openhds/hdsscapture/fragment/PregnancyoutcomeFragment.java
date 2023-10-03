@@ -902,8 +902,6 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 if (finalData.numberofBirths >= 1) {
 
-
-
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus1.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome1();
