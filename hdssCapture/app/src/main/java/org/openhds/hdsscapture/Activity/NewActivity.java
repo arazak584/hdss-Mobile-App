@@ -98,33 +98,33 @@ public class NewActivity extends AppCompatActivity {
                 d++;
             }
 
-            int g=1;
-            for (Death e : deathViewModel.repo()) {
-                String formattedDate = f.format(e.insertDate);
-                Newloc r1 = new Newloc();
-                r1.id1 = g + ". Death";
-                r1.id2 = "" + e.extId + " - " + e.compno;
-                r1.id3 = "" + e.firstName + " " + e.lastName;
-                r1.id4 = "" + formattedDate;
-                r1.index = g;
-
-                list.add(r1);
-                g++;
-            }
-
-            int h=1;
-            for (Individual e : individualViewModel.repo()) {
-                String formattedDate = f.format(e.insertDate);
-                Newloc r1 = new Newloc();
-                r1.id1 = h + ". Individual";
-                r1.id2 = "" + e.extId ;
-                r1.id3 = "" + e.firstName + " " + e.lastName;
-                r1.id4 = "" + formattedDate;
-                r1.index = h;
-
-                list.add(r1);
-                h++;
-            }
+//            int g=1;
+//            for (Death e : deathViewModel.repo()) {
+//                String formattedDate = f.format(e.insertDate);
+//                Newloc r1 = new Newloc();
+//                r1.id1 = g + ". Death";
+//                r1.id2 = "" + e.extId + " - " + e.compno;
+//                r1.id3 = "" + e.firstName + " " + e.lastName;
+//                r1.id4 = "" + formattedDate;
+//                r1.index = g;
+//
+//                list.add(r1);
+//                g++;
+//            }
+//
+//            int h=1;
+//            for (Individual e : individualViewModel.repo()) {
+//                String formattedDate = f.format(e.insertDate);
+//                Newloc r1 = new Newloc();
+//                r1.id1 = h + ". Individual";
+//                r1.id2 = "" + e.extId ;
+//                r1.id3 = "" + e.firstName + " " + e.lastName;
+//                r1.id4 = "" + formattedDate;
+//                r1.index = h;
+//
+//                list.add(r1);
+//                h++;
+//            }
 
 
 
