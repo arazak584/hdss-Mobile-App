@@ -2240,30 +2240,40 @@ public class PullActivity extends AppCompatActivity {
 
 
         final Button button_Complete = findViewById(R.id.button_Complete);
-        final TextView textView_Complete = findViewById(R.id.textView_Complete);
+//        final TextView textView_Complete = findViewById(R.id.textView_Complete);
         button_Complete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ProgressDialog progressDialog = new ProgressDialog(PullActivity.this);
-                progressDialog.setMessage("Completing Files...");
-                progressDialog.setIndeterminate(true);
-                progressDialog.setCancelable(false);
-                progressDialog.show();
+                final ProgressBar progressBar = findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.VISIBLE); // Show the progress bar
 
-                File cacheDir = getExternalCacheDir();
-                if (cacheDir != null && cacheDir.isDirectory()) {
-                    File[] files = cacheDir.listFiles();
-                    for (File file : files) {
-                        String fileName = file.getName();
-                        if (fileName.endsWith(".zip") || fileName.endsWith(".csv")) {
-                            file.delete();
+                // Move the file deletion logic to a background thread
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        File cacheDir = getExternalCacheDir();
+                        if (cacheDir != null && cacheDir.isDirectory()) {
+                            File[] files = cacheDir.listFiles();
+                            for (File file : files) {
+                                String fileName = file.getName();
+                                if (fileName.endsWith(".zip") || fileName.endsWith(".csv")) {
+                                    file.delete();
+                                }
+                            }
                         }
-                    }
-                }
 
-                progressDialog.dismiss();
+                        // Update the UI from the background thread
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                progressBar.setVisibility(View.GONE); // Hide the progress bar
+                            }
+                        });
+                    }
+                }).start();
             }
         });
+
 
 
     }

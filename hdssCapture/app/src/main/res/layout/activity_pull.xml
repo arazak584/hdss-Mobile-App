@@ -273,6 +273,13 @@
             android:backgroundTint="@color/white"
             android:layout_gravity="center" />
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
         <TextView
             android:id="@+id/textView_Complete"
             android:layout_width="match_parent"
