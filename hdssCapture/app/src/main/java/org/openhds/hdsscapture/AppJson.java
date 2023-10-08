@@ -20,7 +20,7 @@ public class AppJson {
 
     private static volatile AppJson INSTANCE;
 
-    private static final String DEFAULT_BASE_URL = "http://ksurvey.org:1100";
+    private static final String DEFAULT_BASE_URL = "http://ksurvey.org:9900";
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService jsonWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
