@@ -2,10 +2,12 @@ package org.openhds.hdsscapture.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,6 +64,13 @@ public class DemographicFragment extends Fragment {
     private EventForm eventForm;
     private Demographic demographic;
 
+    private TextView stopwatchTextView;
+    private Button startPauseButton;
+    private CountDownTimer stopwatchTimer;
+    private long startTimeInMillis;
+    private long pausedTimeInMillis;
+    private boolean isStopwatchRunning = false;
+
     public DemographicFragment() {
         // Required empty public constructor
     }
@@ -109,6 +118,18 @@ public class DemographicFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentDemographicBinding.inflate(inflater, container, false);
         binding.setDemographic(demographic);
+
+        stopwatchTextView = binding.getRoot().findViewById(R.id.stopwatchTextView);
+
+        // Set an OnClickListener for a start/pause button
+        //Button startPauseButton = binding.getRoot().findViewById(R.id.startPauseButton);
+        startPauseButton = binding.getRoot().findViewById(R.id.startPauseButton);
+        startPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleStopwatch();
+            }
+        });
 
 
         //final TextView compno = binding.getRoot().findViewById(R.id.textView2_extid);
@@ -181,6 +202,60 @@ public class DemographicFragment extends Fragment {
         Handler.colorLayouts(requireContext(), binding.DEMOGRAPHICLAYOUT);
         View view = binding.getRoot();
         return view;
+    }
+
+    private void toggleStopwatch() {
+        if (isStopwatchRunning) {
+            pauseStopwatch();
+        } else {
+            startStopwatch();
+        }
+    }
+
+    private void startStopwatch() {
+        if (!isStopwatchRunning) {
+            if (pausedTimeInMillis > 0) {
+                startTimeInMillis = System.currentTimeMillis() - pausedTimeInMillis;
+            } else {
+                startTimeInMillis = System.currentTimeMillis();
+            }
+
+            stopwatchTimer = new CountDownTimer(Long.MAX_VALUE, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    updateStopwatchText();
+                }
+
+                @Override
+                public void onFinish() {
+                    // Handle stopwatch completion
+                }
+            }.start();
+
+            isStopwatchRunning = true;
+            startPauseButton.setText("Pause");
+        }
+    }
+
+    private void pauseStopwatch() {
+        if (isStopwatchRunning) {
+            stopwatchTimer.cancel();
+            pausedTimeInMillis = System.currentTimeMillis() - startTimeInMillis;
+            isStopwatchRunning = false;
+            startPauseButton.setText("Start");
+        }
+    }
+
+    private void updateStopwatchText() {
+        long currentTimeInMillis = System.currentTimeMillis();
+        long elapsedTimeInMillis = currentTimeInMillis - startTimeInMillis;
+
+        int seconds = (int) (elapsedTimeInMillis / 1000) % 60;
+        int minutes = (int) ((elapsedTimeInMillis / (1000 * 60)) % 60);
+        int hours = (int) ((elapsedTimeInMillis / (1000 * 60 * 60)) % 24);
+
+        String timeString = String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
+        stopwatchTextView.setText(timeString);
     }
 
     private void save(boolean save, boolean close, DemographicViewModel viewModel) {

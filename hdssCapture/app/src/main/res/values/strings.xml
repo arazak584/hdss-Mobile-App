@@ -628,6 +628,7 @@
     <string name="livestock_yn">Do you rear livestock?</string>
     <string name="acres">What is the size of your farm? (in acres)</string>
     <string name="new_event">New Events</string>
+    <string name="stopwatch">START WATCH</string>
 
     //SocioDemo End
 

@@ -32,6 +32,14 @@
             android:textSize="30sp"
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/stopwatchTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="00:00:00"
+            android:textSize="24sp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -47,6 +55,7 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textAlignment="center"/>
+
     </LinearLayout>
 
         <View
@@ -92,6 +101,18 @@
                     android:text="@string/visitDate"
                     tools:ignore="DuplicateSpeakableTextCheck"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
+
+
+
+                <Button
+                    android:id="@+id/startPauseButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="15dp"
+                    android:text="Start"
+                    android:textSize="18sp"/>
+
 
                 <TextView
                     android:visibility="visible"
