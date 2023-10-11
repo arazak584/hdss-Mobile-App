@@ -68,6 +68,11 @@ public class Visit extends BaseObservable implements Parcelable {
 
     @Expose
     public Integer complete;
+    @Expose
+    public String sttime;
+
+    @Expose
+    public String edtime;
 
     public Visit(){}
 
@@ -164,6 +169,21 @@ public class Visit extends BaseObservable implements Parcelable {
 
     public void setSocialgroup_uuid(String socialgroup_uuid) {
         this.socialgroup_uuid = socialgroup_uuid;
+    }
+    public String getSttime() {
+        return sttime;
+    }
+
+    public void setSttime(String sttime) {
+        this.sttime = sttime;
+    }
+
+    public String getEdtime() {
+        return edtime;
+    }
+
+    public void setEdtime(String edtime) {
+        this.edtime = edtime;
     }
 
     protected Visit(Parcel in) {
