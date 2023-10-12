@@ -197,7 +197,7 @@ public class ErrorActivity extends AppCompatActivity {
             for (Outcome e : outcomeViewModel.error()) {
                 //String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
-                r1.name = "Outcome " ;
+                r1.name = "" + e.mother_uuid;
                 r1.extid = "PermID" + " " + e.extId;
                 if (e.extId != null && e.extId.length() >= 9) {
                     r1.date = "Compno" + " " + e.extId.substring(0, 9); // Extract the first nine characters of extId
