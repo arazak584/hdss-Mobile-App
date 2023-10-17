@@ -315,6 +315,37 @@ public class LocationFragment extends Fragment {
                     val = true;
                     return;
                 }
+
+                boolean khd = false;
+                String regex = "[A-Z]{2}\\d{4}"; // Two uppercase letters followed by four digits
+                String regnn = "[A-Z]{3}\\d{3}"; // Three uppercase letters followed by three digits
+                String regdd = "[A-Z]{4}\\d{3}"; // Four uppercase letters followed by three digits
+
+                if (!binding.locationcompno.getText().toString().trim().isEmpty() && binding.getLocations().site == 1) {
+                    String input = binding.locationcompno.getText().toString().trim();
+                    if (!input.matches(regex)) {
+                        khd = true;
+                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
+                        binding.locationcompno.setError("Compound Number format is incorrect");
+                        return;
+                    }
+                } else if (!binding.locationcompno.getText().toString().trim().isEmpty() && binding.getLocations().site == 2) {
+                    String input = binding.locationcompno.getText().toString().trim();
+                    if (!input.matches(regnn)) {
+                        khd = true;
+                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
+                        binding.locationcompno.setError("Compound Number format is incorrect");
+                        return;
+                    }
+                } else if (!binding.locationcompno.getText().toString().trim().isEmpty() && binding.getLocations().site == 3) {
+                    String input = binding.locationcompno.getText().toString().trim();
+                    if (!input.matches(regdd)) {
+                        khd = true;
+                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
+                        binding.locationcompno.setError("Compound Number format is incorrect");
+                        return;
+                    }
+                }
             }
 
 
