@@ -28,7 +28,7 @@ public interface DuplicateDao {
     @Query("SELECT * FROM duplicate WHERE complete=1")
     List<Duplicate> retrieveSync();
 
-    @Query("SELECT * FROM duplicate where individual_uuid=:id")
+    @Query("SELECT * FROM duplicate where individual_uuid=:id limit 1")
     Duplicate find(String id);
 
 }

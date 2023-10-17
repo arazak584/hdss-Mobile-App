@@ -27,6 +27,7 @@ import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
@@ -36,6 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -108,8 +110,10 @@ public class DupFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentDupBinding.inflate(inflater, container, false);
 
-        Button showDialogButton = binding.getRoot().findViewById(R.id.button_dup);
+        final Intent i = getActivity().getIntent();
+        final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
+        Button showDialogButton = binding.getRoot().findViewById(R.id.button_dup);
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
         ind.setText(individual.firstName + " " + individual.lastName);
 
@@ -138,8 +142,6 @@ public class DupFragment extends Fragment {
             }
         });
 
-        final Intent i = getActivity().getIntent();
-        final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
         DuplicateViewModel viewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
         try {
@@ -197,6 +199,12 @@ public class DupFragment extends Fragment {
             Duplicate finalData = binding.getDup();
 
             boolean sameID = false;
+            boolean dup1 = false;
+            boolean dup2 = false;
+            boolean dup3 = false;
+
+            final Intent i = getActivity().getIntent();
+            final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
             if (binding.uuid.getText().toString().trim().equals(binding.dupUuid.getText().toString().trim())) {
                 sameID = true;
@@ -213,6 +221,67 @@ public class DupFragment extends Fragment {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
                 return;
             }
+
+            if (finalData.numberofdup != null) {
+
+                if (finalData.numberofdup >= 1) {
+
+                    if (binding.uuid.getText().toString().trim().equals(binding.dupUuid.getText().toString().trim())) {
+                        dup1 = true;
+                        binding.dupFname.setError("Same Individual Selected as Duplicate");
+                        Toast.makeText(requireContext(), "Same Individual Selected as Duplicate", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                }
+
+                if (finalData.numberofdup >= 2) {
+
+                    if (binding.uuid.getText().toString().trim().equals(binding.dup1Uuid.getText().toString().trim())) {
+                        dup1 = true;
+                        binding.dup1Fname.setError("Same Individual Selected as Duplicate");
+                        Toast.makeText(requireContext(), "Same Individual Selected as Duplicate", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    if (binding.dupUuid.getText().toString().trim().equals(binding.dup1Uuid.getText().toString().trim())) {
+                        dup2 = true;
+                        binding.dup1Fname.setError("Same Individual Selected as Duplicate 1");
+                        Toast.makeText(requireContext(), "Same Individual Selected as Duplicate 1", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                }
+
+                if (finalData.numberofdup >= 3) {
+
+                    if (binding.uuid.getText().toString().trim().equals(binding.dup2Uuid.getText().toString().trim())) {
+                        dup1 = true;
+                        binding.dup2Fname.setError("Same Individual Selected as Duplicate");
+                        Toast.makeText(requireContext(), "Same Individual Selected as Duplicate", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    if (binding.dupUuid.getText().toString().trim().equals(binding.dup2Uuid.getText().toString().trim())) {
+                        dup2 = true;
+                        binding.dup2Fname.setError("Same Individual Selected as Duplicate 1");
+                        Toast.makeText(requireContext(), "Same Individual Selected as Duplicate 1", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    if (binding.dup1Uuid.getText().toString().trim().equals(binding.dup2Uuid.getText().toString().trim())) {
+                        dup3 = true;
+                        binding.dup2Fname.setError("Same Individual Selected as Duplicate 2");
+                        Toast.makeText(requireContext(), "Same Individual Selected as Duplicate 2", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+
+                }
+
+
+            }
+
             finalData.complete=1;
             viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();

@@ -3,6 +3,7 @@ package org.openhds.hdsscapture.entity;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
@@ -15,6 +16,7 @@ import com.google.gson.annotations.Expose;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -35,6 +37,9 @@ public class Duplicate extends BaseObservable {
 
     @Expose
     public Date dob;
+
+    @Expose
+    public Integer numberofdup;
 
     @Expose
     public String fname;
@@ -60,6 +65,30 @@ public class Duplicate extends BaseObservable {
     @Expose
     public String fw_uuid;
 
+    @Expose
+    public String dup1_uuid;
+
+    @Expose
+    public Date dup1_dob;
+
+    @Expose
+    public String dup1_fname;
+
+    @Expose
+    public String dup1_lname;
+
+    @Expose
+    public String dup2_uuid;
+
+    @Expose
+    public Date dup2_dob;
+
+    @Expose
+    public String dup2_fname;
+
+    @Expose
+    public String dup2_lname;
+
     public Duplicate(){}
 
     @Ignore
@@ -76,6 +105,18 @@ public class Duplicate extends BaseObservable {
             this.insertDate = f.parse(insertDate);
         } catch (ParseException e) {
             System.out.println("Date Error " + e.getMessage());
+        }
+    }
+
+
+    public void setNumberofdup(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            numberofdup = Integer.parseInt(TAG);
+            patternSkipper(view);
         }
     }
 
@@ -102,6 +143,34 @@ public class Duplicate extends BaseObservable {
     public void setDup_dob(String dup_dob) {
         try {
             this.dup_dob = f.parse(dup_dob);
+        } catch (ParseException e) {
+            System.out.println("Date Error " + e.getMessage());
+        }
+    }
+
+    @Bindable
+    public String getDup1_dob() {
+        if (dup1_dob == null) return "";
+        return f.format(dup1_dob);
+    }
+
+    public void setDup1_dob(String dup1_dob) {
+        try {
+            this.dup1_dob = f.parse(dup1_dob);
+        } catch (ParseException e) {
+            System.out.println("Date Error " + e.getMessage());
+        }
+    }
+
+    @Bindable
+    public String getDup2_dob() {
+        if (dup2_dob == null) return "";
+        return f.format(dup2_dob);
+    }
+
+    public void setDup2_dob(String dup2_dob) {
+        try {
+            this.dup2_dob = f.parse(dup2_dob);
         } catch (ParseException e) {
             System.out.println("Date Error " + e.getMessage());
         }
@@ -156,6 +225,54 @@ public class Duplicate extends BaseObservable {
         this.dup_lname = dup_lname;
     }
 
+    public String getDup1_uuid() {
+        return dup1_uuid;
+    }
+
+    public void setDup1_uuid(String dup1_uuid) {
+        this.dup1_uuid = dup1_uuid;
+    }
+
+    public String getDup1_fname() {
+        return dup1_fname;
+    }
+
+    public void setDup1_fname(String dup1_fname) {
+        this.dup1_fname = dup1_fname;
+    }
+
+    public String getDup1_lname() {
+        return dup1_lname;
+    }
+
+    public void setDup1_lname(String dup1_lname) {
+        this.dup1_lname = dup1_lname;
+    }
+
+    public String getDup2_uuid() {
+        return dup2_uuid;
+    }
+
+    public void setDup2_uuid(String dup2_uuid) {
+        this.dup2_uuid = dup2_uuid;
+    }
+
+    public String getDup2_fname() {
+        return dup2_fname;
+    }
+
+    public void setDup2_fname(String dup2_fname) {
+        this.dup2_fname = dup2_fname;
+    }
+
+    public String getDup2_lname() {
+        return dup2_lname;
+    }
+
+    public void setDup2_lname(String dup2_lname) {
+        this.dup2_lname = dup2_lname;
+    }
+
     //SPINNERS ENTITY COMPLETE FORM FOR SYNC
     public void setComplete(AdapterView<?> parent, View view, int position, long id) {
 
@@ -171,5 +288,31 @@ public class Duplicate extends BaseObservable {
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }
 
+    }
+
+    private void patternSkipper(View view) {
+
+        if (view != null) {
+
+            if(numberofdup == null || numberofdup==1){
+                dup1_dob=null;
+                setDup1_uuid(null);
+                setDup1_fname(null);
+                setDup1_lname(null);
+                dup2_dob=null;
+                setDup2_uuid(null);
+                setDup2_fname(null);
+                setDup2_lname(null);
+            }
+
+            if(numberofdup == null || numberofdup==2){
+                dup2_dob=null;
+                setDup2_uuid(null);
+                setDup2_fname(null);
+                setDup2_lname(null);
+            }
+
+        notifyPropertyChanged(BR._all);
+        }
     }
 }

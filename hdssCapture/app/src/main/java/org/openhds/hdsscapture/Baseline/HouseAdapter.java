@@ -102,7 +102,7 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.ViewHolder>{
         socialgroupList.clear();
         if(locations != null)
             try {
-                List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(locations.getCompextId());
+                List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(locations.getCompno());
 
                 if (list != null) {
                     socialgroupList.addAll(list);

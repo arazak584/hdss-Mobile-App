@@ -108,7 +108,7 @@ public class SocialgroupAdapter extends RecyclerView.Adapter<SocialgroupAdapter.
         socialgroupList.clear();
             if(locations != null)
                 try {
-                    List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(locations.getCompextId());
+                    List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(locations.getCompno());
 
                     if (list != null) {
                         socialgroupList.addAll(list);

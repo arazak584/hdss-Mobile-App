@@ -629,6 +629,7 @@
     <string name="acres">What is the size of your farm? (in acres)</string>
     <string name="new_event">New Events</string>
     <string name="stopwatch">START WATCH</string>
+    <string name="numdup">Number of Duplicates</string>
 
     //SocioDemo End
 
