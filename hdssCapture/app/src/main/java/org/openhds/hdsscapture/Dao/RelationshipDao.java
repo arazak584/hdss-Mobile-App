@@ -31,14 +31,21 @@ public interface RelationshipDao {
     @Update
     int update(Relationship s);
 
+    @Update
+    int updateb(Relationship z);
+
     @Update(entity = Relationship.class)
     int update(RelationshipUpdate s);
+
 
     @Query("SELECT * FROM relationship WHERE complete=1")
     List<Relationship> retrieveToSync();
 
     @Query("SELECT * FROM relationship where individualA_uuid=:id")
     Relationship find(String id);
+
+    @Query("SELECT * FROM relationship where individualB_uuid=:id")
+    Relationship finds(String id);
 
     @Query("SELECT COUNT(*) FROM relationship a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid " +
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")

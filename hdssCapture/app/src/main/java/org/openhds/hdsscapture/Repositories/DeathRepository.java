@@ -46,6 +46,15 @@ public class DeathRepository {
         return future.get();
     }
 
+    public Death finds(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Death> callable = () -> dao.finds(id);
+
+        Future<Death> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Death> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Death>> callable = () -> dao.retrieveToSync();

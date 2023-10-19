@@ -31,6 +31,10 @@ public class RelationshipViewModel extends AndroidViewModel {
         return relationshipRepository.find(id);
     }
 
+    public Relationship finds(String id) throws ExecutionException, InterruptedException {
+        return relationshipRepository.finds(id);
+    }
+
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         return relationshipRepository.count(startDate, endDate, username);
     }
@@ -45,4 +49,5 @@ public class RelationshipViewModel extends AndroidViewModel {
     public int update(RelationshipUpdate s){
         return relationshipRepository.update(s);
     }
+
 }

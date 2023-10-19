@@ -3,7 +3,6 @@ package org.openhds.hdsscapture.fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,6 @@ import android.widget.Toast;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.google.android.material.textfield.TextInputEditText;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
@@ -56,7 +53,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -336,7 +332,7 @@ public class ResidencyFragment extends Fragment {
 
 
         try {
-            Death datadth = deathViewModel.find(individual.uuid);
+            Death datadth = deathViewModel.finds(individual.uuid);
             if (datadth != null) {
                 binding.setDeath(datadth);
             } else {
@@ -874,6 +870,26 @@ public class ResidencyFragment extends Fragment {
                     relationshipUpdate.complete = 1;
 
                     relModel.update(relationshipUpdate);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            RelationshipViewModel relbModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
+            try {
+                Relationship data = relbModel.finds(individual.uuid);
+                if (data != null && !binding.dth.dthDeathDate.getText().toString().trim().isEmpty()) {
+
+                    RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
+                    relationshipUpdate.endType = 2;
+                    relationshipUpdate.endDate = binding.getDeath().deathDate;
+                    relationshipUpdate.individualA_uuid = data.individualA_uuid;
+                    relationshipUpdate.complete = 1;
+
+                    relbModel.update(relationshipUpdate);
                 }
 
             } catch (ExecutionException e) {

@@ -29,6 +29,10 @@ public class DeathViewModel extends AndroidViewModel {
         return deathRepository.find(id);
     }
 
+    public Death finds(String id) throws ExecutionException, InterruptedException {
+        return deathRepository.finds(id);
+    }
+
     public List<Death> findToSync() throws ExecutionException, InterruptedException {
         return deathRepository.findToSync();
     }

@@ -509,7 +509,21 @@ public class IndividualFragment extends Fragment {
             if (finalData.sttime !=null && finalData.edtime==null){
                 finalData.edtime = endtime;
             }
-            finalData.complete=1;
+            //finalData.complete=1;
+
+            String ghc = (binding.ghanacardOld != null) ? binding.ghanacardOld.getText().toString() : null;
+            String othn = (binding.othernameOld != null) ? binding.othernameOld.getText().toString() : null;
+
+            if (finalData.complete == null && (finalData.ghanacard != null) && !finalData.ghanacard.equals(ghc)) {
+                finalData.complete = 1;
+            } else if (finalData.complete == null && (finalData.otherName != null) && !finalData.otherName.equals(othn)) {
+                finalData.complete = 1;
+            }  else if (finalData.complete != null) {
+                finalData.complete = finalData.complete;
+            }else{
+                finalData.complete = 2;
+            }
+
 
             IndividualViewModel viewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
             viewModel.add(finalData);

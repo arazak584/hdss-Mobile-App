@@ -681,7 +681,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.lastName = "Birth";
                 data.gender = 3;
                 data.compno = locations.getCompno();
-                data.extId = individual.getExtId();
+                data.extId = "ST-"+ individual.getExtId();
                 data.compname = locations.getLocationName();
                 data.individual_uuid = individual.getUuid();
                 data.villname = level6Data.getName();

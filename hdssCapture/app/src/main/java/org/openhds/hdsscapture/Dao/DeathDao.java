@@ -23,8 +23,11 @@ public interface DeathDao {
     void deleteAll();
 
 
-    @Query("SELECT * FROM death where individual_uuid=:id")
+    @Query("SELECT * FROM death where individual_uuid=:id and vpmcomplete IS NOT NULL")
     Death find(String id);
+
+    @Query("SELECT * FROM death where individual_uuid=:id and complete IS NOT NULL")
+    Death finds(String id);
 
     @Query("SELECT * FROM death WHERE complete=1")
     List<Death> retrieveToSync();
