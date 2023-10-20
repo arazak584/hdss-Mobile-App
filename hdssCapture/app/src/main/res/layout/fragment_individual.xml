@@ -489,7 +489,7 @@
                         android:id="@+id/ghanacard_old"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={individual.ghanacard}"
+                        android:text="@{individual.ghanacard}"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -507,7 +507,7 @@
                         android:id="@+id/othername_old"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={individual.otherName}"
+                        android:text="@{individual.otherName}"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 

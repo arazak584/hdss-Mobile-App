@@ -36,9 +36,8 @@
                 android:focusable="true"
                 app:backgroundTint="#8A080D"
                 android:textAlignment="center"
-                android:textColor="@color/white"
-                android:text="@string/button_home"
                 app:fabSize="mini"
+                app:icon="@drawable/home"
                 app:srcCompat="@android:drawable/ic_menu_sort_by_size"
                 tools:ignore="ImageContrastCheck" />
 

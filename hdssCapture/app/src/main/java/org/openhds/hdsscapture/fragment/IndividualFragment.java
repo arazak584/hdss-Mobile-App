@@ -516,7 +516,11 @@ public class IndividualFragment extends Fragment {
 
             if (finalData.complete == null && (finalData.ghanacard != null) && !finalData.ghanacard.equals(ghc)) {
                 finalData.complete = 1;
-            } else if (finalData.complete == null && (finalData.otherName != null) && !finalData.otherName.equals(othn)) {
+            } else if (finalData.complete != null && (finalData.ghanacard != null) && !finalData.ghanacard.equals(ghc)) {
+                finalData.complete = 1;
+            }else if (finalData.complete == null && (finalData.otherName != null) && !finalData.otherName.equals(othn)) {
+                finalData.complete = 1;
+            }else if (finalData.complete != null && (finalData.otherName != null) && !finalData.otherName.equals(othn)) {
                 finalData.complete = 1;
             }  else if (finalData.complete != null) {
                 finalData.complete = finalData.complete;
