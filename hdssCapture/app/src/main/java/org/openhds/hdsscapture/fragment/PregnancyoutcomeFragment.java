@@ -868,12 +868,30 @@ public class PregnancyoutcomeFragment extends Fragment {
             boolean iptt = false;
             if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.manyIpt.getText().toString().trim().isEmpty()) {
                 int totalmth = Integer.parseInt(binding.manyIpt.getText().toString().trim());
-                if (totalmth < 1 || totalmth > 5) {
+                if (totalmth < 1 || totalmth > 7) {
                     iptt = true;
-                    binding.manyIpt.setError("Number of IPT taken Cannot be More than 5");
-                    Toast.makeText(getActivity(), "Number of IPT taken Cannot be More than 5", Toast.LENGTH_LONG).show();
+                    binding.manyIpt.setError("Number of IPT taken Cannot be More than 7");
+                    Toast.makeText(getActivity(), "Number of IPT taken Cannot be More than 7", Toast.LENGTH_LONG).show();
                     return;
                 }
+            }
+
+            boolean iptm = false;
+            if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.firstRec.getText().toString().trim().isEmpty()) {
+                int totalmth = Integer.parseInt(binding.firstRec.getText().toString().trim());
+                if (totalmth < 4) {
+                    iptm = true;
+                    binding.firstRec.setError("IPT is given at 16 weeks (4 Months)");
+                    Toast.makeText(getActivity(), "IPT is given at 16 weeks (4 Months)", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+
+            boolean nurse = false;
+            if (finalData.ass_del != 1 && finalData.how_del == 2) {
+                    nurse = true;
+                    Toast.makeText(getActivity(), "Only Doctors Perform Caesarian Section", Toast.LENGTH_LONG).show();
+                    return;
             }
 
 

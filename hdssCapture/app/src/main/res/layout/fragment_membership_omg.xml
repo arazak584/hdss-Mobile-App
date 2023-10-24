@@ -159,6 +159,7 @@
             android:minHeight="48dp"
             android:onItemSelected="@{outmigration::setDestination}"
             android:padding="20dp"
+            android:spinnerMode="dialog"
             android:textColor="#000301" />
 
         <TextView
@@ -178,6 +179,7 @@
             android:minHeight="48dp"
             android:onItemSelected="@{outmigration::setReason}"
             android:padding="20dp"
+            android:spinnerMode="dialog"
             android:textColor="#000301" />
 
 
