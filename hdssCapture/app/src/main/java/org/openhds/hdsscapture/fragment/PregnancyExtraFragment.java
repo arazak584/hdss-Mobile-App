@@ -118,6 +118,9 @@ public class PregnancyExtraFragment extends Fragment {
 
         final TextView ex = binding.getRoot().findViewById(R.id.ext);
         final Spinner extra = binding.getRoot().findViewById(R.id.extra);
+        final TextView title = binding.getRoot().findViewById(R.id.preg);
+
+        title.setText("Pregnancy Observation 2");
 
         ex.setVisibility(View.GONE);
         extra.setVisibility(View.GONE);
@@ -180,6 +183,7 @@ public class PregnancyExtraFragment extends Fragment {
             Pregnancy data = viewModel.finds(individual.uuid);
             if (data != null) {
                 binding.setPregnancy(data);
+                binding.extra.setEnabled(false);
             } else {
                 data = new Pregnancy();
 
@@ -210,6 +214,7 @@ public class PregnancyExtraFragment extends Fragment {
                 binding.setPregnancy(data);
                 binding.getPregnancy().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                 binding.firstPreg.setEnabled(false);
+                binding.extra.setEnabled(false);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();

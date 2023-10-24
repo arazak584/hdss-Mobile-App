@@ -37,6 +37,7 @@
         tools:context=".fragment.PregnancyFragment">
 
         <TextView
+            android:id="@+id/preg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"

@@ -129,6 +129,9 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
         ind.setText(individual.firstName + " " + individual.lastName);
 
+        final TextView title = binding.getRoot().findViewById(R.id.preg);
+        title.setText("Pregnancy Outcome 2");
+
         final TextView ex = binding.getRoot().findViewById(R.id.exts);
         final Spinner extra = binding.getRoot().findViewById(R.id.extras);
 
@@ -277,6 +280,8 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             Pregnancyoutcome data = viewModel.finds(individual.uuid);
             if (data != null) {
                 binding.setPregoutcome(data);
+                binding.extras.setVisibility(View.GONE);
+                binding.exts.setVisibility(View.GONE);
             } else {
                 data = new Pregnancyoutcome();
 
@@ -320,6 +325,8 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
                 data.sttime = timeString;
                 binding.numberOfLiveBirths.setVisibility(View.GONE);
+                binding.extras.setVisibility(View.GONE);
+                binding.exts.setVisibility(View.GONE);
 
                 binding.setPregoutcome(data);
                 binding.getPregoutcome().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
