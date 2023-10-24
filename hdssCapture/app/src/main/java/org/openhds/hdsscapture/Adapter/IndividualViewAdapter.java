@@ -30,10 +30,10 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
 
     HouseMembersFragment activity;
     LayoutInflater inflater;
-    private Locations locations;
-    private Socialgroup socialgroup;
+    private final Locations locations;
+    private final Socialgroup socialgroup;
     private Residency residency;
-    private List<Individual> individualList;
+    private final List<Individual> individualList;
 
     public IndividualViewAdapter(HouseMembersFragment activity, Locations locations, Socialgroup socialgroup) {
         this.activity = activity;

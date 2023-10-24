@@ -38,11 +38,17 @@ public interface PregnancyDao {
     @Query("SELECT * FROM pregnancy where individual_uuid=:id AND outcome IS NOT NULL ORDER BY recordedDate ASC LIMIT 1")
     Pregnancy find(String id);
 
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND outcome=1 ORDER BY recordedDate ASC LIMIT 1")
+    Pregnancy out(String id);
+
     @Query("SELECT * FROM pregnancy where individual_uuid=:id ORDER BY recordedDate ASC LIMIT 1")
     Pregnancy lastpreg(String id);
 
     @Query("SELECT * FROM pregnancy where individual_uuid=:id AND id=2")
     Pregnancy finds(String id);
+
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND outcome=1 AND id=2")
+    Pregnancy out2(String id);
 
     @Query("SELECT * FROM pregnancy where individual_uuid=:id and extra=1")
     Pregnancy findss(String id);

@@ -129,7 +129,7 @@ public class VisitFragment extends Fragment {
             if (data != null) {
                 binding.setVisit(data);
                 binding.getVisit().setVisitDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-                if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)){
+                if ("UNK".equals(socialgroup.groupName)){
                     data.respondent = "UNK";
                 }
                     data.uuid = socialgroup.getVisit_uuid();
@@ -137,7 +137,7 @@ public class VisitFragment extends Fragment {
                 data = new Visit();
 
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
 
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
@@ -148,7 +148,7 @@ public class VisitFragment extends Fragment {
                 data.houseExtId = socialgroup.extId;
                 data.socialgroup_uuid =socialgroup.uuid;
 
-                if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)){
+                if ("UNK".equals(socialgroup.groupName)){
                     data.respondent = "UNK";
                 }
 
@@ -156,7 +156,7 @@ public class VisitFragment extends Fragment {
                     data.extId = data.houseExtId + "00" + roundData.getRoundNumber();
                 }else {
                     data.extId = data.houseExtId + "0" + roundData.getRoundNumber();
-                };
+                }
                 Date currentDate = new Date(); // Get the current date and time
                 // Create a Calendar instance and set it to the current date and time
                 Calendar cal = Calendar.getInstance();

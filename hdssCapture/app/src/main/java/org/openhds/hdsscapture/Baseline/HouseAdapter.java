@@ -29,12 +29,12 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.ViewHolder>{
 
     Baselinehousehold activity;
     LayoutInflater inflater;
-    private Locations locations;
-    private List<Socialgroup> socialgroupList;
-    private Residency residency;
-    private Individual individual;
+    private final Locations locations;
+    private final List<Socialgroup> socialgroupList;
+    private final Residency residency;
+    private final Individual individual;
     private EventForm eventForm;
-    private Visit visit;
+    private final Visit visit;
 
     public HouseAdapter(Baselinehousehold activity, Residency residency, Locations locations, Individual individual, Visit visit) {
         this.activity = activity;

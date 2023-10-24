@@ -31,7 +31,7 @@ public class ViewsAdapter extends RecyclerView.Adapter<ViewsAdapter.ViewHolder>{
 
     private List<Newloc> filter;
 
-    private Context context;
+    private final Context context;
 
     public ViewsAdapter(NewActivity activity) {
         this.activity = activity;

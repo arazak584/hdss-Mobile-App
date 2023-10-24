@@ -78,7 +78,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -86,7 +85,7 @@
                     android:hint="@string/fw"
                     android:text="@string/fw">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/demo_fw"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -131,7 +130,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                 android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -140,7 +138,7 @@
                     android:hint="@string/ind_extid"
                     android:text="@string/ind_extid">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/demographic_extid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -170,7 +168,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{demographic.phone==1}"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -178,7 +175,7 @@
                     android:hint="@string/phone"
                     android:text="@string/phone">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/phone1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -207,7 +204,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{demographic.tribe==77}"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -215,7 +211,7 @@
                     android:hint="@string/attend_you_other"
                     android:text="@string/attend_you_other">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/tribe_oth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -251,7 +247,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{demographic.religion==77}"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -259,7 +254,7 @@
                     android:hint="@string/attend_you_other"
                     android:text="@string/attend_you_other">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/religion_oth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -326,7 +321,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{demographic.occupation==77}"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -334,7 +328,7 @@
                     android:hint="@string/attend_you_other"
                     android:text="@string/attend_you_other">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/occupation_oth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -399,6 +393,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 android:text="@string/saveclosedata" />
 
             <Button
@@ -407,6 +403,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 android:text="@string/closedata" />
 
         </LinearLayout>

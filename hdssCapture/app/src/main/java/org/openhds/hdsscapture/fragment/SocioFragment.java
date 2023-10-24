@@ -121,7 +121,7 @@ public class SocioFragment extends Fragment {
                 binding.formcompldate.setVisibility(View.GONE);
 
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
 
                 data.uuid = uuidString;
                 data.individual_uuid = individual.getUuid();

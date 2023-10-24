@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">R-HealthTrend</string>
+    <string name="app_name">HDSS Capture</string>
     <string name="versions">v2023.0.2</string>
     <string name="update">update</string>
     <string name="send">send</string>
@@ -110,8 +110,8 @@
     <string name="hierarchy">Locations Selection</string>
     <string name="region">Region</string>
     <string name="district">District</string>
-    <string name="subdistrict">Sub District</string>
-    <string name="village">Village/Sector</string>
+    <string name="subdistrict">Sub-District</string>
+    <string name="village">Village</string>
     <string name="cluster">Cluster</string>
     <string name="phone2">Extra Phone Number</string>
     <string name="residency">Residency</string>
@@ -210,7 +210,7 @@
     <string name="text_compid">Structure Number</string>
     <string name="status">Compound Status</string>
     <string name="username">Username</string>
-    <string name="password">Interviewer\'s Pin</string>
+    <string name="password">Password</string>
     <string name="text_location_extid">extId</string>
     <string name="individual">Individual Registration</string>
     <string name="download">Download</string>
@@ -249,7 +249,7 @@
     <string name="anteNatalClinic">Have you been to an ANC clinic?</string>
     <string name="ageOfPregFromPregNotes">Age of pregnancy from pregnancy notes (In Weeks; Use the information in the ANC Booklet)</string>
     <string name="anc">ANC VISIT</string>
-    <string name="estimatedAgeOfPreg">Number of months pregnant (Use the information in the ANC Booklet)</string>
+    <string name="estimatedAgeOfPreg">Number of months pregnant</string>
     <string name="attend_you">Who attended to you?</string>
     <string name="attend_you_other">Other, Specify</string>
     <string name="first_rec">How many months pregnant were you when you first received antenatal care for this pregnancy</string>
@@ -630,6 +630,21 @@
     <string name="new_event">New Events</string>
     <string name="stopwatch">START WATCH</string>
     <string name="numdup">Number of Duplicates</string>
+    <string name="login_welcome_lbl">WELCOME</string>
+    <string name="login_signin_msg_lbl">Login to continue</string>
+    <string name="enumeration">Enumeration</string>
+    <string name="login_settings_lbl">Api Settings</string>
+    <string name="devp">Developed By Abdul Razak Nuhu</string>
+    <string name="copyright_app_company_lbl">© 2023 By Abdul Razak Nuhu</string>
+    <string name="gps_loading_lbl">Loading GPS Location</string>
+    <string name="remain">UNVISITED COMPOUNDS</string>
+    <string name="datac">Data Capture</string>
+    <string name="rp">REPORT</string>
+    <string name="syncd">Sync Data</string>
+    <string name="downlods">Download Data</string>
+    <string name="loch"><![CDATA[Location & Household]]></string>
+    <string name="info">Settings</string>
+    <string name="external">External Inmigration</string>
 
     //SocioDemo End
 

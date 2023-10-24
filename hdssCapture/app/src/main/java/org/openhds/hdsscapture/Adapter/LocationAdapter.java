@@ -28,8 +28,8 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
 
     ClusterFragment activity;
     LayoutInflater inflater;
-    private List<Locations> locationsList;
-    private Hierarchy level6Data;
+    private final List<Locations> locationsList;
+    private final Hierarchy level6Data;
 
     public LocationAdapter(ClusterFragment activity, Hierarchy level6Data) {
         this.activity = activity;

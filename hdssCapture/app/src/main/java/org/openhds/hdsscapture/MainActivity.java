@@ -45,11 +45,11 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         });
 
-        final Button remainder = findViewById(R.id.btncensus);
-        remainder.setOnClickListener(v -> {
-            Intent i = new Intent(getApplicationContext(),RemainderActivity.class);
-            startActivity(i);
-        });
+//        final Button remainder = findViewById(R.id.btncensus);
+//        remainder.setOnClickListener(v -> {
+//            Intent i = new Intent(getApplicationContext(),RemainderActivity.class);
+//            startActivity(i);
+//        });
 
         final Button control = findViewById(R.id.btnreport);
         control.setOnClickListener(v -> {

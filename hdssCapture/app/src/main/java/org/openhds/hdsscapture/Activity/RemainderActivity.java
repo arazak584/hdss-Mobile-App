@@ -43,7 +43,7 @@ public class RemainderActivity extends AppCompatActivity {
     private ArrayAdapter<Hierarchy> level6Adapter;
     private ProgressDialog progress;
     private RemainderAdapter remainderAdapter;
-    private List<Hierarchy> level6List = new ArrayList<>();
+    private final List<Hierarchy> level6List = new ArrayList<>();
     public static final String LEVEL6_DATA = "org.openhds.hdsscapture.activity.RemainderActivity.LEVEL5_DATA";
     @Override
     protected void onCreate(Bundle savedInstanceState) {

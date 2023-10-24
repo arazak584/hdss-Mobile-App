@@ -456,10 +456,18 @@ public class Pregnancy extends BaseObservable implements Parcelable {
 
     public void setAgeOfPregFromPregNotes(String ageOfPregFromPregNotes) {
 
-        try {
-            this.ageOfPregFromPregNotes = (ageOfPregFromPregNotes == null) ? null : Integer.valueOf(ageOfPregFromPregNotes);
-        } catch (NumberFormatException e) {
-        }
+        this.estimatedAgeOfPreg = null;
+        if (ageOfPregFromPregNotes == null) this.ageOfPregFromPregNotes = null;
+        else
+            try {
+                this.ageOfPregFromPregNotes = Integer.valueOf(ageOfPregFromPregNotes);
+                if (this.ageOfPregFromPregNotes != null ) {
+                    this.estimatedAgeOfPreg = this.ageOfPregFromPregNotes/4;
+                }
+            } catch (NumberFormatException e) {
+            }
+        notifyPropertyChanged(BR.estimatedAgeOfPreg);
+
     }
 
     @Bindable

@@ -106,7 +106,7 @@ public class HouseholdFragment extends Fragment {
                 if (data.visit_uuid==null){
 
                     String visits = UUID.randomUUID().toString();
-                    String visituuid = visits.toString().replaceAll("-", "");
+                    String visituuid = visits.replaceAll("-", "");
                     data.visit_uuid = visituuid;
                     //data.complete = 2;
                 }

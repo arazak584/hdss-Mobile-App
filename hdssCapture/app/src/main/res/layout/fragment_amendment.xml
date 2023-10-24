@@ -80,15 +80,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:visibility="gone"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
                 android:hint="@string/fw"
                 android:text="@string/fw">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/individual_fw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -100,15 +99,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:visibility="gone"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
                 android:hint="@string/ind_uuid"
                 android:text="@string/ind_uuid">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/uuid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -120,15 +118,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:visibility="gone"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
                 android:hint="@string/ind_uuid"
                 android:text="@string/ind_uuid">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/individual_uuid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -162,15 +159,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:visibility="visible"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
                 android:hint="@string/startdate"
                 android:text="@string/startdate">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/startDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -460,54 +456,50 @@
                 </TableRow>
             </TableLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                goneUnless="@{amendment.yn_firstName==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/firstname"
+                android:text="@string/firstname">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    goneUnless="@{amendment.yn_firstName==1}"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/amend_firstName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/firstname"
-                    android:text="@string/firstname">
+                    android:text="@={amendment.orig_firstName}"
+                    android:inputType="textPersonName|textCapCharacters"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/amend_firstName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={amendment.orig_firstName}"
-                        android:inputType="textPersonName|textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                goneUnless="@{amendment.yn_firstName==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/replfirstname"
+                android:text="@string/replfirstname">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    goneUnless="@{amendment.yn_firstName==1}"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/repl_firstName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/replfirstname"
-                    android:text="@string/replfirstname">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/repl_firstName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={amendment.repl_firstName}"
-                        android:inputType="textPersonName|textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:text="@={amendment.repl_firstName}"
+                    android:inputType="textPersonName|textCapCharacters"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{amendment.yn_lastName==1}"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
                 android:hint="@string/lastname"
                 android:text="@string/lastname">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/amend_lastName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -517,15 +509,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{amendment.yn_lastName==1}"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
                 android:hint="@string/repllastname"
                 android:text="@string/repllastname">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/repl_lastName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -535,15 +526,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{amendment.yn_otherName==1}"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
                 android:hint="@string/othername"
                 android:text="@string/othername">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/amend_otherName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -553,15 +543,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{amendment.yn_otherName==1}"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
                 android:hint="@string/replothname"
                 android:text="@string/replothname">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/repl_otherName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -571,15 +560,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{amendment.yn_ghanacard==1}"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
                 android:hint="@string/ghanacard"
                 android:text="@string/ghanacard">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/amend_ghanacard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -589,15 +577,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{amendment.yn_ghanacard==1}"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
                 android:hint="@string/replghcard"
                 android:text="@string/replghcard">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/repl_ghanacard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -669,6 +656,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/actual_dob"
                 tools:ignore="DuplicateSpeakableTextCheck"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 app:icon="@drawable/ic_baseline_calendar_month_24" />
 
             <TextView
@@ -725,6 +714,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 android:text="@string/saveclosedata" />
 
             <Button
@@ -733,6 +724,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 android:text="@string/closedata" />
 
         </LinearLayout>

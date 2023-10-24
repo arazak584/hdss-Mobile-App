@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SearchView;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -113,7 +114,7 @@ public class ClusterFragment extends Fragment {
             }
         });
 
-        final ExtendedFloatingActionButton add_location = view.findViewById(R.id.button_new_location);
+        final AppCompatButton add_location = view.findViewById(R.id.button_new_location);
         add_location.setOnClickListener(v -> {
 
             final Locations locations = new Locations();

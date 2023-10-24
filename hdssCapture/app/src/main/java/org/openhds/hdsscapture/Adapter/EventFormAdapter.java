@@ -54,10 +54,10 @@ import java.util.List;
 
 public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.ViewHolder> {
 
-    private Locations locations;
-    private Socialgroup socialgroup;
-    private Residency residency;
-    private Individual individual;
+    private final Locations locations;
+    private final Socialgroup socialgroup;
+    private final Residency residency;
+    private final Individual individual;
     private final List<EventForm> eventForms;
     private final EventsFragment activity;
 

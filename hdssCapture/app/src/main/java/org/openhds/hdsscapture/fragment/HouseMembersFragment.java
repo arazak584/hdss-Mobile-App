@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -233,7 +234,7 @@ public class HouseMembersFragment extends Fragment {
         //initial loading of Individuals in locations
         //adapter.filter("", individualViewModel);
 
-        final ExtendedFloatingActionButton addback = binding.getRoot().findViewById(R.id.add_back);
+        final AppCompatButton addback = binding.getRoot().findViewById(R.id.add_back);
         addback.setOnClickListener(v -> {
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
@@ -241,7 +242,7 @@ public class HouseMembersFragment extends Fragment {
         });
 
 
-        final ExtendedFloatingActionButton add_individual = binding.getRoot().findViewById(R.id.button_newindividual);
+        final AppCompatButton add_individual = binding.getRoot().findViewById(R.id.button_newindividual);
         add_individual.setOnClickListener(v -> {
 
             final Individual individual = new Individual();

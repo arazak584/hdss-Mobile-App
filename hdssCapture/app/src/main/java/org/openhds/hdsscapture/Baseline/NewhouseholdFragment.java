@@ -58,7 +58,7 @@ public class NewhouseholdFragment extends Fragment {
     private Locations locations;
     private Residency residency;
     private Individual individual;
-    private FragmentNewhouseholdBinding binding;;
+    private FragmentNewhouseholdBinding binding;
     private Socialgroup socialgroup;
 
     public NewhouseholdFragment() {
@@ -114,7 +114,7 @@ public class NewhouseholdFragment extends Fragment {
         // Generate a UUID
         if(individual.uuid == null) {
             String uuid = UUID.randomUUID().toString();
-            String uuidString = uuid.toString().replaceAll("-", "");
+            String uuidString = uuid.replaceAll("-", "");
             // Set the ID of the Fieldworker object
             binding.getIndividual().uuid = uuidString;
             binding.getSocialgroup().individual_uuid = uuidString;
@@ -123,14 +123,14 @@ public class NewhouseholdFragment extends Fragment {
 
         if(residency.uuid == null) {
             String uuid = UUID.randomUUID().toString();
-            String resuuidString = uuid.toString().replaceAll("-", "");
+            String resuuidString = uuid.replaceAll("-", "");
             // Set the ID of the Fieldworker object
             binding.getResidency().uuid = resuuidString;
         }
 
         if(socialgroup.uuid == null) {
             String uuid = UUID.randomUUID().toString();
-            String suuidString = uuid.toString().replaceAll("-", "");
+            String suuidString = uuid.replaceAll("-", "");
             // Set the ID of the Fieldworker object
             binding.getSocialgroup().uuid = suuidString;
             binding.getResidency().socialgroup_uuid = suuidString;
@@ -179,7 +179,7 @@ public class NewhouseholdFragment extends Fragment {
             String id = locations.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
             while (true) {
                 try {
-                    if (!(individualViewModels.findAll(id) != null)) break;
+                    if (individualViewModels.findAll(id) == null) break;
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -198,7 +198,7 @@ public class NewhouseholdFragment extends Fragment {
             String id = locations.compextId + String.format("%02d", sequenceNumber); // generate ID with sequence number padded with zeros
             while (true) {
                 try {
-                    if (!(socialgroupViewModels.createhse(id) != null)) break;
+                    if (socialgroupViewModels.createhse(id) == null) break;
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {

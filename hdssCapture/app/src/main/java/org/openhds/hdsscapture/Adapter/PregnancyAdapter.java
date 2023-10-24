@@ -27,11 +27,11 @@ public class PregnancyAdapter extends RecyclerView.Adapter<PregnancyAdapter.View
 
     PregnancyDialogFragment activity;
     LayoutInflater inflater;
-    private Locations locations;
-    private Socialgroup socialgroup;
-    private Residency residency;
-    private List<Pregnancy> pregnancyList;
-    private Individual individual;
+    private final Locations locations;
+    private final Socialgroup socialgroup;
+    private final Residency residency;
+    private final List<Pregnancy> pregnancyList;
+    private final Individual individual;
 
     public PregnancyAdapter(PregnancyDialogFragment activity, Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
         this.activity = activity;

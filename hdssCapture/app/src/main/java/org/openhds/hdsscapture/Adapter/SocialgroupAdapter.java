@@ -28,10 +28,10 @@ public class SocialgroupAdapter extends RecyclerView.Adapter<SocialgroupAdapter.
 
     HouseholdDialogFragment activity;
     LayoutInflater inflater;
-    private Locations locations;
-    private List<Socialgroup> socialgroupList;
+    private final Locations locations;
+    private final List<Socialgroup> socialgroupList;
     private Residency residency;
-    private Individual individual;
+    private final Individual individual;
 
     public interface HouseholdSelectionListener {
         void onHouseholdSelected(String HouseholdId);

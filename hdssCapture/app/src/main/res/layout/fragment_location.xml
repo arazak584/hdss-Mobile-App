@@ -49,48 +49,25 @@
                 android:orientation="vertical"
                 android:padding="10dp">
 
-
-                <com.google.android.material.textfield.TextInputLayout
+                <androidx.appcompat.widget.AppCompatEditText
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:id="@+id/location_fw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
                     android:hint="@string/fw"
-                    android:text="@string/fw">
+                    android:text="@={locations.fw_uuid}"
+                    android:inputType="text"
+                    app:backgroundTint="#FF0000" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/location_fw"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={locations.fw_uuid}"
-                        android:visibility="gone"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:inputType="textPersonName|textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
+                <androidx.appcompat.widget.AppCompatEditText
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:id="@+id/location_uuid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
                     android:hint="@string/location_uuid"
-                    android:text="@string/location_uuid">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/location_uuid"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={locations.uuid}"
-                        android:focusable="false"
-                        android:visibility="gone"
-                        android:focusableInTouchMode="false"
-                        android:inputType="textPersonName|textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:text="@={locations.uuid}"
+                    android:inputType="text"
+                    app:backgroundTint="#FF0000" />
 
                 <Button
                     android:id="@+id/button_location_insertDate"
@@ -101,86 +78,50 @@
                     android:visibility="gone"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
-                <com.google.android.material.textfield.TextInputLayout
+                <androidx.appcompat.widget.AppCompatEditText
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:id="@+id/location_insertDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
                     android:hint="@string/visitDate"
-                    android:text="@string/visitDate">
+                    android:text="@={locations.insertDate}"
+                    android:inputType="text"
+                    app:backgroundTint="#FF0000" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/location_insertDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={locations.insertDate}"
-                        android:focusable="false"
-                        android:visibility="gone"
-                        android:focusableInTouchMode="false"
-                        android:inputType="textPersonName|textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <com.google.android.material.textfield.TextInputLayout
+                <androidx.appcompat.widget.AppCompatEditText
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:id="@+id/cluster_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
                     android:hint="@string/clusteruuid"
-                    android:text="@string/clusteruuid">
+                    style="@style/AppCompatEditTextStyle"
+                    android:text="@={locations.locationLevel_uuid}"
+                    android:inputType="text"
+                    app:backgroundTint="#FF0000" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/cluster_location"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={locations.locationLevel_uuid}"
-                        android:focusable="false"
-                        android:visibility="gone"
-                        android:focusableInTouchMode="false"
-                        android:inputType="textPersonName|textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:visibility="visible"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                <EditText
+                    android:id="@+id/locationcluster"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/cluster"
-                    android:text="@string/cluster">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/locationcluster"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={locations.extId}"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:inputType="textPersonName|textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="50dp"
+                    android:textColor="@color/black"
+                    android:paddingStart="20dp"
+                    android:focusable="false"
+                    android:text="@={locations.extId}"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName|textCapCharacters"
+                    android:background="@drawable/txtbox_rone_wbevel"/>
 
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/locationcompno"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
+                    android:layout_height="70dp"
                     android:hint="@string/compoundnumber"
-                    android:text="@string/compoundnumber">
+                    style="@style/AppCompatEditTextStyle"
+                    android:text="@={locations.compno}"
+                    android:inputType="textPersonName|textCapCharacters"/>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/locationcompno"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={locations.compno}"
-                        android:inputType="textPersonName|textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -200,44 +141,25 @@
                     android:spinnerMode="dialog"
                     android:padding="20dp"/>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <androidx.appcompat.widget.AppCompatEditText
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:id="@+id/locationextid"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="Compound Number"
-                    android:text="Compound Number">
+                    android:layout_height="50dp"
+                    android:hint="@string/compno"
+                    style="@style/AppCompatEditTextStyle"
+                    android:text="@={locations.compextId}"
+                    android:inputType="textPersonName|textCapCharacters"/>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/locationextid"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={locations.compextId}"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:inputType="textPersonName|textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/locationName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:gravity="start"
-                    android:padding="5dp"
+                    android:layout_height="50dp"
                     android:hint="@string/compoundName"
-                    app:isRequired="true"
-                    android:text="@string/compoundName">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/locationName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={locations.locationName}"
-                        android:inputType="textPersonName|textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                    style="@style/AppCompatEditTextStyle"
+                    android:text="@={locations.locationName}"
+                    android:inputType="textPersonName|textCapCharacters"/>
 
 
                 <Button
@@ -246,7 +168,13 @@
                     android:layout_height="wrap_content"
                     android:text="@string/gps"
                     tools:ignore="DuplicateSpeakableTextCheck"
+                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:textColor="@android:color/background_light"
                     app:icon="@drawable/ic_baseline_my_location_24" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
 
                 <ProgressBar
                     android:layout_width="match_parent"
@@ -255,68 +183,60 @@
                     android:visibility="gone"></ProgressBar>
 
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+
+                <EditText
+                    android:id="@+id/longitude"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:gravity="start"
-                    android:padding="5dp"
+                    android:layout_height="@dimen/member_filter_textbox_size"
+                    android:textColor="@color/black"
+                    android:paddingLeft="20dp"
+                    android:gravity="center_vertical"
+                    android:focusable="false"
                     android:hint="@string/longitude"
-                    app:isRequired="true"
-                    android:text="@string/longitude">
+                    android:text="@={locations.longitude}"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName|textCapCharacters"
+                    android:background="@drawable/txtbox_rone_wbevel"/>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/longitude"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:text="@={locations.longitude}"
-                        android:inputType="textPersonName|textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                <Space
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:gravity="start"
-                    android:padding="5dp"
+                    android:layout_height="16dp" />
+
+
+                <EditText
+                    android:id="@+id/latitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textColor="@color/black"
+                    android:paddingStart="20dp"
                     android:hint="@string/latitude"
-                    app:isRequired="true"
-                    android:text="@string/latitude">
+                    android:focusable="false"
+                    android:text="@={locations.latitude}"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName|textCapCharacters"
+                    android:background="@drawable/txtbox_rone_wbevel"/>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/latitude"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:text="@={locations.latitude}"
-                        android:inputType="textPersonName|textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                <Space
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/accuracy"
-                    app:isRequired="true"
-                    android:text="@string/accuracy">
+                    android:layout_height="16dp" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/accuracy"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:text="@={locations.accuracy}"
-                        android:inputType="textPersonName|textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
+
+                <EditText
+                    android:id="@+id/accuracy"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textColor="@color/black"
+                    android:paddingStart="20dp"
+                    android:focusable="false"
+                    android:hint="@string/accuracy"
+                    android:text="@={locations.accuracy}"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName|textCapCharacters"
+                    android:background="@drawable/txtbox_rone_wbevel"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
 
 
                 <TextView
@@ -416,6 +336,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 android:layout_gravity="center"
                 android:text="@string/text_submit"
                 android:textSize="20sp" />

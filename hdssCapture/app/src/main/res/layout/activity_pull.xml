@@ -35,7 +35,7 @@
                     android:layout_weight="1"
                     android:textSize="30dp"
                     android:textStyle="bold"
-                    android:text="@string/app_name"
+                    android:text="@string/download"
                     android:textAlignment="center"
                     android:textColor="@color/black"/>
 
@@ -50,7 +50,7 @@
         android:padding="20dp">
 
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_SyncHierarchyData"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -60,7 +60,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/get_codebook"
-            app:icon="@drawable/pull"
+            android:drawableLeft="@drawable/pull"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             android:layout_gravity="center" />
 
 
@@ -72,7 +74,7 @@
             android:textAlignment="center"
             android:textSize="15sp" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_SyncLocationData"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -82,7 +84,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/get_location"
-            app:icon="@drawable/pull"
+            android:drawableLeft="@drawable/pull"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             android:layout_gravity="center" />
 
         <TextView
@@ -92,7 +96,7 @@
             android:textAlignment="center"
             android:textSize="15sp" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_SyncIndividualData"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -102,7 +106,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/get_individual"
-            app:icon="@drawable/pull"
+            android:drawableLeft="@drawable/pull"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             android:layout_gravity="center" />
 
 
@@ -113,7 +119,7 @@
             android:textAlignment="center"
             android:textSize="15sp" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_SyncResidency"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -123,7 +129,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/get_residency"
-            app:icon="@drawable/pull"
+            android:drawableLeft="@drawable/pull"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             android:layout_gravity="center" />
 
         <TextView
@@ -133,7 +141,7 @@
             android:textAlignment="center"
             android:textSize="15sp" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_SyncRelationship"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -143,7 +151,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/get_relationship"
-            app:icon="@drawable/pull"
+            android:drawableLeft="@drawable/pull"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             android:layout_gravity="center" />
 
 
@@ -154,7 +164,7 @@
             android:textAlignment="center"
             android:textSize="15sp" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_SyncSocialgroup"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -164,7 +174,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/get_socialgroup"
-            app:icon="@drawable/pull"
+            android:drawableLeft="@drawable/pull"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             android:layout_gravity="center" />
 
         <TextView
@@ -174,7 +186,7 @@
             android:textAlignment="center"
             android:textSize="15sp" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_SyncPregnancy"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -184,7 +196,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/get_pregobservation"
-            app:icon="@drawable/pull"
+            android:drawableLeft="@drawable/pull"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             android:layout_gravity="center" />
 
         <TextView
@@ -194,7 +208,7 @@
             android:textAlignment="center"
             android:textSize="15sp" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_SyncDemography"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -204,7 +218,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/get_demography"
-            app:icon="@drawable/pull"
+            android:drawableLeft="@drawable/pull"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             android:layout_gravity="center" />
 
 
@@ -215,7 +231,7 @@
             android:textAlignment="center"
             android:textSize="15sp" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <androidx.appcompat.widget.AppCompatButton
             android:visibility="gone"
             android:id="@+id/button_SyncSes"
             android:layout_width="400dp"
@@ -226,7 +242,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/get_ses"
-            app:icon="@drawable/pull"
+            android:drawableLeft="@drawable/pull"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             android:layout_gravity="center" />
 
 
@@ -238,7 +256,7 @@
             android:textAlignment="center"
             android:textSize="15sp" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_SyncVac"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -248,7 +266,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/get_vac"
-            app:icon="@drawable/pull"
+            android:drawableLeft="@drawable/pull"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             android:layout_gravity="center" />
 
 
@@ -259,7 +279,7 @@
             android:textAlignment="center"
             android:textSize="15sp" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_Complete"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -269,8 +289,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/complete"
-            app:icon="@drawable/pull"
-            android:backgroundTint="@color/white"
+            android:drawableLeft="@drawable/pull"
+            android:background="@drawable/btnd_rone_red"
+            android:textColor="@android:color/background_light"
             android:layout_gravity="center" />
 
         <TextView

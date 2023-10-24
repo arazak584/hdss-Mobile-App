@@ -27,8 +27,8 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
 
     FatherDialogFragment activity;
     LayoutInflater inflater;
-    private Locations locations;
-    private List<Individual> individualList;
+    private final Locations locations;
+    private final List<Individual> individualList;
 
     public interface FatherSelectionListener {
         void onFatherSelected(String fatherId);

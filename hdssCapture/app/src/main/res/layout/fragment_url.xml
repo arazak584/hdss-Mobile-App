@@ -53,22 +53,15 @@
             android:layout_margin="5dp"
             android:background="@color/colorPrimaryDark" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:padding="5dp"
-                android:hint="@string/link"
-                android:text="@string/link">
-
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
                     android:id="@+id/text_url"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@={apiUrl.codeUrl}"
-                    android:inputType="textPersonName"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:ems="10"
+                    android:inputType="textCapCharacters"
+                    android:text="@={apiUrl.codeUrl}" />
+
+
 
 
             </LinearLayout>

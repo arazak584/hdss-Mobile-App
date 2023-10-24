@@ -11,9 +11,11 @@ import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.Dao.ApiDao;
+import org.openhds.hdsscapture.Dialog.FilterDialogFragment;
 import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
@@ -40,6 +43,7 @@ public class LoginActivity extends AppCompatActivity  {
     private ApiDao dao;
     private ProgressDialog progress;
     private Fieldworker fieldworkerData;
+    private ProgressBar progressBar;
     private AppJson appJson;
 
     public static boolean isScreenSizeGreaterThanEqual7Inch(Context context) {
@@ -82,6 +86,8 @@ public class LoginActivity extends AppCompatActivity  {
         progress = new ProgressDialog(LoginActivity.this);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
+        progressBar = findViewById(R.id.login_progress);
+
         AppJson api = AppJson.getInstance(this);
         dao = api.getJsonApi();
 
@@ -89,9 +95,10 @@ public class LoginActivity extends AppCompatActivity  {
         button_SyncFw.setOnClickListener(v -> {
             final TextView textView_SyncFw = findViewById(R.id.textView_SyncFieldworkerData);
             textView_SyncFw.setText("");
-            progress.show();
 
-            progress.setMessage("Updating User Access...");
+            // Show the ProgressBar
+            progressBar.setVisibility(View.VISIBLE);
+
             final FieldworkerViewModel viewModel = new ViewModelProvider(this).get(FieldworkerViewModel.class);
 
             Call<DataWrapper<Fieldworker>> c_callable = dao.getFw();
@@ -100,7 +107,7 @@ public class LoginActivity extends AppCompatActivity  {
                 public void onResponse(Call<DataWrapper<Fieldworker>> call, Response<DataWrapper<Fieldworker>> response) {
                     Fieldworker[] d = response.body().getData().toArray(new Fieldworker[0]);
                     viewModel.add(d);
-                    progress.dismiss();
+                    progressBar.setVisibility(View.GONE);
                     textView_SyncFw.setText("USER ACCESS UPDATED!");
                     textView_SyncFw.setTextColor(Color.GREEN);
                 }
@@ -108,7 +115,7 @@ public class LoginActivity extends AppCompatActivity  {
                 @Override
                 public void onFailure(Call<DataWrapper<Fieldworker>> call, Throwable t) {
 
-                    progress.dismiss();
+                    progressBar.setVisibility(View.GONE);
                     textView_SyncFw.setText("Fieldworker Sync Error!");
                     textView_SyncFw.setTextColor(Color.RED);
                 }
@@ -159,6 +166,16 @@ public class LoginActivity extends AppCompatActivity  {
             startActivity(i);
 
         });
+
+        final Button send = findViewById(R.id.apiSettings);
+        send.setOnClickListener(v -> {
+            // Create an instance of the UrlFragment
+            UrlFragment dialogFragment = new UrlFragment();
+
+            // Show the dialog fragment using the FragmentManager
+            dialogFragment.show(getSupportFragmentManager(), "UrlFragment");
+        });
+
     }
 
 

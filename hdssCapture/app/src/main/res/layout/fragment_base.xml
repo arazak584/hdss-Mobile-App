@@ -59,9 +59,9 @@
 
         </LinearLayout>
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_new_locations"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_marginEnd="10dp"
@@ -71,7 +71,7 @@
             android:text="@string/createLocation"
             android:textColor="@color/white"
             android:textStyle="bold"
-            app:backgroundTint="#246EE9"
+            android:background="@drawable/btnd_rone_dgbevel"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

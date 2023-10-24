@@ -28,10 +28,10 @@ public class DupAdapter extends RecyclerView.Adapter<DupAdapter.ViewHolder>{
 
     DupDialogFragment activity;
     LayoutInflater inflater;
-    private Locations locations;
-    private Socialgroup socialgroup;
-    private Residency residency;
-    private List<Individual> individualList;
+    private final Locations locations;
+    private final Socialgroup socialgroup;
+    private final Residency residency;
+    private final List<Individual> individualList;
     boolean isFirstField = true;
 
     public interface PartnerSelectionListener {
@@ -73,7 +73,7 @@ public class DupAdapter extends RecyclerView.Adapter<DupAdapter.ViewHolder>{
         }
 
         public void setFieldToUpdate(int fieldToUpdate) {
-            this.numberOfdup = fieldToUpdate;
+            numberOfdup = fieldToUpdate;
         }
     }
 
@@ -105,7 +105,7 @@ public class DupAdapter extends RecyclerView.Adapter<DupAdapter.ViewHolder>{
                 EditText fname = null;
                 EditText lname = null;
                 EditText dob = null;
-                switch (holder.numberOfdup) {
+                switch (ViewHolder.numberOfdup) {
                     case 1:
                         dpid = activity.requireActivity().findViewById(R.id.dup_uuid);
                         dob = activity.requireActivity().findViewById(R.id.dup_dob);
@@ -138,10 +138,10 @@ public class DupAdapter extends RecyclerView.Adapter<DupAdapter.ViewHolder>{
 
                 // Increment the flag to update the next field on the next click
                 // Update the fieldToUpdate for the next click
-                if (holder.numberOfdup < 3) {
-                    holder.numberOfdup++;
+                if (ViewHolder.numberOfdup < 3) {
+                    ViewHolder.numberOfdup++;
                 } else {
-                    holder.numberOfdup = 1;
+                    ViewHolder.numberOfdup = 1;
                 }
 
                 activity.dismiss();

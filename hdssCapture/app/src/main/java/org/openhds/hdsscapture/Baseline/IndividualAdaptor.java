@@ -28,10 +28,10 @@ public class IndividualAdaptor extends RecyclerView.Adapter<IndividualAdaptor.Vi
 
     IndividualSummaryFragment activity;
     LayoutInflater inflater;
-    private Locations locations;
-    private Socialgroup socialgroup;
-    private Residency residency;
-    private List<Individual> individualList;
+    private final Locations locations;
+    private final Socialgroup socialgroup;
+    private final Residency residency;
+    private final List<Individual> individualList;
     private ProgressDialog progress;
     private Context context;
 

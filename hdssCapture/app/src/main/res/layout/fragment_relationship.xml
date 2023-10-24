@@ -66,7 +66,6 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -74,7 +73,7 @@
                     android:hint="@string/fw"
                     android:text="@string/fw">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/rel_fw"
                         android:text="@={relationship.fw_uuid}"
                         android:layout_width="match_parent"
@@ -106,7 +105,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -114,7 +112,7 @@
                     android:hint="@string/uuid"
                     android:text="@string/uuid">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:id="@+id/uuid"
@@ -128,7 +126,6 @@
                     android:visibility="gone"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -136,7 +133,7 @@
                     android:hint="@string/actual_dob"
                     android:text="@string/actual_dob">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/woman_dob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -145,7 +142,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -153,7 +149,7 @@
                     android:hint="@string/ind_extid"
                     android:text="@string/ind_extid">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/woman_extid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -169,12 +165,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/partner"
-                    android:backgroundTint="@color/black"
-                    android:textColor="@color/white"
+                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:textColor="@android:color/background_light"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -182,7 +177,7 @@
                     android:hint="@string/partner"
                     android:text="@string/ind_extid">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:id="@+id/man_extidB"
@@ -217,6 +212,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/startdate"
                     tools:ignore="DuplicateSpeakableTextCheck"
+                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:textColor="@android:color/background_light"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
@@ -256,6 +253,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/enddate"
                     tools:ignore="DuplicateSpeakableTextCheck"
+                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:textColor="@android:color/background_light"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
@@ -428,6 +427,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 android:text="@string/saveclosedata" />
 
             <Button
@@ -436,6 +437,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 android:text="@string/closedata" />
 
         </LinearLayout>

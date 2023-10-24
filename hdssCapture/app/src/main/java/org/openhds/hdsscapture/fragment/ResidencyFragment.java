@@ -254,7 +254,7 @@ public class ResidencyFragment extends Fragment {
             } else {
                 dataRes = new Residency();
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
                 dataRes.fw_uuid = fieldworkerData.getFw_uuid();
                 dataRes.uuid = uuidString;
                 dataRes.individual_uuid = individual.getUuid();
@@ -339,7 +339,7 @@ public class ResidencyFragment extends Fragment {
                 datadth = new Death();
 
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
                 datadth.fw_uuid = fieldworkerData.getFw_uuid();
                 datadth.uuid = uuidString;
                 datadth.dob = individual.dob;
@@ -398,7 +398,7 @@ public class ResidencyFragment extends Fragment {
                 dataimg = new Inmigration();
 
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
 
                 dataimg.uuid=uuidString;
                 dataimg.fw_uuid = fieldworkerData.getFw_uuid();
@@ -449,7 +449,7 @@ public class ResidencyFragment extends Fragment {
                 data = new Outmigration();
 
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
 
                 data.uuid=uuidString;
                 data.fw_uuid = fieldworkerData.getFw_uuid();
@@ -907,7 +907,7 @@ public class ResidencyFragment extends Fragment {
                 Outmigration omg = new Outmigration();
 
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
 
                 // Subtract one day from the recordedDate
                 Date recordedDate = binding.getInmigration().recordedDate;

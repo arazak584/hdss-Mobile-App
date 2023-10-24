@@ -12,11 +12,11 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.textfield.TextInputEditText;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
@@ -69,7 +69,7 @@ public class IndividualFragment extends Fragment {
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
-    private FragmentIndividualBinding binding;;
+    private FragmentIndividualBinding binding;
     private ProgressDialog progressDialog;
     private EventForm eventForm;
 
@@ -137,7 +137,7 @@ public class IndividualFragment extends Fragment {
         // Generate a UUID
         if(individual.uuid == null) {
             String uuid = UUID.randomUUID().toString();
-            String uuidString = uuid.toString().replaceAll("-", "");
+            String uuidString = uuid.replaceAll("-", "");
             // Set the ID of the Fieldworker object
             binding.getIndividual().uuid = uuidString;
         }
@@ -214,7 +214,7 @@ public class IndividualFragment extends Fragment {
             String id = locations.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
             while (true) {
                 try {
-                    if (!(individualViewModels.findAll(id) != null)) break;
+                    if (individualViewModels.findAll(id) == null) break;
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -345,9 +345,9 @@ public class IndividualFragment extends Fragment {
             if (datae != null) {
                 binding.setMother(datae);
 
-                TextInputEditText name = binding.getRoot().findViewById(R.id.mother_name);
-                TextInputEditText dob = binding.getRoot().findViewById(R.id.mother_dob);
-                TextInputEditText age = binding.getRoot().findViewById(R.id.mothers_age);
+                AppCompatEditText name = binding.getRoot().findViewById(R.id.mother_name);
+                AppCompatEditText dob = binding.getRoot().findViewById(R.id.mother_dob);
+                AppCompatEditText age = binding.getRoot().findViewById(R.id.mothers_age);
                 name.setText(datae.firstName + " " + datae.lastName);
                 dob.setText(datae.getDob());
                 age.setText(String.valueOf(datae.getAge()));
@@ -361,9 +361,9 @@ public class IndividualFragment extends Fragment {
             if (data != null) {
                 binding.setFather(data);
 
-                TextInputEditText name = binding.getRoot().findViewById(R.id.father_name);
-                TextInputEditText dob = binding.getRoot().findViewById(R.id.father_dob);
-                TextInputEditText age = binding.getRoot().findViewById(R.id.fathers_age);
+                AppCompatEditText name = binding.getRoot().findViewById(R.id.father_name);
+                AppCompatEditText dob = binding.getRoot().findViewById(R.id.father_dob);
+                AppCompatEditText age = binding.getRoot().findViewById(R.id.fathers_age);
                 name.setText(data.firstName + " " + data.lastName);
                 dob.setText(data.getDob());
                 age.setText(String.valueOf(data.getAge()));

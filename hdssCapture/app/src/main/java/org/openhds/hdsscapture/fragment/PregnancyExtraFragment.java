@@ -186,7 +186,7 @@ public class PregnancyExtraFragment extends Fragment {
                 final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
                 data.individual_uuid = individual.getUuid();

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -44,12 +45,12 @@ public class HierarchyActivity extends AppCompatActivity {
     private ArrayAdapter<Hierarchy> level5Adapter;
     private ArrayAdapter<Hierarchy> level6Adapter;
 
-    private List<Hierarchy> level1List = new ArrayList<>();
-    private List<Hierarchy> level2List = new ArrayList<>();
-    private List<Hierarchy> level3List = new ArrayList<>();
-    private List<Hierarchy> level4List = new ArrayList<>();
-    private List<Hierarchy> level5List = new ArrayList<>();
-    private List<Hierarchy> level6List = new ArrayList<>();
+    private final List<Hierarchy> level1List = new ArrayList<>();
+    private final List<Hierarchy> level2List = new ArrayList<>();
+    private final List<Hierarchy> level3List = new ArrayList<>();
+    private final List<Hierarchy> level4List = new ArrayList<>();
+    private final List<Hierarchy> level5List = new ArrayList<>();
+    private final List<Hierarchy> level6List = new ArrayList<>();
 
 
 
@@ -348,7 +349,7 @@ public class HierarchyActivity extends AppCompatActivity {
             }
         });
 
-        final ExtendedFloatingActionButton start = findViewById(R.id.btn_location);
+        final Button start = findViewById(R.id.btn_location);
         start.setOnClickListener(v -> {
             if (level6Spinner.getSelectedItemPosition() == 0 || level6Spinner.getAdapter().isEmpty()) {
                 Toast.makeText(this, "Please Select All Fields", Toast.LENGTH_LONG).show();
@@ -393,7 +394,7 @@ public class HierarchyActivity extends AppCompatActivity {
 
 
 
-        final ExtendedFloatingActionButton base = findViewById(R.id.btn_baseline);
+        final Button base = findViewById(R.id.btn_baseline);
         base.setOnClickListener(v -> {
             if (level6Adapter == null || level6Spinner.getAdapter().isEmpty()) {
                 Toast.makeText(this, "Please Select All Fields", Toast.LENGTH_LONG).show();
@@ -435,6 +436,12 @@ public class HierarchyActivity extends AppCompatActivity {
 //            intent.putExtra(LEVEL6_DATA, level6Data);
 //            intent.putExtra(FIELDWORKER_DATA, fieldworkerData);
 //            startActivity(intent);
+        });
+
+        final Button remainder = findViewById(R.id.btn_visit);
+        remainder.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(),RemainderActivity.class);
+            startActivity(i);
         });
 
 

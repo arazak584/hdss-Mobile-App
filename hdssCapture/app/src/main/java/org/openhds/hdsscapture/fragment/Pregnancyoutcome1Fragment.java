@@ -25,6 +25,7 @@ import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
+import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.databinding.FragmentOutcomeBinding;
@@ -34,6 +35,7 @@ import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outcome;
+import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
@@ -270,6 +272,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         PregnancyoutcomeViewModel pviewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
         ResidencyViewModel residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+        PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         try {
             Pregnancyoutcome data = viewModel.finds(individual.uuid);
             if (data != null) {
@@ -277,11 +280,26 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             } else {
                 data = new Pregnancyoutcome();
 
+                Pregnancy dts = pregnancyViewModel.out2(individual.uuid);
+                if (dts != null){
+
+                    data.outcomeDate = dts.outcome_date;
+                    data.conceptionDate = dts.recordedDate;
+                    data.rec_anc = dts.anteNatalClinic;
+                    data.month_pg = dts.first_rec;
+                    data.who_anc = dts.attend_you;
+                    data.num_anc = dts.anc_visits;
+                    data.pregnancy_uuid = dts.uuid;
+                }
+                if(data.pregnancy_uuid ==null){
+                    Toast.makeText(getContext(), "Kindly Pick the Pregnancy Before you pick the Outcome", Toast.LENGTH_LONG).show();
+                }
+
                 final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
 
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
                 data.mother_uuid = individual.getUuid();
@@ -330,7 +348,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
                 if (data.childuuid == null){
                     String uuid = UUID.randomUUID().toString();
-                    String uuidString = uuid.toString().replaceAll("-", "");
+                    String uuidString = uuid.replaceAll("-", "");
 
                     data.childuuid = uuidString;
                     data.individual_uuid = uuidString;
@@ -342,7 +360,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String id = locations.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -359,10 +377,10 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
                 //Additions
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
 
                 String rs = UUID.randomUUID().toString();
-                String rsi = rs.toString().replaceAll("-", "");
+                String rsi = rs.replaceAll("-", "");
 
                 data.individual_uuid = uuidString;
                 data.childuuid = uuidString;
@@ -390,7 +408,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String id = locations.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -417,7 +435,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
                 if (data.childuuid == null){
                     String uuid = UUID.randomUUID().toString();
-                    String uuidString = uuid.toString().replaceAll("-", "");
+                    String uuidString = uuid.replaceAll("-", "");
 
                     data.childuuid = uuidString;
                     data.individual_uuid = uuidString;
@@ -432,7 +450,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String id = locations.compextId + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -449,10 +467,10 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
                 //Additions
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
 
                 String rs = UUID.randomUUID().toString();
-                String rsi = rs.toString().replaceAll("-", "");
+                String rsi = rs.replaceAll("-", "");
 
                 data.individual_uuid = uuidString;
                 data.childuuid = uuidString;
@@ -482,7 +500,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String id = locations.compextId + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -509,7 +527,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
                 if (data.childuuid == null){
                     String uuid = UUID.randomUUID().toString();
-                    String uuidString = uuid.toString().replaceAll("-", "");
+                    String uuidString = uuid.replaceAll("-", "");
 
                     data.childuuid = uuidString;
                     data.individual_uuid = uuidString;
@@ -524,7 +542,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String id = locations.compextId + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -541,10 +559,10 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
                 //Additions
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
 
                 String rs = UUID.randomUUID().toString();
-                String rsi = rs.toString().replaceAll("-", "");
+                String rsi = rs.replaceAll("-", "");
 
                 data.individual_uuid = uuidString;
                 data.childuuid = uuidString;
@@ -575,7 +593,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String id = locations.compextId + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -602,7 +620,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
                 if (data.childuuid == null){
                     String uuid = UUID.randomUUID().toString();
-                    String uuidString = uuid.toString().replaceAll("-", "");
+                    String uuidString = uuid.replaceAll("-", "");
 
                     data.childuuid = uuidString;
                     data.individual_uuid = uuidString;
@@ -617,7 +635,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String id = locations.compextId + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -634,10 +652,10 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
                 //Additions
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
 
                 String rs = UUID.randomUUID().toString();
-                String rsi = rs.toString().replaceAll("-", "");
+                String rsi = rs.replaceAll("-", "");
 
                 data.individual_uuid = uuidString;
                 data.childuuid = uuidString;
@@ -668,7 +686,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     String id = locations.compextId + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -694,7 +712,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data = new Death();
 
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
                 data.insertDate = new Date();
@@ -1363,10 +1381,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
         }
-        if (save && binding.getPregoutcome().stillbirth != null) {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    PregnancyExtraFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
-        }else {
+        if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }
