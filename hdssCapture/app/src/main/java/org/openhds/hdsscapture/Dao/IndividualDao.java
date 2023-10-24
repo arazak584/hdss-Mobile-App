@@ -56,7 +56,7 @@ public interface IndividualDao {
             " ( fullName LIKE:id OR c.compno LIKE:id OR ghanacard LIKE :id) ORDER BY dob ")
     List<Individual> retrieveBy(String id);
 
-    @Query("SELECT a.*, compno as compextId, firstName || ' ' || lastName as fullName, b.endType " +
+    @Query("SELECT a.*,f.extId as houseExtId, compno as compextId, firstName || ' ' || lastName as fullName, b.endType " +
             "FROM individual AS a " +
             "INNER JOIN ( " +
             "   SELECT individual_uuid, MAX(startDate) AS maxStartDate " +
@@ -64,11 +64,12 @@ public interface IndividualDao {
             "   GROUP BY individual_uuid " +
             ") AS latest_residency ON a.uuid = latest_residency.individual_uuid " +
             "INNER JOIN residency AS b ON a.uuid = b.individual_uuid AND b.startDate = latest_residency.maxStartDate " +
+            "INNER JOIN socialgroup as f ON b.socialgroup_uuid=f.uuid " +
             "INNER JOIN Locations AS c ON b.location_uuid = c.uuid " +
             "INNER JOIN locationhierarchy as d on c.locationLevel_uuid=d.uuid " +
             "LEFT JOIN locationhierarchy as e on d.parent_uuid=e.uuid " +
             "WHERE b.endType != 3 AND firstName != 'FAKE' AND d.name LIKE :id AND (fullName LIKE :searchText OR c.compno LIKE :searchText OR ghanacard LIKE :searchText) " +
-            "ORDER BY dob")
+            "ORDER BY f.extId,dob")
     List<Individual> retrieveBySearch(String id, String searchText);
 
 
