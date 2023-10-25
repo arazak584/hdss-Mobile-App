@@ -23,8 +23,6 @@ public class DeathViewModel extends AndroidViewModel {
         deathRepository = new DeathRepository(application);
     }
 
-
-
     public Death find(String id) throws ExecutionException, InterruptedException {
         return deathRepository.find(id);
     }

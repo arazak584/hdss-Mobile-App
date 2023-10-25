@@ -33,10 +33,10 @@ public class Death extends BaseObservable implements Parcelable {
     @Expose
     @NotNull
     @PrimaryKey
-    public String individual_uuid;
+    public String uuid;
 
     @Expose
-    public String uuid;
+    public String individual_uuid;
 
     @Expose
     public Date deathDate;
@@ -340,6 +340,7 @@ public class Death extends BaseObservable implements Parcelable {
     }
 
     protected Death(Parcel in) {
+        this.uuid = in.readString();
         this.individual_uuid = in.readString();
         this.extId = in.readString();
         this.deathDate = (java.util.Date) in.readSerializable();
@@ -380,6 +381,7 @@ public class Death extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.uuid);
         dest.writeString(this.individual_uuid);
         dest.writeString(this.extId);
         dest.writeSerializable(this.deathDate);
