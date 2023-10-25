@@ -382,6 +382,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@={dup.dup1_fname}"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
                             android:inputType="textPersonName"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -398,6 +400,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@={dup.dup1_lname}"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
                             android:inputType="textPersonName"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -431,7 +435,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:visibility="gone"
-                            android:layout_width="match_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="5dp"
@@ -478,6 +482,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@={dup.dup2_fname}"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
                             android:inputType="textPersonName"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -494,6 +500,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@={dup.dup2_lname}"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
                             android:inputType="textPersonName"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
