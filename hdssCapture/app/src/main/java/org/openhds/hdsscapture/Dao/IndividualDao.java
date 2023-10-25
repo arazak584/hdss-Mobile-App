@@ -152,6 +152,13 @@ public interface IndividualDao {
             " date('now', '-14 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
     List<Individual> error();
 
+    @Query("SELECT a.*,d.compextId,c.extId as houseExtId,c.groupName as lastName FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
+            " INNER JOIN socialgroup c on b.socialgroup_uuid=c.uuid INNER JOIN locations d " +
+            " ON b.location_uuid=d.uuid " +
+            " WHERE firstName!='FAKE' and groupName='UNK' and b.endType=1 " +
+            " GROUP BY c.extId")
+    List<Individual> err();
+
 //    @Query("SELECT * FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
 //            " INNER JOIN locations c on b.location_uuid=c.uuid " +
 //            " WHERE firstName!='FAKE' and " +
@@ -173,8 +180,6 @@ public interface IndividualDao {
             "ORDER BY c.compextId")
     List<Individual> errors();
 
-    @Query("SELECT * FROM individual where extId='XDA000005001'")
-    List<Individual> err();
 
     @Query("SELECT b.* FROM individual as a LEFT JOIN individual as b on a.mother_uuid=b.uuid" +
             " where a.uuid=:id")

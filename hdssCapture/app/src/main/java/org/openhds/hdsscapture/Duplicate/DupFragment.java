@@ -1,4 +1,4 @@
-package org.openhds.hdsscapture.fragment;
+package org.openhds.hdsscapture.Duplicate;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
-import org.openhds.hdsscapture.Dialog.DupDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
@@ -27,17 +26,16 @@ import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
+import org.openhds.hdsscapture.fragment.EventsFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -114,6 +112,8 @@ public class DupFragment extends Fragment {
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_dup);
+        Button showDialogButton1 = binding.getRoot().findViewById(R.id.button1_dup);
+        Button showDialogButton2 = binding.getRoot().findViewById(R.id.button2_dup);
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
         ind.setText(individual.firstName + " " + individual.lastName);
 
@@ -142,6 +142,53 @@ public class DupFragment extends Fragment {
             }
         });
 
+        showDialogButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressDialog = new ProgressDialog(requireContext());
+                progressDialog.setMessage("Loading Individuals...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+                // Simulate long operation
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 500);
+
+
+                // Show the dialog fragment
+                Dup1DialogFragment.newInstance(individual, residency, locations,socialgroup)
+                        .show(getChildFragmentManager(), "Dup1DialogFragment");
+            }
+        });
+
+        showDialogButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressDialog = new ProgressDialog(requireContext());
+                progressDialog.setMessage("Loading Individuals...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+                // Simulate long operation
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 500);
+
+
+                // Show the dialog fragment
+                Dup2DialogFragment.newInstance(individual, residency, locations,socialgroup)
+                        .show(getChildFragmentManager(), "Dup2DialogFragment");
+            }
+        });
 
         DuplicateViewModel viewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
         try {

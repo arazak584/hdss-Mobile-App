@@ -590,7 +590,7 @@
     <string name="admission">Has the baby been admitted at a health facility in the last six months?</string>
     <string name="query">QUERIES</string>
     <string name="reserror">Resolve these errors before you Sync</string>
-    <string name="dup">Duplicate Name</string>
+    <string name="dup">Select Duplicate Name</string>
     <string name="send_duplicate">Send Duplicate</string>
     <string name="old_res">Previous Residency</string>
     <string name="duplicate">Duplicate Registration</string>

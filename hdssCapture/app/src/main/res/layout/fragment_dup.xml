@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context=".fragment.DupFragment">
+        tools:context=".Duplicate.DupFragment">
 
         <TextView
             android:layout_width="match_parent"
@@ -323,10 +323,19 @@
                         android:textSize="30sp"
                         android:textStyle="bold" />
 
+                    <Button
+                        android:id="@+id/button1_dup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dup"
+                        android:background="@drawable/btnd_rone_dgbevel"
+                        android:textColor="@android:color/background_light"
+                        tools:ignore="DuplicateSpeakableTextCheck" />
+
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:visibility="gone"
-                            android:layout_width="match_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="5dp"
@@ -410,6 +419,15 @@
                         android:textColor="@color/colorPrimary"
                         android:textSize="30sp"
                         android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/button2_dup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dup"
+                        android:background="@drawable/btnd_rone_dgbevel"
+                        android:textColor="@android:color/background_light"
+                        tools:ignore="DuplicateSpeakableTextCheck" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:visibility="gone"

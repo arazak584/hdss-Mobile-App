@@ -1,4 +1,4 @@
-package org.openhds.hdsscapture.Adapter;
+package org.openhds.hdsscapture.Duplicate;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +11,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.openhds.hdsscapture.Dialog.DupDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.entity.Individual;
@@ -97,76 +96,25 @@ public class DupAdapter extends RecyclerView.Adapter<DupAdapter.ViewHolder>{
         holder.firstname.setText(individual.getFirstName());
         holder.lastname.setText(individual.getLastName());
 
-            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                // Get the text field in the IndividualFragment where you want to insert the mother's ID
-                EditText dpid = null;
-                EditText fname = null;
-                EditText lname = null;
-                EditText dob = null;
-                switch (ViewHolder.numberOfdup) {
-                    case 1:
-                        dpid = activity.requireActivity().findViewById(R.id.dup_uuid);
-                        dob = activity.requireActivity().findViewById(R.id.dup_dob);
-                        lname = activity.requireActivity().findViewById(R.id.dup_lname);
-                        fname = activity.requireActivity().findViewById(R.id.dup_fname);
-                        break;
-                    case 2:
-                        dpid = activity.requireActivity().findViewById(R.id.dup1_uuid);
-                        dob = activity.requireActivity().findViewById(R.id.dup1_dob);
-                        lname = activity.requireActivity().findViewById(R.id.dup1_lname);
-                        fname = activity.requireActivity().findViewById(R.id.dup1_fname);
+                // Get the text field in the IndividualFragment where you want to insert the mother's ID
+                EditText partnerIdField = activity.requireActivity().findViewById(R.id.dup_uuid);
+                EditText fname = activity.requireActivity().findViewById(R.id.dup_fname);
+                EditText lname = activity.requireActivity().findViewById(R.id.dup_lname);
+                EditText dob = activity.requireActivity().findViewById(R.id.dup_dob);
 
-                        // Set dup2_uuid to null when numberOfdup is 2
-                        EditText dup2Uuid = activity.requireActivity().findViewById(R.id.dup2_uuid);
-                        dup2Uuid.setText(null);
-                        break;
-                    case 3:
-                        dpid = activity.requireActivity().findViewById(R.id.dup2_uuid);
-                        dob = activity.requireActivity().findViewById(R.id.dup2_dob);
-                        lname = activity.requireActivity().findViewById(R.id.dup2_lname);
-                        fname = activity.requireActivity().findViewById(R.id.dup2_fname);
-                        break;
-                }
-
-                // Set the dup ID in the text field
-                dpid.setText(individual.getUuid());
+                // Set the mother's ID in the text field
+                partnerIdField.setText(individual.getUuid());
                 fname.setText(individual.getFirstName());
                 lname.setText(individual.getLastName());
                 dob.setText(individual.getDob());
 
-                // Increment the flag to update the next field on the next click
-                // Update the fieldToUpdate for the next click
-                if (ViewHolder.numberOfdup < 3) {
-                    ViewHolder.numberOfdup++;
-                } else {
-                    ViewHolder.numberOfdup = 1;
-                }
-
+                // Hide the MotherDialogFragment
                 activity.dismiss();
             }
         });
-
-//        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // Get the text field in the IndividualFragment where you want to insert the mother's ID
-//                EditText partnerIdField = activity.requireActivity().findViewById(R.id.dup_uuid);
-//                EditText fname = activity.requireActivity().findViewById(R.id.dup_fname);
-//                EditText lname = activity.requireActivity().findViewById(R.id.dup_lname);
-//                EditText dob = activity.requireActivity().findViewById(R.id.dup_dob);
-//
-//                // Set the mother's ID in the text field
-//                partnerIdField.setText(individual.getUuid());
-//                fname.setText(individual.getFirstName());
-//                lname.setText(individual.getLastName());
-//                dob.setText(individual.getDob());
-//
-//                // Hide the MotherDialogFragment
-//                activity.dismiss();
-//            }
-//        });
     }
 
     @Override

@@ -38,7 +38,7 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.fragment.AmendmentFragment;
 import org.openhds.hdsscapture.fragment.DemographicFragment;
-import org.openhds.hdsscapture.fragment.DupFragment;
+import org.openhds.hdsscapture.Duplicate.DupFragment;
 import org.openhds.hdsscapture.fragment.EventsFragment;
 import org.openhds.hdsscapture.fragment.PregnancyExtraFragment;
 import org.openhds.hdsscapture.fragment.PregnancyFragment;

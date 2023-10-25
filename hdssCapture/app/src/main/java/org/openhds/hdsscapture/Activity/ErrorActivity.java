@@ -194,6 +194,20 @@ public class ErrorActivity extends AppCompatActivity {
 
             }
 
+            int h=1;
+            for (Individual e : individualViewModel.err()) {
+                //String formattedDate = f.format(e.insertDate);
+                Queries r1 = new Queries();
+                r1.name = h + ". Household ID: " +  e.houseExtId;
+                r1.extid = "Compno: " + e.compextId + " - Househead: " + e.lastName;
+                r1.date = "";
+                r1.error = "Head of Household is Unknown";
+                r1.index = h;
+                list.add(r1);
+                h++;
+
+            }
+
             int i=1;
             for (Outcome e : outcomeViewModel.error()) {
                 //String formattedDate = f.format(e.insertDate);
