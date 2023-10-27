@@ -1382,9 +1382,10 @@ public class PregnancyoutcomeFragment extends Fragment {
             if (finalData.sttime !=null && finalData.edtime==null){
                 finalData.edtime = endtime;
             }
+
             finalData.complete=1;
             viewModel.add(finalData);
-           // Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_SHORT).show();
 
         }
         if (close) {

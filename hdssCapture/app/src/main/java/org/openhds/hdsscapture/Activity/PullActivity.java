@@ -32,10 +32,12 @@ import org.openhds.hdsscapture.Dao.VaccinationDao;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Repositories.IndividualRepository;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
 import org.openhds.hdsscapture.entity.CodeBook;
+import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
@@ -171,12 +173,31 @@ public class PullActivity extends AppCompatActivity {
                            Fieldworker[] fw = response.body().getData().toArray(new Fieldworker[0]);
                            fieldworkerViewModel.add(fw);
 
+                                   //Sync Fieldworker
+                           progress.setMessage("Updating Settings...");
+                           final ConfigViewModel configViewModel = new ViewModelProvider(PullActivity.this).get(ConfigViewModel.class);
+                           Call<DataWrapper<Configsettings>> c_callable = dao.getConfig();
+                           c_callable.enqueue(new Callback<DataWrapper<Configsettings>>() {
+                           @Override
+                           public void onResponse(Call<DataWrapper<Configsettings>> call, Response<DataWrapper<Configsettings>> response) {
+                           Configsettings[] cng = response.body().getData().toArray(new Configsettings[0]);
+                               configViewModel.add(cng);
+
 
                         progress.dismiss();
                          textView_SyncHierarchyData.setText("Codebook and Locationhierarchy updated Successfully");
                            textView_SyncHierarchyData.setTextColor(Color.parseColor("#32CD32"));
                                 //textView_SyncHierarchyData.setTextColor(Color.rgb(0, 114, 133));
                             }
+
+                               @Override
+                               public void onFailure(Call<DataWrapper<Configsettings>> call, Throwable t) {
+                                   progress.dismiss();
+                                   textView_SyncHierarchyData.setText("Settings Sync Error!");
+                                   textView_SyncHierarchyData.setTextColor(Color.RED);
+                               }
+                           });
+                               }
 
                                @Override
                                public void onFailure(Call<DataWrapper<Fieldworker>> call, Throwable t) {

@@ -46,7 +46,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView firstname, lastname, nickname, permid, dob, compno, gender,status, hhid;
+        TextView firstname, lastname, nickname, permid, dob, compno, gender,status, hhid, age;
         LinearLayout linearLayout;
         CardView cardView;
 
@@ -91,7 +91,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         holder.dob.setText(individual.getDob());
         holder.compno.setText(individual.compextId);
         holder.hhid.setText(individual.houseExtId);
-        //holder.age.setText(String.valueOf(individual.getAge()));
+        //holder.hhid.setText(String.valueOf(individual.age));
         String otherName = individual.getOtherName();
         if (otherName == null || otherName.isEmpty()) {
             holder.nickname.setText("");

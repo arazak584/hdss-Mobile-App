@@ -3,6 +3,7 @@ package org.openhds.hdsscapture.Dao;
 
 import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.CodeBook;
+import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Duplicate;
@@ -38,6 +39,9 @@ public interface ApiDao {
 
     @GET("/api/round")
     Call<DataWrapper<Round>> getRound();
+
+    @GET("/api/parameter")
+    Call<DataWrapper<Configsettings>> getConfig();
 
     @GET("/api/fieldworker")
     Call<DataWrapper<Fieldworker>> getFw();

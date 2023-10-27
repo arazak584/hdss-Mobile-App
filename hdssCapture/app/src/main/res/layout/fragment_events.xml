@@ -10,6 +10,10 @@
             name="individual"
             type="org.openhds.hdsscapture.entity.Individual" />
 
+        <variable
+            name="config"
+            type="org.openhds.hdsscapture.entity.Configsettings" />
+
     </data>
 
 

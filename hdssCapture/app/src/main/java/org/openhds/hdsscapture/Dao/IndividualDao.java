@@ -77,7 +77,7 @@ public interface IndividualDao {
             "INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
             "INNER JOIN Locations AS c ON b.location_uuid = c.uuid " +
             "WHERE b.endType = 1 AND gender = 2 AND c.compextId = :id " +
-            "AND date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob / 1000, 'unixepoch')) " +
+            "AND strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) >=(SELECT mother_age from config) " +
             "UNION " +
             "SELECT uuid FROM individual WHERE extId = 'UNK') order by dob DESC")
     List<Individual> retrieveByMother(String id);
@@ -86,7 +86,7 @@ public interface IndividualDao {
             "INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
             " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
             "WHERE gender = 2 AND b.endType = 1 AND " +
-            "date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) AND " +
+            "strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) >=(SELECT mother_age from config) AND " +
             "(firstName LIKE :id OR lastName LIKE :id OR c.compno LIKE :id)")
     List<Individual> retrieveByMotherSearch(String id);
 
@@ -95,7 +95,7 @@ public interface IndividualDao {
             "INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
             "INNER JOIN Locations AS c ON b.location_uuid = c.uuid " +
             "WHERE b.endType = 1 AND gender = 1 AND c.compextId = :id AND firstName!='FAKE'" +
-            "AND date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob / 1000, 'unixepoch')) " +
+            "AND strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) >=(SELECT father_age from config) " +
             "UNION " +
             "SELECT uuid FROM individual WHERE extId = 'UNK') order by dob DESC")
     List<Individual> retrieveByFather(String id);
@@ -108,7 +108,7 @@ public interface IndividualDao {
     @Query("SELECT a.* FROM individual as a " + " LEFT JOIN residency as b ON a.uuid = b.individual_uuid " +
             " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
             " WHERE b.endType=1 and gender=1 and c.compextId=:id and firstName!='FAKE' and " +
-            " date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
+            " strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) >=(SELECT rel_age from config) order by dob")
     List<Individual> retrievePartner(String id);
 
 
@@ -116,7 +116,7 @@ public interface IndividualDao {
             "INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
             " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
             "WHERE gender = 1 AND b.endType = 1 and firstName!='FAKE' AND " +
-            "date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) AND " +
+            "strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) >=(SELECT father_age from config) AND " +
             "(firstName LIKE :id OR lastName LIKE :id OR c.compno LIKE :id OR ghanacard LIKE :id)")
     List<Individual> retrieveByFatherSearch(String id);
 
@@ -126,7 +126,7 @@ public interface IndividualDao {
     @Query("SELECT a.*,c.compextId FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
             " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
             " WHERE b.endType=1 and c.compextId=:id and firstName!='FAKE' and " +
-            " date('now', '-14 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
+            " strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) >=(SELECT hoh_age from config) order by dob")
     List<Individual> retrieveHOH(String id);
 
     @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
@@ -145,11 +145,18 @@ public interface IndividualDao {
 //            "where c.endType=1 and a.complete=2 AND d.firstName!='FAKE' AND compextId is not null GROUP BY a.socialgroup_uuid order by dob")
 //    List<Individual> error();
 
+//    @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
+//            " INNER JOIN residency c on b.uuid=c.socialgroup_uuid INNER JOIN locations d " +
+//            " ON c.location_uuid=d.uuid " +
+//            " WHERE firstName!='FAKE' and groupName!='UNK' and c.endType=1 and " +
+//            " date('now', '-14 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
+//    List<Individual> error();
+
     @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
             " INNER JOIN residency c on b.uuid=c.socialgroup_uuid INNER JOIN locations d " +
             " ON c.location_uuid=d.uuid " +
             " WHERE firstName!='FAKE' and groupName!='UNK' and c.endType=1 and " +
-            " date('now', '-14 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
+            " strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) < (SELECT hoh_age from config) GROUP BY b.extId order by dob")
     List<Individual> error();
 
     @Query("SELECT a.*,d.compextId,c.extId as houseExtId,c.groupName as lastName FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +

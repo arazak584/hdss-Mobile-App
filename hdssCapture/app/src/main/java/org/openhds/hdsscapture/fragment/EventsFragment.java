@@ -17,9 +17,11 @@ import org.openhds.hdsscapture.Adapter.EventFormAdapter;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
+import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.DuplicateViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
+import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
@@ -28,6 +30,7 @@ import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.databinding.FragmentEventsBinding;
 import org.openhds.hdsscapture.entity.Amendment;
+import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
@@ -39,6 +42,7 @@ import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
+import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 
 import java.text.ParseException;
@@ -68,6 +72,7 @@ public class EventsFragment extends Fragment {
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
+    private Configsettings configsettings;
     private FragmentEventsBinding binding;
 
     public EventsFragment() {
@@ -119,6 +124,9 @@ public class EventsFragment extends Fragment {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     HouseMembersFragment.newInstance(locations, socialgroup)).commit();
         });
+
+        ConfigViewModel viewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
+
 
         //final SimpleDateFormat f = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
         final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);

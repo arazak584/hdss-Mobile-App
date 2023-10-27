@@ -12,6 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import org.openhds.hdsscapture.Dao.AmendmentDao;
 import org.openhds.hdsscapture.Dao.ApiUrlDao;
 import org.openhds.hdsscapture.Dao.CodeBookDao;
+import org.openhds.hdsscapture.Dao.ConfigDao;
 import org.openhds.hdsscapture.Dao.DeathDao;
 import org.openhds.hdsscapture.Dao.DemographicDao;
 import org.openhds.hdsscapture.Dao.DuplicateDao;
@@ -36,6 +37,7 @@ import org.openhds.hdsscapture.Utilities.Converter;
 import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.ApiUrl;
 import org.openhds.hdsscapture.entity.CodeBook;
+import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Duplicate;
@@ -64,8 +66,8 @@ import java.util.concurrent.Executors;
         Relationship.class, Locations.class, Residency.class, Pregnancyoutcome.class, Individual.class, Round.class, Demographic.class,
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
         Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class, Duplicate.class,
-        ApiUrl.class
-        }, version = 1, exportSchema = true)
+        ApiUrl.class, Configsettings.class
+        }, version = 2 , exportSchema = true)
 
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -93,6 +95,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract VaccinationDao vaccinationDao();
     public abstract DuplicateDao duplicateDao();
     public abstract ApiUrlDao apiUrlDao();
+    public abstract ConfigDao configDao();
 
 
     private static volatile AppDatabase INSTANCE;
@@ -147,6 +150,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 vaccinationDao().deleteAll();
                 duplicateDao().deleteAll();
                 fieldworkerDao().deleteAll();
+                configDao().deleteAll();
 
                 // Perform any other necessary cleanup or initialization
 
