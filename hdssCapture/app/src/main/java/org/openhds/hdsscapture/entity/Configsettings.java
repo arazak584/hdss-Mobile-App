@@ -104,12 +104,12 @@ public class Configsettings extends BaseObservable implements Parcelable {
         this.rel_age = rel_age;
     }
 
-    public String getStartDate() {
+    public String getEarliestDate() {
         if (earliestDate == null) return "Select Start Date";
         return f.format(earliestDate);
     }
 
-    public void setStartDate(String startDate) {
+    public void setEarliestDate(String startDate) {
         if(startDate == null ) this.earliestDate=null;
         else
             try {

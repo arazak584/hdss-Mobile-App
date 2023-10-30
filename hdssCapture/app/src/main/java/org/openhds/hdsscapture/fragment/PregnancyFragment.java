@@ -10,6 +10,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,8 +20,10 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.databinding.FragmentPregnancyBinding;
+import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
@@ -217,6 +220,28 @@ public class PregnancyFragment extends Fragment {
             e.printStackTrace();
         }
 
+        ConfigViewModel configViewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
+        List<Configsettings> configsettings = null;
+
+        try {
+            configsettings = configViewModel.findAll();
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date dt = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).earliestDate : null;
+            AppCompatEditText editText = binding.getRoot().findViewById(R.id.earliest);
+            if (dt != null) {
+                // Format the Date to a String in "yyyy-MM-dd" format
+                String formattedDate = dateFormat.format(dt);
+                //System.out.println("EARLIEST-DATE: " + formattedDate);
+                editText.setText(formattedDate);
+            } else {
+                System.out.println("EARLIEST-DATE: null");
+            }
+
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
         //LOAD SPINNERS
         loadCodeData(binding.anteNatalClinic, "yn_anc");
         loadCodeData(binding.individualComplete, "submit");
@@ -257,14 +282,13 @@ public class PregnancyFragment extends Fragment {
             Pregnancy finalData = binding.getPregnancy();
 
             try {
-                if (!binding.editTextRecordedDate.getText().toString().trim().isEmpty()) {
+                if (!binding.earliest.getText().toString().trim().isEmpty() && !binding.editTextRecordedDate.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    String edateStr = "2018-01-01"; // Assuming edate is a String in the format "yyyy-MM-dd"
-                    Date edate = f.parse(edateStr);
-                    Date stdate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
-                    if (stdate.before(edate)) {
-                        binding.editTextRecordedDate.setError("Conception Date Cannot Be Less than Earliest migration date 2018");
-                        Toast.makeText(getActivity(), "Conception Date Cannot Be Less than Earliest migration date 2018", Toast.LENGTH_LONG).show();
+                    Date stdate = f.parse(binding.earliest.getText().toString().trim());
+                    Date edate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
+                    if (edate.before(stdate)) {
+                        binding.editTextRecordedDate.setError("Conception Date Cannot Be Less than Earliest Event Date");
+                        Toast.makeText(getActivity(), "Conception Date Cannot Be Less than Earliest Event Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     // clear error if validation passes
@@ -274,6 +298,7 @@ public class PregnancyFragment extends Fragment {
                 Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
+
 
             try {
                 if (!binding.editTextRecordedDate.getText().toString().trim().isEmpty() && !binding.editTextLastClinicVisitDate.getText().toString().trim().isEmpty()) {

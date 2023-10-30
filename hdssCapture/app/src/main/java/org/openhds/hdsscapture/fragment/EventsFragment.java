@@ -138,6 +138,7 @@ public class EventsFragment extends Fragment {
         int yrss = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).hoh_age : 0;
         int mage = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).mother_age : 0;
         int fage = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).father_age : 0;
+        Date dt = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).earliestDate : null;
 
         //final SimpleDateFormat f = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
         final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -157,6 +158,7 @@ public class EventsFragment extends Fragment {
         System.out.println("age: " + individual.age);
         System.out.println("ageyrs: " + ageyrs);
         System.out.println("HOH-YRS: " + yrss);
+        System.out.println("EARLIEST-DATE: " + dt);
 
 
         final int yrs = individual.age + (int) ageyrs;

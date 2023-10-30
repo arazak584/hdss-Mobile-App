@@ -38,6 +38,7 @@
             name="death"
             type="org.openhds.hdsscapture.entity.Death" />
 
+
         <variable
             name="eventname"
             type="String" />
@@ -119,6 +120,23 @@
                     android:id="@+id/mig"
                     layout="@layout/fragment_membership_migtype"
                     bind:mig="@{mig}" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/earliest"
+                    android:text="@string/earliest">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/earliest"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"

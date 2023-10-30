@@ -645,6 +645,7 @@
     <string name="loch"><![CDATA[Location & Household]]></string>
     <string name="info">Settings</string>
     <string name="external">External Inmigration</string>
+    <string name="earliest">Earliest Event Date</string>
 
     //SocioDemo End
 
