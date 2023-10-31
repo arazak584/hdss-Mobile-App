@@ -29,7 +29,7 @@ public interface DeathDao {
     @Query("SELECT * FROM death where individual_uuid=:id and complete IS NOT NULL")
     Death finds(String id);
 
-    @Query("SELECT * FROM death WHERE complete=1")
+    @Query("SELECT * FROM death WHERE complete=1 AND deathDate IS NOT NULL")
     List<Death> retrieveToSync();
 
     @Query("SELECT * FROM death WHERE vpmcomplete=1 AND deathDate IS NOT NULL")
@@ -42,9 +42,10 @@ public interface DeathDao {
     List<Death> error();
 
     @Query("SELECT COUNT(*) FROM death a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
-            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username AND a.complete IS NOT NULL")
+            " WHERE a.insertDate BETWEEN :startDate AND :endDate AND b.username = :username AND a.complete IS NOT NULL")
     long count(Date startDate, Date endDate, String username);
 
     @Query("SELECT * FROM death WHERE insertDate > (SELECT startDate FROM round LIMIT 1) AND complete IS NOT NULL order by insertDate DESC")
     List<Death> repo();
+
 }

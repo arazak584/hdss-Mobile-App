@@ -266,8 +266,9 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
+
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonSendEnd"
+            android:id="@+id/buttondth"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -276,6 +277,21 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_death"
+            android:drawableLeft="@drawable/push"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
+            android:layout_gravity="center" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonvpm"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/send_vpm"
             android:drawableLeft="@drawable/push"
             android:background="@drawable/btnd_rone_dgbevel"
             android:textColor="@android:color/background_light"

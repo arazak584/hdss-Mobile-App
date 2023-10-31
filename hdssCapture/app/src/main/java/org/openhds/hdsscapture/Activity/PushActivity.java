@@ -131,7 +131,7 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendLocationdata.setText("Sent " + d.length + " record(s)");
                             //textViewSendLocationdata.setTextColor(Color.rgb(0, 114, 133));
-                            buttonSendLocationdata.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendLocationdata.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -196,7 +196,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendVisit.setText("Sent " + d.length + " record(s)");
-                            buttonSendVisit.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendVisit.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -261,7 +261,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendList.setText("Sent " + d.length + " record(s)");
-                            buttonSendList.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendList.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -329,7 +329,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendIndividualdata.setText("Sent " + d.length + " Individual record(s)");
-                            buttonSendIndividualdata.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendIndividualdata.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -395,7 +395,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendSocialgroupdata.setText("Sent " + d.length + " Socialgroup record(s)");
-                            buttonSendSocialgroupdata.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendSocialgroupdata.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -461,7 +461,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendRelationshipdata.setText("Sent " + d.length + " Relationship record(s)");
-                            buttonSendRelationshipdata.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendRelationshipdata.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -526,7 +526,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendPregnancydata.setText("Sent " + d.length + " Pregnancy record(s)");
-                            buttonSendPregnancydata.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendPregnancydata.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -591,7 +591,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendOutcomedata.setText("Sent " + d.length + " Pregnancy Outcome record(s)");
-                            buttonSendOutcomedata.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendOutcomedata.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -655,7 +655,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendOutcomesdata.setText("Sent " + d.length + " Outcome record(s)");
-                            buttonSendOutcomesdata.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendOutcomesdata.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -722,7 +722,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendDemographicdata.setText("Sent " + d.length + " Demographic record(s)");
-                            buttonSendDemographicdata.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendDemographicdata.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -740,120 +740,133 @@ public class PushActivity extends AppCompatActivity {
         });
 
 
-        //PUSH DEATH DATA (DEATH, VPM)
-        final Button buttonSendEnd = findViewById(R.id.buttonSendEnd);
-        //final TextView textViewSendEnd = findViewById(R.id.textViewSendEnd);
+        //PUSH DEATH
+        final Button buttondth = findViewById(R.id.buttondth);
+        final DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
 
-        final DeathViewModel death = new ViewModelProvider(this).get(DeathViewModel.class);
-        final DeathViewModel vpms = new ViewModelProvider(this).get(DeathViewModel.class);
-        final List<Death> listDeath = new ArrayList<>();
-        final List<Death> listVpm = new ArrayList<>();
-
+        //GET MODIFIED DATA
+        final List<Death> deathList = new ArrayList<>();
         try {
-            listDeath.addAll(death.findToSync());
-            listVpm.addAll(vpms.retrieveVpmSync());
-
-            buttonSendEnd.setText(
-                    "Death (" + listDeath.size() + ")" +
-                            ", VPM(" + listVpm.size() + ")" +
-                            " to send"
-            );
-            buttonSendEnd.setTextColor(Color.WHITE);
-            if (listDeath.isEmpty() && listVpm.isEmpty()) {
-                buttonSendEnd.setVisibility(View.GONE);
-                //textViewSendEnd.setVisibility(View.GONE);
+            deathList.addAll(deathViewModel.findToSync());
+            buttondth.setText("Death (" + deathList.size() + ") to send");
+            buttondth.setTextColor(Color.WHITE);
+            if (deathList.isEmpty()) {
+                buttondth.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
 
-        buttonSendEnd.setOnClickListener(v -> {
+        buttondth.setOnClickListener(v -> {
             progress.setMessage(getResources().getString(R.string.init_syncing));
             progress.show();
 
-            final Death[][] d23 = new Death[1][1];
-            final Death[][] d24 = new Death[1][1];
+            //WRAP THE DATA
+            final DataWrapper<Death> data = new DataWrapper<>(deathList);
 
-            final DataWrapper<Death> dataDeath = new DataWrapper<>(listDeath);
-            if (dataDeath.getData() != null && !dataDeath.getData().isEmpty()) {
-                progress.setMessage("Sending " + dataDeath.getData().size() + " of Death record(s)...");
+            //SEND THE DATA
+            if (data.getData() != null && !data.getData().isEmpty()) {
 
-                for (Death elem : dataDeath.getData()) {
-                    elem.complete = 0;
-                }
+                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Death>> c_callable = dao.sendDeathdata(dataDeath);
+
+                final Call<DataWrapper<Death>> c_callable = dao.sendDeathdata(data);
                 c_callable.enqueue(new Callback<DataWrapper<Death>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            d23[0] = dataDeath.getData().toArray(new Death[0]);
-                            death.add(d23[0]);
+                            Death[] d = data.getData().toArray(new Death[0]);
+
+                            for (Death elem : d) {
+                                elem.complete = 0;
+                                //Log.e("PUSH.tag", "Has value " + elem.edtime);
+                            }
+                            deathViewModel.add(d);
+
                             progress.dismiss();
-                            buttonSendEnd.setText(
-                                    "Death(" + d23[0].length + " of " + listDeath.size() + ")" +
-                                            ", VPM(" + d24[0].length + " of " + listVpm.size() + ")" +
-                                            " sent"
-                            );
-                            buttonSendEnd.setTextColor(Color.parseColor("#FF4500"));
+                            buttondth.setText("Sent " + d.length + " Death record(s)");
+                            buttondth.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Death>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed to send Death data", Toast.LENGTH_LONG).show();
-                        Log.e(TAG, t.getMessage());
+                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
 
                     }
                 });
-
             } else {
                 progress.dismiss();
             }
 
-            final DataWrapper<Death> datavpm = new DataWrapper<>(listVpm);
-            if (datavpm.getData() != null && !datavpm.getData().isEmpty()) {
-                progress.setMessage("Sending " + datavpm.getData().size() + " VPM record(s)...");
+        });
 
-                for (Death elem : datavpm.getData()) {
-                    elem.vpmcomplete = 0;
-                }
 
-                final Call<DataWrapper<Death>> c_callable = dao.sendVpmdata(datavpm);
+        //PUSH VPM
+        final Button buttonvpm = findViewById(R.id.buttonvpm);
+        final DeathViewModel vpmViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+
+        //GET MODIFIED DATA
+        final List<Death> vpmList = new ArrayList<>();
+        try {
+            vpmList.addAll(vpmViewModel.retrieveVpmSync());
+            buttonvpm.setText("VPM (" + vpmList.size() + ") to send");
+            buttonvpm.setTextColor(Color.WHITE);
+            if (vpmList.isEmpty()) {
+                buttonvpm.setVisibility(View.GONE);
+                // textViewSendDemographicdata.setVisibility(View.GONE);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        buttonvpm.setOnClickListener(v -> {
+            progress.setMessage(getResources().getString(R.string.init_syncing));
+            progress.show();
+
+            //WRAP THE DATA
+            final DataWrapper<Death> data = new DataWrapper<>(vpmList);
+
+            //SEND THE DATA
+            if (data.getData() != null && !data.getData().isEmpty()) {
+
+                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
+
+
+                final Call<DataWrapper<Death>> c_callable = dao.sendVpmdata(data);
                 c_callable.enqueue(new Callback<DataWrapper<Death>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            d24[0] = response.body().getData().toArray(new Death[0]);
-                            vpms.add(d24[0]);
+                            Death[] d = data.getData().toArray(new Death[0]);
+
+                            for (Death elems : d) {
+                                elems.vpmcomplete = 0;
+                                //Log.e("PUSH.tag", "Has value " + elem.edtime);
+                            }
+                            vpmViewModel.add(d);
+
                             progress.dismiss();
-                            buttonSendEnd.setText(
-                                    "Death(" + d23[0].length + " of " + listDeath.size() + ")" +
-                                            ", VPM(" + d24[0].length + " of " + listVpm.size() + ")" +
-                                            " sent"
-                            );
-                            buttonSendEnd.setTextColor(Color.parseColor("#FF4500"));
+                            buttonvpm.setText("Sent " + d.length + " VPM record(s)");
+                            buttonvpm.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Death>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed to send VPM", Toast.LENGTH_LONG).show();
-                        Log.e(TAG, t.getMessage());
+                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
 
                     }
                 });
-
             } else {
                 progress.dismiss();
             }
-
 
         });
 
@@ -904,7 +917,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendSocio.setText("Sent " + d.length + " record(s)");
-                            buttonSendSocio.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendSocio.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -971,7 +984,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendRes.setText("Sent " + d.length + " Residency record(s)");
-                            buttonSendRes.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendRes.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -1036,7 +1049,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendImg.setText("Sent " + d.length + " Inmigration record(s)");
-                            buttonSendImg.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendImg.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -1102,7 +1115,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendOmg.setText("Sent " + d.length + " Outmigration record(s)");
-                            buttonSendOmg.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendOmg.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -1170,7 +1183,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendAmend.setText("Sent " + d.length + " Amendment record(s)");
-                            buttonSendAmend.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendAmend.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -1237,7 +1250,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendVac.setText("Sent " + d.length + " Vaccination record(s)");
-                            buttonSendVac.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendVac.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -1302,7 +1315,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendDup.setText("Sent " + d.length + " Duplicate record(s)");
-                            buttonSendDup.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendDup.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 

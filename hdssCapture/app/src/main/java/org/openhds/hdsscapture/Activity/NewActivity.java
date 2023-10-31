@@ -100,12 +100,12 @@ public class NewActivity extends AppCompatActivity {
 
 //            int g=1;
 //            for (Death e : deathViewModel.repo()) {
-//                String formattedDate = f.format(e.insertDate);
+//                //String formattedDate = f.format(e.insertDate);
 //                Newloc r1 = new Newloc();
 //                r1.id1 = g + ". Death";
 //                r1.id2 = "" + e.extId + " - " + e.compno;
 //                r1.id3 = "" + e.firstName + " " + e.lastName;
-//                r1.id4 = "" + formattedDate;
+//                r1.id4 = "" + e.deathCause;
 //                r1.index = g;
 //
 //                list.add(r1);

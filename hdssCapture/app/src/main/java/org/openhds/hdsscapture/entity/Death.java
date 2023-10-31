@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -185,13 +186,14 @@ public class Death extends BaseObservable implements Parcelable {
         if (insertDate == null) return null;
         return f.format(insertDate);
     }
-
     public void setInsertDate(String insertDate) {
-        try {
-            this.insertDate = f.parse(insertDate);
-        } catch (ParseException e) {
-            System.out.println("Visit Date Error " + e.getMessage());
-        }
+        if(insertDate == null ) this.insertDate=null;
+        else
+            try {
+                this.insertDate = f.parse(insertDate);
+            } catch (ParseException e) {
+                System.out.println("Visit Date Error " + e.getMessage());
+            }
     }
 
     public String getFirstName() {

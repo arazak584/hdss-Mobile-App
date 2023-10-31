@@ -1022,6 +1022,44 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                             return;
                         }
                     }
+
+                    try {
+                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
+                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                            Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                            Date recordedDate = f.parse(binding.editTextConception.getText().toString().trim());
+
+                            Calendar startCalendar = Calendar.getInstance();
+                            startCalendar.setTime(recordedDate);
+
+                            Calendar endCalendar = Calendar.getInstance();
+                            endCalendar.setTime(outcomeDate);
+
+                            int yearDiff = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+                            int monthDiff = endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+                            int dayDiff = endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH);
+
+                            // Adjust the difference based on the day component
+                            if (dayDiff < 0) {
+                                monthDiff--;
+                            }
+
+                            // Calculate the total difference in months
+                            int totalDiffMonths = yearDiff * 12 + monthDiff;
+
+                            if (totalDiffMonths <= 5 && inf.type==1 || inf.type==2) {
+                                Toast.makeText(getActivity(), "Outcome cannot be Live Birth or Still Birth for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                                return;
+                            }else if (totalDiffMonths > 5 && inf.type==3){
+                                Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                    } catch (ParseException e) {
+                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
@@ -1085,6 +1123,44 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                             return;
                         }
                     }
+
+                    try {
+                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
+                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                            Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                            Date recordedDate = f.parse(binding.editTextConception.getText().toString().trim());
+
+                            Calendar startCalendar = Calendar.getInstance();
+                            startCalendar.setTime(recordedDate);
+
+                            Calendar endCalendar = Calendar.getInstance();
+                            endCalendar.setTime(outcomeDate);
+
+                            int yearDiff = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+                            int monthDiff = endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+                            int dayDiff = endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH);
+
+                            // Adjust the difference based on the day component
+                            if (dayDiff < 0) {
+                                monthDiff--;
+                            }
+
+                            // Calculate the total difference in months
+                            int totalDiffMonths = yearDiff * 12 + monthDiff;
+
+                            if (totalDiffMonths <= 5 && inf.type==1 || inf.type==2) {
+                                Toast.makeText(getActivity(), "Outcome cannot be Live Birth or Still Birth for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                                return;
+                            }else if (totalDiffMonths > 5 && inf.type==3){
+                                Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                    } catch (ParseException e) {
+                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
@@ -1149,6 +1225,44 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                             return;
                         }
                     }
+
+                    try {
+                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
+                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                            Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                            Date recordedDate = f.parse(binding.editTextConception.getText().toString().trim());
+
+                            Calendar startCalendar = Calendar.getInstance();
+                            startCalendar.setTime(recordedDate);
+
+                            Calendar endCalendar = Calendar.getInstance();
+                            endCalendar.setTime(outcomeDate);
+
+                            int yearDiff = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+                            int monthDiff = endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+                            int dayDiff = endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH);
+
+                            // Adjust the difference based on the day component
+                            if (dayDiff < 0) {
+                                monthDiff--;
+                            }
+
+                            // Calculate the total difference in months
+                            int totalDiffMonths = yearDiff * 12 + monthDiff;
+
+                            if (totalDiffMonths <= 5 && inf.type==1 || inf.type==2) {
+                                Toast.makeText(getActivity(), "Outcome cannot be Live Birth or Still Birth for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                                return;
+                            }else if (totalDiffMonths > 5 && inf.type==3){
+                                Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                    } catch (ParseException e) {
+                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
@@ -1212,6 +1326,45 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                             return;
                         }
                     }
+
+                    try {
+                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
+                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                            Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                            Date recordedDate = f.parse(binding.editTextConception.getText().toString().trim());
+
+                            Calendar startCalendar = Calendar.getInstance();
+                            startCalendar.setTime(recordedDate);
+
+                            Calendar endCalendar = Calendar.getInstance();
+                            endCalendar.setTime(outcomeDate);
+
+                            int yearDiff = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+                            int monthDiff = endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+                            int dayDiff = endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH);
+
+                            // Adjust the difference based on the day component
+                            if (dayDiff < 0) {
+                                monthDiff--;
+                            }
+
+                            // Calculate the total difference in months
+                            int totalDiffMonths = yearDiff * 12 + monthDiff;
+
+                            if (totalDiffMonths <= 5 && inf.type==1 || inf.type==2) {
+                                Toast.makeText(getActivity(), "Outcome cannot be Live Birth or Still Birth for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                                return;
+                            }else if (totalDiffMonths > 5 && inf.type==3){
+                                Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                    } catch (ParseException e) {
+                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+
+
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
