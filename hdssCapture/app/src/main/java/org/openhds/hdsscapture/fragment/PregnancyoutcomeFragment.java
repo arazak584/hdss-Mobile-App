@@ -271,6 +271,8 @@ public class PregnancyoutcomeFragment extends Fragment {
             Pregnancyoutcome data = viewModel.find(individual.uuid);
             if (data != null) {
                 binding.setPregoutcome(data);
+                binding.buttonOutcomeConception.setEnabled(false);
+                binding.buttonOutcomeStartDate.setEnabled(false);
             } else {
                 data = new Pregnancyoutcome();
 
@@ -313,6 +315,8 @@ public class PregnancyoutcomeFragment extends Fragment {
                 // Format the components into a string with leading zeros
                 String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
                 data.sttime = timeString;
+                binding.buttonOutcomeConception.setEnabled(false);
+                binding.buttonOutcomeStartDate.setEnabled(false);
 
                 binding.numberOfLiveBirths.setVisibility(View.GONE);
 

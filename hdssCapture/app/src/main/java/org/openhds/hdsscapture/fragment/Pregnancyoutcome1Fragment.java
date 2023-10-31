@@ -285,6 +285,8 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 binding.setPregoutcome(data);
                 binding.extras.setVisibility(View.GONE);
                 binding.exts.setVisibility(View.GONE);
+                binding.buttonOutcomeConception.setEnabled(false);
+                binding.buttonOutcomeStartDate.setEnabled(false);
             } else {
                 data = new Pregnancyoutcome();
 
@@ -330,6 +332,8 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 binding.numberOfLiveBirths.setVisibility(View.GONE);
                 binding.extras.setVisibility(View.GONE);
                 binding.exts.setVisibility(View.GONE);
+                binding.buttonOutcomeConception.setEnabled(false);
+                binding.buttonOutcomeStartDate.setEnabled(false);
 
                 binding.setPregoutcome(data);
                 binding.getPregoutcome().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
