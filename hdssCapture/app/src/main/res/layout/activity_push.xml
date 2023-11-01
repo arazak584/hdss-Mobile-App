@@ -280,6 +280,33 @@
             app:icon="@drawable/push"
             android:layout_gravity="center" />
 
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/buttondth"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/send_death"
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/buttonvpm"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/send_death"
+            app:icon="@drawable/push"
+            android:layout_gravity="center" />
+
+
 <!--        <TextView-->
 <!--            android:id="@+id/textViewSendEnd"-->
 <!--            android:layout_width="match_parent"-->
