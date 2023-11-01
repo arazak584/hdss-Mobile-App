@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -122,9 +123,13 @@ public class LocationFragment extends Fragment {
         // Create a location request with maximum accuracy of 10
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(1000); // 10 seconds
-        locationRequest.setFastestInterval(5000); // 5 seconds
-        locationRequest.setSmallestDisplacement(50); // 10 meters
+//        locationRequest.setInterval(1000); // 10 seconds
+//        locationRequest.setFastestInterval(5000); // 5 seconds
+//        locationRequest.setSmallestDisplacement(50);
+        locationRequest.setInterval(5); // 5 milliseconds
+        locationRequest.setFastestInterval(0); // 0 seconds
+        //locationRequest.setSmallestDisplacement(50); // 10 meters
+        locationRequest.setNumUpdates(1);
 
 
         // Get a reference to the progress bar view
@@ -148,15 +153,26 @@ public class LocationFragment extends Fragment {
                         public void onLocationChanged(@NonNull Location location) {
                             // Update the currentLocation variable with the new location
                             currentLocation = location;
+                            double latitude = currentLocation.getLatitude();
+                            double longitude = currentLocation.getLongitude();
 
-                            // Display the longitude, latitude, and accuracy values in the TextInputEditText views
-                            TextInputEditText longitudeEditText = requireView().findViewById(R.id.longitude);
-                            longitudeEditText.setText(String.valueOf(currentLocation.getLongitude()));
+                            // Define the number of decimal places you want to display (e.g., 6)
+                            int decimalPlaces = 6;
 
-                            TextInputEditText latitudeEditText = requireView().findViewById(R.id.latitude);
-                            latitudeEditText.setText(String.valueOf(currentLocation.getLatitude()));
+                            // Format the latitude and longitude to the specified number of decimal places
+                            String formattedLatitude = String.format("%.6f", latitude);
+                            String formattedLongitude = String.format("%.6f", longitude);
 
-                            TextInputEditText accuracyEditText = requireView().findViewById(R.id.accuracy);
+                            // Display the longitude, latitude, and accuracy values in the EditText views
+                            EditText longitudeEditText = requireView().findViewById(R.id.longitude);
+//                            longitudeEditText.setText(String.valueOf(currentLocation.getLongitude()));
+                            longitudeEditText.setText(formattedLongitude);
+
+                            EditText latitudeEditText = requireView().findViewById(R.id.latitude);
+                            latitudeEditText.setText(formattedLatitude);
+//                            latitudeEditText.setText(String.valueOf(currentLocation.getLatitude()));
+
+                            EditText accuracyEditText = requireView().findViewById(R.id.accuracy);
                             accuracyEditText.setText(String.valueOf(currentLocation.getAccuracy()));
 
                             // Check if the accuracy is less than or equal to 10 meters, dismiss the progress bar, and stop requesting location updates
