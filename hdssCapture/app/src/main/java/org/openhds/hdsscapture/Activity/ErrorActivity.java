@@ -212,17 +212,18 @@ public class ErrorActivity extends AppCompatActivity {
             for (Outcome e : outcomeViewModel.error()) {
                 //String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
-                r1.name = "Outcome " ;
-                r1.extid = "PermID" + " " + e.extId;
-                if (e.extId != null && e.extId.length() >= 9) {
-                    r1.date = "Compno" + " " + e.extId.substring(0, 9); // Extract the first nine characters of extId
-                } else {
-                    r1.date = "";
-                }
-                //r1.date = "Compno" + e.extId;
+                r1.name = i + ". Compno: " + e.childuuid;
+                r1.extid = "PermID" + " " + e.extId + " - " + e.firstName + " " + e.lastName;
+//                if (e.extId != null && e.extId.length() >= 9) {
+//                    r1.date = "Compno" + " " + e.extId.substring(0, 9); // Extract the first nine characters of extId
+//                } else {
+//                    r1.date = "";
+//                }
+//                r1.date = "MotherName" + e.firstName + " " + e.lastName;
                 r1.error = "Outcome Error (Pregnancy Outcome incomplete)";
                 r1.index = i;
                 list.add(r1);
+                i++;
 
             }
 
