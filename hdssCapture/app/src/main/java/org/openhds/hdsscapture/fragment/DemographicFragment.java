@@ -149,7 +149,7 @@ public class DemographicFragment extends Fragment {
             if (data != null) {
                 binding.setDemographic(data);
                 binding.getDemographic().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-                //data.individual_uuid = individual.getUuid();
+                data.fw_uuid = fieldworkerData.getFw_uuid();
                 if(data.phone1 !=null){
                     data.phone=1;
                 }
