@@ -106,6 +106,14 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.err();
     }
 
+    public List<Individual> merror() throws ExecutionException, InterruptedException {
+        return individualRepository.merror();
+    }
+
+    public List<Individual> ferror() throws ExecutionException, InterruptedException {
+        return individualRepository.ferror();
+    }
+
     public void add(Individual data){ individualRepository.create(data);}
 
     public void add(Individual... data){

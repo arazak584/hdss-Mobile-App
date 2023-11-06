@@ -218,7 +218,7 @@ public class ErrorActivity extends AppCompatActivity {
 //                } else {
 //                    r1.date = "";
 //                }
-//                r1.date = "MotherName" + e.firstName + " " + e.lastName;
+                r1.date = "";
                 r1.error = "Outcome Error (Pregnancy Outcome incomplete)";
                 r1.index = i;
                 list.add(r1);
@@ -237,6 +237,34 @@ public class ErrorActivity extends AppCompatActivity {
                 r1.index = l;
                 list.add(r1);
                 l++;
+
+            }
+
+            int o=1;
+            for (Individual e : individualViewModel.merror()) {
+                //String formattedDate = f.format(e.insertDate);
+                Queries r1 = new Queries();
+                r1.name = o + ". Household ID: " +  e.houseExtId;
+                r1.extid = "Compno: " + e.compextId + " - " + e.firstName + " " + e.lastName;
+                r1.date = "";
+                r1.error = "Non existent mother";
+                r1.index = o;
+                list.add(r1);
+                o++;
+
+            }
+
+            int n=1;
+            for (Individual e : individualViewModel.ferror()) {
+                //String formattedDate = f.format(e.insertDate);
+                Queries r1 = new Queries();
+                r1.name = n + ". Household ID: " +  e.houseExtId;
+                r1.extid = "Compno: " + e.compextId + " - " + e.firstName + " " + e.lastName;
+                r1.date = "";
+                r1.error = "Non existent father";
+                r1.index = n;
+                list.add(r1);
+                n++;
 
             }
             

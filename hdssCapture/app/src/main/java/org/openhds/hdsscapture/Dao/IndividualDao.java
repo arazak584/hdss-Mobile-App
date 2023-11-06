@@ -178,6 +178,20 @@ public interface IndividualDao {
             " GROUP BY c.extId")
     List<Individual> err();
 
+    @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a LEFT JOIN individual as z on a.mother_uuid=z.uuid " +
+            " INNER JOIN residency c on a.uuid=c.individual_uuid INNER JOIN locations d " +
+            " ON c.location_uuid=d.uuid " +
+            " INNER JOIN socialgroup as b ON c.socialgroup_uuid = b.uuid " +
+            " WHERE z.uuid IS NULL AND a.firstName!='FAKE'")
+    List<Individual> merror();
+
+    @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a LEFT JOIN individual as z on a.father_uuid=z.uuid " +
+            " INNER JOIN residency c on a.uuid=c.individual_uuid INNER JOIN locations d " +
+            " ON c.location_uuid=d.uuid " +
+            " INNER JOIN socialgroup as b ON c.socialgroup_uuid = b.uuid " +
+            " WHERE z.complete!=1 AND a.complete=1 AND a.firstName!='FAKE'")
+    List<Individual> ferror();
+
     @Query("SELECT b.* FROM individual as a LEFT JOIN individual as b on a.mother_uuid=b.uuid" +
             " where a.uuid=:id")
     Individual mother(String id);

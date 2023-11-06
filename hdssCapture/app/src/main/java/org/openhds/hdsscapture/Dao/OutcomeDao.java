@@ -28,7 +28,7 @@ OutcomeDao {
     @Query("SELECT a.uuid,c.extId as extId,e.compextId as childuuid,c.firstName,c.lastName FROM outcome as a left join pregnancyoutcome as b on a.preg_uuid=b.uuid " +
             " INNER JOIN individual as c on a.mother_uuid=c.uuid INNER JOIN residency as d on c.uuid=d.individual_uuid " +
             " INNER JOIN locations as e on d.location_uuid=e.uuid " +
-            "WHERE b.uuid is NULL and c.endType=1 ")
+            "WHERE b.uuid is NULL and d.endType=1 ")
     List<Outcome> error();
 
     @Query("SELECT * FROM outcome where uuid=:id")

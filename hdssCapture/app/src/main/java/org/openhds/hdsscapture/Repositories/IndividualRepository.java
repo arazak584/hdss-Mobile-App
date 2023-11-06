@@ -223,6 +223,24 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public List<Individual> merror() throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.merror();
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Individual> ferror() throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.ferror();
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
 
 
 }
