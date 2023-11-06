@@ -219,7 +219,7 @@ public class ErrorActivity extends AppCompatActivity {
 //                } else {
 //                    r1.date = "";
 //                }
-//                r1.date = "MotherName" + e.firstName + " " + e.lastName;
+                r1.date = "";
                 r1.error = "Outcome Error (Pregnancy Outcome incomplete)";
                 r1.index = i;
                 list.add(r1);
