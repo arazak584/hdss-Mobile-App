@@ -119,11 +119,11 @@ public class DemographicFragment extends Fragment {
         binding = FragmentDemographicBinding.inflate(inflater, container, false);
         binding.setDemographic(demographic);
 
-        stopwatchTextView = binding.getRoot().findViewById(R.id.stopwatchTextView);
-
-        // Set an OnClickListener for a start/pause button
-        //Button startPauseButton = binding.getRoot().findViewById(R.id.startPauseButton);
-        startPauseButton = binding.getRoot().findViewById(R.id.startPauseButton);
+//        stopwatchTextView = binding.getRoot().findViewById(R.id.stopwatchTextView);
+//
+//        // Set an OnClickListener for a start/pause button
+//        //Button startPauseButton = binding.getRoot().findViewById(R.id.startPauseButton);
+//        startPauseButton = binding.getRoot().findViewById(R.id.startPauseButton);
         startPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
