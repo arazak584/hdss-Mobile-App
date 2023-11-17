@@ -64,7 +64,8 @@ public class HierarchyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hierarchy);
 
-
+        final Intent f = getIntent();
+        final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
 
         final FieldworkerViewModel fieldworkerViewModel = new ViewModelProvider(this).get(FieldworkerViewModel.class);
         final RoundViewModel roundViewModel = new ViewModelProvider(this).get(RoundViewModel.class);
@@ -80,6 +81,7 @@ public class HierarchyActivity extends AppCompatActivity {
         final Spinner roundSpinner = findViewById(R.id.spRound);
 
         final EditText username = findViewById(R.id.login_username);
+        username.setText(fieldworkerDatas.username);
 
         // set adapters to spinners
         level1Spinner.setAdapter(level1Adapter);

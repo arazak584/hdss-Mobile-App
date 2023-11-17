@@ -42,9 +42,13 @@ public class LoginActivity extends AppCompatActivity  {
 
     private ApiDao dao;
     private ProgressDialog progress;
-    private Fieldworker fieldworkerData;
+    private Fieldworker fieldworkerDatas;
     private ProgressBar progressBar;
     private AppJson appJson;
+
+    public static final String FIELDWORKER_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.FIELDWORKER_DATA";
+    public static final String FIELDWORKER_DATAS = "org.openhds.hdsscapture.activity.MainActivity.FIELDWORKER_DATAS";
+
 
     public static boolean isScreenSizeGreaterThanEqual7Inch(Context context) {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -142,7 +146,7 @@ public class LoginActivity extends AppCompatActivity  {
             final String mypass = password.getText().toString();
 
             try {
-                fieldworkerData = fieldworkerViewModel.find(myuser, mypass);
+                fieldworkerDatas = fieldworkerViewModel.find(myuser, mypass);
 
             } catch (ExecutionException e) {
                 Toast.makeText(this,"Something terrible went wrong", Toast.LENGTH_LONG).show();
@@ -154,7 +158,7 @@ public class LoginActivity extends AppCompatActivity  {
                 return;
             }
 
-            if(fieldworkerData == null){
+            if(fieldworkerDatas == null){
                 username.setError("Invalid user or PIN");
                 Toast.makeText(this,"Please provide a valid user and PIN", Toast.LENGTH_LONG).show();
                 return;
@@ -163,6 +167,7 @@ public class LoginActivity extends AppCompatActivity  {
             username.setError(null);
             password.setText(null);
             final Intent i = new Intent(this, MainActivity.class);
+            i.putExtra(FIELDWORKER_DATAS, fieldworkerDatas);
             startActivity(i);
 
         });
