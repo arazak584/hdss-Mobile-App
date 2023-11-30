@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
 import org.openhds.hdsscapture.entity.Vaccination;
 
@@ -19,7 +20,8 @@ public interface VaccinationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Vaccination... vaccination);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Vaccination> vaccination);
 
 

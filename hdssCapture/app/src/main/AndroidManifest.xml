@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <supports-screens
         android:largeScreens="true"
@@ -17,6 +17,9 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="org.odk.collect.android.provider.odk.forms.permission.READ_FORMS" />
+    <uses-permission android:name="org.odk.collect.android.provider.odk.forms.permission.WRITE_FORMS" />
+
 
     <application
         android:allowBackup="true"
@@ -30,10 +33,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31" >
+        tools:targetApi="31">
+        <activity
+            android:name=".odk.OdkActivity"
+            android:exported="false" />
         <activity
             android:name=".Activity.NewActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".Activity.ErrorActivity"
             android:exported="false" />
@@ -48,19 +54,18 @@
             android:name=".Activity.LocationActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false" />
-
         <activity
             android:name=".Activity.HierarchyActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"  />
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".Activity.RemainderActivity"
             android:exported="false"
             android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".Activity.PullActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
@@ -75,7 +80,7 @@
             tools:targetApi="24" />
         <activity
             android:name=".Activity.LoginActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

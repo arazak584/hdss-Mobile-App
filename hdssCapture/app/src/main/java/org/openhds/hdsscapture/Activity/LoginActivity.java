@@ -5,8 +5,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,16 +25,19 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.Dao.ApiDao;
 import org.openhds.hdsscapture.Dialog.FilterDialogFragment;
 import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Utilities.HashUtil;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.fragment.UrlFragment;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import retrofit2.Call;
@@ -50,6 +56,7 @@ public class LoginActivity extends AppCompatActivity  {
     public static final String FIELDWORKER_DATAS = "org.openhds.hdsscapture.activity.MainActivity.FIELDWORKER_DATAS";
 
 
+    //Allow access on phones with screen size 7 inches and above
     public static boolean isScreenSizeGreaterThanEqual7Inch(Context context) {
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics metrics = new DisplayMetrics();
@@ -72,7 +79,8 @@ public class LoginActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Check the screen size before proceeding
+
+        // //Allow access on phones with screen size 7 inches and above
         if (!isScreenSizeGreaterThanEqual7Inch(this)) {
             // Display a message for small screens
             Toast.makeText(this, "Enabled on Tablet Only", Toast.LENGTH_LONG).show();
@@ -95,36 +103,98 @@ public class LoginActivity extends AppCompatActivity  {
         AppJson api = AppJson.getInstance(this);
         dao = api.getJsonApi();
 
+//        String userProvidedPassword = "admin";
+//        // Construct Basic Authentication header
+//        String usernames = "data";
+//        String credentials = usernames + ":" + userProvidedPassword;
+//        String base64Credentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+//        String authorizationHeader = "Basic " + base64Credentials;
+
+
         final Button button_SyncFw = findViewById(R.id.button_SyncFieldworkerData);
         button_SyncFw.setOnClickListener(v -> {
             final TextView textView_SyncFw = findViewById(R.id.textView_SyncFieldworkerData);
             textView_SyncFw.setText("");
+
+            // Get the username and password from the EditText fields
+            String enteredUsername = username.getText().toString().trim();
+            String enteredPassword = password.getText().toString().trim();
+            if (TextUtils.isEmpty(enteredUsername) || TextUtils.isEmpty(enteredPassword)) {
+                Toast.makeText(LoginActivity.this, "Wrong Username or Password", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            // Construct Basic Authentication header
+            String credentials = enteredUsername + ":" + enteredPassword;
+            String base64Credentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+            String authorizationHeader = "Basic " + base64Credentials;
+
+            // Save authorizationHeader in SharedPreferences
+            SharedPreferences preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("authorizationHeader", authorizationHeader);
+            editor.apply();
 
             // Show the ProgressBar
             progressBar.setVisibility(View.VISIBLE);
 
             final FieldworkerViewModel viewModel = new ViewModelProvider(this).get(FieldworkerViewModel.class);
 
-            Call<DataWrapper<Fieldworker>> c_callable = dao.getFw();
+            // Modify the service method to accept the credentials in the header
+            Call<DataWrapper<Fieldworker>> c_callable = dao.getFw(authorizationHeader);
             c_callable.enqueue(new Callback<DataWrapper<Fieldworker>>() {
                 @Override
                 public void onResponse(Call<DataWrapper<Fieldworker>> call, Response<DataWrapper<Fieldworker>> response) {
-                    Fieldworker[] d = response.body().getData().toArray(new Fieldworker[0]);
-                    viewModel.add(d);
-                    progressBar.setVisibility(View.GONE);
-                    textView_SyncFw.setText("USER ACCESS UPDATED!");
-                    textView_SyncFw.setTextColor(Color.GREEN);
+                    if (response != null && response.isSuccessful()) {
+                        DataWrapper<Fieldworker> dataWrapper = response.body();
+                        if (dataWrapper != null) {
+                            List<Fieldworker> fieldworkers = dataWrapper.getData();
+                            if (fieldworkers != null && !fieldworkers.isEmpty()) {
+                                // Process the data
+                                Fieldworker[] fieldworkerArray = fieldworkers.toArray(new Fieldworker[0]);
+                                viewModel.add(fieldworkerArray);
+                                progressBar.setVisibility(View.GONE);
+                                textView_SyncFw.setText("USER ACCESS UPDATED!");
+                                textView_SyncFw.setTextColor(Color.GREEN);
+                            } else {
+                                // Handle empty or null fieldworkers list
+                                handleEmptyFieldworkers();
+                            }
+                        } else {
+                            // Handle null dataWrapper
+                            handleNullDataWrapper();
+                        }
+                    } else {
+                        // Handle unsuccessful response
+                        progressBar.setVisibility(View.GONE);
+                        textView_SyncFw.setText("Unsuccessful response: " + response.code());
+                        textView_SyncFw.setTextColor(Color.RED);
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<DataWrapper<Fieldworker>> call, Throwable t) {
-
+                    // Handle failure
                     progressBar.setVisibility(View.GONE);
                     textView_SyncFw.setText("Fieldworker Sync Error!");
                     textView_SyncFw.setTextColor(Color.RED);
                 }
+
+                private void handleEmptyFieldworkers() {
+                    progressBar.setVisibility(View.GONE);
+                    textView_SyncFw.setText("Fieldworkers data is empty or null");
+                    textView_SyncFw.setTextColor(Color.RED);
+                }
+
+                private void handleNullDataWrapper() {
+                    progressBar.setVisibility(View.GONE);
+                    textView_SyncFw.setText("DataWrapper is null");
+                    textView_SyncFw.setTextColor(Color.RED);
+                }
             });
+
         });
+
 
 
         final Button start = findViewById(R.id.btnLogin);
@@ -144,6 +214,7 @@ public class LoginActivity extends AppCompatActivity  {
 
             final String myuser = username.getText().toString();
             final String mypass = password.getText().toString();
+
 
             try {
                 fieldworkerDatas = fieldworkerViewModel.find(myuser, mypass);
@@ -209,6 +280,7 @@ public class LoginActivity extends AppCompatActivity  {
 
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public void onBackPressed() {

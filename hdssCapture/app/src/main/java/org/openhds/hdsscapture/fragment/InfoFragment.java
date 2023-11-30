@@ -34,7 +34,7 @@ public class InfoFragment extends DialogFragment {
     }
 
 
-    public static InfoFragment newInstance(String param1, String param2) {
+    public static InfoFragment newInstance() {
         InfoFragment fragment = new InfoFragment();
         Bundle args = new Bundle();
 

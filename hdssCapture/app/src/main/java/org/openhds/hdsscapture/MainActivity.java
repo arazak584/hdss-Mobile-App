@@ -21,6 +21,7 @@ import org.openhds.hdsscapture.Activity.RemainderActivity;
 import org.openhds.hdsscapture.Activity.ReportActivity;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.fragment.InfoFragment;
+import org.openhds.hdsscapture.odk.OdkActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Intent f = getIntent();
         final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
-        Toast.makeText(MainActivity.this, "Welcome " + fieldworkerDatas.firstName + " " + fieldworkerDatas.lastName, Toast.LENGTH_LONG).show();
+        //Toast.makeText(MainActivity.this, "Welcome " + fieldworkerDatas.firstName + " " + fieldworkerDatas.lastName, Toast.LENGTH_LONG).show();
 
 
 
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Button pull = findViewById(R.id.btnpull);
         pull.setOnClickListener(v -> {
-            if (fieldworkerDatas != null && fieldworkerDatas.status != null && fieldworkerDatas.status == 3) {
+            if (fieldworkerDatas != null && fieldworkerDatas.status != null && fieldworkerDatas.status == 2) {
                 Intent i = new Intent(getApplicationContext(), PullActivity.class);
                 startActivity(i);
             } else {
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (fieldworkerDatas != null && fieldworkerDatas.status != null && fieldworkerDatas.status == 3) {
+                if (fieldworkerDatas != null && fieldworkerDatas.status != null && fieldworkerDatas.status == 2) {
                     InfoFragment dialogFragment = new InfoFragment();
 
                     // Show the dialog fragment
@@ -99,6 +100,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        final Button odk = findViewById(R.id.btnodk);
+//        odk.setOnClickListener(v -> {
+//            Intent i = new Intent(getApplicationContext(), OdkActivity.class);
+//            startActivity(i);
+//        });
 
 
     }

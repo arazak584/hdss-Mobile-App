@@ -266,6 +266,8 @@
                 android:textColor="@color/black"
                 android:paddingStart="20dp"
                 android:hint="@string/username"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:inputType="textPersonName|textCapCharacters"
                 android:background="@drawable/txtbox_rone_wbevel"/>
 
@@ -318,6 +320,17 @@
                 android:text="@string/remain"
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp" />
+
+<!--            <Button-->
+<!--                android:id="@+id/btn_odk"-->
+<!--                android:layout_width="300dip"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="16dip"-->
+<!--                android:background="@drawable/btnd_rone_red"-->
+<!--                android:text="@string/ODK"-->
+<!--                android:textColor="@android:color/background_light"-->
+<!--                android:textSize="18sp" />-->
 
         </LinearLayout>
 

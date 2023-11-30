@@ -172,8 +172,10 @@
     <color name="color_dg_start_m">#05A73E</color>
     <color name="color_dg_end">#03541E</color>
     <color name="color_blackgreen_end">#04812E</color>
+    <color name="color_circle_color_one">#8EC4A0</color>
     <color name="colorAccent">#FF4081</color>
     <color name="zxing_transparent">#00000000</color>
     <color name="color_text_gr">#1c9844</color>
+    <color name="settings_textcolor">#444</color>
 
 </resources>

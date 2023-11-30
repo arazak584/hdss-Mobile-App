@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Locations;
@@ -23,7 +24,8 @@ public interface SocialgroupDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create (Socialgroup socialgroup);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Socialgroup> socialgroup);
 
     @Update

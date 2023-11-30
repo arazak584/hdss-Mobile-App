@@ -24,114 +24,119 @@ import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.odk.Form;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 public interface ApiDao {
 
     @GET("/api/codebook")
-    Call<DataWrapper<CodeBook>> getCodeBook();
+    Call<DataWrapper<CodeBook>> getCodeBook(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/round")
-    Call<DataWrapper<Round>> getRound();
+    Call<DataWrapper<Round>> getRound(@Header("Authorization") String authorizationHeader);
 
-    @GET("/api/parameter")
-    Call<DataWrapper<Configsettings>> getConfig();
+    @GET("/api/settings/parameter")
+    Call<DataWrapper<Configsettings>> getConfig(@Header("Authorization") String authorizationHeader);
+
+    @GET("/api/odk/enabled")
+    Call<DataWrapper<Form>> getExtra(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/fieldworker")
-    Call<DataWrapper<Fieldworker>> getFw();
+    Call<DataWrapper<Fieldworker>> getFw(@Header("Authorization") String credentials);
 
-    @GET("/api/hierarchy")
-    Call<DataWrapper<Hierarchy>> getAllHierarchy();
+    @GET("/api/hierarchy/all")
+    Call<DataWrapper<Hierarchy>> getAllHierarchy(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/zip/location")
-    Call<ResponseBody> downloadLocation();
+    Call<ResponseBody> downloadLocation(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/zip/residency")
-    Call<ResponseBody> downloadResidency();
+    Call<ResponseBody> downloadResidency(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/zip/socialgroup")
-    Call<ResponseBody> downloadSocialgroup();
+    Call<ResponseBody> downloadSocialgroup(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/zip/relationship")
-    Call<ResponseBody> downloadRelationship();
+    Call<ResponseBody> downloadRelationship(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/zip/pregnancy")
-    Call<ResponseBody> downloadPregnancy();
+    Call<ResponseBody> downloadPregnancy(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/zip/individual")
-    Call<ResponseBody> downloadZipFile();
+    Call<ResponseBody> downloadIndividual(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/zip/demographics")
-    Call<ResponseBody> downloadDemography();
+    Call<ResponseBody> downloadDemography(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/zip/ses")
-    Call<ResponseBody> downloadSes();
+    Call<ResponseBody> downloadSes(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/zip/vaccination")
-    Call<ResponseBody> downloadVaccination();
+    Call<ResponseBody> downloadVaccination(@Header("Authorization") String authorizationHeader);
 
     @POST("/api/location")
-    Call<DataWrapper<Locations>> sendLocationdata(@Body DataWrapper<Locations> dataModal);
+    Call<DataWrapper<Locations>> sendLocationdata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Locations> dataModal);
 
     @POST("/api/visit")
-    Call<DataWrapper<Visit>> sendVisitdata(@Body DataWrapper<Visit> dataModal);
+    Call<DataWrapper<Visit>> sendVisitdata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Visit> dataModal);
 
     @POST("/api/individual")
-    Call<DataWrapper<Individual>> sendIndividualdata(@Body DataWrapper<Individual> dataModal);
+    Call<DataWrapper<Individual>> sendIndividualdata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Individual> dataModal);
 
     @POST("/api/residency")
-    Call<DataWrapper<Residency>> sendResidencydata(@Body DataWrapper<Residency> dataModal);
+    Call<DataWrapper<Residency>> sendResidencydata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Residency> dataModal);
 
     @POST("/api/socialgroup")
-    Call<DataWrapper<Socialgroup>> sendSocialgroupdata(@Body DataWrapper<Socialgroup> dataModal);
+    Call<DataWrapper<Socialgroup>> sendSocialgroupdata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Socialgroup> dataModal);
 
     @POST("/api/inmigration")
-    Call<DataWrapper<Inmigration>> sendInmigrationdata(@Body DataWrapper<Inmigration> dataModal);
+    Call<DataWrapper<Inmigration>> sendInmigrationdata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Inmigration> dataModal);
 
     @POST("/api/outmigration")
-    Call<DataWrapper<Outmigration>> sendOutmigrationdata(@Body DataWrapper<Outmigration> dataModal);
+    Call<DataWrapper<Outmigration>> sendOutmigrationdata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Outmigration> dataModal);
 
     @POST("/api/death")
-    Call<DataWrapper<Death>> sendDeathdata(@Body DataWrapper<Death> dataModal);
+    Call<DataWrapper<Death>> sendDeathdata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Death> dataModal);
 
     @POST("/api/vpm")
-    Call<DataWrapper<Death>> sendVpmdata(@Body DataWrapper<Death> dataModal);
+    Call<DataWrapper<Death>> sendVpmdata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Death> dataModal);
 
     @POST("/api/pregnancy")
-    Call<DataWrapper<Pregnancy>> sendPregnancydata(@Body DataWrapper<Pregnancy> dataModal);
+    Call<DataWrapper<Pregnancy>> sendPregnancydata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Pregnancy> dataModal);
 
     @POST("/api/relationship")
-    Call<DataWrapper<Relationship>> sendRelationshipdata(@Body DataWrapper<Relationship> dataModal);
+    Call<DataWrapper<Relationship>> sendRelationshipdata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Relationship> dataModal);
 
     @POST("/api/pregoutcome")
-    Call<DataWrapper<Pregnancyoutcome>> sendPregoutcomedata(@Body DataWrapper<Pregnancyoutcome> dataModal);
+    Call<DataWrapper<Pregnancyoutcome>> sendPregoutcomedata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Pregnancyoutcome> dataModal);
 
     @POST("/api/outcome")
-    Call<DataWrapper<Outcome>> sendOutcomedata(@Body DataWrapper<Outcome> dataModal);
+    Call<DataWrapper<Outcome>> sendOutcomedata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Outcome> dataModal);
 
     @POST("/api/socio")
-    Call<DataWrapper<HdssSociodemo>> sendSociodata(@Body DataWrapper<HdssSociodemo> dataModal);
+    Call<DataWrapper<HdssSociodemo>> sendSociodata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<HdssSociodemo> dataModal);
 
     @POST("/api/demographic")
-    Call<DataWrapper<Demographic>> sendDemographicdata(@Body DataWrapper<Demographic> dataModal);
+    Call<DataWrapper<Demographic>> sendDemographicdata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Demographic> dataModal);
 
     @POST("/api/listing")
-    Call<DataWrapper<Listing>> sendListing(@Body DataWrapper<Listing> dataModal);
+    Call<DataWrapper<Listing>> sendListing(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Listing> dataModal);
 
     @POST("/api/amendment")
-    Call<DataWrapper<Amendment>> sendAmendment(@Body DataWrapper<Amendment> dataModal);
+    Call<DataWrapper<Amendment>> sendAmendment(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Amendment> dataModal);
 
     @POST("/api/vaccination")
-    Call<DataWrapper<Vaccination>> sendVaccination(@Body DataWrapper<Vaccination> dataModal);
+    Call<DataWrapper<Vaccination>> sendVaccination(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Vaccination> dataModal);
 
     @POST("/api/duplicate")
-    Call<DataWrapper<Duplicate>> sendDup(@Body DataWrapper<Duplicate> dataModal);
+    Call<DataWrapper<Duplicate>> sendDup(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Duplicate> dataModal);
 
 
 }

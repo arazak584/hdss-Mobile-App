@@ -2,7 +2,9 @@ package org.openhds.hdsscapture.Activity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -81,6 +83,10 @@ public class PushActivity extends AppCompatActivity {
         AppJson api = AppJson.getInstance(this);
         dao = api.getJsonApi();
 
+        // Retrieve authorizationHeader from SharedPreferences
+        SharedPreferences preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        String authorizationHeader = preferences.getString("authorizationHeader", null);
+
 
         //PUSH LOCATION
         final Button buttonSendLocationdata = findViewById(R.id.buttonSendLocation);
@@ -113,7 +119,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Locations>> c_callable = dao.sendLocationdata(data);
+                final Call<DataWrapper<Locations>> c_callable = dao.sendLocationdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Locations>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Locations>> call, Response<DataWrapper<Locations>> response) {
@@ -180,7 +186,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Visit>> c_callable = dao.sendVisitdata(data);
+                final Call<DataWrapper<Visit>> c_callable = dao.sendVisitdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Visit>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Visit>> call, Response<DataWrapper<Visit>> response) {
@@ -245,7 +251,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Listing>> c_callable = dao.sendListing(data);
+                final Call<DataWrapper<Listing>> c_callable = dao.sendListing(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Listing>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Listing>> call, Response<DataWrapper<Listing>> response) {
@@ -314,7 +320,7 @@ public class PushActivity extends AppCompatActivity {
 //                    elem.complete = 0;
 //                }
 
-                final Call<DataWrapper<Individual>> c_callable = dao.sendIndividualdata(data);
+                final Call<DataWrapper<Individual>> c_callable = dao.sendIndividualdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Individual>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Individual>> call, Response<DataWrapper<Individual>> response) {
@@ -378,7 +384,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Socialgroup>> c_callable = dao.sendSocialgroupdata(data);
+                final Call<DataWrapper<Socialgroup>> c_callable = dao.sendSocialgroupdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Socialgroup>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Socialgroup>> call, Response<DataWrapper<Socialgroup>> response) {
@@ -445,7 +451,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Relationship>> c_callable = dao.sendRelationshipdata(data);
+                final Call<DataWrapper<Relationship>> c_callable = dao.sendRelationshipdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Relationship>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Relationship>> call, Response<DataWrapper<Relationship>> response) {
@@ -510,7 +516,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Pregnancy>> c_callable = dao.sendPregnancydata(data);
+                final Call<DataWrapper<Pregnancy>> c_callable = dao.sendPregnancydata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Pregnancy>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Pregnancy>> call, Response<DataWrapper<Pregnancy>> response) {
@@ -575,7 +581,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Pregnancyoutcome>> c_callable = dao.sendPregoutcomedata(data);
+                final Call<DataWrapper<Pregnancyoutcome>> c_callable = dao.sendPregoutcomedata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Pregnancyoutcome>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Pregnancyoutcome>> call, Response<DataWrapper<Pregnancyoutcome>> response) {
@@ -639,7 +645,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Outcome>> c_callable = dao.sendOutcomedata(data);
+                final Call<DataWrapper<Outcome>> c_callable = dao.sendOutcomedata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Outcome>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Outcome>> call, Response<DataWrapper<Outcome>> response) {
@@ -705,7 +711,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Demographic>> c_callable = dao.sendDemographicdata(data);
+                final Call<DataWrapper<Demographic>> c_callable = dao.sendDemographicdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Demographic>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Demographic>> call, Response<DataWrapper<Demographic>> response) {
@@ -770,7 +776,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Death>> c_callable = dao.sendDeathdata(data);
+                final Call<DataWrapper<Death>> c_callable = dao.sendDeathdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Death>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
@@ -784,7 +790,6 @@ public class PushActivity extends AppCompatActivity {
                                 //Log.e("PUSH.tag", "Has value " + elem.edtime);
                             }
                             deathViewModel.add(d);
-
                             progress.dismiss();
                             buttondth.setText("Sent " + d.length + " Death record(s)");
                             buttondth.setTextColor(Color.parseColor("#FFFFFFFF"));
@@ -836,7 +841,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Death>> c_callable = dao.sendVpmdata(data);
+                final Call<DataWrapper<Death>> c_callable = dao.sendVpmdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Death>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
@@ -901,7 +906,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<HdssSociodemo>> c_callable = dao.sendSociodata(data);
+                final Call<DataWrapper<HdssSociodemo>> c_callable = dao.sendSociodata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<HdssSociodemo>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<HdssSociodemo>> call, Response<DataWrapper<HdssSociodemo>> response) {
@@ -968,7 +973,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Residency>> c_callable = dao.sendResidencydata(data);
+                final Call<DataWrapper<Residency>> c_callable = dao.sendResidencydata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Residency>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Residency>> call, Response<DataWrapper<Residency>> response) {
@@ -1033,7 +1038,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Inmigration>> c_callable = dao.sendInmigrationdata(data);
+                final Call<DataWrapper<Inmigration>> c_callable = dao.sendInmigrationdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Inmigration>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Inmigration>> call, Response<DataWrapper<Inmigration>> response) {
@@ -1099,7 +1104,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Outmigration>> c_callable = dao.sendOutmigrationdata(data);
+                final Call<DataWrapper<Outmigration>> c_callable = dao.sendOutmigrationdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Outmigration>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Outmigration>> call, Response<DataWrapper<Outmigration>> response) {
@@ -1167,7 +1172,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Amendment>> c_callable = dao.sendAmendment(data);
+                final Call<DataWrapper<Amendment>> c_callable = dao.sendAmendment(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Amendment>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Amendment>> call, Response<DataWrapper<Amendment>> response) {
@@ -1234,7 +1239,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Vaccination>> c_callable = dao.sendVaccination(data);
+                final Call<DataWrapper<Vaccination>> c_callable = dao.sendVaccination(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Vaccination>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Vaccination>> call, Response<DataWrapper<Vaccination>> response) {
@@ -1299,7 +1304,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Duplicate>> c_callable = dao.sendDup(data);
+                final Call<DataWrapper<Duplicate>> c_callable = dao.sendDup(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Duplicate>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Duplicate>> call, Response<DataWrapper<Duplicate>> response) {

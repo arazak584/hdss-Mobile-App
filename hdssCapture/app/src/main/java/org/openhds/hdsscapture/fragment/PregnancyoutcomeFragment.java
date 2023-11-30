@@ -993,10 +993,10 @@ public class PregnancyoutcomeFragment extends Fragment {
                     boolean weight = false;
                     if (inf.chd_weight!=null && inf.chd_weight == 1 && !binding.childFetus1.weigHcard.getText().toString().trim().isEmpty()) {
                         double childWeight = Double.parseDouble(binding.childFetus1.weigHcard.getText().toString().trim());
-                        if (childWeight < 1.5 || childWeight > 4.5) {
+                        if (childWeight < 1.0 || childWeight > 5.0) {
                             weight = true;
-                            binding.childFetus1.weigHcard.setError("Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5");
-                            Toast.makeText(getContext(), "Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5", Toast.LENGTH_LONG).show();
+                            binding.childFetus1.weigHcard.setError("Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0");
+                            Toast.makeText(getContext(), "Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0", Toast.LENGTH_LONG).show();
                             return;
                         }
                     }
@@ -1096,10 +1096,10 @@ public class PregnancyoutcomeFragment extends Fragment {
                     boolean weight = false;
                     if (inf.chd_weight!=null && inf.chd_weight == 1 && !binding.childFetus2.weigHcard.getText().toString().trim().isEmpty()) {
                         double childWeight = Double.parseDouble(binding.childFetus2.weigHcard.getText().toString().trim());
-                        if (childWeight < 1.5 || childWeight > 4.5) {
+                        if (childWeight < 1.0 || childWeight > 5.0) {
                             weight = true;
-                            binding.childFetus2.weigHcard.setError("Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5");
-                            Toast.makeText(getContext(), "Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5", Toast.LENGTH_LONG).show();
+                            binding.childFetus2.weigHcard.setError("Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0");
+                            Toast.makeText(getContext(), "Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0", Toast.LENGTH_LONG).show();
                             return;
                         }
                     }
@@ -1198,10 +1198,10 @@ public class PregnancyoutcomeFragment extends Fragment {
                     boolean weight = false;
                     if (inf.chd_weight!=null && inf.chd_weight == 1 && !binding.childFetus3.weigHcard.getText().toString().trim().isEmpty()) {
                         double childWeight = Double.parseDouble(binding.childFetus3.weigHcard.getText().toString().trim());
-                        if (childWeight < 1.5 || childWeight > 4.5) {
+                        if (childWeight < 1.0 || childWeight > 5.0) {
                             weight = true;
-                            binding.childFetus3.weigHcard.setError("Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5");
-                            Toast.makeText(getContext(), "Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5", Toast.LENGTH_LONG).show();
+                            binding.childFetus3.weigHcard.setError("Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0");
+                            Toast.makeText(getContext(), "Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0", Toast.LENGTH_LONG).show();
                             return;
                         }
                     }
@@ -1300,10 +1300,10 @@ public class PregnancyoutcomeFragment extends Fragment {
                     boolean weight = false;
                     if (inf.chd_weight!=null && inf.chd_weight == 1 && !binding.childFetus4.weigHcard.getText().toString().trim().isEmpty()) {
                         double childWeight = Double.parseDouble(binding.childFetus4.weigHcard.getText().toString().trim());
-                        if (childWeight < 1.5 || childWeight > 4.5) {
+                        if (childWeight < 1.0 || childWeight > 5.0) {
                             weight = true;
-                            binding.childFetus4.weigHcard.setError("Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5");
-                            Toast.makeText(getContext(), "Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5", Toast.LENGTH_LONG).show();
+                            binding.childFetus4.weigHcard.setError("Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0");
+                            Toast.makeText(getContext(), "Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0", Toast.LENGTH_LONG).show();
                             return;
                         }
                     }

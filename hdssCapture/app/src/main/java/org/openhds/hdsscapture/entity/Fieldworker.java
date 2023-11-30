@@ -83,6 +83,14 @@ public class Fieldworker extends BaseObservable implements Parcelable {
         this.lastName = lastName;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     public Fieldworker() {
     }
 

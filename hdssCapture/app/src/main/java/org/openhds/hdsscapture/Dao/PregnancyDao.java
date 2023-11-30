@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Pregnancy;
@@ -20,7 +21,8 @@ public interface PregnancyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Pregnancy... pregnancy);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert (List<Pregnancy> pregnancies);
 
     @Query("DELETE FROM pregnancy")

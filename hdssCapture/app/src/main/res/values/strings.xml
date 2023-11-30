@@ -646,6 +646,22 @@
     <string name="info">Settings</string>
     <string name="external">External Inmigration</string>
     <string name="earliest">Earliest Event Date</string>
+    <string name="ODK">ODK</string>
+    <string name="syncall">Sync All</string>
+    <string name="stop">Stop</string>
+    <string name="syncevent">Download Events</string>
+    <string name="sync_details">Synchronization Summary</string>
+    <string name="Location">Locations</string>
+    <string name="Residency">Residency</string>
+    <string name="individuals">Individuals</string>
+    <string name="Socialgroup">Socialgroups</string>
+    <string name="pregnancy">Pregnancy</string>
+    <string name="event">Event</string>
+    <string name="total">Total</string>
+    <string name="dates">Date</string>
+    <string name="relationships">Relationships</string>
+    <string name="ses">SES</string>
+    <string name="vac">Vaccinations</string>
 
     //SocioDemo End
 

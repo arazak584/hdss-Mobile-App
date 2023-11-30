@@ -41,6 +41,9 @@ public class Vaccination extends BaseObservable {
     public Date insertDate;
 
     @Expose
+    public Date editDate;
+
+    @Expose
     public String socialgroup_uuid;
 
     @Expose
@@ -237,6 +240,18 @@ public class Vaccination extends BaseObservable {
     public void setInsertDate(String insertDate) {
         try {
             this.insertDate = f.parse(insertDate);
+        } catch (ParseException e) {
+        }
+    }
+
+    public String getEditDate() {
+        if (editDate == null) return null;
+        return f.format(editDate);
+    }
+
+    public void setEditDate(String editDate) {
+        try {
+            this.editDate = f.parse(editDate);
         } catch (ParseException e) {
         }
     }

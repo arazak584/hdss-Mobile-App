@@ -89,7 +89,7 @@
                 android:layout_marginTop="8dip"
                 android:background="@drawable/txtbox_rone_wbevel"
                 android:labelFor="@id/text_username"
-                android:inputType="textCapCharacters"
+                android:inputType="textAutoComplete"
                 android:maxLines="1"
                 android:paddingStart="20dip"
                 android:paddingEnd="20dip"
