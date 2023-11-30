@@ -220,7 +220,7 @@ public class Baslinelocation extends DialogFragment {
         // Generate a UUID
         if(locations.uuid == null) {
             String uuid = UUID.randomUUID().toString();
-            String uuidString = uuid.toString().replaceAll("-", "");
+            String uuidString = uuid.replaceAll("-", "");
             // Set the ID of the Fieldworker object
             binding.getLocations().uuid = uuidString;
         }

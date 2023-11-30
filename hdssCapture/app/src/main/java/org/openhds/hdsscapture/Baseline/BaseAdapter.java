@@ -27,8 +27,8 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ViewHolder>{
 
     BaseFragment activity;
     LayoutInflater inflater;
-    private List<Locations> locationsList;
-    private Hierarchy level6Data;
+    private final List<Locations> locationsList;
+    private final Hierarchy level6Data;
     private Socialgroup socialgroup;
     private Residency residency;
     private Individual individual;

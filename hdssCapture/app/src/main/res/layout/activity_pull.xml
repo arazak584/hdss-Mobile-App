@@ -35,7 +35,7 @@
                     android:layout_weight="1"
                     android:textSize="30dp"
                     android:textStyle="bold"
-                    android:text="@string/app_name"
+                    android:text="@string/download"
                     android:textAlignment="center"
                     android:textColor="@color/black"/>
 
@@ -49,246 +49,488 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/button_SyncHierarchyData"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/get_codebook"
-            app:icon="@drawable/pull"
-            android:layout_gravity="center" />
-
-
-        <TextView
-            android:id="@+id/textView_SyncHierarchyData"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="15dp"
+            android:orientation="vertical"
+            android:background="@drawable/cardview_elevated">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="2dp"
+                android:paddingBottom="3dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/syncSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:layout_marginEnd="3dp"
+                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:drawableLeft="@drawable/pull"
+                    android:text="@string/download"
+                    android:textSize="15sp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:elevation="5dp"/>
+
+                <TextView
+                    android:id="@+id/syncCodebook"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|right"
+                    android:layout_marginStart="3dp"
+                    android:layout_weight="1"
+                    android:gravity="right|center_horizontal"
+                    android:text="Settings | Codebook"
+                    android:singleLine="true"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#444"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ProgressBar
+                        android:id="@+id/codebookProgressBar"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:max="100"
+                        android:min="0"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/progress_bar_custom"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-2dp"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/syncEntityDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_blackgreen_end"
+                    android:textStyle="bold"
+                    android:textAlignment="textEnd"
+                    android:text="Not Synced"/>
+
+                <TextView
+                    android:id="@+id/syncCodebookMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_weight="2"
+                    android:textSize="12sp"
+                    android:textColor="@color/settings_textcolor"
+                    android:textStyle="bold"
+                    android:textAlignment="textEnd"
+                    android:singleLine="true"
+                    android:text="Last Synced"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="15dp"
+            android:orientation="vertical"
+            android:background="@drawable/cardview_elevated">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="2dp"
+                android:paddingBottom="3dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/syncIndividual"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:layout_marginEnd="3dp"
+                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:drawableLeft="@drawable/pull"
+                    android:text="@string/download"
+                    android:textSize="15sp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:elevation="5dp"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|right"
+                    android:layout_marginStart="3dp"
+                    android:layout_weight="1"
+                    android:src="@mipmap/pull"
+                    android:gravity="right|center_horizontal"
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ProgressBar
+                        android:id="@+id/IndividualProgressBar"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:max="100"
+                        android:min="0"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/progress_bar_custom"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-2dp"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/syncIndividualDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_blackgreen_end"
+                    android:textStyle="bold"
+                    android:textAlignment="textEnd"
+                    android:text="Not Synced"/>
+
+                <TextView
+                    android:id="@+id/syncIndividualMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_weight="2"
+                    android:textSize="12sp"
+                    android:textColor="@color/settings_textcolor"
+                    android:textStyle="bold"
+                    android:textAlignment="textEnd"
+                    android:singleLine="true"
+                    android:text="Last Synced"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-2dp"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textAlignment="textEnd"
+                    android:text="Location | Socialgroup | Individual | Residency"/>
+
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="15dp"
+            android:orientation="vertical"
+            android:background="@drawable/cardview_elevated">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="2dp"
+                android:paddingBottom="3dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/syncEvents"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:layout_marginEnd="3dp"
+                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:drawableLeft="@drawable/pull"
+                    android:text="@string/download"
+                    android:textSize="15sp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:elevation="5dp"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|right"
+                    android:layout_marginStart="3dp"
+                    android:layout_weight="1"
+                    android:src="@mipmap/pull"
+                    android:gravity="right|center_horizontal"
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ProgressBar
+                        android:id="@+id/EventsProgressBar"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:min="0"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/progress_bar_custom"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-2dp"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/syncEventsDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_blackgreen_end"
+                    android:textStyle="bold"
+                    android:textAlignment="textEnd"
+                    android:text="Not Synced"/>
+
+                <TextView
+                    android:id="@+id/syncEventsMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_weight="2"
+                    android:textSize="12sp"
+                    android:textColor="@color/settings_textcolor"
+                    android:textStyle="bold"
+                    android:textAlignment="textEnd"
+                    android:singleLine="true"
+                    android:text="Last Synced"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-2dp"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textAlignment="textEnd"
+                    android:text="Pregnancy | Relationship | Demographics"/>
+
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="15dp"
+            android:orientation="vertical"
+            android:background="@drawable/cardview_elevated">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="2dp"
+                android:paddingBottom="3dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/syncSes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:layout_marginEnd="3dp"
+                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:drawableLeft="@drawable/pull"
+                    android:text="@string/download"
+                    android:textSize="15sp"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:elevation="5dp"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|right"
+                    android:layout_marginStart="3dp"
+                    android:layout_weight="1"
+                    android:src="@mipmap/pull"
+                    android:gravity="right|center_horizontal"
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ProgressBar
+                        android:id="@+id/sesProgressBar"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:min="0"
+                        android:progress="0"
+                        android:progressDrawable="@drawable/progress_bar_custom"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-2dp"
+                android:padding="5dp">
+
+                <TextView
+                    android:id="@+id/syncsesDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_blackgreen_end"
+                    android:textStyle="bold"
+                    android:textAlignment="textEnd"
+                    android:text="Not Synced"/>
+
+                <TextView
+                    android:id="@+id/syncsesMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_marginEnd="3dp"
+                    android:layout_weight="2"
+                    android:textSize="12sp"
+                    android:textColor="@color/settings_textcolor"
+                    android:textStyle="bold"
+                    android:textAlignment="textEnd"
+                    android:singleLine="true"
+                    android:text="Last Synced"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-2dp"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:textAlignment="textEnd"
+                    android:text="Socio-Economic Status | Vaccination"/>
+
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <Button
+            android:id="@+id/syncDetails"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:paddingTop="20dp"
             android:layout_gravity="center"
-            android:textAlignment="center"
-            android:textSize="15sp" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/button_SyncLocationData"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/get_location"
-            app:icon="@drawable/pull"
-            android:layout_gravity="center" />
-
-        <TextView
-            android:id="@+id/textView_SyncLocationData"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="15sp" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/button_SyncIndividualData"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/get_individual"
-            app:icon="@drawable/pull"
-            android:layout_gravity="center" />
-
-
-        <TextView
-            android:id="@+id/textView_SyncIndividualData"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="15sp" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/button_SyncResidency"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/get_residency"
-            app:icon="@drawable/pull"
-            android:layout_gravity="center" />
-
-        <TextView
-            android:id="@+id/textView_SyncResidency"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="15sp" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/button_SyncRelationship"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/get_relationship"
-            app:icon="@drawable/pull"
-            android:layout_gravity="center" />
-
-
-        <TextView
-            android:id="@+id/textView_SyncRelationship"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="15sp" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/button_SyncSocialgroup"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/get_socialgroup"
-            app:icon="@drawable/pull"
-            android:layout_gravity="center" />
-
-        <TextView
-            android:id="@+id/textView_SyncSocialgroup"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="15sp" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/button_SyncPregnancy"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/get_pregobservation"
-            app:icon="@drawable/pull"
-            android:layout_gravity="center" />
-
-        <TextView
-            android:id="@+id/textView_SyncPregnancy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="15sp" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/button_SyncDemography"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/get_demography"
-            app:icon="@drawable/pull"
-            android:layout_gravity="center" />
-
-
-        <TextView
-            android:id="@+id/textView_SyncDemography"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="15sp" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:visibility="gone"
-            android:id="@+id/button_SyncSes"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/get_ses"
-            app:icon="@drawable/pull"
-            android:layout_gravity="center" />
-
-
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/textView_SyncSes"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="15sp" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/button_SyncVac"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/get_vac"
-            app:icon="@drawable/pull"
-            android:layout_gravity="center" />
-
-
-        <TextView
-            android:id="@+id/textView_SyncVac"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="15sp" />
-
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/button_Complete"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/complete"
-            app:icon="@drawable/pull"
-            android:backgroundTint="@color/white"
-            android:layout_gravity="center" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/textView_Complete"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="15sp" />
-
-
-
+            android:background="@drawable/sync_info" />
 
     </LinearLayout>
         </LinearLayout>

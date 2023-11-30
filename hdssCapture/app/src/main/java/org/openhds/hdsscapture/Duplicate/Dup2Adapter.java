@@ -1,4 +1,4 @@
-package org.openhds.hdsscapture.Adapter;
+package org.openhds.hdsscapture.Duplicate;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +11,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.openhds.hdsscapture.Dialog.DupDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.entity.Individual;
@@ -24,25 +23,27 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
-public class DupAdapter extends RecyclerView.Adapter<DupAdapter.ViewHolder>{
+public class Dup2Adapter extends RecyclerView.Adapter<Dup2Adapter.ViewHolder>{
 
-    DupDialogFragment activity;
+    Dup2DialogFragment activity;
     LayoutInflater inflater;
-    private Locations locations;
-    private Socialgroup socialgroup;
-    private Residency residency;
-    private List<Individual> individualList;
+    private final Locations locations;
+    private final Socialgroup socialgroup;
+    private final Residency residency;
+    private final List<Individual> individualList;
+    boolean isFirstField = true;
+
     public interface PartnerSelectionListener {
         void onPartnerSelected(String partnerId);
     }
 
-    private DupAdapter.PartnerSelectionListener listener;
+    private Dup2Adapter.PartnerSelectionListener listener;
 
-    public void setPartnerSelectionListener(DupAdapter.PartnerSelectionListener listener) {
+    public void setPartnerSelectionListener(Dup2Adapter.PartnerSelectionListener listener) {
         this.listener = listener;
     }
 
-    public DupAdapter(DupDialogFragment activity, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public Dup2Adapter(Dup2DialogFragment activity, Residency residency, Locations locations, Socialgroup socialgroup) {
         this.activity = activity;
         this.locations = locations;
         this.residency = residency;
@@ -64,21 +65,22 @@ public class DupAdapter extends RecyclerView.Adapter<DupAdapter.ViewHolder>{
             this.lastname = view.findViewById(R.id.dup_lname);
             this.linearLayout = view.findViewById(R.id.searchedDup);
         }
+
     }
 
     @NonNull
     @Override
-    public DupAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public Dup2Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View listItem = layoutInflater.inflate(R.layout.dup_itemlist, parent, false);
-        DupAdapter.ViewHolder viewHolder = new DupAdapter.ViewHolder(listItem);
+        Dup2Adapter.ViewHolder viewHolder = new Dup2Adapter.ViewHolder(listItem);
 
 
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DupAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull Dup2Adapter.ViewHolder holder, int position) {
         final Individual individual = individualList.get(position);
 
         holder.permid.setText(individual.getExtId());
@@ -90,10 +92,10 @@ public class DupAdapter extends RecyclerView.Adapter<DupAdapter.ViewHolder>{
             @Override
             public void onClick(View v) {
                 // Get the text field in the IndividualFragment where you want to insert the mother's ID
-                EditText partnerIdField = activity.requireActivity().findViewById(R.id.dup_uuid);
-                EditText fname = activity.requireActivity().findViewById(R.id.dup_fname);
-                EditText lname = activity.requireActivity().findViewById(R.id.dup_lname);
-                EditText dob = activity.requireActivity().findViewById(R.id.dup_dob);
+                EditText partnerIdField = activity.requireActivity().findViewById(R.id.dup2_uuid);
+                EditText fname = activity.requireActivity().findViewById(R.id.dup2_fname);
+                EditText lname = activity.requireActivity().findViewById(R.id.dup2_lname);
+                EditText dob = activity.requireActivity().findViewById(R.id.dup2_dob);
 
                 // Set the mother's ID in the text field
                 partnerIdField.setText(individual.getUuid());

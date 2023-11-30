@@ -14,6 +14,8 @@ import org.openhds.hdsscapture.Adapter.ViewsAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Newloc;
 import org.openhds.hdsscapture.Utilities.Queries;
+import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.entity.Death;
@@ -33,6 +35,8 @@ public class NewActivity extends AppCompatActivity {
 
     private SocialgroupViewModel socialgroupViewModel;
     private LocationViewModel locationViewModel;
+    private DeathViewModel deathViewModel;
+    private IndividualViewModel individualViewModel;
     private ProgressDialog progress;
     private ViewsAdapter viewsAdapter;
     private List<Newloc> filterAll;
@@ -50,6 +54,8 @@ public class NewActivity extends AppCompatActivity {
 
         socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
         locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
+        deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
 
         query();
     }
@@ -91,6 +97,34 @@ public class NewActivity extends AppCompatActivity {
                 list.add(r1);
                 d++;
             }
+
+//            int g=1;
+//            for (Death e : deathViewModel.repo()) {
+//                //String formattedDate = f.format(e.insertDate);
+//                Newloc r1 = new Newloc();
+//                r1.id1 = g + ". Death";
+//                r1.id2 = "" + e.extId + " - " + e.compno;
+//                r1.id3 = "" + e.firstName + " " + e.lastName;
+//                r1.id4 = "" + e.deathCause;
+//                r1.index = g;
+//
+//                list.add(r1);
+//                g++;
+//            }
+//
+//            int h=1;
+//            for (Individual e : individualViewModel.repo()) {
+//                String formattedDate = f.format(e.insertDate);
+//                Newloc r1 = new Newloc();
+//                r1.id1 = h + ". Individual";
+//                r1.id2 = "" + e.extId ;
+//                r1.id3 = "" + e.firstName + " " + e.lastName;
+//                r1.id4 = "" + formattedDate;
+//                r1.index = h;
+//
+//                list.add(r1);
+//                h++;
+//            }
 
 
 

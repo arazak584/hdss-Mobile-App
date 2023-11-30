@@ -27,8 +27,8 @@ public class MotherAdapter extends RecyclerView.Adapter<MotherAdapter.ViewHolder
 
     MotherDialogFragment activity;
     LayoutInflater inflater;
-    private Locations locations;
-    private List<Individual> individualList;
+    private final Locations locations;
+    private final List<Individual> individualList;
 
     public interface MotherSelectionListener {
         void onMotherSelected(String motherId);

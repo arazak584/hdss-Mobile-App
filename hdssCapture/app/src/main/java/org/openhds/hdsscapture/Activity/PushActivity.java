@@ -2,7 +2,9 @@ package org.openhds.hdsscapture.Activity;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -81,6 +83,10 @@ public class PushActivity extends AppCompatActivity {
         AppJson api = AppJson.getInstance(this);
         dao = api.getJsonApi();
 
+        // Retrieve authorizationHeader from SharedPreferences
+        SharedPreferences preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        String authorizationHeader = preferences.getString("authorizationHeader", null);
+
 
         //PUSH LOCATION
         final Button buttonSendLocationdata = findViewById(R.id.buttonSendLocation);
@@ -92,7 +98,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             locationsList.addAll(locationViewModel.findToSync());
             buttonSendLocationdata.setText("Locations(" + locationsList.size() + ") to send");
-            buttonSendLocationdata.setTextColor(Color.BLACK);
+            buttonSendLocationdata.setTextColor(Color.WHITE);
             if (locationsList.isEmpty()) {
                 buttonSendLocationdata.setVisibility(View.GONE);
                 //textViewSendLocationdata.setVisibility(View.GONE);
@@ -113,7 +119,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Locations>> c_callable = dao.sendLocationdata(data);
+                final Call<DataWrapper<Locations>> c_callable = dao.sendLocationdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Locations>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Locations>> call, Response<DataWrapper<Locations>> response) {
@@ -131,7 +137,7 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendLocationdata.setText("Sent " + d.length + " record(s)");
                             //textViewSendLocationdata.setTextColor(Color.rgb(0, 114, 133));
-                            buttonSendLocationdata.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendLocationdata.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -159,7 +165,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             visitList.addAll(visitViewModel.findToSync());
             buttonSendVisit.setText("Visit(" + visitList.size() + ") to send");
-            buttonSendVisit.setTextColor(Color.BLACK);
+            buttonSendVisit.setTextColor(Color.WHITE);
             if (visitList.isEmpty()) {
                 buttonSendVisit.setVisibility(View.GONE);
                // textViewSendVisit.setVisibility(View.GONE);
@@ -180,7 +186,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Visit>> c_callable = dao.sendVisitdata(data);
+                final Call<DataWrapper<Visit>> c_callable = dao.sendVisitdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Visit>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Visit>> call, Response<DataWrapper<Visit>> response) {
@@ -196,7 +202,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendVisit.setText("Sent " + d.length + " record(s)");
-                            buttonSendVisit.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendVisit.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -224,7 +230,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             listingList.addAll(listingViewModel.findToSync());
             buttonSendList.setText("Listing(" + listingList.size() + ") to send");
-            buttonSendList.setTextColor(Color.BLACK);
+            buttonSendList.setTextColor(Color.WHITE);
             if (listingList.isEmpty()) {
                 buttonSendList.setVisibility(View.GONE);
                 //textViewSendList.setVisibility(View.GONE);
@@ -245,7 +251,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Listing>> c_callable = dao.sendListing(data);
+                final Call<DataWrapper<Listing>> c_callable = dao.sendListing(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Listing>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Listing>> call, Response<DataWrapper<Listing>> response) {
@@ -261,7 +267,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendList.setText("Sent " + d.length + " record(s)");
-                            buttonSendList.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendList.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -289,7 +295,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             individualList.addAll(individualViewModel.findToSync());
             buttonSendIndividualdata.setText("Individuals(" + individualList.size() + ") to send");
-            buttonSendIndividualdata.setTextColor(Color.BLACK);
+            buttonSendIndividualdata.setTextColor(Color.WHITE);
             if (individualList.isEmpty()) {
                 buttonSendIndividualdata.setVisibility(View.GONE);
                 //textViewSendIndividualdata.setVisibility(View.GONE);
@@ -314,7 +320,7 @@ public class PushActivity extends AppCompatActivity {
 //                    elem.complete = 0;
 //                }
 
-                final Call<DataWrapper<Individual>> c_callable = dao.sendIndividualdata(data);
+                final Call<DataWrapper<Individual>> c_callable = dao.sendIndividualdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Individual>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Individual>> call, Response<DataWrapper<Individual>> response) {
@@ -329,7 +335,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendIndividualdata.setText("Sent " + d.length + " Individual record(s)");
-                            buttonSendIndividualdata.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendIndividualdata.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -357,7 +363,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             socialgroupList.addAll(socialgroupViewModel.findToSync());
             buttonSendSocialgroupdata.setText("Socialgroup (" + socialgroupList.size() + ") to send");
-            buttonSendSocialgroupdata.setTextColor(Color.BLACK);
+            buttonSendSocialgroupdata.setTextColor(Color.WHITE);
             if (socialgroupList.isEmpty()) {
                 buttonSendSocialgroupdata.setVisibility(View.GONE);
                 //textViewSendSocialgroupdata.setVisibility(View.GONE);
@@ -378,7 +384,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Socialgroup>> c_callable = dao.sendSocialgroupdata(data);
+                final Call<DataWrapper<Socialgroup>> c_callable = dao.sendSocialgroupdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Socialgroup>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Socialgroup>> call, Response<DataWrapper<Socialgroup>> response) {
@@ -395,7 +401,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendSocialgroupdata.setText("Sent " + d.length + " Socialgroup record(s)");
-                            buttonSendSocialgroupdata.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendSocialgroupdata.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -423,7 +429,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             relationshipList.addAll(relationshipViewModel.findToSync());
             buttonSendRelationshipdata.setText("Relationship (" + relationshipList.size() + ") to send");
-            buttonSendRelationshipdata.setTextColor(Color.BLACK);
+            buttonSendRelationshipdata.setTextColor(Color.WHITE);
             if (relationshipList.isEmpty()) {
                 buttonSendRelationshipdata.setVisibility(View.GONE);
                 //textViewSendRelationshipdata.setVisibility(View.GONE);
@@ -445,7 +451,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Relationship>> c_callable = dao.sendRelationshipdata(data);
+                final Call<DataWrapper<Relationship>> c_callable = dao.sendRelationshipdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Relationship>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Relationship>> call, Response<DataWrapper<Relationship>> response) {
@@ -461,7 +467,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendRelationshipdata.setText("Sent " + d.length + " Relationship record(s)");
-                            buttonSendRelationshipdata.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendRelationshipdata.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -489,7 +495,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             pregnancyList.addAll(pregnancyViewModel.findToSync());
             buttonSendPregnancydata.setText("Pregnancy (" + pregnancyList.size() + ") to send");
-            buttonSendPregnancydata.setTextColor(Color.BLACK);
+            buttonSendPregnancydata.setTextColor(Color.WHITE);
             if (pregnancyList.isEmpty()) {
                 buttonSendPregnancydata.setVisibility(View.GONE);
                 //textViewSendPregnancydata.setVisibility(View.GONE);
@@ -510,7 +516,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Pregnancy>> c_callable = dao.sendPregnancydata(data);
+                final Call<DataWrapper<Pregnancy>> c_callable = dao.sendPregnancydata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Pregnancy>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Pregnancy>> call, Response<DataWrapper<Pregnancy>> response) {
@@ -526,7 +532,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendPregnancydata.setText("Sent " + d.length + " Pregnancy record(s)");
-                            buttonSendPregnancydata.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendPregnancydata.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -554,7 +560,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             pregnancyoutcomeList.addAll(pregnancyoutcomeViewModel.findToSync());
             buttonSendOutcomedata.setText("Pregnancy Outcome (" + pregnancyoutcomeList.size() + ") to send");
-            buttonSendOutcomedata.setTextColor(Color.BLACK);
+            buttonSendOutcomedata.setTextColor(Color.WHITE);
             if (pregnancyoutcomeList.isEmpty()) {
                 buttonSendOutcomedata.setVisibility(View.GONE);
                 //textViewSendOutcomedata.setVisibility(View.GONE);
@@ -575,7 +581,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Pregnancyoutcome>> c_callable = dao.sendPregoutcomedata(data);
+                final Call<DataWrapper<Pregnancyoutcome>> c_callable = dao.sendPregoutcomedata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Pregnancyoutcome>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Pregnancyoutcome>> call, Response<DataWrapper<Pregnancyoutcome>> response) {
@@ -591,7 +597,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendOutcomedata.setText("Sent " + d.length + " Pregnancy Outcome record(s)");
-                            buttonSendOutcomedata.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendOutcomedata.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -618,7 +624,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             outcomeList.addAll(outcomeViewModel.findToSync());
             buttonSendOutcomesdata.setText("Outcome (" + outcomeList.size() + ") to send");
-            buttonSendOutcomesdata.setTextColor(Color.BLACK);
+            buttonSendOutcomesdata.setTextColor(Color.WHITE);
             if (outcomeList.isEmpty()) {
                 buttonSendOutcomesdata.setVisibility(View.GONE);
                 //textViewSendOutcomesdata.setVisibility(View.GONE);
@@ -639,7 +645,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Outcome>> c_callable = dao.sendOutcomedata(data);
+                final Call<DataWrapper<Outcome>> c_callable = dao.sendOutcomedata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Outcome>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Outcome>> call, Response<DataWrapper<Outcome>> response) {
@@ -655,7 +661,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendOutcomesdata.setText("Sent " + d.length + " Outcome record(s)");
-                            buttonSendOutcomesdata.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendOutcomesdata.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -683,7 +689,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             demographicList.addAll(demographicViewModel.findToSync());
             buttonSendDemographicdata.setText("Demographic (" + demographicList.size() + ") to send");
-            buttonSendDemographicdata.setTextColor(Color.BLACK);
+            buttonSendDemographicdata.setTextColor(Color.WHITE);
             if (demographicList.isEmpty()) {
                 buttonSendDemographicdata.setVisibility(View.GONE);
                // textViewSendDemographicdata.setVisibility(View.GONE);
@@ -705,7 +711,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Demographic>> c_callable = dao.sendDemographicdata(data);
+                final Call<DataWrapper<Demographic>> c_callable = dao.sendDemographicdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Demographic>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Demographic>> call, Response<DataWrapper<Demographic>> response) {
@@ -716,12 +722,13 @@ public class PushActivity extends AppCompatActivity {
 
                             for (Demographic elem : d) {
                                 elem.complete = 0;
+                                //Log.e("PUSH.tag", "Has value " + elem.edtime);
                             }
                             demographicViewModel.add(d);
 
                             progress.dismiss();
                             buttonSendDemographicdata.setText("Sent " + d.length + " Demographic record(s)");
-                            buttonSendDemographicdata.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendDemographicdata.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -769,7 +776,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Death>> c_callable = dao.sendDeathdata(data);
+                final Call<DataWrapper<Death>> c_callable = dao.sendDeathdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Death>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
@@ -783,7 +790,6 @@ public class PushActivity extends AppCompatActivity {
                                 //Log.e("PUSH.tag", "Has value " + elem.edtime);
                             }
                             deathViewModel.add(d);
-
                             progress.dismiss();
                             buttondth.setText("Sent " + d.length + " Death record(s)");
                             buttondth.setTextColor(Color.parseColor("#FFFFFFFF"));
@@ -835,7 +841,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Death>> c_callable = dao.sendVpmdata(data);
+                final Call<DataWrapper<Death>> c_callable = dao.sendVpmdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Death>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
@@ -879,7 +885,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             hdssSociodemoList.addAll(hdssSociodemoViewModel.findToSync());
             buttonSendSocio.setText("Profiles[SES] (" + hdssSociodemoList.size() + ") to send");
-            buttonSendSocio.setTextColor(Color.BLACK);
+            buttonSendSocio.setTextColor(Color.WHITE);
             if (hdssSociodemoList.isEmpty()) {
                 buttonSendSocio.setVisibility(View.GONE);
                 //textViewSendSocio.setVisibility(View.GONE);
@@ -900,7 +906,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<HdssSociodemo>> c_callable = dao.sendSociodata(data);
+                final Call<DataWrapper<HdssSociodemo>> c_callable = dao.sendSociodata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<HdssSociodemo>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<HdssSociodemo>> call, Response<DataWrapper<HdssSociodemo>> response) {
@@ -916,7 +922,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendSocio.setText("Sent " + d.length + " record(s)");
-                            buttonSendSocio.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendSocio.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -945,7 +951,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             residencyList.addAll(residencyViewModel.findToSync());
             buttonSendRes.setText("Residency (" + residencyList.size() + ") to send");
-            buttonSendRes.setTextColor(Color.BLACK);
+            buttonSendRes.setTextColor(Color.WHITE);
             if (residencyList.isEmpty()) {
                 buttonSendRes.setVisibility(View.GONE);
                 //textViewSendRes.setVisibility(View.GONE);
@@ -967,7 +973,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Residency>> c_callable = dao.sendResidencydata(data);
+                final Call<DataWrapper<Residency>> c_callable = dao.sendResidencydata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Residency>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Residency>> call, Response<DataWrapper<Residency>> response) {
@@ -983,7 +989,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendRes.setText("Sent " + d.length + " Residency record(s)");
-                            buttonSendRes.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendRes.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -1011,7 +1017,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             inmigrationList.addAll(inmigrationViewModel.findToSync());
             buttonSendImg.setText("Inmigration (" + inmigrationList.size() + ") to send");
-            buttonSendImg.setTextColor(Color.BLACK);
+            buttonSendImg.setTextColor(Color.WHITE);
             if (inmigrationList.isEmpty()) {
                 buttonSendImg.setVisibility(View.GONE);
                 //textViewSendImg.setVisibility(View.GONE);
@@ -1032,7 +1038,7 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-                final Call<DataWrapper<Inmigration>> c_callable = dao.sendInmigrationdata(data);
+                final Call<DataWrapper<Inmigration>> c_callable = dao.sendInmigrationdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Inmigration>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Inmigration>> call, Response<DataWrapper<Inmigration>> response) {
@@ -1048,7 +1054,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendImg.setText("Sent " + d.length + " Inmigration record(s)");
-                            buttonSendImg.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendImg.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -1076,7 +1082,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             outmigrationList.addAll(outmigrationViewModel.findToSync());
             buttonSendOmg.setText("Outmigration (" + outmigrationList.size() + ") to send");
-            buttonSendOmg.setTextColor(Color.BLACK);
+            buttonSendOmg.setTextColor(Color.WHITE);
             if (outmigrationList.isEmpty()) {
                 buttonSendOmg.setVisibility(View.GONE);
                 //textViewSendOmg.setVisibility(View.GONE);
@@ -1098,7 +1104,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Outmigration>> c_callable = dao.sendOutmigrationdata(data);
+                final Call<DataWrapper<Outmigration>> c_callable = dao.sendOutmigrationdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Outmigration>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Outmigration>> call, Response<DataWrapper<Outmigration>> response) {
@@ -1114,7 +1120,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendOmg.setText("Sent " + d.length + " Outmigration record(s)");
-                            buttonSendOmg.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendOmg.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -1144,7 +1150,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             amendmentList.addAll(amendmentViewModel.findToSync());
             buttonSendAmend.setText("Amendment (" + amendmentList.size() + ") to send");
-            buttonSendAmend.setTextColor(Color.BLACK);
+            buttonSendAmend.setTextColor(Color.WHITE);
             if (amendmentList.isEmpty()) {
                 buttonSendAmend.setVisibility(View.GONE);
                 //textViewSendAmend.setVisibility(View.GONE);
@@ -1166,7 +1172,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Amendment>> c_callable = dao.sendAmendment(data);
+                final Call<DataWrapper<Amendment>> c_callable = dao.sendAmendment(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Amendment>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Amendment>> call, Response<DataWrapper<Amendment>> response) {
@@ -1182,7 +1188,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendAmend.setText("Sent " + d.length + " Amendment record(s)");
-                            buttonSendAmend.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendAmend.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -1211,7 +1217,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             vaccinationList.addAll(vaccinationViewModel.findToSync());
             buttonSendVac.setText("Vaccination (" + vaccinationList.size() + ") to send");
-            buttonSendVac.setTextColor(Color.BLACK);
+            buttonSendVac.setTextColor(Color.WHITE);
             if (vaccinationList.isEmpty()) {
                 buttonSendVac.setVisibility(View.GONE);
                 //textViewSendVac.setVisibility(View.GONE);
@@ -1233,7 +1239,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Vaccination>> c_callable = dao.sendVaccination(data);
+                final Call<DataWrapper<Vaccination>> c_callable = dao.sendVaccination(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Vaccination>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Vaccination>> call, Response<DataWrapper<Vaccination>> response) {
@@ -1249,7 +1255,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendVac.setText("Sent " + d.length + " Vaccination record(s)");
-                            buttonSendVac.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendVac.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -1276,7 +1282,7 @@ public class PushActivity extends AppCompatActivity {
         try {
             duplicateList.addAll(duplicateViewModel.findToSync());
             buttonSendDup.setText("Duplicate (" + duplicateList.size() + ") to send");
-            buttonSendDup.setTextColor(Color.BLACK);
+            buttonSendDup.setTextColor(Color.WHITE);
             if (duplicateList.isEmpty()) {
                 buttonSendDup.setVisibility(View.GONE);
                 //textViewSendDup.setVisibility(View.GONE);
@@ -1298,7 +1304,7 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Duplicate>> c_callable = dao.sendDup(data);
+                final Call<DataWrapper<Duplicate>> c_callable = dao.sendDup(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Duplicate>>() {
                     @Override
                     public void onResponse(@NonNull Call<DataWrapper<Duplicate>> call, Response<DataWrapper<Duplicate>> response) {
@@ -1314,7 +1320,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendDup.setText("Sent " + d.length + " Duplicate record(s)");
-                            buttonSendDup.setTextColor(Color.parseColor("#FF4500"));
+                            buttonSendDup.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 

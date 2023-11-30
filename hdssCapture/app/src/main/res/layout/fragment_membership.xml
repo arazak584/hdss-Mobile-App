@@ -38,6 +38,7 @@
             name="death"
             type="org.openhds.hdsscapture.entity.Death" />
 
+
         <variable
             name="eventname"
             type="String" />
@@ -48,6 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="15dp"
         tools:context=".fragment.ResidencyFragment">
 
         <TextView
@@ -120,8 +122,24 @@
                     bind:mig="@{mig}" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/earliest"
+                    android:text="@string/earliest">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/earliest"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -129,7 +147,7 @@
                     android:hint="@string/fw"
                     android:text="@string/fw">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:id="@+id/fw"
@@ -163,7 +181,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -171,7 +188,7 @@
                     android:hint="@string/uuid"
                     android:text="@string/uuid">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:id="@+id/uuid"
@@ -183,7 +200,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -191,7 +207,7 @@
                     android:hint="@string/ind_extid"
                     android:text="@string/ind_extid">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:id="@+id/extid"
@@ -204,7 +220,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -212,7 +227,7 @@
                     android:hint="@string/location_select"
                     android:text="@string/location_select">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:id="@+id/location_extid"
@@ -224,7 +239,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -232,7 +246,7 @@
                     android:hint="@string/currentLoc"
                     android:text="@string/currentLoc">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:id="@+id/currentLoc"
@@ -244,7 +258,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -252,7 +265,7 @@
                     android:hint="@string/actual_dob"
                     android:text="@string/actual_dob">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:id="@+id/currentdob"
@@ -268,11 +281,12 @@
                     android:layout_height="wrap_content"
                     android:text="@string/changehh"
                     app:icon="@drawable/baseline_people_24"
+                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:textColor="@android:color/background_light"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -280,7 +294,7 @@
                     android:hint="@string/old_res"
                     android:text="@string/old_res">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:id="@+id/old_res"
@@ -292,7 +306,6 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -300,7 +313,7 @@
                     android:hint="@string/household_select"
                     android:text="@string/household_select">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:id="@+id/socialgroup_uuid"
@@ -347,6 +360,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/startdate"
                     tools:ignore="DuplicateSpeakableTextCheck"
+                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:textColor="@android:color/background_light"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
@@ -385,11 +400,12 @@
                     android:layout_height="wrap_content"
                     android:text="@string/enddate"
                     tools:ignore="DuplicateSpeakableTextCheck"
+                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:textColor="@android:color/background_light"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{residency.endType==2 || residency.endType==3}"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -397,7 +413,7 @@
                     android:hint="@string/enddate"
                     android:text="@string/enddate">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:id="@+id/editText_endDate"
@@ -447,7 +463,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -455,7 +470,7 @@
                     android:hint="@string/rltn_head"
                     android:text="@string/rltn_head">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:id="@+id/rltn"
@@ -555,6 +570,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 android:text="@string/savecontinuedata" />
 
             <Button
@@ -563,6 +580,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 android:text="@string/closedata" />
 
         </LinearLayout>

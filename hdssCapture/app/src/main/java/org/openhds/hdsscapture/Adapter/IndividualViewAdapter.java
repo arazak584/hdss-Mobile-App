@@ -30,10 +30,10 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
 
     HouseMembersFragment activity;
     LayoutInflater inflater;
-    private Locations locations;
-    private Socialgroup socialgroup;
+    private final Locations locations;
+    private final Socialgroup socialgroup;
     private Residency residency;
-    private List<Individual> individualList;
+    private final List<Individual> individualList;
 
     public IndividualViewAdapter(HouseMembersFragment activity, Locations locations, Socialgroup socialgroup) {
         this.activity = activity;
@@ -46,7 +46,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView firstname, lastname, nickname, permid, dob, compno, gender,status;
+        TextView firstname, lastname, nickname, permid, dob, compno, gender,status, hhid, age;
         LinearLayout linearLayout;
         CardView cardView;
 
@@ -60,6 +60,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
             this.gender = view.findViewById(R.id.text_gender);
             this.compno = view.findViewById(R.id.text_compno);
             this.status = view.findViewById(R.id.text_status);
+            this.hhid = view.findViewById(R.id.text_hhid);
             this.cardView = view.findViewById(R.id.searchedIindividual);
         }
     }
@@ -89,7 +90,8 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         holder.lastname.setText(individual.getLastName());
         holder.dob.setText(individual.getDob());
         holder.compno.setText(individual.compextId);
-        //holder.age.setText(String.valueOf(individual.getAge()));
+        holder.hhid.setText(individual.houseExtId);
+        //holder.hhid.setText(String.valueOf(individual.age));
         String otherName = individual.getOtherName();
         if (otherName == null || otherName.isEmpty()) {
             holder.nickname.setText("");

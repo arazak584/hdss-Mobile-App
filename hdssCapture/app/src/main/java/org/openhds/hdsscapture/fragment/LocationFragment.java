@@ -44,6 +44,7 @@ import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -244,6 +245,18 @@ public class LocationFragment extends Fragment {
 
         if(locations.insertDate==null){
             binding.getLocations().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
+            Date currentDate = new Date(); // Get the current date and time
+            // Create a Calendar instance and set it to the current date and time
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(currentDate);
+            // Extract the hour, minute, and second components
+            int hh = cal.get(Calendar.HOUR_OF_DAY);
+            int mm = cal.get(Calendar.MINUTE);
+            int ss = cal.get(Calendar.SECOND);
+            // Format the components into a string with leading zeros
+            String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
+            locations.sttime = timeString;
         }
 
         if(locations.compno!=null){
@@ -302,6 +315,7 @@ public class LocationFragment extends Fragment {
             binding.latitude.setError(null);
 
             boolean val = false;
+            boolean fmt = false;
 
             if (!binding.locationcompno.getText().toString().isEmpty()) {
                 String comp = binding.locationcompno.getText().toString();
@@ -423,6 +437,20 @@ public class LocationFragment extends Fragment {
                 }
             }
 
+            Date end = new Date(); // Get the current date and time
+            // Create a Calendar instance and set it to the current date and time
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(end);
+            // Extract the hour, minute, and second components
+            int hh = cal.get(Calendar.HOUR_OF_DAY);
+            int mm = cal.get(Calendar.MINUTE);
+            int ss = cal.get(Calendar.SECOND);
+            // Format the components into a string with leading zeros
+            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
+
+            if (locations.sttime !=null && locations.edtime==null){
+                locations.edtime = endtime;
+            }
             locations.complete = 1;
             locationViewModel.add(locations);
             //Toast.makeText(v.getContext(), "Saved Successfully", Toast.LENGTH_LONG).show();

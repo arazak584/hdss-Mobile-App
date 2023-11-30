@@ -36,7 +36,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -44,7 +43,7 @@
             android:hint="@string/fw"
             android:text="@string/fw">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/omg_fw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,7 +75,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -85,7 +83,7 @@
             android:hint="@string/uuid"
             android:text="@string/ind_extid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/omg_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -95,7 +93,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -103,7 +100,7 @@
             android:hint="@string/resuuid"
             android:text="@string/resuuid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/res_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -113,7 +110,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -121,7 +117,7 @@
             android:hint="@string/ind_extid"
             android:text="@string/ind_extid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/omg_extid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -131,7 +127,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -139,7 +134,7 @@
             android:hint="@string/visitid"
             android:text="@string/household_select">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/omg_visitid"
                 android:text="@={outmigration.visit_uuid}"
                 android:layout_width="match_parent"
@@ -164,6 +159,7 @@
             android:minHeight="48dp"
             android:onItemSelected="@{outmigration::setDestination}"
             android:padding="20dp"
+            android:spinnerMode="dialog"
             android:textColor="#000301" />
 
         <TextView
@@ -183,12 +179,12 @@
             android:minHeight="48dp"
             android:onItemSelected="@{outmigration::setReason}"
             android:padding="20dp"
+            android:spinnerMode="dialog"
             android:textColor="#000301" />
 
 
         <com.google.android.material.textfield.TextInputLayout
             goneUnless="@{outmigration.reason==77}"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -196,7 +192,7 @@
             android:hint="@string/attend_you_other"
             android:text="@string/attend_you_other">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/other_reason"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -210,10 +206,11 @@
             android:layout_height="wrap_content"
             android:text="@string/outdate"
             tools:ignore="DuplicateSpeakableTextCheck"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -221,7 +218,7 @@
             android:hint="@string/outdate"
             android:text="@string/outdate">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:id="@+id/omg_date"

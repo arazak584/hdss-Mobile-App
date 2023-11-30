@@ -6,7 +6,6 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -17,6 +16,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -39,6 +39,9 @@ public class Vaccination extends BaseObservable {
 
     @Expose
     public Date insertDate;
+
+    @Expose
+    public Date editDate;
 
     @Expose
     public String socialgroup_uuid;
@@ -188,7 +191,7 @@ public class Vaccination extends BaseObservable {
     public Integer chlbednet;//How many children sleep under the bednet?
 
     @Expose
-    public Integer weight;//Weight of child at birth in Kg?
+    public String weight;//Weight of child at birth in Kg?
 
     @Expose
     public Integer scar;//Does the child have the BCG scar? (Observe)
@@ -216,6 +219,11 @@ public class Vaccination extends BaseObservable {
 
     @Expose
     public Integer muac;//Mid-Upper Arm circumference MUAC
+    @Expose
+    public String sttime;
+
+    @Expose
+    public String edtime;
 
     public Vaccination(){}
 
@@ -234,6 +242,34 @@ public class Vaccination extends BaseObservable {
             this.insertDate = f.parse(insertDate);
         } catch (ParseException e) {
         }
+    }
+
+    public String getEditDate() {
+        if (editDate == null) return null;
+        return f.format(editDate);
+    }
+
+    public void setEditDate(String editDate) {
+        try {
+            this.editDate = f.parse(editDate);
+        } catch (ParseException e) {
+        }
+    }
+
+    public String getSttime() {
+        return sttime;
+    }
+
+    public void setSttime(String sttime) {
+        this.sttime = sttime;
+    }
+
+    public String getEdtime() {
+        return edtime;
+    }
+
+    public void setEdtime(String edtime) {
+        this.edtime = edtime;
     }
 
     @NotNull
@@ -815,16 +851,11 @@ public class Vaccination extends BaseObservable {
     }
 
     public String getWeight() {
-        return weight == null ? "" : String.valueOf(weight);
+        return weight;
     }
 
     public void setWeight(String weight) {
-        if (weight == null) this.weight = null;
-        else
-            try {
-                this.weight = Integer.valueOf(weight);
-            } catch (NumberFormatException e) {
-            }
+        this.weight = weight;
     }
 
     public Integer getScar() {

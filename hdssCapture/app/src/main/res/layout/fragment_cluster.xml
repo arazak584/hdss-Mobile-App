@@ -20,12 +20,15 @@
 
         <Button
             android:id="@+id/button_filter"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_gravity="center"
             android:textSize="18sp"
-            android:text="@string/filter" />
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:text="@string/filter"
+            android:background="@drawable/btnd_rone_dgbevel"/>
 
         <LinearLayout
             android:id="@+id/layout_manu"
@@ -50,6 +53,15 @@
 
         </LinearLayout>
 
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="25dp"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/compoundsview"
             android:layout_width="match_parent"
@@ -58,7 +70,8 @@
             android:layout_marginEnd="1dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="20dp"
-            android:padding="20dp"
+            android:padding="5dp"
+            android:layout_weight="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -66,21 +79,49 @@
 
         </androidx.recyclerview.widget.RecyclerView>
 
+<!--            <View-->
+<!--                android:layout_width="2dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_margin="5dp"-->
+<!--                android:background="@color/colorPrimaryDark" />-->
+
+
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/householdview"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_marginStart="1dp"-->
+<!--                android:layout_marginEnd="1dp"-->
+<!--                android:layout_marginTop="5dp"-->
+<!--                android:layout_marginBottom="20dp"-->
+<!--                android:padding="20dp"-->
+<!--                android:layout_weight="1"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/layout_manu">-->
+
+<!--            </androidx.recyclerview.widget.RecyclerView>-->
+
+
+        </LinearLayout>
+
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_new_location"
-        android:layout_width="wrap_content"
+        android:layout_width="200dip"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:contentDescription="@string/createLocation"
+        android:layout_margin="5dp"
         android:src="@drawable/ic_baseline_add_24"
         android:text="@string/createLocation"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:backgroundTint="#246EE9"
+        android:background="@drawable/btnd_rone_dgbevel"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

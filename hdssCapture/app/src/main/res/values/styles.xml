@@ -1,19 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <!-- Customize your theme here -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/gray</item>
+        <item name="colorAccent">@color/colorAccent</item>
+<!--        <item name="android:fontFamily">@font/gordita_regular</item>-->
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/button_textcolor</item>
+        <item name="android:textViewStyle">@style/customTextViewStyle</item>
+        <item name="android:buttonStyle">@style/customButtonStyle</item>
+        <item name="android:dialogTheme">@style/CustomDialog</item>
+        <item name="android:spinnerItemStyle">@style/spinnerStyle</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="CustomDialog" parent="@style/AppTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="appCompatDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+<!--        <item name="android:fontFamily">@font/gordita_regular</item>-->
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/button_textcolor</item>
+        <item name="android:textViewStyle">@style/customTextViewStyle</item>
+        <item name="android:buttonStyle">@style/customButtonStyle</item>
+        <item name="android:spinnerItemStyle">@style/spinnerStyle</item>
+    </style>
 
-    <style name="MyAlertDialogStyle" parent="Theme.MaterialComponents.Light.Dialog.Alert">
-        <item name="colorAccent">@color/orange</item> <!--define your color here-->
+    <style name="ThemeNoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+<!--        <item name="android:fontFamily">@font/gordita_regular</item>-->
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/button_textcolor</item>
+    </style>
+
+    <style name="SettingsScreen" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColor">@color/Red</item>
+        <item name="android:textColorPrimary">#444</item>
+        <item name="colorPrimary">#C85E5E</item>
+        <item name="colorPrimaryDark">#C85E5E</item>
+        <item name="colorAccent">#836060</item>
+        <item name="android:background">@color/zxing_transparent</item>
+    </style>
+
+    <style name="spinnerStyle" parent="@style/Widget.AppCompat.Light.DropDownItem.Spinner">
+        <item name="android:textColor">#444</item>
+        <item name="android:colorAccent">@color/Red</item>
+        <item name="android:color">#444</item>
+        <item name="overlapAnchor">true</item>
+        <item name="android:background">@drawable/spinner_rone_wbevel</item>
+    </style>
+
+    <style name="customTextViewStyle" parent="@android:style/Widget.Material.Light.TextView">
+<!--        <item name="android:fontFamily">@font/gordita_regular</item>-->
+        <item name="android:textColor">@color/button_textcolor</item>
+    </style>
+
+    <style name="customButtonStyle" parent="@android:style/Widget.Material.Light.Button">
+<!--        <item name="android:fontFamily">@font/gordita_regular</item>-->
+        <item name="android:textColor">@color/button_textcolor</item>
+    </style>
+
+    <style name="customTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/customTabTextAppearance</item>
+    </style>
+
+    <style name="customTabTextAppearance" parent="TextAppearance.Design.Tab">
+<!--        <item name="android:fontFamily">@font/gordita_regular</item>-->
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="customSyncTabLayout" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/customSyncTextAppearance</item>
+    </style>
+
+    <style name="customSyncTextAppearance" parent="TextAppearance.Design.Tab">
+<!--        <item name="android:fontFamily">@font/gordita_regular</item>-->
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
     </style>
 
     <style name="CustomDatePickerStyle">
@@ -33,6 +117,16 @@
 
     <style name="CustomDatePickerDialogTheme" parent="ThemeOverlay.MaterialComponents.Dialog">
         <item name="android:datePickerStyle">@style/CustomDatePickerStyle</item>
+    </style>
+
+    <style name="AppCompatEditTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:hint">Enter your text</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:backgroundTint">#0077B6</item>
     </style>
 
 

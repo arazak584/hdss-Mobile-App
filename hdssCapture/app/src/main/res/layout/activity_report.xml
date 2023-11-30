@@ -58,6 +58,8 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             app:icon="@drawable/date"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             android:text="@string/pick_date" />
 
         <Button
@@ -67,6 +69,8 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             app:icon="@drawable/date"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             android:text="@string/pick_end" />
 
 
@@ -135,15 +139,17 @@
                 android:orientation="vertical">
 
 
-                <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/bt_report"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="10dp"
                     android:textAlignment="center"
                     android:gravity="center"
+                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:textColor="@android:color/background_light"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:text="@string/report" />

@@ -161,11 +161,21 @@
     <color name="MediumBlue">#0000CD</color>
     <color name="DarkBlue">#00008B</color>
     <color name="Navy">#000080</color>
-    <color name="Black">#000000</color>
     <color name="pop">#FF4500</color>
     <color name="transparent">#0000ffff</color>
     <color name="home">#8A080D</color>
     <color name="back">#F5F5F5</color>
-
+    <color name="color_border_lightgray">#DFDFDF</color>
+    <color name="color_text_darkgray">#3E3E3E</color>
+    <color name="color_text_green">#11923C</color>
+    <color name="color_dg_start">#05A73B</color>
+    <color name="color_dg_start_m">#05A73E</color>
+    <color name="color_dg_end">#03541E</color>
+    <color name="color_blackgreen_end">#04812E</color>
+    <color name="color_circle_color_one">#8EC4A0</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="zxing_transparent">#00000000</color>
+    <color name="color_text_gr">#1c9844</color>
+    <color name="settings_textcolor">#444</color>
 
 </resources>

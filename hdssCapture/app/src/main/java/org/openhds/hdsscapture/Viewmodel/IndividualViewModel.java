@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.IndividualRepository;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 
@@ -106,12 +107,8 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.err();
     }
 
-    public List<Individual> merror() throws ExecutionException, InterruptedException {
-        return individualRepository.merror();
-    }
-
-    public List<Individual> ferror() throws ExecutionException, InterruptedException {
-        return individualRepository.ferror();
+    public List<Individual> repo() throws ExecutionException, InterruptedException {
+        return individualRepository.repo();
     }
 
     public void add(Individual data){ individualRepository.create(data);}

@@ -55,7 +55,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -63,12 +62,11 @@
                     android:hint="@string/fw"
                     android:text="@string/fw">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/location_fw"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={listing.fw_uuid}"
-                        android:visibility="visible"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:inputType="textPersonName|textCapCharacters"/>
@@ -86,7 +84,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="visible"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -94,7 +91,7 @@
                     android:hint="@string/visitDate"
                     android:text="@string/visitDate">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/location_insertDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -106,7 +103,6 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -114,7 +110,7 @@
                     android:hint="@string/compoundnumber"
                     android:text="@string/compoundnumber">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/locationcompno"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -126,7 +122,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -134,7 +129,7 @@
                     android:hint="@string/location_uuid"
                     android:text="@string/location_uuid">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/uuid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -147,7 +142,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -155,7 +149,7 @@
                     android:hint="Compound Number"
                     android:text="Compound Number">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/locationextid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -166,7 +160,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
@@ -176,7 +169,7 @@
                     app:isRequired="true"
                     android:text="@string/compound">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/locationName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -206,7 +199,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{listing.correct_yn==2}"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
@@ -216,7 +208,7 @@
                     app:isRequired="true"
                     android:text="@string/compoundcorrect">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/repllocationName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -229,10 +221,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/changecluster"
+                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:textColor="@android:color/background_light"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
@@ -241,7 +234,7 @@
                     android:hint="@string/cluster"
                     android:text="@string/cluster">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/villcode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -251,7 +244,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
@@ -260,7 +252,7 @@
                     android:hint="@string/cluster"
                     android:text="@string/cluster">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/cluster_code"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -269,7 +261,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
@@ -278,7 +269,7 @@
                     android:hint="@string/fieldworker"
                     android:text="@string/fieldworker">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/fw_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -289,7 +280,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
@@ -298,7 +288,7 @@
                     android:hint="@string/village"
                     android:text="@string/village">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/village"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -365,6 +355,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 android:text="@string/saveclosedata" />
 
             <Button
@@ -373,6 +365,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 android:text="@string/closedata" />
 
         </LinearLayout>

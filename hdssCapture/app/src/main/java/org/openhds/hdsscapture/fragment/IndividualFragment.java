@@ -12,11 +12,11 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.material.textfield.TextInputEditText;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
@@ -69,7 +69,7 @@ public class IndividualFragment extends Fragment {
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
-    private FragmentIndividualBinding binding;;
+    private FragmentIndividualBinding binding;
     private ProgressDialog progressDialog;
     private EventForm eventForm;
 
@@ -137,7 +137,7 @@ public class IndividualFragment extends Fragment {
         // Generate a UUID
         if(individual.uuid == null) {
             String uuid = UUID.randomUUID().toString();
-            String uuidString = uuid.toString().replaceAll("-", "");
+            String uuidString = uuid.replaceAll("-", "");
             // Set the ID of the Fieldworker object
             binding.getIndividual().uuid = uuidString;
         }
@@ -148,6 +148,18 @@ public class IndividualFragment extends Fragment {
 
         if(individual.insertDate==null){
             binding.getIndividual().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
+            Date currentDate = new Date(); // Get the current date and time
+            // Create a Calendar instance and set it to the current date and time
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(currentDate);
+            // Extract the hour, minute, and second components
+            int hh = cal.get(Calendar.HOUR_OF_DAY);
+            int mm = cal.get(Calendar.MINUTE);
+            int ss = cal.get(Calendar.SECOND);
+            // Format the components into a string with leading zeros
+            String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
+            individual.sttime = timeString;
         }
 
         if (individual.mother_uuid != null) {
@@ -202,7 +214,7 @@ public class IndividualFragment extends Fragment {
             String id = locations.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
             while (true) {
                 try {
-                    if (!(individualViewModels.findAll(id) != null)) break;
+                    if (individualViewModels.findAll(id) == null) break;
                 } catch (ExecutionException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -333,9 +345,9 @@ public class IndividualFragment extends Fragment {
             if (datae != null) {
                 binding.setMother(datae);
 
-                TextInputEditText name = binding.getRoot().findViewById(R.id.mother_name);
-                TextInputEditText dob = binding.getRoot().findViewById(R.id.mother_dob);
-                TextInputEditText age = binding.getRoot().findViewById(R.id.mothers_age);
+                AppCompatEditText name = binding.getRoot().findViewById(R.id.mother_name);
+                AppCompatEditText dob = binding.getRoot().findViewById(R.id.mother_dob);
+                AppCompatEditText age = binding.getRoot().findViewById(R.id.mothers_age);
                 name.setText(datae.firstName + " " + datae.lastName);
                 dob.setText(datae.getDob());
                 age.setText(String.valueOf(datae.getAge()));
@@ -349,9 +361,9 @@ public class IndividualFragment extends Fragment {
             if (data != null) {
                 binding.setFather(data);
 
-                TextInputEditText name = binding.getRoot().findViewById(R.id.father_name);
-                TextInputEditText dob = binding.getRoot().findViewById(R.id.father_dob);
-                TextInputEditText age = binding.getRoot().findViewById(R.id.fathers_age);
+                AppCompatEditText name = binding.getRoot().findViewById(R.id.father_name);
+                AppCompatEditText dob = binding.getRoot().findViewById(R.id.father_dob);
+                AppCompatEditText age = binding.getRoot().findViewById(R.id.fathers_age);
                 name.setText(data.firstName + " " + data.lastName);
                 dob.setText(data.getDob());
                 age.setText(String.valueOf(data.getAge()));
@@ -483,7 +495,39 @@ public class IndividualFragment extends Fragment {
                 return;
             }
 
-            finalData.complete=1;
+            Date end = new Date(); // Get the current date and time
+            // Create a Calendar instance and set it to the current date and time
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(end);
+            // Extract the hour, minute, and second components
+            int hh = cal.get(Calendar.HOUR_OF_DAY);
+            int mm = cal.get(Calendar.MINUTE);
+            int ss = cal.get(Calendar.SECOND);
+            // Format the components into a string with leading zeros
+            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
+
+            if (finalData.sttime !=null && finalData.edtime==null){
+                finalData.edtime = endtime;
+            }
+            //finalData.complete=1;
+
+            String ghc = (binding.ghanacardOld != null) ? binding.ghanacardOld.getText().toString() : null;
+            String othn = (binding.othernameOld != null) ? binding.othernameOld.getText().toString() : null;
+
+            if (finalData.complete == null && (finalData.ghanacard != null) && !finalData.ghanacard.equals(ghc)) {
+                finalData.complete = 1;
+            } else if (finalData.complete != null && (finalData.ghanacard != null) && !finalData.ghanacard.equals(ghc)) {
+                finalData.complete = 1;
+            }else if (finalData.complete == null && (finalData.otherName != null) && !finalData.otherName.equals(othn)) {
+                finalData.complete = 1;
+            }else if (finalData.complete != null && (finalData.otherName != null) && !finalData.otherName.equals(othn)) {
+                finalData.complete = 1;
+            }  else if (finalData.complete != null) {
+                finalData.complete = finalData.complete;
+            }else{
+                finalData.complete = 2;
+            }
+
 
             IndividualViewModel viewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
             viewModel.add(finalData);

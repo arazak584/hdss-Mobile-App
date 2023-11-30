@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
@@ -21,6 +20,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -87,6 +87,12 @@ public class Residency extends BaseObservable implements Parcelable {
     @Expose
     public Integer age;
 
+    @Expose
+    public String sttime;
+
+    @Expose
+    public String edtime;
+
     public Residency(){}
 
 
@@ -100,6 +106,22 @@ public class Residency extends BaseObservable implements Parcelable {
 
     public void setUuid(@NotNull String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getSttime() {
+        return sttime;
+    }
+
+    public void setSttime(String sttime) {
+        this.sttime = sttime;
+    }
+
+    public String getEdtime() {
+        return edtime;
+    }
+
+    public void setEdtime(String edtime) {
+        this.edtime = edtime;
     }
 
     @Bindable

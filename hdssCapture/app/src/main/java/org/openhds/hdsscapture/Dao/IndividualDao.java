@@ -6,8 +6,10 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 
@@ -23,7 +25,8 @@ public interface IndividualDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Individual individual);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Individual individual);
 
     @Update
@@ -55,7 +58,7 @@ public interface IndividualDao {
             " ( fullName LIKE:id OR c.compno LIKE:id OR ghanacard LIKE :id) ORDER BY dob ")
     List<Individual> retrieveBy(String id);
 
-    @Query("SELECT a.*, compno as compextId, firstName || ' ' || lastName as fullName, b.endType " +
+    @Query("SELECT a.*,f.extId as houseExtId, compno as compextId, firstName || ' ' || lastName as fullName, b.endType " +
             "FROM individual AS a " +
             "INNER JOIN ( " +
             "   SELECT individual_uuid, MAX(startDate) AS maxStartDate " +
@@ -63,11 +66,12 @@ public interface IndividualDao {
             "   GROUP BY individual_uuid " +
             ") AS latest_residency ON a.uuid = latest_residency.individual_uuid " +
             "INNER JOIN residency AS b ON a.uuid = b.individual_uuid AND b.startDate = latest_residency.maxStartDate " +
+            "INNER JOIN socialgroup as f ON b.socialgroup_uuid=f.uuid " +
             "INNER JOIN Locations AS c ON b.location_uuid = c.uuid " +
             "INNER JOIN locationhierarchy as d on c.locationLevel_uuid=d.uuid " +
             "LEFT JOIN locationhierarchy as e on d.parent_uuid=e.uuid " +
             "WHERE b.endType != 3 AND firstName != 'FAKE' AND d.name LIKE :id AND (fullName LIKE :searchText OR c.compno LIKE :searchText OR ghanacard LIKE :searchText) " +
-            "ORDER BY dob")
+            "ORDER BY f.extId,dob")
     List<Individual> retrieveBySearch(String id, String searchText);
 
 
@@ -75,7 +79,7 @@ public interface IndividualDao {
             "INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
             "INNER JOIN Locations AS c ON b.location_uuid = c.uuid " +
             "WHERE b.endType = 1 AND gender = 2 AND c.compextId = :id " +
-            "AND date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob / 1000, 'unixepoch')) " +
+            "AND strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) >=(SELECT mother_age from config) " +
             "UNION " +
             "SELECT uuid FROM individual WHERE extId = 'UNK') order by dob DESC")
     List<Individual> retrieveByMother(String id);
@@ -84,7 +88,7 @@ public interface IndividualDao {
             "INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
             " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
             "WHERE gender = 2 AND b.endType = 1 AND " +
-            "date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) AND " +
+            "strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) >=(SELECT mother_age from config) AND " +
             "(firstName LIKE :id OR lastName LIKE :id OR c.compno LIKE :id)")
     List<Individual> retrieveByMotherSearch(String id);
 
@@ -93,7 +97,7 @@ public interface IndividualDao {
             "INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
             "INNER JOIN Locations AS c ON b.location_uuid = c.uuid " +
             "WHERE b.endType = 1 AND gender = 1 AND c.compextId = :id AND firstName!='FAKE'" +
-            "AND date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob / 1000, 'unixepoch')) " +
+            "AND strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) >=(SELECT father_age from config) " +
             "UNION " +
             "SELECT uuid FROM individual WHERE extId = 'UNK') order by dob DESC")
     List<Individual> retrieveByFather(String id);
@@ -106,7 +110,7 @@ public interface IndividualDao {
     @Query("SELECT a.* FROM individual as a " + " LEFT JOIN residency as b ON a.uuid = b.individual_uuid " +
             " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
             " WHERE b.endType=1 and gender=1 and c.compextId=:id and firstName!='FAKE' and " +
-            " date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
+            " strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) >=(SELECT rel_age from config) order by dob")
     List<Individual> retrievePartner(String id);
 
 
@@ -114,7 +118,7 @@ public interface IndividualDao {
             "INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
             " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
             "WHERE gender = 1 AND b.endType = 1 and firstName!='FAKE' AND " +
-            "date('now', '-12 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) AND " +
+            "strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) >=(SELECT father_age from config) AND " +
             "(firstName LIKE :id OR lastName LIKE :id OR c.compno LIKE :id OR ghanacard LIKE :id)")
     List<Individual> retrieveByFatherSearch(String id);
 
@@ -124,7 +128,7 @@ public interface IndividualDao {
     @Query("SELECT a.*,c.compextId FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
             " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
             " WHERE b.endType=1 and c.compextId=:id and firstName!='FAKE' and " +
-            " date('now', '-14 years') >= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
+            " strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) >=(SELECT hoh_age from config) order by dob")
     List<Individual> retrieveHOH(String id);
 
     @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
@@ -143,12 +147,26 @@ public interface IndividualDao {
 //            "where c.endType=1 and a.complete=2 AND d.firstName!='FAKE' AND compextId is not null GROUP BY a.socialgroup_uuid order by dob")
 //    List<Individual> error();
 
+//    @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
+//            " INNER JOIN residency c on b.uuid=c.socialgroup_uuid INNER JOIN locations d " +
+//            " ON c.location_uuid=d.uuid " +
+//            " WHERE firstName!='FAKE' and groupName!='UNK' and c.endType=1 and " +
+//            " date('now', '-14 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
+//    List<Individual> error();
+
     @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
             " INNER JOIN residency c on b.uuid=c.socialgroup_uuid INNER JOIN locations d " +
             " ON c.location_uuid=d.uuid " +
             " WHERE firstName!='FAKE' and groupName!='UNK' and c.endType=1 and " +
-            " date('now', '-14 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
+            " strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) < (SELECT hoh_age from config) GROUP BY b.extId order by dob")
     List<Individual> error();
+
+    @Query("SELECT a.*,d.compextId,c.extId as houseExtId,c.groupName as lastName FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
+            " INNER JOIN socialgroup c on b.socialgroup_uuid=c.uuid INNER JOIN locations d " +
+            " ON b.location_uuid=d.uuid " +
+            " WHERE firstName!='FAKE' and groupName='UNK' and b.endType=1 " +
+            " GROUP BY c.extId")
+    List<Individual> err();
 
 //    @Query("SELECT * FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
 //            " INNER JOIN locations c on b.location_uuid=c.uuid " +
@@ -171,26 +189,6 @@ public interface IndividualDao {
             "ORDER BY c.compextId")
     List<Individual> errors();
 
-    @Query("SELECT a.*,d.compextId,c.extId as houseExtId,c.groupName as lastName FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
-            " INNER JOIN socialgroup c on b.socialgroup_uuid=c.uuid INNER JOIN locations d " +
-            " ON b.location_uuid=d.uuid " +
-            " WHERE firstName!='FAKE' and groupName='UNK' and b.endType=1 " +
-            " GROUP BY c.extId")
-    List<Individual> err();
-
-    @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a LEFT JOIN individual as z on a.mother_uuid=z.uuid " +
-            " INNER JOIN residency c on a.uuid=c.individual_uuid INNER JOIN locations d " +
-            " ON c.location_uuid=d.uuid " +
-            " INNER JOIN socialgroup as b ON c.socialgroup_uuid = b.uuid " +
-            " WHERE z.uuid IS NULL AND a.firstName!='FAKE'")
-    List<Individual> merror();
-
-    @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a LEFT JOIN individual as z on a.father_uuid=z.uuid " +
-            " INNER JOIN residency c on a.uuid=c.individual_uuid INNER JOIN locations d " +
-            " ON c.location_uuid=d.uuid " +
-            " INNER JOIN socialgroup as b ON c.socialgroup_uuid = b.uuid " +
-            " WHERE z.complete!=1 AND a.complete=1 AND a.firstName!='FAKE'")
-    List<Individual> ferror();
 
     @Query("SELECT b.* FROM individual as a LEFT JOIN individual as b on a.mother_uuid=b.uuid" +
             " where a.uuid=:id")
@@ -199,6 +197,9 @@ public interface IndividualDao {
     @Query("SELECT b.* FROM individual as a LEFT JOIN individual as b on a.father_uuid=b.uuid" +
             " where a.uuid=:id")
     Individual father(String id);
+
+    @Query("SELECT * FROM individual WHERE insertDate > (SELECT startDate FROM round LIMIT 1) order by insertDate DESC")
+    List<Individual> repo();
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

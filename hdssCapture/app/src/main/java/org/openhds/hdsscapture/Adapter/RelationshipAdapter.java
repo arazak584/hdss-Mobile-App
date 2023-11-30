@@ -28,10 +28,10 @@ public class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapte
 
     RelationshipDialogFragment activity;
     LayoutInflater inflater;
-    private Locations locations;
-    private Socialgroup socialgroup;
-    private Residency residency;
-    private List<Individual> individualList;
+    private final Locations locations;
+    private final Socialgroup socialgroup;
+    private final Residency residency;
+    private final List<Individual> individualList;
     public interface PartnerSelectionListener {
         void onPartnerSelected(String partnerId);
     }

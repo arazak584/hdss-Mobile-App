@@ -121,6 +121,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="5dp"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             android:text="@string/search" />
     </LinearLayout>
 
@@ -129,6 +131,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             android:text="@string/individual_select" />
 
 
@@ -154,26 +158,25 @@
 
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_newindividual"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|left"
         android:layout_marginLeft="8dp"
         android:layout_marginBottom="10dp"
-        android:contentDescription="@string/newindividual"
+        android:contentDescription="@string/external"
         android:src="@drawable/ic_baseline_add_24"
-        android:text="@string/newindividual"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:backgroundTint="#2196F3"
+        android:text="@string/external"
+        android:background="@drawable/btnd_rone_dgbevel"
+        android:textColor="@android:color/background_light"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="ImageContrastCheck" />
 
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/add_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

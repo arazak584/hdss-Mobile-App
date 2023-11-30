@@ -409,7 +409,7 @@
                     android:id="@+id/cattle_num"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/black"
                     android:text="@string/item_other" />
 
                 <EditText
@@ -647,7 +647,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/item_other"
-                    android:textColor="@color/Black"
+                    android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <EditText

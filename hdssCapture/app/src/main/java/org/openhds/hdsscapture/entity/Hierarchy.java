@@ -41,6 +41,9 @@ public class Hierarchy extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "level_uuid")
     private String level_uuid;
 
+    @ColumnInfo(name = "fw_name")
+    public String fw_name;
+
     public Hierarchy() {
     }
 
@@ -113,12 +116,21 @@ public class Hierarchy extends BaseObservable implements Parcelable {
         this.level_uuid = level_uuid;
     }
 
+    public String getFw_name() {
+        return fw_name;
+    }
+
+    public void setFw_name(String fw_name) {
+        this.fw_name = fw_name;
+    }
+
     protected Hierarchy(Parcel in) {
         this.uuid = in.readString();
         this.extId = in.readString();
         this.town = in.readString();
         this.name = in.readString();
         this.area = in.readString();
+        this.fw_name = in.readString();
         this.parent_uuid = in.readString();
         this.level_uuid = in.readString();
     }
@@ -147,6 +159,7 @@ public class Hierarchy extends BaseObservable implements Parcelable {
         dest.writeString(this.town);
         dest.writeString(this.name);
         dest.writeString(this.area);
+        dest.writeString(this.fw_name);
         dest.writeString(this.parent_uuid);
         dest.writeString(this.level_uuid);
     }

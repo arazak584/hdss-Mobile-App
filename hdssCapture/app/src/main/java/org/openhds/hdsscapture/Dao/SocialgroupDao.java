@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Locations;
@@ -23,7 +24,8 @@ public interface SocialgroupDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create (Socialgroup socialgroup);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Socialgroup> socialgroup);
 
     @Update
@@ -55,7 +57,7 @@ public interface SocialgroupDao {
 
     @Query("SELECT a.*,compextId FROM socialgroup as a " + "INNER JOIN residency as b ON a.uuid = b.socialgroup_uuid" +
             " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
-            " WHERE b.endType=1 and c.compextId=:id GROUP BY a.extId ")
+            " WHERE b.endType=1 and c.compno=:id GROUP BY a.extId ")
     List<Socialgroup> retrieveBySocialgroup(String id);
 
 

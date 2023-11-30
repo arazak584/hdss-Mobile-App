@@ -38,7 +38,7 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.fragment.AmendmentFragment;
 import org.openhds.hdsscapture.fragment.DemographicFragment;
-import org.openhds.hdsscapture.fragment.DupFragment;
+import org.openhds.hdsscapture.Duplicate.DupFragment;
 import org.openhds.hdsscapture.fragment.EventsFragment;
 import org.openhds.hdsscapture.fragment.PregnancyExtraFragment;
 import org.openhds.hdsscapture.fragment.PregnancyFragment;
@@ -54,10 +54,10 @@ import java.util.List;
 
 public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.ViewHolder> {
 
-    private Locations locations;
-    private Socialgroup socialgroup;
-    private Residency residency;
-    private Individual individual;
+    private final Locations locations;
+    private final Socialgroup socialgroup;
+    private final Residency residency;
+    private final Individual individual;
     private final List<EventForm> eventForms;
     private final EventsFragment activity;
 

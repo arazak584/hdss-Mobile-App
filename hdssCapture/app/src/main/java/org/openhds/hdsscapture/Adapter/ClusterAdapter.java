@@ -25,8 +25,8 @@ public class ClusterAdapter extends RecyclerView.Adapter<ClusterAdapter.ViewHold
 
     ClusterDialogFragment activity;
     LayoutInflater inflater;
-    private List<Hierarchy> hierarchyList;
-    private Locations locations;
+    private final List<Hierarchy> hierarchyList;
+    private final Locations locations;
 
     public interface ClusterSelectionListener {
         void onClusterSelected(String clusterid);

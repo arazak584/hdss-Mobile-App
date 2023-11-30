@@ -27,7 +27,7 @@ public class ErrorAdapter extends RecyclerView.Adapter<ErrorAdapter.ViewHolder>{
 
     private List<Queries> filter;
 
-    private Context context;
+    private final Context context;
 
     public ErrorAdapter(Context context) {
         this.context = context;

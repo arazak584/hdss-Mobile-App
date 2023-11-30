@@ -77,7 +77,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:textColor="@color/white"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 android:text="@string/household_select" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -96,9 +97,9 @@
 
         </LinearLayout>
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_newhousehold"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_marginEnd="10dp"
@@ -108,7 +109,7 @@
             android:text="@string/text_newhousehold"
             android:textColor="@color/white"
             android:textStyle="bold"
-            app:backgroundTint="#246EE9"
+            android:background="@drawable/btnd_rone_dgbevel"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

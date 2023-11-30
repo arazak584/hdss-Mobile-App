@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -22,18 +23,22 @@ import org.openhds.hdsscapture.Dialog.FatherOutcomeDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
+import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.databinding.FragmentOutcomeBinding;
+import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outcome;
+import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
@@ -261,23 +266,58 @@ public class PregnancyoutcomeFragment extends Fragment {
         DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
         ResidencyViewModel residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+        PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         try {
             Pregnancyoutcome data = viewModel.find(individual.uuid);
             if (data != null) {
                 binding.setPregoutcome(data);
+                binding.buttonOutcomeConception.setEnabled(false);
+                binding.buttonOutcomeStartDate.setEnabled(false);
             } else {
                 data = new Pregnancyoutcome();
+
+
+                Pregnancy dts = pregnancyViewModel.out(individual.uuid);
+                if (dts != null){
+
+                    data.outcomeDate = dts.outcome_date;
+                    data.conceptionDate = dts.recordedDate;
+                    data.rec_anc = dts.anteNatalClinic;
+                    data.month_pg = dts.first_rec;
+                    data.who_anc = dts.attend_you;
+                    data.num_anc = dts.anc_visits;
+                    data.pregnancy_uuid = dts.uuid;
+                }
+
+                if(data.pregnancy_uuid ==null){
+                    Toast.makeText(getContext(), "Kindly Pick the Pregnancy Before you pick the Outcome", Toast.LENGTH_LONG).show();
+                }
 
                 final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
 
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
                 data.mother_uuid = individual.getUuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
+
+                Date currentDate = new Date(); // Get the current date and time
+                // Create a Calendar instance and set it to the current date and time
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(currentDate);
+                // Extract the hour, minute, and second components
+                int hh = cal.get(Calendar.HOUR_OF_DAY);
+                int mm = cal.get(Calendar.MINUTE);
+                int ss = cal.get(Calendar.SECOND);
+                // Format the components into a string with leading zeros
+                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
+                data.sttime = timeString;
+                binding.buttonOutcomeConception.setEnabled(false);
+                binding.buttonOutcomeStartDate.setEnabled(false);
+
                 binding.numberOfLiveBirths.setVisibility(View.GONE);
 
                 binding.setPregoutcome(data);
@@ -297,7 +337,7 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 if (data.childuuid == null){
                     String uuid = UUID.randomUUID().toString();
-                    String uuidString = uuid.toString().replaceAll("-", "");
+                    String uuidString = uuid.replaceAll("-", "");
 
                     data.childuuid = uuidString;
                     data.individual_uuid = uuidString;
@@ -309,7 +349,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     String id = locations.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -327,10 +367,10 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 //Additions
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
 
                 String rs = UUID.randomUUID().toString();
-                String rsi = rs.toString().replaceAll("-", "");
+                String rsi = rs.replaceAll("-", "");
 
                 data.individual_uuid = uuidString;
                 data.childuuid = uuidString;
@@ -358,7 +398,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     String id = locations.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -384,7 +424,7 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 if (data.childuuid == null){
                     String uuid = UUID.randomUUID().toString();
-                    String uuidString = uuid.toString().replaceAll("-", "");
+                    String uuidString = uuid.replaceAll("-", "");
 
                     data.childuuid = uuidString;
                     data.individual_uuid = uuidString;
@@ -399,7 +439,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     String id = locations.compextId + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -416,10 +456,10 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 //Additions
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
 
                 String rs = UUID.randomUUID().toString();
-                String rsi = rs.toString().replaceAll("-", "");
+                String rsi = rs.replaceAll("-", "");
 
                 data.individual_uuid = uuidString;
                 data.childuuid = uuidString;
@@ -449,7 +489,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     String id = locations.compextId + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -476,7 +516,7 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 if (data.childuuid == null){
                     String uuid = UUID.randomUUID().toString();
-                    String uuidString = uuid.toString().replaceAll("-", "");
+                    String uuidString = uuid.replaceAll("-", "");
 
                     data.childuuid = uuidString;
                     data.individual_uuid = uuidString;
@@ -491,7 +531,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     String id = locations.compextId + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -508,10 +548,10 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 //Additions
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
 
                 String rs = UUID.randomUUID().toString();
-                String rsi = rs.toString().replaceAll("-", "");
+                String rsi = rs.replaceAll("-", "");
 
                 data.individual_uuid = uuidString;
                 data.childuuid = uuidString;
@@ -543,7 +583,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     String id = locations.compextId + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -569,7 +609,7 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 if (data.childuuid == null){
                     String uuid = UUID.randomUUID().toString();
-                    String uuidString = uuid.toString().replaceAll("-", "");
+                    String uuidString = uuid.replaceAll("-", "");
 
                     data.childuuid = uuidString;
                     data.individual_uuid = uuidString;
@@ -584,7 +624,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     String id = locations.compextId + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -601,10 +641,10 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 //Additions
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
 
                 String rs = UUID.randomUUID().toString();
-                String rsi = rs.toString().replaceAll("-", "");
+                String rsi = rs.replaceAll("-", "");
 
                 data.individual_uuid = uuidString;
                 data.childuuid = uuidString;
@@ -635,7 +675,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                     String id = locations.compextId + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -660,7 +700,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data = new Death();
 
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
                 data.insertDate = new Date();
@@ -668,7 +708,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 data.lastName = "Birth";
                 data.gender = 3;
                 data.compno = locations.getCompno();
-                data.extId = individual.getExtId();
+                data.extId = "ST-"+ individual.getExtId();
                 data.compname = locations.getLocationName();
                 data.individual_uuid = individual.getUuid();
                 data.villname = level6Data.getName();
@@ -681,6 +721,28 @@ public class PregnancyoutcomeFragment extends Fragment {
 
                 binding.setDeath(data);
             }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ConfigViewModel configViewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
+        List<Configsettings> configsettings = null;
+
+        try {
+            configsettings = configViewModel.findAll();
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date dt = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).earliestDate : null;
+            AppCompatEditText editText = binding.getRoot().findViewById(R.id.earliest);
+            if (dt != null) {
+                // Format the Date to a String in "yyyy-MM-dd" format
+                String formattedDate = dateFormat.format(dt);
+                //System.out.println("EARLIEST-DATE: " + formattedDate);
+                editText.setText(formattedDate);
+            } else {
+                System.out.println("EARLIEST-DATE: null");
+            }
+
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -705,17 +767,23 @@ public class PregnancyoutcomeFragment extends Fragment {
         loadCodeData(binding.firstNb, codeBookViewModel, "complete");
         loadCodeData(binding.recAnc, codeBookViewModel, "yn_anc");
         loadCodeData(binding.recIpt, codeBookViewModel, "complete");
-        loadCodeData(binding.chdWeight, codeBookViewModel, "complete");
         loadCodeData(binding.assDel, codeBookViewModel, "assist");
         loadCodeData(binding.howDel, codeBookViewModel, "howdel");
         loadCodeData(binding.whereAnc, codeBookViewModel, "birthPlace");
         loadCodeData(binding.whoAnc, codeBookViewModel, "assist");
-        loadCodeData(binding.chdSize, codeBookViewModel, "size");
         loadCodeData(binding.individualComplete, codeBookViewModel, "submit");
         loadCodeData(binding.vpm.dthDeathPlace, codeBookViewModel, "deathPlace");
         loadCodeData(binding.vpm.dthDeathCause, codeBookViewModel, "deathCause");
         loadCodeData(binding.father, codeBookViewModel, "complete");
         loadCodeData(binding.extras, codeBookViewModel, "complete");
+        loadCodeData(binding.childFetus1.chdWeight, codeBookViewModel, "complete");
+        loadCodeData(binding.childFetus1.chdSize, codeBookViewModel, "size");
+        loadCodeData(binding.childFetus2.chdWeight, codeBookViewModel, "complete");
+        loadCodeData(binding.childFetus2.chdSize, codeBookViewModel, "size");
+        loadCodeData(binding.childFetus3.chdWeight, codeBookViewModel, "complete");
+        loadCodeData(binding.childFetus3.chdSize, codeBookViewModel, "size");
+        loadCodeData(binding.childFetus4.chdWeight, codeBookViewModel, "complete");
+        loadCodeData(binding.childFetus4.chdSize, codeBookViewModel, "size");
 
 
         binding.buttonSaveClose.setOnClickListener(v -> {
@@ -740,14 +808,13 @@ public class PregnancyoutcomeFragment extends Fragment {
             Pregnancyoutcome finalData = binding.getPregoutcome();
 
             try {
-                if (!binding.editTextConception.getText().toString().trim().isEmpty()) {
+                if (!binding.earliest.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    String edateStr = "2018-01-01"; // Assuming edate is a String in the format "yyyy-MM-dd"
-                    Date edate = f.parse(edateStr);
-                    Date stdate = f.parse(binding.editTextConception.getText().toString().trim());
-                    if (stdate.before(edate)) {
-                        binding.editTextConception.setError("Conception Date Cannot Be Less than Earliest migration date 2018");
-                        Toast.makeText(getActivity(), "Conception Date Cannot Be Less than Earliest migration date 2018", Toast.LENGTH_LONG).show();
+                    Date stdate = f.parse(binding.earliest.getText().toString().trim());
+                    Date edate = f.parse(binding.editTextConception.getText().toString().trim());
+                    if (edate.before(stdate)) {
+                        binding.editTextConception.setError("Conception Date Cannot Be Less than Earliest Event Date");
+                        Toast.makeText(getActivity(), "Conception Date Cannot Be Less than Earliest Event Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     // clear error if validation passes
@@ -757,6 +824,25 @@ public class PregnancyoutcomeFragment extends Fragment {
                 Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
+
+//            try {
+//                if (!binding.editTextConception.getText().toString().trim().isEmpty()) {
+//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                    String edateStr = "2018-01-01"; // Assuming edate is a String in the format "yyyy-MM-dd"
+//                    Date edate = f.parse(edateStr);
+//                    Date stdate = f.parse(binding.editTextConception.getText().toString().trim());
+//                    if (stdate.before(edate)) {
+//                        binding.editTextConception.setError("Conception Date Cannot Be Less than Earliest migration date 2018");
+//                        Toast.makeText(getActivity(), "Conception Date Cannot Be Less than Earliest migration date 2018", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    // clear error if validation passes
+//                    binding.editTextConception.setError(null);
+//                }
+//            } catch (ParseException e) {
+//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
 
             try {
                 if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
@@ -829,23 +915,30 @@ public class PregnancyoutcomeFragment extends Fragment {
             boolean iptt = false;
             if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.manyIpt.getText().toString().trim().isEmpty()) {
                 int totalmth = Integer.parseInt(binding.manyIpt.getText().toString().trim());
-                if (totalmth < 1 || totalmth > 5) {
+                if (totalmth < 1 || totalmth > 7) {
                     iptt = true;
-                    binding.manyIpt.setError("Number of IPT taken Cannot be More than 5");
-                    Toast.makeText(getActivity(), "Number of IPT taken Cannot be More than 5", Toast.LENGTH_LONG).show();
+                    binding.manyIpt.setError("Number of IPT taken Cannot be More than 7");
+                    Toast.makeText(getActivity(), "Number of IPT taken Cannot be More than 7", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
 
-            boolean weight = false;
-            if (finalData.chd_weight!=null && finalData.chd_weight == 1 && !binding.weigHcard.getText().toString().trim().isEmpty()) {
-                double childWeight = Double.parseDouble(binding.weigHcard.getText().toString().trim());
-                if (childWeight < 1.5 || childWeight > 4.5) {
-                    weight = true;
-                    binding.weigHcard.setError("Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5");
-                    Toast.makeText(getContext(), "Child Weight Cannot be More than 4.5 Kilograms or Less than 1.5", Toast.LENGTH_LONG).show();
+            boolean iptm = false;
+            if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.firstRec.getText().toString().trim().isEmpty()) {
+                int totalmth = Integer.parseInt(binding.firstRec.getText().toString().trim());
+                if (totalmth < 4) {
+                    iptm = true;
+                    binding.firstRec.setError("IPT is given at 16 weeks (4 Months)");
+                    Toast.makeText(getActivity(), "IPT is given at 16 weeks (4 Months)", Toast.LENGTH_LONG).show();
                     return;
                 }
+            }
+
+            boolean nurse = false;
+            if (finalData.ass_del != 1 && finalData.how_del == 2) {
+                    nurse = true;
+                    Toast.makeText(getActivity(), "Only Doctors Perform Caesarian Section", Toast.LENGTH_LONG).show();
+                    return;
             }
 
 
@@ -893,12 +986,58 @@ public class PregnancyoutcomeFragment extends Fragment {
             if (finalData.numberofBirths != null) {
 
                 if (finalData.numberofBirths >= 1) {
-
-
-
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus1.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome1();
+
+                    boolean weight = false;
+                    if (inf.chd_weight!=null && inf.chd_weight == 1 && !binding.childFetus1.weigHcard.getText().toString().trim().isEmpty()) {
+                        double childWeight = Double.parseDouble(binding.childFetus1.weigHcard.getText().toString().trim());
+                        if (childWeight < 1.0 || childWeight > 5.0) {
+                            weight = true;
+                            binding.childFetus1.weigHcard.setError("Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0");
+                            Toast.makeText(getContext(), "Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
+
+                    try {
+                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
+                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                            Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                            Date recordedDate = f.parse(binding.editTextConception.getText().toString().trim());
+
+                            Calendar startCalendar = Calendar.getInstance();
+                            startCalendar.setTime(recordedDate);
+
+                            Calendar endCalendar = Calendar.getInstance();
+                            endCalendar.setTime(outcomeDate);
+
+                            int yearDiff = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+                            int monthDiff = endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+                            int dayDiff = endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH);
+
+                            // Adjust the difference based on the day component
+                            if (dayDiff < 0) {
+                                monthDiff--;
+                            }
+
+                            // Calculate the total difference in months
+                            int totalDiffMonths = yearDiff * 12 + monthDiff;
+
+                            if (totalDiffMonths <= 5 && inf.type==1 || inf.type==2) {
+                                Toast.makeText(getActivity(), "Outcome cannot be Live Birth or Still Birth for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                                return;
+                            }else if (totalDiffMonths > 5 && inf.type==3){
+                                Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                    } catch (ParseException e) {
+                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
@@ -953,6 +1092,55 @@ public class PregnancyoutcomeFragment extends Fragment {
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus2.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome2();
+
+                    boolean weight = false;
+                    if (inf.chd_weight!=null && inf.chd_weight == 1 && !binding.childFetus2.weigHcard.getText().toString().trim().isEmpty()) {
+                        double childWeight = Double.parseDouble(binding.childFetus2.weigHcard.getText().toString().trim());
+                        if (childWeight < 1.0 || childWeight > 5.0) {
+                            weight = true;
+                            binding.childFetus2.weigHcard.setError("Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0");
+                            Toast.makeText(getContext(), "Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
+
+                    try {
+                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
+                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                            Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                            Date recordedDate = f.parse(binding.editTextConception.getText().toString().trim());
+
+                            Calendar startCalendar = Calendar.getInstance();
+                            startCalendar.setTime(recordedDate);
+
+                            Calendar endCalendar = Calendar.getInstance();
+                            endCalendar.setTime(outcomeDate);
+
+                            int yearDiff = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+                            int monthDiff = endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+                            int dayDiff = endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH);
+
+                            // Adjust the difference based on the day component
+                            if (dayDiff < 0) {
+                                monthDiff--;
+                            }
+
+                            // Calculate the total difference in months
+                            int totalDiffMonths = yearDiff * 12 + monthDiff;
+
+                            if (totalDiffMonths <= 5 && inf.type==1 || inf.type==2) {
+                                Toast.makeText(getActivity(), "Outcome cannot be Live Birth or Still Birth for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                                return;
+                            }else if (totalDiffMonths > 5 && inf.type==3){
+                                Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                    } catch (ParseException e) {
+                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
@@ -1006,6 +1194,55 @@ public class PregnancyoutcomeFragment extends Fragment {
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus3.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome3();
+
+                    boolean weight = false;
+                    if (inf.chd_weight!=null && inf.chd_weight == 1 && !binding.childFetus3.weigHcard.getText().toString().trim().isEmpty()) {
+                        double childWeight = Double.parseDouble(binding.childFetus3.weigHcard.getText().toString().trim());
+                        if (childWeight < 1.0 || childWeight > 5.0) {
+                            weight = true;
+                            binding.childFetus3.weigHcard.setError("Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0");
+                            Toast.makeText(getContext(), "Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
+
+                    try {
+                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
+                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                            Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                            Date recordedDate = f.parse(binding.editTextConception.getText().toString().trim());
+
+                            Calendar startCalendar = Calendar.getInstance();
+                            startCalendar.setTime(recordedDate);
+
+                            Calendar endCalendar = Calendar.getInstance();
+                            endCalendar.setTime(outcomeDate);
+
+                            int yearDiff = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+                            int monthDiff = endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+                            int dayDiff = endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH);
+
+                            // Adjust the difference based on the day component
+                            if (dayDiff < 0) {
+                                monthDiff--;
+                            }
+
+                            // Calculate the total difference in months
+                            int totalDiffMonths = yearDiff * 12 + monthDiff;
+
+                            if (totalDiffMonths <= 5 && inf.type==1 || inf.type==2) {
+                                Toast.makeText(getActivity(), "Outcome cannot be Live Birth or Still Birth for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                                return;
+                            }else if (totalDiffMonths > 5 && inf.type==3){
+                                Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                    } catch (ParseException e) {
+                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
@@ -1059,6 +1296,55 @@ public class PregnancyoutcomeFragment extends Fragment {
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus4.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Outcome inf = binding.getPregoutcome4();
+
+                    boolean weight = false;
+                    if (inf.chd_weight!=null && inf.chd_weight == 1 && !binding.childFetus4.weigHcard.getText().toString().trim().isEmpty()) {
+                        double childWeight = Double.parseDouble(binding.childFetus4.weigHcard.getText().toString().trim());
+                        if (childWeight < 1.0 || childWeight > 5.0) {
+                            weight = true;
+                            binding.childFetus4.weigHcard.setError("Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0");
+                            Toast.makeText(getContext(), "Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
+
+                    try {
+                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
+                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                            Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+                            Date recordedDate = f.parse(binding.editTextConception.getText().toString().trim());
+
+                            Calendar startCalendar = Calendar.getInstance();
+                            startCalendar.setTime(recordedDate);
+
+                            Calendar endCalendar = Calendar.getInstance();
+                            endCalendar.setTime(outcomeDate);
+
+                            int yearDiff = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+                            int monthDiff = endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+                            int dayDiff = endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH);
+
+                            // Adjust the difference based on the day component
+                            if (dayDiff < 0) {
+                                monthDiff--;
+                            }
+
+                            // Calculate the total difference in months
+                            int totalDiffMonths = yearDiff * 12 + monthDiff;
+
+                            if (totalDiffMonths <= 5 && inf.type==1 || inf.type==2) {
+                                Toast.makeText(getActivity(), "Outcome cannot be Live Birth or Still Birth for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                                return;
+                            }else if (totalDiffMonths > 5 && inf.type==3){
+                                Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                    } catch (ParseException e) {
+                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;
@@ -1202,6 +1488,8 @@ public class PregnancyoutcomeFragment extends Fragment {
                     }
                 }
 
+
+
                 try {
                     if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
                         final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -1278,18 +1566,31 @@ public class PregnancyoutcomeFragment extends Fragment {
                 }
 
             }
+            Date end = new Date(); // Get the current date and time
+            // Create a Calendar instance and set it to the current date and time
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(end);
+            // Extract the hour, minute, and second components
+            int hh = cal.get(Calendar.HOUR_OF_DAY);
+            int mm = cal.get(Calendar.MINUTE);
+            int ss = cal.get(Calendar.SECOND);
+            // Format the components into a string with leading zeros
+            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
+
+            if (finalData.sttime !=null && finalData.edtime==null){
+                finalData.edtime = endtime;
+            }
+
             finalData.complete=1;
             viewModel.add(finalData);
-           // Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_SHORT).show();
 
         }
-        if (save && binding.getPregoutcome().stillbirth != null) {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    PregnancyFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
-        }else {
+        if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         }
+
     }
 
     @Override

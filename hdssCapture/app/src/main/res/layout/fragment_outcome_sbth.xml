@@ -32,7 +32,6 @@
             android:visibility="gone"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -40,7 +39,7 @@
             android:hint="@string/fw"
             android:text="@string/fw">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/dth_fw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -64,7 +63,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -72,7 +70,7 @@
             android:hint="@string/ind_extid"
             android:text="@string/ind_extid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:id="@+id/dth_extid"
@@ -106,7 +104,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -114,7 +111,7 @@
             android:hint="@string/uuid"
             android:text="@string/uuid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:id="@+id/dth_individual_uuid"
@@ -126,7 +123,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -134,7 +130,7 @@
             android:hint="@string/location_select"
             android:text="@string/location_select">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:id="@+id/dth_location_extid"
@@ -146,7 +142,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -154,7 +149,7 @@
             android:hint="@string/visitid"
             android:text="@string/visitid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:id="@+id/dth_visitDeath_uuid"
@@ -166,7 +161,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -174,7 +168,7 @@
             android:hint="@string/firstname"
             android:text="@string/firstname">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:id="@+id/dth_firstName"
@@ -186,7 +180,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -194,7 +187,7 @@
             android:hint="@string/lastname"
             android:text="@string/lastname">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:id="@+id/dth_lastName"
@@ -210,10 +203,11 @@
             android:layout_height="wrap_content"
             android:text="@string/actual_dob"
             tools:ignore="DuplicateSpeakableTextCheck"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -221,7 +215,7 @@
             android:hint="@string/actual_dob"
             android:text="@string/actual_dob">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:id="@+id/dth_dob"
@@ -237,10 +231,11 @@
             android:layout_height="wrap_content"
             android:text="@string/dod"
             tools:ignore="DuplicateSpeakableTextCheck"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -248,7 +243,7 @@
             android:hint="@string/dod"
             android:text="@string/dod">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:id="@+id/dth_deathDate"
@@ -299,7 +294,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -307,7 +301,7 @@
             android:hint="@string/respondent_name"
             android:text="@string/respondent_name">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/dth_respondent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -319,7 +313,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -327,7 +320,7 @@
             android:hint="@string/householdhead"
             android:text="@string/householdhead">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/dth_househead"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -339,7 +332,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -347,7 +339,7 @@
             android:hint="@string/compoundName"
             android:text="@string/compoundName">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/dth_compname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -359,7 +351,6 @@
             android:visibility="gone"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -367,7 +358,7 @@
             android:hint="@string/village"
             android:text="@string/village">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/dth_village"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -379,7 +370,6 @@
             android:visibility="gone"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -387,7 +377,7 @@
             android:hint="@string/villcode"
             android:text="@string/villcode">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/dth_phone1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

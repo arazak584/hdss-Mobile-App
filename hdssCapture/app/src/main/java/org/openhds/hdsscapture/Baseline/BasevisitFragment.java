@@ -120,14 +120,14 @@ public class BasevisitFragment extends Fragment {
             if (data != null) {
                 binding.setVisit(data);
                 data.visitDate = new Date();
-                if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)){
+                if ("UNK".equals(socialgroup.groupName)){
                     data.respondent = "UNK";
                 }
             } else {
                 data = new Visit();
 
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
 
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
@@ -139,7 +139,7 @@ public class BasevisitFragment extends Fragment {
                 data.socialgroup_uuid =socialgroup.uuid;
                 data.extId = data.houseExtId + "000";
 
-                if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)){
+                if ("UNK".equals(socialgroup.groupName)){
                     data.respondent = "UNK";
                 }
 

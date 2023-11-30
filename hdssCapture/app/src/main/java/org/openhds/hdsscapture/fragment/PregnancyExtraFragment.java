@@ -10,6 +10,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,8 +20,10 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.databinding.FragmentPregnancyBinding;
+import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
@@ -118,6 +121,9 @@ public class PregnancyExtraFragment extends Fragment {
 
         final TextView ex = binding.getRoot().findViewById(R.id.ext);
         final Spinner extra = binding.getRoot().findViewById(R.id.extra);
+        final TextView title = binding.getRoot().findViewById(R.id.preg);
+
+        title.setText("Pregnancy Observation 2");
 
         ex.setVisibility(View.GONE);
         extra.setVisibility(View.GONE);
@@ -180,13 +186,14 @@ public class PregnancyExtraFragment extends Fragment {
             Pregnancy data = viewModel.finds(individual.uuid);
             if (data != null) {
                 binding.setPregnancy(data);
+                binding.extra.setEnabled(false);
             } else {
                 data = new Pregnancy();
 
                 final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
                 data.individual_uuid = individual.getUuid();
@@ -195,9 +202,22 @@ public class PregnancyExtraFragment extends Fragment {
                 data.id = 2;
                 data.first_preg = 2;
 
+                Date currentDate = new Date(); // Get the current date and time
+                // Create a Calendar instance and set it to the current date and time
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(currentDate);
+                // Extract the hour, minute, and second components
+                int hh = cal.get(Calendar.HOUR_OF_DAY);
+                int mm = cal.get(Calendar.MINUTE);
+                int ss = cal.get(Calendar.SECOND);
+                // Format the components into a string with leading zeros
+                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
+                data.sttime = timeString;
+
                 binding.setPregnancy(data);
                 binding.getPregnancy().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                 binding.firstPreg.setEnabled(false);
+                binding.extra.setEnabled(false);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -209,6 +229,28 @@ public class PregnancyExtraFragment extends Fragment {
                 binding.setPreg(datas);
 
             }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        ConfigViewModel configViewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
+        List<Configsettings> configsettings = null;
+
+        try {
+            configsettings = configViewModel.findAll();
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date dt = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).earliestDate : null;
+            AppCompatEditText editText = binding.getRoot().findViewById(R.id.earliest);
+            if (dt != null) {
+                // Format the Date to a String in "yyyy-MM-dd" format
+                String formattedDate = dateFormat.format(dt);
+                //System.out.println("EARLIEST-DATE: " + formattedDate);
+                editText.setText(formattedDate);
+            } else {
+                System.out.println("EARLIEST-DATE: null");
+            }
+
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
@@ -251,6 +293,24 @@ public class PregnancyExtraFragment extends Fragment {
 
         if (save) {
             Pregnancy finalData = binding.getPregnancy();
+
+            try {
+                if (!binding.earliest.getText().toString().trim().isEmpty() && !binding.editTextRecordedDate.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date stdate = f.parse(binding.earliest.getText().toString().trim());
+                    Date edate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
+                    if (edate.before(stdate)) {
+                        binding.editTextRecordedDate.setError("Conception Date Cannot Be Less than Earliest Event Date");
+                        Toast.makeText(getActivity(), "Conception Date Cannot Be Less than Earliest Event Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.editTextRecordedDate.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
 
             try {
                 if (!binding.editTextRecordedDate.getText().toString().trim().isEmpty() && !binding.editTextLastClinicVisitDate.getText().toString().trim().isEmpty()) {
@@ -454,6 +514,20 @@ public class PregnancyExtraFragment extends Fragment {
             if (hasErrors) {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
                 return;
+            }
+            Date end = new Date(); // Get the current date and time
+            // Create a Calendar instance and set it to the current date and time
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(end);
+            // Extract the hour, minute, and second components
+            int hh = cal.get(Calendar.HOUR_OF_DAY);
+            int mm = cal.get(Calendar.MINUTE);
+            int ss = cal.get(Calendar.SECOND);
+            // Format the components into a string with leading zeros
+            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
+
+            if (finalData.sttime !=null && finalData.edtime==null){
+                finalData.edtime = endtime;
             }
             finalData.complete=1;
             viewModel.add(finalData);

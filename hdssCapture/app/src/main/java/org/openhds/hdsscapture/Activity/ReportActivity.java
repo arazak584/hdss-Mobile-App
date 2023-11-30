@@ -10,6 +10,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -86,7 +87,7 @@ public class ReportActivity extends AppCompatActivity {
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(ReportActivity.this,R.style.CustomDatePickerDialogTheme, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(ReportActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         // Set the selected date on EditText
@@ -109,7 +110,7 @@ public class ReportActivity extends AppCompatActivity {
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(ReportActivity.this,R.style.CustomDatePickerDialogTheme, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(ReportActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         // Set the selected date on EditText
@@ -140,7 +141,7 @@ public class ReportActivity extends AppCompatActivity {
         vaccinationViewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
         residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
 
-        Button generateReportButton = findViewById(R.id.bt_report);
+        AppCompatButton generateReportButton = findViewById(R.id.bt_report);
         generateReportButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -200,8 +201,6 @@ public class ReportActivity extends AppCompatActivity {
 
         try {
             List<ReportCounter> list = new ArrayList<>();
-
-
 
             ReportCounter individualCounter = new ReportCounter();
             individualCounter.name = "Individual";

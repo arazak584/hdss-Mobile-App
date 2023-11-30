@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -21,6 +20,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -130,6 +130,12 @@ public class Individual extends BaseObservable implements Parcelable {
     @Expose
     public Integer m_age=150;
 
+    @Expose
+    public String sttime;
+
+    @Expose
+    public String edtime;
+
     public Individual(){}
 
     @Ignore
@@ -169,6 +175,22 @@ public class Individual extends BaseObservable implements Parcelable {
 
     @Ignore
     private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+
+    public String getSttime() {
+        return sttime;
+    }
+
+    public void setSttime(String sttime) {
+        this.sttime = sttime;
+    }
+
+    public String getEdtime() {
+        return edtime;
+    }
+
+    public void setEdtime(String edtime) {
+        this.edtime = edtime;
+    }
 
     @Bindable
     public String getDob() {

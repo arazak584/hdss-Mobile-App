@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/cardview_elevated.xml -->
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background Shape -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="16dp" />
+            <solid android:color="#FFFFFF" />
+            <stroke android:width="1dp" android:color="#E0E0E0" />
+        </shape>
+    </item>
+
+    <!-- Elevation Shadow -->
+    <item android:top="1dp" android:left="1dp" android:right="1dp">
+        <shape android:shape="rectangle">
+            <corners android:radius="16dp" />
+            <solid android:color="#E0E0E0" />
+            <padding android:bottom="1dp" />
+        </shape>
+    </item>
+
+</layer-list>

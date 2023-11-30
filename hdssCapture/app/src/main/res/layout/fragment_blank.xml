@@ -90,6 +90,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@color/white"
             android:text="@string/household_select" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -108,39 +110,42 @@
 
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/button_newhousehold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:contentDescription="@string/text_newhousehold"
-        android:src="@drawable/ic_baseline_add_24"
-        android:text="@string/text_newhousehold"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:backgroundTint="#246EE9"
-        app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="ImageContrastCheck" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_newhousehold"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:contentDescription="@string/text_newhousehold"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_baseline_add_24"
+            android:text="@string/text_newhousehold"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:background="@drawable/btnd_rone_dgbevel"
+            app:fabSize="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="ImageContrastCheck" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_listing"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="@string/listing"
+            android:src="@drawable/ic_baseline_add_24"
+            android:text="@string/listing"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:background="@drawable/btnd_rone_dgbevel"
+            app:fabSize="normal"
+            app:layout_constraintBottom_toTopOf="@+id/button_newhousehold"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="ImageContrastCheck" />
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/button_listing"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="20dp"
-        android:text="@string/listing"
-        android:textSize="15sp"
-        app:backgroundTint="#246EE9"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toTopOf="@+id/button_newhousehold"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="ImageContrastCheck" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

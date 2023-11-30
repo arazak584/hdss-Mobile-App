@@ -154,7 +154,7 @@ public class AmendmentFragment extends Fragment {
 
 
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
                 data.orig_firstName = individual.getFirstName();

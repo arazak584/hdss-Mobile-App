@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -20,6 +19,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -81,6 +81,11 @@ public class Relationship extends BaseObservable implements Parcelable {
     public Integer lcow;//Does women live in the same household with co-wife(s)
     @Expose
     public Integer mrank;//Woman's rank (In current marriage)
+    @Expose
+    public String sttime;
+
+    @Expose
+    public String edtime;
 
 
     public Relationship(){}
@@ -95,6 +100,22 @@ public class Relationship extends BaseObservable implements Parcelable {
 
     public void setUuid(@NotNull String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getSttime() {
+        return sttime;
+    }
+
+    public void setSttime(String sttime) {
+        this.sttime = sttime;
+    }
+
+    public String getEdtime() {
+        return edtime;
+    }
+
+    public void setEdtime(String edtime) {
+        this.edtime = edtime;
     }
 
     public String getIndividualA_uuid() {

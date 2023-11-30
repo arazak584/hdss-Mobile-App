@@ -54,6 +54,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             android:text="@string/individual_select" />
 
 
@@ -79,7 +81,7 @@
 
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_newindividual"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -89,18 +91,17 @@
         android:contentDescription="@string/newindividual"
         android:src="@drawable/ic_baseline_add_24"
         android:text="@string/baseline"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:backgroundTint="#2196F3"
+        android:background="@drawable/btnd_rone_dgbevel"
+        android:textColor="@android:color/background_light"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="ImageContrastCheck" />
 
 
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/add_back"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_marginEnd="8dp"
@@ -108,9 +109,8 @@
         android:contentDescription="@string/mainmenu"
         android:src="@drawable/ic_baseline_add_24"
         android:text="@string/mainmenu"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:backgroundTint="#8A080D"
+        android:background="@drawable/btnd_rone_dgbevel"
+        android:textColor="@android:color/background_light"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/button_newindividual"

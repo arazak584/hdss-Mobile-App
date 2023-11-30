@@ -71,6 +71,11 @@ public class Socialgroup extends BaseObservable implements Parcelable {
     @Expose
     @ColumnInfo(name = "complete")
     public Integer complete;
+    @Expose
+    public Date sttime;
+
+    @Expose
+    public Date edtime;
 
     public Socialgroup(){}
 
@@ -82,6 +87,30 @@ public class Socialgroup extends BaseObservable implements Parcelable {
 
     public void setUuid(@NotNull String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getSttime() {
+        if (sttime == null) return null;
+        return f.format(sttime);
+    }
+
+    public void setSttime(String sttime) {
+        try {
+            this.sttime = f.parse(sttime);
+        } catch (ParseException e) {
+        }
+    }
+
+    public String getEdtime() {
+        if (edtime == null) return null;
+        return f.format(edtime);
+    }
+
+    public void setEdtime(String edtime) {
+        try {
+            this.edtime = f.parse(edtime);
+        } catch (ParseException e) {
+        }
     }
 
     public String getExtId() {

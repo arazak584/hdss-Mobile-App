@@ -22,7 +22,8 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:padding="15dp"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             android:text="@string/queries" />
 
 

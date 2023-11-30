@@ -1,4 +1,4 @@
-package org.openhds.hdsscapture.Dialog;
+package org.openhds.hdsscapture.Duplicate;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.openhds.hdsscapture.Adapter.DupAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentDupDialogBinding;
@@ -26,10 +25,10 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DupDialogFragment#newInstance} factory method to
+ * Use the {@link Dup2DialogFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DupDialogFragment extends DialogFragment {
+public class Dup2DialogFragment extends DialogFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
@@ -44,7 +43,7 @@ public class DupDialogFragment extends DialogFragment {
     private Individual individual;
     private FragmentDupDialogBinding binding;
 
-    public DupDialogFragment() {
+    public Dup2DialogFragment() {
         // Required empty public constructor
     }
 
@@ -59,8 +58,8 @@ public class DupDialogFragment extends DialogFragment {
      * @return A new instance of fragment DupDialogFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DupDialogFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
-        DupDialogFragment fragment = new DupDialogFragment();
+    public static Dup2DialogFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
+        Dup2DialogFragment fragment = new Dup2DialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(RESIDENCY_ID, residency);
@@ -106,7 +105,7 @@ public class DupDialogFragment extends DialogFragment {
 
         //Load Father Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_duplicate);
-        final DupAdapter adapter = new DupAdapter(this, residency, locations, socialgroup );
+        final Dup2Adapter adapter = new Dup2Adapter(this, residency, locations, socialgroup );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
 

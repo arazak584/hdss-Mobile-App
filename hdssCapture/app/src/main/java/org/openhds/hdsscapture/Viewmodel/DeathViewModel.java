@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.DeathRepository;
 import org.openhds.hdsscapture.entity.Death;
+import org.openhds.hdsscapture.entity.Locations;
 
 import java.util.Date;
 import java.util.List;
@@ -22,10 +23,12 @@ public class DeathViewModel extends AndroidViewModel {
         deathRepository = new DeathRepository(application);
     }
 
-
-
     public Death find(String id) throws ExecutionException, InterruptedException {
         return deathRepository.find(id);
+    }
+
+    public Death finds(String id) throws ExecutionException, InterruptedException {
+        return deathRepository.finds(id);
     }
 
     public List<Death> findToSync() throws ExecutionException, InterruptedException {
@@ -42,6 +45,10 @@ public class DeathViewModel extends AndroidViewModel {
 
     public long count(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
         return deathRepository.count(startDate, endDate, username);
+    }
+
+    public List<Death> repo() throws ExecutionException, InterruptedException {
+        return deathRepository.repo();
     }
 
     public void add(Death data){ deathRepository.create(data);}

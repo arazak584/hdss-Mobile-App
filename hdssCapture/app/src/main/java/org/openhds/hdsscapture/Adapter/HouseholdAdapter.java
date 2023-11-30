@@ -26,8 +26,8 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
 
     BlankFragment activity;
     LayoutInflater inflater;
-    private Locations locations;
-    private List<Socialgroup> socialgroupList;
+    private final Locations locations;
+    private final List<Socialgroup> socialgroupList;
 
 
     public HouseholdAdapter(BlankFragment activity, Locations locations) {
@@ -111,7 +111,7 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
         socialgroupList.clear();
         if(locations != null)
             try {
-                List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(locations.getCompextId());
+                List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(locations.getCompno());
 
                 if (list != null) {
                     socialgroupList.addAll(list);

@@ -8,7 +8,6 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -19,6 +18,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -67,6 +67,11 @@ public class Outmigration extends BaseObservable implements Parcelable {
     @Expose
     @ColumnInfo(name = "complete")
     public Integer complete;
+    @Expose
+    public String sttime;
+
+    @Expose
+    public String edtime;
 
     public Outmigration(){}
 
@@ -83,6 +88,21 @@ public class Outmigration extends BaseObservable implements Parcelable {
         this.uuid = uuid;
     }
 
+    public String getSttime() {
+        return sttime;
+    }
+
+    public void setSttime(String sttime) {
+        this.sttime = sttime;
+    }
+
+    public String getEdtime() {
+        return edtime;
+    }
+
+    public void setEdtime(String edtime) {
+        this.edtime = edtime;
+    }
     @NotNull
     public String getIndividual_uuid() {
         return individual_uuid;

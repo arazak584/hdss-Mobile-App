@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import org.openhds.hdsscapture.fragment.ClusterFragment;
 public class LocationActivity extends AppCompatActivity {
 
     public static Locations TOP_LOCATION = new Locations();
+    private ImageView home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,7 @@ public class LocationActivity extends AppCompatActivity {
 
         loadFragment(ClusterFragment.newInstance(level6Data));
 
-        final ExtendedFloatingActionButton home = findViewById(R.id.home);
+        final ImageView home = findViewById(R.id.home);
         home.setOnClickListener(view -> {
             loadFragment(ClusterFragment.newInstance(level6Data));
         });

@@ -7,7 +7,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -18,6 +17,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -103,12 +103,7 @@ public class Pregnancyoutcome extends BaseObservable {
     public Integer first_rec;//How many months pregnant were you when you first received  IPT?
     @Expose
     public Integer many_ipt;//How many times did you take IPT in front of a nurse during the pregnancy?
-    @Expose
-    public Integer chd_weight;//Was the child weighed at birth?
-    @Expose
-    public Integer chd_size;//How much did the child weigh (estimated baby size)
-    @Expose
-    public Integer weig_hcard;//Record weight in kilograms from Health Card
+
     @Expose
     public Integer stillbirth;
     @Expose
@@ -122,6 +117,14 @@ public class Pregnancyoutcome extends BaseObservable {
 
     @Expose
     public Integer id;
+    @Expose
+    public String sttime;
+
+    @Expose
+    public String edtime;
+
+    @Expose
+    public String pregnancy_uuid;
 
     public Pregnancyoutcome(){}
 
@@ -136,6 +139,22 @@ public class Pregnancyoutcome extends BaseObservable {
 
     public void setUuid(@NotNull String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getSttime() {
+        return sttime;
+    }
+
+    public void setSttime(String sttime) {
+        this.sttime = sttime;
+    }
+
+    public String getEdtime() {
+        return edtime;
+    }
+
+    public void setEdtime(String edtime) {
+        this.edtime = edtime;
     }
 
     public String getMother_uuid() {
@@ -392,42 +411,20 @@ public class Pregnancyoutcome extends BaseObservable {
         }
     }
 
-    public Integer getChd_weight() {
-        return chd_weight;
-    }
-
-    public void setChd_weight(Integer chd_weight) {
-        this.chd_weight = chd_weight;
-    }
-
-    public Integer getChd_size() {
-        return  chd_size;
-    }
-
-    public void setChd_size(Integer chd_size) {
-
-            this.chd_size = chd_size ;
-
-    }
-
-
-    public String getWeig_hcard() {
-        return  weig_hcard == null ? "" : String.valueOf(weig_hcard);
-    }
-
-    public void setWeig_hcard(String weig_hcard) {
-        try {
-            this.weig_hcard = (weig_hcard == null) ? null : Integer.valueOf(weig_hcard);
-        } catch (NumberFormatException e) {
-        }
-    }
-
     public Integer getComplete() {
         return complete;
     }
 
     public void setComplete(Integer complete) {
         this.complete = complete;
+    }
+
+    public String getPregnancy_uuid() {
+        return pregnancy_uuid;
+    }
+
+    public void setPregnancy_uuid(String pregnancy_uuid) {
+        this.pregnancy_uuid = pregnancy_uuid;
     }
 
     public String getNumberOfLiveBirths() {
@@ -640,24 +637,6 @@ public class Pregnancyoutcome extends BaseObservable {
 
     }
 
-    //During the time that you were pregnant, did you receive IPT infront of a nurse?
-    public void setChd_weight(AdapterView<?> parent, View view, int position, long id) {
-
-        if (position != parent.getSelectedItemPosition()) {
-            parent.setSelection(position);
-        }
-        if (position == 0) {
-            chd_weight = AppConstants.NOSELECT;
-        } else {
-            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            chd_weight = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-            ((TextView) parent.getChildAt(0)).setTextSize(20);
-        }
-        patternSkipper(view);
-
-    }
-
     //Still Birth
 
     public void setStillbirth(RadioGroup view, int checkedId) {
@@ -670,23 +649,6 @@ public class Pregnancyoutcome extends BaseObservable {
 
             patternSkipper(view);
         }
-    }
-
-    //During the time that you were pregnant, did you receive IPT infront of a nurse?
-    public void setChd_size(AdapterView<?> parent, View view, int position, long id) {
-
-        if (position != parent.getSelectedItemPosition()) {
-            parent.setSelection(position);
-        }
-        if (position == 0) {
-            chd_size = AppConstants.NOSELECT;
-        } else {
-            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            chd_size = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-            ((TextView) parent.getChildAt(0)).setTextSize(20);
-        }
-
     }
 
     //SPINNERS ENTITY
@@ -766,10 +728,6 @@ public class Pregnancyoutcome extends BaseObservable {
             if(rec_ipt == null || rec_ipt!=1){
                 setFirst_rec(null);
                 setMany_ipt(null);
-            }
-
-            if(chd_weight == null || chd_weight!=1){
-                setWeig_hcard(null);
             }
 
             notifyPropertyChanged(BR._all);

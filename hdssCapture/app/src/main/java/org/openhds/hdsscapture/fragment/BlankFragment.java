@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -175,7 +176,7 @@ public class BlankFragment extends Fragment {
         //initial loading of Individuals in locations
         //adapter.filter("", socialgroupViewModel);
 
-        final ExtendedFloatingActionButton add_household = binding.getRoot().findViewById(R.id.button_newhousehold);
+        final AppCompatButton add_household = binding.getRoot().findViewById(R.id.button_newhousehold);
         add_household.setOnClickListener(v -> {
 
             final Individual individual = new Individual();
@@ -186,7 +187,7 @@ public class BlankFragment extends Fragment {
                     NewSocialgroupFragment.newInstance(individual, residency, locations,socialgroup)).commit();
         });
 
-        final ExtendedFloatingActionButton add_listing = binding.getRoot().findViewById(R.id.button_listing);
+        final AppCompatButton add_listing = binding.getRoot().findViewById(R.id.button_listing);
         add_listing.setOnClickListener(v -> {
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
-import androidx.databinding.library.baseAdapters.BR;
+import androidx.databinding.Bindable;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -19,6 +19,7 @@ import com.google.gson.annotations.Expose;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -33,10 +34,10 @@ public class Death extends BaseObservable implements Parcelable {
     @Expose
     @NotNull
     @PrimaryKey
-    public String individual_uuid;
+    public String uuid;
 
     @Expose
-    public String uuid;
+    public String individual_uuid;
 
     @Expose
     public Date deathDate;
@@ -46,6 +47,12 @@ public class Death extends BaseObservable implements Parcelable {
 
     @Expose
     public Date insertDate;
+
+    @Expose
+    public String sttime;
+
+    @Expose
+    public String edtime;
 
     @Expose
     public String firstName;
@@ -130,6 +137,24 @@ public class Death extends BaseObservable implements Parcelable {
         this.individual_uuid = individual_uuid;
     }
 
+    public String getSttime() {
+        return sttime;
+    }
+
+    public void setSttime(String sttime) {
+        this.sttime = sttime;
+    }
+
+    public String getEdtime() {
+        return edtime;
+    }
+
+    public void setEdtime(String edtime) {
+        this.edtime = edtime;
+    }
+
+
+
     public String getDeathDate() {
         if (deathDate == null) return "";
         return f.format(deathDate);
@@ -161,13 +186,14 @@ public class Death extends BaseObservable implements Parcelable {
         if (insertDate == null) return null;
         return f.format(insertDate);
     }
-
     public void setInsertDate(String insertDate) {
-        try {
-            this.insertDate = f.parse(insertDate);
-        } catch (ParseException e) {
-            System.out.println("Visit Date Error " + e.getMessage());
-        }
+        if(insertDate == null ) this.insertDate=null;
+        else
+            try {
+                this.insertDate = f.parse(insertDate);
+            } catch (ParseException e) {
+                System.out.println("Visit Date Error " + e.getMessage());
+            }
     }
 
     public String getFirstName() {
@@ -316,6 +342,7 @@ public class Death extends BaseObservable implements Parcelable {
     }
 
     protected Death(Parcel in) {
+        this.uuid = in.readString();
         this.individual_uuid = in.readString();
         this.extId = in.readString();
         this.deathDate = (java.util.Date) in.readSerializable();
@@ -356,6 +383,7 @@ public class Death extends BaseObservable implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.uuid);
         dest.writeString(this.individual_uuid);
         dest.writeString(this.extId);
         dest.writeSerializable(this.deathDate);

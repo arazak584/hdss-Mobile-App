@@ -4,19 +4,24 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.openhds.hdsscapture.Activity.ErrorActivity;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
+import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.Activity.NewActivity;
 import org.openhds.hdsscapture.Activity.PullActivity;
 import org.openhds.hdsscapture.Activity.PushActivity;
 import org.openhds.hdsscapture.Activity.RemainderActivity;
 import org.openhds.hdsscapture.Activity.ReportActivity;
+import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.fragment.InfoFragment;
+import org.openhds.hdsscapture.odk.OdkActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,10 +31,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final Intent f = getIntent();
+        final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
+        //Toast.makeText(MainActivity.this, "Welcome " + fieldworkerDatas.firstName + " " + fieldworkerDatas.lastName, Toast.LENGTH_LONG).show();
+
+
 
         final Button update = findViewById(R.id.btnupdate);
         update.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(),HierarchyActivity.class);
+            i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
             startActivity(i);
         });
 
@@ -41,15 +52,20 @@ public class MainActivity extends AppCompatActivity {
 
         final Button pull = findViewById(R.id.btnpull);
         pull.setOnClickListener(v -> {
-            Intent i = new Intent(getApplicationContext(),PullActivity.class);
-            startActivity(i);
+            if (fieldworkerDatas != null && fieldworkerDatas.status != null && fieldworkerDatas.status == 2) {
+                Intent i = new Intent(getApplicationContext(), PullActivity.class);
+                startActivity(i);
+            } else {
+                // Display a message or take appropriate action when the condition is not met
+                Toast.makeText(MainActivity.this, "You do not have permission to Download Data", Toast.LENGTH_SHORT).show();
+            }
         });
 
-        final Button remainder = findViewById(R.id.btncensus);
-        remainder.setOnClickListener(v -> {
-            Intent i = new Intent(getApplicationContext(),RemainderActivity.class);
-            startActivity(i);
-        });
+//        final Button remainder = findViewById(R.id.btncensus);
+//        remainder.setOnClickListener(v -> {
+//            Intent i = new Intent(getApplicationContext(),RemainderActivity.class);
+//            startActivity(i);
+//        });
 
         final Button control = findViewById(R.id.btnreport);
         control.setOnClickListener(v -> {
@@ -73,14 +89,24 @@ public class MainActivity extends AppCompatActivity {
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (fieldworkerDatas != null && fieldworkerDatas.status != null && fieldworkerDatas.status == 2) {
+                    InfoFragment dialogFragment = new InfoFragment();
 
-                InfoFragment dialogFragment = new InfoFragment();
-
-                // Show the dialog fragment
-                dialogFragment.show(getSupportFragmentManager(), "InfoFragment");
-
+                    // Show the dialog fragment
+                    dialogFragment.show(getSupportFragmentManager(), "InfoFragment");
+                } else {
+                    Toast.makeText(MainActivity.this, "You do not have permission to access Settings", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
+//        final Button odk = findViewById(R.id.btnodk);
+//        odk.setOnClickListener(v -> {
+//            Intent i = new Intent(getApplicationContext(), OdkActivity.class);
+//            startActivity(i);
+//        });
+
+
     }
 
     @Override

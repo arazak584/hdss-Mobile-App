@@ -24,7 +24,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
     LayoutInflater inflater;
     private List<ReportCounter> reportCounter;
 
-    private Context context;
+    private final Context context;
 
     public ReportAdapter(ReportActivity activity) {
         this.activity = activity;

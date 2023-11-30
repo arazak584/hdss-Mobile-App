@@ -113,14 +113,14 @@ public class BasesocialgroupFragment extends Fragment {
             if (data.complete==null){
                 data.complete = 2;
             }
-            if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)){
+            if ("UNK".equals(socialgroup.groupName)){
                 data.complete = 2;
             }
 
             if (data.visit_uuid==null){
 
                 String visits = UUID.randomUUID().toString();
-                String visituuid = visits.toString().replaceAll("-", "");
+                String visituuid = visits.replaceAll("-", "");
                 data.visit_uuid = visituuid;
                 //data.complete = 2;
             }

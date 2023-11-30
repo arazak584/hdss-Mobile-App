@@ -60,6 +60,15 @@ public class RelationshipRepository {
         return future.get();
     }
 
+    public Relationship finds(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Relationship> callable = () -> dao.finds(id);
+
+        Future<Relationship> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         Callable<Long> callable = () -> dao.count(startDate, endDate, username);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);

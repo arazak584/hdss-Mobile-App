@@ -61,6 +61,24 @@ public class PregnancyRepository {
         return future.get();
     }
 
+    public Pregnancy out(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Pregnancy> callable = () -> dao.out(id);
+
+        Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Pregnancy out2(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Pregnancy> callable = () -> dao.out2(id);
+
+        Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public Pregnancy lastpreg(String id) throws ExecutionException, InterruptedException {
 
         Callable<Pregnancy> callable = () -> dao.lastpreg(id);

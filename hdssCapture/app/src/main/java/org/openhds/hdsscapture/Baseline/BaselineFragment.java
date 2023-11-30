@@ -67,7 +67,7 @@ public class BaselineFragment extends Fragment {
     private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
-    private FragmentBaselineBinding binding;;
+    private FragmentBaselineBinding binding;
     private ProgressDialog progressDialog;
 
     public BaselineFragment() {
@@ -227,7 +227,7 @@ public class BaselineFragment extends Fragment {
             } else {
                 data = new Individual();
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
 
@@ -243,7 +243,7 @@ public class BaselineFragment extends Fragment {
                     String id = locations.compextId + String.format("%04d", sequenceNumber); // generate ID with sequence number padded with zeros
                     while (true) {
                         try {
-                            if (!(individualViewModels.findAll(id) != null)) break;
+                            if (individualViewModels.findAll(id) == null) break;
                         } catch (ExecutionException e) {
                             e.printStackTrace();
                         } catch (InterruptedException e) {
@@ -275,7 +275,7 @@ public class BaselineFragment extends Fragment {
             } else {
                 data = new Residency();
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
                 data.startType = 3;

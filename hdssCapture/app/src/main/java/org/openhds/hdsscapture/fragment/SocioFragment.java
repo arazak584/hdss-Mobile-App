@@ -121,7 +121,7 @@ public class SocioFragment extends Fragment {
                 binding.formcompldate.setVisibility(View.GONE);
 
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
 
                 data.uuid = uuidString;
                 data.individual_uuid = individual.getUuid();
@@ -129,10 +129,18 @@ public class SocioFragment extends Fragment {
                 data.socialgroup_uuid = socialgroup.getUuid();
                 data.fw_uuid = fieldworkerData.getFw_uuid();
 
-                //get the hour and minute on first fill
+                Date currentDate = new Date(); // Get the current date and time
+                // Create a Calendar instance and set it to the current date and time
                 Calendar cal = Calendar.getInstance();
+                cal.setTime(currentDate);
+                // Extract the hour, minute, and second components
                 int hh = cal.get(Calendar.HOUR_OF_DAY);
                 int mm = cal.get(Calendar.MINUTE);
+                int ss = cal.get(Calendar.SECOND);
+                // Format the components into a string with leading zeros
+                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
+                data.sttime = timeString;
+
 
                 binding.setSociodemo(data);
                 binding.getSociodemo().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
@@ -226,13 +234,20 @@ public class SocioFragment extends Fragment {
             }
 
 
-            //get the hour and minute on first fill
+            Date end = new Date(); // Get the current date and time
+            // Create a Calendar instance and set it to the current date and time
             Calendar cal = Calendar.getInstance();
+            cal.setTime(end);
+            // Extract the hour, minute, and second components
             int hh = cal.get(Calendar.HOUR_OF_DAY);
             int mm = cal.get(Calendar.MINUTE);
+            int ss = cal.get(Calendar.SECOND);
+            // Format the components into a string with leading zeros
+            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
 
-
-
+            if (data.sttime !=null && data.edtime==null){
+                data.edtime = endtime;
+            }
             viewModel.add(data);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
         }

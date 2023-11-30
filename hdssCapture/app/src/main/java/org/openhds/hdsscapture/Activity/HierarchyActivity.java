@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -44,12 +45,12 @@ public class HierarchyActivity extends AppCompatActivity {
     private ArrayAdapter<Hierarchy> level5Adapter;
     private ArrayAdapter<Hierarchy> level6Adapter;
 
-    private List<Hierarchy> level1List = new ArrayList<>();
-    private List<Hierarchy> level2List = new ArrayList<>();
-    private List<Hierarchy> level3List = new ArrayList<>();
-    private List<Hierarchy> level4List = new ArrayList<>();
-    private List<Hierarchy> level5List = new ArrayList<>();
-    private List<Hierarchy> level6List = new ArrayList<>();
+    private final List<Hierarchy> level1List = new ArrayList<>();
+    private final List<Hierarchy> level2List = new ArrayList<>();
+    private final List<Hierarchy> level3List = new ArrayList<>();
+    private final List<Hierarchy> level4List = new ArrayList<>();
+    private final List<Hierarchy> level5List = new ArrayList<>();
+    private final List<Hierarchy> level6List = new ArrayList<>();
 
 
 
@@ -63,7 +64,8 @@ public class HierarchyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hierarchy);
 
-
+        final Intent f = getIntent();
+        final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
 
         final FieldworkerViewModel fieldworkerViewModel = new ViewModelProvider(this).get(FieldworkerViewModel.class);
         final RoundViewModel roundViewModel = new ViewModelProvider(this).get(RoundViewModel.class);
@@ -79,6 +81,7 @@ public class HierarchyActivity extends AppCompatActivity {
         final Spinner roundSpinner = findViewById(R.id.spRound);
 
         final EditText username = findViewById(R.id.login_username);
+        username.setText(fieldworkerDatas.username);
 
         // set adapters to spinners
         level1Spinner.setAdapter(level1Adapter);
@@ -306,7 +309,12 @@ public class HierarchyActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 level5Data = level5Adapter.getItem(position);
-                //Hierarchy selectedLevel5 = level5Adapter.getItem(position);
+
+                // Get the username and status from the Intent
+                final Intent f = getIntent();
+                final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
+                String username = fieldworkerDatas.getUsername();
+                Integer status = fieldworkerDatas.getStatus();
 
                 // Reset level 6 spinner to position 0
                 level6Spinner.setSelection(0);
@@ -320,9 +328,30 @@ public class HierarchyActivity extends AppCompatActivity {
                 // Load level 6 data
                 try {
                     List<Hierarchy> level6Data = hierarchyViewModel.retrieveLevel6(level5Data.getUuid());
-                    level6Data.add(0, new Hierarchy("", "Select Sub Village"));
-                    level6Adapter.clear();
-                    level6Adapter.addAll(level6Data);
+
+                    // Check if status is a supervisor
+                    if (status == 2) {
+                        // If status is 3, use level6Data directly
+                        level6Data.add(0, new Hierarchy("", "Select Sub Village"));
+                        level6Adapter.clear();
+                        level6Adapter.addAll(level6Data);
+                    } else {
+                        // Filter the data based on fw_name matching the username
+                        List<Hierarchy> filteredData = new ArrayList<>();
+                        for (Hierarchy item : level6Data) {
+                            String fwName = item.getFw_name();
+                            if (fwName != null && fwName.equals(username)) {
+                                filteredData.add(item);
+                            }
+                        }
+
+                        // Add "Select Sub Village" as the first item to the filtered data
+                        filteredData.add(0, new Hierarchy("", "Select Sub Village"));
+
+                        // Clear and update the adapter with the filtered data
+                        level6Adapter.clear();
+                        level6Adapter.addAll(filteredData);
+                    }
                 } catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
                     Toast.makeText(HierarchyActivity.this, "Error loading data", Toast.LENGTH_SHORT).show();
@@ -340,7 +369,6 @@ public class HierarchyActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 level6Data = level6Adapter.getItem(position);
                 //level6Adapter.clear();
-
             }
 
             @Override
@@ -348,7 +376,8 @@ public class HierarchyActivity extends AppCompatActivity {
             }
         });
 
-        final ExtendedFloatingActionButton start = findViewById(R.id.btn_location);
+
+        final Button start = findViewById(R.id.btn_location);
         start.setOnClickListener(v -> {
             if (level6Spinner.getSelectedItemPosition() == 0 || level6Spinner.getAdapter().isEmpty()) {
                 Toast.makeText(this, "Please Select All Fields", Toast.LENGTH_LONG).show();
@@ -393,7 +422,7 @@ public class HierarchyActivity extends AppCompatActivity {
 
 
 
-        final ExtendedFloatingActionButton base = findViewById(R.id.btn_baseline);
+        final Button base = findViewById(R.id.btn_baseline);
         base.setOnClickListener(v -> {
             if (level6Adapter == null || level6Spinner.getAdapter().isEmpty()) {
                 Toast.makeText(this, "Please Select All Fields", Toast.LENGTH_LONG).show();
@@ -436,6 +465,19 @@ public class HierarchyActivity extends AppCompatActivity {
 //            intent.putExtra(FIELDWORKER_DATA, fieldworkerData);
 //            startActivity(intent);
         });
+
+        final Button remainder = findViewById(R.id.btn_visit);
+        remainder.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(),RemainderActivity.class);
+            startActivity(i);
+        });
+
+//        final Button odk = findViewById(R.id.btn_odk);
+//        odk.setOnClickListener(v -> {
+//            Intent intent = new Intent(Intent.ACTION_VIEW);
+//            intent.setType("vnd.android.cursor.dir/vnd.odk.form");
+//            startActivity(intent);
+//        });
 
 
     }

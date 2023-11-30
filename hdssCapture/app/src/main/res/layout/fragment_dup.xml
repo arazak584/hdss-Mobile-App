@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context=".fragment.DupFragment">
+        tools:context=".Duplicate.DupFragment">
 
         <TextView
             android:layout_width="match_parent"
@@ -66,7 +66,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -74,7 +73,7 @@
                     android:hint="@string/fw"
                     android:text="@string/fw">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/rel_fw"
                         android:text="@={dup.fw_uuid}"
                         android:layout_width="match_parent"
@@ -106,7 +105,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -114,7 +112,7 @@
                     android:hint="@string/uuid"
                     android:text="@string/uuid">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:id="@+id/uuid"
@@ -126,7 +124,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -134,7 +131,7 @@
                     android:hint="@string/actual_dob"
                     android:text="@string/actual_dob">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/dob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -143,7 +140,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -151,7 +147,7 @@
                     android:hint="@string/firstname"
                     android:text="@string/firstname">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/fname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -160,7 +156,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -168,7 +163,7 @@
                     android:hint="@string/lastname"
                     android:text="@string/firstname">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/lname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -176,17 +171,74 @@
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/numdup" />
+
+                <RadioGroup
+                    android:id="@+id/dups"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onCheckedChanged="@{dup::setNumberofdup}"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/dup_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{dup.numberofdup==1}"
+                        android:tag="1"
+                        android:text="@string/text_1" />
+
+                    <RadioButton
+                        android:id="@+id/dup_two"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{dup.numberofdup==2}"
+                        android:tag="2"
+                        android:text="@string/text_2" />
+
+                    <RadioButton
+                        android:id="@+id/dup_three"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{dup.numberofdup==3}"
+                        android:tag="3"
+                        android:text="@string/text_3" />
+
+
+                </RadioGroup>
+
+            <LinearLayout
+                goneUnless="@{dup.numberofdup>=1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="Duplicate-1"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/button_dup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/dup"
+                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:textColor="@android:color/background_light"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -194,7 +246,7 @@
                     android:hint="@string/ind_extid"
                     android:text="@string/ind_extid">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/dup_uuid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -206,7 +258,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:visibility="gone"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -214,7 +265,7 @@
                     android:hint="@string/actual_dob"
                     android:text="@string/actual_dob">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/dup_dob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -223,7 +274,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -231,7 +281,7 @@
                     android:hint="@string/firstname"
                     android:text="@string/firstname">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/dup_fname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -240,7 +290,6 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -248,13 +297,215 @@
                     android:hint="@string/lastname"
                     android:text="@string/firstname">
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/dup_lname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={dup.dup_lname}"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+                <LinearLayout
+                    goneUnless="@{dup.numberofdup>=2}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Duplicate-2"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/button1_dup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dup"
+                        android:background="@drawable/btnd_rone_dgbevel"
+                        android:textColor="@android:color/background_light"
+                        tools:ignore="DuplicateSpeakableTextCheck" />
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/ind_extid"
+                        android:text="@string/ind_extid">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/dup1_uuid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={dup.dup1_uuid}"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:visibility="gone"
+                            android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/actual_dob"
+                        android:text="@string/actual_dob">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/dup1_dob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={dup.dup1_dob}"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/firstname"
+                        android:text="@string/firstname">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/dup1_fname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={dup.dup1_fname}"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/lastname"
+                        android:text="@string/firstname">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/dup1_lname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={dup.dup1_lname}"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    goneUnless="@{dup.numberofdup>=3}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="10dp"
+                        android:text="Duplicate-3"
+                        android:textAllCaps="true"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/button2_dup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dup"
+                        android:background="@drawable/btnd_rone_dgbevel"
+                        android:textColor="@android:color/background_light"
+                        tools:ignore="DuplicateSpeakableTextCheck" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/ind_extid"
+                        android:text="@string/ind_extid">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/dup2_uuid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={dup.dup2_uuid}"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:visibility="gone"
+                            android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/actual_dob"
+                        android:text="@string/actual_dob">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/dup2_dob"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={dup.dup2_dob}"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/firstname"
+                        android:text="@string/firstname">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/dup2_fname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={dup.dup2_fname}"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/lastname"
+                        android:text="@string/firstname">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/dup2_lname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={dup.dup2_lname}"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
 
 
                 <TextView
@@ -295,6 +546,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 android:text="@string/saveclosedata" />
 
             <Button
@@ -303,6 +556,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 android:text="@string/closedata" />
 
         </LinearLayout>

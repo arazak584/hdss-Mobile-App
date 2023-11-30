@@ -114,6 +114,11 @@ public class Locations extends BaseObservable implements Parcelable {
     @Expose
     @ColumnInfo(name = "site")
     public Integer site;
+    @Expose
+    public String sttime;
+
+    @Expose
+    public String edtime;
 
     public Locations(){}
 
@@ -151,6 +156,21 @@ public class Locations extends BaseObservable implements Parcelable {
         this.uuid = uuid;
     }
 
+    public String getSttime() {
+        return sttime;
+    }
+
+    public void setSttime(String sttime) {
+        this.sttime = sttime;
+    }
+
+    public String getEdtime() {
+        return edtime;
+    }
+
+    public void setEdtime(String edtime) {
+        this.edtime = edtime;
+    }
     public String getCompextId() {
         return compextId;
     }

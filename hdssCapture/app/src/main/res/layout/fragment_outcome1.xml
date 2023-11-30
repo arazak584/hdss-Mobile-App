@@ -30,7 +30,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -38,7 +37,7 @@
             android:hint="@string/uuid"
             android:text="@string/uuid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/out1_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,7 +49,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -58,7 +56,7 @@
             android:hint="@string/preguuid"
             android:text="@string/preguuid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/preg1_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,7 +68,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -78,7 +75,7 @@
             android:hint="@string/motherid"
             android:text="@string/motherid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/out1_preguuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,7 +107,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -118,7 +114,7 @@
             android:hint="@string/childextid"
             android:text="@string/childextid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/out1_child_extid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -131,7 +127,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             goneUnless="@{pregoutcome1.type==1}"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -140,7 +135,7 @@
             android:hint="@string/ind_extid"
             android:text="@string/ind_extid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:id="@+id/individual1_extid"
@@ -152,7 +147,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -160,7 +154,7 @@
             android:hint="@string/ind_uuid"
             android:text="@string/ind_uuid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/individual1_mother"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -172,7 +166,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             goneUnless="@{pregoutcome1.type==1}"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -180,7 +173,7 @@
             android:hint="@string/firstname"
             android:text="@string/firstname">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/individual1_firstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -191,7 +184,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             goneUnless="@{pregoutcome1.type==1}"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -199,7 +191,7 @@
             android:hint="@string/lastname"
             android:text="@string/lastname">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/individual1_lastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -250,6 +242,64 @@
             android:onItemSelected="@{pregoutcome1::setRltn_head}"
             android:padding="10dp"
             android:spinnerMode="dialog" />
+
+
+        <TextView
+            goneUnless="@{pregoutcome1.type==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="@string/chd_weight"/>
+
+        <Spinner
+            goneUnless="@{pregoutcome1.type==1}"
+            android:id="@+id/chd_weight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:spinnerMode="dialog"
+            selection="@{pregoutcome1.chd_weight}"
+            android:onItemSelected="@{pregoutcome1::setChd_weight}"
+            android:padding="10dp"/>
+
+        <TextView
+            goneUnless="@{pregoutcome1.chd_weight==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="@string/weig_hcard" />
+
+        <EditText
+            goneUnless="@{pregoutcome1.chd_weight==1}"
+            android:id="@+id/weig_hcard"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text="@={pregoutcome1.weig_hcard}" />
+
+        <TextView
+            goneUnless="@{pregoutcome1.type==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="@string/chd_size"/>
+
+        <Spinner
+            goneUnless="@{pregoutcome1.type==1}"
+            android:id="@+id/chd_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:spinnerMode="dialog"
+            selection="@{pregoutcome1.chd_size}"
+            android:onItemSelected="@{pregoutcome1::setChd_size}"
+            android:padding="10dp"/>
+
 
     </LinearLayout>
 

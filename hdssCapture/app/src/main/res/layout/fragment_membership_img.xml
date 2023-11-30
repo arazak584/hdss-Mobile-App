@@ -36,7 +36,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -44,7 +43,7 @@
             android:hint="@string/fw"
             android:text="@string/fw">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/img_fw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,7 +75,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -85,7 +83,7 @@
             android:hint="@string/uuid"
             android:text="@string/ind_extid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/img_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -95,7 +93,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -103,7 +100,7 @@
             android:hint="@string/resuuid"
             android:text="@string/resuuid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/res_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -113,7 +110,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -121,7 +117,7 @@
             android:hint="@string/ind_extid"
             android:text="@string/ind_extid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/img_extid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -131,7 +127,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -139,7 +134,7 @@
             android:hint="@string/visitid"
             android:text="@string/household_select">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/img_visitid"
                 android:text="@={inmigration.visit_uuid}"
                 android:layout_width="match_parent"
@@ -199,14 +194,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:minHeight="48dp"
             android:onItemSelected="@{inmigration::setReason}"
-            android:padding="20dp"
+            android:padding="10dp"
             android:spinnerMode="dialog" />
 
         <com.google.android.material.textfield.TextInputLayout
             goneUnless="@{inmigration.reason==77}"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -214,7 +207,7 @@
             android:hint="@string/attend_you_other"
             android:text="@string/attend_you_other">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/other_reason"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -228,10 +221,11 @@
             android:layout_height="wrap_content"
             android:text="@string/migration_date"
             tools:ignore="DuplicateSpeakableTextCheck"
+            android:background="@drawable/btnd_rone_dgbevel"
+            android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -239,7 +233,7 @@
             android:hint="@string/migration_date"
             android:text="@string/migration_date">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:id="@+id/img_date"
@@ -248,6 +242,188 @@
                 android:text="@={inmigration.recordedDate}"
                 android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        goneUnless="@{inmigration.reason==9}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="@string/farm"/>
+
+        <Spinner
+            android:id="@+id/farm"
+            selection="@{inmigration.farm}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:minHeight="48dp"
+            android:onItemSelected="@{inmigration::setFarm}"
+            android:padding="20dp"
+            android:spinnerMode="dialog" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            goneUnless="@{inmigration.farm==77}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:hint="@string/attend_you_other"
+            android:text="@string/attend_you_other">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/fram_oth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={inmigration.farm_other}"
+                android:inputType="textCapCharacters"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/food_yn"/>
+
+            <Spinner
+                android:id="@+id/food_yn"
+                selection="@{inmigration.food_yn}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:minHeight="48dp"
+                android:onItemSelected="@{inmigration::setFood_yn}"
+                android:padding="20dp"
+                android:spinnerMode="dialog" />
+
+        <TextView
+            goneUnless="@{inmigration.food_yn==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="@string/food_crops"/>
+
+        <Spinner
+            goneUnless="@{inmigration.food_yn==1}"
+            android:id="@+id/food_crops"
+            selection="@{inmigration.food_crops}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:minHeight="48dp"
+            android:onItemSelected="@{inmigration::setFood_crops}"
+            android:padding="20dp"
+            android:spinnerMode="dialog" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="@string/cash_yn"/>
+
+        <Spinner
+            android:id="@+id/cash_yn"
+            selection="@{inmigration.cash_yn}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:minHeight="48dp"
+            android:onItemSelected="@{inmigration::setCash_yn}"
+            android:padding="20dp"
+            android:spinnerMode="dialog" />
+
+        <TextView
+            goneUnless="@{inmigration.cash_yn==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="@string/food_crops"/>
+
+        <Spinner
+            goneUnless="@{inmigration.cash_yn==1}"
+            android:id="@+id/cash_crops"
+            selection="@{inmigration.cash_crops}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:minHeight="48dp"
+            android:onItemSelected="@{inmigration::setCash_crops}"
+            android:padding="20dp"
+            android:spinnerMode="dialog" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="@string/livestock_yn"/>
+
+        <Spinner
+            android:id="@+id/livestock_yn"
+            selection="@{inmigration.livestock_yn}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:minHeight="48dp"
+            android:onItemSelected="@{inmigration::setLivestock_yn}"
+            android:padding="20dp"
+            android:spinnerMode="dialog" />
+
+        <TextView
+            goneUnless="@{inmigration.livestock_yn==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="@string/food_crops"/>
+
+        <Spinner
+            goneUnless="@{inmigration.livestock_yn==1}"
+            android:id="@+id/livestock"
+            selection="@{inmigration.livestock}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:minHeight="48dp"
+            android:onItemSelected="@{inmigration::setLivestock}"
+            android:padding="20dp"
+            android:spinnerMode="dialog" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:hint="@string/acres"
+            android:text="@string/acres">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/acres"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={inmigration.acres}"
+                android:inputType="number"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    </LinearLayout>
 
 
 

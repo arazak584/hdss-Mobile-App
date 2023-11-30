@@ -27,8 +27,8 @@ public class RemainderAdapter extends RecyclerView.Adapter<RemainderAdapter.View
 
     RemainderActivity activity;
     LayoutInflater inflater;
-    private List<Locations> locationsList;
-    private Hierarchy level6Data;
+    private final List<Locations> locationsList;
+    private final Hierarchy level6Data;
 
 
     public RemainderAdapter(RemainderActivity activity, Hierarchy level6Data) {

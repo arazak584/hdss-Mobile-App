@@ -80,7 +80,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -88,7 +87,7 @@
             android:hint="@string/fw"
             android:text="@string/fw">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/individual_fw"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -100,7 +99,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -108,7 +106,7 @@
             android:hint="@string/ind_uuid"
             android:text="@string/ind_uuid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/individual_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -120,7 +118,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -128,7 +125,7 @@
             android:hint="@string/location_uuid"
             android:text="@string/location_uuid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/location_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -140,7 +137,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -148,7 +144,7 @@
             android:hint="@string/socialgroupid"
             android:text="@string/socialgroupid">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/socialgroup_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -160,7 +156,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="visible"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -168,7 +163,7 @@
             android:hint="@string/actual_dob"
             android:text="@string/actual_dob">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/dob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -252,15 +247,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{vaccination.reason==77}"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
                 android:hint="@string/attend_you_other"
                 android:text="@string/attend_you_other">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/reason_oth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -331,15 +325,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{vaccination.bednet==1}"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
                 android:hint="@string/chlbednet"
                 android:text="@string/chlbednet">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/chlbednet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -348,15 +341,14 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
                 android:hint="@string/weight"
                 android:text="@string/weight">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/weight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -498,15 +490,14 @@
                 android:padding="15dp"/>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
                 android:hint="@string/muac"
                 android:text="@string/muac">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/muac"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -558,7 +549,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Date of Admission"
-                android:textColor="@color/white"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 app:icon="@drawable/ic_baseline_calendar_month_24" />
 
             <TextView
@@ -574,15 +566,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{vaccination.rea==77}"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
-                android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
                 android:hint="@string/attend_you_other"
                 android:text="@string/attend_you_other">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/rea_oth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -707,7 +698,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/bcg"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -725,7 +717,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/opv0"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -743,7 +736,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/opv1"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -761,7 +755,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/opv2"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -779,7 +774,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/opv3"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -797,7 +793,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="DPT-HepB-Hib 1"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -815,7 +812,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="DPT-HepB-Hib 2"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -833,7 +831,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="DPT-HepB-Hib 3"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -851,7 +850,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Pneumococcal 1"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -869,7 +869,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Pneumococcal 2"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -887,7 +888,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Pneumococcal 3"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -905,7 +907,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="ROTA 1"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -923,7 +926,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="ROTA 2"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -941,7 +945,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="ROTA 3"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -959,7 +964,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/ipv"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -977,7 +983,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="VITAMIN A [6 Months]"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -995,7 +1002,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="VITAMIN A [12 Months]"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1013,7 +1021,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="VITAMIN A [18 Months]"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1031,7 +1040,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="MAlARIA RTSS [6 Months]"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1049,7 +1059,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="MAlARIA RTSS [7 Months]"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1067,7 +1078,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="MAlARIA RTSS [9 Months]"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1085,7 +1097,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="MAlARIA RTSS [18 Months]"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1103,7 +1116,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="MEASLES RUBELLA 1"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1121,7 +1135,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="MEASLES RUBELLA 2"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1139,7 +1154,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="YELLOW FEVER"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1157,7 +1173,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/mena"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1175,7 +1192,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/itn"
-            android:textColor="@color/white"
+            android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1228,6 +1246,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 android:text="@string/saveclosedata" />
 
             <Button
@@ -1236,6 +1256,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
+                android:background="@drawable/btnd_rone_dgbevel"
+                android:textColor="@android:color/background_light"
                 android:text="@string/closedata" />
 
         </LinearLayout>

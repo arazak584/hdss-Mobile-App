@@ -705,7 +705,7 @@ public class VaccinationFragment extends Fragment {
 
 
                 String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.toString().replaceAll("-", "");
+                String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
                 data.individual_uuid = individual.uuid;
@@ -713,6 +713,18 @@ public class VaccinationFragment extends Fragment {
                 data.socialgroup_uuid = socialgroup.uuid;
                 data.dob = individual.dob;
                 data.complete = 1;
+
+                Date currentDate = new Date(); // Get the current date and time
+                // Create a Calendar instance and set it to the current date and time
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(currentDate);
+                // Extract the hour, minute, and second components
+                int hh = cal.get(Calendar.HOUR_OF_DAY);
+                int mm = cal.get(Calendar.MINUTE);
+                int ss = cal.get(Calendar.SECOND);
+                // Format the components into a string with leading zeros
+                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
+                data.sttime = timeString;
 
 
                 binding.setVaccination(data);
@@ -1348,6 +1360,21 @@ public class VaccinationFragment extends Fragment {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
                 //return;
             }
+            Date end = new Date(); // Get the current date and time
+            // Create a Calendar instance and set it to the current date and time
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(end);
+            // Extract the hour, minute, and second components
+            int hh = cal.get(Calendar.HOUR_OF_DAY);
+            int mm = cal.get(Calendar.MINUTE);
+            int ss = cal.get(Calendar.SECOND);
+            // Format the components into a string with leading zeros
+            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
+
+            if (finalData.sttime !=null && finalData.edtime==null){
+                finalData.edtime = endtime;
+            }
+            finalData.editDate = new Date();
             finalData.complete=1;
             viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
