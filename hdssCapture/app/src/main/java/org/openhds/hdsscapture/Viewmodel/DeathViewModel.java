@@ -35,9 +35,6 @@ public class DeathViewModel extends AndroidViewModel {
         return deathRepository.findToSync();
     }
 
-    public List<Death> retrieveVpmSync() throws ExecutionException, InterruptedException {
-        return deathRepository.retrieveVpmSync();
-    }
 
     public List<Death> error() throws ExecutionException, InterruptedException {
         return deathRepository.error();

@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.SocialgroupRepository;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 
 import java.util.Date;
@@ -31,12 +32,24 @@ public class SocialgroupViewModel extends AndroidViewModel {
         return socialgroupRepository.find(id);
     }
 
+    public Socialgroup visit(String id) throws ExecutionException, InterruptedException {
+        return socialgroupRepository.visit(id);
+    }
+
+    public Socialgroup minor(String id) throws ExecutionException, InterruptedException {
+        return socialgroupRepository.minor(id);
+    }
+
     public Socialgroup createhse(String id) throws ExecutionException, InterruptedException {
         return socialgroupRepository.createhse(id);
     }
 
     public List<Socialgroup> retrieveBySocialgroup(String id) throws ExecutionException, InterruptedException {
         return socialgroupRepository.retrieveBySocialgroup(id);
+    }
+
+    public List<Socialgroup> changehousehold(String id) throws ExecutionException, InterruptedException {
+        return socialgroupRepository.changehousehold(id);
     }
 
     public Socialgroup findhse(String id) throws ExecutionException, InterruptedException {
@@ -78,4 +91,9 @@ public class SocialgroupViewModel extends AndroidViewModel {
     public int update(SocialgroupAmendment s){
         return socialgroupRepository.update(s);
     }
+
+    public int visited(HvisitAmendment s){
+        return socialgroupRepository.visited(s);
+    }
+
 }

@@ -19,6 +19,7 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.databinding.FragmentVaccinationBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
@@ -27,6 +28,7 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
+import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
@@ -50,18 +52,13 @@ public class VaccinationFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
-    private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String SOCIAL_ID = "SOCIAL_ID";
-    private static final String CASE_ID = "CASE_ID";
-    private static final String EVENT_ID = "EVENT_ID";
     private final String TAG = "VACCINATION.TAG";
 
     private Locations locations;
-    private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentVaccinationBinding binding;
-    private EventForm eventForm;
     private Vaccination vaccination;
 
     public VaccinationFragment() {
@@ -73,21 +70,17 @@ public class VaccinationFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param locations Parameter 1.
-     * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
-     * @param eventForm Parameter 7.
      * @return A new instance of fragment VaccinationFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static VaccinationFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, EventForm eventForm) {
+    public static VaccinationFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
         VaccinationFragment fragment = new VaccinationFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
-        args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
     }
@@ -97,10 +90,8 @@ public class VaccinationFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
 
@@ -112,7 +103,7 @@ public class VaccinationFragment extends Fragment {
         binding.setVaccination(vaccination);
 
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(individual.firstName + " " + individual.lastName);
+        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
 
 
         //CHOOSING THE DATE
@@ -432,7 +423,7 @@ public class VaccinationFragment extends Fragment {
 
         VaccinationViewModel viewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
         try {
-            Vaccination data = viewModel.find(individual.uuid);
+            Vaccination data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid);
             if (data != null) {
                 binding.setVaccination(data);
 
@@ -708,10 +699,10 @@ public class VaccinationFragment extends Fragment {
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
-                data.individual_uuid = individual.uuid;
-                data.location_uuid = locations.uuid;
+                data.individual_uuid = HouseMembersFragment.selectedIndividual.uuid;
+                data.location_uuid = ClusterFragment.selectedLocation.uuid;
                 data.socialgroup_uuid = socialgroup.uuid;
-                data.dob = individual.dob;
+                data.dob = HouseMembersFragment.selectedIndividual.dob;
                 data.complete = 1;
 
                 Date currentDate = new Date(); // Get the current date and time
@@ -1377,12 +1368,27 @@ public class VaccinationFragment extends Fragment {
             finalData.editDate = new Date();
             finalData.complete=1;
             viewModel.add(finalData);
+            IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
+            try {
+                Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                if (data != null) {
+                    IndividualVisited visited = new IndividualVisited();
+                    visited.uuid = finalData.individual_uuid;
+                    visited.complete = 2;
+                    iview.visited(visited);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    HouseMembersFragment.newInstance(locations, socialgroup, individual)).commit();
         }
     }
 

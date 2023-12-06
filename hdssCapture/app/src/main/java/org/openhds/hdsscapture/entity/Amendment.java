@@ -10,6 +10,7 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -24,7 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-@Entity(tableName = "amendment")
+@Entity(tableName = "amendment",
+indices = {@Index(value = {"individual_uuid","fw_uuid","complete"}, unique = false)})
 public class Amendment extends BaseObservable {
 
     @Expose

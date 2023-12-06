@@ -80,7 +80,7 @@ public class MoveInErrorFragment extends DialogFragment {
 
         final TextView compno = view.findViewById(R.id.textViewindivid_compextId);
         if (individual != null) {
-            compno.setText("Move " + individual.firstName +' '+ individual.lastName + " Out of Compound " + individual.compextId + " Before the Move In");
+            compno.setText("Move " + individual.firstName +' '+ individual.lastName + " Out of Compound " + individual.compno + " Before the Move In");
         } else {
             // Handle the case where locations is null
             compno.setText("Error loading locations data");

@@ -11,6 +11,7 @@ import androidx.databinding.BaseObservable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -26,7 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-@Entity(tableName = "inmigration")
+@Entity(tableName = "inmigration",
+indices = {@Index(value = {"individual_uuid","residency_uuid","fw_uuid","complete"}, unique = false)})
 public class Inmigration extends BaseObservable implements Parcelable {
 
     @SerializedName("residency_uuid")
@@ -93,6 +95,8 @@ public class Inmigration extends BaseObservable implements Parcelable {
     public Integer acres;
     @Expose
     public Integer food_crops;
+    @Expose
+    public String location_uuid;
 
     public Inmigration(){}
 
@@ -291,6 +295,12 @@ public class Inmigration extends BaseObservable implements Parcelable {
 
     public void setFood_crops(Integer food_crops) {
         this.food_crops = food_crops;
+    }
+    public String getLocation_uuid() {
+        return location_uuid;
+    }
+    public void setLocation_uuid(String location_uuid) {
+        this.location_uuid = location_uuid;
     }
 
     protected Inmigration(Parcel in) {

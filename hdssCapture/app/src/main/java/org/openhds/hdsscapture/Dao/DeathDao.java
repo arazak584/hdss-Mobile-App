@@ -23,17 +23,15 @@ public interface DeathDao {
     void deleteAll();
 
 
-    @Query("SELECT * FROM death where individual_uuid=:id and vpmcomplete IS NOT NULL")
+    @Query("SELECT * FROM death where individual_uuid=:id")
     Death find(String id);
 
     @Query("SELECT * FROM death where individual_uuid=:id and complete IS NOT NULL")
     Death finds(String id);
 
-    @Query("SELECT * FROM death WHERE complete=1 AND deathDate IS NOT NULL")
+    @Query("SELECT * FROM death WHERE complete=1")
     List<Death> retrieveToSync();
 
-    @Query("SELECT * FROM death WHERE vpmcomplete=1 AND deathDate IS NOT NULL")
-    List<Death> retrieveVpmSync();
 
     @Query("SELECT a.*,groupName as firstName,b.extId as lastName FROM death as a INNER JOIN socialgroup as b ON a.individual_uuid=b.individual_uuid " +
             " INNER JOIN residency as c on b.uuid=c.socialgroup_uuid " +

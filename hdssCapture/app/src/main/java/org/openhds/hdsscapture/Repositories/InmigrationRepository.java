@@ -34,9 +34,9 @@ public class InmigrationRepository {
         });
     }
 
-    public Inmigration find(String id) throws ExecutionException, InterruptedException {
+    public Inmigration find(String id, String locid) throws ExecutionException, InterruptedException {
 
-        Callable<Inmigration> callable = () -> dao.find(id);
+        Callable<Inmigration> callable = () -> dao.find(id,locid);
 
         Future<Inmigration> future = Executors.newSingleThreadExecutor().submit(callable);
 

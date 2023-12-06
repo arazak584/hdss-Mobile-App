@@ -9,6 +9,9 @@ import org.openhds.hdsscapture.Repositories.IndividualRepository;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
+import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
+import org.openhds.hdsscapture.entity.subentity.IndividualResidency;
+import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 
 import java.util.Date;
 import java.util.List;
@@ -31,6 +34,10 @@ public class IndividualViewModel extends AndroidViewModel {
 
     public List<Individual> retrieveByLocationId(String id) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveByLocationId(id);
+    }
+
+    public List<Individual> retrieveReturn(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.retrieveReturn(id);
     }
 
     public List<Individual> retrieveChild(String id) throws ExecutionException, InterruptedException {
@@ -91,6 +98,10 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.father(id);
     }
 
+    public Individual visited(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.visited(id);
+    }
+
     public long countIndividuals(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
         return individualRepository.countIndividuals(startDate, endDate, username);
     }
@@ -120,4 +131,16 @@ public class IndividualViewModel extends AndroidViewModel {
     public int update(IndividualAmendment s){
         return individualRepository.update(s);
     }
+
+    public int dthupdate(IndividualEnd e){
+        return individualRepository.dthupdate(e);
+    }
+
+    public int visited(IndividualVisited e){
+        return individualRepository.visited(e);
+    }
+    public int updateres(IndividualResidency e){
+        return individualRepository.updateres(e);
+    }
+
 }

@@ -119,97 +119,97 @@ public class EventFormAdapter extends RecyclerView.Adapter<EventFormAdapter.View
 
     private void formFactory(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, EventForm eventForm) {
         switch (eventForm.event_name) {
-            case EVENT_HDSS1: {
-                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        ResidencyFragment.newInstance(individual,residency, locations,socialgroup,eventForm)).commit();
+//            case EVENT_HDSS1: {
+//                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                        ResidencyFragment.newInstance(individual,residency, locations,socialgroup,eventForm)).commit();
+//
+//                break;
+//            }
 
-                break;
-            }
-
-            case EVENT_HDSS3: {
-
-                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        SocialgroupFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
-
-                break;
-            }
-
-            case EVENT_HDSS4: {
-
-                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        DemographicFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
-
-                break;
-            }
-
-            case EVENT_HDSS7: {
-
-                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        RelationshipFragment.newInstance(individual,residency, locations, socialgroup,eventForm)).commit();
-
-                break;
-            }
-
-
-            case EVENT_HDSS10: {
-
-                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        PregnancyFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
-
-                break;
-            }
-
-            case EVENT_HDSS13: {
-
-                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        PregnancyExtraFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
-
-                break;
-            }
-
-            case EVENT_SOCIO: {
-
-                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        SocioFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
-
-                break;
-            }
-
-            case EVENT_HDSS11: {
-
-                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        PregnancyoutcomeFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
-
-                break;
-            }
-
-            case EVENT_HDSS12: {
-
-                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        Pregnancyoutcome1Fragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
-
-                break;
-            }
-            case EVENT_HDSS14: {
-
-                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        AmendmentFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
-
-                break;
-            }
-
-            case EVENT_HDSS15: {
-
-                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        VaccinationFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
-
-                break;
-            }
+//            case EVENT_HDSS3: {
+//
+//                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                        SocialgroupFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
+//
+//                break;
+//            }
+//
+//            case EVENT_HDSS4: {
+//
+//                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                        DemographicFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
+//
+//                break;
+//            }
+//
+//            case EVENT_HDSS7: {
+//
+//                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                        RelationshipFragment.newInstance(individual,residency, locations, socialgroup,eventForm)).commit();
+//
+//                break;
+//            }
+//
+//
+//            case EVENT_HDSS10: {
+//
+//                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                        PregnancyFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
+//
+//                break;
+//            }
+//
+//            case EVENT_HDSS13: {
+//
+//                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                        PregnancyExtraFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
+//
+//                break;
+//            }
+//
+//            case EVENT_SOCIO: {
+//
+//                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                        SocioFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
+//
+//                break;
+//            }
+//
+//            case EVENT_HDSS11: {
+//
+//                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                        PregnancyoutcomeFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
+//
+//                break;
+//            }
+//
+//            case EVENT_HDSS12: {
+//
+//                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                        Pregnancyoutcome1Fragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
+//
+//                break;
+//            }
+//            case EVENT_HDSS14: {
+//
+//                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                        AmendmentFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
+//
+//                break;
+//            }
+//
+//            case EVENT_HDSS15: {
+//
+//                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                        VaccinationFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
+//
+//                break;
+//            }
 
             case EVENT_HDSS16: {
 
                 activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        DupFragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
+                        DupFragment.newInstance(individual,residency, locations, socialgroup)).commit();
 
                 break;
             }

@@ -4,6 +4,7 @@
     android:id="@+id/searchedItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/item_selector"
     app:cardElevation="16dp"
     app:cardCornerRadius="8dp"
     android:layout_margin="8dp">

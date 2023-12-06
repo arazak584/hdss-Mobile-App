@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -21,6 +22,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.DuplicateViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentDupBinding;
 import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.Fieldworker;
@@ -28,9 +30,12 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
+import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import org.openhds.hdsscapture.fragment.EventsFragment;
+import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,7 +48,7 @@ import java.util.concurrent.ExecutionException;
  * Use the {@link DupFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DupFragment extends Fragment {
+public class DupFragment extends DialogFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
@@ -74,18 +79,16 @@ public class DupFragment extends Fragment {
      * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
-     * @param eventForm Parameter 7.
      * @return A new instance of fragment DupFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DupFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, EventForm eventForm) {
+    public static DupFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
         DupFragment fragment = new DupFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
-        args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
     }
@@ -98,7 +101,6 @@ public class DupFragment extends Fragment {
             residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
 
@@ -115,7 +117,7 @@ public class DupFragment extends Fragment {
         Button showDialogButton1 = binding.getRoot().findViewById(R.id.button1_dup);
         Button showDialogButton2 = binding.getRoot().findViewById(R.id.button2_dup);
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(individual.firstName + " " + individual.lastName);
+        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
 
         // Set a click listener on the button for partner
         showDialogButton.setOnClickListener(new View.OnClickListener() {
@@ -192,7 +194,7 @@ public class DupFragment extends Fragment {
 
         DuplicateViewModel viewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
         try {
-            Duplicate data = viewModel.find(individual.uuid);
+            Duplicate data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid);
             if (data != null) {
                 binding.setDup(data);
                 binding.fname.setEnabled(false);
@@ -203,10 +205,10 @@ public class DupFragment extends Fragment {
                 data = new Duplicate();
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.individual_uuid = individual.getUuid();
-                data.fname = individual.getFirstName();
-                data.lname = individual.getLastName();
-                data.dob = individual.dob;
+                data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
+                data.fname = HouseMembersFragment.selectedIndividual.getFirstName();
+                data.lname = HouseMembersFragment.selectedIndividual.getLastName();
+                data.dob = HouseMembersFragment.selectedIndividual.dob;
 
                 binding.fname.setEnabled(false);
                 binding.lname.setEnabled(false);
@@ -331,11 +333,25 @@ public class DupFragment extends Fragment {
 
             finalData.complete=1;
             viewModel.add(finalData);
-            //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+            IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+            try {
+                Individual data = individualViewModel.visited(HouseMembersFragment.selectedIndividual.uuid);
+                if (data != null) {
+                    IndividualVisited visited = new IndividualVisited();
+                    visited.uuid = binding.getDup().individual_uuid;
+                    visited.complete = 2;
+                    individualViewModel.visited(visited);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    HouseMembersFragment.newInstance(locations, socialgroup,individual)).commit();
         }
 
     }

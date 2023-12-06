@@ -21,7 +21,9 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
+import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.databinding.FragmentPregnancyBinding;
 import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Fieldworker;
@@ -30,6 +32,8 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
@@ -48,25 +52,20 @@ import java.util.concurrent.ExecutionException;
  * Use the {@link PregnancyExtraFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PregnancyExtraFragment extends Fragment {
+public class PregnancyExtraFragment extends DialogFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
-    private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String SOCIAL_ID = "SOCIAL_ID";
-    private static final String PREGNANCY_ID = "PREGNANCY_ID";
-    private static final String CASE_ID = "CASE_ID";
-    private static final String EVENT_ID = "EVENT_ID";
+
     private final String TAG = "PREGNANCY.TAG";
 
     private Pregnancy pregnancy;
     private Locations locations;
-    private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentPregnancyBinding binding;
-    private EventForm eventForm;
 
 
     public PregnancyExtraFragment() {
@@ -78,21 +77,17 @@ public class PregnancyExtraFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param locations Parameter 1.
-     * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
-     * @param eventForm Parameter 7.
      * @return A new instance of fragment PregnancyFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PregnancyExtraFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup,  EventForm eventForm) {
+    public static PregnancyExtraFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
         PregnancyExtraFragment fragment = new PregnancyExtraFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
-        args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
     }
@@ -102,10 +97,8 @@ public class PregnancyExtraFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
 
@@ -117,7 +110,7 @@ public class PregnancyExtraFragment extends Fragment {
         binding.setPregnancy(pregnancy);
 
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(individual.firstName + " " + individual.lastName);
+        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
 
         final TextView ex = binding.getRoot().findViewById(R.id.ext);
         final Spinner extra = binding.getRoot().findViewById(R.id.extra);
@@ -182,8 +175,9 @@ public class PregnancyExtraFragment extends Fragment {
 
         PregnancyViewModel viewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         PregnancyViewModel pviewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
+        VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
         try {
-            Pregnancy data = viewModel.finds(individual.uuid);
+            Pregnancy data = viewModel.finds(HouseMembersFragment.selectedIndividual.uuid);
             if (data != null) {
                 binding.setPregnancy(data);
                 binding.extra.setEnabled(false);
@@ -192,12 +186,16 @@ public class PregnancyExtraFragment extends Fragment {
 
                 final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
+                Visit dts = visitViewModel.find(socialgroup.uuid);
+                if (dts != null){
+                    data.visit_uuid = dts.uuid;
+                }
+
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
-                data.individual_uuid = individual.getUuid();
-                data.visit_uuid = socialgroup.getVisit_uuid();
+                data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.extra = 2;
                 data.id = 2;
                 data.first_preg = 2;
@@ -224,10 +222,12 @@ public class PregnancyExtraFragment extends Fragment {
         }
 
         try {
-            Pregnancy datas = pviewModel.findpreg(individual.uuid);
+            Pregnancy datas = pviewModel.findpreg(HouseMembersFragment.selectedIndividual.uuid);
             if (datas != null) {
                 binding.setPreg(datas);
 
+            }else{
+                Toast.makeText(getActivity(), "Kindly Use the First Pregnancy Form", Toast.LENGTH_LONG).show();
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -283,7 +283,6 @@ public class PregnancyExtraFragment extends Fragment {
             save(false, true, viewModel);
         });
 
-        binding.setEventname(eventForm.event_name);
         Handler.colorLayouts(requireContext(), binding.PREGNANCYLAYOUT);
         View view = binding.getRoot();
         return view;
@@ -531,14 +530,29 @@ public class PregnancyExtraFragment extends Fragment {
             }
             finalData.complete=1;
             viewModel.add(finalData);
+            IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
+            try {
+                Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                if (data != null) {
+                    IndividualVisited visited = new IndividualVisited();
+                    visited.uuid = finalData.individual_uuid;
+                    visited.complete = 2;
+                    iview.visited(visited);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
         }
         if (save && binding.getPregnancy().outcome==1) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    Pregnancyoutcome1Fragment.newInstance(individual,residency, locations, socialgroup, eventForm)).commit();
+                    Pregnancyoutcome1Fragment.newInstance(individual,locations, socialgroup)).commit();
         }else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    HouseMembersFragment.newInstance(locations, socialgroup, individual)).commit();
         }
     }
 

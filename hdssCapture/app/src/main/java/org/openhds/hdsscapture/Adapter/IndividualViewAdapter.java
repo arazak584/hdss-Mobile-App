@@ -1,6 +1,7 @@
 package org.openhds.hdsscapture.Adapter;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
@@ -34,13 +37,21 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
     private final Socialgroup socialgroup;
     private Residency residency;
     private final List<Individual> individualList;
+    private final Fragment fragment;
+    private final IndividualClickListener individualClickListener;
 
-    public IndividualViewAdapter(HouseMembersFragment activity, Locations locations, Socialgroup socialgroup) {
-        this.activity = activity;
+
+    public interface IndividualClickListener {
+        void onIndividualClick(Individual selectedIndividual);
+    }
+
+    public IndividualViewAdapter(Fragment fragment, Locations locations, Socialgroup socialgroup,IndividualClickListener listener) {
+        this.fragment = fragment;
         this.locations = locations;
         this.socialgroup = socialgroup;
+        this.individualClickListener = listener;
         individualList = new ArrayList<>();
-        inflater = LayoutInflater.from(activity.requireContext());
+        //inflater = LayoutInflater.from(activity.requireContext());
     }
 
 
@@ -89,8 +100,8 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         holder.firstname.setText(individual.getFirstName());
         holder.lastname.setText(individual.getLastName());
         holder.dob.setText(individual.getDob());
-        holder.compno.setText(individual.compextId);
-        holder.hhid.setText(individual.houseExtId);
+        holder.compno.setText(individual.getCompno());
+        holder.hhid.setText(individual.getHohID());
         //holder.hhid.setText(String.valueOf(individual.age));
         String otherName = individual.getOtherName();
         if (otherName == null || otherName.isEmpty()) {
@@ -107,28 +118,31 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         Integer status = individual.endType;
         if (status == 1) {
             holder.status.setText("(" + "Active" + ")");
-            holder.status.setTextColor(Color.parseColor("#32CD32"));
+            holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
         } else {
             holder.status.setText("(" + "Outmigrated" + ")");
-            holder.status.setTextColor(Color.RED);
+            holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
         }
         Integer st = individual.complete;
         if (st != null) {
-            holder.permid.setTextColor(Color.parseColor("#32CD32"));
-            holder.firstname.setTextColor(Color.parseColor("#32CD32"));
-            holder.lastname.setTextColor(Color.parseColor("#32CD32"));
+            holder.permid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
+            holder.firstname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
+            holder.lastname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
         }else {
-            holder.permid.setTextColor(Color.parseColor("#FF4500"));
-            holder.firstname.setTextColor(Color.parseColor("#FF4500"));
-            holder.lastname.setTextColor(Color.parseColor("#FF4500"));
+            holder.permid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+            holder.firstname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+            holder.lastname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
         }
 
 
-
         holder.cardView.setOnClickListener(v -> {
-            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    IndividualFragment.newInstance( individual,residency, locations, socialgroup )).commit();
+            if (individualClickListener != null) {
+                individualClickListener.onIndividualClick(individual);
+                //Log.d("IndividualViewAdapter", "Person clicked: " + individual.getExtId());
+                //Toast.makeText(fragment.requireContext(), "Individual" + individual.age, Toast.LENGTH_SHORT).show();
+            }
         });
+
     }
 
     @Override
@@ -154,43 +168,66 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
 //        activity.dismissLoadingDialog();
 //    }
 
-    public void search(String selectedSpinnerItem, String searchText, IndividualViewModel individualViewModel) {
-        individualList.clear();
+//    public void search(String selectedSpinnerItem, String searchText, IndividualViewModel individualViewModel) {
+//        individualList.clear();
+//
+//        // Check if either selectedSpinnerItem or searchText is not empty (non-null and non-empty) before proceeding with the search
+//        if ((selectedSpinnerItem != null && !selectedSpinnerItem.isEmpty()) && (searchText != null && !searchText.isEmpty())) {
+//            if (searchText != null) {
+//                searchText = searchText.toLowerCase(Locale.getDefault());
+//            }
+//
+//            try {
+//                List<Individual> searchResults = individualViewModel.retrieveBySearch(selectedSpinnerItem, searchText);
+//                individualList.addAll(searchResults);
+//            } catch (ExecutionException | InterruptedException e) {
+//                e.printStackTrace();
+//                Toast.makeText(activity.getActivity(), "Error searching individuals", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//
+//        notifyDataSetChanged();
+//        activity.dismissLoadingDialog();
+//    }
+//
+//
+//
+//
+//    public void pull(IndividualViewModel individualViewModel) {
+//        individualList.clear();
+//        if(socialgroup != null)
+//            try {
+//                List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getUuid());
+//
+//                if (list != null) {
+//                    individualList.addAll(list);
+//                }
+//
+//                if (list.isEmpty()) {
+//                    Toast.makeText(activity.getActivity(), "No Active Individual Found", Toast.LENGTH_SHORT).show();
+//                }
+//
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        notifyDataSetChanged();
+//        activity.dismissLoadingDialogs();
+//    }
 
-        // Check if either selectedSpinnerItem or searchText is not empty (non-null and non-empty) before proceeding with the search
-        if ((selectedSpinnerItem != null && !selectedSpinnerItem.isEmpty()) && (searchText != null && !searchText.isEmpty())) {
-            if (searchText != null) {
-                searchText = searchText.toLowerCase(Locale.getDefault());
-            }
-
-            try {
-                List<Individual> searchResults = individualViewModel.retrieveBySearch(selectedSpinnerItem, searchText);
-                individualList.addAll(searchResults);
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-                Toast.makeText(activity.getActivity(), "Error searching individuals", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        notifyDataSetChanged();
-        activity.dismissLoadingDialog();
-    }
-
-
-
-
-    public void pull(IndividualViewModel individualViewModel) {
+    public void filter(String charText,IndividualViewModel individualViewModel) {
         individualList.clear();
         if(socialgroup != null)
             try {
-                List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getExtId());
+                List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getUuid());
 
                 if (list != null) {
                     individualList.addAll(list);
                 }
 
                 if (list.isEmpty()) {
-                    Toast.makeText(activity.getActivity(), "No Active Individual Found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(fragment.requireContext(), "No Active Individual Found", Toast.LENGTH_SHORT).show();
                 }
 
             } catch (ExecutionException e) {
@@ -199,7 +236,6 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
                 e.printStackTrace();
             }
         notifyDataSetChanged();
-        activity.dismissLoadingDialogs();
     }
 
 

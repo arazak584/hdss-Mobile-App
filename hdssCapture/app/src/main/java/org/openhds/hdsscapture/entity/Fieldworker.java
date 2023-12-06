@@ -7,11 +7,13 @@ import androidx.databinding.BaseObservable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
-@Entity(tableName = "fieldworker")
+@Entity(tableName = "fieldworker",
+indices = {@Index(value = {"fw_uuid"}, unique = true)})
 public class Fieldworker extends BaseObservable implements Parcelable {
 
 

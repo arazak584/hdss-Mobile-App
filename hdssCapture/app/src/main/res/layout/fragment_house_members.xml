@@ -1,139 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragment.HouseMembersFragment">
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:id="@+id/linearLayout_household"
+
+    <data>
+
+        <variable
+            name="individual"
+            type="org.openhds.hdsscapture.entity.Individual" />
+
+        <variable
+            name="config"
+            type="org.openhds.hdsscapture.entity.Configsettings" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="10dp"
-        tools:ignore="MissingConstraints">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView_compextId"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/design_default_color_on_secondary"
-                android:textSize="15sp"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/textView_compname"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/design_default_color_on_secondary"
-                android:textSize="15sp"
-                android:textAlignment="textEnd"
-                android:textStyle="bold"/>
-
-        </LinearLayout>
+        android:padding="15dp"
+        tools:context=".fragment.HouseMembersFragment">
 
 
         <LinearLayout
-            android:id="@+id/layout_individual"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-<!--            <com.google.android.material.textfield.TextInputLayout-->
-<!--                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:gravity="start"-->
-<!--                android:layout_weight="1"-->
-<!--                android:padding="5dp"-->
-<!--                android:hint="@string/village"-->
-<!--                android:text="@string/village">-->
-
-<!--                <com.google.android.material.textfield.TextInputEditText-->
-<!--                    android:id="@+id/searchVillage"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:inputType="textCapCharacters"/>-->
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
-
-            <AutoCompleteTextView
-                android:id="@+id/autoVillage"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/village"
-                android:paddingLeft="10dp"
-                android:inputType="textCapCharacters"
-                android:hint="Search Village" />
-
-            <EditText
-                android:id="@+id/search_indivdual"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/search"
-                android:paddingLeft="10dp"
-                android:inputType="textCapCharacters"
-                android:hint="Search Using Compno or Name Or Ghanacard" />
-
-
-<!--            <com.google.android.material.textfield.TextInputLayout-->
-<!--                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:gravity="start"-->
-<!--                android:layout_weight="1"-->
-<!--                android:padding="5dp"-->
-<!--                android:hint="@string/text_searchindividual"-->
-<!--                android:text="@string/text_searchindividual">-->
-
-<!--                <com.google.android.material.textfield.TextInputEditText-->
-<!--                    android:id="@+id/search_indivdual"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:inputType="textCapCharacters"/>-->
-<!--            </com.google.android.material.textfield.TextInputLayout>-->
-
-
-
-
-        </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/button_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/linearLayout_household"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:padding="5dp"
-            android:background="@drawable/btnd_rone_dgbevel"
-            android:textColor="@android:color/background_light"
-            android:text="@string/search" />
-    </LinearLayout>
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout_txt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints">
 
-        <Button
-            android:id="@+id/button_individuals"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@drawable/btnd_rone_dgbevel"
-            android:textColor="@android:color/background_light"
-            android:text="@string/individual_select" />
+            <TextView
+                android:id="@+id/textView_hh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textSize="20sp" />
 
 
         <View
@@ -141,6 +51,19 @@
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />
 
+        <LinearLayout
+            android:id="@+id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_household"
@@ -153,46 +76,337 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
-
         </androidx.recyclerview.widget.RecyclerView>
+            </ScrollView>
 
-    </LinearLayout>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_visit"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|bottom"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:contentDescription="@string/createLocation"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_baseline_add_24"
+                android:text="@string/visithousehold"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:background="@drawable/btnd_save"
+                app:fabSize="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="ImageContrastCheck" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_newindividual"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|left"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="10dp"
-        android:contentDescription="@string/external"
-        android:src="@drawable/ic_baseline_add_24"
-        android:text="@string/external"
-        android:background="@drawable/btnd_rone_dgbevel"
-        android:textColor="@android:color/background_light"
-        app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="ImageContrastCheck" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_cpvisit"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|bottom"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:contentDescription="@string/compvisit"
+                android:layout_margin="5dp"
+                android:src="@drawable/ic_baseline_add_24"
+                android:text="@string/compvisit"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:background="@drawable/btnd_save"
+                app:fabSize="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="ImageContrastCheck" />
+        </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_txt"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout_household"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints">
 
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/add_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="10dp"
-        android:contentDescription="@string/mainmenu"
-        android:src="@drawable/ic_baseline_add_24"
-        android:text="@string/mainmenu"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:backgroundTint="#8A080D"
-        app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/button_newindividual"
-        tools:ignore="ImageContrastCheck" />
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <LinearLayout
+            android:id="@+id/layouthse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/search"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="10dp"
+                android:contentDescription="@string/external"
+                android:src="@drawable/ic_baseline_add_24"
+                android:text="@string/external"
+                android:layout_gravity="center"
+                app:backgroundTint="@color/DarkBlue"
+                android:textColor="@android:color/background_light"
+                app:fabSize="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="ImageContrastCheck" />
+
+            <TextView
+                android:id="@+id/textView_person"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textSize="20sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/death"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@string/deathform"
+                android:focusable="true"
+                app:backgroundTint="@color/home"
+                android:text="@string/death"
+                android:textColor="@color/white"
+                app:fabSize="normal"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                tools:ignore="ImageContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/omg"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@string/outmigration"
+                android:focusable="true"
+                app:backgroundTint="@color/home"
+                android:text="@string/omg"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:fabSize="mini"
+                app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                tools:ignore="ImageContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/dup"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@string/duplicate"
+                android:focusable="true"
+                app:backgroundTint="@color/home"
+                android:text="@string/duplicate"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:fabSize="mini"
+                app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                tools:ignore="ImageContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/demographic"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@string/demographics"
+                android:focusable="true"
+                app:backgroundTint="@color/home"
+                android:text="@string/demographics"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:fabSize="mini"
+                app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                tools:ignore="ImageContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/pregnancy"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@string/pregnancy"
+                android:focusable="true"
+                app:backgroundTint="@color/home"
+                android:text="@string/pregnancy"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:fabSize="mini"
+                app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                tools:ignore="ImageContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/pregnancy2"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@string/pregnancy"
+                android:focusable="true"
+                app:backgroundTint="@color/home"
+                android:text="@string/pregnancyex"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:fabSize="mini"
+                app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                tools:ignore="ImageContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/outcome"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@string/outcome"
+                android:focusable="true"
+                app:backgroundTint="@color/home"
+                android:text="@string/pregoutcome"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:fabSize="mini"
+                app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                tools:ignore="ImageContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/outcome2"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@string/outcome"
+                android:focusable="true"
+                app:backgroundTint="@color/home"
+                android:text="@string/pregoutcome2"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:fabSize="mini"
+                app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                tools:ignore="ImageContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/amend"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@string/amendment"
+                android:focusable="true"
+                app:backgroundTint="@color/home"
+                android:text="@string/amendment"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:fabSize="mini"
+                app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                tools:ignore="ImageContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/rel"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@string/relationships"
+                android:focusable="true"
+                app:backgroundTint="@color/home"
+                android:text="@string/relationships"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:fabSize="mini"
+                app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                tools:ignore="ImageContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/hoh"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@string/relationships"
+                android:focusable="true"
+                app:backgroundTint="@color/home"
+                android:text="@string/changehoh"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:fabSize="mini"
+                app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                tools:ignore="ImageContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/ses"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@string/sess"
+                android:focusable="true"
+                app:backgroundTint="@color/home"
+                android:text="@string/sess"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:fabSize="mini"
+                app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                tools:ignore="ImageContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/vac"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@string/vac"
+                android:focusable="true"
+                app:backgroundTint="@color/home"
+                android:text="@string/vac"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:fabSize="mini"
+                app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                tools:ignore="ImageContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/relhoh"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@string/reltn"
+                android:focusable="true"
+                app:backgroundTint="@color/home"
+                android:text="@string/reltn"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                app:fabSize="mini"
+                app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                tools:ignore="ImageContrastCheck" />
+
+            <TextView
+                android:id="@+id/minor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+
+
+            </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

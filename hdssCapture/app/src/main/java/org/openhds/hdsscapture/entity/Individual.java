@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "individual",
-indices = {@Index(value = {"uuid"}, unique = true)})
+indices = {@Index(value = {"uuid","ghanacard","firstName","lastName","compno","socialgroup","fw_uuid","complete"}, unique = false)})
 public class Individual extends BaseObservable implements Parcelable {
 
     @SerializedName("uuid")
@@ -39,6 +39,9 @@ public class Individual extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "uuid")
     @PrimaryKey
     public String uuid;
+
+    @Expose
+    public String visit_uuid;
 
     @Expose
     @ColumnInfo(name = "extId")
@@ -110,12 +113,6 @@ public class Individual extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "other")
     public Integer other;
 
-    @Expose
-    public String compextId;
-    @Expose
-    public String houseExtId;
-    @Expose
-    public Integer endType;
     @SerializedName("gh")
     @Expose
     @ColumnInfo(name = "gh")
@@ -126,9 +123,9 @@ public class Individual extends BaseObservable implements Parcelable {
     public Integer father;
 
     @Expose
-    public Integer f_age=150;
+    public Integer f_age = 150;
     @Expose
-    public Integer m_age=150;
+    public Integer m_age = 150;
 
     @Expose
     public String sttime;
@@ -136,7 +133,38 @@ public class Individual extends BaseObservable implements Parcelable {
     @Expose
     public String edtime;
 
-    public Individual(){}
+    @Expose
+    public Integer startType;
+    @Expose
+    public Integer endType;
+    @Expose
+    public Date startDate;
+    @Expose
+    public Date endDate;
+    @Expose
+    public String compno;
+    @Expose
+    public String village;
+    @Expose
+    public String residency;
+    @Expose
+    public String socialgroup;
+    @Expose
+    public String hohID;
+    @Expose
+    public Integer rltn_head;
+
+    @Expose
+    public Integer reason;
+
+    @Expose
+    public String reason_oth;
+
+    @Expose
+    public Integer origin;
+
+    public Individual() {
+    }
 
     @Ignore
     public Individual(@NotNull String uuid, String extId, Date dob, Integer age, Date insertDate, String firstName, String lastName, Integer gender, Integer dobAspect, String otherName, String mother_uuid, String father_uuid, String fw_uuid) {
@@ -201,12 +229,27 @@ public class Individual extends BaseObservable implements Parcelable {
     public void setDob(String dob) {
         try {
             this.dob = f.parse(dob);
+            calculateAge();
         } catch (ParseException e) {
             System.out.println("Dob error " + e.getMessage());
         }
     }
 
-
+    private void calculateAge() {
+        if (dob == null) {
+            // Handle the case where date of birth is not set
+            age = -1; // or throw an exception, set a default age, etc.
+            return;
+        }
+        Calendar dobCalendar = Calendar.getInstance();
+        dobCalendar.setTime(this.dob);
+        Calendar nowCalendar = Calendar.getInstance();
+        age = nowCalendar.get(Calendar.YEAR) - dobCalendar.get(Calendar.YEAR);
+        // Adjust age if the birthday hasn't occurred yet this year
+        if (nowCalendar.get(Calendar.DAY_OF_YEAR) < dobCalendar.get(Calendar.DAY_OF_YEAR)) {
+            age--;
+        }
+    }
 
     @Bindable
     public int getAge() {
@@ -226,6 +269,33 @@ public class Individual extends BaseObservable implements Parcelable {
     public void setAge(Integer age) {
         this.age = age;
     }
+
+    public String getStartDate() {
+        if (startDate == null) return null;
+        return f.format(startDate);
+    }
+
+    public void setStartDate(String startDate) {
+        try {
+            this.startDate = f.parse(startDate);
+        } catch (ParseException e) {
+            System.out.println("Date error " + e.getMessage());
+        }
+    }
+
+    public String getEndDate() {
+        if (endDate == null) return null;
+        return f.format(endDate);
+    }
+
+    public void setEndDate(String endDate) {
+        try {
+            this.endDate = f.parse(endDate);
+        } catch (ParseException e) {
+            System.out.println("Date error " + e.getMessage());
+        }
+    }
+
 
     @Bindable
     public String getInsertDate() {
@@ -282,7 +352,7 @@ public class Individual extends BaseObservable implements Parcelable {
     }
 
     public void setOtherName(String otherName) {
-        if (otherName != null && otherName=="") {
+        if (otherName != null && otherName == "") {
             this.otherName = null;
         } else {
             this.otherName = otherName;
@@ -329,7 +399,7 @@ public class Individual extends BaseObservable implements Parcelable {
     }
 
     public void setGhanacard(String ghanacard) {
-        if (ghanacard != null && ghanacard=="") {
+        if (ghanacard != null && ghanacard == "") {
             this.ghanacard = null;
         } else {
             this.ghanacard = ghanacard;
@@ -374,6 +444,96 @@ public class Individual extends BaseObservable implements Parcelable {
         }
     }
 
+    @Bindable
+    public Integer getEndType() {
+        return endType;
+    }
+
+    public void setEndType(Integer endType) {
+        this.endType = endType;
+    }
+    @Bindable
+    public String getCompno() {
+        return compno;
+    }
+
+    public void setCompno(String compno) {
+        this.compno = compno;
+    }
+    @Bindable
+    public String getVillage() {
+        return village;
+    }
+
+    public void setVillage(String village) {
+        this.village = village;
+    }
+    @Bindable
+    public String getResidency() {
+        return residency;
+    }
+
+    public void setResidency(String residency) {
+        this.residency = residency;
+    }
+    @Bindable
+    public String getSocialgroup() {
+        return socialgroup;
+    }
+
+    public void setSocialgroup(String socialgroup) {
+        this.socialgroup = socialgroup;
+    }
+    @Bindable
+    public String getHohID() {
+        return hohID;
+    }
+
+    public void setHohID(String hohID) {
+        this.hohID = hohID;
+    }
+
+    public Integer getRltn_head() {
+        return rltn_head;
+    }
+
+    public void setRltn_head(Integer rltn_head) {
+        this.rltn_head = rltn_head;
+    }
+
+    public Integer getReason() {
+        return reason;
+    }
+
+    public void setReason(Integer reason) {
+        this.reason = reason;
+    }
+
+    public String getReason_oth() {
+        return reason_oth;
+    }
+    @Bindable
+    public void setReason_oth(String reason_oth) {
+        this.reason_oth = reason_oth;
+    }
+    @Bindable
+    public Integer getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(Integer origin) {
+        this.origin = origin;
+    }
+
+    @Bindable
+    public Integer getStartType() {
+        return startType;
+    }
+
+    public void setStartType(Integer startType) {
+        this.startType = startType;
+    }
+
     protected Individual(Parcel in) {
         this.uuid = in.readString();
         this.extId = in.readString();
@@ -393,6 +553,15 @@ public class Individual extends BaseObservable implements Parcelable {
         this.other = in.readInt();
         this.mother = in.readInt();
         this.father = in.readInt();
+        this.endType = in.readInt();
+        this.startDate = (java.util.Date) in.readSerializable();
+        this.endDate = (java.util.Date) in.readSerializable();
+        this.compno = in.readString();
+        this.village = in.readString();
+        this.residency = in.readString();
+        this.socialgroup = in.readString();
+        this.hohID = in.readString();
+
     }
 
     public static final Creator<Individual> CREATOR = new Creator<Individual>() {
@@ -432,6 +601,15 @@ public class Individual extends BaseObservable implements Parcelable {
         dest.writeInt(this.other);
         dest.writeInt(this.mother);
         dest.writeInt(this.father);
+        dest.writeInt(this.endType);
+        dest.writeSerializable(this.startDate);
+        dest.writeSerializable(this.endDate);
+        dest.writeString(this.compno);
+        dest.writeString(this.village);
+        dest.writeString(this.residency);
+        dest.writeString(this.socialgroup);
+        dest.writeString(this.hohID);
+
     }
 
     //SPINNERS ENTITY DOB ASPECT
@@ -557,5 +735,64 @@ public class Individual extends BaseObservable implements Parcelable {
 
     }
 
+    public void setRltn_head(AdapterView<?> parent, View view, int position, long id) {
 
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            rltn_head = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            rltn_head = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    public void setReason(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            reason = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            reason = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+
+
+    }
+
+    public void setOrigin(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            origin = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            origin = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+
+    }
+
+    private void patternSkipper(View view) {
+
+        if (view != null) {
+
+            if (reason == null || reason != 77)
+                setReason_oth(null);
+        }
+
+    }
 }
+

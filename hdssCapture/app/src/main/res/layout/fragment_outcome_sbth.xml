@@ -7,7 +7,7 @@
 
         <variable
             name="death"
-            type="org.openhds.hdsscapture.entity.Death" />
+            type="org.openhds.hdsscapture.entity.Vpm" />
 
     </data>
 
@@ -203,7 +203,7 @@
             android:layout_height="wrap_content"
             android:text="@string/actual_dob"
             tools:ignore="DuplicateSpeakableTextCheck"
-            android:background="@drawable/btnd_rone_dgbevel"
+            android:background="@drawable/btnd_save"
             android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
@@ -231,7 +231,7 @@
             android:layout_height="wrap_content"
             android:text="@string/dod"
             tools:ignore="DuplicateSpeakableTextCheck"
-            android:background="@drawable/btnd_rone_dgbevel"
+            android:background="@drawable/btnd_save"
             android:textColor="@android:color/background_light"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 

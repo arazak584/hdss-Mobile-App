@@ -10,6 +10,7 @@ import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -24,7 +25,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@Entity(tableName = "listing")
+@Entity(tableName = "listing",
+        indices = {@Index(value = {"compextId","compno","location_uuid","fw_uuid","complete"}, unique = false)})
 public class Listing extends BaseObservable {
 
     @SerializedName("compextId")
@@ -56,6 +58,21 @@ public class Listing extends BaseObservable {
     @Expose
     @ColumnInfo(name = "status")
     public Integer status;
+
+    @SerializedName("longitude")
+    @Expose
+    @ColumnInfo(name = "longitude")
+    public String longitude;
+
+    @SerializedName("latitude")
+    @Expose
+    @ColumnInfo(name = "latitude")
+    public String latitude;
+
+    @SerializedName("accuracy")
+    @Expose
+    @ColumnInfo(name = "accuracy")
+    public String accuracy;
 
     @SerializedName("complete")
     @Expose
@@ -175,6 +192,37 @@ public class Listing extends BaseObservable {
         return compextId;
     }
 
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getAccuracy() {
+        return accuracy;
+    }
+
+    public void setAccuracy(String accuracy) {
+        this.accuracy = accuracy;
+    }
+
+    public String getVill_extId() {
+        return vill_extId;
+    }
+
+    public void setVill_extId(String vill_extId) {
+        this.vill_extId = vill_extId;
+    }
 
     //SPINNERS ENTITY COMPOUND STATUS
     public void setStatus(AdapterView<?> parent, View view, int position, long id) {

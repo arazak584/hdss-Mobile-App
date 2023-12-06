@@ -30,6 +30,8 @@ import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
+import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
+import org.openhds.hdsscapture.Viewmodel.VpmViewModel;
 import org.openhds.hdsscapture.databinding.FragmentOutcomeBinding;
 import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Death;
@@ -43,6 +45,9 @@ import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.Vpm;
+import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
@@ -66,21 +71,17 @@ public class Pregnancyoutcome1Fragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
-    private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private static final String PREGNANCY_ID = "PREGNANCY_ID";
-    private static final String CASE_ID = "CASE_ID";
-    private static final String EVENT_ID = "EVENT_ID";
     private final String TAG = "OUTCOME.TAG";
 
     private Locations locations;
-    private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentOutcomeBinding binding;
-    private EventForm eventForm;
     private Pregnancyoutcome pregnancyoutcome;
     private ProgressDialog progressDialog;
+    private EventForm eventForm;
 
     public Pregnancyoutcome1Fragment() {
         // Required empty public constructor
@@ -91,21 +92,17 @@ public class Pregnancyoutcome1Fragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param locations Parameter 1.
-     * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
-     * @param eventForm Parameter 7.
      * @return A new instance of fragment PregnancyoutcomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static Pregnancyoutcome1Fragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, EventForm eventForm) {
+    public static Pregnancyoutcome1Fragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
         Pregnancyoutcome1Fragment fragment = new Pregnancyoutcome1Fragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
-        args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
     }
@@ -115,10 +112,8 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
 
@@ -130,7 +125,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         binding.setPregoutcome(pregnancyoutcome);
 
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(individual.firstName + " " + individual.lastName);
+        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
 
         final TextView title = binding.getRoot().findViewById(R.id.preg);
         title.setText("Pregnancy Outcome 2");
@@ -166,7 +161,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 }, 500);
 
                 // Show the dialog fragment
-                FatherOutcomeDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                FatherOutcomeDialogFragment.newInstance(individual, locations,socialgroup)
                         .show(getChildFragmentManager(), "FatherOutcomeDialogFragment");
             }
         });
@@ -274,13 +269,12 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
         PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         OutcomeViewModel outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
-        DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
-        PregnancyoutcomeViewModel pviewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
+        VpmViewModel vpmViewModel = new ViewModelProvider(this).get(VpmViewModel.class);
         IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
         ResidencyViewModel residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         try {
-            Pregnancyoutcome data = viewModel.finds(individual.uuid);
+            Pregnancyoutcome data = viewModel.finds(HouseMembersFragment.selectedIndividual.uuid);
             if (data != null) {
                 binding.setPregoutcome(data);
                 binding.extras.setVisibility(View.GONE);
@@ -290,7 +284,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             } else {
                 data = new Pregnancyoutcome();
 
-                Pregnancy dts = pregnancyViewModel.out2(individual.uuid);
+                Pregnancy dts = pregnancyViewModel.out2(HouseMembersFragment.selectedIndividual.uuid);
                 if (dts != null){
 
                     data.outcomeDate = dts.outcome_date;
@@ -300,6 +294,11 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     data.who_anc = dts.attend_you;
                     data.num_anc = dts.anc_visits;
                     data.pregnancy_uuid = dts.uuid;
+                }
+                VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
+                Visit dta = visitViewModel.find(socialgroup.uuid);
+                if (dta != null){
+                    data.visit_uuid = dta.uuid;
                 }
                 if(data.pregnancy_uuid ==null){
                     Toast.makeText(getContext(), "Kindly Pick the Pregnancy Before you pick the Outcome", Toast.LENGTH_LONG).show();
@@ -312,8 +311,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
-                data.mother_uuid = individual.getUuid();
-                data.visit_uuid = socialgroup.getVisit_uuid();
+                data.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
 //                data.complete = 1;
                 data.extra = 2;
                 data.id = 2;
@@ -343,7 +341,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         }
 
         try {
-            Pregnancyoutcome datas = pviewModel.findpreg(individual.uuid);
+            Pregnancyoutcome datas = viewModel.findpreg(HouseMembersFragment.selectedIndividual.uuid);
             if (datas != null) {
                 binding.setPreg(datas);
 
@@ -354,7 +352,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
 
         try {
-            final String child_id = individual.uuid + AppConstants.CHILD5 + + eventForm.event_name_id + roundData.roundNumber;
+            final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD5 + 0 + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 data.preg_uuid = binding.getPregoutcome().getUuid();
@@ -371,7 +369,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 if (binding.getPregoutcome1().extId == null) {
                     final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
                     int sequenceNumber = 1;
-                    String id = locations.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
+                    String id = ClusterFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
                     while (true) {
                         try {
                             if (individualViewModels.findAll(id) == null) break;
@@ -381,7 +379,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                             e.printStackTrace();
                         } // check if ID already exists in ViewModel
                         sequenceNumber++; // increment sequence number if ID exists
-                        id = locations.compextId + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
+                        id = ClusterFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
                     }
                     binding.getPregoutcome1().extId = id; // set the generated ID to the extId property of the Individual object
                 }
@@ -398,13 +396,13 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
                 data.individual_uuid = uuidString;
                 data.childuuid = uuidString;
-                //data.mother_uuid = individual.uuid;
+                //data.mother_uuid = HouseMembersFragment.selectedIndividual.uuid;
                 data.residency_uuid = rsi;
 
-                data.mother_uuid = individual.getUuid();
+                data.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.child_idx = AppConstants.CHILD5;
 
-                data.vis_number = eventForm.event_name_id;
+                data.vis_number = 0;
 
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber();
@@ -419,7 +417,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 if (binding.getPregoutcome1().extId == null) {
                     final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
                     int sequenceNumber = 1;
-                    String id = locations.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
+                    String id = ClusterFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
                     while (true) {
                         try {
                             if (individualViewModels.findAll(id) == null) break;
@@ -429,7 +427,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                             e.printStackTrace();
                         } // check if ID already exists in ViewModel
                         sequenceNumber++; // increment sequence number if ID exists
-                        id = locations.compextId + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
+                        id = ClusterFragment.selectedLocation.compextId  + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
                     }
                     binding.getPregoutcome1().extId = id; // set the generated ID to the extId property of the Individual object
                 }
@@ -441,7 +439,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         }
 
         try {
-            final String child_id = individual.uuid + AppConstants.CHILD6 + eventForm.event_name_id + roundData.roundNumber;
+            final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD6 + 0 + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 data.preg_uuid = binding.getPregoutcome().getUuid();
@@ -461,7 +459,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     int sequenceNumber = Integer.parseInt(pregoutcome1Id.substring(pregoutcome1Id.length() - 3));
                     sequenceNumber += 1; // Increment the sequence number by 2
 
-                    String id = locations.compextId + String.format("%03d", sequenceNumber);
+                    String id = ClusterFragment.selectedLocation.compextId  + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
                             if (individualViewModels.findAll(id) == null) break;
@@ -471,7 +469,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                             e.printStackTrace();
                         }
                         sequenceNumber += 1;
-                        id = locations.compextId + String.format("%03d", sequenceNumber);
+                        id = ClusterFragment.selectedLocation.compextId  + String.format("%03d", sequenceNumber);
                     }
                     binding.getPregoutcome2().extId = id;
                 }
@@ -488,13 +486,13 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
                 data.individual_uuid = uuidString;
                 data.childuuid = uuidString;
-                //data.mother_uuid = individual.uuid;
+                //data.mother_uuid = HouseMembersFragment.selectedIndividual.uuid;
                 data.residency_uuid = rsi;
 
-                data.mother_uuid = individual.getUuid();
+                data.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.child_idx = AppConstants.CHILD6;
 
-                data.vis_number = eventForm.event_name_id;
+                data.vis_number = 0;
 
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber();
@@ -511,7 +509,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     int sequenceNumber = Integer.parseInt(pregoutcome1Id.substring(pregoutcome1Id.length() - 3));
                     sequenceNumber += 1; // Increment the sequence number by 2
 
-                    String id = locations.compextId + String.format("%03d", sequenceNumber);
+                    String id = ClusterFragment.selectedLocation.compextId  + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
                             if (individualViewModels.findAll(id) == null) break;
@@ -521,7 +519,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                             e.printStackTrace();
                         }
                         sequenceNumber += 1;
-                        id = locations.compextId + String.format("%03d", sequenceNumber);
+                        id = ClusterFragment.selectedLocation.compextId  + String.format("%03d", sequenceNumber);
                     }
                     binding.getPregoutcome2().extId = id;
                 }
@@ -533,7 +531,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         }
 
         try {
-            final String child_id = individual.uuid + AppConstants.CHILD7 + eventForm.event_name_id + roundData.roundNumber;
+            final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD7 + 0 + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 data.preg_uuid = binding.getPregoutcome().getUuid();
@@ -553,7 +551,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     int sequenceNumber = Integer.parseInt(pregoutcome1Id.substring(pregoutcome1Id.length() - 3));
                     sequenceNumber += 2; // Increment the sequence number by 2
 
-                    String id = locations.compextId + String.format("%03d", sequenceNumber);
+                    String id = ClusterFragment.selectedLocation.compextId  + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
                             if (individualViewModels.findAll(id) == null) break;
@@ -563,7 +561,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                             e.printStackTrace();
                         }
                         sequenceNumber += 2;
-                        id = locations.compextId + String.format("%03d", sequenceNumber);
+                        id = ClusterFragment.selectedLocation.compextId  + String.format("%03d", sequenceNumber);
                     }
                     binding.getPregoutcome3().extId = id;
                 }
@@ -580,13 +578,13 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
                 data.individual_uuid = uuidString;
                 data.childuuid = uuidString;
-                //data.mother_uuid = individual.uuid;
+                //data.mother_uuid = HouseMembersFragment.selectedIndividual.uuid;
                 data.residency_uuid = rsi;
 
-                data.mother_uuid = individual.getUuid();
+                data.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.child_idx = AppConstants.CHILD7;
 
-                data.vis_number = eventForm.event_name_id;
+                data.vis_number = 0;
 
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber();
@@ -604,7 +602,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     int sequenceNumber = Integer.parseInt(pregoutcome1Id.substring(pregoutcome1Id.length() - 3));
                     sequenceNumber += 2; // Increment the sequence number by 2
 
-                    String id = locations.compextId + String.format("%03d", sequenceNumber);
+                    String id = ClusterFragment.selectedLocation.compextId  + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
                             if (individualViewModels.findAll(id) == null) break;
@@ -614,7 +612,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                             e.printStackTrace();
                         }
                         sequenceNumber += 2;
-                        id = locations.compextId + String.format("%03d", sequenceNumber);
+                        id = ClusterFragment.selectedLocation.compextId  + String.format("%03d", sequenceNumber);
                     }
                     binding.getPregoutcome3().extId = id;
                 }
@@ -626,7 +624,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         }
 
         try {
-            final String child_id = individual.uuid + AppConstants.CHILD8 + eventForm.event_name_id + roundData.roundNumber;
+            final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD8 + 0 + roundData.roundNumber;
             Outcome data = outcomeViewModel.find(child_id);
             if (data != null) {
                 data.preg_uuid = binding.getPregoutcome().getUuid();
@@ -646,7 +644,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     int sequenceNumber = Integer.parseInt(pregoutcome1Id.substring(pregoutcome1Id.length() - 3));
                     sequenceNumber += 3; // Increment the sequence number by 2
 
-                    String id = locations.compextId + String.format("%03d", sequenceNumber);
+                    String id = ClusterFragment.selectedLocation.compextId  + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
                             if (individualViewModels.findAll(id) == null) break;
@@ -656,7 +654,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                             e.printStackTrace();
                         }
                         sequenceNumber += 3;
-                        id = locations.compextId + String.format("%03d", sequenceNumber);
+                        id = ClusterFragment.selectedLocation.compextId  + String.format("%03d", sequenceNumber);
                     }
                     binding.getPregoutcome4().extId = id;
                 }
@@ -673,13 +671,13 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
                 data.individual_uuid = uuidString;
                 data.childuuid = uuidString;
-                //data.mother_uuid = individual.uuid;
+                //data.mother_uuid = HouseMembersFragment.selectedIndividual.uuid;
                 data.residency_uuid = rsi;
 
-                data.mother_uuid = individual.getUuid();
+                data.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.child_idx = AppConstants.CHILD8;
 
-                data.vis_number = eventForm.event_name_id;
+                data.vis_number = 0;
 
                 data.child_screen = data.mother_uuid + data.child_idx;
                 data.uuid = data.child_screen+data.vis_number+ roundData.getRoundNumber() ;
@@ -697,7 +695,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                     int sequenceNumber = Integer.parseInt(pregoutcome1Id.substring(pregoutcome1Id.length() - 3));
                     sequenceNumber += 3; // Increment the sequence number by 2
 
-                    String id = locations.compextId + String.format("%03d", sequenceNumber);
+                    String id = ClusterFragment.selectedLocation.compextId  + String.format("%03d", sequenceNumber);
                     while (true) {
                         try {
                             if (individualViewModels.findAll(id) == null) break;
@@ -707,7 +705,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                             e.printStackTrace();
                         }
                         sequenceNumber += 3;
-                        id = locations.compextId + String.format("%03d", sequenceNumber);
+                        id = ClusterFragment.selectedLocation.compextId  + String.format("%03d", sequenceNumber);
                     }
                     binding.getPregoutcome4().extId = id;
                 }
@@ -719,11 +717,17 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         }
 
         try {
-            Death data = deathViewModel.find(individual.uuid);
-            if (data != null && data.edit!=null) {
+            Vpm data = vpmViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+            if (data != null) {
                 binding.setDeath(data);
             } else {
-                data = new Death();
+                data = new Vpm();
+
+                VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
+                Visit dts = visitViewModel.find(socialgroup.uuid);
+                if (dts != null){
+                    data.visit_uuid = dts.uuid;
+                }
 
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
@@ -733,18 +737,16 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.firstName = "Still";
                 data.lastName = "Birth";
                 data.gender = 3;
-                data.compno = locations.getCompno();
-                data.extId = "ST-"+ individual.getExtId();
-                data.compname = locations.getLocationName();
-                data.individual_uuid = individual.getUuid();
+                data.compno = ClusterFragment.selectedLocation.getCompno();
+                data.extId = "ST-"+ HouseMembersFragment.selectedIndividual.getExtId();
+                data.compname = ClusterFragment.selectedLocation.getLocationName();
+                data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.villname = level6Data.getName();
                 data.villcode = level6Data.getExtId();
-                data.visit_uuid = socialgroup.getVisit_uuid();
-                data.respondent = individual.getFirstName() +" "+ individual.getLastName();
-                data.househead = individual.getFirstName() +" "+ individual.getLastName();
+                data.respondent = HouseMembersFragment.selectedIndividual.getFirstName() +" "+ HouseMembersFragment.selectedIndividual.getLastName();
+                data.househead = HouseMembersFragment.selectedIndividual.getFirstName() +" "+ HouseMembersFragment.selectedIndividual.getLastName();
                 data.deathCause = 77;
-                data.vpmcomplete=1;
-                data.edit=1;
+                data.complete=1;
 
                 binding.setDeath(data);
             }
@@ -814,12 +816,12 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
-            save(true, true, viewModel, outcomeViewModel,deathViewModel,individualViewModel,residencyViewModel);
+            save(true, true, viewModel, outcomeViewModel,vpmViewModel,individualViewModel,residencyViewModel);
         });
 
         binding.buttonClose.setOnClickListener(v -> {
 
-            save(false, true, viewModel, outcomeViewModel,deathViewModel,individualViewModel,residencyViewModel);
+            save(false, true, viewModel, outcomeViewModel,vpmViewModel,individualViewModel,residencyViewModel);
         });
 
         binding.setEventname(eventForm.event_name);
@@ -828,7 +830,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         return view;
     }
 
-    private void save(boolean save, boolean close, PregnancyoutcomeViewModel viewModel, OutcomeViewModel outcomeViewModel,DeathViewModel deathViewModel,IndividualViewModel individualViewModel,ResidencyViewModel residencyViewModel) {
+    private void save(boolean save, boolean close, PregnancyoutcomeViewModel viewModel, OutcomeViewModel outcomeViewModel,VpmViewModel vpmViewModel,IndividualViewModel individualViewModel,ResidencyViewModel residencyViewModel) {
 
         if (save) {
             Pregnancyoutcome finalData = binding.getPregoutcome();
@@ -1100,7 +1102,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                         res.endType= 1;
                         res.startType= 2;
                         res.insertDate= prg.insertDate;
-                        res.location_uuid= locations.uuid;
+                        res.location_uuid= ClusterFragment.selectedLocation.getUuid() ;
                         res.socialgroup_uuid = socialgroup.uuid;
                         res.fw_uuid= finalData.fw_uuid;
                         res.rltn_head = prg.rltn_head;
@@ -1201,7 +1203,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                         res.endType= 1;
                         res.startType= 2;
                         res.insertDate= prg.insertDate;
-                        res.location_uuid= locations.uuid;
+                        res.location_uuid= ClusterFragment.selectedLocation.getUuid() ;
                         res.socialgroup_uuid = socialgroup.uuid;
                         res.fw_uuid= finalData.fw_uuid;
                         res.rltn_head = prg.rltn_head;
@@ -1303,7 +1305,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                         res.endType= 1;
                         res.startType= 2;
                         res.insertDate= prg.insertDate;
-                        res.location_uuid= locations.uuid;
+                        res.location_uuid= ClusterFragment.selectedLocation.getUuid() ;
                         res.socialgroup_uuid = socialgroup.uuid;
                         res.fw_uuid= finalData.fw_uuid;
                         res.rltn_head = prg.rltn_head;
@@ -1405,7 +1407,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                         res.endType= 1;
                         res.startType= 2;
                         res.insertDate= prg.insertDate;
-                        res.location_uuid= locations.uuid;
+                        res.location_uuid= ClusterFragment.selectedLocation.getUuid();
                         res.socialgroup_uuid = socialgroup.uuid;
                         res.fw_uuid= finalData.fw_uuid;
                         res.rltn_head = prg.rltn_head;
@@ -1580,9 +1582,9 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.vpm.OUTCOMELAYOUT, validateOnComplete, false);
 
-                    final Death vpm = binding.getDeath();
-                    vpm.vpmcomplete = 1;
-                    deathViewModel.add(vpm);
+                    final Vpm vpm = binding.getDeath();
+                    vpm.complete = 1;
+                    vpmViewModel.add(vpm);
 
                 }
 
@@ -1603,12 +1605,27 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             }
             finalData.complete=1;
             viewModel.add(finalData);
+            IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
+            try {
+                Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                if (data != null) {
+                    IndividualVisited visited = new IndividualVisited();
+                    visited.uuid = finalData.mother_uuid;
+                    visited.complete = 2;
+                    iview.visited(visited);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    HouseMembersFragment.newInstance(locations, socialgroup,individual)).commit();
         }
     }
 

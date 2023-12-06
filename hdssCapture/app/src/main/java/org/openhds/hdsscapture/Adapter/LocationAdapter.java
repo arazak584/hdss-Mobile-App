@@ -1,21 +1,33 @@
 package org.openhds.hdsscapture.Adapter;
 
+import static org.openhds.hdsscapture.fragment.ClusterFragment.selectedLocation;
+
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.entity.Hierarchy;
+import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.fragment.BlankFragment;
 import org.openhds.hdsscapture.fragment.ClusterFragment;
 import org.openhds.hdsscapture.fragment.LocationFragment;
 
@@ -26,20 +38,24 @@ import java.util.concurrent.ExecutionException;
 
 public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHolder> {
 
-    ClusterFragment activity;
+    //ClusterFragment activity;
+    private final LocationClickListener locationClickListener;
     LayoutInflater inflater;
     private final List<Locations> locationsList;
     private final Hierarchy level6Data;
+    private Socialgroup socialgroup;
+    private final Fragment fragment;
 
-    public LocationAdapter(ClusterFragment activity, Hierarchy level6Data) {
-        this.activity = activity;
-        this.level6Data = level6Data;
-        locationsList = new ArrayList<>();
-        inflater = LayoutInflater.from(activity.requireContext());
-
-
+    public interface LocationClickListener {
+        void onLocationClick(Locations selectedLocation);
     }
 
+    public LocationAdapter(Fragment fragment, Hierarchy level6Data, LocationClickListener listener) {
+        this.fragment = fragment;
+        this.level6Data = level6Data;
+        this.locationClickListener = listener;
+        locationsList = new ArrayList<>();
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView locationname, compno, gps, latitude;
@@ -51,7 +67,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             this.locationname = view.findViewById(R.id.Location_name);
             this.compno = view.findViewById(R.id.location_compno);
             this.gps = view.findViewById(R.id.longitude);
-            //this.latitude = view.findViewById(R.id.latitude);
             this.linearLayout = view.findViewById(R.id.searchedItem);
         }
     }
@@ -62,86 +77,91 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View listItem = layoutInflater.inflate(R.layout.location_view_items, parent, false);
         ViewHolder viewHolder = new ViewHolder(listItem);
-
-
         return viewHolder;
-
-
     }
-
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         final Locations locations = locationsList.get(position);
+        //Log.d("LocationAdapter", "Binding location: " + locations.getCompno());
 
         holder.locationname.setText(locations.getLocationName());
         holder.compno.setText(locations.getCompno());
-        holder.gps.setText(locations.getLatitude()  + "," + locations.getLongitude());
-        //holder.latitude.setText(locations.getLatitude());
+        holder.gps.setText(locations.getLatitude() + "," + locations.getLongitude());
 
         Integer st = locations.complete;
         if (st != null) {
-            holder.compno.setTextColor(Color.parseColor("#32CD32"));
-            holder.locationname.setTextColor(Color.parseColor("#32CD32"));
-//            holder.longitude.setTextColor(Color.GREEN);
-//            holder.latitude.setTextColor(Color.GREEN);
+            holder.compno.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
+            holder.locationname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
         } else {
-            holder.compno.setTextColor(Color.parseColor("#FF4500"));
-            holder.locationname.setTextColor(Color.parseColor("#FF4500"));
-//            holder.longitude.setTextColor(Color.parseColor("#FF4500"));
-//            holder.latitude.setTextColor(Color.parseColor("#FF4500"));
+            holder.compno.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+            holder.locationname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
         }
 
         holder.gps.setTextIsSelectable(true);
-        //holder.latitude.setTextIsSelectable(true);
 
         holder.linearLayout.setOnClickListener(v -> {
-            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    LocationFragment.newInstance(level6Data, locations)).commit();
+            if (locationClickListener != null) {
+                locationClickListener.onLocationClick(locations);
+                //Log.d("LocationAdapter", "Location clicked: " + locations.getCompno());
+            }
         });
 
     }
 
     @Override
     public int getItemCount() {
-
         return locationsList.size();
     }
 
-    @SuppressLint("SuspiciousIndentation")
     public void filter(String charText, LocationViewModel locationViewModel) {
         locationsList.clear();
         if (charText != null && charText.length() > 2) {
             charText = charText.toLowerCase(Locale.getDefault());
-
             try {
-                List<Locations> list = locationViewModel.findBySearch(level6Data.getUuid(),charText);
-
+                List<Locations> list = locationViewModel.findBySearch(level6Data.getUuid(), charText);
                 if (list != null) {
                     locationsList.addAll(list);
                 }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
         } else {
-
-            if(level6Data != null)
-            try {
-                List<Locations> list = locationViewModel.findLocationsOfCluster(level6Data.getUuid());
-
-                if (list != null) {
-                    locationsList.addAll(list);
+            if (level6Data != null)
+                try {
+                    List<Locations> list = locationViewModel.findLocationsOfCluster(level6Data.getUuid());
+                    if (list != null) {
+                        locationsList.addAll(list);
+                    }
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
                 }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
         }
+
         notifyDataSetChanged();
     }
+
+//    public void refresh(LocationViewModel locationViewModel) {
+//        locationsList.clear();
+//        if (level6Data != null)
+//            try {
+//                List<Locations> list = locationViewModel.findLocationsOfCluster(level6Data.getUuid());
+//
+//                if (list != null) {
+//                    locationsList.addAll(list);
+//                }
+//
+//                if (list.isEmpty()) {
+//                    Toast.makeText(fragment.requireContext(), "No Compound Found", Toast.LENGTH_SHORT).show();
+//                }
+//
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        notifyDataSetChanged();
+//    }
+
 
 }

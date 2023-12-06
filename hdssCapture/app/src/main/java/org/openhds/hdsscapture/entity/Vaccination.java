@@ -9,6 +9,7 @@ import androidx.databinding.BaseObservable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -24,7 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-@Entity(tableName = "vaccination")
+@Entity(tableName = "vaccination",
+indices = {@Index(value = {"individual_uuid", "location_uuid", "socialgroup_uuid","fw_uuid","complete"}, unique = false)})
 public class Vaccination extends BaseObservable {
 
     @SerializedName("individual_uuid")
@@ -36,6 +38,9 @@ public class Vaccination extends BaseObservable {
 
     @Expose
     public String uuid;
+
+    @Expose
+    public String visit_uuid;
 
     @Expose
     public Date insertDate;

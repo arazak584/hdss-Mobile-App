@@ -38,7 +38,7 @@ public class ListingRepository {
 
     public Listing find(String id) throws ExecutionException, InterruptedException {
 
-        Callable<Listing> callable = () -> dao.retrieve(id.toUpperCase());
+        Callable<Listing> callable = () -> dao.retrieve(id);
 
         Future<Listing> future = Executors.newSingleThreadExecutor().submit(callable);
 

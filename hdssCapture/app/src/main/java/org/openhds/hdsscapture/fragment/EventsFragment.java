@@ -123,7 +123,7 @@ public class EventsFragment extends Fragment {
         binding.addMenuFab.setOnClickListener(view -> {
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseMembersFragment.newInstance(locations, socialgroup)).commit();
+                    HouseMembersFragment.newInstance(locations, socialgroup, individual)).commit();
         });
 
         ConfigViewModel viewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
@@ -145,103 +145,104 @@ public class EventsFragment extends Fragment {
 
         int ageyrs = 0;
 
-        try {
-            Date dobdif = f.parse(individual.getDob());
-            System.out.println("dateob: " + dobdif);
-            long difference = Math.abs(dobdif.getTime() - new Date().getTime());
-            ageyrs = (int) (difference / (1000 * 60 * 60 * 24 * 365.25));
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if (individual != null) {
+            try {
+                Date dobdif = f.parse(individual.getDob());
+                System.out.println("dateob: " + dobdif);
+                long difference = Math.abs(dobdif.getTime() - new Date().getTime());
+                ageyrs = (int) (difference / (1000 * 60 * 60 * 24 * 365.25));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
-        System.out.println("dob: " + individual.dob);
-        System.out.println("age: " + individual.age);
-        System.out.println("ageyrs: " + ageyrs);
-        System.out.println("HOH-YRS: " + yrss);
-        System.out.println("EARLIEST-DATE: " + dt);
-
-
-        final int yrs = individual.age + (int) ageyrs;
-
-        final String message =
-                (individual.gender==2 && yrs>=12? "Adult Female" : ((individual.gender == 1 && yrs>=12? "Adult Male" : "")))
-                        + (yrs >=2 && yrs<12 ? "Child" : (yrs <2 ? "Infant":""))
-                        + " --Complete All Events" ;
-
-
-        //binding.textViewScreenId.setText(individual.extId);
-        binding.textViewLastEventInfo.setText(message);
-
+//        System.out.println("dob: " + individual.dob);
+//        System.out.println("age: " + individual.age);
+//        System.out.println("ageyrs: " + ageyrs);
+//        System.out.println("HOH-YRS: " + yrss);
+//        System.out.println("EARLIEST-DATE: " + dt);
         List<EventForm> eventForms = new ArrayList<>();
+        if (individual != null) {
+            final int yrs = individual.age + (int) ageyrs;
+
+            final String message =
+                    (individual.gender == 2 && yrs >= 12 ? "Adult Female" : ((individual.gender == 1 && yrs >= 12 ? "Adult Male" : "")))
+                            + (yrs >= 2 && yrs < 12 ? "Child" : (yrs < 2 ? "Infant" : ""))
+                            + " --Complete All Events";
+
+
+            //binding.textViewScreenId.setText(individual.extId);
+            binding.textViewLastEventInfo.setText(message);
 
 
 
-        if (individual.extId != null && individual.gender != null) {
+
+            if (individual.extId != null && individual.gender != null) {
 
 
-            if (individual.dob != null) {
+                if (individual.dob != null) {
 
-                            //Adult Male
-                            if (individual.gender==1 && yrs>=fage) {
-                                showDemographicForm(eventForms);
-                                showResidencyForm(eventForms);
-                                showAmendment(eventForms);
-                                showDup(eventForms);
+                    //Adult Male
+                    if (individual.gender == 1 && yrs >= fage) {
+                        showDemographicForm(eventForms);
+                        showResidencyForm(eventForms);
+                        showAmendment(eventForms);
+                        showDup(eventForms);
 
-                            }
+                    }
 
-                            //Adult Female 56 and above
-                            if (individual.gender==2 && yrs>55) {
-                                showDemographicForm(eventForms);
-                                showRelationshipForm(eventForms);
-                                showResidencyForm(eventForms);
-                                showAmendment(eventForms);
-                                showDup(eventForms);
+                    //Adult Female 56 and above
+                    if (individual.gender == 2 && yrs > 55) {
+                        showDemographicForm(eventForms);
+                        showRelationshipForm(eventForms);
+                        showResidencyForm(eventForms);
+                        showAmendment(eventForms);
+                        showDup(eventForms);
 
-                            }
+                    }
 
-                            //Adult Female
-                            if (individual.gender==2 && yrs>=mage && yrs<=55) {
-                                showDemographicForm(eventForms);
-                                showRelationshipForm(eventForms);
-                                showPregnancyForm(eventForms);
-                                showPregnancyFormExtra(eventForms);
-                                showOutcomeForm(eventForms);
-                                showOutcome1Form(eventForms);
-                                showResidencyForm(eventForms);
-                                showAmendment(eventForms);
-                                showDup(eventForms);
+                    //Adult Female
+                    if (individual.gender == 2 && yrs >= mage && yrs <= 55) {
+                        showDemographicForm(eventForms);
+                        showRelationshipForm(eventForms);
+                        showPregnancyForm(eventForms);
+                        showPregnancyFormExtra(eventForms);
+                        showOutcomeForm(eventForms);
+                        showOutcome1Form(eventForms);
+                        showResidencyForm(eventForms);
+                        showAmendment(eventForms);
+                        showDup(eventForms);
 
-                            }
+                    }
 
-                            //Child
-                            if (yrs <=11) {
+                    //Child
+                    if (yrs <= 11) {
 
-                                showDemographicForm(eventForms);
-                                showResidencyForm(eventForms);
-                                showAmendment(eventForms);
-                                showDup(eventForms);
+                        showDemographicForm(eventForms);
+                        showResidencyForm(eventForms);
+                        showAmendment(eventForms);
+                        showDup(eventForms);
 
-                            }
+                    }
 
-                            //Adult
-                            if (yrs >= yrss) {
-                                showSocialgroupForm(eventForms);
-                                showSocioForm(eventForms);
-                            }
+                    //Adult
+                    if (yrs >= yrss) {
+                        showSocialgroupForm(eventForms);
+                        showSocioForm(eventForms);
+                    }
 
-                            //Vaccination
-                            if (yrs < 5) {
-                                showVaccination(eventForms);
-                            }
+                    //Vaccination
+                    if (yrs < 5) {
+                        showVaccination(eventForms);
+                    }
 
-                            }
+                }
+
+
+            }
 
 
         }
-
-
-
 
         final View view = binding.getRoot();
 

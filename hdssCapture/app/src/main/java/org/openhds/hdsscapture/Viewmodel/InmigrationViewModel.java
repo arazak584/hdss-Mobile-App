@@ -26,8 +26,8 @@ public class InmigrationViewModel extends AndroidViewModel {
         return inmigrationRepository.findToSync();
     }
 
-    public Inmigration find(String id) throws ExecutionException, InterruptedException {
-        return inmigrationRepository.find(id);
+    public Inmigration find(String id, String locid) throws ExecutionException, InterruptedException {
+        return inmigrationRepository.find(id,locid);
     }
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
@@ -36,5 +36,5 @@ public class InmigrationViewModel extends AndroidViewModel {
 
     public void add(Inmigration data){ inmigrationRepository.create(data);}
 
-    public void add(Inmigration... data){     inmigrationRepository.create(data);  }
+    public void add(Inmigration... data){inmigrationRepository.create(data); }
 }

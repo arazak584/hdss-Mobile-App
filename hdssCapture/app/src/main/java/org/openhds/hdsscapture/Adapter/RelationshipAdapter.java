@@ -18,6 +18,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,6 @@ public class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapte
     LayoutInflater inflater;
     private final Locations locations;
     private final Socialgroup socialgroup;
-    private final Residency residency;
     private final List<Individual> individualList;
     public interface PartnerSelectionListener {
         void onPartnerSelected(String partnerId);
@@ -42,10 +42,9 @@ public class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapte
         this.listener = listener;
     }
 
-    public RelationshipAdapter(RelationshipDialogFragment activity, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public RelationshipAdapter(RelationshipDialogFragment activity, Locations locations, Socialgroup socialgroup) {
         this.activity = activity;
         this.locations = locations;
-        this.residency = residency;
         this.socialgroup = socialgroup;
         individualList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
@@ -124,9 +123,9 @@ public class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapte
             }
         } else {
 
-            if(locations != null)
+            if(ClusterFragment.selectedLocation != null)
                 try {
-                    List<Individual> list = individualViewModel.retrievePartner(locations.getCompextId());
+                    List<Individual> list = individualViewModel.retrievePartner(ClusterFragment.selectedLocation.getCompno());
 
                     if (list != null) {
                         individualList.addAll(list);

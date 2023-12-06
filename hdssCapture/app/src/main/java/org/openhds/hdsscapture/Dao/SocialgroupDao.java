@@ -10,6 +10,7 @@ import androidx.room.Update;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 
 import java.util.Date;
@@ -34,6 +35,9 @@ public interface SocialgroupDao {
     @Update(entity = Socialgroup.class)
     int update(SocialgroupAmendment s);
 
+    @Update(entity = Socialgroup.class)
+    int visited(HvisitAmendment s);
+
     @Query("DELETE FROM socialgroup")
     void deleteAll();
 
@@ -49,16 +53,27 @@ public interface SocialgroupDao {
     @Query("SELECT * FROM socialgroup where uuid=:id and groupName='UNK' ")
     Socialgroup find(String id);
 
+    @Query("SELECT * FROM socialgroup where uuid=:id and complete IS NULL")
+    Socialgroup visit(String id);
+
+    @Query("SELECT * FROM socialgroup as a INNER JOIN individual as b on a.individual_uuid=b.uuid " +
+            "where a.uuid=:id and endType=1 and b.firstName!='FAKE' and " +
+            "strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) <(SELECT hoh_age from config)")
+    Socialgroup minor(String id);
+
     @Query("SELECT * FROM socialgroup WHERE complete=1 AND groupName!='UNK'")
     List<Socialgroup> retrieveToSync();
 
     @Query("SELECT * FROM socialgroup WHERE insertDate BETWEEN :startDate AND :endDate")
     List<Socialgroup> retrieve(Date startDate, Date endDate);
 
-    @Query("SELECT a.*,compextId FROM socialgroup as a " + "INNER JOIN residency as b ON a.uuid = b.socialgroup_uuid" +
-            " INNER JOIN Locations as c on b.location_uuid=c.uuid " +
-            " WHERE b.endType=1 and c.compno=:id GROUP BY a.extId ")
+    @Query("SELECT a.*,compno FROM socialgroup as a INNER JOIN individual as b ON a.uuid = b.socialgroup" +
+            " WHERE b.endType=1 and compno=:id GROUP BY a.extId ")
     List<Socialgroup> retrieveBySocialgroup(String id);
+
+    @Query("SELECT a.*,compno FROM socialgroup as a INNER JOIN individual as b ON a.uuid = b.socialgroup" +
+            " WHERE b.endType=1 and compno=:id and groupName!='UNK' GROUP BY a.extId ")
+    List<Socialgroup> changehousehold(String id);
 
 
     @Query("SELECT COUNT(*) FROM socialgroup a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +

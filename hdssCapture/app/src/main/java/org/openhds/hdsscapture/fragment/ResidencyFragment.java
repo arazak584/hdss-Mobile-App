@@ -25,11 +25,13 @@ import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
+import org.openhds.hdsscapture.Viewmodel.VpmViewModel;
 import org.openhds.hdsscapture.databinding.FragmentMembershipBinding;
 import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Death;
@@ -43,6 +45,9 @@ import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.Vpm;
+import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
+import org.openhds.hdsscapture.entity.subentity.IndividualResidency;
 import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
@@ -69,19 +74,12 @@ public class ResidencyFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
-    private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String SOCIAL_ID = "SOCIAL_ID";
-    private static final String CASE_ID = "CASE_ID";
-    private static final String EVENT_ID = "EVENT_ID";
-    private final String TAG = "RESIDENCY.TAG";
 
     private Locations locations;
-    private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentMembershipBinding binding;
-    private EventForm eventForm;
-    private Visit visit;
     private ProgressDialog progressDialog;
 
 
@@ -94,21 +92,17 @@ public class ResidencyFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param locations Parameter 1.
-     * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
-     * @param eventForm Parameter 7.
      * @return A new instance of fragment ResidencyFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ResidencyFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup,EventForm eventForm) {
+    public static ResidencyFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
         ResidencyFragment fragment = new ResidencyFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
-        args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
     }
@@ -119,10 +113,8 @@ public class ResidencyFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
 
@@ -133,15 +125,8 @@ public class ResidencyFragment extends Fragment {
         binding = FragmentMembershipBinding.inflate(inflater, container, false);
 
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(individual.firstName + " " + individual.lastName);
+        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
 
-        //FETCH FIELDWORKER USER DETAIL
-        final Intent i = getActivity().getIntent();
-        final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
-
-        //FETCH VILLAGE
-        final Intent j = getActivity().getIntent();
-        final Hierarchy level6Data = j.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
 
         // Find the button view
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_change_hh);
@@ -171,372 +156,36 @@ public class ResidencyFragment extends Fragment {
             }
         });
 
-
-        //CHOOSING THE DATE
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            // We use a String here, but any type that can be put in a Bundle is supported
-            if (bundle.containsKey((DATE_BUNDLES.STARTDATE.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.STARTDATE.getBundleKey());
-                binding.editTextStartDate.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.ENDDATE.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.ENDDATE.getBundleKey());
-                binding.editTextEndDate.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.DEATHDATE.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.DEATHDATE.getBundleKey());
-                binding.dth.dthDeathDate.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.IMGDATE.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.IMGDATE.getBundleKey());
-                binding.img.imgDate.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.OMGDATE.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.OMGDATE.getBundleKey());
-                binding.omg.omgDate.setText(result);
-            }
-
-        });
-
-        binding.buttonResidencyStartDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.STARTDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.buttonResidencyEndDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.ENDDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.dth.buttonDeathDod.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.DEATHDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.img.buttonImgImgDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.IMGDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.omg.buttonOmgImgDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.OMGDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-        ResidencyViewModel resViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-        ResidencyViewModel esViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-        ResidencyViewModel eviewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-        DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
-        InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
-        OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
         try {
-            Residency dataRes = viewModel.findRes(individual.uuid, locations.uuid);
+            Residency dataRes = viewModel.findRes(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
 
             if (dataRes != null) {
                 binding.setResidency(dataRes);
-                dataRes.loc = locations.getUuid();
-                dataRes.dobs = individual.dob;
-                if(dataRes.img ==null){
-                    dataRes.img = 2;
-                }
-
                 binding.starttype.setEnabled(false);
                 binding.editTextStartDate.setEnabled(false);
                 binding.residencyImg.setEnabled(false);
                 binding.buttonResidencyStartDate.setEnabled(false);
-            } else {
-                dataRes = new Residency();
-                String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.replaceAll("-", "");
-                dataRes.fw_uuid = fieldworkerData.getFw_uuid();
-                dataRes.uuid = uuidString;
-                dataRes.individual_uuid = individual.getUuid();
-                dataRes.location_uuid = locations.getUuid();
-                dataRes.socialgroup_uuid = socialgroup.uuid;
-                dataRes.loc = locations.getUuid();
-                dataRes.complete = 1;
-                dataRes.dobs = individual.dob;
-                dataRes.age = individual.getAge();
-                dataRes.startType = 1;
-                dataRes.endType = 1;
-                binding.starttype.setEnabled(false);
-                binding.rltn.setVisibility(View.GONE);
-
-                Date currentDate = new Date(); // Get the current date and time
-                // Create a Calendar instance and set it to the current date and time
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(currentDate);
-                // Extract the hour, minute, and second components
-                int hh = cal.get(Calendar.HOUR_OF_DAY);
-                int mm = cal.get(Calendar.MINUTE);
-                int ss = cal.get(Calendar.SECOND);
-                // Format the components into a string with leading zeros
-                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
-                dataRes.sttime = timeString;
-
-                if (dataRes!=null){
-                    dataRes.img=1;
-                }else{dataRes.img=2;}
-
-                binding.setResidency(dataRes);
-                binding.getResidency().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-                binding.residencyImg.setEnabled(false);
-
-
+                if (dataRes.hohID == null) {
+                    dataRes.hohID = socialgroup.extId;
+                }else {dataRes.hohID = dataRes.hohID;}
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-        try {
-            Residency datas = resViewModel.finds(individual.uuid);
-            if (datas != null) {
-                binding.setRes(datas);
-                binding.starttype.setEnabled(false);
-                if (binding.getResidency().startDate == null) {
-                    Calendar calendar = Calendar.getInstance(Locale.US);
-                    calendar.setTime(datas.endDate);
-                    calendar.add(Calendar.DAY_OF_MONTH, 1);
-                    binding.getResidency().setStartDate(new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()));
-                    binding.getResidency().startType= 1;
-                }
-
-
-            }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        ConfigViewModel configViewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
-        List<Configsettings> configsettings = null;
-
-        try {
-            configsettings = configViewModel.findAll();
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date dt = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).earliestDate : null;
-            AppCompatEditText editText = binding.getRoot().findViewById(R.id.earliest);
-            if (dt != null) {
-                // Format the Date to a String in "yyyy-MM-dd" format
-                String formattedDate = dateFormat.format(dt);
-                //System.out.println("EARLIEST-DATE: " + formattedDate);
-                editText.setText(formattedDate);
-            } else {
-                System.out.println("EARLIEST-DATE: null");
-            }
-
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
-
-
-        try {
-            Residency datae = esViewModel.findEnd(individual.uuid, locations.uuid);
-            if (datae != null) {
-                binding.setOmgg(datae);
-                binding.getOmgg().loc = datae.getLocation_uuid();
-                binding.getOmgg().old_residency = datae.getUuid();
-                binding.getOmgg().startDate = datae.startDate;
-                binding.getResidency().old_residency = datae.getUuid();
-            }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
-        try {
-            Death datadth = deathViewModel.finds(individual.uuid);
-            if (datadth != null) {
-                binding.setDeath(datadth);
-            } else {
-                datadth = new Death();
-
-                String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.replaceAll("-", "");
-                datadth.fw_uuid = fieldworkerData.getFw_uuid();
-                datadth.uuid = uuidString;
-                datadth.dob = individual.dob;
-                datadth.firstName = individual.getFirstName();
-                datadth.lastName = individual.getLastName();
-                datadth.gender = individual.getGender();
-                datadth.compno = locations.getCompno();
-                datadth.extId = individual.getExtId();
-                datadth.compname = locations.getLocationName();
-                datadth.individual_uuid = individual.getUuid();
-                datadth.villname = level6Data.getName();
-                datadth.villcode = level6Data.getExtId();
-                datadth.visit_uuid = socialgroup.getVisit_uuid();
-                datadth.deathDate = binding.getResidency().endDate;
-                datadth.vpmcomplete=1;
-                datadth.complete = 1;
-                datadth.househead = socialgroup.getGroupName();
-
-                Date currentDate = new Date(); // Get the current date and time
-                // Create a Calendar instance and set it to the current date and time
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(currentDate);
-                // Extract the hour, minute, and second components
-                int hh = cal.get(Calendar.HOUR_OF_DAY);
-                int mm = cal.get(Calendar.MINUTE);
-                int ss = cal.get(Calendar.SECOND);
-                // Format the components into a string with leading zeros
-                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
-                datadth.sttime = timeString;
-
-
-                binding.setDeath(datadth);
-                binding.getDeath().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-            }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            Residency datas = eviewModel.amend(individual.uuid);
-            if (datas != null) {
-                binding.setMig(datas);
-
-            }
-
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            Inmigration dataimg = inmigrationViewModel.find(individual.uuid);
-            if (dataimg != null && binding.getResidency().rltn_head !=null) {
-                binding.setInmigration(dataimg);
-                binding.img.migtype.setEnabled(false);
-            } else {
-                dataimg = new Inmigration();
-
-                String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.replaceAll("-", "");
-
-                dataimg.uuid=uuidString;
-                dataimg.fw_uuid = fieldworkerData.getFw_uuid();
-                dataimg.residency_uuid = binding.getResidency().uuid;
-                dataimg.individual_uuid = individual.getUuid();
-                dataimg.visit_uuid = socialgroup.getVisit_uuid();
-                dataimg.recordedDate = binding.getResidency().startDate;
-                dataimg.complete = 1;
-
-                Date currentDate = new Date(); // Get the current date and time
-                // Create a Calendar instance and set it to the current date and time
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(currentDate);
-                // Extract the hour, minute, and second components
-                int hh = cal.get(Calendar.HOUR_OF_DAY);
-                int mm = cal.get(Calendar.MINUTE);
-                int ss = cal.get(Calendar.SECOND);
-                // Format the components into a string with leading zeros
-                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
-                dataimg.sttime = timeString;
-
-                if (binding.getMig() == null || binding.getMig().individual_uuid == null) {
-                    if (dataimg.migType == null) {
-                        dataimg.migType = 1;
-                    }
-                } else {
-                    if (dataimg.migType == null) {
-                        dataimg.migType = 2;
-                    }
-                }
-
-                binding.setInmigration(dataimg);
-
-
-                binding.img.migtype.setEnabled(false);
-
-                binding.getInmigration().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-            }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            Outmigration data = outmigrationViewModel.find(individual.uuid);
-            if (data != null) {
-                binding.setOutmigration(data);
-            } else {
-                data = new Outmigration();
-
-                String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.replaceAll("-", "");
-
-                data.uuid=uuidString;
-                data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.residency_uuid = binding.getResidency().uuid;
-                data.individual_uuid = individual.getUuid();
-                data.visit_uuid = socialgroup.getVisit_uuid();
-                data.recordedDate = binding.getResidency().endDate;
-                data.complete = 1;
-
-                Date currentDate = new Date(); // Get the current date and time
-                // Create a Calendar instance and set it to the current date and time
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(currentDate);
-                // Extract the hour, minute, and second components
-                int hh = cal.get(Calendar.HOUR_OF_DAY);
-                int mm = cal.get(Calendar.MINUTE);
-                int ss = cal.get(Calendar.SECOND);
-                // Format the components into a string with leading zeros
-                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
-                data.sttime = timeString;
-
-
-                binding.setOutmigration(data);
-                binding.getOutmigration().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-            }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
-        loadCodeData(binding.membershipComplete, "submit");
-        loadCodeData(binding.starttype, "startType");
         loadCodeData(binding.endtype,  "endType");
         loadCodeData(binding.rltnHead,  "rltnhead");
-        loadCodeData(binding.residencyImg,  "complete");
-        loadCodeData(binding.img.reason,  "reason");
-        loadCodeData(binding.omg.reasonOut,  "reasonForOutMigration");
-        loadCodeData(binding.img.origin,  "comingfrom");
-        loadCodeData(binding.img.migtype,  "migType");
-        loadCodeData(binding.omg.destination,  "whereoutside");
-        loadCodeData(binding.dth.dthDeathPlace, "deathPlace");
-        loadCodeData(binding.dth.dthDeathCause, "deathCause");
-        loadCodeData(binding.img.farm,  "farm");
-        loadCodeData(binding.img.livestock,  "livestock");
-        loadCodeData(binding.img.cashCrops,  "cashcrops");
-        loadCodeData(binding.img.foodCrops,  "food");
-        loadCodeData(binding.img.livestockYn, "submit");
-        loadCodeData(binding.img.cashYn, "submit");
-        loadCodeData(binding.img.foodYn, "submit");
-
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
-            save(true, true, viewModel, deathViewModel,inmigrationViewModel,outmigrationViewModel);
+            save(true, true, viewModel);
         });
 
         binding.buttonClose.setOnClickListener(v -> {
 
-            save(false, true, viewModel, deathViewModel,inmigrationViewModel,outmigrationViewModel);
+            save(false, true, viewModel);
         });
 
         binding.setEventname(AppConstants.EVENT_RESIDENCY);
@@ -545,148 +194,10 @@ public class ResidencyFragment extends Fragment {
         return view;
     }
 
-    private void save(boolean save, boolean close, ResidencyViewModel viewModel, DeathViewModel deathViewModel, InmigrationViewModel inmigrationViewModel,OutmigrationViewModel outmigrationViewModel) {
+    private void save(boolean save, boolean close, ResidencyViewModel viewModel) {
 
         if (save) {
             Residency finalData = binding.getResidency();
-
-            boolean isOmg = false;
-            boolean dthdate = false;
-            boolean imgdate = false;
-            boolean omgdate = false;
-            boolean sdate = false;
-
-
-            //Log.d("DEBUG", "locationExtid: " + binding.locationExtid);
-            //Log.d("DEBUG", "currentLoc: " + binding.currentLoc);
-//            if (!binding.locationExtid.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim())) {
-//                isOmg = true;
-//                binding.currentLoc.setError("Move Individual Out of His/Her Previous Compound");
-//            }
-//
-//            if(isOmg){//if there is an error, do not continue
-//                MoveInErrorFragment dialog = MoveInErrorFragment.newInstance(individual,residency,locations,socialgroup);
-//                dialog.show(requireActivity().getSupportFragmentManager(), "dialog");
-//                return;
-//            }
-
-
-            //Date Validations
-
-            try {
-                if (!binding.currentdob.getText().toString().trim().isEmpty() && !binding.editTextStartDate.getText().toString().trim().isEmpty()) {
-                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date currentDate = new Date();
-                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
-                    Date edate = f.parse(binding.currentdob.getText().toString().trim());
-                    if (edate.after(stdate)) {
-                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Date of Birth");
-                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Date of Birth", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    // clear error if validation passes
-                    binding.editTextStartDate.setError(null);
-                }
-            } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-
-            try {
-                if (!binding.omgg.oldStartDate.getText().toString().trim().isEmpty() && !binding.editTextStartDate.getText().toString().trim().isEmpty()) {
-                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
-                    Date edate = f.parse(binding.omgg.oldStartDate.getText().toString().trim());
-
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(edate);
-                    calendar.add(Calendar.DAY_OF_MONTH, 3);
-                    Date minStartDate = calendar.getTime();
-
-                    if (stdate.before(minStartDate)) {
-                        binding.editTextStartDate.setError("Start Date must be at least three days after the previous start date " + f.format(minStartDate));
-                        Toast.makeText(getActivity(), "Start Date must be at least three days after the previous start date " + f.format(minStartDate), Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    // Clear error if validation passes
-                    binding.editTextStartDate.setError(null);
-                }
-            } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-
-
-            try {
-                if (!binding.editTextStartDate.getText().toString().trim().isEmpty() && !binding.res.resEndDate.getText().toString().trim().isEmpty()) {
-                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
-                    Date edate = f.parse(binding.res.resEndDate.getText().toString().trim());
-                    String formattedDate = f.format(edate);
-                    if (edate.after(stdate)) {
-                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Or Equal to " + formattedDate);
-                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Or Equal to " + formattedDate, Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    if (edate.equals(stdate)) {
-                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Or Equal to " + formattedDate);
-                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Or Equal to " + formattedDate, Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    // clear error if validation passes
-                    binding.editTextStartDate.setError(null);
-                }
-            } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-
-
-            try {
-                if (!binding.editTextEndDate.getText().toString().trim().isEmpty() && !binding.editTextStartDate.getText().toString().trim().isEmpty()) {
-                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date currentDate = new Date();
-                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
-                    Date edate = f.parse(binding.editTextEndDate.getText().toString().trim());
-                    if (edate.after(currentDate)) {
-                        binding.editTextEndDate.setError("End Date Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "End Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    if (edate.before(stdate)) {
-                        binding.editTextEndDate.setError("End Date Cannot Be Less than Start Date");
-                        Toast.makeText(getActivity(), "End Date Cannot Be Less than Start Date", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    // clear error if validation passes
-                    binding.editTextEndDate.setError(null);
-                }
-            } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-
-
-            try {
-                if (!binding.editTextStartDate.getText().toString().trim().isEmpty()) {
-                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date currentDate = new Date();
-                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
-                    if (stdate.after(currentDate)) {
-                        binding.editTextStartDate.setError("Start Date Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Start Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    // clear error if validation passes
-                    binding.editTextStartDate.setError(null);
-                }
-            } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
@@ -695,351 +206,18 @@ public class ResidencyFragment extends Fragment {
                 Toast.makeText(requireContext(), "All fields are Required", Toast.LENGTH_LONG).show();
                 return;
             }
-
-
-            if (finalData.individual_uuid != null) {
-
-                if (finalData.endType == 3) {
-
-
-
-                    hasErrors = hasErrors || new Handler().hasInvalidInput(binding.dth.MAINLAYOUT, validateOnComplete, false);
-
-                    if (!binding.editTextEndDate.getText().toString().trim().equals(binding.dth.dthDeathDate.getText().toString().trim())) {
-                        dthdate = true;
-                        binding.dth.dthDeathDate.setError("End Date Not Equal to Date of Death");
-                        Toast.makeText(getActivity(), "End Date Not Equal to Date of Death", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    try {
-                        if (!binding.earliest.getText().toString().trim().isEmpty() && !binding.dth.dthDeathDate.getText().toString().trim().isEmpty()) {
-                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                            Date stdate = f.parse(binding.earliest.getText().toString().trim());
-                            Date edate = f.parse(binding.dth.dthDeathDate.getText().toString().trim());
-                            if (edate.before(stdate)) {
-                                binding.dth.dthDeathDate.setError("Migration Date Cannot Be Less than Earliest Event Date");
-                                Toast.makeText(getActivity(), "Death Date Cannot Be Less than Earliest Event Date", Toast.LENGTH_LONG).show();
-                                return;
-                            }
-                            // clear error if validation passes
-                            binding.dth.dthDeathDate.setError(null);
-                        }
-                    } catch (ParseException e) {
-                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                    }
-
-                    final Death dth = binding.getDeath();
-                    Date end = new Date(); // Get the current date and time
-                    // Create a Calendar instance and set it to the current date and time
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(end);
-                    // Extract the hour, minute, and second components
-                    int hh = cal.get(Calendar.HOUR_OF_DAY);
-                    int mm = cal.get(Calendar.MINUTE);
-                    int ss = cal.get(Calendar.SECOND);
-                    // Format the components into a string with leading zeros
-                    String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
-
-                    if (dth.sttime !=null && dth.edtime==null){
-                        dth.edtime = endtime;
-                    }
-                    dth.complete = 1;
-                    deathViewModel.add(dth);
-                }
-
-                if (finalData.startType == 1 && binding.getResidency().img==1) {
-
-                    hasErrors = hasErrors || new Handler().hasInvalidInput(binding.img.MAINLAYOUT, validateOnComplete, false);
-
-                    if (!binding.editTextStartDate.getText().toString().trim().equals(binding.img.imgDate.getText().toString().trim())) {
-                        imgdate = true;
-                        binding.img.imgDate.setError("Migration Date Not Equal to Start Date");
-                        Toast.makeText(getActivity(), "Migration Date Not Equal to Start Date", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    try {
-                        if (!binding.earliest.getText().toString().trim().isEmpty() && !binding.img.imgDate.getText().toString().trim().isEmpty()) {
-                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                            Date stdate = f.parse(binding.earliest.getText().toString().trim());
-                            Date edate = f.parse(binding.img.imgDate.getText().toString().trim());
-                            if (edate.before(stdate)) {
-                                binding.img.imgDate.setError("Migration Date Cannot Be Less than Earliest Event Date");
-                                Toast.makeText(getActivity(), "Migration Date Cannot Be Less than Earliest Event Date", Toast.LENGTH_LONG).show();
-                                return;
-                            }
-                            // clear error if validation passes
-                            binding.img.imgDate.setError(null);
-                        }
-                    } catch (ParseException e) {
-                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                    }
-
-                    final Inmigration img = binding.getInmigration();
-                    Date end = new Date(); // Get the current date and time
-                    // Create a Calendar instance and set it to the current date and time
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(end);
-                    // Extract the hour, minute, and second components
-                    int hh = cal.get(Calendar.HOUR_OF_DAY);
-                    int mm = cal.get(Calendar.MINUTE);
-                    int ss = cal.get(Calendar.SECOND);
-                    // Format the components into a string with leading zeros
-                    String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
-
-                    if (img.sttime !=null && img.edtime==null){
-                        img.edtime = endtime;
-                    }
-                    img.complete = 1;
-                    inmigrationViewModel.add(img);
-
-                }
-
-                if (finalData.endType == 2) {
-
-                    hasErrors = hasErrors || new Handler().hasInvalidInput(binding.omg.MAINLAYOUT, validateOnComplete, false);
-
-                    if (!binding.editTextEndDate.getText().toString().trim().equals(binding.omg.omgDate.getText().toString().trim())) {
-                        omgdate = true;
-                        binding.omg.omgDate.setError("End Date Not Equal to Date of Outmigration");
-                        Toast.makeText(getActivity(), "End Date Not Equal to Date of Outmigration", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-
-                    try {
-                        if (!binding.earliest.getText().toString().trim().isEmpty() && !binding.omg.omgDate.getText().toString().trim().isEmpty()) {
-                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                            Date stdate = f.parse(binding.earliest.getText().toString().trim());
-                            Date edate = f.parse(binding.omg.omgDate.getText().toString().trim());
-                            if (edate.before(stdate)) {
-                                binding.omg.omgDate.setError("Out Migration Date Cannot Be Less than Earliest Event Date");
-                                Toast.makeText(getActivity(), "Out Migration Date Cannot Be Less than Earliest Event Date", Toast.LENGTH_LONG).show();
-                                return;
-                            }
-                            // clear error if validation passes
-                            binding.omg.omgDate.setError(null);
-                        }
-                    } catch (ParseException e) {
-                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                    }
-
-                    final Outmigration omg = binding.getOutmigration();
-                    Date end = new Date(); // Get the current date and time
-                    // Create a Calendar instance and set it to the current date and time
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(end);
-                    // Extract the hour, minute, and second components
-                    int hh = cal.get(Calendar.HOUR_OF_DAY);
-                    int mm = cal.get(Calendar.MINUTE);
-                    int ss = cal.get(Calendar.SECOND);
-                    // Format the components into a string with leading zeros
-                    String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
-
-                    if (omg.sttime !=null && omg.edtime==null){
-                        omg.edtime = endtime;
-                    }
-                    omg.complete = 1;
-                    outmigrationViewModel.add(omg);
-
-                }
-
-
-            }
-            if (hasErrors) {
-                Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            String rltnText = binding.rltn.getText().toString(); // Get the text from TextInputEditText
-            Integer rltnValue = Integer.parseInt(rltnText); // Convert the text to an Integer (assuming it's an Integer)
-
-            if (finalData.endType == 2 || finalData.endType == 3) {
-                finalData.complete = 1;
-            } else if (finalData.complete == null && !finalData.rltn_head.equals(rltnValue)) {
-                finalData.complete = 1;
-            }else if (finalData.complete == null && finalData.endType == 1) {
-                finalData.complete = 2;
-            }else if (finalData.complete != null && finalData.rltn_head.equals(rltnValue) && finalData.complete == 1) {
-                // No action needed, as finalData.complete is already 1
-            } else if (finalData.complete != null && !finalData.rltn_head.equals(rltnValue) && finalData.complete == 2){
-                finalData.complete = 1;
-            }else{
-                finalData.complete = finalData.complete;
-            }
-
-//            SocialgroupAmendment socialgroupA = new SocialgroupAmendment();
-//
-//            if (socialgroup.groupName!= null && individual.getFirstName()!= null && "UNK".equals(socialgroup.groupName)) {
-//                socialgroupA.individual_uuid = individual.getUuid();
-//                socialgroupA.groupName = individual.getFirstName() +' '+ individual.getLastName();
-//                socialgroupA.uuid = socialgroup.uuid;
-//            }
-//
-//            SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-//            socialgroupViewModel.update(socialgroupA);
-//
-//            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
-//            finalData.complete=1;
-            Date end = new Date(); // Get the current date and time
-            // Create a Calendar instance and set it to the current date and time
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(end);
-            // Extract the hour, minute, and second components
-            int hh = cal.get(Calendar.HOUR_OF_DAY);
-            int mm = cal.get(Calendar.MINUTE);
-            int ss = cal.get(Calendar.SECOND);
-            // Format the components into a string with leading zeros
-            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
-
-            if (finalData.sttime !=null && finalData.edtime==null){
-                finalData.edtime = endtime;
-            }
             viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
-
-
-            SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+            IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
             try {
-                Socialgroup data = socialgroupViewModel.find(socialgroup.uuid);
-                if (data !=null) {
-                    SocialgroupAmendment socialgroupAmendment = new SocialgroupAmendment();
-                    socialgroupAmendment.individual_uuid = individual.uuid;
-                    socialgroupAmendment.groupName = individual.getFirstName() + ' ' + individual.getLastName();
-                    socialgroupAmendment.uuid = socialgroup.uuid;
-                    socialgroupAmendment.complete =1;
+                Residency dataRes = viewModel.findRes(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
+                if (dataRes != null) {
+                    IndividualResidency res = new IndividualResidency();
+                    res.uuid = finalData.individual_uuid;
+                    res.socialgroup = finalData.socialgroup_uuid;
+                    res.hohID = finalData.hohID;
 
-                    socialgroupViewModel.update(socialgroupAmendment);
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            RelationshipViewModel relModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
-            try {
-                Relationship data = relModel.find(individual.uuid);
-                if (data != null && !binding.dth.dthDeathDate.getText().toString().trim().isEmpty()) {
-
-                    RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
-                    relationshipUpdate.endType = 4;
-                    relationshipUpdate.endDate = binding.getDeath().deathDate;
-                    relationshipUpdate.individualA_uuid = individual.uuid;
-                    relationshipUpdate.complete = 1;
-
-                    relModel.update(relationshipUpdate);
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            RelationshipViewModel relbModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
-            try {
-                Relationship data = relbModel.finds(individual.uuid);
-                if (data != null && !binding.dth.dthDeathDate.getText().toString().trim().isEmpty()) {
-
-                    RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
-                    relationshipUpdate.endType = 2;
-                    relationshipUpdate.endDate = binding.getDeath().deathDate;
-                    relationshipUpdate.individualA_uuid = data.individualA_uuid;
-                    relationshipUpdate.complete = 1;
-
-                    relbModel.update(relationshipUpdate);
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            OutmigrationViewModel omgModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
-            try {
-                Outmigration data = omgModel.createOmg(individual.uuid, locations.uuid);
-//                if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim()))
-                    if (data != null) {
-
-                Outmigration omg = new Outmigration();
-
-                String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.replaceAll("-", "");
-
-                // Subtract one day from the recordedDate
-                Date recordedDate = binding.getInmigration().recordedDate;
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(recordedDate);
-                calendar.add(Calendar.DAY_OF_MONTH, -1);
-
-                omg.recordedDate = calendar.getTime();
-                omg.uuid = uuidString;
-                omg.individual_uuid = finalData.individual_uuid;
-                omg.insertDate = finalData.insertDate;
-                omg.destination = binding.getInmigration().origin;
-                omg.reason = binding.getInmigration().reason;
-                omg.reason_oth = binding.getInmigration().reason_oth;
-                omg.residency_uuid = binding.getOmgg().old_residency;
-                omg.fw_uuid = finalData.fw_uuid;
-                omg.complete = 1;
-                omg.visit_uuid = binding.getInmigration().visit_uuid;
-
-                omgModel.add(omg);
-            }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-            try {
-                Residency data = resModel.fetchs(individual.uuid, locations.uuid);
-//                if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim()))
-                if (data != null) {
-
-                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
-
-                    Date recordedDate = binding.getInmigration().recordedDate;
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(recordedDate);
-                    calendar.add(Calendar.DAY_OF_MONTH, -1);
-
-                    residencyAmendment.endType = 2;
-                    residencyAmendment.endDate = calendar.getTime();
-                    residencyAmendment.uuid = binding.getOmgg().old_residency;
-                    residencyAmendment.complete = 1;
-
-                    resModel.update(residencyAmendment);
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            //Update Fake Individual's Residency that was used to create the socialgroup
-            ResidencyViewModel unks = new ViewModelProvider(this).get(ResidencyViewModel.class);
-            try {
-                Residency datas = unks.unk(socialgroup.uuid);
-//                if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim()))
-                if (datas != null) {
-
-                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
-
-                    residencyAmendment.endType = 2;
-                    residencyAmendment.endDate = new Date();
-                    residencyAmendment.uuid = datas.uuid;
-                    residencyAmendment.complete = 2;
-
-                    unks.update(residencyAmendment);
+                    individualViewModel.updateres(res);
                 }
 
             } catch (ExecutionException e) {
@@ -1050,17 +228,11 @@ public class ResidencyFragment extends Fragment {
 
 
         }
-        if (save && binding.getResidency().endType==1) {
+        if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
-        }else if (save && binding.getResidency().endType==2 || binding.getResidency().endType==3){
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseMembersFragment.newInstance(locations, socialgroup)).commit();
+                    HouseMembersFragment.newInstance(locations, socialgroup,individual)).commit();
         }
-        else {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    IndividualFragment.newInstance(individual,residency, locations, socialgroup)).commit();
-        }
+
     }
 
     @Override
@@ -1101,11 +273,6 @@ public class ResidencyFragment extends Fragment {
     }
 
     private enum DATE_BUNDLES {
-        INSERTDATE ("INSERTDATE"),
-        STARTDATE ("STARTDATE"),
-        DEATHDATE("DEATHDATE"),
-        IMGDATE("IMGDATE"),
-        OMGDATE("OMGDATE"),
         ENDDATE ("ENDDATE");
 
         private final String bundleKey;

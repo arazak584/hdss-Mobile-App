@@ -125,6 +125,15 @@ public class ResidencyRepository {
         return future.get();
     }
 
+    public Residency dth(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Residency> callable = () -> dao.dth(id);
+
+        Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Residency> error() throws ExecutionException, InterruptedException {
 
         Callable<List<Residency>> callable = () -> dao.error();

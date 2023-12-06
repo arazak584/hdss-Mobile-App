@@ -84,15 +84,15 @@
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />
 
-        <Button
-            android:id="@+id/button_household"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/btnd_rone_dgbevel"
-            android:textColor="@color/white"
-            android:text="@string/household_select" />
+<!--        <Button-->
+<!--            android:id="@+id/button_household"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:background="@drawable/btnd_rone_dgbevel"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:text="@string/household_select" />-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_householdid"

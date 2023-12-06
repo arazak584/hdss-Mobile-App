@@ -18,6 +18,7 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,9 +92,9 @@ public class PregnancyAdapter extends RecyclerView.Adapter<PregnancyAdapter.View
 
     public void filter(String charText, PregnancyViewModel pregnancyViewModel) {
         pregnancyList.clear();
-            if(locations != null)
+            if(socialgroup != null)
                 try {
-                    List<Pregnancy> list = pregnancyViewModel.retrievePregnancy(locations.getCompextId());
+                    List<Pregnancy> list = pregnancyViewModel.retrievePregnancy(socialgroup.getUuid());
 
                     if (list != null) {
                         pregnancyList.addAll(list);

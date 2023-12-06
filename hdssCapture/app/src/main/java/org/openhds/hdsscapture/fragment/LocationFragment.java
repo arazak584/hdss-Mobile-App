@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -55,7 +56,7 @@ import java.util.concurrent.ExecutionException;
  * Use the {@link LocationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LocationFragment extends Fragment {
+public class LocationFragment extends DialogFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_CLUSTER_IDS = "ARG_CLUSTER_IDS";
@@ -455,7 +456,7 @@ public class LocationFragment extends Fragment {
             locationViewModel.add(locations);
             //Toast.makeText(v.getContext(), "Saved Successfully", Toast.LENGTH_LONG).show();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                 BlankFragment.newInstance(locations, socialgroup)).commit();
+                 ClusterFragment.newInstance(level6Data,locations, socialgroup)).commit();
 
 
         });

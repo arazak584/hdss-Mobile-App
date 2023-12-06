@@ -61,6 +61,10 @@ public class ResidencyViewModel extends AndroidViewModel {
         return residencyRepository.amend(id);
     }
 
+    public Residency dth(String id) throws ExecutionException, InterruptedException {
+        return residencyRepository.dth(id);
+    }
+
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         return residencyRepository.count(startDate, endDate, username);
     }

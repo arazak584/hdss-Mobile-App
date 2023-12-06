@@ -9,4 +9,7 @@ public class LocationAmendment {
     public String locationLevel_uuid;
     public String extId;
     public String compextId;
+    public String longitude;
+    public String latitude;
+    public String accuracy;
 }

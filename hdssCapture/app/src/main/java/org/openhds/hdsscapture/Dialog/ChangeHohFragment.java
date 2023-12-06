@@ -33,12 +33,9 @@ public class ChangeHohFragment extends DialogFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
-    private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String SOCIAL_ID = "SOCIAL_ID";
-    private final String TAG = "INDIVIDUAL.TAG";
 
     private Locations locations;
-    private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentChangeHohBinding binding;
@@ -51,17 +48,15 @@ public class ChangeHohFragment extends DialogFragment {
      * this fragment using the provided parameters.
      *
      * @param locations Parameter 1.
-     * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
      * @return A new instance of fragment ChangeHohFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ChangeHohFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public static ChangeHohFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
         ChangeHohFragment fragment = new ChangeHohFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
         fragment.setArguments(args);
@@ -73,7 +68,6 @@ public class ChangeHohFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
@@ -104,7 +98,7 @@ public class ChangeHohFragment extends DialogFragment {
 
         //Load Father Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_hoh);
-        final ChangeHOH adapter = new ChangeHOH(this, residency, locations, socialgroup );
+        final ChangeHOH adapter = new ChangeHOH(this, locations, socialgroup );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
         //recyclerView.setHasFixedSize(true);

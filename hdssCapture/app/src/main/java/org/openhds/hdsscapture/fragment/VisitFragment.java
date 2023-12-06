@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -17,6 +18,8 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.databinding.FragmentVisitBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
@@ -26,6 +29,8 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
+import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
@@ -42,7 +47,7 @@ import java.util.concurrent.ExecutionException;
  * Use the {@link VisitFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class VisitFragment extends Fragment {
+public class VisitFragment extends DialogFragment {
 
     private Visit visit;
     private FragmentVisitBinding binding;
@@ -129,29 +134,24 @@ public class VisitFragment extends Fragment {
             if (data != null) {
                 binding.setVisit(data);
                 binding.getVisit().setVisitDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-                if ("UNK".equals(socialgroup.groupName)){
-                    data.respondent = "UNK";
-                }
-                    data.uuid = socialgroup.getVisit_uuid();
             } else {
                 data = new Visit();
 
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
 
-
+                data.uuid = uuidString;
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.location_uuid = locations.getUuid();
+                data.location_uuid = ClusterFragment.selectedLocation.getUuid();
                 data.roundNumber = roundData.getRoundNumber();
-                data.uuid = socialgroup.getVisit_uuid();
+                //data.uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
                 data.houseExtId = socialgroup.extId;
                 data.socialgroup_uuid =socialgroup.uuid;
 
-                if ("UNK".equals(socialgroup.groupName)){
-                    data.respondent = "UNK";
-                }
-
+//                if (HouseMembersFragment.selectedIndividual != null) {
+//                    data.respondent = HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName;
+//                }
                 if(roundData.roundNumber < 10) {
                     data.extId = data.houseExtId + "00" + roundData.getRoundNumber();
                 }else {
@@ -212,12 +212,7 @@ public class VisitFragment extends Fragment {
                     Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
                     return;
                 }
-
-                if (finalData.respondent == "UNK"){
-                    finalData.complete =2;
-                }else {
                     finalData.complete =1;
-                }
 
             Date end = new Date(); // Get the current date and time
             // Create a Calendar instance and set it to the current date and time
@@ -234,15 +229,27 @@ public class VisitFragment extends Fragment {
                 finalData.edtime = endtime;
             }
             viewModel.add(finalData);
+            SocialgroupViewModel vmodel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+            try {
+                Socialgroup data = vmodel.visit(socialgroup.uuid);
+                if (data != null) {
+                    HvisitAmendment visit = new HvisitAmendment();
+                    visit.uuid = binding.getVisit().socialgroup_uuid;
+                    visit.complete = 2;
+                    vmodel.visited(visit);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
         }
-        if (save) {
+        if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseMembersFragment.newInstance(locations, socialgroup)).commit();
-        }else {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    BlankFragment.newInstance(locations, socialgroup)).commit();
+                    HouseMembersFragment.newInstance(locations, socialgroup,individual)).commit();
         }
     }
 

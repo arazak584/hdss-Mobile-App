@@ -21,6 +21,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,8 +80,8 @@ public class MotherDialogFragment extends DialogFragment {
 
 
         final TextView compno = view.findViewById(R.id.textViewmother_compextId);
-        if (locations != null) {
-            compno.setText(locations.getCompno());
+        if (ClusterFragment.selectedLocation != null) {
+            compno.setText(ClusterFragment.selectedLocation.getCompno());
         } else {
             // Handle the case where locations is null
             compno.setText("Error loading locations data");

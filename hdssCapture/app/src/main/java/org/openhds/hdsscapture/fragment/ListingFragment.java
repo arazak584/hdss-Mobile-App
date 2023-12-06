@@ -1,17 +1,31 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.gms.location.LocationRequest;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
@@ -47,8 +61,13 @@ public class ListingFragment extends Fragment {
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
 
     private Locations locations;
+    private Hierarchy level6Data;
     private Socialgroup socialgroup;
     private FragmentListingBinding binding;
+    public static  Locations selectedLocation;
+    private LocationManager locationManager;
+    private Location currentLocation;
+    private static final int REQUEST_LOCATION_PERMISSION = 1;
 
     public ListingFragment() {
         // Required empty public constructor
@@ -85,7 +104,6 @@ public class ListingFragment extends Fragment {
         binding = FragmentListingBinding.inflate(inflater, container, false);
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_change_cluster);
-
         // Set a click listener on the button for mother
         showDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +111,90 @@ public class ListingFragment extends Fragment {
                 // Show the dialog fragment
                 ClusterDialogFragment.newInstance(locations)
                         .show(getChildFragmentManager(), "ClusterDialogFragment");
+            }
+        });
+
+        // Initialize the LocationManager
+        locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        // Create a location request with maximum accuracy of 10
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+//        locationRequest.setInterval(1000); // 10 seconds
+//        locationRequest.setFastestInterval(5000); // 5 seconds
+//        locationRequest.setSmallestDisplacement(50);
+        locationRequest.setInterval(5); // 5 milliseconds
+        locationRequest.setFastestInterval(0); // 0 seconds
+        //locationRequest.setSmallestDisplacement(50); // 10 meters
+        locationRequest.setNumUpdates(1);
+
+
+        // Get a reference to the progress bar view
+        ProgressBar progressBar = binding.getRoot().findViewById(R.id.progress_bar);
+
+        binding.buttonGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Check for location permissions
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // Permission is not granted, request it
+                    ActivityCompat.requestPermissions(requireActivity(),
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            REQUEST_LOCATION_PERMISSION);
+                } else {
+                    // Permission is granted, show the progress bar and start requesting location updates
+                    progressBar.setVisibility(View.VISIBLE);
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener() {
+                        @Override
+                        public void onLocationChanged(@NonNull Location location) {
+                            // Update the currentLocation variable with the new location
+                            currentLocation = location;
+                            double latitude = currentLocation.getLatitude();
+                            double longitude = currentLocation.getLongitude();
+
+                            // Define the number of decimal places you want to display (e.g., 6)
+                            int decimalPlaces = 6;
+
+                            // Format the latitude and longitude to the specified number of decimal places
+                            String formattedLatitude = String.format("%.6f", latitude);
+                            String formattedLongitude = String.format("%.6f", longitude);
+
+                            // Display the longitude, latitude, and accuracy values in the EditText views
+                            EditText longitudeEditText = requireView().findViewById(R.id.longitude);
+//                            longitudeEditText.setText(String.valueOf(currentLocation.getLongitude()));
+                            longitudeEditText.setText(formattedLongitude);
+
+                            EditText latitudeEditText = requireView().findViewById(R.id.latitude);
+                            latitudeEditText.setText(formattedLatitude);
+//                            latitudeEditText.setText(String.valueOf(currentLocation.getLatitude()));
+
+                            EditText accuracyEditText = requireView().findViewById(R.id.accuracy);
+                            accuracyEditText.setText(String.valueOf(currentLocation.getAccuracy()));
+
+                            // Check if the accuracy is less than or equal to 10 meters, dismiss the progress bar, and stop requesting location updates
+                            if (currentLocation.getAccuracy() <= 10) {
+                                progressBar.setVisibility(View.GONE);
+                                locationManager.removeUpdates(this);
+                            }
+                        }
+
+                        @Override
+                        public void onProviderDisabled(String provider) {
+                            // Handle the case when the location provider is disabled
+                            // For example, you can display a message or prompt the user to enable the location provider
+                        }
+
+                        // Other methods of LocationListener
+                        @Override
+                        public void onStatusChanged(String provider, int status, Bundle extras) {
+                        }
+
+                        @Override
+                        public void onProviderEnabled(String provider) {
+                        }
+                    });
+                }
             }
         });
 
@@ -107,7 +209,7 @@ public class ListingFragment extends Fragment {
 
         ListingViewModel viewModel = new ViewModelProvider(this).get(ListingViewModel.class);
         try {
-            Listing data = viewModel.find(locations.compno);
+            Listing data = viewModel.find(ClusterFragment.selectedLocation.compno);
             if (data != null) {
                 binding.setListing(data);
                 binding.locationName.setEnabled(false);
@@ -117,15 +219,18 @@ public class ListingFragment extends Fragment {
                 data = new Listing();
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.compextId = locations.getCompextId();
-                data.compno = locations.getCompno();
-                data.status = locations.getStatus();
+                data.compextId = ClusterFragment.selectedLocation.getCompextId();
+                data.compno = ClusterFragment.selectedLocation.getCompno();
+                data.status = ClusterFragment.selectedLocation.getStatus();
                 data.village = level6Data.getName();
                 data.fw_name = fieldworkerData.getFirstName() + ' ' + fieldworkerData.lastName ;
-                data.locationName = locations.getLocationName();
-                data.location_uuid = locations.getUuid();
-                data.vill_extId = locations.getExtId();
-                data.cluster_id = locations.getLocationLevel_uuid();
+                data.locationName = ClusterFragment.selectedLocation.getLocationName();
+                data.location_uuid = ClusterFragment.selectedLocation.getUuid();
+                data.vill_extId = level6Data.getExtId();
+                data.cluster_id = ClusterFragment.selectedLocation.getLocationLevel_uuid();
+                data.longitude = ClusterFragment.selectedLocation.getLongitude();
+                data.latitude = ClusterFragment.selectedLocation.getLatitude();
+                data.accuracy = ClusterFragment.selectedLocation.getAccuracy();
 
                 binding.locationName.setEnabled(false);
                 binding.clusterCode.setEnabled(false);
@@ -180,20 +285,23 @@ public class ListingFragment extends Fragment {
 
             try {
 
-                Locations data = locationViewModel.find(locations.compno);
+                Locations data = locationViewModel.find(ClusterFragment.selectedLocation.compno);
                 if (data !=null) {
 
-                    LocationAmendment location = new LocationAmendment();
-                    location.uuid = finalData.location_uuid;
+                    LocationAmendment locationz = new LocationAmendment();
+                    locationz.uuid = finalData.location_uuid;
 
                     if (!binding.repllocationName.getText().toString().trim().isEmpty()) {
-                        location.locationName = binding.getListing().repl_locationName;
+                        locationz.locationName = binding.getListing().repl_locationName;
                     } else {
-                        location.locationName = finalData.locationName;
+                        locationz.locationName = finalData.locationName;
                     }
-                    location.status = finalData.status;
-                    location.locationLevel_uuid = finalData.cluster_id;
-                    location.extId = finalData.vill_extId;
+                    locationz.status = finalData.status;
+                    locationz.locationLevel_uuid = finalData.cluster_id;
+                    locationz.extId = finalData.vill_extId;
+                    locationz.longitude = finalData.longitude;
+                    locationz.latitude = finalData.latitude;
+                    locationz.accuracy = finalData.accuracy;
 
                     // Assuming vill_extId is a String
                     String villExtId = finalData.vill_extId;
@@ -213,10 +321,10 @@ public class ListingFragment extends Fragment {
                         compExtId = finalData.compextId; // Keep the original value
                     }
 
-                    location.compextId = compExtId;
-                    location.complete = 1;
+                    locationz.compextId = compExtId;
+                    locationz.complete = 1;
 
-                    locationViewModel.update(location);
+                    locationViewModel.update(locationz);
                 }
 
             } catch (ExecutionException e) {
@@ -227,8 +335,10 @@ public class ListingFragment extends Fragment {
 
         }
         if (close) {
+
+
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    BlankFragment.newInstance(locations, socialgroup)).commit();
+                    ClusterFragment.newInstance(level6Data,locations, socialgroup)).commit();
         }
     }
 

@@ -16,6 +16,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,9 +101,9 @@ public class ClusterAdapter extends RecyclerView.Adapter<ClusterAdapter.ViewHold
 
     public void clusters(String charText, HierarchyViewModel hierarchyViewModel) {
         hierarchyList.clear();
-        if(locations != null)
+        if(ClusterFragment.selectedLocation != null)
             try {
-                List<Hierarchy> list = hierarchyViewModel.clusters(locations.getVill_extId());
+                List<Hierarchy> list = hierarchyViewModel.clusters(ClusterFragment.selectedLocation.getVill_extId());
 
                 if (list != null) {
                     hierarchyList.addAll(list);

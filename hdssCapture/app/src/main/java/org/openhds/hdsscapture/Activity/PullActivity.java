@@ -408,7 +408,7 @@ public class PullActivity extends AppCompatActivity {
                 CsvSchema locationSchema = CsvSchema.builder()
                         .addColumn("uuid").addColumn("accuracy").addColumn("compextId").addColumn("compno").addColumn("edtime")
                         .addColumn("fw_uuid").addColumn("insertDate").addColumn("latitude").addColumn("locationLevel_uuid").addColumn("locationName")
-                        .addColumn("locationType").addColumn("longitude").addColumn("status").addColumn("sttime").build();
+                        .addColumn("locationType").addColumn("longitude").addColumn("status").addColumn("sttime").addColumn("vill_extId").build();
 
                 downloadAndProcessDataset("location.zip", "location.csv", () -> dao.downloadLocation(authorizationHeader), Locations.class, locationSchema, locationCounts, loc);
 
@@ -417,7 +417,8 @@ public class PullActivity extends AppCompatActivity {
                         .addColumn("uuid").addColumn("dob").addColumn("dobAspect").addColumn("edtime").addColumn("extId")
                         .addColumn("firstName").addColumn("fw_uuid").addColumn("gender").addColumn("ghanacard").addColumn("insertDate")
                         .addColumn("lastName").addColumn("otherName").addColumn("father_uuid").addColumn("mother_uuid")
-                        .addColumn("sttime").build();
+                        .addColumn("sttime").addColumn("endType").addColumn("startDate").addColumn("endDate").addColumn("compno")
+                        .addColumn("village").addColumn("residency").addColumn("socialgroup").addColumn("hohID").build();
 
                 downloadAndProcessDataset("individual.zip", "individual.csv", () -> dao.downloadIndividual(authorizationHeader), Individual.class, individualsSchema, individualCounts, ind);
 

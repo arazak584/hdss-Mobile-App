@@ -30,6 +30,8 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
+import org.openhds.hdsscapture.entity.subentity.IndividualResidency;
+import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
@@ -48,7 +50,7 @@ import java.util.concurrent.ExecutionException;
  * Use the {@link AmendmentFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AmendmentFragment extends Fragment {
+public class AmendmentFragment extends DialogFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
@@ -75,21 +77,17 @@ public class AmendmentFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param locations Parameter 1.
-     * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
-     * @param eventForm Parameter 7.
      * @return A new instance of fragment AmendmentFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AmendmentFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, EventForm eventForm) {
+    public static AmendmentFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
         AmendmentFragment fragment = new AmendmentFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
-        args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
     }
@@ -99,10 +97,8 @@ public class AmendmentFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
 
@@ -114,7 +110,7 @@ public class AmendmentFragment extends Fragment {
         //binding.setIndividual(individual);
 
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(individual.firstName + " " + individual.lastName);
+        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -138,7 +134,7 @@ public class AmendmentFragment extends Fragment {
         AmendmentViewModel viewModel = new ViewModelProvider(this).get(AmendmentViewModel.class);
         ResidencyViewModel resViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         try {
-            Amendment data = viewModel.find(individual.uuid);
+            Amendment data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid);
             if (data != null) {
                 binding.setAmendment(data);
                 binding.amendFirstName.setEnabled(false);
@@ -157,13 +153,13 @@ public class AmendmentFragment extends Fragment {
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
-                data.orig_firstName = individual.getFirstName();
-                data.orig_lastName = individual.getLastName();
-                data.orig_otherName = individual.getOtherName();
-                data.orig_ghanacard = individual.getGhanacard();
-                data.orig_dob = individual.dob;
-                data.orig_gender = individual.getGender();
-                data.individual_uuid = individual.getUuid();
+                data.orig_firstName = HouseMembersFragment.selectedIndividual.getFirstName();
+                data.orig_lastName = HouseMembersFragment.selectedIndividual.getLastName();
+                data.orig_otherName = HouseMembersFragment.selectedIndividual.getOtherName();
+                data.orig_ghanacard = HouseMembersFragment.selectedIndividual.getGhanacard();
+                data.orig_dob = HouseMembersFragment.selectedIndividual.dob;
+                data.orig_gender = HouseMembersFragment.selectedIndividual.getGender();
+                data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
 
                 binding.amendFirstName.setEnabled(false);
                 binding.amendLastName.setEnabled(false);
@@ -179,7 +175,7 @@ public class AmendmentFragment extends Fragment {
         }
 
         try {
-            Residency datas = resViewModel.amend(individual.uuid);
+            Residency datas = resViewModel.amend(HouseMembersFragment.selectedIndividual.uuid);
             if (datas != null) {
                 binding.setRes(datas);
 
@@ -203,7 +199,6 @@ public class AmendmentFragment extends Fragment {
             save(false, true, viewModel);
         });
 
-        binding.setEventname(eventForm.event_name);
         Handler.colorLayouts(requireContext(), binding.AMENDLAYOUT);
         View view = binding.getRoot();
         return view;
@@ -231,9 +226,6 @@ public class AmendmentFragment extends Fragment {
                 Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
-
-            IndividualAmendment amend = new IndividualAmendment();
-            amend.uuid = finalData.individual_uuid;
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.AMENDLAYOUT, validateOnComplete, false);
@@ -286,52 +278,75 @@ public class AmendmentFragment extends Fragment {
             finalData.complete=1;
             viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
-
-            if (!binding.replFirstName.getText().toString().trim().isEmpty()) {
-                amend.firstName = binding.getAmendment().repl_firstName;
-            }else {
-                amend.firstName = finalData.orig_firstName;
-            }
-
-            if (!binding.replLastName.getText().toString().trim().isEmpty()) {
-                amend.lastName = binding.getAmendment().repl_lastName;
-            }else {
-                amend.lastName = finalData.orig_lastName;
-            }
-
-            if (!binding.replOtherName.getText().toString().trim().isEmpty()) {
-                amend.otherName = binding.getAmendment().repl_otherName;
-            }else {
-                amend.otherName = finalData.orig_otherName;
-            }
-
-            if (!binding.replGhanacard.getText().toString().trim().isEmpty()) {
-                amend.ghanacard = binding.getAmendment().repl_ghanacard;
-            }else {
-                amend.ghanacard = finalData.orig_ghanacard;
-            }
-
-            if (binding.replGender.getSelectedItemPosition() != 0) {
-                amend.gender = binding.getAmendment().repl_gender;
-            }else {
-                amend.gender = finalData.orig_gender;
-            }
-
-            if (!binding.replDob.getText().toString().trim().isEmpty()) {
-                amend.dob = binding.getAmendment().repl_dob;
-            }else {
-                amend.dob = finalData.orig_dob;
-            }
-
-
-            amend.complete = 1;
             IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-            individualViewModel.update(amend);
+            try {
+                Individual data = individualViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+                if (data != null) {
+                    IndividualAmendment amend = new IndividualAmendment();
+                    amend.uuid = finalData.individual_uuid;
+                    if (!binding.replFirstName.getText().toString().trim().isEmpty()) {
+                        amend.firstName = binding.getAmendment().repl_firstName;
+                    } else {
+                        amend.firstName = finalData.orig_firstName;
+                    }
+                    if (!binding.replLastName.getText().toString().trim().isEmpty()) {
+                        amend.lastName = binding.getAmendment().repl_lastName;
+                    } else {
+                        amend.lastName = finalData.orig_lastName;
+                    }
+                    if (!binding.replOtherName.getText().toString().trim().isEmpty()) {
+                        amend.otherName = binding.getAmendment().repl_otherName;
+                    } else {
+                        amend.otherName = finalData.orig_otherName;
+                    }
+                    if (!binding.replGhanacard.getText().toString().trim().isEmpty()) {
+                        amend.ghanacard = binding.getAmendment().repl_ghanacard;
+                    } else {
+                        amend.ghanacard = finalData.orig_ghanacard;
+                    }
+
+                    if (binding.replGender.getSelectedItemPosition() != 0) {
+                        amend.gender = binding.getAmendment().repl_gender;
+                    } else {
+                        amend.gender = finalData.orig_gender;
+                    }
+
+                    if (!binding.replDob.getText().toString().trim().isEmpty()) {
+                        amend.dob = binding.getAmendment().repl_dob;
+                    } else {
+                        amend.dob = finalData.orig_dob;
+                    }
+                    amend.complete = 1;
+                    individualViewModel.update(amend);
+                }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+
+            IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
+            try {
+                Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                if (data != null) {
+                    IndividualVisited visited = new IndividualVisited();
+                    visited.uuid = binding.getAmendment().individual_uuid;
+                    visited.complete = 2;
+                    iview.visited(visited);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    HouseMembersFragment.newInstance(locations, socialgroup,individual)).commit();
         }
     }
 

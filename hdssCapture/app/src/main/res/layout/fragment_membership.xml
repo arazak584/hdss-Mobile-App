@@ -5,38 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <variable
-            name="individual"
-            type="org.openhds.hdsscapture.entity.Individual" />
-
         <variable
             name="residency"
             type="org.openhds.hdsscapture.entity.Residency" />
-
-        <variable
-            name="res"
-            type="org.openhds.hdsscapture.entity.Residency" />
-
-        <variable
-            name="omgg"
-            type="org.openhds.hdsscapture.entity.Residency" />
-
-        <variable
-            name="mig"
-            type="org.openhds.hdsscapture.entity.Residency" />
-
-        <variable
-            name="inmigration"
-            type="org.openhds.hdsscapture.entity.Inmigration" />
-
-        <variable
-            name="outmigration"
-            type="org.openhds.hdsscapture.entity.Outmigration" />
-
-        <variable
-            name="death"
-            type="org.openhds.hdsscapture.entity.Death" />
 
 
         <variable
@@ -103,25 +74,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <include
-                    android:visibility="gone"
-                    android:id="@+id/res"
-                    layout="@layout/fragment_membership_edate"
-                    bind:res="@{res}" />
-
-                <include
-                    android:visibility="gone"
-                    android:id="@+id/omgg"
-                    layout="@layout/fragment_membership_prev"
-                    bind:omgg="@{omgg}" />
-
-                <include
-                    android:visibility="gone"
-                    android:id="@+id/mig"
-                    layout="@layout/fragment_membership_migtype"
-                    bind:mig="@{mig}" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -281,7 +236,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/changehh"
                     app:icon="@drawable/baseline_people_24"
-                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:background="@drawable/btnd_save"
                     android:textColor="@android:color/background_light"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -304,6 +259,23 @@
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/household"
+                    android:text="@string/household">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/socialgroup_extid"
+                        android:text="@={residency.hohID}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -325,6 +297,7 @@
 
 
                 <TextView
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -333,6 +306,7 @@
                     android:text="@string/starttype"/>
 
                 <Spinner
+                    android:visibility="gone"
                     android:id="@+id/starttype"
                     selection="@{residency.startType}"
                     android:layout_width="match_parent"
@@ -355,16 +329,18 @@
                     android:inputType="number" />
 
                 <Button
+                    android:visibility="gone"
                     android:id="@+id/button_residency_startDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/startdate"
                     tools:ignore="DuplicateSpeakableTextCheck"
-                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:background="@drawable/btnd_save"
                     android:textColor="@android:color/background_light"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/editText_startDate"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
@@ -375,6 +351,7 @@
 
 
                 <TextView
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -383,6 +360,7 @@
                     android:text="@string/endtype"/>
 
                 <Spinner
+                    android:visibility="gone"
                     android:id="@+id/endtype"
                     selection="@{residency.endType}"
                     android:layout_width="match_parent"
@@ -394,6 +372,7 @@
                     android:spinnerMode="dialog" />
 
                 <Button
+                    android:visibility="gone"
                     goneUnless="@{residency.endType==2 || residency.endType==3}"
                     android:id="@+id/button_residency_endDate"
                     android:layout_width="match_parent"
@@ -405,6 +384,7 @@
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
                     goneUnless="@{residency.endType==2 || residency.endType==3}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -487,44 +467,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <LinearLayout
-                        goneUnless="@{residency.endType==3}"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
 
-                        <include
-                            android:id="@+id/dth"
-                            layout="@layout/fragment_membership_dth"
-                            bind:death="@{death}" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        goneUnless="@{residency.img==1 &amp; residency.startType==1}"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <include
-                            android:id="@+id/img"
-                            layout="@layout/fragment_membership_img"
-                            bind:inmigration="@{inmigration}" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        goneUnless="@{residency.endType==2}"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <include
-                            android:id="@+id/omg"
-                            layout="@layout/fragment_membership_omg"
-                            bind:outmigration="@{outmigration}" />
-
-                    </LinearLayout>
 
 
                 </LinearLayout>
@@ -570,7 +513,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_rone_dgbevel"
+                android:background="@drawable/btnd_save"
                 android:textColor="@android:color/background_light"
                 android:text="@string/savecontinuedata" />
 
@@ -580,7 +523,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_rone_dgbevel"
+                android:background="@drawable/btnd_close"
                 android:textColor="@android:color/background_light"
                 android:text="@string/closedata" />
 

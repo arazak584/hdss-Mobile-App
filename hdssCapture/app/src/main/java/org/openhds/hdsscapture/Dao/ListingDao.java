@@ -38,8 +38,9 @@ public interface ListingDao {
             " WHERE a.insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
-    @Query("SELECT a.* FROM locations as a LEFT JOIN listing as b ON a.compno=b.compno" +
-            " where b.compno IS NULL AND a.complete IS NOT NULL ")
+    @Query("SELECT a.location_uuid,c.compno,c.compextId,c.locationName FROM visit as a INNER JOIN locations c on a.location_uuid=c.uuid" +
+            " LEFT JOIN listing as b ON a.location_uuid=b.location_uuid" +
+            " where b.location_uuid IS NULL GROUP BY a.location_uuid")
     List<Listing> error();
 
 }

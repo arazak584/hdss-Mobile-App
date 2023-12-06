@@ -24,6 +24,7 @@ import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.Vpm;
 import org.openhds.hdsscapture.odk.Form;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
@@ -106,7 +107,7 @@ public interface ApiDao {
     Call<DataWrapper<Death>> sendDeathdata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Death> dataModal);
 
     @POST("/api/vpm")
-    Call<DataWrapper<Death>> sendVpmdata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Death> dataModal);
+    Call<DataWrapper<Vpm>> sendVpmdata(@Header("Authorization") String authorizationHeader, @Body DataWrapper<Vpm> dataModal);
 
     @POST("/api/pregnancy")
     Call<DataWrapper<Pregnancy>> sendPregnancydata(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Pregnancy> dataModal);

@@ -170,8 +170,8 @@ public class ErrorActivity extends AppCompatActivity {
             for (Individual e : individualViewModel.error()) {
                 //String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
-                r1.name = g + ". Household ID: " + e.houseExtId;
-                r1.extid = "" + e.compextId + " - " +e.firstName + " " + e.lastName;
+                r1.name = g + ". Household ID: " + e.getHohID();
+                r1.extid = "" + e.compno + " - " +e.firstName + " " + e.lastName;
                 r1.date = "";
                 r1.error = "Household Head is a Minor";
                 r1.index = g;
@@ -184,8 +184,8 @@ public class ErrorActivity extends AppCompatActivity {
             for (Individual e : individualViewModel.errors()) {
                 //String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
-                r1.name = k + ". Household ID: " +  e.houseExtId;
-                r1.extid = "Compno: " + e.compextId + " - Househead: " + e.lastName;
+                r1.name = k + ". Household ID: " +  e.getHohID();
+                r1.extid = "Compno: " + e.compno + " - Househead: " + e.lastName;
                 r1.date = "";
                 r1.error = "Only Minors Left in Household";
                 r1.index = k;
@@ -198,8 +198,8 @@ public class ErrorActivity extends AppCompatActivity {
             for (Individual e : individualViewModel.err()) {
                 //String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
-                r1.name = h + ". Household ID: " +  e.houseExtId;
-                r1.extid = "Compno: " + e.compextId + " - Househead: " + e.lastName;
+                r1.name = h + ". Household ID: " +  e.getHohID();
+                r1.extid = "Compno: " + e.compno + " - Househead: " + e.lastName;
                 r1.date = "";
                 r1.error = "Head of Household is Unknown";
                 r1.index = h;
@@ -241,33 +241,33 @@ public class ErrorActivity extends AppCompatActivity {
 
             }
 
-            int o=1;
-            for (Individual e : individualViewModel.merror()) {
-                //String formattedDate = f.format(e.insertDate);
-                Queries r1 = new Queries();
-                r1.name = o + ". Household ID: " +  e.houseExtId;
-                r1.extid = "Compno: " + e.compextId + " - " + e.firstName + " " + e.lastName;
-                r1.date = "";
-                r1.error = "Non existent mother";
-                r1.index = o;
-                list.add(r1);
-                o++;
-
-            }
-
-            int n=1;
-            for (Individual e : individualViewModel.ferror()) {
-                //String formattedDate = f.format(e.insertDate);
-                Queries r1 = new Queries();
-                r1.name = n + ". Household ID: " +  e.houseExtId;
-                r1.extid = "Compno: " + e.compextId + " - " + e.firstName + " " + e.lastName;
-                r1.date = "";
-                r1.error = "Non existent father";
-                r1.index = n;
-                list.add(r1);
-                n++;
-
-            }
+//            int o=1;
+//            for (Individual e : individualViewModel.merror()) {
+//                //String formattedDate = f.format(e.insertDate);
+//                Queries r1 = new Queries();
+//                r1.name = o + ". Household ID: " +  e.houseExtId;
+//                r1.extid = "Compno: " + e.compextId + " - " + e.firstName + " " + e.lastName;
+//                r1.date = "";
+//                r1.error = "Non existent mother";
+//                r1.index = o;
+//                list.add(r1);
+//                o++;
+//
+//            }
+//
+//            int n=1;
+//            for (Individual e : individualViewModel.ferror()) {
+//                //String formattedDate = f.format(e.insertDate);
+//                Queries r1 = new Queries();
+//                r1.name = n + ". Household ID: " +  e.houseExtId;
+//                r1.extid = "Compno: " + e.compextId + " - " + e.firstName + " " + e.lastName;
+//                r1.date = "";
+//                r1.error = "Non existent father";
+//                r1.index = n;
+//                list.add(r1);
+//                n++;
+//
+//            }
             
 
 //            int h=1;

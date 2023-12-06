@@ -64,15 +64,6 @@ public class DeathRepository {
         return future.get();
     }
 
-    public List<Death> retrieveVpmSync() throws ExecutionException, InterruptedException {
-
-        Callable<List<Death>> callable = () -> dao.retrieveVpmSync();
-
-        Future<List<Death>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
     public List<Death> error() throws ExecutionException, InterruptedException {
 
         Callable<List<Death>> callable = () -> dao.error();

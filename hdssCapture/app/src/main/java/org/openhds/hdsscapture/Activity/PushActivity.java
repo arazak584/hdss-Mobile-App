@@ -38,6 +38,7 @@ import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
+import org.openhds.hdsscapture.Viewmodel.VpmViewModel;
 import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
@@ -56,6 +57,7 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.Vpm;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
 import java.util.ArrayList;
@@ -812,12 +814,12 @@ public class PushActivity extends AppCompatActivity {
 
         //PUSH VPM
         final Button buttonvpm = findViewById(R.id.buttonvpm);
-        final DeathViewModel vpmViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+        final VpmViewModel vpmViewModel = new ViewModelProvider(this).get(VpmViewModel.class);
 
         //GET MODIFIED DATA
-        final List<Death> vpmList = new ArrayList<>();
+        final List<Vpm> vpmList = new ArrayList<>();
         try {
-            vpmList.addAll(vpmViewModel.retrieveVpmSync());
+            vpmList.addAll(vpmViewModel.retrieveToSync());
             buttonvpm.setText("VPM (" + vpmList.size() + ") to send");
             buttonvpm.setTextColor(Color.WHITE);
             if (vpmList.isEmpty()) {
@@ -833,7 +835,7 @@ public class PushActivity extends AppCompatActivity {
             progress.show();
 
             //WRAP THE DATA
-            final DataWrapper<Death> data = new DataWrapper<>(vpmList);
+            final DataWrapper<Vpm> data = new DataWrapper<>(vpmList);
 
             //SEND THE DATA
             if (data.getData() != null && !data.getData().isEmpty()) {
@@ -841,17 +843,17 @@ public class PushActivity extends AppCompatActivity {
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
 
-                final Call<DataWrapper<Death>> c_callable = dao.sendVpmdata(authorizationHeader,data);
-                c_callable.enqueue(new Callback<DataWrapper<Death>>() {
+                final Call<DataWrapper<Vpm>> c_callable = dao.sendVpmdata(authorizationHeader,data);
+                c_callable.enqueue(new Callback<DataWrapper<Vpm>>() {
                     @Override
-                    public void onResponse(@NonNull Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
+                    public void onResponse(@NonNull Call<DataWrapper<Vpm>> call, Response<DataWrapper<Vpm>> response) {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
-                            Death[] d = data.getData().toArray(new Death[0]);
+                            Vpm[] d = data.getData().toArray(new Vpm[0]);
 
-                            for (Death elems : d) {
-                                elems.vpmcomplete = 0;
+                            for (Vpm elems : d) {
+                                elems.complete = 0;
                                 //Log.e("PUSH.tag", "Has value " + elem.edtime);
                             }
                             vpmViewModel.add(d);
@@ -863,7 +865,7 @@ public class PushActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<DataWrapper<Death>> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<DataWrapper<Vpm>> call, @NonNull Throwable t) {
                         progress.dismiss();
                         Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
 

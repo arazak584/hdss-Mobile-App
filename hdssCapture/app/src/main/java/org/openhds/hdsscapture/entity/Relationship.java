@@ -12,6 +12,7 @@ import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -27,7 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-@Entity(tableName = "relationship")
+@Entity(tableName = "relationship",
+indices = {@Index(value = {"individualA_uuid", "individualB_uuid","fw_uuid","complete"}, unique = false)})
 public class Relationship extends BaseObservable implements Parcelable {
 
     @SerializedName("uuid")
@@ -41,6 +43,8 @@ public class Relationship extends BaseObservable implements Parcelable {
     @Expose
     public String individualA_uuid;
 
+    @Expose
+    public String visit_uuid;
     @Expose
     public String individualB_uuid;
 

@@ -46,16 +46,11 @@ public class SocioFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
-    private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String SOCIAL_ID = "SOCIAL_ID";
-    private static final String EVENT_ID = "EVENT_ID";
-    private static final String CASE_ID = "CASE_ID";
 
     private Locations locations;
-    private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
-    private EventForm eventForm;
     private FragmentSocioBinding binding;
 
     public SocioFragment() {
@@ -67,21 +62,17 @@ public class SocioFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param locations Parameter 1.
-     * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
-     * @param eventForm Parameter 7.
      * @return A new instance of fragment SocioFragment.
      */
     //
-    public static SocioFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, EventForm eventForm) {
+    public static SocioFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
         SocioFragment fragment = new SocioFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
-        args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
     }
@@ -91,10 +82,8 @@ public class SocioFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
 
@@ -124,8 +113,8 @@ public class SocioFragment extends Fragment {
                 String uuidString = uuid.replaceAll("-", "");
 
                 data.uuid = uuidString;
-                data.individual_uuid = individual.getUuid();
-                data.location_uuid = locations.getUuid();
+                data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
+                data.location_uuid = ClusterFragment.selectedLocation.getUuid();
                 data.socialgroup_uuid = socialgroup.getUuid();
                 data.fw_uuid = fieldworkerData.getFw_uuid();
 
@@ -182,7 +171,6 @@ public class SocioFragment extends Fragment {
             save(false, true, viewModel);
         });
 
-        binding.setEventname(eventForm.event_name);
         Handler.colorLayouts(requireContext(), binding.MAINLAYOUT);
         View view = binding.getRoot();
         return view;
@@ -253,7 +241,7 @@ public class SocioFragment extends Fragment {
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    HouseMembersFragment.newInstance(locations, socialgroup, individual)).commit();
         }
 
 

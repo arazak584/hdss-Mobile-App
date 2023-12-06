@@ -19,6 +19,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,13 +86,15 @@ public class SocialgroupAdapter extends RecyclerView.Adapter<SocialgroupAdapter.
             public void onClick(View v) {
                 // Get the text field in the IndividualFragment where you want to insert the mother's ID
                 EditText householdIdField = activity.requireActivity().findViewById(R.id.socialgroup_uuid);
-                Spinner compSpinner = activity.requireActivity().findViewById(R.id.membership_complete);
+                EditText hohID = activity.requireActivity().findViewById(R.id.socialgroup_extid);
+                //Spinner compSpinner = activity.requireActivity().findViewById(R.id.membership_complete);
 
                 // Set the household ID in the text field
                 householdIdField.setText(socialgroup.getUuid());
-                compSpinner.setVisibility(View.VISIBLE);
-                compSpinner.setEnabled(false);
-                compSpinner.setSelection(1);
+                hohID.setText(socialgroup.getExtId());
+                //compSpinner.setVisibility(View.VISIBLE);
+               // compSpinner.setEnabled(false);
+                //compSpinner.setSelection(1);
 
                 // Hide the MotherDialogFragment
                 activity.dismiss();
@@ -106,9 +109,9 @@ public class SocialgroupAdapter extends RecyclerView.Adapter<SocialgroupAdapter.
 
     public void filter(String charText, SocialgroupViewModel socialgroupViewModel) {
         socialgroupList.clear();
-            if(locations != null)
+            if(ClusterFragment.selectedLocation != null)
                 try {
-                    List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(locations.getCompno());
+                    List<Socialgroup> list = socialgroupViewModel.changehousehold(ClusterFragment.selectedLocation.getCompno());
 
                     if (list != null) {
                         socialgroupList.addAll(list);

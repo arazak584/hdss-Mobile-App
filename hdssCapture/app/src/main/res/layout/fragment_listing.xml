@@ -7,10 +7,6 @@
     <data>
 
         <variable
-            name="locations"
-            type="org.openhds.hdsscapture.entity.Locations" />
-
-        <variable
             name="listing"
             type="org.openhds.hdsscapture.entity.Listing" />
 
@@ -177,6 +173,84 @@
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <Button
+                    android:id="@+id/button_gps"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gps"
+                    tools:ignore="DuplicateSpeakableTextCheck"
+                    android:background="@drawable/btnd_save"
+                    android:layout_gravity="center"
+                    android:textColor="@android:color/background_light"
+                    app:icon="@drawable/ic_baseline_my_location_24" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
+
+                <ProgressBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/progress_bar"
+                    android:visibility="gone">
+                </ProgressBar>
+
+
+
+                <EditText
+                    android:id="@+id/longitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/member_filter_textbox_size"
+                    android:textColor="@color/black"
+                    android:paddingLeft="20dp"
+                    android:gravity="center_vertical"
+                    android:focusable="false"
+                    android:hint="@string/longitude"
+                    android:text="@={listing.longitude}"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName|textCapCharacters"
+                    android:background="@drawable/txtbox_rone_wbevel"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
+
+
+                <EditText
+                    android:id="@+id/latitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textColor="@color/black"
+                    android:paddingStart="20dp"
+                    android:hint="@string/latitude"
+                    android:focusable="false"
+                    android:text="@={listing.latitude}"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName|textCapCharacters"
+                    android:background="@drawable/txtbox_rone_wbevel"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
+
+
+                <EditText
+                    android:id="@+id/accuracy"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textColor="@color/black"
+                    android:paddingStart="20dp"
+                    android:focusable="false"
+                    android:hint="@string/accuracy"
+                    android:text="@={listing.accuracy}"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName|textCapCharacters"
+                    android:background="@drawable/txtbox_rone_wbevel"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -221,7 +295,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/changecluster"
-                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:background="@drawable/btnd_save"
                     android:textColor="@android:color/background_light"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -355,7 +429,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_rone_dgbevel"
+                android:background="@drawable/btnd_save"
                 android:textColor="@android:color/background_light"
                 android:text="@string/saveclosedata" />
 
@@ -365,7 +439,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_rone_dgbevel"
+                android:background="@drawable/btnd_close"
                 android:textColor="@android:color/background_light"
                 android:text="@string/closedata" />
 

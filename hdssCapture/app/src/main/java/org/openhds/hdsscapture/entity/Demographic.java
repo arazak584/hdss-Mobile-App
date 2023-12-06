@@ -12,6 +12,7 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -26,7 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-@Entity(tableName = "demographic")
+@Entity(tableName = "demographic",
+        indices = {@Index(value = {"individual_uuid","fw_uuid","complete"}, unique = false)})
 public class Demographic extends BaseObservable implements Parcelable {
 
     @Expose
@@ -84,6 +86,9 @@ public class Demographic extends BaseObservable implements Parcelable {
 
     @Expose
     public Integer phone;
+
+    @Expose
+    public String visit_uuid;
 
     public Demographic(){}
 
@@ -231,6 +236,14 @@ public class Demographic extends BaseObservable implements Parcelable {
 
     public void setEdtime(String edtime) {
         this.edtime = edtime;
+    }
+
+    public String getVisit_uuid() {
+        return visit_uuid;
+    }
+
+    public void setVisit_uuid(String visit_uuid) {
+        this.visit_uuid = visit_uuid;
     }
 
     protected Demographic(Parcel in) {

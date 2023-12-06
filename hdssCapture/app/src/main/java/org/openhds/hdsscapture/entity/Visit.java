@@ -28,7 +28,7 @@ import java.util.Locale;
 
 
 @Entity(tableName = "visit",
-        indices = {@Index(value = {"location_uuid","uuid"}, unique = false)})
+        indices = {@Index(value = {"location_uuid","uuid","fw_uuid","complete"}, unique = false)})
 public class Visit extends BaseObservable implements Parcelable {
 
     @Expose

@@ -11,6 +11,7 @@ import androidx.databinding.BaseObservable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -26,7 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-@Entity(tableName = "outmigration")
+@Entity(tableName = "outmigration",
+indices = {@Index(value = {"individual_uuid", "residency_uuid","fw_uuid","complete"}, unique = false)})
 public class Outmigration extends BaseObservable implements Parcelable {
 
     @SerializedName("residency_uuid")
@@ -41,6 +43,9 @@ public class Outmigration extends BaseObservable implements Parcelable {
 
     @Expose
     public Date insertDate;
+
+    @Expose
+    public Date startDate;
 
     @Expose
     public Integer destination;
@@ -121,7 +126,20 @@ public class Outmigration extends BaseObservable implements Parcelable {
         try {
             this.insertDate = f.parse(insertDate);
         } catch (ParseException e) {
-            System.out.println("Visit Date Error " + e.getMessage());
+            System.out.println("Date Error " + e.getMessage());
+        }
+    }
+
+    public String getStartDate() {
+        if (startDate == null) return "";
+        return f.format(startDate);
+    }
+
+    public void setStartDate(String startDate) {
+        try {
+            this.startDate = f.parse(startDate);
+        } catch (ParseException e) {
+            System.out.println("Date Error " + e.getMessage());
         }
     }
 

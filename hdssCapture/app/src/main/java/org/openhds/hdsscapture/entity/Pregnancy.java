@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "pregnancy",
-        indices = {@Index(value = {"individual_uuid"}, unique = false)})
+        indices = {@Index(value = {"individual_uuid","fw_uuid","complete"}, unique = false)})
 public class Pregnancy extends BaseObservable implements Parcelable {
 
     @SerializedName("uuid")
@@ -259,9 +259,9 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             Calendar calendar = Calendar.getInstance(Locale.US);
             calendar.setTime(newRecordedDate);
             calendar.add(Calendar.MONTH, 9);
+            // Update the recordedDate field
             this.expectedDeliveryDate = calendar.getTime();
 
-            // Update the recordedDate field
             this.recordedDate = newRecordedDate;
         } catch (ParseException e) {
             // Handle the ParseException

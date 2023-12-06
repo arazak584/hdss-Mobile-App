@@ -7,6 +7,9 @@ import org.openhds.hdsscapture.Dao.IndividualDao;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
+import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
+import org.openhds.hdsscapture.entity.subentity.IndividualResidency;
+import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 
 import java.util.Date;
 import java.util.List;
@@ -44,6 +47,24 @@ public class IndividualRepository {
         return row.intValue();
     }
 
+    public int dthupdate(IndividualEnd e) {
+        AtomicInteger row = new AtomicInteger();
+        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.dthupdate(e)));
+        return row.intValue();
+    }
+
+    public int visited(IndividualVisited e) {
+        AtomicInteger row = new AtomicInteger();
+        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.visited(e)));
+        return row.intValue();
+    }
+
+    public int updateres(IndividualResidency e) {
+        AtomicInteger row = new AtomicInteger();
+        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.updateres(e)));
+        return row.intValue();
+    }
+
     public Individual findAll(String id) throws ExecutionException, InterruptedException {
 
         Callable<Individual> callable = () -> dao.retrieve(id.toUpperCase());
@@ -66,6 +87,15 @@ public class IndividualRepository {
     public List<Individual> retrieveByLocationId(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Individual>> callable = () -> dao.retrieveByLocationId(id);
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Individual> retrieveReturn(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.retrieveReturn(id);
 
         Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
 
@@ -184,6 +214,15 @@ public class IndividualRepository {
     public Individual father(String id) throws ExecutionException, InterruptedException {
 
         Callable<Individual> callable = () -> dao.father(id);
+
+        Future<Individual> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Individual visited(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Individual> callable = () -> dao.visited(id);
 
         Future<Individual> future = Executors.newSingleThreadExecutor().submit(callable);
 

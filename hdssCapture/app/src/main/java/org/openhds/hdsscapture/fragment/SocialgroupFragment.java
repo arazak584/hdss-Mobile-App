@@ -41,22 +41,15 @@ import java.util.concurrent.ExecutionException;
 public class SocialgroupFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_CLUSTER_IDS = "ARG_CLUSTER_IDS";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String SOCIAL_ID = "SOCIAL_ID";
-    private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
-    private static final String CASE_ID = "CASE_ID";
-    private static final String EVENT_ID = "EVENT_ID";
-    private final String TAG = "LOCATION.TAG";
 
     //private Cluster cluster_id;
     private Locations locations;
     private Socialgroup socialgroup;
-    private Residency residency;
     private Individual individual;
     private FragmentSocialgroupBinding binding;
-    private EventForm eventForm;
     private ProgressDialog progressDialog;
 
     public SocialgroupFragment() {
@@ -69,22 +62,18 @@ public class SocialgroupFragment extends Fragment {
      *
      //* @param cluster_id  Parameter 1.
      * @param locations Parameter 1.
-     * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
-     * @param eventForm Parameter 7.
      * @return A new instance of fragment HouseholdFragment.
      */
 
-    public static SocialgroupFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup,EventForm eventForm) {
+    public static SocialgroupFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
 
         SocialgroupFragment fragment = new SocialgroupFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
-        args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
     }
@@ -95,10 +84,8 @@ public class SocialgroupFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
 
@@ -137,28 +124,28 @@ public class SocialgroupFragment extends Fragment {
                 }, 500);
 
                 // Show the dialog fragment
-                ChangeHohFragment.newInstance(individual, residency, locations,socialgroup)
+                ChangeHohFragment.newInstance(individual, locations,socialgroup)
                         .show(getChildFragmentManager(), "ChangeHohFragment");
             }
         });
 
-        SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-            try {
-            Socialgroup data = viewModel.findhse(socialgroup.uuid);
-            if (data != null) {
-
-                binding.setSocialgroup(data);
-
-                if (individual.firstName != null && "UNK".equals(data.groupName)){
-
-                    data.groupName = individual.firstName +' '+ individual.lastName;
-                    data.individual_uuid = individual.uuid;
-                }
-
-            }
-           } catch (ExecutionException | InterruptedException e) {
-               e.printStackTrace();
-           }
+//        SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+//            try {
+//            Socialgroup data = viewModel.findhse(socialgroup.uuid);
+//            if (data != null) {
+//
+//                binding.setSocialgroup(data);
+//
+//                if (HouseMembersFragment.selectedIndividual.firstName != null && "UNK".equals(data.groupName)){
+//
+//                    data.groupName = HouseMembersFragment.selectedIndividual.firstName +' '+ HouseMembersFragment.selectedIndividual.lastName;
+//                    data.individual_uuid = HouseMembersFragment.selectedIndividual.uuid;
+//                }
+//
+//            }
+//           } catch (ExecutionException | InterruptedException e) {
+//               e.printStackTrace();
+//           }
 
 
 
@@ -177,7 +164,6 @@ public class SocialgroupFragment extends Fragment {
             save(false, true);
         });
 
-        binding.setEventname(eventForm.event_name);
         Handler.colorLayouts(requireContext(), binding.SOCIALGROUPSLAYOUT);
         View v = binding.getRoot();
         return v;
@@ -194,7 +180,7 @@ public class SocialgroupFragment extends Fragment {
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual, residency, locations, socialgroup)).commit();
+                    HouseMembersFragment.newInstance(locations, socialgroup, individual)).commit();
         }
     }
 

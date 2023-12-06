@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
@@ -94,10 +95,19 @@ public class BlankFragment extends Fragment {
         final TextView gpsLat = binding.getRoot().findViewById(R.id.gpsLat);
         final TextView name = binding.getRoot().findViewById(R.id.textView_locationName);
 
-        compno.setText(locations.getCompextId());
-        name.setText(locations.getLocationName());
-        gpsLat.setText(locations.getLatitude());
-        gps.setText(locations.getLongitude());
+        if (locations != null) {
+            compno.setText(locations.getCompextId());
+            name.setText(locations.getLocationName());
+            gpsLat.setText(locations.getLatitude());
+            gps.setText(locations.getLongitude());
+        } else {
+            // Handle the case where data is not available yet
+            // You might want to show a loading message or some default values
+            compno.setText("Loading...");
+            name.setText("Loading...");
+            gpsLat.setText("Loading...");
+            gps.setText("Loading...");
+        }
 
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_pregnancy);
@@ -130,69 +140,69 @@ public class BlankFragment extends Fragment {
         });
 
 
-        final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_householdid);
-        final HouseholdAdapter adapter = new HouseholdAdapter(this, locations);
-        final SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(requireActivity()).get(SocialgroupViewModel.class);
-
-        //recyclerView.setHasFixedSize(true);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                RecyclerView.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-        recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-        recyclerView.setAdapter(adapter);
-
-        //initial loading of Socialgroups in locations
-        //adapter.search(socialgroupViewModel);
-        // In your onCreateView() or onViewCreated() method
-        buttonHousehold = binding.getRoot().findViewById(R.id.button_household);
-        buttonHousehold.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLoadingDialog();
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.search(socialgroupViewModel);
-                    }
-                }, 500); // change delay time as needed
-            }
-
-            public void showLoadingDialog() {
-
-                if (progress == null) {
-                    progress = new ProgressDialog(requireContext());
-                    //progress.setTitle(getString(R.string.loading_lbl));
-                    //progress.setProgressStyle();
-                    progress.setMessage("Loading Households...");
-                    //progress.setMessage("Loading...");
-                    progress.setCancelable(false);
-                }
-                progress.show();
-            }
-        });
-
-
-        //initial loading of Individuals in locations
-        //adapter.filter("", socialgroupViewModel);
-
-        final AppCompatButton add_household = binding.getRoot().findViewById(R.id.button_newhousehold);
-        add_household.setOnClickListener(v -> {
-
-            final Individual individual = new Individual();
-            final Residency residency = new Residency();
-            final Socialgroup socialgroup = new Socialgroup();
-
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    NewSocialgroupFragment.newInstance(individual, residency, locations,socialgroup)).commit();
-        });
-
-        final AppCompatButton add_listing = binding.getRoot().findViewById(R.id.button_listing);
-        add_listing.setOnClickListener(v -> {
-
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    ListingFragment.newInstance(locations)).commit();
-        });
+//        final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_householdid);
+//        final HouseholdAdapter adapter = new HouseholdAdapter(this, locations, socialgroupViewModel);
+//        final SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(requireActivity()).get(SocialgroupViewModel.class);
+//
+//        //recyclerView.setHasFixedSize(true);
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+//                RecyclerView.VERTICAL);
+//        recyclerView.addItemDecoration(dividerItemDecoration);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+//        recyclerView.setAdapter(adapter);
+//
+//        //initial loading of Socialgroups in locations
+//        //adapter.search(socialgroupViewModel);
+//        // In your onCreateView() or onViewCreated() method
+////        buttonHousehold = binding.getRoot().findViewById(R.id.button_household);
+////        buttonHousehold.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+////                showLoadingDialog();
+////
+////                new Handler().postDelayed(new Runnable() {
+////                    @Override
+////                    public void run() {
+////                        adapter.search(socialgroupViewModel);
+////                    }
+////                }, 500); // change delay time as needed
+////            }
+////
+////            public void showLoadingDialog() {
+////
+////                if (progress == null) {
+////                    progress = new ProgressDialog(requireContext());
+////                    //progress.setTitle(getString(R.string.loading_lbl));
+////                    //progress.setProgressStyle();
+////                    progress.setMessage("Loading Households...");
+////                    //progress.setMessage("Loading...");
+////                    progress.setCancelable(false);
+////                }
+////                progress.show();
+////            }
+////        });
+//
+//
+//        //initial loading of Socialgroup in locations
+//        adapter.filter("", socialgroupViewModel);
+//
+//        final AppCompatButton add_household = binding.getRoot().findViewById(R.id.button_newhousehold);
+//        add_household.setOnClickListener(v -> {
+//
+//            final Individual individual = new Individual();
+//            final Residency residency = new Residency();
+//            final Socialgroup socialgroup = new Socialgroup();
+//
+//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                    NewSocialgroupFragment.newInstance(individual, residency, locations,socialgroup)).commit();
+//        });
+//
+//        final AppCompatButton add_listing = binding.getRoot().findViewById(R.id.button_listing);
+//        add_listing.setOnClickListener(v -> {
+//
+//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                    ListingFragment.newInstance(locations)).commit();
+//        });
 
         View view = binding.getRoot();
         return view;

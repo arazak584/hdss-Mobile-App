@@ -17,6 +17,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,6 @@ public class ChangeHOH extends RecyclerView.Adapter<ChangeHOH.ViewHolder>{
     LayoutInflater inflater;
     private final Locations locations;
     private final Socialgroup socialgroup;
-    private final Residency residency;
     private final List<Individual> individualList;
     public interface ChangehohSelectionListener {
         void onChangehohSelected(String headId);
@@ -40,10 +40,9 @@ public class ChangeHOH extends RecyclerView.Adapter<ChangeHOH.ViewHolder>{
         this.listener = listener;
     }
 
-    public ChangeHOH(ChangeHohFragment activity, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public ChangeHOH(ChangeHohFragment activity, Locations locations, Socialgroup socialgroup) {
         this.activity = activity;
         this.locations = locations;
-        this.residency = residency;
         this.socialgroup = socialgroup;
         individualList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
@@ -93,7 +92,7 @@ public class ChangeHOH extends RecyclerView.Adapter<ChangeHOH.ViewHolder>{
                 headIdField.setText(individual.getUuid());
                 headname.setText(individual.getFirstName() +' '+individual.getLastName());
 
-                // Hide the MotherDialogFragment
+                // Hide the HHDialogFragment
                 activity.dismiss();
             }
         });
@@ -107,9 +106,9 @@ public class ChangeHOH extends RecyclerView.Adapter<ChangeHOH.ViewHolder>{
     public void filter(String charText, IndividualViewModel individualViewModel) {
         individualList.clear();
 
-            if(locations != null)
+            if(ClusterFragment.selectedLocation != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveHOH(locations.getCompextId());
+                    List<Individual> list = individualViewModel.retrieveHOH(ClusterFragment.selectedLocation.getCompno());
 
                     if (list != null) {
                         individualList.addAll(list);

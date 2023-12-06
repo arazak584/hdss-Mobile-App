@@ -180,7 +180,7 @@
     <string name="text_location_note">PLEASE SELECT THE LOCATION OF THE INTERVIEW TO PROCEED</string>
     <string name="text_searchid">Search Using Compound Number or Compound Name</string>
     <string name="text_newlocation">New Locations</string>
-    <string name="button_home">Home</string>
+    <string name="button_home">HOME</string>
     <string name="text_location_text">Cluster</string>
     <string name="text_submit"><![CDATA[Save & Continue]]></string>
     <string name="title_activity_login">LoginActivity</string>
@@ -204,7 +204,7 @@
     <string name="nameofhousehold">Name of Household Head</string>
     <string name="nameofcompound">Name of Compound</string>
     <string name="newindividual">Add Individual(New)</string>
-    <string name="visithousehold">Visit Household</string>
+    <string name="visithousehold">Visit</string>
     <string name="text_extid">extId</string>
     <string name="compname">Compound Name</string>
     <string name="text_compid">Structure Number</string>
@@ -332,7 +332,7 @@
     <string name="loading_lbl">Loading</string>
     <string name="please_wait_lbl">Please wait</string>
     <string name="changehh">Change Household</string>
-    <string name="changehoh">Change Head of Household</string>
+    <string name="changehoh">Change HoH</string>
     <string name="individual_select">Select Individuals</string>
     <string name="own_phone">Do you Own a Phone?</string>
     <string name="rel_partner">Relationship Partner</string>
@@ -608,7 +608,7 @@
     <string name="diarrhoea">In the last two weeks did the child report diarrhoea?</string>
     <string name="arti">In the last two weeks did the child report ARTI?</string>
     <string name="muac">Mid-Upper Arm circumference (MUAC)</string>
-    <string name="filter">Filter</string>
+    <string name="filter">FILTER</string>
     <string name="extid">Cluster</string>
     <string name="other_specify">Other, Specify</string>
     <string name="visitDates">Date of Visit</string>
@@ -644,24 +644,36 @@
     <string name="downlods">Download Data</string>
     <string name="loch"><![CDATA[Location & Household]]></string>
     <string name="info">Settings</string>
-    <string name="external">External Inmigration</string>
+    <string name="external">Inmigration</string>
     <string name="earliest">Earliest Event Date</string>
     <string name="ODK">ODK</string>
     <string name="syncall">Sync All</string>
     <string name="stop">Stop</string>
     <string name="syncevent">Download Events</string>
     <string name="sync_details">Synchronization Summary</string>
-    <string name="Location">Locations</string>
+    <string name="Location">Location</string>
     <string name="Residency">Residency</string>
-    <string name="individuals">Individuals</string>
-    <string name="Socialgroup">Socialgroups</string>
+    <string name="individuals">Individual</string>
+    <string name="Socialgroup">Socialgroup</string>
     <string name="pregnancy">Pregnancy</string>
     <string name="event">Event</string>
     <string name="total">Total</string>
     <string name="dates">Date</string>
-    <string name="relationships">Relationships</string>
+    <string name="relationships">Relationship</string>
     <string name="ses">SES</string>
-    <string name="vac">Vaccinations</string>
+    <string name="vac">Vaccination</string>
+    <string name="forms">Forms</string>
+    <string name="household">Household</string>
+    <string name="location">Location</string>
+    <string name="hse_searchid">Search</string>
+    <string name="death">Death Registration</string>
+    <string name="omg">Outmigration</string>
+    <string name="pregnancyex">Pregnancy (2)</string>
+    <string name="pregoutcome2">Pregnancy Outcome (2)</string>
+    <string name="amendment">Amendment</string>
+    <string name="sess">SES (Profile)</string>
+    <string name="reltn">Change Household</string>
+    <string name="compvisit">Finish Visit</string>
 
     //SocioDemo End
 

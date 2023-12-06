@@ -34,6 +34,7 @@ import org.openhds.hdsscapture.Dao.RoundDao;
 import org.openhds.hdsscapture.Dao.SocialgroupDao;
 import org.openhds.hdsscapture.Dao.VaccinationDao;
 import org.openhds.hdsscapture.Dao.VisitDao;
+import org.openhds.hdsscapture.Dao.VpmDao;
 import org.openhds.hdsscapture.Utilities.Converter;
 import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.ApiUrl;
@@ -59,6 +60,7 @@ import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.Vpm;
 import org.openhds.hdsscapture.odk.Form;
 
 import java.util.concurrent.ExecutorService;
@@ -68,7 +70,7 @@ import java.util.concurrent.Executors;
         Relationship.class, Locations.class, Residency.class, Pregnancyoutcome.class, Individual.class, Round.class, Demographic.class,
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
         Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class, Duplicate.class,
-        ApiUrl.class, Configsettings.class, Form.class
+        ApiUrl.class, Configsettings.class, Form.class, Vpm.class
         }, version = 2 , exportSchema = true)
 
 @TypeConverters({Converter.class})
@@ -99,6 +101,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract ApiUrlDao apiUrlDao();
     public abstract ConfigDao configDao();
     public abstract OdkDao odkDao();
+    public abstract VpmDao vpmDao();
 
 
     private static volatile AppDatabase INSTANCE;
@@ -155,6 +158,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 fieldworkerDao().deleteAll();
                 configDao().deleteAll();
                 odkDao().deleteAll();
+                vpmDao().deleteAll();
 
                 // Perform any other necessary cleanup or initialization
 

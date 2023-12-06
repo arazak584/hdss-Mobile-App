@@ -23,6 +23,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,12 +35,10 @@ public class RelationshipDialogFragment extends DialogFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
-    private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private final String TAG = "INDIVIDUAL.TAG";
 
     private Locations locations;
-    private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentRelationshipDialogBinding binding;
@@ -53,17 +52,15 @@ public class RelationshipDialogFragment extends DialogFragment {
      * this fragment using the provided parameters.
      *
      * @param locations Parameter 1.
-     * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
      * @return A new instance of fragment RelationshipDialogFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static RelationshipDialogFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public static RelationshipDialogFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
         RelationshipDialogFragment fragment = new RelationshipDialogFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
         fragment.setArguments(args);
@@ -75,7 +72,6 @@ public class RelationshipDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
@@ -88,8 +84,8 @@ public class RelationshipDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_relationship_dialog, container, false);
 
         final TextView compno = view.findViewById(R.id.textViewman_compextId);
-        if (locations != null) {
-            compno.setText(locations.getCompno());
+        if (ClusterFragment.selectedLocation != null) {
+            compno.setText(ClusterFragment.selectedLocation.getCompno());
         } else {
             // Handle the case where locations is null
             compno.setText("Error loading locations data");
@@ -106,7 +102,7 @@ public class RelationshipDialogFragment extends DialogFragment {
 
         //Load Father Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_relationship);
-        final RelationshipAdapter adapter = new RelationshipAdapter(this, residency, locations, socialgroup );
+        final RelationshipAdapter adapter = new RelationshipAdapter(this, locations, socialgroup );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
 

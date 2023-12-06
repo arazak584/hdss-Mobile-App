@@ -1,6 +1,11 @@
 package org.openhds.hdsscapture.Adapter;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
+import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,13 +14,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
+import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.fragment.BlankFragment;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
+import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 import org.openhds.hdsscapture.fragment.HouseholdFragment;
 
 import java.util.ArrayList;
@@ -24,15 +35,21 @@ import java.util.concurrent.ExecutionException;
 
 public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.ViewHolder> {
 
-    BlankFragment activity;
-    LayoutInflater inflater;
-    private final Locations locations;
+    private final ClusterFragment activity;
+    private final LayoutInflater inflater;
+    private static Locations selectedLocation;
     private final List<Socialgroup> socialgroupList;
+    private final SocialgroupViewModel socialgroupViewModel;
+    private final Socialgroup socialgroup;
+    private final FragmentActivity activity1;
+    private Individual individual;
 
-
-    public HouseholdAdapter(BlankFragment activity, Locations locations) {
+    public HouseholdAdapter(Context context, ClusterFragment activity, Locations selectedLocation, Socialgroup socialgroup, SocialgroupViewModel socialgroupViewModel) {
+        this.activity1 = activity.requireActivity();
         this.activity = activity;
-        this.locations = locations;
+        this.selectedLocation = selectedLocation;
+        this.socialgroup = socialgroup;
+        this.socialgroupViewModel = socialgroupViewModel;
         socialgroupList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -63,24 +80,33 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
     public void onBindViewHolder(@NonNull HouseholdAdapter.ViewHolder holder, int position) {
         final Socialgroup socialgroup = socialgroupList.get(position);
 
-        holder.name.setText(socialgroup.getGroupName());
-        holder.hhid.setText(socialgroup.getExtId());
+        if (ClusterFragment.selectedLocation != null) {
+            holder.name.setText(socialgroup.getGroupName());
+            holder.hhid.setText(socialgroup.getExtId()+ " " + "(" + ClusterFragment.selectedLocation.getCompno() + ")" );
 
-        Integer visit = socialgroup.complete;
+            Integer visit = socialgroup.complete;
 
-        if (visit != null) {
-            holder.hhid.setTextColor(Color.parseColor("#32CD32"));
-            holder.name.setTextColor(Color.parseColor("#32CD32"));
+            if (visit != null) {
+                holder.hhid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
+                holder.name.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
+            } else {
+                holder.hhid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+                holder.name.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+            }
         }else {
-            holder.hhid.setTextColor(Color.parseColor("#FF4500"));
-            holder.name.setTextColor(Color.parseColor("#FF4500"));
+            // Handle the case when selectedLocation is null
+            holder.name.setText("No selected location");
+            holder.hhid.setText("");
         }
 
-
         holder.linearLayout.setOnClickListener(v -> {
-            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                   HouseholdFragment.newInstance(locations, socialgroup)).commit();
+            // Use the stored activity reference to access the getSupportFragmentManager()
+            activity1.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container_cluster, HouseMembersFragment.newInstance(selectedLocation, socialgroup,individual))
+                    .addToBackStack(null)
+                    .commit();
         });
+
     }
 
     @Override
@@ -88,45 +114,50 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
         return socialgroupList.size();
     }
 
-//    public void filter(String charText, SocialgroupViewModel socialgroupViewModel) {
-//        socialgroupList.clear();
-//            if(locations != null)
-//                try {
-//                    List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(locations.getCompextId());
-//
-//                    if (list != null) {
-//                        socialgroupList.addAll(list);
-//                    }
-//                } catch (ExecutionException e) {
-//                    e.printStackTrace();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//
-//
-//        notifyDataSetChanged();
-//    }
+    public void setSelectedLocation(Locations selectedLocation) {
 
-    public void search(SocialgroupViewModel socialgroupViewModel) {
         socialgroupList.clear();
-        if(locations != null)
+        if (selectedLocation != null) {
             try {
-                List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(locations.getCompno());
+                List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(selectedLocation.getCompno());
 
                 if (list != null) {
                     socialgroupList.addAll(list);
                 }
-                if (list.isEmpty()) {
-                    Toast.makeText(activity.getActivity(), "No household Found", Toast.LENGTH_SHORT).show();
+                if (list.isEmpty()){
+                    Toast.makeText(activity.getActivity(), "No Active Household In " + selectedLocation.getCompno(), Toast.LENGTH_LONG).show();
                 }
-
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+
         notifyDataSetChanged();
-        activity.dismissLoadingDialog();
     }
+
+
+//    public void search(SocialgroupViewModel socialgroupViewModel) {
+//        socialgroupList.clear();
+//        if(locations != null)
+//            try {
+//                List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(locations.getCompno());
+//
+//                if (list != null) {
+//                    socialgroupList.addAll(list);
+//                }
+//                if (list.isEmpty()) {
+//                    Toast.makeText(activity.getActivity(), "No household Found", Toast.LENGTH_SHORT).show();
+//                }
+//
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        notifyDataSetChanged();
+//        activity.dismissLoadingDialog();
+//    }
 
 }

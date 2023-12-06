@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity(tableName = "locations",
-indices = {@Index(value = {"uuid","compextId","compno"}, unique = true)})
+indices = {@Index(value = {"uuid","compextId","compno","locationLevel_uuid"}, unique = false)})
 public class Locations extends BaseObservable implements Parcelable {
 
     @SerializedName("uuid")
@@ -119,6 +119,8 @@ public class Locations extends BaseObservable implements Parcelable {
 
     @Expose
     public String edtime;
+    @Expose
+    public boolean selected;
 
     public Locations(){}
 
@@ -147,6 +149,13 @@ public class Locations extends BaseObservable implements Parcelable {
         }
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
     @NotNull
     public String getUuid() {
         return uuid;

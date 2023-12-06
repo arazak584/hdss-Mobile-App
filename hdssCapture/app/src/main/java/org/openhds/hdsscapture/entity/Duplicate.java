@@ -10,6 +10,7 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -24,7 +25,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-@Entity(tableName = "duplicate")
+@Entity(tableName = "duplicate",
+        indices = {@Index(value = {"individual_uuid","fw_uuid","complete"}, unique = false)})
 public class Duplicate extends BaseObservable {
 
     @Expose
@@ -88,6 +90,9 @@ public class Duplicate extends BaseObservable {
 
     @Expose
     public String dup2_lname;
+
+    @Expose
+    public String visit_uuid;
 
     public Duplicate(){}
 
@@ -271,6 +276,14 @@ public class Duplicate extends BaseObservable {
 
     public void setDup2_lname(String dup2_lname) {
         this.dup2_lname = dup2_lname;
+    }
+
+    public String getVisit_uuid() {
+        return visit_uuid;
+    }
+
+    public void setVisit_uuid(String visit_uuid) {
+        this.visit_uuid = visit_uuid;
     }
 
     //SPINNERS ENTITY COMPLETE FORM FOR SYNC

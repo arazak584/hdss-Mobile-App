@@ -25,8 +25,8 @@ public interface InmigrationDao {
     @Query("SELECT * FROM inmigration WHERE complete=1")
     List<Inmigration> retrieveimgToSync();
 
-    @Query("SELECT * FROM inmigration where individual_uuid=:id ORDER BY recordedDate DESC LIMIT 1")
-    Inmigration find(String id);
+    @Query("SELECT * FROM inmigration where individual_uuid=:id and location_uuid=:locid ORDER BY recordedDate DESC LIMIT 1")
+    Inmigration find(String id, String locid);
 
     @Query("SELECT COUNT(*) FROM inmigration a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")

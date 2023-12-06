@@ -12,7 +12,7 @@
 
         <variable
             name="death"
-            type="org.openhds.hdsscapture.entity.Death" />
+            type="org.openhds.hdsscapture.entity.Vpm" />
 
         <variable
             name="pregoutcome"
@@ -237,7 +237,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/father_extid"
                     tools:ignore="DuplicateSpeakableTextCheck"
-                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:background="@drawable/btnd_save"
                     android:textColor="@android:color/background_light"
                     app:icon="@drawable/ic_baseline_person_24" />
 
@@ -654,7 +654,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/conception"
                     tools:ignore="DuplicateSpeakableTextCheck"
-                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:background="@drawable/btnd_save"
                     android:textColor="@android:color/background_light"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
@@ -676,7 +676,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/outcomeDate"
                     tools:ignore="DuplicateSpeakableTextCheck"
-                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:background="@drawable/btnd_save"
                     android:textColor="@android:color/background_light"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
@@ -926,7 +926,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_rone_dgbevel"
+                android:background="@drawable/btnd_save"
                 android:textColor="@android:color/background_light"
                 android:text="@string/saveclosedata" />
 
@@ -936,7 +936,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_rone_dgbevel"
+                android:background="@drawable/btnd_close"
                 android:textColor="@android:color/background_light"
                 android:text="@string/closedata" />
 

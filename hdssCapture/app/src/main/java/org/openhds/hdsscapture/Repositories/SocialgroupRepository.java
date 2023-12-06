@@ -5,6 +5,7 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.SocialgroupDao;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 
 import java.util.Date;
@@ -43,6 +44,12 @@ public class SocialgroupRepository {
         return row.intValue();
     }
 
+    public int visited(HvisitAmendment s) {
+        AtomicInteger row = new AtomicInteger();
+        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.visited(s)));
+        return row.intValue();
+    }
+
 
     public Socialgroup retrieve(String id) throws ExecutionException, InterruptedException {
 
@@ -56,6 +63,24 @@ public class SocialgroupRepository {
     public Socialgroup find(String id) throws ExecutionException, InterruptedException {
 
         Callable<Socialgroup> callable = () -> dao.find(id);
+
+        Future<Socialgroup> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Socialgroup visit(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Socialgroup> callable = () -> dao.visit(id);
+
+        Future<Socialgroup> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Socialgroup minor(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Socialgroup> callable = () -> dao.minor(id);
 
         Future<Socialgroup> future = Executors.newSingleThreadExecutor().submit(callable);
 
@@ -83,6 +108,15 @@ public class SocialgroupRepository {
     public List<Socialgroup> retrieveBySocialgroup(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Socialgroup>> callable = () -> dao.retrieveBySocialgroup(id);
+
+        Future<List<Socialgroup>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Socialgroup> changehousehold(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Socialgroup>> callable = () -> dao.changehousehold(id);
 
         Future<List<Socialgroup>> future = Executors.newSingleThreadExecutor().submit(callable);
 

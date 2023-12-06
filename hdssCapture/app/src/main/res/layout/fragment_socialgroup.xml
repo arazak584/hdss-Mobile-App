@@ -135,7 +135,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/changehoh"
-                android:background="@drawable/btnd_rone_dgbevel"
+                android:background="@drawable/btnd_save"
                 android:textColor="@android:color/background_light"
                 tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -229,7 +229,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:background="@drawable/btnd_save"
                     android:textColor="@android:color/background_light"
                     android:text="@string/saveclosedata" />
 
@@ -239,7 +239,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:background="@drawable/btnd_close"
                     android:textColor="@android:color/background_light"
                     android:text="@string/closedata" />
 

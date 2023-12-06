@@ -16,6 +16,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,9 +130,9 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
             }
         } else {
 
-            if(locations != null)
+            if(ClusterFragment.selectedLocation != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveByFather(locations.getCompextId());
+                    List<Individual> list = individualViewModel.retrieveByFather(ClusterFragment.selectedLocation.getCompno());
 
                     if (list != null) {
                         individualList.addAll(list);

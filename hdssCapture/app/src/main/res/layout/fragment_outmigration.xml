@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="outmigration"
+            type="org.openhds.hdsscapture.entity.Outmigration" />
+
+        <variable
+            name="eventname"
+            type="String" />
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp"
+        tools:context=".fragment.OutmigrationFragment">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/outmigration"
+            android:textAllCaps="true"
+            android:textColor="@color/colorPrimary"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_margin="5dp"
+            android:background="@color/colorPrimaryDark" />
+
+            <TextView
+                android:id="@+id/ind"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textAlignment="center"/>
+
+        <ScrollView
+            android:id="@+id/MAIN_LAYOUT"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/fw"
+                        android:text="@string/fw">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/omg_fw"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={outmigration.fw_uuid}"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                        android:visibility="gone"
+                        android:id="@+id/button_omg_insertDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/visitDate"
+                        tools:ignore="DuplicateSpeakableTextCheck"
+                        app:icon="@drawable/ic_baseline_calendar_month_24" />
+
+                    <TextView
+                        android:visibility="gone"
+                        android:id="@+id/omg_insertDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autofillHints=""
+                        android:ems="10"
+                        android:text="@={outmigration.insertDate}"
+                        android:minHeight="30dp"
+                        android:textSize="20sp"
+                        tools:ignore="TextContrastCheck" />
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:inputType="text"
+                        android:hint="@string/uuid"
+                        android:text="@string/ind_extid">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/omg_uuid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={outmigration.uuid}"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/resuuid"
+                        android:text="@string/resuuid">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/res_uuid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={outmigration.residency_uuid}"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/ind_extid"
+                        android:text="@string/ind_extid">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/omg_extid"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={outmigration.individual_uuid}"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/visitid"
+                        android:text="@string/household_select">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/omg_visitid"
+                            android:text="@={outmigration.visit_uuid}"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/earliest"
+                        android:text="@string/earliest">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:id="@+id/earliest"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/startdate"
+                        android:text="@string/startdate">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:id="@+id/startdate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={outmigration.startDate}"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:text="@string/destination"/>
+
+                    <Spinner
+                        android:id="@+id/destination"
+                        selection="@{outmigration.destination}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:minHeight="48dp"
+                        android:onItemSelected="@{outmigration::setDestination}"
+                        android:padding="20dp"
+                        android:spinnerMode="dialog"
+                        android:textColor="#000301" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:text="@string/reason_out"/>
+
+                    <Spinner
+                        android:id="@+id/reason_out"
+                        selection="@{outmigration.reason}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:minHeight="48dp"
+                        android:onItemSelected="@{outmigration::setReason}"
+                        android:padding="20dp"
+                        android:spinnerMode="dialog"
+                        android:textColor="#000301" />
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        goneUnless="@{outmigration.reason==77}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/attend_you_other"
+                        android:text="@string/attend_you_other">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/other_reason"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={outmigration.reason_oth}"
+                            android:inputType="textCapCharacters"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <Button
+                        android:id="@+id/button_omg_imgDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/outdate"
+                        tools:ignore="DuplicateSpeakableTextCheck"
+                        android:background="@drawable/btnd_save"
+                        android:textColor="@android:color/background_light"
+                        app:icon="@drawable/ic_baseline_calendar_month_24" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/outdate"
+                        android:text="@string/outdate">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:id="@+id/omg_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={outmigration.recordedDate}"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/buttonSaveClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/btnd_save"
+                android:textColor="@android:color/background_light"
+                android:text="@string/savecontinuedata" />
+
+            <Button
+                android:id="@+id/buttonClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/btnd_close"
+                android:textColor="@android:color/background_light"
+                android:text="@string/closedata" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+</layout>

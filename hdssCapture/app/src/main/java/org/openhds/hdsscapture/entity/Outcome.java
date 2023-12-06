@@ -10,6 +10,7 @@ import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -25,7 +26,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-@Entity(tableName = "outcome")
+@Entity(tableName = "outcome",
+indices = {@Index(value = {"uuid", "childuuid","complete"}, unique = false)})
 public class Outcome extends BaseObservable {
 
     @SerializedName("uuid")

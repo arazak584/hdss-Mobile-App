@@ -22,6 +22,7 @@ import org.openhds.hdsscapture.Dialog.RelationshipDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.databinding.FragmentRelationshipBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
@@ -30,6 +31,7 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
@@ -53,19 +55,13 @@ public class RelationshipFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
-    private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String SOCIAL_ID = "SOCIAL_ID";
-    private static final String CASE_ID = "CASE_ID";
-    private static final String EVENT_ID = "EVENT_ID";
     private final String TAG = "RELATIONSHIP.TAG";
 
     private Locations locations;
-    private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentRelationshipBinding binding;
-    private EventForm eventForm;
-    private Relationship relationship;
     private ProgressDialog progressDialog;
 
     public RelationshipFragment() {
@@ -77,21 +73,17 @@ public class RelationshipFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param locations Parameter 1.
-     * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
      * @param individual Parameter 4.
-     * @param eventForm Parameter 7.
      * @return A new instance of fragment RelationshipFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static RelationshipFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup, EventForm eventForm) {
+    public static RelationshipFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
         RelationshipFragment fragment = new RelationshipFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
-        args.putParcelable(EVENT_ID, eventForm);
         fragment.setArguments(args);
         return fragment;
     }
@@ -101,10 +93,8 @@ public class RelationshipFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
 
@@ -115,7 +105,7 @@ public class RelationshipFragment extends Fragment {
         binding = FragmentRelationshipBinding.inflate(inflater, container, false);
 
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(individual.firstName + " " + individual.lastName);
+        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_partner);
 
@@ -140,7 +130,7 @@ public class RelationshipFragment extends Fragment {
 
 
                 // Show the dialog fragment
-                RelationshipDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                RelationshipDialogFragment.newInstance(individual, locations,socialgroup)
                         .show(getChildFragmentManager(), "RelationshipDialogFragment");
             }
         });
@@ -178,7 +168,7 @@ public class RelationshipFragment extends Fragment {
 
         RelationshipViewModel viewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
         try {
-            Relationship data = viewModel.find(individual.uuid);
+            Relationship data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid);
             if (data != null) {
                 binding.setRelationship(data);
             } else {
@@ -191,8 +181,8 @@ public class RelationshipFragment extends Fragment {
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
 
-                data.individualA_uuid = individual.getUuid();
-                data.dob = individual.dob;
+                data.individualA_uuid = HouseMembersFragment.selectedIndividual.getUuid();
+                data.dob = HouseMembersFragment.selectedIndividual.dob;
 
                 Date currentDate = new Date(); // Get the current date and time
                 // Create a Calendar instance and set it to the current date and time
@@ -325,11 +315,26 @@ public class RelationshipFragment extends Fragment {
             }
             finalData.complete=1;
             viewModel.add(finalData);
+            IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
+            try {
+                Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                if (data != null) {
+                    IndividualVisited visited = new IndividualVisited();
+                    visited.uuid = finalData.individualA_uuid;
+                    visited.complete = 2;
+                    iview.visited(visited);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    EventsFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    HouseMembersFragment.newInstance(locations, socialgroup,individual)).commit();
         }
 
     }

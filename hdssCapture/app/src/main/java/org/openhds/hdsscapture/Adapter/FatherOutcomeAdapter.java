@@ -18,6 +18,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,6 @@ public class FatherOutcomeAdapter extends RecyclerView.Adapter<FatherOutcomeAdap
     LayoutInflater inflater;
     private final Locations locations;
     private final Socialgroup socialgroup;
-    private final Residency residency;
     private final List<Individual> individualList;
 
     public interface FatherSelectionListener {
@@ -44,10 +44,9 @@ public class FatherOutcomeAdapter extends RecyclerView.Adapter<FatherOutcomeAdap
         this.listener = listener;
     }
 
-    public FatherOutcomeAdapter(FatherOutcomeDialogFragment activity, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public FatherOutcomeAdapter(FatherOutcomeDialogFragment activity, Locations locations, Socialgroup socialgroup) {
         this.activity = activity;
         this.locations = locations;
-        this.residency = residency;
         this.socialgroup = socialgroup;
         individualList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
@@ -134,9 +133,9 @@ public class FatherOutcomeAdapter extends RecyclerView.Adapter<FatherOutcomeAdap
             }
         } else {
 
-            if(locations != null)
+            if(ClusterFragment.selectedLocation != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveByFather(locations.getCompextId());
+                    List<Individual> list = individualViewModel.retrieveByFather(ClusterFragment.selectedLocation.getCompno());
 
                     if (list != null) {
                         individualList.addAll(list);

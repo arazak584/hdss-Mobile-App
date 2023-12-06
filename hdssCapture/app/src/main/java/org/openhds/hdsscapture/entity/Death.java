@@ -13,6 +13,7 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -28,7 +29,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-@Entity(tableName = "death")
+@Entity(tableName = "death",
+indices = {@Index(value = {"individual_uuid","residency_uuid","fw_uuid","complete"}, unique = false)})
 public class Death extends BaseObservable implements Parcelable {
 
     @Expose
@@ -88,9 +90,6 @@ public class Death extends BaseObservable implements Parcelable {
     public Integer complete;
 
     @Expose
-    public Integer vpmcomplete;
-
-    @Expose
     public Integer edit;
 
     @Expose
@@ -111,6 +110,8 @@ public class Death extends BaseObservable implements Parcelable {
     @Expose
     public Integer AgeAtDeath=0;
 
+    @Expose
+    public String residency_uuid;
 
     public Death(){}
 
@@ -318,6 +319,14 @@ public class Death extends BaseObservable implements Parcelable {
 
     public void setDeathPlace_oth(String deathPlace_oth) {
         this.deathPlace_oth = deathPlace_oth;
+    }
+
+    public String getResidency_uuid() {
+        return residency_uuid;
+    }
+
+    public void setResidency_uuid(String residency_uuid) {
+        this.residency_uuid = residency_uuid;
     }
 
     public Integer getAgeAtDeath() {

@@ -275,19 +275,19 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_rone_dgbevel"
+                android:background="@drawable/btnd_save"
                 android:textColor="@android:color/background_light"
-                android:text="@string/savecontinuedata" />
+                android:text="@string/save" />
 
             <Button
                 android:id="@+id/buttonClose"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@drawable/btnd_rone_dgbevel"
+                android:background="@drawable/btnd_close"
                 android:textColor="@android:color/background_light"
                 android:layout_weight="1"
-                android:text="@string/closedata" />
+                android:text="@string/close" />
 
         </LinearLayout>
     </LinearLayout>
