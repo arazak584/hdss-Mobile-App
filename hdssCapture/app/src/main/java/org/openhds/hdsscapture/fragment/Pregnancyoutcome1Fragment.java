@@ -1088,6 +1088,12 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                         ind.dob = finalData.outcomeDate;
                         ind.complete = 1;
                         ind.dobAspect = 1;
+                        ind.hohID = socialgroup.extId;
+                        ind.compno = ClusterFragment.selectedLocation.compno;
+                        ind.socialgroup = socialgroup.uuid;
+                        ind.startDate = finalData.outcomeDate;
+                        ind.endType = 1;
+                        ind.residency = binding.getPregoutcome1().residency_uuid;
 
                         individualViewModel.add(ind);
 
@@ -1189,6 +1195,12 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                         ind.dob = finalData.outcomeDate;
                         ind.complete = 1;
                         ind.dobAspect = 1;
+                        ind.hohID = socialgroup.extId;
+                        ind.compno = ClusterFragment.selectedLocation.compno;
+                        ind.socialgroup = socialgroup.uuid;
+                        ind.startDate = finalData.outcomeDate;
+                        ind.endType = 1;
+                        ind.residency = binding.getPregoutcome2().residency_uuid;
 
                         individualViewModel.add(ind);
 
@@ -1291,6 +1303,12 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                         ind.dob = finalData.outcomeDate;
                         ind.complete = 1;
                         ind.dobAspect = 1;
+                        ind.hohID = socialgroup.extId;
+                        ind.compno = ClusterFragment.selectedLocation.compno;
+                        ind.socialgroup = socialgroup.uuid;
+                        ind.startDate = finalData.outcomeDate;
+                        ind.endType = 1;
+                        ind.residency = binding.getPregoutcome3().residency_uuid;
 
                         individualViewModel.add(ind);
 
@@ -1393,6 +1411,12 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                         ind.dob = finalData.outcomeDate;
                         ind.complete = 1;
                         ind.dobAspect = 1;
+                        ind.hohID = socialgroup.extId;
+                        ind.compno = ClusterFragment.selectedLocation.compno;
+                        ind.socialgroup = socialgroup.uuid;
+                        ind.startDate = finalData.outcomeDate;
+                        ind.endType = 1;
+                        ind.residency = binding.getPregoutcome4().residency_uuid;
 
                         individualViewModel.add(ind);
 
@@ -1603,6 +1627,8 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             if (finalData.sttime !=null && finalData.edtime==null){
                 finalData.edtime = endtime;
             }
+            finalData.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
+            finalData.visit_uuid = binding.getPregoutcome().visit_uuid;
             finalData.complete=1;
             viewModel.add(finalData);
             IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);

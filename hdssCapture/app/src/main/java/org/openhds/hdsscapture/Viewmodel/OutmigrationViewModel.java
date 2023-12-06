@@ -27,8 +27,8 @@ public class OutmigrationViewModel extends AndroidViewModel {
 
     public void add(Outmigration... data){outmigrationRepository.create(data);  }
 
-    public Outmigration find(String id) throws ExecutionException, InterruptedException {
-        return outmigrationRepository.find(id);
+    public Outmigration find(String id,String locid) throws ExecutionException, InterruptedException {
+        return outmigrationRepository.find(id,locid);
     }
 
     public List<Outmigration> findToSync() throws ExecutionException, InterruptedException {

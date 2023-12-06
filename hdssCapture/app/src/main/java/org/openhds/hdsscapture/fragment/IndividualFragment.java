@@ -48,6 +48,7 @@ import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
@@ -865,6 +866,42 @@ public class IndividualFragment extends Fragment {
                     resModel.update(residencyAmendment);
                 }
 
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //Update Fake Individual's Residency that was used to create the socialgroup
+            ResidencyViewModel unks = new ViewModelProvider(this).get(ResidencyViewModel.class);
+            try {
+                Residency datas = unks.unk(socialgroup.uuid);
+                if (datas != null) {
+                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+                    residencyAmendment.endType = 2;
+                    residencyAmendment.endDate = new Date();
+                    residencyAmendment.uuid = datas.uuid;
+                    residencyAmendment.complete = 2;
+                    unks.update(residencyAmendment);
+                }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //Update Fake Individual's Residency that was used to create the socialgroup
+            IndividualViewModel unkss = new ViewModelProvider(this).get(IndividualViewModel.class);
+            try {
+                Individual datas = unkss.unk(socialgroup.uuid);
+                if (datas != null) {
+                    IndividualEnd endInd = new IndividualEnd();
+                    endInd.endType = 2;
+                    endInd.endDate = finalData.insertDate;
+                    endInd.uuid = datas.uuid;
+                    endInd.complete = 2;
+                    individualViewModel.dthupdate(endInd);
+                }
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {

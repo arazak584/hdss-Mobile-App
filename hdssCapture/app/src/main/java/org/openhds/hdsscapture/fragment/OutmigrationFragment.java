@@ -145,7 +145,7 @@ public class OutmigrationFragment extends DialogFragment {
 
         OutmigrationViewModel viewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
         try {
-            Outmigration data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+            Outmigration data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid,ClusterFragment.selectedLocation.uuid);
             VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
             if (data != null) {
                 binding.setOutmigration(data);

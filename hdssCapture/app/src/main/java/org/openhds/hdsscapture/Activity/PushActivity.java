@@ -130,7 +130,7 @@ public class PushActivity extends AppCompatActivity {
 
                             Locations[] d = data.getData().toArray(new Locations[0]);
                             for (Locations elem : d) {
-                                elem.setComplete(2);
+                                elem.setComplete(0);
                                 Log.e("PUSH.tag", "Has value " + elem.getCompno());
                             }
                             locationViewModel.add(d);
@@ -198,7 +198,7 @@ public class PushActivity extends AppCompatActivity {
                             Visit[] d = data.getData().toArray(new Visit[0]);
 
                             for (Visit elem : d) {
-                                elem.complete = 2;
+                                elem.complete = 0;
                             }
                             visitViewModel.add(d);
 
@@ -263,7 +263,7 @@ public class PushActivity extends AppCompatActivity {
                             Listing[] d = data.getData().toArray(new Listing[0]);
 
                             for (Listing elem : d) {
-                                elem.complete = 2;
+                                elem.complete = 0;
                             }
                             listingViewModel.add(d);
 
@@ -331,7 +331,7 @@ public class PushActivity extends AppCompatActivity {
 
                             Individual[] d = data.getData().toArray(new Individual[0]);
                             for (Individual elem : d) {
-                                elem.complete = 2;
+                                elem.complete = 0;
                             }
                             individualViewModel.add(d);
 
@@ -397,7 +397,7 @@ public class PushActivity extends AppCompatActivity {
 
 
                             for (Socialgroup elem : d) {
-                                elem.complete = 2;
+                                elem.complete = 0;
                             }
                             socialgroupViewModel.add(d);
 

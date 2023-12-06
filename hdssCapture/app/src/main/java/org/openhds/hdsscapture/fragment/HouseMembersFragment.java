@@ -402,7 +402,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             TextView person = view.findViewById(R.id.textView_person);
             person.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
             //eventFormAdapter.formFactory(HouseMembersFragment.selectedIndividual);
-            AppCompatButton dup = view.findViewById(R.id.dup);
+            //AppCompatButton dup = view.findViewById(R.id.dup);
             AppCompatButton preg = view.findViewById(R.id.pregnancy);
             AppCompatButton dth = view.findViewById(R.id.death);
             AppCompatButton omg = view.findViewById(R.id.omg);
@@ -422,7 +422,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 Visit data = visitViewModel.find(socialgroup.uuid);
 
                 // Define default texts for each button
-                String TextDup = "Duplicate";
+                //String TextDup = "Duplicate";
                 String TextPreg = "Pregnancy";
                 String TextDth = "Death";
                 String TextOmg = "Outmigration";
@@ -439,8 +439,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
                 // Disable all buttons if Visit data is null
                 boolean isVisitDataNull = (data == null);
-                setButtonEnabled(dup, !isVisitDataNull);
-                setButtonText(dup, !isVisitDataNull, TextDup);
+                //setButtonEnabled(dup, !isVisitDataNull);
+                //setButtonText(dup, !isVisitDataNull, TextDup);
                 setButtonEnabled(preg, !isVisitDataNull);
                 setButtonText(preg, !isVisitDataNull, TextPreg);
                 setButtonEnabled(dth, !isVisitDataNull);
@@ -473,20 +473,179 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 Toast.makeText(requireContext(), "Error retrieving visit data", Toast.LENGTH_SHORT).show();
             }
 
-            // Set OnClickListener for disabled buttons
-//            setDisabledButtonClickListener(dup);
-//            setDisabledButtonClickListener(preg);
+//            DuplicateViewModel dupViewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
+//            try {
+//                Duplicate data = dupViewModel.find(selectedIndividual.uuid);
+//                if (data != null) {
+//                    boolean isComplete = data.complete != null && data.complete == 1;
+//                    boolean isIncomplete = data.complete != null && data.complete == 0;
+//                    changeDupButtonColor(dup, isComplete, isIncomplete);
+//                } else {
+//                    changeDupButtonColor(dup, false, false);
+//                }
+//            } catch (ExecutionException | InterruptedException e) {
+//                e.printStackTrace();
+//                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+//            }
 
-
-            DuplicateViewModel dupViewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
+            AmendmentViewModel a = new ViewModelProvider(this).get(AmendmentViewModel.class);
             try {
-                Duplicate data = dupViewModel.find(selectedIndividual.uuid);
+                Amendment data = a.find(selectedIndividual.uuid);
                 if (data != null) {
-                    boolean isComplete = (data.complete == 1);
-                    boolean isIncomplete = (data.complete == 0);
-                    changeDupButtonColor(dup, isComplete, isIncomplete);
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(amend, isComplete, isIncomplete);
                 } else {
-                    changeDupButtonColor(dup, false, false);
+                    changeDupButtonColor(amend, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            DemographicViewModel b = new ViewModelProvider(this).get(DemographicViewModel.class);
+            try {
+                Demographic data = b.find(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(dem, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(dem, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+
+            PregnancyViewModel c = new ViewModelProvider(this).get(PregnancyViewModel.class);
+            try {
+                Pregnancy data = c.find(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(preg, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(preg, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            try {
+                Pregnancy data = c.finds(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(preg2, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(preg2, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            PregnancyoutcomeViewModel d = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
+            try {
+                Pregnancyoutcome data = d.find(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(outcome, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(outcome, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            try {
+                Pregnancyoutcome data = d.finds(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(outcome2, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(outcome2, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            RelationshipViewModel g = new ViewModelProvider(this).get(RelationshipViewModel.class);
+            try {
+                Relationship data = g.find(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(rel, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(rel, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            HdssSociodemoViewModel f = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
+            try {
+                HdssSociodemo data = f.findses(socialgroup.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(ses, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(ses, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            SocialgroupViewModel h = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+            try {
+                Socialgroup data = h.findhse(socialgroup.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(choh, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(choh, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            ResidencyViewModel i = new ViewModelProvider(this).get(ResidencyViewModel.class);
+            try {
+                Residency data = i.amend(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(relhoh, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(relhoh, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            VaccinationViewModel v = new ViewModelProvider(this).get(VaccinationViewModel.class);
+            try {
+                Vaccination data = v.find(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(vac, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(vac, false, false);
                 }
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -495,7 +654,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
 
             if(selectedIndividual.gender!=null) {
-                dup.setVisibility(View.VISIBLE);
+                //dup.setVisibility(View.VISIBLE);
                 dem.setVisibility(View.VISIBLE);
                 omg.setVisibility(View.VISIBLE);
                 dth.setVisibility(View.VISIBLE);
@@ -506,15 +665,37 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
             if (selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2){
                 preg.setVisibility(View.VISIBLE);
-                preg2.setVisibility(View.VISIBLE);
                 outcome.setVisibility(View.VISIBLE);
-                outcome2.setVisibility(View.VISIBLE);
                 rel.setVisibility(View.VISIBLE);
+                //Extra Pregnancy
+                try {
+                    Pregnancy data = c.findss(selectedIndividual.uuid);
+                    if (data != null) {
+                        preg2.setVisibility(View.VISIBLE);
+                    } else {
+                        preg2.setVisibility(View.GONE);
+                    }
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+                }
+                //Extra Pregnancy Outcome
+                try {
+                    Pregnancyoutcome data = d.findout(selectedIndividual.uuid);
+                    if (data != null) {
+                        outcome2.setVisibility(View.VISIBLE);
+                    } else {
+                        outcome2.setVisibility(View.GONE);
+                    }
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+                }
+
+
             }else{
                 preg.setVisibility(View.GONE);
-                preg2.setVisibility(View.GONE);
                 outcome.setVisibility(View.GONE);
-                outcome2.setVisibility(View.GONE);
                 rel.setVisibility(View.GONE);
             }
             if (selectedIndividual.getAge() >= mage && selectedIndividual.gender==2){

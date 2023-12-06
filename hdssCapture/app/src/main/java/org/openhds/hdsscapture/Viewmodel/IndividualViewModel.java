@@ -90,6 +90,10 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.find(id);
     }
 
+    public Individual unk(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.unk(id);
+    }
+
     public Individual mother(String id) throws ExecutionException, InterruptedException {
         return individualRepository.mother(id);
     }

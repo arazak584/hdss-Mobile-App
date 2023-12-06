@@ -202,6 +202,15 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public Individual unk(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Individual> callable = () -> dao.unk(id);
+
+        Future<Individual> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public Individual mother(String id) throws ExecutionException, InterruptedException {
 
         Callable<Individual> callable = () -> dao.mother(id);

@@ -11,6 +11,7 @@ import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
 import org.openhds.hdsscapture.entity.subentity.IndividualResidency;
@@ -198,18 +199,8 @@ public interface IndividualDao {
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username AND a.firstName!='FAKE'")
     long countIndividuals(Date startDate, Date endDate, String username);
 
-//    @Query("SELECT * FROM sociodemo as a INNER JOIN socialgroup as b ON a.socialgroup_uuid=b.uuid " +
-//            " INNER JOIN residency as c on b.uuid=c.socialgroup_uuid " +
-//            " INNER JOIN individual as d on c.individual_uuid=d.uuid " +
-//            "where c.endType=1 and a.complete=2 AND d.firstName!='FAKE' AND compextId is not null GROUP BY a.socialgroup_uuid order by dob")
-//    List<Individual> error();
-
-//    @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
-//            " INNER JOIN residency c on b.uuid=c.socialgroup_uuid INNER JOIN locations d " +
-//            " ON c.location_uuid=d.uuid " +
-//            " WHERE firstName!='FAKE' and groupName!='UNK' and c.endType=1 and " +
-//            " date('now', '-14 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
-//    List<Individual> error();
+    @Query("SELECT * FROM individual WHERE socialgroup=:id AND firstName='FAKE' AND endType=1")
+    Individual unk(String id);
 
     @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
             " INNER JOIN residency c on b.uuid=c.socialgroup_uuid INNER JOIN locations d " +
