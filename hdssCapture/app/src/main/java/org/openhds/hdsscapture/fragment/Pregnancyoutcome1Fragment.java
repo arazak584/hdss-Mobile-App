@@ -824,7 +824,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             save(false, true, viewModel, outcomeViewModel,vpmViewModel,individualViewModel,residencyViewModel);
         });
 
-        binding.setEventname(eventForm.event_name);
+//        binding.setEventname(eventForm.event_name);
         Handler.colorLayouts(requireContext(), binding.OUTCOMELAYOUT);
         View view = binding.getRoot();
         return view;

@@ -167,7 +167,7 @@ public class HouseholdFragment extends Fragment {
         }
         if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    VisitFragment.newInstance(individual, residency, locations, socialgroup)).commit();
+                    VisitFragment.newInstance(individual, locations, socialgroup)).commit();
         }else{
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     BlankFragment.newInstance(locations, socialgroup)).commit();

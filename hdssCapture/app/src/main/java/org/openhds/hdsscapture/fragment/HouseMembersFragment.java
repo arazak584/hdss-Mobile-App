@@ -4,14 +4,10 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,24 +19,14 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
-
-import org.openhds.hdsscapture.Adapter.EventFormAdapter;
-import org.openhds.hdsscapture.Adapter.HouseholdAdapter;
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
-import org.openhds.hdsscapture.Adapter.LocationAdapter;
-import org.openhds.hdsscapture.AppConstants;
-import org.openhds.hdsscapture.Dialog.FilterDialogFragment;
 import org.openhds.hdsscapture.Dialog.PregnancyDialogFragment;
 import org.openhds.hdsscapture.Duplicate.DupFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
-import org.openhds.hdsscapture.Viewmodel.DuplicateViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
-import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
@@ -52,14 +38,12 @@ import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.databinding.FragmentHouseMembersBinding;
 import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.Configsettings;
-import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
@@ -67,15 +51,8 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
-import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
-import org.openhds.hdsscapture.entity.subqueries.EventForm;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -86,7 +63,6 @@ import java.util.concurrent.ExecutionException;
 public class HouseMembersFragment extends Fragment implements IndividualViewAdapter.IndividualClickListener {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_CLUSTER_IDS = "ARG_CLUSTER_IDS";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private static final String RESIDENCY_ID = "RESIDENCY_ID";
@@ -122,7 +98,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
      //* @param cluster_id  Parameter 1.
      * @param locations    Parameter 2.
      * @param socialgroup Parameter 3.
-     * @param individual
+     * @param individual Parameter 4.
      * @return A new instance of fragment HouseMembersFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -225,7 +201,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
         final AppCompatButton visit = view.findViewById(R.id.button_visit);
         visit.setOnClickListener(v -> {
-            VisitFragment.newInstance(individual,residency, locations, socialgroup)
+            VisitFragment.newInstance(individual, locations, socialgroup)
                     .show(getChildFragmentManager(), "VisitFragment");
         });
 
@@ -288,14 +264,14 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
         final AppCompatButton outcome2 = view.findViewById(R.id.outcome2);
         outcome2.setOnClickListener(v -> {
-            final Pregnancyoutcome pregnancyoutcome = new Pregnancyoutcome();
+            //final Pregnancyoutcome pregnancyoutcome = new Pregnancyoutcome();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     Pregnancyoutcome1Fragment.newInstance(individual, locations, socialgroup)).commit();
         });
 
         final AppCompatButton amend = view.findViewById(R.id.amend);
         amend.setOnClickListener(v -> {
-            final Amendment amendment = new Amendment();
+            //final Amendment amendment = new Amendment();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     AmendmentFragment.newInstance(individual, locations, socialgroup)).commit();
         });
@@ -303,7 +279,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
         final AppCompatButton rel = view.findViewById(R.id.rel);
         rel.setOnClickListener(v -> {
-            final Relationship relationship = new Relationship();
+            //final Relationship relationship = new Relationship();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     RelationshipFragment.newInstance(individual, locations, socialgroup)).commit();
         });
@@ -314,6 +290,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     SocialgroupFragment.newInstance(individual, locations, socialgroup)).commit();
         });
+
+
 
         SocialgroupViewModel model = new ViewModelProvider(this).get(SocialgroupViewModel.class);
         try {
@@ -662,41 +640,47 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 relhoh.setVisibility(View.VISIBLE);
             }
 
+            //Extra Pregnancy Outcome
+            PregnancyoutcomeViewModel p = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
+            try {
+                Pregnancyoutcome data = p.findout(selectedIndividual.uuid);
+                if (data != null && selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2) {
+                    outcome2.setVisibility(View.VISIBLE);
+                } else {
+                    outcome2.setVisibility(View.GONE);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+        //Extra Pregnancy
+        try {
+            Pregnancy data = c.findss(selectedIndividual.uuid);
+            if (data != null && selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2) {
+                preg2.setVisibility(View.VISIBLE);
+            } else {
+                preg2.setVisibility(View.GONE);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+        }
+
+
 
             if (selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2){
                 preg.setVisibility(View.VISIBLE);
                 outcome.setVisibility(View.VISIBLE);
                 rel.setVisibility(View.VISIBLE);
-                //Extra Pregnancy
-                try {
-                    Pregnancy data = c.findss(selectedIndividual.uuid);
-                    if (data != null) {
-                        preg2.setVisibility(View.VISIBLE);
-                    } else {
-                        preg2.setVisibility(View.GONE);
-                    }
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
-                }
-                //Extra Pregnancy Outcome
-                try {
-                    Pregnancyoutcome data = d.findout(selectedIndividual.uuid);
-                    if (data != null) {
-                        outcome2.setVisibility(View.VISIBLE);
-                    } else {
-                        outcome2.setVisibility(View.GONE);
-                    }
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
-                }
-
-
+                //preg2.setVisibility(View.VISIBLE);
+                //outcome2.setVisibility(View.VISIBLE);
             }else{
                 preg.setVisibility(View.GONE);
                 outcome.setVisibility(View.GONE);
+                //outcome2.setVisibility(View.GONE);
                 rel.setVisibility(View.GONE);
+                //preg2.setVisibility(View.GONE);
             }
             if (selectedIndividual.getAge() >= mage && selectedIndividual.gender==2){
                 rel.setVisibility(View.VISIBLE);

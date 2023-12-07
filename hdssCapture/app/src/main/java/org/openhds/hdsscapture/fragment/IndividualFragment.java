@@ -412,6 +412,17 @@ public class IndividualFragment extends Fragment {
                 data.individual_uuid = binding.getIndividual().uuid;
                 data.hohID = socialgroup.extId;
 
+                Date currentDate = new Date(); // Get the current date and time
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(currentDate);
+                // Extract the hour, minute, and second components
+                int hh = cal.get(Calendar.HOUR_OF_DAY);
+                int mm = cal.get(Calendar.MINUTE);
+                int ss = cal.get(Calendar.SECOND);
+                // Format the components into a string with leading zeros
+                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
+                data.sttime = timeString;
+
                 binding.setResidency(data);
                 binding.getResidency().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 
@@ -769,6 +780,12 @@ public class IndividualFragment extends Fragment {
 
             if (finalData.sttime !=null && finalData.edtime==null){
                 finalData.edtime = endtime;
+            }
+            if (Data.sttime !=null && Data.edtime==null){
+                Data.edtime = endtime;
+            }
+            if (img.sttime !=null && img.edtime==null){
+                img.edtime = endtime;
             }
 
             img.residency_uuid = Data.uuid;
