@@ -568,7 +568,8 @@ public class PullActivity extends AppCompatActivity {
                                         runOnUiThread(() -> {
                                             long finalCount = counts.get();
                                             int finalProgress = (int) (((double) finalCount / totalRecords[0]) * 100);
-                                            textView_Sync.setText("Successful Downloaded All ");
+                                            textView_Sync.setText("Successful Download of " + files);
+                                            textView_Sync.setTextColor(Color.parseColor("#32CD32"));
                                             progressBar.setProgress(finalProgress);
                                             //Log.d("Three", "Location Count: " + files + " " + finalCount);
                                             saveCountsToSharedPreferences(files, finalCount);
@@ -800,6 +801,7 @@ public class PullActivity extends AppCompatActivity {
                                             long finalCount = counts.get();
                                             int finalProgress = (int) (((double) finalCount / totalRecords[0]) * 100);
                                             textView_Sync.setText("Successful Download of " + files);
+                                            textView_Sync.setTextColor(Color.parseColor("#32CD32"));
                                             progressBar.setProgress(finalProgress);
                                             saveCountsToSharedPreferences(files, finalCount);
 
@@ -1076,6 +1078,7 @@ public class PullActivity extends AppCompatActivity {
                                             long finalCount = counts.get();
                                             int finalProgress = (int) (((double) finalCount / totalRecords[0]) * 100);
                                             textView_Sync.setText("Successful Download of " + files);
+                                            textView_Sync.setTextColor(Color.parseColor("#32CD32"));
                                             progressBar.setProgress(finalProgress);
 
                                             saveCountsToSharedPreferences(files, finalCount);

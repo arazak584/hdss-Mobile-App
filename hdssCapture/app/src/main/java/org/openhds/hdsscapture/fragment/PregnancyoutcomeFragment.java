@@ -218,6 +218,17 @@ public class PregnancyoutcomeFragment extends Fragment {
                 binding.setPregoutcome(data);
                 binding.buttonOutcomeConception.setEnabled(false);
                 binding.buttonOutcomeStartDate.setEnabled(false);
+
+                Pregnancy dts = pregnancyViewModel.out(HouseMembersFragment.selectedIndividual.uuid);
+                if (dts != null){
+                    data.outcomeDate = dts.outcome_date;
+                    data.conceptionDate = dts.recordedDate;
+                    data.rec_anc = dts.anteNatalClinic;
+                    data.month_pg = dts.first_rec;
+                    data.who_anc = dts.attend_you;
+                    data.num_anc = dts.anc_visits;
+                    data.pregnancy_uuid = dts.uuid;
+                }
             } else {
                 data = new Pregnancyoutcome();
 
@@ -953,6 +964,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                                 return;
                             }else if (totalDiffMonths > 5 && inf.type==3){
                                 Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                                return;
                             }
 
                         }
@@ -1062,6 +1074,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                                 return;
                             }else if (totalDiffMonths > 5 && inf.type==3){
                                 Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                                return;
                             }
 
                         }
@@ -1170,6 +1183,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                                 return;
                             }else if (totalDiffMonths > 5 && inf.type==3){
                                 Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                                return;
                             }
 
                         }
@@ -1278,6 +1292,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                                 return;
                             }else if (totalDiffMonths > 5 && inf.type==3){
                                 Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                                return;
                             }
 
                         }
