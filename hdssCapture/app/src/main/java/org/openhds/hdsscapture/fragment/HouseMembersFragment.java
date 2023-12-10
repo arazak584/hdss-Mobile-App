@@ -8,26 +8,33 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.openhds.hdsscapture.Adapter.EndEventsAdapter;
+import org.openhds.hdsscapture.Adapter.ErrorAdapter;
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
 import org.openhds.hdsscapture.Dialog.PregnancyDialogFragment;
 import org.openhds.hdsscapture.Duplicate.DupFragment;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Utilities.Queries;
 import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
+import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
@@ -38,12 +45,16 @@ import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.databinding.FragmentHouseMembersBinding;
 import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.Configsettings;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Outcome;
+import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
@@ -51,8 +62,12 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.subqueries.EndEvents;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -82,6 +97,10 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private ArrayAdapter<Hierarchy> level6Adapter;
     public static  Individual selectedIndividual;
     private View view;
+    private EndEventsAdapter eventsAdapter;
+    private List<EndEvents> filterAll;
+    private DeathViewModel deathViewModel;
+    private OutmigrationViewModel outmigrationViewModel;
 
     public interface IndividualClickListener {
         void onIndividualClick(Individual selectedIndividual);
@@ -131,6 +150,11 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         //binding = FragmentHouseMembersBinding.inflate(inflater, container, false);
         view = inflater.inflate(R.layout.fragment_house_members, container, false);
         //binding.setIndividual(individual);
+
+        //Ended Events
+        deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+        outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
+        query();
 
         //final TextView hh = view.findViewById(R.id.textView_compextId);
         final TextView name = view.findViewById(R.id.textView_hh);
@@ -759,6 +783,52 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             progress.dismiss();
         }
     }
+
+
+    private void query() {
+        List<EndEvents> list = new ArrayList<>();
+
+        try {
+            int d = 1;
+            for (Death death : deathViewModel.end(socialgroup.uuid)) {
+                EndEvents endEvent = new EndEvents();
+                endEvent.eventName = "Death ";
+                endEvent.eventId = "" + death.lastName + " " + death.firstName;
+                endEvent.eventDate = "" + death.getInsertDate();
+                endEvent.eventError = "";
+                list.add(endEvent);
+                d++;
+            }
+
+            int a = 1;
+            for (Outmigration e : outmigrationViewModel.end(socialgroup.uuid)) {
+                EndEvents endEvent = new EndEvents();
+                endEvent.eventName = "Outmigration ";
+                endEvent.eventId = "" + e.visit_uuid + " " + e.location_uuid;
+                endEvent.eventDate = "" + e.getInsertDate();
+                endEvent.eventError = "";
+                list.add(endEvent);
+                a++;
+            }
+
+            // Assuming filterAll is a field in your class
+            filterAll = new ArrayList<>(list);
+
+            // Assuming eventsAdapter is a field in your class
+            eventsAdapter = new EndEventsAdapter(requireContext(), this);
+            eventsAdapter.setQueries(list);
+
+            RecyclerView recyclerView = view.findViewById(R.id.recyclerView_end);
+            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+            recyclerView.setAdapter(eventsAdapter);
+
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 
     // Override the onBackPressed() method in the hosting activity
     //@Override

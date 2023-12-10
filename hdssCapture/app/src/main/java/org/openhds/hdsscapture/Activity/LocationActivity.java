@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.fragment.ClusterFragment;
 
@@ -39,6 +41,12 @@ public class LocationActivity extends AppCompatActivity {
 
         final Intent f = getIntent();
         final Fieldworker fieldworkerData = f.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
+        final Intent intent = getIntent();
+        final Round roundData = intent.getParcelableExtra(HierarchyActivity.ROUND_DATA);
+
+        //Toast.makeText(LocationActivity.this, "Welcome " + roundData.insertDate , Toast.LENGTH_LONG).show();
+
 
         //Toast.makeText(LocationActivity.this, "Welcome " + fieldworkerData.firstName + " " + fieldworkerData.lastName, Toast.LENGTH_LONG).show();
 

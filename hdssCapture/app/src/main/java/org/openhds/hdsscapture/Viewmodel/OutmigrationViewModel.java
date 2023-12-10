@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.OutmigrationRepository;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Outmigration;
 
 import java.util.Date;
@@ -29,6 +30,10 @@ public class OutmigrationViewModel extends AndroidViewModel {
 
     public Outmigration find(String id,String locid) throws ExecutionException, InterruptedException {
         return outmigrationRepository.find(id,locid);
+    }
+
+    public List<Outmigration> end(String id) throws ExecutionException, InterruptedException {
+        return outmigrationRepository.end(id);
     }
 
     public List<Outmigration> findToSync() throws ExecutionException, InterruptedException {

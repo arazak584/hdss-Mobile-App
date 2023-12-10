@@ -4,6 +4,7 @@ import android.app.Application;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.OutmigrationDao;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Outmigration;
 
 import java.util.Date;
@@ -58,6 +59,15 @@ public class OutmigrationRepository {
         Callable<Outmigration> callable = () -> dao.find(id,locid);
 
         Future<Outmigration> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Outmigration> end(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Outmigration>> callable = () -> dao.end(id);
+
+        Future<List<Outmigration>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }

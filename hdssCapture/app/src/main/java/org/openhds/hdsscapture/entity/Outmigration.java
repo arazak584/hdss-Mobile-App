@@ -81,6 +81,9 @@ public class Outmigration extends BaseObservable implements Parcelable {
     @Expose
     public String location_uuid;
 
+    @Expose
+    public String socialgroup_uuid;
+
     public Outmigration(){}
 
 
@@ -223,6 +226,14 @@ public class Outmigration extends BaseObservable implements Parcelable {
 
     public void setLocation_uuid(String location_uuid) {
         this.location_uuid = location_uuid;
+    }
+
+    public String getSocialgroup_uuid() {
+        return socialgroup_uuid;
+    }
+
+    public void setSocialgroup_uuid(String socialgroup_uuid) {
+        this.socialgroup_uuid = socialgroup_uuid;
     }
 
     protected Outmigration(Parcel in) {

@@ -5,6 +5,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Outmigration;
 
 import java.util.Date;
@@ -35,4 +36,7 @@ public interface OutmigrationDao {
     @Query("SELECT COUNT(*) FROM outmigration a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
+
+    @Query("SELECT a.uuid,a.insertDate,a.residency_uuid,b.firstName as visit_uuid,b.lastName as location_uuid FROM outmigration as a inner join individual as b on a.individual_uuid=b.uuid WHERE socialgroup_uuid=:id")
+    List<Outmigration> end(String id);
 }

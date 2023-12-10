@@ -8,6 +8,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,9 +137,27 @@ public class DeathFragment extends DialogFragment {
                 });
 
         binding.buttonDeathDod.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DeathFragment.DATE_BUNDLES.DEATHDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+            if (!TextUtils.isEmpty(binding.dthDeathDate.getText())) {
+                // If replDob is not empty, parse the date and use it as the initial date
+                String currentDate = binding.dthDeathDate.getText().toString();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+                try {
+                    Date date = sdf.parse(currentDate);
+                    Calendar selectedDate = Calendar.getInstance();
+                    selectedDate.setTime(date);
+
+                    // Create DatePickerFragment with the parsed date
+                    DialogFragment newFragment = new DatePickerFragment(DeathFragment.DATE_BUNDLES.DEATHDATE.getBundleKey(), selectedDate);
+                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                final Calendar c = Calendar.getInstance();
+                DialogFragment newFragment = new DatePickerFragment(DeathFragment.DATE_BUNDLES.DEATHDATE.getBundleKey(), c);
+                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+            }
         });
 
         ConfigViewModel configViewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
@@ -188,6 +207,7 @@ public class DeathFragment extends DialogFragment {
                 data.complete = 1;
                 data.househead = socialgroup.getGroupName();
                 data.residency_uuid = HouseMembersFragment.selectedIndividual.getResidency();
+                data.socialgroup_uuid = socialgroup.uuid;
 
                 Date currentDate = new Date(); // Get the current date and time
                 // Create a Calendar instance and set it to the current date and time

@@ -2,6 +2,7 @@ package org.openhds.hdsscapture.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -147,21 +148,75 @@ public class PregnancyExtraFragment extends DialogFragment {
         });
 
         binding.buttonPregStartDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(PregnancyExtraFragment.DATE_BUNDLES.RECORDDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+            if (!TextUtils.isEmpty(binding.editTextRecordedDate.getText())) {
+                // If Date is not empty, parse the date and use it as the initial date
+                String currentDate = binding.editTextRecordedDate.getText().toString();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+                try {
+                    Date date = sdf.parse(currentDate);
+                    Calendar selectedDate = Calendar.getInstance();
+                    selectedDate.setTime(date);
+
+                    // Create DatePickerFragment with the parsed date
+                    DialogFragment newFragment = new DatePickerFragment(PregnancyExtraFragment.DATE_BUNDLES.RECORDDATE.getBundleKey(), selectedDate);
+                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                final Calendar c = Calendar.getInstance();
+                DialogFragment newFragment = new DatePickerFragment(PregnancyExtraFragment.DATE_BUNDLES.RECORDDATE.getBundleKey(), c);
+                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+            }
         });
 
         binding.buttonPregnancyOutcome.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(PregnancyExtraFragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+            if (!TextUtils.isEmpty(binding.editTextOutcomeDate.getText())) {
+                // If Date is not empty, parse the date and use it as the initial date
+                String currentDate = binding.editTextOutcomeDate.getText().toString();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+                try {
+                    Date date = sdf.parse(currentDate);
+                    Calendar selectedDate = Calendar.getInstance();
+                    selectedDate.setTime(date);
+
+                    // Create DatePickerFragment with the parsed date
+                    DialogFragment newFragment = new DatePickerFragment(PregnancyExtraFragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey(), selectedDate);
+                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                final Calendar c = Calendar.getInstance();
+                DialogFragment newFragment = new DatePickerFragment(PregnancyExtraFragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey(), c);
+                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+            }
         });
 
         binding.buttonLastClinicVisitDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(PregnancyExtraFragment.DATE_BUNDLES.CLINICDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+            if (!TextUtils.isEmpty(binding.editTextLastClinicVisitDate.getText())) {
+                // If Date is not empty, parse the date and use it as the initial date
+                String currentDate = binding.editTextLastClinicVisitDate.getText().toString();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+                try {
+                    Date date = sdf.parse(currentDate);
+                    Calendar selectedDate = Calendar.getInstance();
+                    selectedDate.setTime(date);
+
+                    // Create DatePickerFragment with the parsed date
+                    DialogFragment newFragment = new DatePickerFragment(PregnancyExtraFragment.DATE_BUNDLES.CLINICDATE.getBundleKey(), selectedDate);
+                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                final Calendar c = Calendar.getInstance();
+                DialogFragment newFragment = new DatePickerFragment(PregnancyExtraFragment.DATE_BUNDLES.CLINICDATE.getBundleKey(), c);
+                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+            }
         });
 
         binding.buttonPregExpectDate.setOnClickListener(v -> {

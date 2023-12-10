@@ -113,6 +113,9 @@ public class Death extends BaseObservable implements Parcelable {
     @Expose
     public String residency_uuid;
 
+    @Expose
+    public String socialgroup_uuid;
+
     public Death(){}
 
 
@@ -327,6 +330,14 @@ public class Death extends BaseObservable implements Parcelable {
 
     public void setResidency_uuid(String residency_uuid) {
         this.residency_uuid = residency_uuid;
+    }
+
+    public String getSocialgroup_uuid() {
+        return socialgroup_uuid;
+    }
+
+    public void setSocialgroup_uuid(String socialgroup_uuid) {
+        this.socialgroup_uuid = socialgroup_uuid;
     }
 
     public Integer getAgeAtDeath() {

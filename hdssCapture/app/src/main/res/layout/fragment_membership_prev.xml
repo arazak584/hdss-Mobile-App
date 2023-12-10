@@ -52,6 +52,15 @@
             android:inputType="textPersonName"
             android:text="@={omgg.startDate}" />
 
+        <EditText
+            android:visibility="gone"
+            android:id="@+id/old_soc"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@={omgg.socialgroup_uuid}" />
+
 
     </LinearLayout>
 

@@ -51,6 +51,7 @@ import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.OdkViewModel;
 import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
+import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.entity.CodeBook;
 import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Demographic;
@@ -65,6 +66,7 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
+import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.fragment.UrlFragment;
 import org.openhds.hdsscapture.odk.Form;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
@@ -260,6 +262,10 @@ public class PullActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(Call<DataWrapper<Round>> call, Response<DataWrapper<Round>> response) {
                             Round[] i = response.body().getData().toArray(new Round[0]);
+                            for (Round rounds : i) {
+                                rounds.insertDate = new Date();
+                                Log.d("DateInsertion", "Round insert date: " + rounds.insertDate);
+                            }
                             round.add(i);
 
                             //Sync Round
@@ -291,6 +297,16 @@ public class PullActivity extends AppCompatActivity {
                                                 public void onResponse(Call<DataWrapper<Configsettings>> call, Response<DataWrapper<Configsettings>> response) {
                                                     Configsettings[] cng = response.body().getData().toArray(new Configsettings[0]);
                                                     configViewModel.add(cng);
+
+                                                    //Sync Visit
+                                                    textView_SyncHierarchyData.setText("Updating Visit...");
+                                                    final VisitViewModel visitViewModel = new ViewModelProvider(PullActivity.this).get(VisitViewModel.class);
+                                                    Call<DataWrapper<Visit>> c_callable = dao.getVisit(authorizationHeader);
+                                                    c_callable.enqueue(new Callback<DataWrapper<Visit>>() {
+                                                        @Override
+                                                        public void onResponse(Call<DataWrapper<Visit>> call, Response<DataWrapper<Visit>> response) {
+                                                            Visit[] v = response.body().getData().toArray(new Visit[0]);
+                                                            visitViewModel.add(v);
 
                                                     //Sync Extra Forms
                                                     textView_SyncHierarchyData.setText("Updating Forms...");
@@ -330,6 +346,15 @@ public class PullActivity extends AppCompatActivity {
                                                     });
                                                 }
 
+                                                        @Override
+                                                        public void onFailure(Call<DataWrapper<Visit>> call, Throwable t) {
+                                                            progressBar.setProgress(0);
+                                                            textView_SyncHierarchyData.setText("Visit Sync Error!");
+                                                            textView_SyncHierarchyData.setTextColor(Color.RED);
+                                                        }
+                                                    });
+                                                }
+
                                                 @Override
                                                 public void onFailure(Call<DataWrapper<Configsettings>> call, Throwable t) {
                                                     progressBar.setProgress(0);
@@ -338,6 +363,8 @@ public class PullActivity extends AppCompatActivity {
                                                 }
                                             });
                                         }
+
+
 
                                         @Override
                                         public void onFailure(Call<DataWrapper<Fieldworker>> call, Throwable t) {

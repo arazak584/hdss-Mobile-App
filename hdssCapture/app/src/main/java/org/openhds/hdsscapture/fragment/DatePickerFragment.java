@@ -10,12 +10,14 @@ import androidx.fragment.app.DialogFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     private final String bundleKey;
     private final Calendar calendar;
+    private Date selectDate;
 
     public DatePickerFragment(final String bundleKey, final Calendar calendar){
         this.bundleKey = bundleKey;
@@ -29,8 +31,12 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
+        if (selectDate != null) {
+            calendar.setTime(selectDate);
+        }
+
         // Create a new instance of DatePickerDialog and return it
-        return new DatePickerDialog(requireContext(), AlertDialog.THEME_TRADITIONAL, this, year, month, day);
+        return new DatePickerDialog(requireContext(), AlertDialog.THEME_DEVICE_DEFAULT_LIGHT, this, year, month, day);
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
@@ -38,6 +44,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, day);
+        selectDate = c.getTime();
         final String selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(c.getTime());
         Bundle result = new Bundle();
         result.putString(bundleKey, selectedDate);

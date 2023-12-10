@@ -64,6 +64,15 @@ public class DeathRepository {
         return future.get();
     }
 
+    public List<Death> end(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Death>> callable = () -> dao.end(id);
+
+        Future<List<Death>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Death> error() throws ExecutionException, InterruptedException {
 
         Callable<List<Death>> callable = () -> dao.error();

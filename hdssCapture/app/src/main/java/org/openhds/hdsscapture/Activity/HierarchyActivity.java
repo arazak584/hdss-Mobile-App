@@ -143,7 +143,7 @@ public class HierarchyActivity extends AppCompatActivity {
             }
         });
 
-        roundSpinner.setEnabled(false);
+        //roundSpinner.setEnabled(false);
 
         // Load level 1 data
         try {
@@ -384,6 +384,11 @@ public class HierarchyActivity extends AppCompatActivity {
                 return;
             }
 
+            if (roundData == null) {
+                Toast.makeText(this, "Round Not Selected", Toast.LENGTH_LONG).show();
+                return;
+            }
+
             if(username.getText().toString()==null || username.getText().toString().trim().isEmpty()){
                 username.setError("Invalid Username");
                 Toast.makeText(this,"Please provide a valid Username", Toast.LENGTH_LONG).show();
@@ -424,7 +429,7 @@ public class HierarchyActivity extends AppCompatActivity {
 
         final Button base = findViewById(R.id.btn_baseline);
         base.setOnClickListener(v -> {
-            if (level6Adapter == null || level6Spinner.getAdapter().isEmpty()) {
+            if (level6Adapter == null || level6Spinner.getAdapter().isEmpty() && roundData == null) {
                 Toast.makeText(this, "Please Select All Fields", Toast.LENGTH_LONG).show();
                 return;
             }

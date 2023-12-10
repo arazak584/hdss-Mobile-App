@@ -45,6 +45,10 @@ public class Round extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "endDate")
     public Date endDate;
 
+    @Expose
+    @ColumnInfo(name = "insertDate")
+    public Date insertDate;
+
     public Round() {
     }
 
@@ -55,12 +59,9 @@ public class Round extends BaseObservable implements Parcelable {
         this.remark = remark;
     }
 
-    //public Round(String roundNumber, String remark) {
-    //}
-
 
     @Ignore
-    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
+    public final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
 
     @NotNull
@@ -89,7 +90,7 @@ public class Round extends BaseObservable implements Parcelable {
     }
 
     public String getStartDate() {
-        if (startDate == null) return "Select Start Date";
+        if (startDate == null) return "";
         return f.format(startDate);
     }
 
@@ -99,7 +100,31 @@ public class Round extends BaseObservable implements Parcelable {
             try {
                 this.startDate = f.parse(startDate);
             } catch (ParseException e) {
-                System.out.println("Start Date Error " + e.getMessage());
+                System.out.println("Date Error " + e.getMessage());
+            }
+    }
+
+//    public Date getInsertDate() {
+//        if (insertDate == null) return new Date();
+//        return insertDate;
+//    }
+//
+//    public void setInsertDate(Date insertDate) {
+//        this.insertDate = new Date();
+//    }
+
+        public String getInsertDate() {
+        if (insertDate == null) return "";
+        return f.format(insertDate);
+    }
+
+    public void setInsertDate(String insertDate) {
+        if(insertDate == null ) this.insertDate= new Date();
+        else
+            try {
+                this.insertDate = f.parse(insertDate);
+            } catch (ParseException e) {
+                System.out.println("Date Error " + e.getMessage());
             }
     }
 
@@ -124,6 +149,7 @@ public class Round extends BaseObservable implements Parcelable {
         this.remark = in.readString();
         this.startDate = (Date) in.readSerializable();
         this.endDate = (Date) in.readSerializable();
+        this.insertDate = (Date) in.readSerializable();
     }
 
     public static final Creator<Round> CREATOR = new Creator<Round>() {
@@ -150,6 +176,7 @@ public class Round extends BaseObservable implements Parcelable {
         dest.writeString(this.remark);
         dest.writeSerializable(this.startDate);
         dest.writeSerializable(this.endDate);
+        dest.writeSerializable(this.insertDate);
     }
 
     @Override

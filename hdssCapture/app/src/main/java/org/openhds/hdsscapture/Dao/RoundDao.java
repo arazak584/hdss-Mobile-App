@@ -21,7 +21,7 @@ public interface RoundDao {
     @Query("DELETE FROM round")
     void deleteAll();
 
-    @Query("SELECT * FROM round")
+    @Query("SELECT * FROM round WHERE startDate<=insertDate and endDate>insertDate")
     List<Round> retrieve();
 
 }

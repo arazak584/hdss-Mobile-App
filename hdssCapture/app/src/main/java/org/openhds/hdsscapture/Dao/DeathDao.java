@@ -46,4 +46,7 @@ public interface DeathDao {
     @Query("SELECT * FROM death WHERE insertDate > (SELECT startDate FROM round LIMIT 1) AND complete IS NOT NULL order by insertDate DESC")
     List<Death> repo();
 
+    @Query("SELECT * FROM death WHERE socialgroup_uuid=:id")
+    List<Death> end(String id);
+
 }

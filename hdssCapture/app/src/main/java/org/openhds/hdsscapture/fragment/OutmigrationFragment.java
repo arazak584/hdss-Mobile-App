@@ -8,6 +8,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,9 +124,27 @@ public class OutmigrationFragment extends DialogFragment {
         });
 
         binding.buttonOmgImgDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(OutmigrationFragment.DATE_BUNDLES.DATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+            if (!TextUtils.isEmpty(binding.omgDate.getText())) {
+                // If Date is not empty, parse the date and use it as the initial date
+                String currentDate = binding.omgDate.getText().toString();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+                try {
+                    Date date = sdf.parse(currentDate);
+                    Calendar selectedDate = Calendar.getInstance();
+                    selectedDate.setTime(date);
+
+                    // Create DatePickerFragment with the parsed date
+                    DialogFragment newFragment = new DatePickerFragment(OutmigrationFragment.DATE_BUNDLES.DATE.getBundleKey(), selectedDate);
+                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                final Calendar c = Calendar.getInstance();
+                DialogFragment newFragment = new DatePickerFragment(OutmigrationFragment.DATE_BUNDLES.DATE.getBundleKey(), c);
+                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+            }
         });
 
         ConfigViewModel configViewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
@@ -167,6 +186,7 @@ public class OutmigrationFragment extends DialogFragment {
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
                 data.startDate = HouseMembersFragment.selectedIndividual.startDate;
+                data.socialgroup_uuid = socialgroup.uuid;
 
                 Date currentDate = new Date(); // Get the current date and time
                 Calendar cal = Calendar.getInstance();

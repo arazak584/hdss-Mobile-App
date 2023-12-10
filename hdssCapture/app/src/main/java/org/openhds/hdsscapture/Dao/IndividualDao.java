@@ -202,10 +202,15 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual WHERE socialgroup=:id AND firstName='FAKE' AND endType=1")
     Individual unk(String id);
 
-    @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
-            " INNER JOIN residency c on b.uuid=c.socialgroup_uuid INNER JOIN locations d " +
-            " ON c.location_uuid=d.uuid " +
-            " WHERE firstName!='FAKE' and groupName!='UNK' and c.endType=1 and " +
+//    @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
+//            " INNER JOIN residency c on b.uuid=c.socialgroup_uuid INNER JOIN locations d " +
+//            " ON c.location_uuid=d.uuid " +
+//            " WHERE firstName!='FAKE' and groupName!='UNK' and c.endType=1 and " +
+//            " strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) < (SELECT hoh_age from config) GROUP BY b.extId order by dob")
+//    List<Individual> error();
+
+    @Query("SELECT a.* FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
+            " WHERE firstName!='FAKE' and endType=1 and " +
             " strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) < (SELECT hoh_age from config) GROUP BY b.extId order by dob")
     List<Individual> error();
 
@@ -222,19 +227,27 @@ public interface IndividualDao {
 //            " date('now', '-14 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
 //    List<Individual> errors();
 
-    @Query("SELECT a.*,c.compextId,d.extId as houseExtId,groupName as lastName FROM individual AS a INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
-            " INNER JOIN locations c on b.location_uuid=c.uuid " +
-            " INNER JOIN socialgroup d on b.socialgroup_uuid = d.uuid " +
-            "WHERE a.firstName != 'FAKE' AND b.endType = 1 " +
-            "AND b.socialgroup_uuid IN ( " +
-            "    SELECT b2.socialgroup_uuid " +
-            "    FROM individual AS a2 " +
-            "    INNER JOIN residency AS b2 ON a2.uuid = b2.individual_uuid " +
-            "    WHERE b2.endType = 1 " +
-            "    GROUP BY b2.socialgroup_uuid " +
-            "    HAVING MAX(STRFTIME('%Y', 'now') - STRFTIME('%Y', DATE(a2.dob/1000, 'unixepoch'))) < 14" +
-            ") GROUP BY socialgroup_uuid " +
-            "ORDER BY c.compextId")
+//    @Query("SELECT a.*,c.compextId,d.extId as houseExtId,groupName as lastName FROM individual AS a INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
+//            " INNER JOIN locations c on b.location_uuid=c.uuid " +
+//            " INNER JOIN socialgroup d on b.socialgroup_uuid = d.uuid " +
+//            "WHERE a.firstName != 'FAKE' AND b.endType = 1 " +
+//            "AND b.socialgroup_uuid IN ( " +
+//            "    SELECT b2.socialgroup_uuid " +
+//            "    FROM individual AS a2 " +
+//            "    INNER JOIN residency AS b2 ON a2.uuid = b2.individual_uuid " +
+//            "    WHERE b2.endType = 1 " +
+//            "    GROUP BY b2.socialgroup_uuid " +
+//            "    HAVING MAX(STRFTIME('%Y', 'now') - STRFTIME('%Y', DATE(a2.dob/1000, 'unixepoch'))) < 14" +
+//            ") GROUP BY socialgroup_uuid " +
+//            "ORDER BY c.compextId")
+//    List<Individual> errors();
+
+    @Query("SELECT a.* FROM individual AS a WHERE a.firstName != 'FAKE' AND endType = 1 " +
+            "AND socialgroup IN ( " +
+            "    SELECT socialgroup FROM individual WHERE endType = 1 GROUP BY socialgroup " +
+            "    HAVING MAX(STRFTIME('%Y', 'now') - STRFTIME('%Y', DATE(dob/1000, 'unixepoch'))) < 14" +
+            ") GROUP BY socialgroup " +
+            "ORDER BY compno")
     List<Individual> errors();
 
 

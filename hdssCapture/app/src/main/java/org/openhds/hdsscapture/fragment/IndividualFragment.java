@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -240,9 +241,27 @@ public class IndividualFragment extends Fragment {
         });
 
         binding.buttonResidencyStartDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(IndividualFragment.DATE_BUNDLES.STARTDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+            if (!TextUtils.isEmpty(binding.editTextStartDate.getText())) {
+                // If Date is not empty, parse the date and use it as the initial date
+                String currentDate = binding.editTextStartDate.getText().toString();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+                try {
+                    Date date = sdf.parse(currentDate);
+                    Calendar selectedDate = Calendar.getInstance();
+                    selectedDate.setTime(date);
+
+                    // Create DatePickerFragment with the parsed date
+                    DialogFragment newFragment = new DatePickerFragment(IndividualFragment.DATE_BUNDLES.STARTDATE.getBundleKey(), selectedDate);
+                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                final Calendar c = Calendar.getInstance();
+                DialogFragment newFragment = new DatePickerFragment(IndividualFragment.DATE_BUNDLES.STARTDATE.getBundleKey(), c);
+                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+            }
         });
 
         binding.buttonImgImgDate.setOnClickListener(v -> {
@@ -262,8 +281,26 @@ public class IndividualFragment extends Fragment {
                 } catch (ParseException e) {
                 }
             }
-            DialogFragment newFragment = new DatePickerFragment(IndividualFragment.DATE_BUNDLES.DOB.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+            if (!TextUtils.isEmpty(binding.dob.getText())) {
+                // If Date is not empty, parse the date and use it as the initial date
+                String currentDate = binding.dob.getText().toString();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+                try {
+                    Date date = sdf.parse(currentDate);
+                    Calendar selectedDate = Calendar.getInstance();
+                    selectedDate.setTime(date);
+
+                    // Create DatePickerFragment with the parsed date
+                    DialogFragment newFragment = new DatePickerFragment(IndividualFragment.DATE_BUNDLES.DOB.getBundleKey(), selectedDate);
+                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                DialogFragment newFragment = new DatePickerFragment(IndividualFragment.DATE_BUNDLES.DOB.getBundleKey(), c);
+                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+            }
         });
 
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
@@ -856,6 +893,8 @@ public class IndividualFragment extends Fragment {
                     omg.fw_uuid = finalData.fw_uuid;
                     omg.complete = 1;
                     omg.visit_uuid = binding.getInmigration().visit_uuid;
+                    omg.socialgroup_uuid = binding.getOmgg().socialgroup_uuid;
+
 
                     omgModel.add(omg);
                 }

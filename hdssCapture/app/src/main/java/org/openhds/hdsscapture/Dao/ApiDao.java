@@ -43,6 +43,9 @@ public interface ApiDao {
     @GET("/api/round")
     Call<DataWrapper<Round>> getRound(@Header("Authorization") String authorizationHeader);
 
+    @GET("/api/visit")
+    Call<DataWrapper<Visit>> getVisit(@Header("Authorization") String authorizationHeader);
+
     @GET("/api/settings/parameter")
     Call<DataWrapper<Configsettings>> getConfig(@Header("Authorization") String authorizationHeader);
 

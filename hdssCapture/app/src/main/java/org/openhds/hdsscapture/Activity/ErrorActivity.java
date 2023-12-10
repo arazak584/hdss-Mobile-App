@@ -123,19 +123,19 @@ public class ErrorActivity extends AppCompatActivity {
             final SimpleDateFormat f = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
             final SimpleDateFormat z = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 
-            int c=1;
-            for (Socialgroup e : socialgroupViewModel.error()) {
-                //String formattedDate = f.format(e.insertDate);
-                Queries r1 = new Queries();
-                r1.name = c + ". Household ID: " + e.extId;
-                r1.extid = "Compno: " + e.visit_uuid + " - Household Head: " + e.groupName;
-                r1.date = "";
-                r1.error = "UNK as Respondent";
-                r1.index = c;
-
-                list.add(r1);
-                c++;
-            }
+//            int c=1;
+//            for (Socialgroup e : socialgroupViewModel.error()) {
+//                //String formattedDate = f.format(e.insertDate);
+//                Queries r1 = new Queries();
+//                r1.name = c + ". Household ID: " + e.extId;
+//                r1.extid = "Compno: " + e.visit_uuid + " - Household Head: " + e.groupName;
+//                r1.date = "";
+//                r1.error = "UNK as Respondent";
+//                r1.index = c;
+//
+//                list.add(r1);
+//                c++;
+//            }
 
 //            int n=1;
 //            for (Socialgroup e : socialgroupViewModel.error()) {
@@ -194,19 +194,19 @@ public class ErrorActivity extends AppCompatActivity {
 
             }
 
-            int h=1;
-            for (Individual e : individualViewModel.err()) {
-                //String formattedDate = f.format(e.insertDate);
-                Queries r1 = new Queries();
-                r1.name = h + ". Household ID: " +  e.getHohID();
-                r1.extid = "Compno: " + e.compno + " - Househead: " + e.lastName;
-                r1.date = "";
-                r1.error = "Head of Household is Unknown";
-                r1.index = h;
-                list.add(r1);
-                h++;
-
-            }
+//            int h=1;
+//            for (Individual e : individualViewModel.err()) {
+//                //String formattedDate = f.format(e.insertDate);
+//                Queries r1 = new Queries();
+//                r1.name = h + ". Household ID: " +  e.getHohID();
+//                r1.extid = "Compno: " + e.compno + " - Househead: " + e.lastName;
+//                r1.date = "";
+//                r1.error = "Head of Household is Unknown";
+//                r1.index = h;
+//                list.add(r1);
+//                h++;
+//
+//            }
 
             int i=1;
             for (Outcome e : outcomeViewModel.error()) {
