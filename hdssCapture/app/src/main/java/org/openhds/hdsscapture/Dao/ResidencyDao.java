@@ -7,6 +7,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
@@ -25,6 +26,10 @@ public interface ResidencyDao {
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Residency> residency);
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(Residency... residency);
 
     @Update
     int update(Residency s);

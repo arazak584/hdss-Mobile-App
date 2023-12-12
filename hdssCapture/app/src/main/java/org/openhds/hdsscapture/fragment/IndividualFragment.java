@@ -434,6 +434,7 @@ public class IndividualFragment extends Fragment {
 
             if (data != null) {
                 binding.setResidency(data);
+                binding.buttonResidencyStartDate.setEnabled(false);
 
             } else {
                 data = new Residency();
@@ -448,6 +449,7 @@ public class IndividualFragment extends Fragment {
                 data.complete = 1;
                 data.individual_uuid = binding.getIndividual().uuid;
                 data.hohID = socialgroup.extId;
+                data.img = 1;
 
                 Date currentDate = new Date(); // Get the current date and time
                 Calendar cal = Calendar.getInstance();
@@ -532,7 +534,7 @@ public class IndividualFragment extends Fragment {
 
         try {
             Inmigration dataimg = inmigrationViewModel.find(individual.uuid,ClusterFragment.selectedLocation.uuid);
-            if (dataimg != null) {
+            if (dataimg != null && binding.getResidency().img!=null) {
                 binding.setInmigration(dataimg);
 
             } else {
@@ -825,8 +827,6 @@ public class IndividualFragment extends Fragment {
                 img.edtime = endtime;
             }
 
-            img.residency_uuid = Data.uuid;
-            img.recordedDate = Data.startDate;
             finalData.compno = ClusterFragment.selectedLocation.compno;
             finalData.socialgroup = Data.socialgroup_uuid;
             finalData.residency = Data.uuid;
@@ -834,14 +834,18 @@ public class IndividualFragment extends Fragment {
             finalData.startDate = Data.startDate;
             finalData.hohID = socialgroup.extId;
 
+            if(binding.getResidency().img != null){
+                img.residency_uuid = Data.uuid;
+                img.recordedDate = Data.startDate;
+                img.complete=1;
+                inmigrationViewModel.add(img);
+            }
 
             finalData.complete=1;
             Data.complete=1;
-            img.complete=1;
 
             viewModel.add(Data);
             individualViewModel.add(finalData);
-            inmigrationViewModel.add(img);
 
             //Update The Househead for the new household
             SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
@@ -864,6 +868,9 @@ public class IndividualFragment extends Fragment {
                 e.printStackTrace();
             }
 
+            final Intent i = getActivity().getIntent();
+            final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
             //Generate Outmigration for previous active episode
             OutmigrationViewModel omgModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
             try {
@@ -885,16 +892,15 @@ public class IndividualFragment extends Fragment {
                     omg.recordedDate = calendar.getTime();
                     omg.uuid = uuidString;
                     omg.individual_uuid = finalData.uuid;
-                    omg.insertDate = finalData.insertDate;
+                    omg.insertDate = new Date();
                     omg.destination = binding.getInmigration().origin;
                     omg.reason = binding.getInmigration().reason;
                     omg.reason_oth = binding.getInmigration().reason_oth;
                     omg.residency_uuid = binding.getOmgg().old_residency;
-                    omg.fw_uuid = finalData.fw_uuid;
+                    omg.fw_uuid = fieldworkerData.fw_uuid;
                     omg.complete = 1;
                     omg.visit_uuid = binding.getInmigration().visit_uuid;
                     omg.socialgroup_uuid = binding.getOmgg().socialgroup_uuid;
-
 
                     omgModel.add(omg);
                 }

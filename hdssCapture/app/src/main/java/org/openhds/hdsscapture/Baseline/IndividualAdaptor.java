@@ -11,6 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
@@ -34,19 +37,21 @@ public class IndividualAdaptor extends RecyclerView.Adapter<IndividualAdaptor.Vi
     private final List<Individual> individualList;
     private ProgressDialog progress;
     private Context context;
+    private final Fragment fragment;
 
-    public IndividualAdaptor(IndividualSummaryFragment activity, Residency residency, Locations locations, Socialgroup socialgroup) {
-        this.activity = activity;
+    public IndividualAdaptor(Fragment fragment, Residency residency, Locations locations, Socialgroup socialgroup) {
+        this.fragment = fragment;
         this.locations = locations;
         this.residency = residency;
         this.socialgroup = socialgroup;
         individualList = new ArrayList<>();
-        inflater = LayoutInflater.from(activity.requireContext());
+//        inflater = LayoutInflater.from(activity.requireContext());
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView firstname, lastname, nickname, permid, dob, compno, gender,status;
         LinearLayout linearLayout;
+        CardView cardView;
 
         public ViewHolder(View view) {
             super(view);
@@ -58,7 +63,7 @@ public class IndividualAdaptor extends RecyclerView.Adapter<IndividualAdaptor.Vi
             this.gender = view.findViewById(R.id.text_gender);
             //this.compno = view.findViewById(R.id.text_compno);
             this.status = view.findViewById(R.id.text_status);
-            this.linearLayout = view.findViewById(R.id.searchedIindividual);
+            this.cardView = view.findViewById(R.id.searchedIindividual);
         }
     }
 
@@ -99,21 +104,25 @@ public class IndividualAdaptor extends RecyclerView.Adapter<IndividualAdaptor.Vi
         Integer status = individual.endType;
         if (status == 1) {
             holder.status.setText("(" + "Active" + ")");
-            holder.status.setTextColor(Color.MAGENTA);
+            holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
         } else {
             holder.status.setText("(" + "Outmigrated" + ")");
-            holder.status.setTextColor(Color.RED);
+            holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
         }
         Integer st = individual.complete;
         if (st != null) {
-            holder.permid.setTextColor(Color.BLUE);
-            holder.firstname.setTextColor(Color.BLUE);
-            holder.lastname.setTextColor(Color.BLUE);
+            holder.permid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
+            holder.firstname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
+            holder.lastname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
+        }else {
+            holder.permid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+            holder.firstname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+            holder.lastname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
         }
 
 
 
-        holder.linearLayout.setOnClickListener(v -> {
+        holder.cardView.setOnClickListener(v -> {
             activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
                     BaselineFragment.newInstance( individual, residency, locations, socialgroup)).commit();
         });
@@ -124,18 +133,41 @@ public class IndividualAdaptor extends RecyclerView.Adapter<IndividualAdaptor.Vi
         return individualList.size();
     }
 
-    public void pull(IndividualViewModel individualViewModel) {
+//    public void pull(IndividualViewModel individualViewModel) {
+//        individualList.clear();
+//        if(socialgroup != null)
+//            try {
+//                List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getExtId());
+//
+//                if (list != null) {
+//                    individualList.addAll(list);
+//                }
+//
+//                if (list.isEmpty()) {
+//                    Toast.makeText(activity.getActivity(), "No Active Individual Found", Toast.LENGTH_SHORT).show();
+//                }
+//
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        notifyDataSetChanged();
+//        activity.dismissLoadingDialog();
+//    }
+
+    public void filter(String charText,IndividualViewModel individualViewModel) {
         individualList.clear();
         if(socialgroup != null)
             try {
-                List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getExtId());
+                List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getUuid());
 
                 if (list != null) {
                     individualList.addAll(list);
                 }
 
                 if (list.isEmpty()) {
-                    Toast.makeText(activity.getActivity(), "No Active Individual Found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(fragment.requireContext(), "No Active Individual Found", Toast.LENGTH_SHORT).show();
                 }
 
             } catch (ExecutionException e) {
@@ -144,6 +176,5 @@ public class IndividualAdaptor extends RecyclerView.Adapter<IndividualAdaptor.Vi
                 e.printStackTrace();
             }
         notifyDataSetChanged();
-        activity.dismissLoadingDialog();
     }
 }

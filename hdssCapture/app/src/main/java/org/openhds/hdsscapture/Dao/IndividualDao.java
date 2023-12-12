@@ -269,4 +269,8 @@ public interface IndividualDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Individual> individuals);
 
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(Individual... individuals);
+
 }

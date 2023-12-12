@@ -651,6 +651,7 @@
                 android:spinnerMode="dialog" />
 
             <TextView
+                goneUnless="@{residency.img==1}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
@@ -659,6 +660,7 @@
                 android:text="@string/origin"/>
 
             <Spinner
+                goneUnless="@{residency.img==1}"
                 android:id="@+id/origin"
                 selection="@{inmigration.origin}"
                 android:layout_width="match_parent"
@@ -670,6 +672,7 @@
                 android:spinnerMode="dialog" />
 
             <TextView
+                goneUnless="@{residency.img==1}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
@@ -678,6 +681,7 @@
                 android:text="@string/reason"/>
 
             <Spinner
+                goneUnless="@{residency.img==1}"
                 android:id="@+id/reason"
                 selection="@{inmigration.reason}"
                 android:layout_width="match_parent"

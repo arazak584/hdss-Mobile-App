@@ -36,6 +36,7 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
 import org.openhds.hdsscapture.fragment.DatePickerFragment;
 
 import java.text.ParseException;
@@ -240,7 +241,7 @@ public class BaselineFragment extends Fragment {
                 if (binding.getIndividual().extId == null) {
                     final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
                     int sequenceNumber = 1;
-                    String id = locations.compextId + String.format("%04d", sequenceNumber); // generate ID with sequence number padded with zeros
+                    String id = BaseFragment.selectedLocation.compextId + String.format("%04d", sequenceNumber); // generate ID with sequence number padded with zeros
                     while (true) {
                         try {
                             if (individualViewModels.findAll(id) == null) break;
@@ -250,7 +251,7 @@ public class BaselineFragment extends Fragment {
                             e.printStackTrace();
                         } // check if ID already exists in ViewModel
                         sequenceNumber++; // increment sequence number if ID exists
-                        id = locations.compextId + String.format("%04d", sequenceNumber); // generate new ID with updated sequence number
+                        id = BaseFragment.selectedLocation.compextId + String.format("%04d", sequenceNumber); // generate new ID with updated sequence number
                     }
                     binding.getIndividual().extId = id; // set the generated ID to the extId property of the Individual object
                 }
@@ -267,7 +268,7 @@ public class BaselineFragment extends Fragment {
 
 
         try {
-            Residency data = viewModel.findRes(individual.uuid,locations.uuid);
+            Residency data = viewModel.findRes(individual.uuid,BaseFragment.selectedLocation.uuid);
 
             if (data != null) {
                 binding.setResidency(data);
@@ -280,7 +281,7 @@ public class BaselineFragment extends Fragment {
                 data.uuid = uuidString;
                 data.startType = 3;
                 data.endType = 1;
-                data.location_uuid = locations.uuid;
+                data.location_uuid = BaseFragment.selectedLocation.uuid;
                 data.socialgroup_uuid = socialgroup.uuid;
                 data.complete = 1;
                 data.individual_uuid = binding.getIndividual().uuid;
@@ -428,6 +429,13 @@ public class BaselineFragment extends Fragment {
                 return;
             }
 
+            Data.compno = BaseFragment.selectedLocation.compno;
+            Data.socialgroup = finalData.socialgroup_uuid;
+            Data.residency = finalData.uuid;
+            Data.endType = finalData.endType;
+            Data.startDate = finalData.startDate;
+            Data.hohID = socialgroup.extId;
+
             finalData.complete=1;
             viewModel.add(finalData);
             individualViewModel.add(Data);
@@ -451,8 +459,8 @@ public class BaselineFragment extends Fragment {
                 Socialgroup data = socialgroupViewModel.find(socialgroup.uuid);
                 if (data !=null) {
                     SocialgroupAmendment socialgroupAmendment = new SocialgroupAmendment();
-                    socialgroupAmendment.individual_uuid = individual.uuid;
-                    socialgroupAmendment.groupName = individual.getFirstName() + ' ' + individual.getLastName();
+                    socialgroupAmendment.individual_uuid = Data.uuid;
+                    socialgroupAmendment.groupName = Data.getFirstName() + ' ' + Data.getLastName();
                     socialgroupAmendment.uuid = socialgroup.uuid;
                     socialgroupAmendment.complete =1;
 
@@ -492,10 +500,10 @@ public class BaselineFragment extends Fragment {
         }
         if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
-                    IndividualSummaryFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    IndividualSummaryFragment.newInstance(locations, socialgroup,individual)).commit();
         }else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
-                    IndividualSummaryFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    IndividualSummaryFragment.newInstance(locations, socialgroup,individual)).commit();
         }
     }
 

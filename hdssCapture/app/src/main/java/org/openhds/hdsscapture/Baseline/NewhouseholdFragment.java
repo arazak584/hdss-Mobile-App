@@ -23,6 +23,7 @@ import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.databinding.FragmentNewhouseholdBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
@@ -46,7 +47,7 @@ import java.util.concurrent.ExecutionException;
  * Use the {@link NewhouseholdFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewhouseholdFragment extends Fragment {
+public class NewhouseholdFragment extends DialogFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
@@ -60,6 +61,7 @@ public class NewhouseholdFragment extends Fragment {
     private Individual individual;
     private FragmentNewhouseholdBinding binding;
     private Socialgroup socialgroup;
+    private Hierarchy level6Data;
 
     public NewhouseholdFragment() {
         // Required empty public constructor
@@ -126,6 +128,7 @@ public class NewhouseholdFragment extends Fragment {
             String resuuidString = uuid.replaceAll("-", "");
             // Set the ID of the Fieldworker object
             binding.getResidency().uuid = resuuidString;
+            binding.getIndividual().residency = resuuidString;
         }
 
         if(socialgroup.uuid == null) {
@@ -134,6 +137,7 @@ public class NewhouseholdFragment extends Fragment {
             // Set the ID of the Fieldworker object
             binding.getSocialgroup().uuid = suuidString;
             binding.getResidency().socialgroup_uuid = suuidString;
+            binding.getIndividual().socialgroup = suuidString;
         }
 
         if(individual.fw_uuid==null){
@@ -149,7 +153,8 @@ public class NewhouseholdFragment extends Fragment {
         }
 
         if(residency.location_uuid==null){
-            binding.getResidency().location_uuid = locations.getUuid();
+            binding.getResidency().location_uuid = BaseFragment.selectedLocation.getUuid();
+            binding.getIndividual().compno = BaseFragment.selectedLocation.getCompno();
         }
 
         if(socialgroup.complete==null){
@@ -176,7 +181,7 @@ public class NewhouseholdFragment extends Fragment {
         if (binding.getIndividual().extId == null) {
             final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
             int sequenceNumber = 1;
-            String id = locations.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
+            String id = BaseFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
             while (true) {
                 try {
                     if (individualViewModels.findAll(id) == null) break;
@@ -186,7 +191,7 @@ public class NewhouseholdFragment extends Fragment {
                     e.printStackTrace();
                 } // check if ID already exists in ViewModel
                 sequenceNumber++; // increment sequence number if ID exists
-                id = locations.compextId + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
+                id = BaseFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
             }
             binding.getIndividual().extId = id; // set the generated ID to the extId property of the Individual object
         }
@@ -195,7 +200,7 @@ public class NewhouseholdFragment extends Fragment {
         if (binding.getSocialgroup().extId == null) {
             final SocialgroupViewModel socialgroupViewModels = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             int sequenceNumber = 1;
-            String id = locations.compextId + String.format("%02d", sequenceNumber); // generate ID with sequence number padded with zeros
+            String id = BaseFragment.selectedLocation.compextId + String.format("%02d", sequenceNumber); // generate ID with sequence number padded with zeros
             while (true) {
                 try {
                     if (socialgroupViewModels.createhse(id) == null) break;
@@ -205,9 +210,10 @@ public class NewhouseholdFragment extends Fragment {
                     e.printStackTrace();
                 } // check if ID already exists in ViewModel
                 sequenceNumber++; // increment sequence number if ID exists
-                id = locations.compextId + String.format("%02d", sequenceNumber); // generate new ID with updated sequence number
+                id = BaseFragment.selectedLocation.compextId + String.format("%02d", sequenceNumber); // generate new ID with updated sequence number
             }
             binding.getSocialgroup().extId = id; // set the generated ID to the extId property of the Individual object
+            binding.getIndividual().hohID = id;
         }
 
 
@@ -233,6 +239,7 @@ public class NewhouseholdFragment extends Fragment {
 
         if(residency.startDate==null){
             binding.getResidency().startDate = new Date();
+            binding.getIndividual().startDate = new Date();
         }
 
         if(residency.startType==null){
@@ -241,6 +248,7 @@ public class NewhouseholdFragment extends Fragment {
 
         if(residency.endType==null){
             binding.getResidency().endType = 1;
+            binding.getIndividual().endType = 1;
         }
 
         if(residency.rltn_head==null){
@@ -326,25 +334,6 @@ public class NewhouseholdFragment extends Fragment {
 
             }
 
-            if(individual.fw_uuid==null){
-                isExists = true;
-                binding.individualFw.setError("Fieldworker userName is Required");
-            }
-
-            if(individual.firstName==null){
-                isExists = true;
-                binding.individualFirstName.setError("FirstName is Required");
-            }
-
-            if(individual.lastName==null){
-                isExists = true;
-                binding.individualLastName.setError("LastName is Required");
-            }
-
-            if(individual.dob==null){
-                isExists = true;
-                binding.dob.setError("Date of Birth is Required");
-            }
 
 
         });
@@ -395,10 +384,10 @@ public class NewhouseholdFragment extends Fragment {
         }
         if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
-                    BasesocialgroupFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    IndividualSummaryFragment.newInstance(locations, socialgroup,individual)).commit();
         } else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
-                    Baselinehousehold.newInstance(individual,residency, locations, socialgroup)).commit();
+                    BaseFragment.newInstance(level6Data, locations, socialgroup)).commit();
         }
 
     }

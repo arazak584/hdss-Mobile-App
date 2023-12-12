@@ -197,7 +197,7 @@ public class BasevisitFragment extends Fragment {
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
-                    IndividualSummaryFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+                    IndividualSummaryFragment.newInstance(locations, socialgroup,individual)).commit();
         }
     }
 

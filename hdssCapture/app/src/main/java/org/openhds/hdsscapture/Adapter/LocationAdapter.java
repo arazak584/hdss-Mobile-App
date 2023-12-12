@@ -141,27 +141,6 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         notifyDataSetChanged();
     }
 
-//    public void refresh(LocationViewModel locationViewModel) {
-//        locationsList.clear();
-//        if (level6Data != null)
-//            try {
-//                List<Locations> list = locationViewModel.findLocationsOfCluster(level6Data.getUuid());
-//
-//                if (list != null) {
-//                    locationsList.addAll(list);
-//                }
-//
-//                if (list.isEmpty()) {
-//                    Toast.makeText(fragment.requireContext(), "No Compound Found", Toast.LENGTH_SHORT).show();
-//                }
-//
-//            } catch (ExecutionException e) {
-//                e.printStackTrace();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        notifyDataSetChanged();
-//    }
 
 
 }

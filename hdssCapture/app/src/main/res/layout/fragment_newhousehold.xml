@@ -550,7 +550,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/btnd_rone_dgbevel"
                 android:textColor="@android:color/background_light"
-                android:text="@string/closecontinue" />
+                android:text="@string/close" />
 
 
         </LinearLayout>

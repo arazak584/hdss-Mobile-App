@@ -85,20 +85,14 @@ public class Baslinelocation extends DialogFragment {
      *
      * @param cluster_id  Parameter 1.
      * @param locations    Parameter 2.
-     * @param socialgroup Parameter 3.
-     * @param residency Parameter 4.
-     * @param individual Parameter 5.
      * @return A new instance of fragment Baslinelocation.
      */
     // TODO: Rename and change types and number of parameters
-    public static Baslinelocation newInstance(Hierarchy cluster_id, Locations locations, Socialgroup socialgroup, Residency residency, Individual individual) {
+    public static Baslinelocation newInstance(Hierarchy cluster_id, Locations locations) {
         Baslinelocation fragment = new Baslinelocation();
         Bundle args = new Bundle();
         args.putParcelable(ARG_CLUSTER_IDS, cluster_id);
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(SOCIAL_ID, socialgroup);
-        args.putParcelable(RESIDENCY_ID, residency);
-        args.putParcelable(INDIVIDUAL_ID, individual);
         fragment.setArguments(args);
         return fragment;
     }
@@ -109,9 +103,6 @@ public class Baslinelocation extends DialogFragment {
         if (getArguments() != null) {
             cluster_id = getArguments().getParcelable(ARG_CLUSTER_IDS);
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            socialgroup = getArguments().getParcelable(SOCIAL_ID);
-            residency = getArguments().getParcelable(RESIDENCY_ID);
-            individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
     }
 
@@ -129,9 +120,13 @@ public class Baslinelocation extends DialogFragment {
         // Create a location request with maximum accuracy of 10
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(10000); // 10 seconds
-        locationRequest.setFastestInterval(5000); // 5 seconds
-        locationRequest.setSmallestDisplacement(10); // 10 meters
+//        locationRequest.setInterval(1000); // 10 seconds
+//        locationRequest.setFastestInterval(5000); // 5 seconds
+//        locationRequest.setSmallestDisplacement(50);
+        locationRequest.setInterval(5); // 5 milliseconds
+        locationRequest.setFastestInterval(0); // 0 seconds
+        //locationRequest.setSmallestDisplacement(50); // 10 meters
+        locationRequest.setNumUpdates(1);
 
 
 

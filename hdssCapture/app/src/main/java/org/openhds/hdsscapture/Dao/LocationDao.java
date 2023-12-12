@@ -9,6 +9,7 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.LocationAmendment;
 
 import java.util.Date;
@@ -35,6 +36,10 @@ public interface LocationDao {
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Locations> locations);
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(Locations... locations);
 
     @Delete
     void delete(Locations locations);

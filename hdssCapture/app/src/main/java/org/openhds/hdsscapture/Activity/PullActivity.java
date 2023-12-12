@@ -544,7 +544,7 @@ public class PullActivity extends AppCompatActivity {
 
                                     AtomicLong counts = new AtomicLong();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 5000;
+                                        int batchSize = 10000;
                                         List<T> entities = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -555,13 +555,17 @@ public class PullActivity extends AppCompatActivity {
 
                                                 if (batchCount == batchSize) {
                                                     if (entityClass.equals(Locations.class)) {
-                                                        locationDao.insert((List<Locations>) entities);
+                                                        //locationDao.insert((List<Locations>) entities);
+                                                        locationDao.insert((Locations[]) entities.toArray(new Locations[0]));
                                                     } else if (entityClass.equals(Individual.class)) {
-                                                        individualDao.insert((List<Individual>) entities);
+                                                        individualDao.insert((Individual[]) entities.toArray(new Individual[0]));
+                                                        //individualDao.insert((List<Individual>) entities);
                                                     }else if (entityClass.equals(Socialgroup.class)) {
-                                                        socialgroupDao.insert((List<Socialgroup>) entities);
+                                                        //socialgroupDao.insert((List<Socialgroup>) entities);
+                                                        socialgroupDao.insert((Socialgroup[]) entities.toArray(new Socialgroup[0]));
                                                     }else if (entityClass.equals(Residency.class)) {
-                                                        residencyDao.insert((List<Residency>) entities);
+                                                        //residencyDao.insert((List<Residency>) entities);
+                                                        residencyDao.insert((Residency[]) entities.toArray(new Residency[0]));
                                                     }
                                                     entities.clear();
                                                     batchCount = 0;
@@ -583,13 +587,17 @@ public class PullActivity extends AppCompatActivity {
                                         }
                                         if (batchCount > 0) {
                                             if (entityClass.equals(Locations.class)) {
-                                                locationDao.insert((List<Locations>) entities);
+                                                //locationDao.insert((List<Locations>) entities);
+                                                locationDao.insert((Locations[]) entities.toArray(new Locations[0]));
                                             } else if (entityClass.equals(Individual.class)) {
+                                                individualDao.insert((Individual[]) entities.toArray(new Individual[0]));
                                                 individualDao.insert((List<Individual>) entities);
                                             }else if (entityClass.equals(Socialgroup.class)) {
-                                                socialgroupDao.insert((List<Socialgroup>) entities);
+                                                socialgroupDao.insert((Socialgroup[]) entities.toArray(new Socialgroup[0]));
+                                                //socialgroupDao.insert((List<Socialgroup>) entities);
                                             }else if (entityClass.equals(Residency.class)) {
-                                                residencyDao.insert((List<Residency>) entities);
+                                                residencyDao.insert((Residency[]) entities.toArray(new Residency[0]));
+                                                //residencyDao.insert((List<Residency>) entities);
                                             }
                                         }
                                         runOnUiThread(() -> {
@@ -780,7 +788,7 @@ public class PullActivity extends AppCompatActivity {
 
                                     AtomicLong counts = new AtomicLong();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 5000;
+                                        int batchSize = 10000;
                                         List<T> entities = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -791,11 +799,14 @@ public class PullActivity extends AppCompatActivity {
 
                                                 if (batchCount == batchSize) {
                                                     if (entityClass.equals(Pregnancy.class)) {
-                                                        pregnancyDao.insert((List<Pregnancy>) entities);
+                                                        //pregnancyDao.insert((List<Pregnancy>) entities);
+                                                        pregnancyDao.insert((Pregnancy[]) entities.toArray(new Pregnancy[0]));
                                                     } else if (entityClass.equals(Relationship.class)) {
-                                                        relationshipDao.insert((List<Relationship>) entities);
+                                                        relationshipDao.insert((Relationship[]) entities.toArray(new Relationship[0]));
+                                                        //relationshipDao.insert((List<Relationship>) entities);
                                                     }else if (entityClass.equals(Demographic.class)) {
-                                                        demographicDao.insert((List<Demographic>) entities);
+                                                        demographicDao.insert((Demographic[]) entities.toArray(new Demographic[0]));
+                                                        //demographicDao.insert((List<Demographic>) entities);
                                                     }
                                                     entities.clear();
                                                     batchCount = 0;
@@ -817,11 +828,14 @@ public class PullActivity extends AppCompatActivity {
                                         }
                                         if (batchCount > 0) {
                                             if (entityClass.equals(Pregnancy.class)) {
-                                                pregnancyDao.insert((List<Pregnancy>) entities);
+                                                //pregnancyDao.insert((List<Pregnancy>) entities);
+                                                pregnancyDao.insert((Pregnancy[]) entities.toArray(new Pregnancy[0]));
                                             } else if (entityClass.equals(Relationship.class)) {
-                                                relationshipDao.insert((List<Relationship>) entities);
+                                                relationshipDao.insert((Relationship[]) entities.toArray(new Relationship[0]));
+                                                //relationshipDao.insert((List<Relationship>) entities);
                                             }else if (entityClass.equals(Demographic.class)) {
-                                                demographicDao.insert((List<Demographic>) entities);
+                                                //demographicDao.insert((List<Demographic>) entities);
+                                                demographicDao.insert((Demographic[]) entities.toArray(new Demographic[0]));
                                             }
                                         }
                                         runOnUiThread(() -> {
@@ -1061,7 +1075,7 @@ public class PullActivity extends AppCompatActivity {
 
                                     AtomicLong counts = new AtomicLong();
                                     AppDatabase.databaseWriteExecutor.execute(() -> {
-                                        int batchSize = 5000;
+                                        int batchSize = 10000;
                                         List<T> entities = new ArrayList<>();
                                         int batchCount = 0;
                                         while (iterator.hasNext()) {
@@ -1072,9 +1086,11 @@ public class PullActivity extends AppCompatActivity {
 
                                                 if (batchCount == batchSize) {
                                                     if (entityClass.equals(HdssSociodemo.class)) {
-                                                        hdssSociodemoDao.insert((List<HdssSociodemo>) entities);
+                                                        hdssSociodemoDao.insert((HdssSociodemo[]) entities.toArray(new HdssSociodemo[0]));
+                                                        //hdssSociodemoDao.insert((List<HdssSociodemo>) entities);
                                                     } else if (entityClass.equals(Vaccination.class)) {
-                                                        vaccinationDao.insert((List<Vaccination>) entities);
+                                                        vaccinationDao.insert((Vaccination[]) entities.toArray(new Vaccination[0]));
+                                                        //vaccinationDao.insert((List<Vaccination>) entities);
                                                     }
                                                     entities.clear();
                                                     batchCount = 0;
@@ -1096,9 +1112,11 @@ public class PullActivity extends AppCompatActivity {
                                         }
                                         if (batchCount > 0) {
                                             if (entityClass.equals(HdssSociodemo.class)) {
-                                                hdssSociodemoDao.insert((List<HdssSociodemo>) entities);
+                                                //hdssSociodemoDao.insert((List<HdssSociodemo>) entities);
+                                                hdssSociodemoDao.insert((HdssSociodemo[]) entities.toArray(new HdssSociodemo[0]));
                                             } else if (entityClass.equals(Vaccination.class)) {
-                                                vaccinationDao.insert((List<Vaccination>) entities);
+                                                //vaccinationDao.insert((List<Vaccination>) entities);
+                                                vaccinationDao.insert((Vaccination[]) entities.toArray(new Vaccination[0]));
                                             }
                                         }
                                         runOnUiThread(() -> {

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +56,11 @@ public class LoginActivity extends AppCompatActivity  {
 
     public static final String FIELDWORKER_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.FIELDWORKER_DATA";
     public static final String FIELDWORKER_DATAS = "org.openhds.hdsscapture.activity.MainActivity.FIELDWORKER_DATAS";
+
+    private static final String PREFS_NAME = "task";
+    private static final String SELECTED_RADIO_BUTTON_ID_KEY = "selectedTask";
+    private RadioGroup radioGroup;
+    private SharedPreferences preferences;
 
 
     //Allow access on phones with screen size 7 inches and above

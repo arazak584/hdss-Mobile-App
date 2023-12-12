@@ -20,10 +20,13 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Socialgroup;
 
 public class BaselineActivity extends AppCompatActivity {
 
     public static Locations TOP_LOCATION = new Locations();
+    private Locations locations;
+    private Socialgroup socialgroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +72,11 @@ public class BaselineActivity extends AppCompatActivity {
 
 
 
-        loadFragment(BaseFragment.newInstance(level6Data));
+        loadFragment(BaseFragment.newInstance(level6Data,locations,socialgroup));
 
         final ExtendedFloatingActionButton home = findViewById(R.id.home);
         home.setOnClickListener(view -> {
-            loadFragment(BaseFragment.newInstance(level6Data));
+            loadFragment(BaseFragment.newInstance(level6Data,locations,socialgroup));
         });
     }
 

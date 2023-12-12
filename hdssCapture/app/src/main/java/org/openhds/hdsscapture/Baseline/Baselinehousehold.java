@@ -109,55 +109,55 @@ public class Baselinehousehold extends Fragment {
         gpsLat.setText(locations.getLatitude());
         gps.setText(locations.getLongitude());
 
-        final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_householdbase);
-        final HouseAdapter adapter = new HouseAdapter(this, residency, locations, individual, visit);
-        final SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(requireActivity()).get(SocialgroupViewModel.class);
+//        final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_householdbase);
+//        final HouseAdapter adapter = new HouseAdapter(this, residency, locations, individual, visit);
+//        final SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(requireActivity()).get(SocialgroupViewModel.class);
+//
+//        //recyclerView.setHasFixedSize(true);
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+//                RecyclerView.VERTICAL);
+//        recyclerView.addItemDecoration(dividerItemDecoration);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+//        recyclerView.setAdapter(adapter);
 
-        //recyclerView.setHasFixedSize(true);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                RecyclerView.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-        recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
-        recyclerView.setAdapter(adapter);
+//        buttonHousehold = binding.getRoot().findViewById(R.id.button_household);
+//        buttonHousehold.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showLoadingDialog();
+//
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        adapter.search(socialgroupViewModel);
+//                    }
+//                }, 500); // change delay time as needed
+//            }
+//
+//            public void showLoadingDialog() {
+//
+//                if (progress == null) {
+//                    progress = new ProgressDialog(requireContext());
+//                    //progress.setTitle(getString(R.string.loading_lbl));
+//                    //progress.setProgressStyle();
+//                    progress.setMessage("Loading Households...");
+//                    //progress.setMessage("Loading...");
+//                    progress.setCancelable(false);
+//                }
+//                progress.show();
+//            }
+//        });
 
-        buttonHousehold = binding.getRoot().findViewById(R.id.button_household);
-        buttonHousehold.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLoadingDialog();
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.search(socialgroupViewModel);
-                    }
-                }, 500); // change delay time as needed
-            }
-
-            public void showLoadingDialog() {
-
-                if (progress == null) {
-                    progress = new ProgressDialog(requireContext());
-                    //progress.setTitle(getString(R.string.loading_lbl));
-                    //progress.setProgressStyle();
-                    progress.setMessage("Loading Households...");
-                    //progress.setMessage("Loading...");
-                    progress.setCancelable(false);
-                }
-                progress.show();
-            }
-        });
-
-        final ExtendedFloatingActionButton add_household = binding.getRoot().findViewById(R.id.button_newhousehold);
-        add_household.setOnClickListener(v -> {
-
-            final Individual individual = new Individual();
-            final Residency residency = new Residency();
-            final Socialgroup socialgroup = new Socialgroup();
-
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
-                    NewhouseholdFragment.newInstance(individual, residency, locations,socialgroup)).commit();
-        });
+//        final ExtendedFloatingActionButton add_household = binding.getRoot().findViewById(R.id.button_newhousehold);
+//        add_household.setOnClickListener(v -> {
+//
+//            final Individual individual = new Individual();
+//            final Residency residency = new Residency();
+//            final Socialgroup socialgroup = new Socialgroup();
+//
+//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
+//                    NewhouseholdFragment.newInstance(individual, residency, locations,socialgroup)).commit();
+//        });
 
         View view = binding.getRoot();
         return view;

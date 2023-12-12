@@ -10,6 +10,7 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.DemographicAmendment;
 
@@ -28,6 +29,10 @@ public interface DemographicDao {
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Demographic> demographics);
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(Demographic... demographics);
 
     @Query("DELETE FROM demographic")
     void deleteAll();

@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -64,8 +65,13 @@ public class HierarchyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hierarchy);
 
+
         final Intent f = getIntent();
         final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
+
+        Intent intents = getIntent();
+        int selectedRadioButtonId = intents.getIntExtra("selectedTask", -1);
+
 
         final FieldworkerViewModel fieldworkerViewModel = new ViewModelProvider(this).get(FieldworkerViewModel.class);
         final RoundViewModel roundViewModel = new ViewModelProvider(this).get(RoundViewModel.class);
@@ -79,9 +85,12 @@ public class HierarchyActivity extends AppCompatActivity {
         final Spinner level6Spinner = findViewById(R.id.spCluster);
         //final Spinner level7Spinner = findViewById(R.id.spCluster);
         final Spinner roundSpinner = findViewById(R.id.spRound);
-
         final EditText username = findViewById(R.id.login_username);
-        username.setText(fieldworkerDatas.username);
+
+        if (fieldworkerDatas != null) {
+
+            username.setText(fieldworkerDatas.username);
+        }
 
         // set adapters to spinners
         level1Spinner.setAdapter(level1Adapter);
@@ -429,8 +438,13 @@ public class HierarchyActivity extends AppCompatActivity {
 
         final Button base = findViewById(R.id.btn_baseline);
         base.setOnClickListener(v -> {
-            if (level6Adapter == null || level6Spinner.getAdapter().isEmpty() && roundData == null) {
+            if (level6Spinner.getSelectedItemPosition() == 0 || level6Spinner.getAdapter().isEmpty()) {
                 Toast.makeText(this, "Please Select All Fields", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if (roundData == null) {
+                Toast.makeText(this, "Round Not Selected", Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -461,14 +475,14 @@ public class HierarchyActivity extends AppCompatActivity {
                 return;
             }
 
-            Toast.makeText(this,"Enumeration Disabled", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this,"Enumeration Disabled", Toast.LENGTH_LONG).show();
 
-//            Intent intent = new Intent(HierarchyActivity.this, BaselineActivity.class);
-//            intent.putExtra(ROUND_DATA, roundData);
-//            intent.putExtra(LEVEL5_DATA, level5Data);
-//            intent.putExtra(LEVEL6_DATA, level6Data);
-//            intent.putExtra(FIELDWORKER_DATA, fieldworkerData);
-//            startActivity(intent);
+            Intent intent = new Intent(HierarchyActivity.this, BaselineActivity.class);
+            intent.putExtra(ROUND_DATA, roundData);
+            intent.putExtra(LEVEL5_DATA, level5Data);
+            intent.putExtra(LEVEL6_DATA, level6Data);
+            intent.putExtra(FIELDWORKER_DATA, fieldworkerData);
+            startActivity(intent);
         });
 
         final Button remainder = findViewById(R.id.btn_visit);
@@ -476,6 +490,19 @@ public class HierarchyActivity extends AppCompatActivity {
             Intent i = new Intent(getApplicationContext(),RemainderActivity.class);
             startActivity(i);
         });
+
+//        //int selectedRadioButtonId = getIntent().getIntExtra("selectedTask", R.id.Update);
+//        Log.d("HierarchyActivity", "Selected RadioButton ID: " + selectedRadioButtonId);
+//        // Use the selected RadioButton ID to determine which buttons to enable/disable
+//        if (selectedRadioButtonId == R.id.Update) {
+//            Log.d("HierarchyActivity", "Update selected");
+//            start.setEnabled(true); // Enable or disable as needed
+//            base.setEnabled(false); // Enable or disable as needed
+//        } else if (selectedRadioButtonId == R.id.Enumerate) {
+//            Log.d("HierarchyActivity", "Enumerate selected");
+//            start.setEnabled(false); // Enable or disable as needed
+//            base.setEnabled(true); // Enable or disable as needed
+//        }
 
 //        final Button odk = findViewById(R.id.btn_odk);
 //        odk.setOnClickListener(v -> {

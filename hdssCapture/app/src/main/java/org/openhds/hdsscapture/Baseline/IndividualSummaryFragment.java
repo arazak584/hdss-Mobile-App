@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -21,6 +22,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentIndividualSummaryBinding;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
@@ -41,7 +43,7 @@ public class IndividualSummaryFragment extends Fragment {
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private final String TAG = "LOCATION.TAG";
 
-
+    private Hierarchy level6Data;
     private Locations locations;
     private Socialgroup socialgroup;
     private Residency residency;
@@ -58,18 +60,16 @@ public class IndividualSummaryFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param individual Parameter 5.
-     * @param residency Parameter 4.
      * @param locations    Parameter 2.
      * @param socialgroup Parameter 3.
      * @return A new instance of fragment IndividualSummaryFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static IndividualSummaryFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public static IndividualSummaryFragment newInstance(Locations locations, Socialgroup socialgroup,Individual individual) {
         IndividualSummaryFragment fragment = new IndividualSummaryFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(SOCIAL_ID, socialgroup);
-        args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(INDIVIDUAL_ID, individual);
         fragment.setArguments(args);
         return fragment;
@@ -109,39 +109,42 @@ public class IndividualSummaryFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
         recyclerView.setAdapter(adapter);
 
-        binding.buttonIndividuals.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLoadingDialog();
+//        binding.buttonIndividuals.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showLoadingDialog();
+//
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        adapter.pull(individualViewModel);
+//                    }
+//                }, 500); // change delay time as needed
+//            }
+//
+//            public void showLoadingDialog() {
+//                if (progress == null) {
+//                    progress = new ProgressDialog(requireContext());
+//                    progress.setTitle("Loading Individuals...");
+//                    progress.setMessage(getString(R.string.please_wait_lbl));
+//                    progress.setCancelable(false);
+//                }
+//                progress.show();
+//            }
+//        });
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.pull(individualViewModel);
-                    }
-                }, 500); // change delay time as needed
-            }
+        //initial loading of Individuals in locations
+        adapter.filter("", individualViewModel);
 
-            public void showLoadingDialog() {
-                if (progress == null) {
-                    progress = new ProgressDialog(requireContext());
-                    progress.setTitle("Loading Individuals...");
-                    progress.setMessage(getString(R.string.please_wait_lbl));
-                    progress.setCancelable(false);
-                }
-                progress.show();
-            }
-        });
-
-        final ExtendedFloatingActionButton addback = binding.getRoot().findViewById(R.id.add_back);
+        final AppCompatButton addback = binding.getRoot().findViewById(R.id.add_back);
         addback.setOnClickListener(v -> {
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
-                    Baselinehousehold.newInstance(individual,residency,locations, socialgroup)).commit();
+                    BaseFragment.newInstance(level6Data,locations,socialgroup)).commit();
         });
 
 
-        final ExtendedFloatingActionButton add_individual = binding.getRoot().findViewById(R.id.button_newindividual);
+        final AppCompatButton add_individual = binding.getRoot().findViewById(R.id.button_newindividual);
         add_individual.setOnClickListener(v -> {
 
             final Individual individual = new Individual();

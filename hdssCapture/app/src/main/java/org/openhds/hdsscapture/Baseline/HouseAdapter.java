@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Baseline;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
@@ -19,6 +22,8 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
+import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,21 +32,21 @@ import java.util.concurrent.ExecutionException;
 public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.ViewHolder>{
 
 
-    Baselinehousehold activity;
+    BaseFragment activity;
     LayoutInflater inflater;
-    private final Locations locations;
     private final List<Socialgroup> socialgroupList;
-    private final Residency residency;
-    private final Individual individual;
-    private EventForm eventForm;
-    private final Visit visit;
+    private final SocialgroupViewModel socialgroupViewModel;
+    private final FragmentActivity activity1;
+    private Individual individual;
+    private final Socialgroup socialgroup;
+    private static Locations selectedLocation;
 
-    public HouseAdapter(Baselinehousehold activity, Residency residency, Locations locations, Individual individual, Visit visit) {
+    public HouseAdapter(Context context, BaseFragment activity, Locations selectedLocation, Socialgroup socialgroup, SocialgroupViewModel socialgroupViewModel) {
+        this.activity1 = activity.requireActivity();
         this.activity = activity;
-        this.locations = locations;
-        this.residency = residency;
-        this.individual = individual;
-        this.visit = visit;
+        this.selectedLocation = selectedLocation;
+        this.socialgroup = socialgroup;
+        this.socialgroupViewModel = socialgroupViewModel;
         socialgroupList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -72,24 +77,31 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull HouseAdapter.ViewHolder holder, int position) {
         final Socialgroup socialgroup = socialgroupList.get(position);
 
-        holder.name.setText(socialgroup.getGroupName());
-        holder.hhid.setText(socialgroup.getExtId());
-        holder.hhid.setTextColor(Color.RED);
+        if (BaseFragment.selectedLocation != null) {
+            holder.name.setText(socialgroup.getGroupName());
+            holder.hhid.setText(socialgroup.getExtId()+ " " + "(" + BaseFragment.selectedLocation.getCompno() + ")" );
 
-        Integer visit = socialgroup.complete;
+            Integer visit = socialgroup.complete;
 
-        if (visit != null) {
-            holder.hhid.setTextColor(Color.BLUE);
-            holder.name.setTextColor(Color.BLUE);
+            if (visit != null) {
+                holder.hhid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
+                holder.name.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
+            } else {
+                holder.hhid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+                holder.name.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+            }
         }else {
-            holder.hhid.setTextColor(Color.RED);
-            holder.name.setTextColor(Color.RED);
+            // Handle the case when selectedLocation is null
+            holder.name.setText("No selected location");
+            holder.hhid.setText("");
         }
 
-
         holder.linearLayout.setOnClickListener(v -> {
-            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
-                    BasesocialgroupFragment.newInstance(individual, residency, locations, socialgroup)).commit();
+            // Use the stored activity reference to access the getSupportFragmentManager()
+            activity1.getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container_baseline, IndividualSummaryFragment.newInstance(selectedLocation, socialgroup,individual))
+                    .addToBackStack(null)
+                    .commit();
         });
     }
 
@@ -98,25 +110,26 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.ViewHolder>{
         return socialgroupList.size();
     }
 
-    public void search(SocialgroupViewModel socialgroupViewModel) {
+    public void setSelectedLocation(Locations selectedLocation) {
+
         socialgroupList.clear();
-        if(locations != null)
+        if (selectedLocation != null) {
             try {
-                List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(locations.getCompno());
+                List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(selectedLocation.getCompno());
 
                 if (list != null) {
                     socialgroupList.addAll(list);
                 }
-                if (list.isEmpty()) {
-                    Toast.makeText(activity.getActivity(), "No household Found", Toast.LENGTH_SHORT).show();
+                if (list.isEmpty()){
+                    Toast.makeText(activity.getActivity(), "No Active Household In " + selectedLocation.getCompno(), Toast.LENGTH_LONG).show();
                 }
-
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+
         notifyDataSetChanged();
-        activity.dismissLoadingDialog();
     }
 }

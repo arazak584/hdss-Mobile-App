@@ -8,8 +8,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.openhds.hdsscapture.Adapter.LocationAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.entity.Hierarchy;
@@ -25,32 +28,34 @@ import java.util.concurrent.ExecutionException;
 
 public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ViewHolder>{
 
+    private final LocationClickListener locationClickListener;
     BaseFragment activity;
     LayoutInflater inflater;
     private final List<Locations> locationsList;
     private final Hierarchy level6Data;
-    private Socialgroup socialgroup;
-    private Residency residency;
-    private Individual individual;
+    private final Fragment fragment;
 
-    public BaseAdapter(BaseFragment activity, Hierarchy level6Data) {
-        this.activity = activity;
+    public interface LocationClickListener {
+        void onLocationClick(Locations selectedLocation);
+    }
+
+    public BaseAdapter(Fragment fragment, Hierarchy level6Data, LocationClickListener listener) {
+        this.fragment = fragment;
         this.level6Data = level6Data;
+        this.locationClickListener = listener;
         locationsList = new ArrayList<>();
-        inflater = LayoutInflater.from(activity.requireContext());
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView locationname, compno, longitude, latitude;
+        TextView locationname, compno, gps, latitude;
         LinearLayout linearLayout;
 
         public ViewHolder(View view) {
             super(view);
             this.locationname = view.findViewById(R.id.Location_name);
             this.compno = view.findViewById(R.id.location_compno);
-            this.longitude = view.findViewById(R.id.longitude);
-            this.latitude = view.findViewById(R.id.latitude);
-            this.linearLayout = view.findViewById(R.id.searchedBaseline);
+            this.gps = view.findViewById(R.id.longitude);
+            this.linearLayout = view.findViewById(R.id.searchedItem);
         }
     }
 
@@ -71,18 +76,24 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ViewHolder>{
 
         holder.locationname.setText(locations.getLocationName());
         holder.compno.setText(locations.getCompno());
-        holder.longitude.setText(locations.getLongitude());
-        holder.latitude.setText(locations.getLatitude());
+        holder.gps.setText(locations.getLatitude() + "," + locations.getLongitude());
 
         Integer st = locations.complete;
         if (st != null) {
-            holder.compno.setTextColor(Color.BLUE);
-            holder.locationname.setTextColor(Color.BLUE);
+            holder.compno.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
+            holder.locationname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
+        } else {
+            holder.compno.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+            holder.locationname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
         }
 
+        holder.gps.setTextIsSelectable(true);
+
         holder.linearLayout.setOnClickListener(v -> {
-            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
-                    Baslinelocation.newInstance(level6Data, locations, socialgroup, residency, individual)).commit();
+            if (locationClickListener != null) {
+                locationClickListener.onLocationClick(locations);
+                //Log.d("LocationAdapter", "Location clicked: " + locations.getCompno());
+            }
         });
 
     }
@@ -97,34 +108,26 @@ public class BaseAdapter extends RecyclerView.Adapter<BaseAdapter.ViewHolder>{
         locationsList.clear();
         if (charText != null && charText.length() > 2) {
             charText = charText.toLowerCase(Locale.getDefault());
-
             try {
-                List<Locations> list = locationViewModel.retrieveBySearchs(charText);
-
+                List<Locations> list = locationViewModel.findBySearch(level6Data.getUuid(), charText);
                 if (list != null) {
                     locationsList.addAll(list);
                 }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+            } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
         } else {
-
-            if(level6Data != null)
+            if (level6Data != null)
                 try {
                     List<Locations> list = locationViewModel.findLocationsOfCluster(level6Data.getUuid());
-
                     if (list != null) {
                         locationsList.addAll(list);
                     }
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
+                } catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
                 }
-
         }
+
         notifyDataSetChanged();
     }
 }

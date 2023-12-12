@@ -49,15 +49,6 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/button_individuals"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@drawable/btnd_rone_dgbevel"
-            android:textColor="@android:color/background_light"
-            android:text="@string/individual_select" />
-
 
         <View
             android:layout_width="match_parent"
@@ -91,7 +82,7 @@
         android:contentDescription="@string/newindividual"
         android:src="@drawable/ic_baseline_add_24"
         android:text="@string/baseline"
-        android:background="@drawable/btnd_rone_dgbevel"
+        android:background="@drawable/btnd_save"
         android:textColor="@android:color/background_light"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -33,6 +33,8 @@ public class LocationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
+
+
         final Intent j = getIntent();
         final Hierarchy level5Data = j.getParcelableExtra(HierarchyActivity.LEVEL5_DATA);
 

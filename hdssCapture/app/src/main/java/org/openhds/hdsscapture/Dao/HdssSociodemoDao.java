@@ -5,9 +5,11 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.HdssSociodemo;
+import org.openhds.hdsscapture.entity.Vaccination;
 
 import java.util.Date;
 import java.util.List;
@@ -23,6 +25,10 @@ public interface HdssSociodemoDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     void insert(List<HdssSociodemo> hdssSociodemos);
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(HdssSociodemo... hdssSociodemos);
 
     @Query("DELETE FROM sociodemo")
     void deleteAll();

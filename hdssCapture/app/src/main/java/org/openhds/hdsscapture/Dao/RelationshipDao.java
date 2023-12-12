@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 
@@ -26,6 +27,10 @@ public interface RelationshipDao {
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Relationship> relationships);
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(Relationship... relationships);
 
     @Query("DELETE FROM relationship")
     void deleteAll();

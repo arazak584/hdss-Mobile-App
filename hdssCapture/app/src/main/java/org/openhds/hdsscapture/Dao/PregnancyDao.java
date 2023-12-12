@@ -8,6 +8,7 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Pregnancy;
+import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.PregnancyobsAmendment;
 
 import java.util.Date;
@@ -24,6 +25,10 @@ public interface PregnancyDao {
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert (List<Pregnancy> pregnancies);
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(Pregnancy... pregnancies);
 
     @Query("DELETE FROM pregnancy")
     void deleteAll();

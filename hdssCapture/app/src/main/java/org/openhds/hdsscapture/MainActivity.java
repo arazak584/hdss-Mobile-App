@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         //Toast.makeText(MainActivity.this, "Welcome " + fieldworkerDatas.firstName + " " + fieldworkerDatas.lastName, Toast.LENGTH_LONG).show();
 
 
-
         final Button update = findViewById(R.id.btnupdate);
         update.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(),HierarchyActivity.class);

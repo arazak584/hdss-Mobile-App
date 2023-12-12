@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
+import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Vaccination;
 
 import java.util.Date;
@@ -23,6 +24,10 @@ public interface VaccinationDao {
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Vaccination> vaccination);
+
+    @Transaction
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(Vaccination... vaccination);
 
 
     @Query("DELETE FROM vaccination")
