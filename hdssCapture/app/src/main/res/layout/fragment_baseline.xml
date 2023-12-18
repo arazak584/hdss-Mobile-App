@@ -14,6 +14,14 @@
             name="residency"
             type="org.openhds.hdsscapture.entity.Residency" />
 
+        <variable
+            name="mother"
+            type="org.openhds.hdsscapture.entity.Individual" />
+
+        <variable
+            name="father"
+            type="org.openhds.hdsscapture.entity.Individual" />
+
         <import type="android.view.View" />
 
         <variable
@@ -247,7 +255,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/actual_dob"
                     tools:ignore="DuplicateSpeakableTextCheck"
-                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:background="@drawable/btnd_save"
                     android:textColor="@android:color/background_light"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
@@ -316,39 +324,19 @@
                     android:required="true"
                     android:spinnerMode="dialog" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/mother"/>
-
-                <Spinner
-                    android:id="@+id/mother"
-                    selection="@{individual.mother}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/mother"
-                    android:gravity="left"
-                    android:minHeight="48dp"
-                    android:onItemSelected="@{individual::setMother}"
-                    android:padding="15dp"
-                    android:spinnerMode="dialog" />
 
                 <Button
-                    goneUnless="@{individual.mother==1}"
                     android:id="@+id/button_individual_mother"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/mother_extid"
                     tools:ignore="DuplicateSpeakableTextCheck"
-                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:background="@drawable/btnd_save"
                     android:textColor="@android:color/background_light"
                     app:icon="@drawable/ic_baseline_pregnant_woman_24" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    goneUnless="@{individual.mother==1}"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -366,6 +354,11 @@
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <include
+                    android:id="@+id/mothers"
+                    layout="@layout/fragment_individual_mother"
+                    bind:mother="@{mother}" />
+
                 <EditText
                     android:visibility="gone"
                     android:id="@+id/mother_age"
@@ -377,39 +370,19 @@
                     android:focusableInTouchMode="false"
                     android:inputType="number" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/father"/>
-
-                <Spinner
-                    android:id="@+id/father"
-                    selection="@{individual.father}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/father"
-                    android:gravity="left"
-                    android:minHeight="48dp"
-                    android:onItemSelected="@{individual::setFather}"
-                    android:padding="15dp"
-                    android:spinnerMode="dialog" />
 
                 <Button
-                    goneUnless="@{individual.father==1}"
                     android:id="@+id/button_individual_father"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/father_extid"
-                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:background="@drawable/btnd_save"
                     android:textColor="@android:color/background_light"
                     tools:ignore="DuplicateSpeakableTextCheck"
                     app:icon="@drawable/ic_baseline_person_24" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    goneUnless="@{individual.father==1}"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -426,6 +399,11 @@
                         android:focusableInTouchMode="false"
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <include
+                    android:id="@+id/fathers"
+                    layout="@layout/fragment_individual_father"
+                    bind:father="@{father}" />
 
                 <EditText
                     android:visibility="gone"
@@ -491,8 +469,35 @@
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <Button
+                    android:id="@+id/button_change_hh"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/changehh"
+                    app:icon="@drawable/baseline_people_24"
+                    android:background="@drawable/btnd_save"
+                    android:textColor="@android:color/background_light"
+                    tools:ignore="DuplicateSpeakableTextCheck" />
+
                 <com.google.android.material.textfield.TextInputLayout
-                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/household"
+                    android:text="@string/household">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/socialgroup_hohID"
+                        android:text="@={residency.hohID}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -532,7 +537,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/startdate"
                     tools:ignore="DuplicateSpeakableTextCheck"
-                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:background="@drawable/btnd_save"
                     android:textColor="@android:color/background_light"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
@@ -581,23 +586,6 @@
                     android:spinnerMode="dialog"
                     android:padding="10dp"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/form_complete"/>
-
-                <Spinner
-                    android:id="@+id/individual_complete"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    selection="@{individual.complete}"
-                    android:onItemSelected="@{individual::setComplete}"
-                    android:gravity="left"
-                    android:spinnerMode="dialog"
-                    android:padding="15dp"/>
 
             </LinearLayout>
 
@@ -616,7 +604,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_rone_dgbevel"
+                android:background="@drawable/btnd_save"
                 android:textColor="@android:color/background_light"
                 android:text="@string/savecontinuedata" />
 
@@ -626,7 +614,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_rone_dgbevel"
+                android:background="@drawable/btnd_close"
                 android:textColor="@android:color/background_light"
                 android:text="@string/closedata" />
 

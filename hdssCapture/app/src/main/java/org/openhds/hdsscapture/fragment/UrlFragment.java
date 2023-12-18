@@ -1,6 +1,7 @@
 package org.openhds.hdsscapture.fragment;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.R;
 
 /**
@@ -20,19 +22,17 @@ import org.openhds.hdsscapture.R;
  * Use the  factory method to
  * create an instance of this fragment.
  */
-public class UrlFragment extends DialogFragment {
+public class UrlFragment extends DialogFragment{
 
     private EditText editText;
     private OnUrlUpdatedListener urlUpdatedListener;
+    private Context context;
 
     // Define a callback interface to notify AppJson when the URL is updated
     public interface OnUrlUpdatedListener {
         void onUrlUpdated(String newUrl);
     }
 
-    public void setOnUrlUpdatedListener(OnUrlUpdatedListener listener) {
-        urlUpdatedListener = listener;
-    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -48,9 +48,10 @@ public class UrlFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         String newUrl = editText.getText().toString();
                         saveBaseUrl(newUrl);
-                        if (urlUpdatedListener != null) {
-                            urlUpdatedListener.onUrlUpdated(newUrl);
-                        }
+                        updateAppJsonBaseUrl(newUrl);
+//                        if (urlUpdatedListener != null) {
+//                            urlUpdatedListener.onUrlUpdated(newUrl);
+//                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -62,16 +63,22 @@ public class UrlFragment extends DialogFragment {
         return builder.create();
     }
 
+    private void updateAppJsonBaseUrl(String newUrl) {
+        AppJson.getInstance(context).updateBaseUrl(newUrl);
+    }
+
     public String getBaseUrl() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        return preferences.getString("BASE_URL", "http://ksurvey.org:9900");
+        return preferences.getString("BASE_URL", "http://localhost.org:8080");
     }
+
+
 
     public void saveBaseUrl(String baseUrl) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("BASE_URL", baseUrl);
-        editor.apply();
+        editor.commit();
     }
 }
 

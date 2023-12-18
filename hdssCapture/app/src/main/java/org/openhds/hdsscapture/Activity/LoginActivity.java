@@ -88,12 +88,12 @@ public class LoginActivity extends AppCompatActivity  {
 
 
         // //Allow access on phones with screen size 7 inches and above
-        if (!isScreenSizeGreaterThanEqual7Inch(this)) {
-            // Display a message for small screens
-            Toast.makeText(this, "Enabled on Tablet Only", Toast.LENGTH_LONG).show();
-            finish(); // Finish the activity and prevent the user from proceeding
-            return;
-        }
+//        if (!isScreenSizeGreaterThanEqual7Inch(this)) {
+//            // Display a message for small screens
+//            Toast.makeText(this, "Enabled on Tablet Only", Toast.LENGTH_LONG).show();
+//            finish(); // Finish the activity and prevent the user from proceeding
+//            return;
+//        }
 
         appJson = AppJson.getInstance(this);
 

@@ -1,6 +1,5 @@
 package org.openhds.hdsscapture.Adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -13,9 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.openhds.hdsscapture.Activity.ErrorActivity;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Queries;
 import org.openhds.hdsscapture.entity.subqueries.EndEvents;
 import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 

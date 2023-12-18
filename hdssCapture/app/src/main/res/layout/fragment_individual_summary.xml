@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Baseline.IndividualSummaryFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="5dp"
+        tools:context=".Baseline.IndividualSummaryFragment">
 
     <LinearLayout
         android:id="@+id/linearLayout_household"
@@ -73,39 +77,67 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_newindividual"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|left"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="10dp"
-        android:contentDescription="@string/newindividual"
-        android:src="@drawable/ic_baseline_add_24"
-        android:text="@string/baseline"
-        android:background="@drawable/btnd_save"
-        android:textColor="@android:color/background_light"
-        app:fabSize="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="ImageContrastCheck" />
-
-
-    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/add_back"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="10dp"
+        android:layout_margin="16dp"
         android:contentDescription="@string/mainmenu"
         android:src="@drawable/ic_baseline_add_24"
         android:text="@string/mainmenu"
-        android:background="@drawable/btnd_rone_dgbevel"
-        android:textColor="@android:color/background_light"
         app:fabSize="normal"
+        android:background="@drawable/btnd_rone_btn"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/button_newindividual"
+        app:layout_constraintEnd_toStartOf="@+id/add_adhoc_fab"
         tools:ignore="ImageContrastCheck" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_adhoc_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/adhocforms"
+        android:src="@drawable/ic_baseline_add_24"
+        android:text="@string/adhocforms"
+        app:fabSize="mini"
+        android:background="@drawable/btnd_rone_btn"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="ImageContrastCheck" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_newindividual"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/baseline"
+        android:textSize="12sp"
+        android:background="@drawable/btnd_rone_btn"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/add_back"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="ImageContrastCheck,DuplicateSpeakableTextCheck" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_visit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/visithousehold"
+            android:textSize="12sp"
+            android:background="@drawable/btnd_rone_btn"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/button_newindividual"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="ImageContrastCheck" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

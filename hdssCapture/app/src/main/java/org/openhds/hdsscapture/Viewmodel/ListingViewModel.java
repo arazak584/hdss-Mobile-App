@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.ListingRepository;
 import org.openhds.hdsscapture.entity.Listing;
@@ -36,6 +37,10 @@ public class ListingViewModel extends AndroidViewModel {
 
     public List<Listing> error() throws ExecutionException, InterruptedException {
         return listingRepository.error();
+    }
+
+    public LiveData<Listing> errors() throws ExecutionException, InterruptedException {
+        return listingRepository.errors();
     }
 
     public void add(Listing data){

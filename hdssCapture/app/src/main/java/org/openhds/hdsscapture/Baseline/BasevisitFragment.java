@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -41,7 +42,7 @@ import java.util.concurrent.ExecutionException;
  * Use the {@link BasevisitFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BasevisitFragment extends Fragment {
+public class BasevisitFragment extends DialogFragment {
 
     private Visit visit;
     private FragmentBasevisitBinding binding;
@@ -55,11 +56,7 @@ public class BasevisitFragment extends Fragment {
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     public static final String LOCATION_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.LOCATION_DATA";
-    private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String SOCIAL_ID = "SOCIAL_ID";
-    private static final String VISIT_ID = "VISIT_ID";
-    private static final String CASE_ID = "CASE_ID";
-    private static final String EVENT_ID = "EVENT_ID";
     private final String TAG = "VISIT.TAG";
 
     public BasevisitFragment() {
@@ -71,19 +68,15 @@ public class BasevisitFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param locations Parameter 1.
-     * @param residency Parameter 2.
      * @param socialgroup Parameter 3.
-     * @param individual Parameter 4.
      * @return A new instance of fragment BasevisitFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BasevisitFragment newInstance(Individual individual, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public static BasevisitFragment newInstance(Locations locations, Socialgroup socialgroup) {
         BasevisitFragment fragment = new BasevisitFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
-        args.putParcelable(RESIDENCY_ID, residency);
         args.putParcelable(SOCIAL_ID, socialgroup);
-        args.putParcelable(INDIVIDUAL_ID, individual);
         fragment.setArguments(args);
         return fragment;
     }
@@ -93,10 +86,7 @@ public class BasevisitFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
-            residency = getArguments().getParcelable(RESIDENCY_ID);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
-            individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            eventForm = getArguments().getParcelable(EVENT_ID);
         }
     }
 
@@ -120,9 +110,7 @@ public class BasevisitFragment extends Fragment {
             if (data != null) {
                 binding.setVisit(data);
                 data.visitDate = new Date();
-                if ("UNK".equals(socialgroup.groupName)){
-                    data.respondent = "UNK";
-                }
+
             } else {
                 data = new Visit();
 
@@ -131,17 +119,13 @@ public class BasevisitFragment extends Fragment {
 
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.location_uuid = locations.getUuid();
+                data.location_uuid = BaseFragment.selectedLocation.getUuid();
                 data.roundNumber = roundData.getRoundNumber();
-                data.uuid = socialgroup.getVisit_uuid();
+                data.uuid = uuidString;
                 data.complete = 1;
                 data.houseExtId = socialgroup.extId;
                 data.socialgroup_uuid =socialgroup.uuid;
                 data.extId = data.houseExtId + "000";
-
-                if ("UNK".equals(socialgroup.groupName)){
-                    data.respondent = "UNK";
-                }
 
                 binding.setVisit(data);
                 binding.getVisit().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
@@ -153,7 +137,7 @@ public class BasevisitFragment extends Fragment {
         }
 
 
-        loadCodeData(binding.visitcomplete, "submit");
+        //loadCodeData(binding.visitcomplete, "submit");
         loadCodeData(binding.realVisit, "complete");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
@@ -186,11 +170,7 @@ public class BasevisitFragment extends Fragment {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
                 return;
             }
-            if (finalData.respondent == "UNK"){
-                finalData.complete =2;
-            }else {
                 finalData.complete =1;
-            }
             viewModel.add(finalData);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 

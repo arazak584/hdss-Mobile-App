@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.openhds.hdsscapture.Activity.ErrorActivity;
+import org.openhds.hdsscapture.Activity.QueryActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Queries;
 
@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ErrorAdapter extends RecyclerView.Adapter<ErrorAdapter.ViewHolder>{
 
-    ErrorActivity activity;
+    QueryActivity activity;
     LayoutInflater inflater;
     private List<Queries> queries;
 
@@ -35,7 +35,7 @@ public class ErrorAdapter extends RecyclerView.Adapter<ErrorAdapter.ViewHolder>{
     }
 
 
-    public ErrorAdapter(ErrorActivity activity) {
+    public ErrorAdapter(QueryActivity activity) {
         this.activity = activity;
         this.queries = new ArrayList<>();
         inflater = LayoutInflater.from(activity);

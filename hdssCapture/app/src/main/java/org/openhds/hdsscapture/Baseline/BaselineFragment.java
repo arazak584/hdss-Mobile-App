@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.FatherDialogFragment;
+import org.openhds.hdsscapture.Dialog.HouseholdDialogFragment;
 import org.openhds.hdsscapture.Dialog.MotherDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Calculators;
@@ -118,6 +120,33 @@ public class BaselineFragment extends Fragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
+        Button hhse = binding.getRoot().findViewById(R.id.button_change_hh);
+
+        // Set a click listener on the button for mother
+        hhse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressDialog = new ProgressDialog(requireContext());
+                progressDialog.setMessage("Loading Households...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+
+                progressDialog.show();
+
+                // Simulate long operation
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 500);
+
+                // Show the dialog fragment
+                ChangeDialogFragment.newInstance(individual, locations,socialgroup)
+                        .show(getChildFragmentManager(), "ChangeDialogFragment");
+            }
+        });
+
         // Find the button view
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_individual_mother);
         Button showDialogButton1 = binding.getRoot().findViewById(R.id.button_individual_father);
@@ -143,8 +172,8 @@ public class BaselineFragment extends Fragment {
                 }, 500);
 
                 // Show the dialog fragment
-                MotherDialogFragment.newInstance(locations,socialgroup)
-                        .show(getChildFragmentManager(), "MotherDialogFragment");
+                BaseMotherDialogFragment.newInstance(locations,socialgroup)
+                        .show(getChildFragmentManager(), "BaseMotherDialogFragment");
             }
         });
 
@@ -169,8 +198,8 @@ public class BaselineFragment extends Fragment {
                 }, 500);
 
                 // Show the dialog fragment
-                FatherDialogFragment.newInstance(locations,socialgroup)
-                        .show(getChildFragmentManager(), "FatherDialogFragment");
+                BaseFatherDialogFragment.newInstance(locations,socialgroup)
+                        .show(getChildFragmentManager(), "BaseFatherDialogFragment");
             }
         });
 
@@ -241,7 +270,7 @@ public class BaselineFragment extends Fragment {
                 if (binding.getIndividual().extId == null) {
                     final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
                     int sequenceNumber = 1;
-                    String id = BaseFragment.selectedLocation.compextId + String.format("%04d", sequenceNumber); // generate ID with sequence number padded with zeros
+                    String id = BaseFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
                     while (true) {
                         try {
                             if (individualViewModels.findAll(id) == null) break;
@@ -251,7 +280,7 @@ public class BaselineFragment extends Fragment {
                             e.printStackTrace();
                         } // check if ID already exists in ViewModel
                         sequenceNumber++; // increment sequence number if ID exists
-                        id = BaseFragment.selectedLocation.compextId + String.format("%04d", sequenceNumber); // generate new ID with updated sequence number
+                        id = BaseFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
                     }
                     binding.getIndividual().extId = id; // set the generated ID to the extId property of the Individual object
                 }
@@ -263,6 +292,39 @@ public class BaselineFragment extends Fragment {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        IndividualViewModel ind = new ViewModelProvider(this).get(IndividualViewModel.class);
+        try {
+            Individual datae = ind.mother(individual.uuid);
+            if (datae != null) {
+                binding.setMother(datae);
+
+                AppCompatEditText name = binding.getRoot().findViewById(R.id.mother_name);
+                AppCompatEditText dob = binding.getRoot().findViewById(R.id.mother_dob);
+                AppCompatEditText age = binding.getRoot().findViewById(R.id.mothers_age);
+                name.setText(datae.firstName + " " + datae.lastName);
+                dob.setText(datae.getDob());
+                age.setText(String.valueOf(datae.getAge()));
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Individual data = ind.father(individual.uuid);
+            if (data != null) {
+                binding.setFather(data);
+
+                AppCompatEditText name = binding.getRoot().findViewById(R.id.father_name);
+                AppCompatEditText dob = binding.getRoot().findViewById(R.id.father_dob);
+                AppCompatEditText age = binding.getRoot().findViewById(R.id.fathers_age);
+                name.setText(data.firstName + " " + data.lastName);
+                dob.setText(data.getDob());
+                age.setText(String.valueOf(data.getAge()));
+            }
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
 
@@ -285,6 +347,7 @@ public class BaselineFragment extends Fragment {
                 data.socialgroup_uuid = socialgroup.uuid;
                 data.complete = 1;
                 data.individual_uuid = binding.getIndividual().uuid;
+                data.hohID = socialgroup.extId;
 
                 binding.starttype.setEnabled(false);
                 binding.endtype.setEnabled(false);
@@ -308,15 +371,12 @@ public class BaselineFragment extends Fragment {
 
         //LOAD SPINNERS
         loadCodeData(binding.dobAspect, "complete");
-        loadCodeData(binding.individualComplete,  "complete");
         loadCodeData(binding.gender, "gender");
         loadCodeData(binding.starttype, "startType");
         loadCodeData(binding.endtype, "endType");
         loadCodeData(binding.rltnHead, "rltnhead");
         loadCodeData(binding.other,  "complete");
         loadCodeData(binding.gh,  "complete");
-        loadCodeData(binding.mother,  "complete");
-        loadCodeData(binding.father,  "complete");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
@@ -437,6 +497,7 @@ public class BaselineFragment extends Fragment {
             Data.hohID = socialgroup.extId;
 
             finalData.complete=1;
+            Data.complete=1;
             viewModel.add(finalData);
             individualViewModel.add(Data);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
@@ -498,10 +559,7 @@ public class BaselineFragment extends Fragment {
 
 
         }
-        if (save) {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
-                    IndividualSummaryFragment.newInstance(locations, socialgroup,individual)).commit();
-        }else {
+        if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
                     IndividualSummaryFragment.newInstance(locations, socialgroup,individual)).commit();
         }

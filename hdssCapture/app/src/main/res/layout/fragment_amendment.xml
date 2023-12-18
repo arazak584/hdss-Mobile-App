@@ -226,6 +226,12 @@
 
                 </TableRow>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/color_text_green" />
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -270,6 +276,12 @@
                     </RadioGroup>
                 </TableRow>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/color_text_green" />
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -313,6 +325,11 @@
                             android:visibility="invisible" />
                     </RadioGroup>
                 </TableRow>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/color_text_green" />
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -357,6 +374,11 @@
                             android:visibility="invisible" />
                     </RadioGroup>
                 </TableRow>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/color_text_green" />
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -402,6 +424,11 @@
                     </RadioGroup>
 
                 </TableRow>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_margin="5dp"
+                    android:background="@color/color_text_green" />
 
                 <TableRow
                     android:layout_width="match_parent"

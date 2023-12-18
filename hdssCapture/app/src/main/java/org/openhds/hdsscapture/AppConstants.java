@@ -66,6 +66,14 @@ public class AppConstants {
             EVENT_DUP = "DUPLICATE",
             EVENT_VAC = "VACCINATION";
 
-
+    public static final String DATA_CAPTURE = "file:///android_asset/data_capture_code.html";
+    public static final String DATA_SYNC = "file:///android_asset/data_sync.html";
+    public static final String DATA_REPORT = "file:///android_asset/data_report.html";
+    public static final String DATA_DOWNLOAD = "file:///android_asset/data_download.html";
+    public static final String DATA_VIEWS = "file:///android_asset/data_views.html";
+    public static final String DATA_QUERY = "file:///android_asset/data_query.html";
+    public static final String DOWNLOAD_SES = "file:///android_asset/ses_download.html";
+    public static final String DOWNLOAD_IND = "file:///android_asset/ind_download.html";
+    public static final String DOWNLOAD_DEMO = "file:///android_asset/demo_download.html";
 
 }

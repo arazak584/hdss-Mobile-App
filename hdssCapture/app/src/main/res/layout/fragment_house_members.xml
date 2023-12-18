@@ -92,7 +92,7 @@
                 android:text="@string/visithousehold"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:background="@drawable/btnd_save"
+                android:background="@color/DarkBlue"
                 app:fabSize="normal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -111,7 +111,7 @@
                 android:text="@string/compvisit"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:background="@drawable/btnd_save"
+                android:background="@color/DarkBlue"
                 app:fabSize="normal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -154,7 +154,7 @@
                 android:src="@drawable/ic_baseline_add_24"
                 android:text="@string/external"
                 android:layout_gravity="center"
-                app:backgroundTint="@color/DarkBlue"
+                android:background="@color/DarkBlue"
                 android:textColor="@android:color/background_light"
                 app:fabSize="normal"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -176,7 +176,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/deathform"
                 android:focusable="true"
-                app:backgroundTint="@color/home"
+                android:background="@color/home"
                 android:text="@string/death"
                 android:textColor="@color/white"
                 app:fabSize="normal"
@@ -185,6 +185,15 @@
                 app:srcCompat="@android:drawable/ic_menu_sort_by_size"
                 tools:ignore="ImageContrastCheck" />
 
+            <View
+                android:visibility="gone"
+                android:id="@+id/id1"
+                android:layout_width="250dp"
+                android:layout_height="2dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:background="@color/Green" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/omg"
                 android:layout_width="250dp"
@@ -192,7 +201,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/outmigration"
                 android:focusable="true"
-                app:backgroundTint="@color/home"
+                android:background="@color/home"
                 android:text="@string/omg"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -201,6 +210,15 @@
                 app:srcCompat="@android:drawable/ic_menu_sort_by_size"
                 tools:ignore="ImageContrastCheck" />
 
+            <View
+                android:visibility="gone"
+                android:id="@+id/id2"
+                android:layout_width="250dp"
+                android:layout_height="2dp"
+                android:layout_gravity="center"
+                android:layout_margin="5dp"
+                android:background="@color/Green" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/dup"
                 android:layout_width="250dp"
@@ -208,7 +226,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/duplicate"
                 android:focusable="true"
-                app:backgroundTint="@color/home"
+                android:background="@color/home"
                 android:text="@string/duplicate"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -217,6 +235,15 @@
                 app:srcCompat="@android:drawable/ic_menu_sort_by_size"
                 tools:ignore="ImageContrastCheck" />
 
+            <View
+                android:visibility="gone"
+                android:id="@+id/id3"
+                android:layout_width="250dp"
+                android:layout_height="2dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:background="@color/Green" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/demographic"
                 android:layout_width="250dp"
@@ -224,7 +251,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/demographics"
                 android:focusable="true"
-                app:backgroundTint="@color/home"
+                android:background="@color/home"
                 android:text="@string/demographics"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -233,6 +260,15 @@
                 app:srcCompat="@android:drawable/ic_menu_sort_by_size"
                 tools:ignore="ImageContrastCheck" />
 
+            <View
+                android:visibility="gone"
+                android:id="@+id/id4"
+                android:layout_width="250dp"
+                android:layout_height="2dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:background="@color/Green" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/pregnancy"
                 android:layout_width="250dp"
@@ -240,7 +276,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/pregnancy"
                 android:focusable="true"
-                app:backgroundTint="@color/home"
+                android:background="@color/home"
                 android:text="@string/pregnancy"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -249,6 +285,15 @@
                 app:srcCompat="@android:drawable/ic_menu_sort_by_size"
                 tools:ignore="ImageContrastCheck" />
 
+            <View
+                android:visibility="gone"
+                android:id="@+id/id5"
+                android:layout_width="250dp"
+                android:layout_height="2dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:background="@color/Green" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/pregnancy2"
                 android:layout_width="250dp"
@@ -256,7 +301,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/pregnancy"
                 android:focusable="true"
-                app:backgroundTint="@color/home"
+                android:background="@color/home"
                 android:text="@string/pregnancyex"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -265,6 +310,15 @@
                 app:srcCompat="@android:drawable/ic_menu_sort_by_size"
                 tools:ignore="ImageContrastCheck" />
 
+            <View
+                android:visibility="gone"
+                android:id="@+id/id6"
+                android:layout_width="250dp"
+                android:layout_height="2dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:background="@color/Green" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/outcome"
                 android:layout_width="250dp"
@@ -272,7 +326,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/outcome"
                 android:focusable="true"
-                app:backgroundTint="@color/home"
+                android:background="@color/home"
                 android:text="@string/pregoutcome"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -281,6 +335,15 @@
                 app:srcCompat="@android:drawable/ic_menu_sort_by_size"
                 tools:ignore="ImageContrastCheck" />
 
+            <View
+                android:visibility="gone"
+                android:id="@+id/id7"
+                android:layout_width="250dp"
+                android:layout_height="2dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:background="@color/Green" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/outcome2"
                 android:layout_width="250dp"
@@ -288,7 +351,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/outcome"
                 android:focusable="true"
-                app:backgroundTint="@color/home"
+                android:background="@color/home"
                 android:text="@string/pregoutcome2"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -297,6 +360,15 @@
                 app:srcCompat="@android:drawable/ic_menu_sort_by_size"
                 tools:ignore="ImageContrastCheck" />
 
+            <View
+                android:id="@+id/id8"
+                android:visibility="gone"
+                android:layout_width="250dp"
+                android:layout_height="2dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:background="@color/Green" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/amend"
                 android:layout_width="250dp"
@@ -304,7 +376,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/amendment"
                 android:focusable="true"
-                app:backgroundTint="@color/home"
+                android:background="@color/home"
                 android:text="@string/amendment"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -313,6 +385,15 @@
                 app:srcCompat="@android:drawable/ic_menu_sort_by_size"
                 tools:ignore="ImageContrastCheck" />
 
+            <View
+                android:visibility="gone"
+                android:id="@+id/id9"
+                android:layout_width="250dp"
+                android:layout_height="2dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:background="@color/Green" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/rel"
                 android:layout_width="250dp"
@@ -320,7 +401,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/relationships"
                 android:focusable="true"
-                app:backgroundTint="@color/home"
+                android:background="@color/home"
                 android:text="@string/relationships"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -329,14 +410,23 @@
                 app:srcCompat="@android:drawable/ic_menu_sort_by_size"
                 tools:ignore="ImageContrastCheck" />
 
+            <View
+                android:visibility="gone"
+                android:id="@+id/id10"
+                android:layout_width="250dp"
+                android:layout_height="2dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:background="@color/Green" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/hoh"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:contentDescription="@string/relationships"
+                android:contentDescription="@string/changehoh"
                 android:focusable="true"
-                app:backgroundTint="@color/home"
+                android:background="@color/home"
                 android:text="@string/changehoh"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -345,6 +435,15 @@
                 app:srcCompat="@android:drawable/ic_menu_sort_by_size"
                 tools:ignore="ImageContrastCheck" />
 
+            <View
+                android:visibility="gone"
+                android:id="@+id/id11"
+                android:layout_width="250dp"
+                android:layout_height="2dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:background="@color/Green" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/ses"
                 android:layout_width="250dp"
@@ -352,7 +451,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/sess"
                 android:focusable="true"
-                app:backgroundTint="@color/home"
+                android:background="@color/home"
                 android:text="@string/sess"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -361,6 +460,15 @@
                 app:srcCompat="@android:drawable/ic_menu_sort_by_size"
                 tools:ignore="ImageContrastCheck" />
 
+            <View
+                android:visibility="gone"
+                android:id="@+id/id12"
+                android:layout_width="250dp"
+                android:layout_height="2dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:background="@color/Green" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/vac"
                 android:layout_width="250dp"
@@ -368,7 +476,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/vac"
                 android:focusable="true"
-                app:backgroundTint="@color/home"
+                android:background="@color/home"
                 android:text="@string/vac"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -377,6 +485,15 @@
                 app:srcCompat="@android:drawable/ic_menu_sort_by_size"
                 tools:ignore="ImageContrastCheck" />
 
+            <View
+                android:visibility="gone"
+                android:id="@+id/id13"
+                android:layout_width="250dp"
+                android:layout_height="2dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:background="@color/Green" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/relhoh"
                 android:layout_width="250dp"
@@ -384,7 +501,7 @@
                 android:clickable="true"
                 android:contentDescription="@string/reltn"
                 android:focusable="true"
-                app:backgroundTint="@color/home"
+                android:background="@color/home"
                 android:text="@string/reltn"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
@@ -392,6 +509,15 @@
                 app:fabSize="mini"
                 app:srcCompat="@android:drawable/ic_menu_sort_by_size"
                 tools:ignore="ImageContrastCheck" />
+
+            <View
+                android:visibility="gone"
+                android:id="@+id/id14"
+                android:layout_width="250dp"
+                android:layout_height="2dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:background="@color/Green" />
 
             <TextView
                 android:id="@+id/minor"

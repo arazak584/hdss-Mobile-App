@@ -123,12 +123,6 @@ public class ResidencyFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentMembershipBinding.inflate(inflater, container, false);
-
-        final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
-
-
-        // Find the button view
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_change_hh);
 
         // Set a click listener on the button for mother
@@ -155,6 +149,12 @@ public class ResidencyFragment extends Fragment {
                         .show(getChildFragmentManager(), "HouseholdDialogFragment");
             }
         });
+        final TextView ind = binding.getRoot().findViewById(R.id.ind);
+        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
+
+
+        // Find the button view
+
 
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         try {
@@ -220,6 +220,43 @@ public class ResidencyFragment extends Fragment {
                     individualViewModel.updateres(res);
                 }
 
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+            //Update Fake Individual's Residency that was used to create the socialgroup
+            ResidencyViewModel unks = new ViewModelProvider(this).get(ResidencyViewModel.class);
+            try {
+                Residency datas = unks.unk(socialgroup.uuid);
+                if (datas != null) {
+                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+                    residencyAmendment.endType = 2;
+                    residencyAmendment.endDate = new Date();
+                    residencyAmendment.uuid = datas.uuid;
+                    residencyAmendment.complete = 2;
+                    unks.update(residencyAmendment);
+                }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //Update Fake Individual's Residency that was used to create the socialgroup
+            IndividualViewModel unkss = new ViewModelProvider(this).get(IndividualViewModel.class);
+            try {
+                Individual datas = unkss.unk(socialgroup.uuid);
+                if (datas != null) {
+                    IndividualEnd endInd = new IndividualEnd();
+                    endInd.endType = 2;
+                    endInd.endDate = finalData.insertDate;
+                    endInd.uuid = datas.uuid;
+                    endInd.complete = 2;
+                    individualViewModel.dthupdate(endInd);
+                }
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {

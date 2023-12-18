@@ -170,6 +170,42 @@
             android:textAlignment="center"
             android:textSize="15sp" />
 
+<!--        <TableLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content">-->
+
+<!--            <TableRow-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content">-->
+
+<!--                <RadioGroup-->
+<!--                    android:id="@+id/task"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal">-->
+
+<!--                    <RadioButton-->
+<!--                        android:id="@+id/Update"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:tag="1"-->
+<!--                        android:text="Update"-->
+<!--                        android:checked="true"-->
+<!--                        tools:ignore="DuplicateSpeakableTextCheck" />-->
+
+<!--                    <RadioButton-->
+<!--                        android:id="@+id/Enumerate"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:tag="2"-->
+<!--                        android:text="@string/enumeration"-->
+<!--                        tools:ignore="DuplicateSpeakableTextCheck" />-->
+
+<!--                </RadioGroup>-->
+<!--            </TableRow>-->
+
+<!--        </TableLayout>-->
+
         <!-- progress -->
         <ProgressBar
             android:id="@+id/login_progress"

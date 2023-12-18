@@ -2,6 +2,8 @@ package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
+
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.OutcomeDao;
 import org.openhds.hdsscapture.entity.Demographic;
@@ -49,6 +51,15 @@ public class OutcomeRepository {
         Callable<List<Outcome>> callable = () -> dao.error();
 
         Future<List<Outcome>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public LiveData<Outcome> error1() throws ExecutionException, InterruptedException {
+
+        Callable<LiveData<Outcome>> callable = () -> dao.error1();
+
+        Future<LiveData<Outcome>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }

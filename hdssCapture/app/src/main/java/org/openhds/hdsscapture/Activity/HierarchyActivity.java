@@ -11,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -21,9 +23,11 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 
 import org.openhds.hdsscapture.Baseline.BaselineActivity;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
+import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Round;
@@ -68,10 +72,6 @@ public class HierarchyActivity extends AppCompatActivity {
 
         final Intent f = getIntent();
         final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
-
-        Intent intents = getIntent();
-        int selectedRadioButtonId = intents.getIntExtra("selectedTask", -1);
-
 
         final FieldworkerViewModel fieldworkerViewModel = new ViewModelProvider(this).get(FieldworkerViewModel.class);
         final RoundViewModel roundViewModel = new ViewModelProvider(this).get(RoundViewModel.class);
@@ -491,18 +491,54 @@ public class HierarchyActivity extends AppCompatActivity {
             startActivity(i);
         });
 
-//        //int selectedRadioButtonId = getIntent().getIntExtra("selectedTask", R.id.Update);
-//        Log.d("HierarchyActivity", "Selected RadioButton ID: " + selectedRadioButtonId);
-//        // Use the selected RadioButton ID to determine which buttons to enable/disable
-//        if (selectedRadioButtonId == R.id.Update) {
-//            Log.d("HierarchyActivity", "Update selected");
-//            start.setEnabled(true); // Enable or disable as needed
-//            base.setEnabled(false); // Enable or disable as needed
-//        } else if (selectedRadioButtonId == R.id.Enumerate) {
-//            Log.d("HierarchyActivity", "Enumerate selected");
-//            start.setEnabled(false); // Enable or disable as needed
-//            base.setEnabled(true); // Enable or disable as needed
-//        }
+        ConfigViewModel viewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
+        List<Configsettings> configsettings = null;
+        try {
+            configsettings = viewModel.findAll();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        boolean upda = configsettings != null && !configsettings.isEmpty() && configsettings.get(0).updates;
+        boolean enu = configsettings != null && !configsettings.isEmpty() && configsettings.get(0).enumeration;
+
+       // RadioGroup radioGroup = findViewById(R.id.task);
+
+        RadioGroup radioGroup = findViewById(R.id.task);
+        RadioButton btnUpdate = findViewById(R.id.Update);
+        RadioButton btnEnumerate = findViewById(R.id.Enumerate);
+
+        btnUpdate.setEnabled(false);
+        btnEnumerate.setEnabled(false);
+
+        if (upda) {
+            start.setVisibility(View.VISIBLE);
+            btnUpdate.setEnabled(true);
+            if (btnUpdate.isEnabled()) {
+                btnUpdate.setChecked(true);
+                Log.d("RadioButton", "Update RadioButton is enabled and checked");
+            } else {
+                Log.d("RadioButton", "Update RadioButton is not enabled");
+            }
+        } else {
+            start.setVisibility(View.GONE);
+            btnUpdate.setEnabled(false);
+        }
+
+        if (enu) {
+            base.setVisibility(View.VISIBLE);
+            btnEnumerate.setEnabled(true);
+            if (btnEnumerate.isEnabled()) {
+                btnEnumerate.setChecked(true);
+                Log.d("RadioButton", "Enumerate RadioButton is enabled and checked");
+            } else {
+                Log.d("RadioButton", "Enumerate RadioButton is not enabled");
+            }
+        } else {
+            base.setVisibility(View.GONE);
+            btnEnumerate.setEnabled(false);
+        }
+
+
 
 //        final Button odk = findViewById(R.id.btn_odk);
 //        odk.setOnClickListener(v -> {

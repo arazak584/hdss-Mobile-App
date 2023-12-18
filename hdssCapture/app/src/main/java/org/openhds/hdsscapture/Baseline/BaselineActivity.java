@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -74,7 +75,7 @@ public class BaselineActivity extends AppCompatActivity {
 
         loadFragment(BaseFragment.newInstance(level6Data,locations,socialgroup));
 
-        final ExtendedFloatingActionButton home = findViewById(R.id.home);
+        final AppCompatButton home = findViewById(R.id.home);
         home.setOnClickListener(view -> {
             loadFragment(BaseFragment.newInstance(level6Data,locations,socialgroup));
         });

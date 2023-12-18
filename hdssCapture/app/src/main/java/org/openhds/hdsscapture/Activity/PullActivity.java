@@ -1,23 +1,23 @@
 package org.openhds.hdsscapture.Activity;
 
+import static org.openhds.hdsscapture.AppConstants.DATA_QUERY;
+import static org.openhds.hdsscapture.AppConstants.DOWNLOAD_DEMO;
+import static org.openhds.hdsscapture.AppConstants.DOWNLOAD_IND;
+import static org.openhds.hdsscapture.AppConstants.DOWNLOAD_SES;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -40,11 +40,13 @@ import org.openhds.hdsscapture.Dao.RelationshipDao;
 import org.openhds.hdsscapture.Dao.ResidencyDao;
 import org.openhds.hdsscapture.Dao.SocialgroupDao;
 import org.openhds.hdsscapture.Dao.VaccinationDao;
+import org.openhds.hdsscapture.Dialog.ExtraDownloadSummary;
+import org.openhds.hdsscapture.Dialog.IndividualDownloadSummary;
+import org.openhds.hdsscapture.Dialog.OtherDownloadSummary;
 import org.openhds.hdsscapture.Dialog.ProgressDialogFragment;
-import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Repositories.IndividualRepository;
-import org.openhds.hdsscapture.Utilities.HashUtil;
+import org.openhds.hdsscapture.Utilities.SimpleDialog;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
@@ -67,7 +69,6 @@ import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
-import org.openhds.hdsscapture.fragment.UrlFragment;
 import org.openhds.hdsscapture.odk.Form;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
@@ -83,7 +84,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
@@ -111,6 +111,11 @@ public class PullActivity extends AppCompatActivity {
     private HdssSociodemoDao hdssSociodemoDao;
     private OdkDao odkDao;
     AppDatabase appDatabase;
+
+    private void showDialogInfo(String message, String codeFragment) {
+        SimpleDialog simpleDialog = SimpleDialog.newInstance(message, codeFragment);
+        simpleDialog.show(getSupportFragmentManager(), SimpleDialog.INFO_DIALOG_TAG);
+    }
 
     public String getLastSyncDatetime() {
         SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
@@ -168,10 +173,26 @@ public class PullActivity extends AppCompatActivity {
 
         final Button sync = findViewById(R.id.syncDetails);
         sync.setOnClickListener(v -> {
-            // Create an instance of the UrlFragment
             ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
-            // Show the dialog fragment using the FragmentManager
             progressDialogFragment.show(getSupportFragmentManager(), "ProgressDialogFragment");
+        });
+
+        final ImageButton ind = findViewById(R.id.indsummary);
+        ind.setOnClickListener(v -> {
+            IndividualDownloadSummary progressDialogFragment = new IndividualDownloadSummary();
+            progressDialogFragment.show(getSupportFragmentManager(), "IndividualDownloadSummary");
+        });
+
+        final ImageButton extra = findViewById(R.id.extraSummary);
+        extra.setOnClickListener(v -> {
+            ExtraDownloadSummary progressDialogFragment = new ExtraDownloadSummary();
+            progressDialogFragment.show(getSupportFragmentManager(), "ExtraDownloadSummary");
+        });
+
+        final ImageButton other = findViewById(R.id.syncD1);
+        other.setOnClickListener(v -> {
+            OtherDownloadSummary progressDialogFragment = new OtherDownloadSummary();
+            progressDialogFragment.show(getSupportFragmentManager(), "OtherDownloadSummary");
         });
 
         appDatabase = AppDatabase.getDatabase(this);
@@ -1426,7 +1447,17 @@ public class PullActivity extends AppCompatActivity {
         return entityName.toLowerCase() + "_count";
     }
 
+    public void AppInfo(View view) {
+        showDialogInfo(null, DOWNLOAD_SES);
+    }
 
+    public void AppIndInfo(View view) {
+        showDialogInfo(null, DOWNLOAD_IND);
+    }
+
+    public void AppOthInfo(View view) {
+        showDialogInfo(null, DOWNLOAD_DEMO);
+    }
 
 
 

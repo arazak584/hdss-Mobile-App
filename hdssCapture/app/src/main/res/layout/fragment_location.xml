@@ -142,7 +142,7 @@
                     android:padding="20dp"/>
 
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:id="@+id/locationextid"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"

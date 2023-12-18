@@ -123,7 +123,7 @@ public class IndividualAdaptor extends RecyclerView.Adapter<IndividualAdaptor.Vi
 
 
         holder.cardView.setOnClickListener(v -> {
-            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
+            fragment.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
                     BaselineFragment.newInstance( individual, residency, locations, socialgroup)).commit();
         });
     }

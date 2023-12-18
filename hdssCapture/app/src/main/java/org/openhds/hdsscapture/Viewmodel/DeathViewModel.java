@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.DeathRepository;
 import org.openhds.hdsscapture.entity.Death;
@@ -41,6 +42,10 @@ public class DeathViewModel extends AndroidViewModel {
 
     public List<Death> error() throws ExecutionException, InterruptedException {
         return deathRepository.error();
+    }
+
+    public LiveData<Death> errors() throws ExecutionException, InterruptedException {
+        return deathRepository.errors();
     }
 
     public long count(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {

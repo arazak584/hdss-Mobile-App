@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -35,6 +36,11 @@ OutcomeDao {
             " INNER JOIN individual as c on a.mother_uuid=c.uuid " +
             "WHERE b.uuid is NULL and endType=1 ")
     List<Outcome> error();
+
+    @Query("SELECT a.uuid,c.extId as extId,c.compno as childuuid,c.firstName,c.lastName FROM outcome as a left join pregnancyoutcome as b on a.preg_uuid=b.uuid " +
+            " INNER JOIN individual as c on a.mother_uuid=c.uuid " +
+            "WHERE b.uuid is NULL and endType=1 ")
+    LiveData<Outcome> error1();
 
     @Query("SELECT * FROM outcome where uuid=:id")
     Outcome find(String id);

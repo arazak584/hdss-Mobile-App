@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.IndividualRepository;
 import org.openhds.hdsscapture.entity.Death;
@@ -112,6 +113,14 @@ public class IndividualViewModel extends AndroidViewModel {
 
     public List<Individual> error() throws ExecutionException, InterruptedException {
         return individualRepository.error();
+    }
+
+    public LiveData<Individual> error1() throws ExecutionException, InterruptedException {
+        return individualRepository.error1();
+    }
+
+    public LiveData<Individual> error2() throws ExecutionException, InterruptedException {
+        return individualRepository.error2();
     }
 
     public List<Individual> errors() throws ExecutionException, InterruptedException {

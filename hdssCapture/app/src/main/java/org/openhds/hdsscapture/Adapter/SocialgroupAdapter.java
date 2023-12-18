@@ -117,7 +117,7 @@ public class SocialgroupAdapter extends RecyclerView.Adapter<SocialgroupAdapter.
                         socialgroupList.addAll(list);
                     }
                     if (list.isEmpty()) {
-                        Toast.makeText(activity.getActivity(), "No Adult Male/Female Found In This Compound", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getActivity(), "No Household Found", Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (ExecutionException e) {

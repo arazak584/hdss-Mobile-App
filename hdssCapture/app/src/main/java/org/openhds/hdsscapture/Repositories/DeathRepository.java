@@ -2,6 +2,8 @@ package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
+
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.DeathDao;
 import org.openhds.hdsscapture.entity.Death;
@@ -78,6 +80,15 @@ public class DeathRepository {
         Callable<List<Death>> callable = () -> dao.error();
 
         Future<List<Death>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public LiveData<Death> errors() throws ExecutionException, InterruptedException {
+
+        Callable<LiveData<Death>> callable = () -> dao.errors();
+
+        Future<LiveData<Death>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }

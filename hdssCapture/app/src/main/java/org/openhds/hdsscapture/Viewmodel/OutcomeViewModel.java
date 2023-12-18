@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.OutcomeRepository;
 import org.openhds.hdsscapture.entity.Demographic;
@@ -32,6 +33,10 @@ public class OutcomeViewModel extends AndroidViewModel {
 
     public List<Outcome> error() throws ExecutionException, InterruptedException {
         return outcomeRepository.error();
+    }
+
+    public LiveData<Outcome> error1() throws ExecutionException, InterruptedException {
+        return outcomeRepository.error1();
     }
 
     public void add(Outcome data){ outcomeRepository.create(data);}

@@ -13,11 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.openhds.hdsscapture.Activity.ErrorActivity;
 import org.openhds.hdsscapture.Activity.NewActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Newloc;
-import org.openhds.hdsscapture.Utilities.Queries;
 
 import java.util.ArrayList;
 import java.util.List;

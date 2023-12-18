@@ -46,6 +46,12 @@ public class Configsettings extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "earliestDate")
     public Date earliestDate;
 
+    @ColumnInfo(name = "updates")
+    public boolean updates;
+
+    @ColumnInfo(name = "enumeration")
+    public boolean enumeration;
+
 
     public Configsettings() {
     }
@@ -102,6 +108,22 @@ public class Configsettings extends BaseObservable implements Parcelable {
 
     public void setRel_age(Integer rel_age) {
         this.rel_age = rel_age;
+    }
+
+    public boolean isUpdates() {
+        return updates;
+    }
+
+    public void setUpdates(boolean updates) {
+        this.updates = updates;
+    }
+
+    public boolean isEnumeration() {
+        return enumeration;
+    }
+
+    public void setEnumeration(boolean enumeration) {
+        this.enumeration = enumeration;
     }
 
     public String getEarliestDate() {

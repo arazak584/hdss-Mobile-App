@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:layout_marginEnd="3dp"
-                    android:background="@drawable/btnd_rone_white"
+                    android:background="@color/DarkBlue"
                     android:drawableLeft="@drawable/download"
                     android:text="@string/download"
                     android:textSize="15sp"
@@ -175,11 +175,11 @@
 
                 <Button
                     android:id="@+id/syncIndividual"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:layout_marginEnd="3dp"
-                    android:background="@drawable/btnd_rone_white"
+                    android:background="@color/DarkBlue"
                     android:drawableLeft="@drawable/download"
                     android:text="@string/download"
                     android:textSize="15sp"
@@ -187,15 +187,27 @@
                     android:textStyle="bold"
                     android:elevation="5dp"/>
 
-                <ImageView
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|right"
                     android:layout_marginStart="3dp"
-                    android:layout_weight="1"
-                    android:src="@mipmap/pull"
+                    android:text="Download Core Dataset"
+                    android:layout_weight="3"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     android:gravity="right|center_horizontal"
+                    android:padding="10dp"
                     />
+
+
+
+                <ImageButton
+                    android:id="@+id/indsummary"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@color/black"
+                    android:background="@android:drawable/ic_dialog_info" />
 
 
             </LinearLayout>
@@ -254,25 +266,25 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-2dp"
-                android:padding="5dp">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="-2dp"-->
+<!--                android:padding="5dp">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:textSize="12sp"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textAlignment="textEnd"
-                    android:text="Location | Socialgroup | Individual | Residency"/>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="5dp"-->
+<!--                    android:textSize="12sp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textAlignment="textEnd"-->
+<!--                    android:text="Location | Socialgroup | Individual | Residency"/>-->
 
 
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
         </LinearLayout>
 
         <Space
@@ -298,11 +310,11 @@
 
                 <Button
                     android:id="@+id/syncEvents"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:layout_marginEnd="3dp"
-                    android:background="@drawable/btnd_rone_white"
+                    android:background="@color/DarkBlue"
                     android:drawableLeft="@drawable/download"
                     android:text="@string/download"
                     android:textSize="15sp"
@@ -310,15 +322,28 @@
                     android:textStyle="bold"
                     android:elevation="5dp"/>
 
-                <ImageView
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|right"
                     android:layout_marginStart="3dp"
-                    android:layout_weight="1"
-                    android:src="@mipmap/pull"
+                    android:text="Download Extra Dataset"
+                    android:layout_weight="3"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     android:gravity="right|center_horizontal"
+                    android:padding="10dp"
                     />
+
+
+
+                <ImageButton
+                    android:id="@+id/extraSummary"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@color/black"
+                    android:onClick="AppOthInfo"
+                    android:background="@android:drawable/ic_dialog_info" />
 
 
             </LinearLayout>
@@ -377,25 +402,25 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-2dp"
-                android:padding="5dp">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="-2dp"-->
+<!--                android:padding="5dp">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:textSize="12sp"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textAlignment="textEnd"
-                    android:text="Pregnancy | Relationship | Demographics"/>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="5dp"-->
+<!--                    android:textSize="12sp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textAlignment="textEnd"-->
+<!--                    android:text="Pregnancy | Relationship | Demographics"/>-->
 
 
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
 
         </LinearLayout>
 
@@ -422,11 +447,11 @@
 
                 <Button
                     android:id="@+id/syncSes"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:layout_marginEnd="3dp"
-                    android:background="@drawable/btnd_rone_white"
+                    android:background="@color/DarkBlue"
                     android:drawableLeft="@drawable/download"
                     android:text="@string/download"
                     android:textSize="15sp"
@@ -434,15 +459,29 @@
                     android:textStyle="bold"
                     android:elevation="5dp"/>
 
-                <ImageView
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|right"
                     android:layout_marginStart="3dp"
-                    android:layout_weight="1"
-                    android:src="@mipmap/pull"
+                    android:text="Download Extra Dataset"
+                    android:layout_weight="3"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     android:gravity="right|center_horizontal"
+                    android:padding="10dp"
                     />
+
+
+
+                <ImageButton
+                    android:id="@+id/syncD1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@color/black"
+                    android:onClick="AppInfo"
+                    android:background="@android:drawable/ic_dialog_info" />
+
 
 
             </LinearLayout>
@@ -499,25 +538,25 @@
                     android:text="Last Synced"/>
 
             </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-2dp"
-                android:padding="5dp">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="-2dp"-->
+<!--                android:padding="5dp">-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:textSize="12sp"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textAlignment="textEnd"
-                    android:text="Socio-Economic Status | Vaccination"/>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="5dp"-->
+<!--                    android:textSize="12sp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textAlignment="textEnd"-->
+<!--                    android:text="Socio-Economic Status | Vaccination"/>-->
 
 
 
-            </LinearLayout>
+<!--            </LinearLayout>-->
         </LinearLayout>
 
         <Space

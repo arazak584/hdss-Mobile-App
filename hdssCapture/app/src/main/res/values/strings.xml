@@ -675,6 +675,9 @@
     <string name="reltn">Change Household</string>
     <string name="compvisit">Finish Visit</string>
     <string name="external_img">External Inmigration</string>
+    <string name="visits">Visit</string>
+    <string name="view">Views</string>
+    <string name="sync_result_dialog_title">Synchronization Summary</string>
 
     //SocioDemo End
 

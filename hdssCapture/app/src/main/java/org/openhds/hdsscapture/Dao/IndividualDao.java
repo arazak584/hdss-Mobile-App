@@ -1,6 +1,7 @@
 package org.openhds.hdsscapture.Dao;
 
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -220,6 +221,19 @@ public interface IndividualDao {
             " WHERE firstName!='FAKE' and groupName='UNK' and b.endType=1 " +
             " GROUP BY c.extId")
     List<Individual> err();
+
+    @Query("SELECT a.* FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
+            " WHERE firstName!='FAKE' and endType=1 and " +
+            " strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) < (SELECT hoh_age from config) GROUP BY b.extId order by dob")
+    LiveData<Individual> error1();
+
+    @Query("SELECT a.* FROM individual AS a WHERE a.firstName != 'FAKE' AND endType = 1 " +
+            "AND socialgroup IN ( " +
+            "    SELECT socialgroup FROM individual WHERE endType = 1 GROUP BY socialgroup " +
+            "    HAVING MAX(STRFTIME('%Y', 'now') - STRFTIME('%Y', DATE(dob/1000, 'unixepoch'))) < 14" +
+            ") GROUP BY socialgroup " +
+            "ORDER BY compno")
+    LiveData<Individual> error2();
 
 //    @Query("SELECT * FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
 //            " INNER JOIN locations c on b.location_uuid=c.uuid " +

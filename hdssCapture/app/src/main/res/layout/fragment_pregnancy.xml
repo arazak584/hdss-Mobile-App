@@ -718,7 +718,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/outcomeDate"
                     tools:ignore="DuplicateSpeakableTextCheck"
-                    android:background="@drawable/btnd_rone_dgbevel"
+                    android:background="@drawable/btnd_save"
                     android:textColor="@android:color/background_light"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 

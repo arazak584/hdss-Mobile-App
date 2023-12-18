@@ -418,6 +418,20 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             AppCompatButton ses = view.findViewById(R.id.ses);
             AppCompatButton vac = view.findViewById(R.id.vac);
             AppCompatButton relhoh = view.findViewById(R.id.relhoh);
+            View id1 = view.findViewById(R.id.id1);
+            View id2 = view.findViewById(R.id.id2);
+            View id3 = view.findViewById(R.id.id3);
+            View id4 = view.findViewById(R.id.id4);
+            View id5 = view.findViewById(R.id.id5);
+            View id6 = view.findViewById(R.id.id6);
+            View id7 = view.findViewById(R.id.id7);
+            View id8 = view.findViewById(R.id.id8);
+            View id9 = view.findViewById(R.id.id9);
+            View id10 = view.findViewById(R.id.id10);
+            View id11 = view.findViewById(R.id.id11);
+            View id12 = view.findViewById(R.id.id12);
+            View id13 = view.findViewById(R.id.id13);
+            View id14 = view.findViewById(R.id.id14);
 
             VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
             try {
@@ -662,6 +676,11 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 dth.setVisibility(View.VISIBLE);
                 amend.setVisibility(View.VISIBLE);
                 relhoh.setVisibility(View.VISIBLE);
+                id1.setVisibility(View.VISIBLE);
+                id2.setVisibility(View.VISIBLE);
+                id4.setVisibility(View.VISIBLE);
+                id14.setVisibility(View.VISIBLE);
+                id9.setVisibility(View.VISIBLE);
             }
 
             //Extra Pregnancy Outcome
@@ -670,8 +689,10 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 Pregnancyoutcome data = p.findout(selectedIndividual.uuid);
                 if (data != null && selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2) {
                     outcome2.setVisibility(View.VISIBLE);
+                    id8.setVisibility(View.VISIBLE);
                 } else {
                     outcome2.setVisibility(View.GONE);
+                    id8.setVisibility(View.GONE);
                 }
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -683,8 +704,10 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             Pregnancy data = c.findss(selectedIndividual.uuid);
             if (data != null && selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2) {
                 preg2.setVisibility(View.VISIBLE);
+                id6.setVisibility(View.VISIBLE);
             } else {
                 preg2.setVisibility(View.GONE);
+                id6.setVisibility(View.GONE);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -696,35 +719,43 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             if (selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2){
                 preg.setVisibility(View.VISIBLE);
                 outcome.setVisibility(View.VISIBLE);
-                rel.setVisibility(View.VISIBLE);
-                //preg2.setVisibility(View.VISIBLE);
-                //outcome2.setVisibility(View.VISIBLE);
+                //rel.setVisibility(View.VISIBLE);
+                id5.setVisibility(View.VISIBLE);
+                id7.setVisibility(View.VISIBLE);
             }else{
                 preg.setVisibility(View.GONE);
                 outcome.setVisibility(View.GONE);
-                //outcome2.setVisibility(View.GONE);
-                rel.setVisibility(View.GONE);
-                //preg2.setVisibility(View.GONE);
+                //rel.setVisibility(View.GONE);
+                id5.setVisibility(View.GONE);
+                id7.setVisibility(View.GONE);
             }
             if (selectedIndividual.getAge() >= mage && selectedIndividual.gender==2){
                 rel.setVisibility(View.VISIBLE);
+                id10.setVisibility(View.VISIBLE);
             }else{
                 rel.setVisibility(View.GONE);
+                id10.setVisibility(View.GONE);
             }
 
             if (selectedIndividual.getAge() >= hoh){
                 ses.setVisibility(View.VISIBLE);
                 choh.setVisibility(View.VISIBLE);
+                id12.setVisibility(View.VISIBLE);
+                id11.setVisibility(View.VISIBLE);
             }else{
                 ses.setVisibility(View.GONE);
                 choh.setVisibility(View.GONE);
+                id12.setVisibility(View.GONE);
+                id11.setVisibility(View.GONE);
             }
 
 
             if (selectedIndividual.getAge() < 5){
                 vac.setVisibility(View.VISIBLE);
+                id13.setVisibility(View.VISIBLE);
             }else{
                 vac.setVisibility(View.GONE);
+                id13.setVisibility(View.GONE);
             }
 
         } else {
@@ -755,12 +786,16 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private void changeDupButtonColor(AppCompatButton button, boolean isComplete, boolean isIncomplete) {
         if (isComplete) {
             // Change button color when there is data
+            //button.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.btnd_rone_incomp));
             button.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.color_dg_start));
         } else if (isIncomplete) {
             // Change button color when there is no data
             button.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.MediumBlue));
-        } else {
+            //button.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.btnd_rone_comp));
+        }
+        else {
             // Change button color for other cases
+            //button.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.btnd_rone_btn));
             button.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.home));
         }
     }

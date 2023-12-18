@@ -101,8 +101,16 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         holder.lastname.setText(individual.getLastName());
         holder.dob.setText(individual.getDob());
         holder.compno.setText(individual.getCompno());
-        holder.hhid.setText(individual.getHohID());
+        //holder.hhid.setText(individual.getHohID());
         //holder.hhid.setText(String.valueOf(individual.age));
+        String hh  = individual.getGhanacard();
+        if (hh == null || hh.isEmpty()){
+            holder.hhid.setText("No Ghana Card");
+            holder.hhid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+        }else{
+            holder.hhid.setText(individual.getGhanacard());
+        }
+
         String otherName = individual.getOtherName();
         if (otherName == null || otherName.isEmpty()) {
             holder.nickname.setText("");

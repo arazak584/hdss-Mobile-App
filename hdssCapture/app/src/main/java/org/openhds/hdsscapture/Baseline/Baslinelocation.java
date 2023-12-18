@@ -351,7 +351,7 @@ public class Baslinelocation extends DialogFragment {
             locationViewModel.add(locations);
             Toast.makeText(v.getContext(), "Saved Successfully", Toast.LENGTH_LONG).show();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
-                    Baselinehousehold.newInstance(individual, residency, locations, socialgroup)).commit();
+                    BaseFragment.newInstance(level6Data, locations, socialgroup)).commit();
 
 
         });

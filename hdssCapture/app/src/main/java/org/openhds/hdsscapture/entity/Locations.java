@@ -20,6 +20,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.BR;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -186,16 +187,7 @@ public class Locations extends BaseObservable implements Parcelable {
 
     public void setCompextId(String compextId) {
         this.compextId = compextId;
-          //KINTAMPO
-        if(extId != null && compno != null && compno.length() == 6 && site == 1){
-            this.compextId = extId + "00" + compno.substring(2,6);
-        } //NAVRONGO
-        else if(extId != null && compno != null && compno.length() == 6 && site == 2){
-            this.compextId = extId + "000" + compno.substring(3,6);
-        } //DODOWA
-        else if(extId != null && compno != null && compno.length() == 7 && site == 3){
-            this.compextId = extId + "00" + compno.substring(4,7);
-        }
+
     }
 
 
@@ -224,6 +216,22 @@ public class Locations extends BaseObservable implements Parcelable {
 
     public void setCompno(String compno) {
         this.compno = compno;
+        if (compno == null) this.compno = null;
+        else
+            try {
+                //KINTAMPO
+                if (extId != null && compno != null && compno.length() == 6 && site == 1) {
+                    this.compextId = extId + "00" + compno.substring(2, 6);
+                } //NAVRONGO
+                else if (extId != null && compno != null && compno.length() == 6 && site == 2) {
+                    this.compextId = extId + "000" + compno.substring(3, 6);
+                } //DODOWA
+                else if (extId != null && compno != null && compno.length() == 7 && site == 3) {
+                    this.compextId = extId + "00" + compno.substring(4, 7);
+                }
+            }catch (NumberFormatException e) {
+            }
+        notifyPropertyChanged(BR._all);
 
     }
 

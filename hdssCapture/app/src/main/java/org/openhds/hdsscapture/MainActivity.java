@@ -1,30 +1,49 @@
 package org.openhds.hdsscapture;
 
+import static org.openhds.hdsscapture.AppConstants.DATA_CAPTURE;
+import static org.openhds.hdsscapture.AppConstants.DATA_DOWNLOAD;
+import static org.openhds.hdsscapture.AppConstants.DATA_QUERY;
+import static org.openhds.hdsscapture.AppConstants.DATA_REPORT;
+import static org.openhds.hdsscapture.AppConstants.DATA_SYNC;
+import static org.openhds.hdsscapture.AppConstants.DATA_VIEWS;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 
-import org.openhds.hdsscapture.Activity.ErrorActivity;
+import org.openhds.hdsscapture.Activity.QueryActivity;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.Activity.NewActivity;
 import org.openhds.hdsscapture.Activity.PullActivity;
 import org.openhds.hdsscapture.Activity.PushActivity;
-import org.openhds.hdsscapture.Activity.RemainderActivity;
 import org.openhds.hdsscapture.Activity.ReportActivity;
+import org.openhds.hdsscapture.Utilities.SimpleDialog;
+import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
+import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
+import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Fieldworker;
+import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.fragment.InfoFragment;
-import org.openhds.hdsscapture.odk.OdkActivity;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
+    private void showDialogInfo(String message, String codeFragment) {
+        SimpleDialog simpleDialog = SimpleDialog.newInstance(message, codeFragment);
+        simpleDialog.show(getSupportFragmentManager(), SimpleDialog.INFO_DIALOG_TAG);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             } else {
                 // Display a message or take appropriate action when the condition is not met
-                Toast.makeText(MainActivity.this, "You do not have permission to Download Data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Access Denied", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -74,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Button query = findViewById(R.id.btnquerry);
         query.setOnClickListener(v -> {
-            Intent i = new Intent(getApplicationContext(), ErrorActivity.class);
+            Intent i = new Intent(getApplicationContext(), QueryActivity.class);
             startActivity(i);
         });
 
@@ -94,18 +113,69 @@ public class MainActivity extends AppCompatActivity {
                     // Show the dialog fragment
                     dialogFragment.show(getSupportFragmentManager(), "InfoFragment");
                 } else {
-                    Toast.makeText(MainActivity.this, "You do not have permission to access Settings", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Access Denied", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-//        final Button odk = findViewById(R.id.btnodk);
-//        odk.setOnClickListener(v -> {
-//            Intent i = new Intent(getApplicationContext(), OdkActivity.class);
-//            startActivity(i);
-//        });
+        DeathViewModel dmodel = new ViewModelProvider(this).get(DeathViewModel.class);
+        try {
+            dmodel.errors().observe(this, data -> {
+                if (data != null) {
+                    send.setEnabled(false);
+                    //Toast.makeText(MainActivity.this, "Resolve All Queries", Toast.LENGTH_SHORT).show();
+                } else {
+                    send.setEnabled(true);
+                }
+            });
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        ListingViewModel listing = new ViewModelProvider(this).get(ListingViewModel.class);
+        try {
+            listing.errors().observe(this, data -> {
+                if (data != null) {
+                    send.setEnabled(false);
+                    //Toast.makeText(MainActivity.this, "Resolve All Queries", Toast.LENGTH_SHORT).show();
+                } else {
+                    send.setEnabled(true);
+                }
+            });
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
 
+
+    }
+
+    public void startAppInfo(View view) {
+        showDialogInfo(null, DATA_CAPTURE);
+    }
+
+    public void startSyncInfo(View view) {
+        showDialogInfo(null, DATA_SYNC);
+    }
+
+    public void startReportInfo(View view) {
+        showDialogInfo(null, DATA_REPORT);
+    }
+
+    public void startQueryInfo(View view) {
+        showDialogInfo(null, DATA_QUERY);
+    }
+
+    public void startViewInfo(View view) {
+        showDialogInfo(null, DATA_VIEWS);
+    }
+
+    public void startDownloadInfo(View view) {
+        showDialogInfo(null, DATA_DOWNLOAD);
     }
 
     @Override

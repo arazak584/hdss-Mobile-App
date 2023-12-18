@@ -41,12 +41,12 @@
             android:name=".Activity.NewActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ErrorActivity"
+            android:name=".Activity.QueryActivity"
             android:exported="false" />
         <activity
             android:name=".Baseline.BaselineActivity"
             android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:configChanges="orientation|screenSize|keyboardHidden" />
         <activity
             android:name=".Activity.ReportActivity"
             android:exported="false" />
