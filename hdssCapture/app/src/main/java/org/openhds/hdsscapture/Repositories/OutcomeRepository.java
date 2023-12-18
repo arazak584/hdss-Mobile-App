@@ -47,20 +47,14 @@ public class OutcomeRepository {
     }
 
     public List<Outcome> error() throws ExecutionException, InterruptedException {
-
         Callable<List<Outcome>> callable = () -> dao.error();
-
         Future<List<Outcome>> future = Executors.newSingleThreadExecutor().submit(callable);
-
         return future.get();
     }
 
     public Outcome find(String id) throws ExecutionException, InterruptedException {
-
         Callable<Outcome> callable = () -> dao.find(id);
-
         Future<Outcome> future = Executors.newSingleThreadExecutor().submit(callable);
-
         return future.get();
     }
 }

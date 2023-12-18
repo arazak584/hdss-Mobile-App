@@ -36,47 +36,32 @@ public class PregnancyoutcomeRepository {
     }
 
     public List<Pregnancyoutcome> findToSync() throws ExecutionException, InterruptedException {
-
         Callable<List<Pregnancyoutcome>> callable = () -> dao.retrieveToSync();
-
         Future<List<Pregnancyoutcome>> future = Executors.newSingleThreadExecutor().submit(callable);
-
         return future.get();
     }
 
     public Pregnancyoutcome find(String id) throws ExecutionException, InterruptedException {
-
         Callable<Pregnancyoutcome> callable = () -> dao.find(id);
-
         Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
-
         return future.get();
     }
 
     public Pregnancyoutcome finds(String id) throws ExecutionException, InterruptedException {
-
         Callable<Pregnancyoutcome> callable = () -> dao.finds(id);
-
         Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
-
         return future.get();
     }
 
     public Pregnancyoutcome findout(String id) throws ExecutionException, InterruptedException {
-
         Callable<Pregnancyoutcome> callable = () -> dao.findout(id);
-
         Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
-
         return future.get();
     }
 
     public Pregnancyoutcome findpreg(String id) throws ExecutionException, InterruptedException {
-
         Callable<Pregnancyoutcome> callable = () -> dao.findpreg(id);
-
         Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
-
         return future.get();
     }
 
