@@ -35,10 +35,6 @@ public class OutcomeViewModel extends AndroidViewModel {
         return outcomeRepository.error();
     }
 
-    public LiveData<Outcome> error1() throws ExecutionException, InterruptedException {
-        return outcomeRepository.error1();
-    }
-
     public void add(Outcome data){ outcomeRepository.create(data);}
 
     public void add(Outcome... data){ outcomeRepository.create(data);  }

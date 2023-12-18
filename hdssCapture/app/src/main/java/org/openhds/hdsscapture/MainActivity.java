@@ -28,10 +28,15 @@ import org.openhds.hdsscapture.Activity.PushActivity;
 import org.openhds.hdsscapture.Activity.ReportActivity;
 import org.openhds.hdsscapture.Utilities.SimpleDialog;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
+import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Fieldworker;
+import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Listing;
+import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.fragment.InfoFragment;
 
@@ -39,6 +44,12 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
+
+    private ListingViewModel listingViewModel;
+    private DeathViewModel deathViewModel;
+    private IndividualViewModel individualViewModel;
+    private OutcomeViewModel outcomeViewModel;
+    private Button send;
 
     private void showDialogInfo(String message, String codeFragment) {
         SimpleDialog simpleDialog = SimpleDialog.newInstance(message, codeFragment);
@@ -54,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
         final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
         //Toast.makeText(MainActivity.this, "Welcome " + fieldworkerDatas.firstName + " " + fieldworkerDatas.lastName, Toast.LENGTH_LONG).show();
 
+        send = findViewById(R.id.btnpush);
+        listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
+        deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+        outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
 
         final Button update = findViewById(R.id.btnupdate);
         update.setOnClickListener(v -> {
@@ -62,10 +78,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         });
 
-        final Button send = findViewById(R.id.btnpush);
         send.setOnClickListener(v -> {
-            Intent i = new Intent(getApplicationContext(),PushActivity.class);
-            startActivity(i);
+            if (send.isEnabled()) {
+                Intent i = new Intent(getApplicationContext(), PushActivity.class);
+                startActivity(i);
+            }else{
+                Toast.makeText(MainActivity.this, "Resolve Queries", Toast.LENGTH_SHORT).show();
+            }
         });
 
         final Button pull = findViewById(R.id.btnpull);
@@ -109,8 +128,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (fieldworkerDatas != null && fieldworkerDatas.status != null && fieldworkerDatas.status == 2) {
                     InfoFragment dialogFragment = new InfoFragment();
-
-                    // Show the dialog fragment
                     dialogFragment.show(getSupportFragmentManager(), "InfoFragment");
                 } else {
                     Toast.makeText(MainActivity.this, "Access Denied", Toast.LENGTH_SHORT).show();
@@ -118,62 +135,116 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        DeathViewModel dmodel = new ViewModelProvider(this).get(DeathViewModel.class);
+        listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
         try {
-            dmodel.errors().observe(this, data -> {
+            List<Listing> data = listingViewModel.error();
+            if (data != null && !data.isEmpty()) {
+                send.setEnabled(false);
+            } else {
+                send.setEnabled(true);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+        try {
+            List<Death> data = deathViewModel.error();
                 if (data != null) {
                     send.setEnabled(false);
-                    //Toast.makeText(MainActivity.this, "Resolve All Queries", Toast.LENGTH_SHORT).show();
                 } else {
                     send.setEnabled(true);
                 }
-            });
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
-        ListingViewModel listing = new ViewModelProvider(this).get(ListingViewModel.class);
+        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
         try {
-            listing.errors().observe(this, data -> {
-                if (data != null) {
-                    send.setEnabled(false);
-                    //Toast.makeText(MainActivity.this, "Resolve All Queries", Toast.LENGTH_SHORT).show();
-                } else {
-                    send.setEnabled(true);
-                }
-            });
+            List<Individual> data = individualViewModel.error();
+            if (data != null) {
+                send.setEnabled(false);
+            } else {
+                send.setEnabled(true);
+            }
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
 
+        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+        try {
+            List<Individual> data = individualViewModel.errors();
+            if (data != null) {
+                send.setEnabled(false);
+            } else {
+                send.setEnabled(true);
+            }
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
+        try {
+            List<Outcome> data = outcomeViewModel.error();
+            if (data != null) {
+                send.setEnabled(false);
+            } else {
+                send.setEnabled(true);
+            }
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            List<Listing> data = listingViewModel.error();
+            List<Death> dth = deathViewModel.error();
+            List<Outcome> out = outcomeViewModel.error();
+            List<Individual> ind = individualViewModel.error();
+            List<Individual> inds = individualViewModel.errors();
+            if ((data != null && !data.isEmpty()) || (dth != null && !dth.isEmpty()) || (out != null && !out.isEmpty())
+                    || (ind != null && !ind.isEmpty()) || (inds != null && !inds.isEmpty())) {
+                send.setEnabled(false);
+            } else {
+                send.setEnabled(true);
+            }
+
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public void startAppInfo(View view) {
         showDialogInfo(null, DATA_CAPTURE);
     }
-
     public void startSyncInfo(View view) {
         showDialogInfo(null, DATA_SYNC);
     }
-
     public void startReportInfo(View view) {
         showDialogInfo(null, DATA_REPORT);
     }
-
     public void startQueryInfo(View view) {
         showDialogInfo(null, DATA_QUERY);
     }
-
     public void startViewInfo(View view) {
         showDialogInfo(null, DATA_VIEWS);
     }
-
     public void startDownloadInfo(View view) {
         showDialogInfo(null, DATA_DOWNLOAD);
     }

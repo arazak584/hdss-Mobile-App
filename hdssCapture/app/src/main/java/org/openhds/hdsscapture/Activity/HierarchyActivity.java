@@ -501,8 +501,6 @@ public class HierarchyActivity extends AppCompatActivity {
         boolean upda = configsettings != null && !configsettings.isEmpty() && configsettings.get(0).updates;
         boolean enu = configsettings != null && !configsettings.isEmpty() && configsettings.get(0).enumeration;
 
-       // RadioGroup radioGroup = findViewById(R.id.task);
-
         RadioGroup radioGroup = findViewById(R.id.task);
         RadioButton btnUpdate = findViewById(R.id.Update);
         RadioButton btnEnumerate = findViewById(R.id.Enumerate);

@@ -72,10 +72,5 @@ public class ListingRepository {
         return future.get();
     }
 
-    public LiveData<Listing> errors() throws ExecutionException, InterruptedException {
-        Callable<LiveData<Listing>> callable = () -> dao.errors();
-        Future<LiveData<Listing>> future = Executors.newSingleThreadExecutor().submit(callable);
-        return future.get();
-    }
 
 }

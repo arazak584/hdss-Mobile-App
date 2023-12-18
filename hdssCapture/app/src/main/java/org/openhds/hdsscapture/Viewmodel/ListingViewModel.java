@@ -39,9 +39,7 @@ public class ListingViewModel extends AndroidViewModel {
         return listingRepository.error();
     }
 
-    public LiveData<Listing> errors() throws ExecutionException, InterruptedException {
-        return listingRepository.errors();
-    }
+
 
     public void add(Listing data){
         listingRepository.create(data);

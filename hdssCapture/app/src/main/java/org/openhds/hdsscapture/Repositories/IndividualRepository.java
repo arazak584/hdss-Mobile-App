@@ -256,24 +256,6 @@ public class IndividualRepository {
         return future.get();
     }
 
-    public LiveData<Individual> error1() throws ExecutionException, InterruptedException {
-
-        Callable<LiveData<Individual>> callable = () -> dao.error1();
-
-        Future<LiveData<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
-    public LiveData<Individual> error2() throws ExecutionException, InterruptedException {
-
-        Callable<LiveData<Individual>> callable = () -> dao.error2();
-
-        Future<LiveData<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
     public List<Individual> errors() throws ExecutionException, InterruptedException {
 
         Callable<List<Individual>> callable = () -> dao.errors();

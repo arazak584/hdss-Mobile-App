@@ -115,14 +115,6 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.error();
     }
 
-    public LiveData<Individual> error1() throws ExecutionException, InterruptedException {
-        return individualRepository.error1();
-    }
-
-    public LiveData<Individual> error2() throws ExecutionException, InterruptedException {
-        return individualRepository.error2();
-    }
-
     public List<Individual> errors() throws ExecutionException, InterruptedException {
         return individualRepository.errors();
     }

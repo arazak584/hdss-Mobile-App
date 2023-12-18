@@ -44,9 +44,5 @@ public interface ListingDao {
             " where b.location_uuid IS NULL GROUP BY a.location_uuid")
     List<Listing> error();
 
-    @Query("SELECT a.*,c.compextId FROM visit as a INNER JOIN locations c on a.location_uuid=c.uuid" +
-            " LEFT JOIN listing as b ON a.location_uuid=b.location_uuid" +
-            " where b.location_uuid IS NULL GROUP BY a.location_uuid")
-    LiveData<Listing> errors();
 
 }
