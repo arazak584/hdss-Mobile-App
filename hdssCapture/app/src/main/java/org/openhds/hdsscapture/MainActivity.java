@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private ListingViewModel listingViewModel;
     private DeathViewModel deathViewModel;
     private IndividualViewModel individualViewModel;
-    private OutcomeViewModel outcomeViewModel;
+    //private OutcomeViewModel outcomeViewModel;
     private Button send;
 
     private void showDialogInfo(String message, String codeFragment) {
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
         deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-        outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
+        //outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
 
         final Button update = findViewById(R.id.btnupdate);
         update.setOnClickListener(v -> {
@@ -189,19 +189,19 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-        outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
-        try {
-            List<Outcome> data = outcomeViewModel.error();
-            if (data != null) {
-                send.setEnabled(false);
-            } else {
-                send.setEnabled(true);
-            }
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+//        outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
+//        try {
+//            List<Outcome> data = outcomeViewModel.error();
+//            if (data != null) {
+//                send.setEnabled(false);
+//            } else {
+//                send.setEnabled(true);
+//            }
+//        } catch (ExecutionException e) {
+//            throw new RuntimeException(e);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
 
 
     }
@@ -212,10 +212,10 @@ public class MainActivity extends AppCompatActivity {
         try {
             List<Listing> data = listingViewModel.error();
             List<Death> dth = deathViewModel.error();
-            List<Outcome> out = outcomeViewModel.error();
+            //List<Outcome> out = outcomeViewModel.error();
             List<Individual> ind = individualViewModel.error();
             List<Individual> inds = individualViewModel.errors();
-            if ((data != null && !data.isEmpty()) || (dth != null && !dth.isEmpty()) || (out != null && !out.isEmpty())
+            if ((data != null && !data.isEmpty()) || (dth != null && !dth.isEmpty())
                     || (ind != null && !ind.isEmpty()) || (inds != null && !inds.isEmpty())) {
                 send.setEnabled(false);
             } else {

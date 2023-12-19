@@ -18,15 +18,15 @@
         android:orientation="vertical">
 
 
-        <Button
-            android:id="@+id/btninfo"
+        <TextView
+            android:id="@+id/info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:drawableStart="@drawable/btn_setting"
             android:drawablePadding="5dip"
-            android:text="@string/info"
+            android:textSize="23sp"
+            android:text="@string/versions"
             android:textColor="@color/color_text_darkgray" />
 
     <LinearLayout
@@ -264,6 +264,17 @@
 
             </LinearLayout>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btninfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:drawableStart="@drawable/btn_setting"
+            android:drawablePadding="5dip"
+            android:text="@string/info"
+            android:textColor="@color/color_text_darkgray" />
 
     </LinearLayout>
 
