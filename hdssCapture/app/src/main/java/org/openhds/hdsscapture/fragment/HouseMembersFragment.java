@@ -32,6 +32,7 @@ import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
+import org.openhds.hdsscapture.Viewmodel.DuplicateViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
@@ -231,7 +232,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
         final AppCompatButton preg = view.findViewById(R.id.pregnancy);
         preg.setOnClickListener(v -> {
-            final Pregnancy pregnancy = new Pregnancy();
+            //final Pregnancy pregnancy = new Pregnancy();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     PregnancyFragment.newInstance(individual,locations, socialgroup)).commit();
         });
@@ -239,7 +240,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
         final AppCompatButton preg2 = view.findViewById(R.id.pregnancy2);
         preg2.setOnClickListener(v -> {
-            final Pregnancy pregnancy = new Pregnancy();
+            //final Pregnancy pregnancy = new Pregnancy();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     PregnancyExtraFragment.newInstance(individual,locations, socialgroup)).commit();
         });
@@ -247,7 +248,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
         final AppCompatButton dup = view.findViewById(R.id.dup);
         dup.setOnClickListener(v -> {
-            final Duplicate duplicate = new Duplicate();
+            //final Duplicate duplicate = new Duplicate();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     DupFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         });
@@ -404,7 +405,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             TextView person = view.findViewById(R.id.textView_person);
             person.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
             //eventFormAdapter.formFactory(HouseMembersFragment.selectedIndividual);
-            //AppCompatButton dup = view.findViewById(R.id.dup);
+            AppCompatButton dup = view.findViewById(R.id.dup);
             AppCompatButton preg = view.findViewById(R.id.pregnancy);
             AppCompatButton dth = view.findViewById(R.id.death);
             AppCompatButton omg = view.findViewById(R.id.omg);
@@ -438,7 +439,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 Visit data = visitViewModel.find(socialgroup.uuid);
 
                 // Define default texts for each button
-                //String TextDup = "Duplicate";
+                String TextDup = "Duplicate";
                 String TextPreg = "Pregnancy";
                 String TextDth = "Death";
                 String TextOmg = "Outmigration";
@@ -455,8 +456,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
                 // Disable all buttons if Visit data is null
                 boolean isVisitDataNull = (data == null);
-                //setButtonEnabled(dup, !isVisitDataNull);
-                //setButtonText(dup, !isVisitDataNull, TextDup);
+                setButtonEnabled(dup, !isVisitDataNull);
+                setButtonText(dup, !isVisitDataNull, TextDup);
                 setButtonEnabled(preg, !isVisitDataNull);
                 setButtonText(preg, !isVisitDataNull, TextPreg);
                 setButtonEnabled(dth, !isVisitDataNull);
@@ -489,20 +490,20 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 Toast.makeText(requireContext(), "Error retrieving visit data", Toast.LENGTH_SHORT).show();
             }
 
-//            DuplicateViewModel dupViewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
-//            try {
-//                Duplicate data = dupViewModel.find(selectedIndividual.uuid);
-//                if (data != null) {
-//                    boolean isComplete = data.complete != null && data.complete == 1;
-//                    boolean isIncomplete = data.complete != null && data.complete == 0;
-//                    changeDupButtonColor(dup, isComplete, isIncomplete);
-//                } else {
-//                    changeDupButtonColor(dup, false, false);
-//                }
-//            } catch (ExecutionException | InterruptedException e) {
-//                e.printStackTrace();
-//                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
-//            }
+            DuplicateViewModel dupViewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
+            try {
+                Duplicate data = dupViewModel.find(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(dup, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(dup, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
 
             AmendmentViewModel a = new ViewModelProvider(this).get(AmendmentViewModel.class);
             try {
@@ -670,7 +671,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
 
             if(selectedIndividual.gender!=null) {
-                //dup.setVisibility(View.VISIBLE);
+                dup.setVisibility(View.VISIBLE);
                 dem.setVisibility(View.VISIBLE);
                 omg.setVisibility(View.VISIBLE);
                 dth.setVisibility(View.VISIBLE);
@@ -678,6 +679,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 relhoh.setVisibility(View.VISIBLE);
                 id1.setVisibility(View.VISIBLE);
                 id2.setVisibility(View.VISIBLE);
+                id3.setVisibility(View.VISIBLE);
                 id4.setVisibility(View.VISIBLE);
                 id14.setVisibility(View.VISIBLE);
                 id9.setVisibility(View.VISIBLE);

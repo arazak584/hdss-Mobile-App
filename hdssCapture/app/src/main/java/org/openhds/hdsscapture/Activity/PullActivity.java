@@ -320,14 +320,14 @@ public class PullActivity extends AppCompatActivity {
                                                     configViewModel.add(cng);
 
                                                     //Sync Visit
-                                                    textView_SyncHierarchyData.setText("Updating Visit...");
-                                                    final VisitViewModel visitViewModel = new ViewModelProvider(PullActivity.this).get(VisitViewModel.class);
-                                                    Call<DataWrapper<Visit>> c_callable = dao.getVisit(authorizationHeader);
-                                                    c_callable.enqueue(new Callback<DataWrapper<Visit>>() {
-                                                        @Override
-                                                        public void onResponse(Call<DataWrapper<Visit>> call, Response<DataWrapper<Visit>> response) {
-                                                            Visit[] v = response.body().getData().toArray(new Visit[0]);
-                                                            visitViewModel.add(v);
+//                                                    textView_SyncHierarchyData.setText("Updating Visit...");
+//                                                    final VisitViewModel visitViewModel = new ViewModelProvider(PullActivity.this).get(VisitViewModel.class);
+//                                                    Call<DataWrapper<Visit>> c_callable = dao.getVisit(authorizationHeader);
+//                                                    c_callable.enqueue(new Callback<DataWrapper<Visit>>() {
+//                                                        @Override
+//                                                        public void onResponse(Call<DataWrapper<Visit>> call, Response<DataWrapper<Visit>> response) {
+//                                                            Visit[] v = response.body().getData().toArray(new Visit[0]);
+//                                                            visitViewModel.add(v);
 
                                                     //Sync Extra Forms
                                                     textView_SyncHierarchyData.setText("Updating Forms...");
@@ -367,14 +367,14 @@ public class PullActivity extends AppCompatActivity {
                                                     });
                                                 }
 
-                                                        @Override
-                                                        public void onFailure(Call<DataWrapper<Visit>> call, Throwable t) {
-                                                            progressBar.setProgress(0);
-                                                            textView_SyncHierarchyData.setText("Visit Sync Error!");
-                                                            textView_SyncHierarchyData.setTextColor(Color.RED);
-                                                        }
-                                                    });
-                                                }
+//                                                        @Override
+//                                                        public void onFailure(Call<DataWrapper<Visit>> call, Throwable t) {
+//                                                            progressBar.setProgress(0);
+//                                                            textView_SyncHierarchyData.setText("Visit Sync Error!");
+//                                                            textView_SyncHierarchyData.setTextColor(Color.RED);
+//                                                        }
+//                                                    });
+//                                                }
 
                                                 @Override
                                                 public void onFailure(Call<DataWrapper<Configsettings>> call, Throwable t) {

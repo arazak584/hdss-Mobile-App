@@ -20,7 +20,7 @@ public class AppJson {
 
     private static volatile AppJson INSTANCE;
 
-    private static final String DEFAULT_BASE_URL = "http://ksurvey.org:8080";
+    private static final String DEFAULT_BASE_URL = "http://localhost.org:8080";
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService jsonWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
@@ -61,7 +61,7 @@ public class AppJson {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("BASE_URL", baseUrl);
-        editor.commit();
+        editor.apply();
         refreshRetrofit();
     }
 
@@ -73,8 +73,12 @@ public class AppJson {
         setBaseUrl(newBaseUrl);
         resetInstance();
         INSTANCE = new AppJson(context); // Create a new instance with the updated configuration
+        INSTANCE.refreshRetrofit();
     }
 
+    public String getCurrentBaseUrl() {
+        return getBaseUrl();
+    }
 
     public void refreshRetrofit() {
         retrofit = new Retrofit.Builder()

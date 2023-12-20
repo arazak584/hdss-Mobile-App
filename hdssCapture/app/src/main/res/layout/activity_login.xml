@@ -168,7 +168,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textAlignment="center"
-            android:textSize="15sp" />
+            android:textStyle="bold"
+            android:textSize="18sp" />
 
 <!--        <TableLayout-->
 <!--            android:layout_width="wrap_content"-->
@@ -241,6 +242,7 @@
             android:drawablePadding="5dip"
             android:text="@string/login_settings_lbl"
             android:textColor="@color/color_text_darkgray" />
+
 
         <TextView
             android:id="@+id/txtCopyrightAppName"

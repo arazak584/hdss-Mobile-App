@@ -678,6 +678,7 @@
     <string name="visits">Visit</string>
     <string name="view">Views</string>
     <string name="sync_result_dialog_title">Synchronization Summary</string>
+    <string name="server_url">Set Server URL</string>
 
     //SocioDemo End
 

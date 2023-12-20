@@ -20,7 +20,6 @@
     <uses-permission android:name="org.odk.collect.android.provider.odk.forms.permission.READ_FORMS" />
     <uses-permission android:name="org.odk.collect.android.provider.odk.forms.permission.WRITE_FORMS" />
 
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -35,6 +34,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".Activity.UrlActivity"
+            android:exported="false" />
+        <activity
             android:name=".odk.OdkActivity"
             android:exported="false" />
         <activity
@@ -45,8 +47,8 @@
             android:exported="false" />
         <activity
             android:name=".Baseline.BaselineActivity"
-            android:exported="false"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false" />
         <activity
             android:name=".Activity.ReportActivity"
             android:exported="false" />

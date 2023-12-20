@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -80,12 +81,20 @@ public class LoginActivity extends AppCompatActivity  {
         return false;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Update the AppJson instance and API DAO in onResume
+        appJson = AppJson.getInstance(this);
+        dao = appJson.getJsonApi();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
 
         // //Allow access on phones with screen size 7 inches and above
 //        if (!isScreenSizeGreaterThanEqual7Inch(this)) {
@@ -161,8 +170,9 @@ public class LoginActivity extends AppCompatActivity  {
                                 Fieldworker[] fieldworkerArray = fieldworkers.toArray(new Fieldworker[0]);
                                 viewModel.add(fieldworkerArray);
                                 progressBar.setVisibility(View.GONE);
-                                textView_SyncFw.setText("USER ACCESS UPDATED!");
-                                textView_SyncFw.setTextColor(Color.GREEN);
+                                textView_SyncFw.setText("Successful Download of " + fieldworkers.size() + " Data Collectors");
+                                textView_SyncFw.setTextColor(ContextCompat.getColor(textView_SyncFw.getContext(), R.color.LimeGreen));
+                                //textView_SyncFw.setTextColor(Color.GREEN);
                             } else {
                                 // Handle empty or null fieldworkers list
                                 handleEmptyFieldworkers();

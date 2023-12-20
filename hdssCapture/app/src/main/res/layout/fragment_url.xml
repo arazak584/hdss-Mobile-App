@@ -3,16 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/url_fragments">
 
-    <data>
+<!--    <data>-->
 
-        <variable
-            name="apiUrl"
-            type="org.openhds.hdsscapture.entity.ApiUrl" />
+<!--        <variable-->
+<!--            name="apiUrl"-->
+<!--            type="org.openhds.hdsscapture.entity.ApiUrl" />-->
 
-        <variable
-            name="eventname"
-            type="String" />
-    </data>
+<!--        <variable-->
+<!--            name="eventname"-->
+<!--            type="String" />-->
+<!--    </data>-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,8 +57,7 @@
                     android:id="@+id/text_url"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:text="@={apiUrl.codeUrl}" />
+                    android:ems="10" />
 
 
 

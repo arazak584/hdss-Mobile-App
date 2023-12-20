@@ -3,6 +3,7 @@ package org.openhds.hdsscapture.fragment;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -10,10 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.R;
 
@@ -49,6 +52,7 @@ public class UrlFragment extends DialogFragment{
                         String newUrl = editText.getText().toString();
                         saveBaseUrl(newUrl);
                         updateAppJsonBaseUrl(newUrl);
+                        reopenLoginActivity();
 //                        if (urlUpdatedListener != null) {
 //                            urlUpdatedListener.onUrlUpdated(newUrl);
 //                        }
@@ -79,6 +83,20 @@ public class UrlFragment extends DialogFragment{
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("BASE_URL", baseUrl);
         editor.commit();
+    }
+
+    public void setOnUrlUpdatedListener(OnUrlUpdatedListener listener) {
+        this.urlUpdatedListener = listener;
+    }
+
+    private void reopenLoginActivity() {
+        // Reopen the LoginActivity
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
+        // Dismiss the current fragment
+        dismiss();
     }
 }
 

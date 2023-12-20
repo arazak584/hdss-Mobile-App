@@ -125,7 +125,7 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
                     socialgroupList.addAll(list);
                 }
                 if (list.isEmpty()){
-                    Toast.makeText(activity.getActivity(), "No Active Household In " + selectedLocation.getCompno(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity.getActivity(), "No Active Household In " + selectedLocation.getCompno(), Toast.LENGTH_SHORT).show();
                 }
             } catch (ExecutionException e) {
                 e.printStackTrace();
