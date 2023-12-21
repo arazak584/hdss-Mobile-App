@@ -679,6 +679,8 @@
     <string name="view">Views</string>
     <string name="sync_result_dialog_title">Synchronization Summary</string>
     <string name="server_url">Set Server URL</string>
+    <string name="duplicates">Duplicates</string>
+    <string name="dups">List of Duplicates</string>
 
     //SocioDemo End
 

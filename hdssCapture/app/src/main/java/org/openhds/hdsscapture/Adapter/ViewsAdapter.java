@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Activity.NewActivity;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Newloc;
+import org.openhds.hdsscapture.entity.subqueries.Newloc;
 
 import java.util.ArrayList;
 import java.util.List;

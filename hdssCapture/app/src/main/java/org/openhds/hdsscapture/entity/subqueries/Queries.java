@@ -1,4 +1,4 @@
-package org.openhds.hdsscapture.Utilities;
+package org.openhds.hdsscapture.entity.subqueries;
 
 public class Queries {
 

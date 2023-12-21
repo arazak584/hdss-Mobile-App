@@ -331,7 +331,8 @@ public class DupFragment extends DialogFragment {
 
             }
 
-            finalData.complete=1;
+
+            //finalData.complete=1;
             viewModel.add(finalData);
             IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
             try {

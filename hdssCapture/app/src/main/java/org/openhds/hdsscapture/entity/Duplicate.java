@@ -307,6 +307,7 @@ public class Duplicate extends BaseObservable {
 
         if (view != null) {
 
+
             if(numberofdup == null || numberofdup==1){
                 dup1_dob=null;
                 setDup1_uuid(null);

@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import org.openhds.hdsscapture.Baseline.BaselineActivity;
+import org.openhds.hdsscapture.Duplicate.DuplicateActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
@@ -488,6 +489,12 @@ public class HierarchyActivity extends AppCompatActivity {
         final Button remainder = findViewById(R.id.btn_visit);
         remainder.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(),RemainderActivity.class);
+            startActivity(i);
+        });
+
+        final Button dups = findViewById(R.id.btn_dup);
+        dups.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), DuplicateActivity.class);
             startActivity(i);
         });
 

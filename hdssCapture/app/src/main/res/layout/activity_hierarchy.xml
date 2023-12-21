@@ -347,27 +347,41 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/ups"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <Button
                 android:id="@+id/btn_visit"
                 android:layout_width="300dip"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dip"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="10dp"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:background="@color/DarkBlue"
                 android:text="@string/remain"
                 android:textColor="@android:color/background_light"
                 android:textSize="18sp" />
 
-<!--            <Button-->
-<!--                android:id="@+id/btn_odk"-->
-<!--                android:layout_width="300dip"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_marginTop="16dip"-->
-<!--                android:background="@drawable/btnd_rone_red"-->
-<!--                android:text="@string/ODK"-->
-<!--                android:textColor="@android:color/background_light"-->
-<!--                android:textSize="18sp" />-->
+            <Button
+                android:id="@+id/btn_dup"
+                android:layout_width="180dip"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="10dp"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:background="@color/DarkBlue"
+                android:text="@string/duplicates"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp" />
+        </LinearLayout>
 
         </LinearLayout>
 

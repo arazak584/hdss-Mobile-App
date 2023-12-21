@@ -22,6 +22,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -87,8 +88,8 @@ public class Dup1DialogFragment extends DialogFragment {
        View view = inflater.inflate(R.layout.fragment_dup_dialog, container, false);
 
         final TextView compno = view.findViewById(R.id.textViewman_compextId);
-        if (locations != null) {
-            compno.setText(locations.getCompno());
+        if (ClusterFragment.selectedLocation.compno != null) {
+            compno.setText(ClusterFragment.selectedLocation.getCompno());
         } else {
             // Handle the case where locations is null
             compno.setText("Error loading locations data");

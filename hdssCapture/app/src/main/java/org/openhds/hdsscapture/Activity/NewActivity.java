@@ -9,20 +9,14 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.widget.SearchView;
 
-import org.openhds.hdsscapture.Adapter.ErrorAdapter;
 import org.openhds.hdsscapture.Adapter.ViewsAdapter;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Newloc;
-import org.openhds.hdsscapture.Utilities.Queries;
+import org.openhds.hdsscapture.entity.subqueries.Newloc;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
-import org.openhds.hdsscapture.entity.Death;
-import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
 import java.text.SimpleDateFormat;

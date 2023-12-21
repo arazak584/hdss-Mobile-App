@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Adapter.ErrorAdapter;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Queries;
+import org.openhds.hdsscapture.entity.subqueries.Queries;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;

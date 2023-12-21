@@ -52,5 +52,14 @@ public class DuplicateRepository {
         return future.get();
     }
 
+    public List<Duplicate> repo() throws ExecutionException, InterruptedException {
+
+        Callable<List<Duplicate>> callable = () -> dao.repo();
+
+        Future<List<Duplicate>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
 
 }
