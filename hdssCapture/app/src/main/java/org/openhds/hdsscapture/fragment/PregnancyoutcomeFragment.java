@@ -760,6 +760,9 @@ public class PregnancyoutcomeFragment extends Fragment {
         if (save) {
             Pregnancyoutcome finalData = binding.getPregoutcome();
 
+            final Intent j = getActivity().getIntent();
+            final Hierarchy level6Data = j.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
+
             try {
                 if (!binding.earliest.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -1001,6 +1004,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                         ind.startDate = finalData.outcomeDate;
                         ind.endType = 1;
                         ind.residency = binding.getPregoutcome1().residency_uuid;
+                        ind.village = level6Data.getName();
 
                         individualViewModel.add(ind);
 
@@ -1111,6 +1115,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                         ind.startDate = finalData.outcomeDate;
                         ind.endType = 1;
                         ind.residency = binding.getPregoutcome2().residency_uuid;
+                        ind.village = level6Data.getName();
 
                         individualViewModel.add(ind);
 
@@ -1220,6 +1225,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                         ind.startDate = finalData.outcomeDate;
                         ind.endType = 1;
                         ind.residency = binding.getPregoutcome3().residency_uuid;
+                        ind.village = level6Data.getName();
 
                         individualViewModel.add(ind);
 
@@ -1329,6 +1335,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                         ind.startDate = finalData.outcomeDate;
                         ind.endType = 1;
                         ind.residency = binding.getPregoutcome4().residency_uuid;
+                        ind.village = level6Data.getName();
 
                         individualViewModel.add(ind);
 
