@@ -107,7 +107,7 @@ public class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapte
 
     public void filter(String charText, IndividualViewModel individualViewModel) {
         individualList.clear();
-        if (charText != null && charText.length() > 4) {
+        if (charText != null && charText.length() > 3) {
             charText = charText.toLowerCase(Locale.getDefault());
 
             try {

@@ -176,16 +176,21 @@ public class OutmigrationFragment extends DialogFragment {
                     data.visit_uuid = dts.uuid;
                 }
 
+                ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+                Residency dataRes = resModel.findRes(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
+                if (dataRes != null){
+                    data.startDate = dataRes.startDate;
+                    data.residency_uuid = dataRes.uuid;
+                }
+
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
 
                 data.uuid=uuidString;
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.residency_uuid = HouseMembersFragment.selectedIndividual.getResidency();
                 data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
-                data.startDate = HouseMembersFragment.selectedIndividual.startDate;
                 data.socialgroup_uuid = socialgroup.uuid;
 
                 Date currentDate = new Date(); // Get the current date and time
@@ -315,7 +320,6 @@ public class OutmigrationFragment extends DialogFragment {
                 if (data != null) {
                     IndividualEnd endInd = new IndividualEnd();
                     endInd.endType = 2;
-                    endInd.endDate = binding.getOutmigration().recordedDate;
                     endInd.uuid = binding.getOutmigration().individual_uuid;
                     endInd.complete = 1;
 

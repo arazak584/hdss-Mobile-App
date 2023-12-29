@@ -359,7 +359,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
 
         try {
-            List<Pregnancy> pregnancyList = pregnancyViewModel.retrievePregnancy(socialgroup.getUuid());
+            List<Pregnancy> pregnancyList = pregnancyViewModel.retrievePregnancy(socialgroup.getExtId());
             if (pregnancyList != null && !pregnancyList.isEmpty()) {
                 showPregnancyDialog();
             }
@@ -441,7 +441,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 String TextOutcome2 = "Pregnancy Outcome (2)";
                 String TextAmend = "Amendment";
                 String TextRel = "Relationship";
-                String TextChoh = "Change HOH";
+                String TextChoh = "Change Household Head";
                 String TextSes = "Socio-Economic Status";
                 String TextVac = "Vaccination";
                 String TextRelhoh = "Change Household";

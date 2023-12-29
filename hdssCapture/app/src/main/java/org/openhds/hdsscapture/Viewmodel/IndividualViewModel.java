@@ -46,7 +46,7 @@ public class IndividualViewModel extends AndroidViewModel {
     }
 
     public List<Individual> retrieveBy(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveBy(id);
+        return individualRepository.retrieveBy("%" + id + "%");
     }
 
     public List<Individual> retrieveByMother(String id) throws ExecutionException, InterruptedException {

@@ -94,7 +94,7 @@ public class PregnancyAdapter extends RecyclerView.Adapter<PregnancyAdapter.View
         pregnancyList.clear();
             if(socialgroup != null)
                 try {
-                    List<Pregnancy> list = pregnancyViewModel.retrievePregnancy(socialgroup.getUuid());
+                    List<Pregnancy> list = pregnancyViewModel.retrievePregnancy(socialgroup.getExtId());
 
                     if (list != null) {
                         pregnancyList.addAll(list);

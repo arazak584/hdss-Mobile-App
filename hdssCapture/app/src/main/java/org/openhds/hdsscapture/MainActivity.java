@@ -45,11 +45,12 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ListingViewModel listingViewModel;
-    private DeathViewModel deathViewModel;
-    private IndividualViewModel individualViewModel;
-    //private OutcomeViewModel outcomeViewModel;
+//    private ListingViewModel listingViewModel;
+//    private DeathViewModel deathViewModel;
+//    private IndividualViewModel individualViewModel;
+//    private OutcomeViewModel outcomeViewModel;
     private Button send;
+    private int status;
 
     private void showDialogInfo(String message, String codeFragment) {
         SimpleDialog simpleDialog = SimpleDialog.newInstance(message, codeFragment);
@@ -63,13 +64,16 @@ public class MainActivity extends AppCompatActivity {
 
         final Intent f = getIntent();
         final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
+        //Integer status = fieldworkerDatas.getStatus();
+        status = (fieldworkerDatas != null) ? fieldworkerDatas.getStatus() : 0;  // Default to 0 or another appropriate value
         //Toast.makeText(MainActivity.this, "Welcome " + fieldworkerDatas.firstName + " " + fieldworkerDatas.lastName, Toast.LENGTH_LONG).show();
+        //Toast.makeText(MainActivity.this, "Welcome " + status, Toast.LENGTH_LONG).show();
 
         send = findViewById(R.id.btnpush);
-        listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
-        deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
-        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-        //outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
+//        listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
+//        deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+//        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+//        outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
 
         final Button update = findViewById(R.id.btnupdate);
         update.setOnClickListener(v -> {
@@ -79,12 +83,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         send.setOnClickListener(v -> {
-            if (send.isEnabled()) {
                 Intent i = new Intent(getApplicationContext(), PushActivity.class);
                 startActivity(i);
-            }else{
-                Toast.makeText(MainActivity.this, "Resolve Queries", Toast.LENGTH_SHORT).show();
-            }
         });
 
         final Button pull = findViewById(R.id.btnpull);
@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         final Button control = findViewById(R.id.btnreport);
         control.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(), ReportActivity.class);
+            i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
             startActivity(i);
         });
 
@@ -135,64 +136,64 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
-        try {
-            List<Listing> data = listingViewModel.error();
-            if (data != null && !data.isEmpty()) {
-                send.setEnabled(false);
-            } else {
-                send.setEnabled(true);
-            }
-        } catch (ExecutionException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
-        try {
-            List<Death> data = deathViewModel.error();
-                if (data != null) {
-                    send.setEnabled(false);
-                } else {
-                    send.setEnabled(true);
-                }
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-        try {
-            List<Individual> data = individualViewModel.error();
-            if (data != null) {
-                send.setEnabled(false);
-            } else {
-                send.setEnabled(true);
-            }
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-        try {
-            List<Individual> data = individualViewModel.errors();
-            if (data != null) {
-                send.setEnabled(false);
-            } else {
-                send.setEnabled(true);
-            }
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
+//        listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
+//        try {
+//            List<Listing> data = listingViewModel.error();
+//            if (data != null && !data.isEmpty() && status == 1) {
+//                send.setEnabled(false);
+//            } else {
+//                send.setEnabled(true);
+//            }
+//        } catch (ExecutionException | InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+//        try {
+//            List<Death> data = deathViewModel.error();
+//                if (data != null && status == 1) {
+//                    send.setEnabled(false);
+//                } else {
+//                    send.setEnabled(true);
+//                }
+//        } catch (ExecutionException e) {
+//            throw new RuntimeException(e);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+//        try {
+//            List<Individual> data = individualViewModel.error();
+//            if (data != null && status == 1) {
+//                send.setEnabled(false);
+//            } else {
+//                send.setEnabled(true);
+//            }
+//        } catch (ExecutionException e) {
+//            throw new RuntimeException(e);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+//        try {
+//            List<Individual> data = individualViewModel.errors();
+//            if (data != null && status == 1) {
+//                send.setEnabled(false);
+//            } else {
+//                send.setEnabled(true);
+//            }
+//        } catch (ExecutionException e) {
+//            throw new RuntimeException(e);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//
 //        outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
 //        try {
 //            List<Outcome> data = outcomeViewModel.error();
-//            if (data != null) {
+//            if (data != null && status == 1) {
 //                send.setEnabled(false);
 //            } else {
 //                send.setEnabled(true);
@@ -206,28 +207,29 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        try {
-            List<Listing> data = listingViewModel.error();
-            List<Death> dth = deathViewModel.error();
-            //List<Outcome> out = outcomeViewModel.error();
-            List<Individual> ind = individualViewModel.error();
-            List<Individual> inds = individualViewModel.errors();
-            if ((data != null && !data.isEmpty()) || (dth != null && !dth.isEmpty())
-                    || (ind != null && !ind.isEmpty()) || (inds != null && !inds.isEmpty())) {
-                send.setEnabled(false);
-            } else {
-                send.setEnabled(true);
-            }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        try {
+//            List<Listing> data = listingViewModel.error();
+//            List<Death> dth = deathViewModel.error();
+//            List<Outcome> out = outcomeViewModel.error();
+//            List<Individual> ind = individualViewModel.error();
+//            List<Individual> inds = individualViewModel.errors();
+//
+//            if (status == 1 && ((data != null && !data.isEmpty()) || (dth != null && !dth.isEmpty())
+//                    || (ind != null && !ind.isEmpty()) || (inds != null && !inds.isEmpty()) || (out != null && !out.isEmpty()))) {
+//                send.setEnabled(false);
+//            } else {
+//                send.setEnabled(true);
+//            }
+//        } catch (ExecutionException | InterruptedException e) {
+//            // Handle errors appropriately, e.g., show a message to the user or log it
+//            e.printStackTrace();
+//            Toast.makeText(this, "Error checking conditions", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
-        } catch (ExecutionException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 
     public void startAppInfo(View view) {

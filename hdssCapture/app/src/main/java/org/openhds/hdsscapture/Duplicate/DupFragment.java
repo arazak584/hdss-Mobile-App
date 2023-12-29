@@ -349,6 +349,33 @@ public class DupFragment extends DialogFragment {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+            if (binding.getDup().numberofdup>=1 && finalData.complete ==1) {
+                IndividualEnd endInd = new IndividualEnd();
+                endInd.endType = 4;
+                endInd.uuid = binding.getDup().dup_uuid;
+                endInd.complete = endInd.complete;
+                individualViewModel.dthupdate(endInd);
+            }
+
+            if (binding.getDup().numberofdup>=2 && finalData.complete ==1) {
+                IndividualEnd endInd = new IndividualEnd();
+                endInd.endType = 4;
+                endInd.uuid = binding.getDup().dup1_uuid;
+                endInd.complete = endInd.complete;
+                individualViewModel.dthupdate(endInd);
+            }
+
+            if (binding.getDup().numberofdup>=3 && finalData.complete ==1) {
+                IndividualEnd endInd = new IndividualEnd();
+                endInd.endType = 4;
+                endInd.uuid = binding.getDup().dup2_uuid;
+                endInd.complete = endInd.complete;
+                individualViewModel.dthupdate(endInd);
+            }
+
+
+
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,

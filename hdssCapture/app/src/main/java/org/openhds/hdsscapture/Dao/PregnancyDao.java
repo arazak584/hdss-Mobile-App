@@ -64,7 +64,7 @@ public interface PregnancyDao {
     Pregnancy findpreg(String id);
 
     @Query("SELECT a.*,b.firstName,b.lastName FROM pregnancy as a  INNER JOIN individual as b on a.individual_uuid=b.uuid " +
-            " WHERE endType=1 and outcome=2 and socialgroup=:id ")
+            " WHERE endType=1 and outcome=2 and hohID=:id ")
     List<Pregnancy> retrievePregnancy(String id);
 
     @Query("SELECT COUNT(*) FROM pregnancy a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +

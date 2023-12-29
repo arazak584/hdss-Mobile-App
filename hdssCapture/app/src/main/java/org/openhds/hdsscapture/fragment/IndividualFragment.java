@@ -349,7 +349,6 @@ public class IndividualFragment extends Fragment {
                     data.uuid = uuidString;
                     data.fw_uuid = fieldworkerData.getFw_uuid();
                     data.village = level6Data.getName();
-                    data.socialgroup = socialgroup.uuid;
                     data.hohID = socialgroup.extId;
 
                 Date currentDate = new Date(); // Get the current date and time
@@ -828,10 +827,7 @@ public class IndividualFragment extends Fragment {
             }
 
             finalData.compno = ClusterFragment.selectedLocation.compno;
-            finalData.socialgroup = Data.socialgroup_uuid;
-            finalData.residency = Data.uuid;
             finalData.endType = Data.endType;
-            finalData.startDate = Data.startDate;
             finalData.hohID = socialgroup.extId;
 
             if(binding.getResidency().img != null){
@@ -955,11 +951,10 @@ public class IndividualFragment extends Fragment {
             //Update Fake Individual's Residency that was used to create the socialgroup
             IndividualViewModel unkss = new ViewModelProvider(this).get(IndividualViewModel.class);
             try {
-                Individual datas = unkss.unk(socialgroup.uuid);
+                Individual datas = unkss.unk(socialgroup.extId);
                 if (datas != null) {
                     IndividualEnd endInd = new IndividualEnd();
                     endInd.endType = 2;
-                    endInd.endDate = finalData.insertDate;
                     endInd.uuid = datas.uuid;
                     endInd.complete = 2;
                     individualViewModel.dthupdate(endInd);

@@ -26,7 +26,7 @@ public interface DuplicateDao {
     @Query("DELETE FROM duplicate")
     void deleteAll();
 
-    @Query("SELECT * FROM duplicate WHERE complete=1")
+    @Query("SELECT * FROM duplicate WHERE complete!=0")
     List<Duplicate> retrieveSync();
 
     @Query("SELECT * FROM duplicate where individual_uuid=:id limit 1")

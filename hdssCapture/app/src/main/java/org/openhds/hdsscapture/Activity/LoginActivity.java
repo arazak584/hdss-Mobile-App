@@ -58,10 +58,6 @@ public class LoginActivity extends AppCompatActivity  {
     public static final String FIELDWORKER_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.FIELDWORKER_DATA";
     public static final String FIELDWORKER_DATAS = "org.openhds.hdsscapture.activity.MainActivity.FIELDWORKER_DATAS";
 
-    private static final String PREFS_NAME = "task";
-    private static final String SELECTED_RADIO_BUTTON_ID_KEY = "selectedTask";
-    private RadioGroup radioGroup;
-    private SharedPreferences preferences;
 
 
     //Allow access on phones with screen size 7 inches and above

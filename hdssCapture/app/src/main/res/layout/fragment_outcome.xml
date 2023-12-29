@@ -569,30 +569,38 @@
                     android:textColor="@color/black"
                     android:text="@string/month_pg" />
 
-                <EditText
-                    goneUnless="@{pregoutcome.rec_anc==1}"
-                    android:id="@+id/month_pg"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:ems="10"
-                    android:inputType="number"
-                    android:text="@={pregoutcome.month_pg}" />
-
-                <TextView
+                <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{pregoutcome.rec_anc==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="@string/num_anc" />
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:text="@string/month_pg">
 
-                <EditText
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/month_pg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={pregoutcome.month_pg}"
+                        android:inputType="number"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{pregoutcome.rec_anc==1}"
-                    android:id="@+id/num_anc"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:ems="10"
-                    android:inputType="number"
-                    android:text="@={pregoutcome.num_anc}" />
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/num_anc"
+                    android:text="@string/num_anc">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/num_anc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={pregoutcome.num_anc}"
+                        android:inputType="number"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     goneUnless="@{pregoutcome.rec_anc==1}"
@@ -622,14 +630,21 @@
                     android:textColor="@color/black"
                     android:text="@string/first_recs" />
 
-                <EditText
+                <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{pregoutcome.rec_ipt==1}"
-                    android:id="@+id/first_rec"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:ems="10"
-                    android:inputType="number"
-                    android:text="@={pregoutcome.first_rec}" />
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:text="@string/first_recs">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/first_rec"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={pregoutcome.first_rec}"
+                        android:inputType="number"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <TextView
@@ -639,14 +654,21 @@
                     android:textColor="@color/black"
                     android:text="@string/many_ipt" />
 
-                <EditText
+                <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{pregoutcome.rec_ipt==1}"
-                    android:id="@+id/many_ipt"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:ems="10"
-                    android:inputType="number"
-                    android:text="@={pregoutcome.many_ipt}" />
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:text="@string/many_ipt">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/many_ipt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={pregoutcome.many_ipt}"
+                        android:inputType="number"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/button_outcome_conception"
@@ -817,22 +839,22 @@
                         android:onItemSelected="@{pregoutcome::setFirst_nb}"
                         android:padding="10dp"/>
 
-
-                    <TextView
+                    <com.google.android.material.textfield.TextInputLayout
                         goneUnless="@{pregoutcome.first_nb==2}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="@string/l_birth" />
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/l_birth"
+                        android:text="@string/l_birth">
 
-                    <EditText
-                        goneUnless="@{pregoutcome.first_nb==2}"
-                        android:id="@+id/l_birth"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:ems="10"
-                        android:inputType="number"
-                        android:text="@={pregoutcome.l_birth}" />
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/l_birth"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={pregoutcome.l_birth}"
+                            android:inputType="number"/>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"

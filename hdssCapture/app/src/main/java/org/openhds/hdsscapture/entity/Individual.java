@@ -30,7 +30,7 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "individual",
-indices = {@Index(value = {"uuid","ghanacard","firstName","lastName","compno","socialgroup","fw_uuid","complete"}, unique = false)})
+indices = {@Index(value = {"uuid","ghanacard","firstName","lastName","compno","hohID","fw_uuid","complete"}, unique = false)})
 public class Individual extends BaseObservable implements Parcelable {
 
     @SerializedName("uuid")
@@ -134,21 +134,11 @@ public class Individual extends BaseObservable implements Parcelable {
     public String edtime;
 
     @Expose
-    public Integer startType;
-    @Expose
     public Integer endType;
-    @Expose
-    public Date startDate;
-    @Expose
-    public Date endDate;
     @Expose
     public String compno;
     @Expose
     public String village;
-    @Expose
-    public String residency;
-    @Expose
-    public String socialgroup;
     @Expose
     public String hohID;
     @Expose
@@ -269,33 +259,6 @@ public class Individual extends BaseObservable implements Parcelable {
     public void setAge(Integer age) {
         this.age = age;
     }
-
-    public String getStartDate() {
-        if (startDate == null) return null;
-        return f.format(startDate);
-    }
-
-    public void setStartDate(String startDate) {
-        try {
-            this.startDate = f.parse(startDate);
-        } catch (ParseException e) {
-            System.out.println("Date error " + e.getMessage());
-        }
-    }
-
-    public String getEndDate() {
-        if (endDate == null) return null;
-        return f.format(endDate);
-    }
-
-    public void setEndDate(String endDate) {
-        try {
-            this.endDate = f.parse(endDate);
-        } catch (ParseException e) {
-            System.out.println("Date error " + e.getMessage());
-        }
-    }
-
 
     @Bindable
     public String getInsertDate() {
@@ -469,22 +432,6 @@ public class Individual extends BaseObservable implements Parcelable {
         this.village = village;
     }
     @Bindable
-    public String getResidency() {
-        return residency;
-    }
-
-    public void setResidency(String residency) {
-        this.residency = residency;
-    }
-    @Bindable
-    public String getSocialgroup() {
-        return socialgroup;
-    }
-
-    public void setSocialgroup(String socialgroup) {
-        this.socialgroup = socialgroup;
-    }
-    @Bindable
     public String getHohID() {
         return hohID;
     }
@@ -525,14 +472,6 @@ public class Individual extends BaseObservable implements Parcelable {
         this.origin = origin;
     }
 
-    @Bindable
-    public Integer getStartType() {
-        return startType;
-    }
-
-    public void setStartType(Integer startType) {
-        this.startType = startType;
-    }
 
     protected Individual(Parcel in) {
         this.uuid = in.readString();
@@ -554,12 +493,8 @@ public class Individual extends BaseObservable implements Parcelable {
         this.mother = in.readInt();
         this.father = in.readInt();
         this.endType = in.readInt();
-        this.startDate = (java.util.Date) in.readSerializable();
-        this.endDate = (java.util.Date) in.readSerializable();
         this.compno = in.readString();
         this.village = in.readString();
-        this.residency = in.readString();
-        this.socialgroup = in.readString();
         this.hohID = in.readString();
 
     }
@@ -602,12 +537,8 @@ public class Individual extends BaseObservable implements Parcelable {
         dest.writeInt(this.mother);
         dest.writeInt(this.father);
         dest.writeInt(this.endType);
-        dest.writeSerializable(this.startDate);
-        dest.writeSerializable(this.endDate);
         dest.writeString(this.compno);
         dest.writeString(this.village);
-        dest.writeString(this.residency);
-        dest.writeString(this.socialgroup);
         dest.writeString(this.hohID);
 
     }

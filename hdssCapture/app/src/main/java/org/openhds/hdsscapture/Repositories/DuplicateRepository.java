@@ -43,6 +43,7 @@ public class DuplicateRepository {
         return future.get();
     }
 
+
     public List<Duplicate> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Duplicate>> callable = () -> dao.retrieveSync();

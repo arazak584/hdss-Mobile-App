@@ -77,6 +77,9 @@ public class QueryActivity extends AppCompatActivity {
             public void onClick(View v) {
                 showLoadingDialog();
 
+                query();
+                hideLoadingDialog();
+
                 // Simulate long operation
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -150,7 +153,7 @@ public class QueryActivity extends AppCompatActivity {
                 r1.name = d + ". Compno: " + e.compno ;
                 r1.extid = "Household ID: " + e.lastName + " - Household Head: " +e.firstName;
                 r1.date = "";
-                r1.error = "Change Head of Household";
+                r1.error = "Change Head of Household [HOH is Dead]";
                 r1.index = d;
 
                 list.add(r1);

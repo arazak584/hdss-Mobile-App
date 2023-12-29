@@ -189,11 +189,17 @@ public class DeathFragment extends DialogFragment {
                     data.visit_uuid = dts.uuid;
                 }
 
+                ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+                Residency dataRes = resModel.findRes(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
+                if (dataRes != null){
+                    data.dob = dataRes.startDate;
+                    data.residency_uuid = dataRes.uuid;
+                }
+
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
-                data.dob = HouseMembersFragment.selectedIndividual.startDate;
                 data.firstName = HouseMembersFragment.selectedIndividual.getFirstName();
                 data.lastName = HouseMembersFragment.selectedIndividual.getLastName();
                 data.gender = HouseMembersFragment.selectedIndividual.getGender();
@@ -206,7 +212,6 @@ public class DeathFragment extends DialogFragment {
                 data.visit_uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
                 data.househead = socialgroup.getGroupName();
-                data.residency_uuid = HouseMembersFragment.selectedIndividual.getResidency();
                 data.socialgroup_uuid = socialgroup.uuid;
 
                 Date currentDate = new Date(); // Get the current date and time
@@ -402,7 +407,6 @@ public class DeathFragment extends DialogFragment {
                 if (data != null) {
                     IndividualEnd endInd = new IndividualEnd();
                     endInd.endType = 3;
-                    endInd.endDate = binding.getDeath().deathDate;
                     endInd.uuid = binding.getDeath().individual_uuid;
                     endInd.complete = 1;
 

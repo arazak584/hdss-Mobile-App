@@ -286,6 +286,14 @@ public class Duplicate extends BaseObservable {
         this.visit_uuid = visit_uuid;
     }
 
+    public Integer getComplete() {
+        return complete;
+    }
+
+    public void setComplete(Integer complete) {
+        this.complete = complete;
+    }
+
     //SPINNERS ENTITY COMPLETE FORM FOR SYNC
     public void setComplete(AdapterView<?> parent, View view, int position, long id) {
 

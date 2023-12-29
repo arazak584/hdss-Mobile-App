@@ -74,10 +74,17 @@ public class PushActivity extends AppCompatActivity {
     private ProgressDialog progress;
     private final String TAG = "Syncing Data Errors: ";
 
+    private ListingViewModel listingViewModel;
+    private Button buttonSendList , buttonSendVisit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_push);
+
+        buttonSendList = findViewById(R.id.buttonSendList);
+        buttonSendVisit = findViewById(R.id.buttonSendVisit);
+        listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
 
         progress = new ProgressDialog(PushActivity.this);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -158,7 +165,7 @@ public class PushActivity extends AppCompatActivity {
 
 
         //PUSH VISIT DATA
-        final Button buttonSendVisit = findViewById(R.id.buttonSendVisit);
+        //final Button buttonSendVisit = findViewById(R.id.buttonSendVisit);
         //final TextView textViewSendVisit = findViewById(R.id.textViewSendVisit);
         final VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
 
@@ -223,9 +230,23 @@ public class PushActivity extends AppCompatActivity {
         });
 
         //PUSH LISTING DATA
-        final Button buttonSendList = findViewById(R.id.buttonSendList);
+        //final Button buttonSendList = findViewById(R.id.buttonSendList);
         //final TextView textViewSendList = findViewById(R.id.textViewSendList);
-        final ListingViewModel listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
+
+//        try {
+//            List<Listing> data = listingViewModel.error();
+//            if (data != null && !data.isEmpty()) {
+//                buttonSendList.setEnabled(false);
+//                buttonSendVisit.setEnabled(false);
+//                buttonSendList.setText("Unresolved Query");
+//                buttonSendVisit.setText("Unresolved Query");
+//            } else {
+//                buttonSendList.setEnabled(true);
+//                buttonSendVisit.setEnabled(true);
+//            }
+//        } catch (ExecutionException | InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
 
         //GET MODIFIED DATA
         final List<Listing> listingList = new ArrayList<>();
@@ -1342,6 +1363,28 @@ public class PushActivity extends AppCompatActivity {
 
 
     }
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        try {
+//            List<Listing> data = listingViewModel.error();
+//
+//            if ((data != null && !data.isEmpty()) ) {
+//                buttonSendList.setEnabled(false);
+//                buttonSendVisit.setEnabled(false);
+//                buttonSendList.setText("Unresolved Query");
+//                buttonSendVisit.setText("Unresolved Query");
+//            } else {
+//                buttonSendList.setEnabled(true);
+//                buttonSendVisit.setEnabled(true);
+//            }
+//        } catch (ExecutionException | InterruptedException e) {
+//            // Handle errors appropriately, e.g., show a message to the user or log it
+//            e.printStackTrace();
+//            Toast.makeText(this, "Error checking conditions", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
 //    @Override
 //    public void onBackPressed() {

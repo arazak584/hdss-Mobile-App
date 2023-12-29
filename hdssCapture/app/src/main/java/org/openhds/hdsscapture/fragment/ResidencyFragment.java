@@ -214,7 +214,6 @@ public class ResidencyFragment extends Fragment {
                 if (dataRes != null) {
                     IndividualResidency res = new IndividualResidency();
                     res.uuid = finalData.individual_uuid;
-                    res.socialgroup = finalData.socialgroup_uuid;
                     res.hohID = finalData.hohID;
 
                     individualViewModel.updateres(res);
@@ -248,11 +247,10 @@ public class ResidencyFragment extends Fragment {
             //Update Fake Individual's Residency that was used to create the socialgroup
             IndividualViewModel unkss = new ViewModelProvider(this).get(IndividualViewModel.class);
             try {
-                Individual datas = unkss.unk(socialgroup.uuid);
+                Individual datas = unkss.unk(socialgroup.extId);
                 if (datas != null) {
                     IndividualEnd endInd = new IndividualEnd();
                     endInd.endType = 2;
-                    endInd.endDate = finalData.insertDate;
                     endInd.uuid = datas.uuid;
                     endInd.complete = 2;
                     individualViewModel.dthupdate(endInd);

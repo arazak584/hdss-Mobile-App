@@ -228,7 +228,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         individualList.clear();
         if(socialgroup != null)
             try {
-                List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getUuid());
+                List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getExtId());
 
                 if (list != null) {
                     individualList.addAll(list);

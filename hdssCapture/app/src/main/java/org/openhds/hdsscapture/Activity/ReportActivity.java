@@ -2,6 +2,7 @@ package org.openhds.hdsscapture.Activity;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -35,6 +36,7 @@ import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
+import org.openhds.hdsscapture.entity.Fieldworker;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -74,9 +76,17 @@ public class ReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
 
+        final Intent f = getIntent();
+        final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
+
         startDateEditText = findViewById(R.id.startDate);
         endDateEditText = findViewById(R.id.endDate);
         usernameEditText = findViewById(R.id.Fusername);
+
+
+        if (fieldworkerDatas != null) {
+            usernameEditText.setText(fieldworkerDatas.username);
+        }
 
         Button startDateButton = findViewById(R.id.btStart);
         startDateButton.setOnClickListener(new View.OnClickListener() {
@@ -147,14 +157,17 @@ public class ReportActivity extends AppCompatActivity {
             public void onClick(View v) {
                 showLoadingDialog();
 
+                report();
+                hideLoadingDialog();
+
                 // Simulate long operation
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        report();
-                        hideLoadingDialog(); // Dismiss the progress dialog after generating the report
-                    }
-                }, 500);
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        report();
+//                        hideLoadingDialog(); // Dismiss the progress dialog after generating the report
+//                    }
+//                }, 500);
 
             }
 

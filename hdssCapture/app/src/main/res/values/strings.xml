@@ -112,7 +112,7 @@
     <string name="district">District</string>
     <string name="subdistrict">Sub-District</string>
     <string name="village">Village</string>
-    <string name="cluster">Cluster</string>
+    <string name="cluster">Sub Village</string>
     <string name="phone2">Extra Phone Number</string>
     <string name="residency">Residency</string>
     <string name="location_select">Select Locations</string>

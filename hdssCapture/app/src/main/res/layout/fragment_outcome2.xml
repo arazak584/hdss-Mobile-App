@@ -260,21 +260,22 @@
             android:onItemSelected="@{pregoutcome2::setChd_weight}"
             android:padding="10dp"/>
 
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
             goneUnless="@{pregoutcome2.chd_weight==1}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="@string/weig_hcard" />
+            android:gravity="start"
+            android:padding="5dp"
+            android:hint="@string/weig_hcard"
+            android:text="@string/weig_hcard">
 
-        <EditText
-            goneUnless="@{pregoutcome2.chd_weight==1}"
-            android:id="@+id/weig_hcard"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:ems="10"
-            android:inputType="numberDecimal"
-            android:text="@={pregoutcome2.weig_hcard}" />
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/weig_hcard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={pregoutcome2.weig_hcard}"
+                android:inputType="numberDecimal"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             goneUnless="@{pregoutcome2.type==1}"

@@ -133,8 +133,6 @@
             tools:ignore="MissingConstraints">
 
 
-
-
         <LinearLayout
             android:id="@+id/layouthse"
             android:layout_width="match_parent"
@@ -168,6 +166,17 @@
                 android:textAlignment="center"
                 android:textStyle="bold"
                 android:textSize="20sp" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+            <LinearLayout
+                android:id="@+id/layouthses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/death"
@@ -539,6 +548,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
             </androidx.recyclerview.widget.RecyclerView>
+
+            </LinearLayout>
+            </ScrollView>
 
         </LinearLayout>
 

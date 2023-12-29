@@ -128,7 +128,6 @@ public class NewhouseholdFragment extends DialogFragment {
             String resuuidString = uuid.replaceAll("-", "");
             // Set the ID of the Fieldworker object
             binding.getResidency().uuid = resuuidString;
-            binding.getIndividual().residency = resuuidString;
         }
 
         if(socialgroup.uuid == null) {
@@ -137,7 +136,6 @@ public class NewhouseholdFragment extends DialogFragment {
             // Set the ID of the Fieldworker object
             binding.getSocialgroup().uuid = suuidString;
             binding.getResidency().socialgroup_uuid = suuidString;
-            binding.getIndividual().socialgroup = suuidString;
         }
 
         if(individual.fw_uuid==null){
@@ -239,7 +237,6 @@ public class NewhouseholdFragment extends DialogFragment {
 
         if(residency.startDate==null){
             binding.getResidency().startDate = new Date();
-            binding.getIndividual().startDate = new Date();
         }
 
         if(residency.startType==null){

@@ -60,6 +60,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             this.gender = view.findViewById(R.id.text_gender);
             this.compno = view.findViewById(R.id.text_compno);
             this.status = view.findViewById(R.id.text_status);
+            this.hhid = view.findViewById(R.id.text_hhid);
             this.cardView = view.findViewById(R.id.searchIndividual);
         }
     }
@@ -84,7 +85,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         holder.lastname.setText(individual.getLastName());
         holder.dob.setText(individual.getDob());
         holder.compno.setText(individual.getCompno());
-        //holder.hhid.setText(individual.getHohID());
+        Integer end = individual.getEndType();
+        String hh = individual.getHohID();
+        if(end != null && end!=2){
+            holder.hhid.setText(individual.getHohID());
+            holder.hhid.setVisibility(View.VISIBLE);
+        }else{
+            holder.hhid.setText(null);
+            holder.hhid.setVisibility(View.GONE);
+        }
         //holder.hhid.setText(String.valueOf(individual.age));
         String otherName = individual.getOtherName();
         if (otherName == null || otherName.isEmpty()) {
@@ -102,8 +111,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         if (status == 1) {
             holder.status.setText("(" + "Active" + ")");
             holder.status.setTextColor(Color.parseColor("#32CD32"));
-        } else {
+        } else if (status == 2){
             holder.status.setText("(" + "Outmigrated" + ")");
+            holder.status.setTextColor(Color.RED);
+        } else{
+            holder.status.setText("(" + "Duplicate" + ")");
             holder.status.setTextColor(Color.RED);
         }
 
@@ -118,26 +130,50 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public int getItemCount() {
         return individualList.size();
     }
+//
+//    public void search(String selectedSpinnerItem, String searchText, IndividualViewModel individualViewModel) {
+//        individualList.clear();
+//
+//        // Check if either selectedSpinnerItem or searchText is not empty (non-null and non-empty) before proceeding with the search
+//        if ((selectedSpinnerItem != null && !selectedSpinnerItem.isEmpty()) && (searchText != null && !searchText.isEmpty())) {
+//            if (searchText != null) {
+//                searchText = searchText.toLowerCase(Locale.getDefault());
+//            }
+//
+//            try {
+//                List<Individual> searchResults = individualViewModel.retrieveBySearch(selectedSpinnerItem, searchText);
+//                individualList.addAll(searchResults);
+//            } catch (ExecutionException | InterruptedException e) {
+//                e.printStackTrace();
+//                Toast.makeText(activity.getActivity(), "Error searching individuals", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//
+//        notifyDataSetChanged();
+//        activity.dismissLoadingDialog();
+//    }
 
     public void search(String selectedSpinnerItem, String searchText, IndividualViewModel individualViewModel) {
         individualList.clear();
-
-        // Check if either selectedSpinnerItem or searchText is not empty (non-null and non-empty) before proceeding with the search
-        if ((selectedSpinnerItem != null && !selectedSpinnerItem.isEmpty()) && (searchText != null && !searchText.isEmpty())) {
+        // Check if searchText is not empty (non-null and non-empty) before proceeding with the search
+        if (searchText != null && !searchText.isEmpty()) {
             if (searchText != null) {
                 searchText = searchText.toLowerCase(Locale.getDefault());
             }
-
             try {
+                // Perform a search using the IndividualViewModel
                 List<Individual> searchResults = individualViewModel.retrieveBySearch(selectedSpinnerItem, searchText);
+                // Add the search results to the adapter's data list
                 individualList.addAll(searchResults);
             } catch (ExecutionException | InterruptedException e) {
+                // Handle exceptions that may occur during the search operation
                 e.printStackTrace();
                 Toast.makeText(activity.getActivity(), "Error searching individuals", Toast.LENGTH_SHORT).show();
             }
         }
-
+        // Notify the adapter that the underlying data has changed
         notifyDataSetChanged();
+        // Dismiss the loading dialog associated with the activity
         activity.dismissLoadingDialog();
     }
 

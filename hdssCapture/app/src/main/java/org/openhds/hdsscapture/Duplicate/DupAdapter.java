@@ -125,7 +125,7 @@ public class DupAdapter extends RecyclerView.Adapter<DupAdapter.ViewHolder>{
 
     public void filter(String charText, IndividualViewModel individualViewModel) {
         individualList.clear();
-        if (charText != null && charText.length() > 4) {
+        if (charText != null && charText.length() > 3) {
             charText = charText.toLowerCase(Locale.getDefault());
 
             try {

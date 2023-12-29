@@ -71,11 +71,11 @@ public interface SocialgroupDao {
     @Query("SELECT * FROM socialgroup WHERE insertDate BETWEEN :startDate AND :endDate")
     List<Socialgroup> retrieve(Date startDate, Date endDate);
 
-    @Query("SELECT a.*,compno FROM socialgroup as a INNER JOIN individual as b ON a.uuid = b.socialgroup" +
+    @Query("SELECT a.*,compno FROM socialgroup as a INNER JOIN individual as b ON a.extId = b.hohID" +
             " WHERE b.endType=1 and compno=:id GROUP BY a.extId ")
     List<Socialgroup> retrieveBySocialgroup(String id);
 
-    @Query("SELECT a.*,compno FROM socialgroup as a INNER JOIN individual as b ON a.uuid = b.socialgroup" +
+    @Query("SELECT a.*,compno FROM socialgroup as a INNER JOIN individual as b ON a.extId = b.hohID" +
             " WHERE b.endType=1 and compno=:id and groupName!='UNK' GROUP BY a.extId ")
     List<Socialgroup> changehousehold(String id);
 

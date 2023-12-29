@@ -318,63 +318,23 @@ public class PullActivity extends AppCompatActivity {
                                                 public void onResponse(Call<DataWrapper<Configsettings>> call, Response<DataWrapper<Configsettings>> response) {
                                                     Configsettings[] cng = response.body().getData().toArray(new Configsettings[0]);
                                                     configViewModel.add(cng);
+                                                    progressBar.setProgress(100);
 
-                                                    //Sync Visit
-//                                                    textView_SyncHierarchyData.setText("Updating Visit...");
-//                                                    final VisitViewModel visitViewModel = new ViewModelProvider(PullActivity.this).get(VisitViewModel.class);
-//                                                    Call<DataWrapper<Visit>> c_callable = dao.getVisit(authorizationHeader);
-//                                                    c_callable.enqueue(new Callback<DataWrapper<Visit>>() {
-//                                                        @Override
-//                                                        public void onResponse(Call<DataWrapper<Visit>> call, Response<DataWrapper<Visit>> response) {
-//                                                            Visit[] v = response.body().getData().toArray(new Visit[0]);
-//                                                            visitViewModel.add(v);
+                                                    final AtomicReference<String> lastSyncDatetime = new AtomicReference<>(getLastSyncDatetime());
 
-                                                    //Sync Extra Forms
-                                                    textView_SyncHierarchyData.setText("Updating Forms...");
-                                                    final OdkViewModel odkViewModel = new ViewModelProvider(PullActivity.this).get(OdkViewModel.class);
-                                                    Call<DataWrapper<Form>> c_callable = dao.getExtra(authorizationHeader);
-                                                    c_callable.enqueue(new Callback<DataWrapper<Form>>() {
-                                                        @Override
-                                                        public void onResponse(Call<DataWrapper<Form>> call, Response<DataWrapper<Form>> response) {
-                                                            Form[] odk = response.body().getData().toArray(new Form[0]);
-                                                            odkViewModel.add(odk);
-                                                            progressBar.setProgress(100);
+                                                    // Inside the synchronization process after a successful sync
+                                                    // Only change the date if there is another sync
+                                                    String currentDateWithTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date());
+                                                    if (!currentDateWithTime.equals(lastSyncDatetime.get())) {
+                                                        syncEntityDateTextView.setText(currentDateWithTime);
+                                                        lastSyncDatetime.set(currentDateWithTime);
+                                                        setLastSyncDatetime(currentDateWithTime);
+                                                    }
+                                                    textView_SyncHierarchyData.setText("Codebook and Locationhierarchy updated Successfully");
+                                                    textView_SyncHierarchyData.setTextColor(Color.parseColor("#32CD32"));
 
-                                                            final AtomicReference<String> lastSyncDatetime = new AtomicReference<>(getLastSyncDatetime());
-
-                                                            // Inside the synchronization process after a successful sync
-                                                            // Only change the date if there is another sync
-                                                            String currentDateWithTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date());
-                                                            if (!currentDateWithTime.equals(lastSyncDatetime.get())) {
-                                                                syncEntityDateTextView.setText(currentDateWithTime);
-                                                                lastSyncDatetime.set(currentDateWithTime);
-                                                                setLastSyncDatetime(currentDateWithTime);
-                                                            }
-
-
-                                                            textView_SyncHierarchyData.setText("Codebook and Locationhierarchy updated Successfully");
-                                                            textView_SyncHierarchyData.setTextColor(Color.parseColor("#32CD32"));
-                                                            //textView_SyncHierarchyData.setTextColor(Color.rgb(0, 114, 133));
-                                                        }
-
-
-                                                        @Override
-                                                        public void onFailure(Call<DataWrapper<Form>> call, Throwable t) {
-                                                            progressBar.setProgress(0);
-                                                            textView_SyncHierarchyData.setText("Forms Sync Error!");
-                                                            textView_SyncHierarchyData.setTextColor(Color.RED);
-                                                        }
-                                                    });
                                                 }
 
-//                                                        @Override
-//                                                        public void onFailure(Call<DataWrapper<Visit>> call, Throwable t) {
-//                                                            progressBar.setProgress(0);
-//                                                            textView_SyncHierarchyData.setText("Visit Sync Error!");
-//                                                            textView_SyncHierarchyData.setTextColor(Color.RED);
-//                                                        }
-//                                                    });
-//                                                }
 
                                                 @Override
                                                 public void onFailure(Call<DataWrapper<Configsettings>> call, Throwable t) {
@@ -465,8 +425,8 @@ public class PullActivity extends AppCompatActivity {
                         .addColumn("uuid").addColumn("dob").addColumn("dobAspect").addColumn("edtime").addColumn("extId")
                         .addColumn("firstName").addColumn("fw_uuid").addColumn("gender").addColumn("ghanacard").addColumn("insertDate")
                         .addColumn("lastName").addColumn("otherName").addColumn("father_uuid").addColumn("mother_uuid")
-                        .addColumn("sttime").addColumn("endType").addColumn("startDate").addColumn("endDate").addColumn("compno")
-                        .addColumn("village").addColumn("residency").addColumn("socialgroup").addColumn("hohID").build();
+                        .addColumn("sttime").addColumn("endType").addColumn("compno")
+                        .addColumn("village").addColumn("hohID").build();
 
                 downloadAndProcessDataset("individual.zip", "individual.csv", () -> dao.downloadIndividual(authorizationHeader), Individual.class, individualsSchema, individualCounts, ind);
 

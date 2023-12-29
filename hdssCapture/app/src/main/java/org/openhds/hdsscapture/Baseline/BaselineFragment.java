@@ -490,10 +490,7 @@ public class BaselineFragment extends Fragment {
             }
 
             Data.compno = BaseFragment.selectedLocation.compno;
-            Data.socialgroup = finalData.socialgroup_uuid;
-            Data.residency = finalData.uuid;
             Data.endType = finalData.endType;
-            Data.startDate = finalData.startDate;
             Data.hohID = socialgroup.extId;
 
             finalData.complete=1;
