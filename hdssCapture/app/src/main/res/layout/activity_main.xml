@@ -282,11 +282,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@android:color/transparent"
-            android:drawableStart="@drawable/btn_setting"
+            android:drawableStart="@drawable/delete"
             android:drawablePadding="5dip"
             android:text="@string/reset"
-            android:textColor="@color/color_text_darkgray" />
+            android:backgroundTint="@color/Red"
+            android:textAllCaps="true"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/button_url"
@@ -295,7 +296,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="@color/white"
+            android:drawableStart="@drawable/downloads"
             android:backgroundTint="@color/pakistan_green"
+            android:textAllCaps="true"
             android:layout_marginBottom="5dp"/>
 
     </LinearLayout>
