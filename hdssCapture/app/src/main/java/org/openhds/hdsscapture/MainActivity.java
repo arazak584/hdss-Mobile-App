@@ -8,8 +8,11 @@ import static org.openhds.hdsscapture.AppConstants.DATA_SYNC;
 import static org.openhds.hdsscapture.AppConstants.DATA_VIEWS;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -51,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
 //    private OutcomeViewModel outcomeViewModel;
     private Button send;
     private int status;
+    private ProgressDialog progressDialog;
 
     private void showDialogInfo(String message, String codeFragment) {
         SimpleDialog simpleDialog = SimpleDialog.newInstance(message, codeFragment);
@@ -131,6 +135,44 @@ public class MainActivity extends AppCompatActivity {
                     InfoFragment dialogFragment = new InfoFragment();
                     dialogFragment.show(getSupportFragmentManager(), "InfoFragment");
                 } else {
+                    Toast.makeText(MainActivity.this, "Access Denied", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        final Button buttonUrl = findViewById(R.id.button_url);
+        buttonUrl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Uri uri = Uri.parse("https://github.com/arn-techsystem/openAB/releases"); // replace with your URL
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
+
+        final Button buttonReset = findViewById(R.id.button_resetDatabase);
+        buttonReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (fieldworkerDatas != null && fieldworkerDatas.status != null && fieldworkerDatas.status == 2) {
+                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(MainActivity.this);
+                    builder.setMessage("Are you sure you want to reset the database?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // User clicked "Yes"
+                                    resetDatabase();
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // User clicked "No"
+                                    // Do nothing or perform any desired action
+                                }
+                            })
+                            .show();
+                }else {
                     Toast.makeText(MainActivity.this, "Access Denied", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -267,5 +309,31 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .setNegativeButton(getString(R.string.no), null)
                 .show();
+    }
+
+    private void resetDatabase() {
+        // Get the context of the application
+        final Context context = getApplicationContext();
+        // Initialize and show the ProgressDialog
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setMessage("Resetting database...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        // Reset the AppDatabase
+        AppDatabase appDatabase = AppDatabase.getDatabase(context);
+        appDatabase.resetDatabase(context, new AppDatabase.ResetCallback() {
+            @Override
+            public void onResetComplete() {
+                // Dismiss the ProgressDialog
+                progressDialog.dismiss();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(context, "Database reset successful", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 }

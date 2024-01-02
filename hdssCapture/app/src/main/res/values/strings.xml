@@ -681,6 +681,7 @@
     <string name="server_url">Set Server URL</string>
     <string name="duplicates">Duplicates</string>
     <string name="dups">List of Duplicates</string>
+    <string name="reset">Reset Database</string>
 
     //SocioDemo End
 

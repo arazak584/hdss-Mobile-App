@@ -77,8 +77,8 @@ public class QueryActivity extends AppCompatActivity {
             public void onClick(View v) {
                 showLoadingDialog();
 
-                query();
-                hideLoadingDialog();
+//                query();
+//                hideLoadingDialog();
 
                 // Simulate long operation
                 new Handler().postDelayed(new Runnable() {

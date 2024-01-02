@@ -266,6 +266,7 @@
         </LinearLayout>
 
         <Button
+            android:visibility="gone"
             android:id="@+id/btninfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -275,6 +276,27 @@
             android:drawablePadding="5dip"
             android:text="@string/info"
             android:textColor="@color/color_text_darkgray" />
+
+        <Button
+            android:id="@+id/button_resetDatabase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:drawableStart="@drawable/btn_setting"
+            android:drawablePadding="5dip"
+            android:text="@string/reset"
+            android:textColor="@color/color_text_darkgray" />
+
+        <Button
+            android:id="@+id/button_url"
+            android:text="Download Update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/pakistan_green"
+            android:layout_marginBottom="5dp"/>
 
     </LinearLayout>
 
