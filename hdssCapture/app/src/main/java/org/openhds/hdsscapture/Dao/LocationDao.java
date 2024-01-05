@@ -73,7 +73,7 @@ public interface LocationDao {
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
-    @Query("SELECT * FROM locations WHERE insertDate > (SELECT startDate FROM round LIMIT 1) order by insertDate DESC")
+    @Query("SELECT * FROM locations WHERE insertDate > (SELECT startDate FROM round ORDER BY roundNumber DESC LIMIT 1) order by insertDate DESC")
     List<Locations> repo();
 
 }

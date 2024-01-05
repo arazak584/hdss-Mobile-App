@@ -157,17 +157,17 @@ public class ReportActivity extends AppCompatActivity {
             public void onClick(View v) {
                 showLoadingDialog();
 
-                report();
-                hideLoadingDialog();
+//                report();
+//                hideLoadingDialog();
 
                 // Simulate long operation
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        report();
-//                        hideLoadingDialog(); // Dismiss the progress dialog after generating the report
-//                    }
-//                }, 500);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        report();
+                        hideLoadingDialog(); // Dismiss the progress dialog after generating the report
+                    }
+                }, 500);
 
             }
 
