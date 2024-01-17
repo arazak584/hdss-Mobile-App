@@ -189,7 +189,6 @@ public class OutmigrationFragment extends DialogFragment {
                 data.uuid=uuidString;
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
-                data.visit_uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
                 data.socialgroup_uuid = socialgroup.uuid;
 

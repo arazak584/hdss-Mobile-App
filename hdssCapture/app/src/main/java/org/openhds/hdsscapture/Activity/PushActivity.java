@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.AppJson;
@@ -146,7 +147,7 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendLocationdata.setText("Sent " + d.length + " record(s)");
                             //textViewSendLocationdata.setTextColor(Color.rgb(0, 114, 133));
-                            buttonSendLocationdata.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendLocationdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -211,7 +212,8 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendVisit.setText("Sent " + d.length + " record(s)");
-                            buttonSendVisit.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendVisit.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                            //buttonSendVisit.setTextColor(Color.parseColor("#FFFFFFFF"));
                         }
                     }
 
@@ -290,7 +292,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendList.setText("Sent " + d.length + " record(s)");
-                            buttonSendList.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendList.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -358,7 +360,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendIndividualdata.setText("Sent " + d.length + " Individual record(s)");
-                            buttonSendIndividualdata.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendIndividualdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -424,7 +426,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendSocialgroupdata.setText("Sent " + d.length + " Socialgroup record(s)");
-                            buttonSendSocialgroupdata.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendSocialgroupdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -490,7 +492,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendRelationshipdata.setText("Sent " + d.length + " Relationship record(s)");
-                            buttonSendRelationshipdata.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendRelationshipdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -555,7 +557,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendPregnancydata.setText("Sent " + d.length + " Pregnancy record(s)");
-                            buttonSendPregnancydata.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendPregnancydata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -620,7 +622,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendOutcomedata.setText("Sent " + d.length + " Pregnancy Outcome record(s)");
-                            buttonSendOutcomedata.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendOutcomedata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -684,7 +686,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendOutcomesdata.setText("Sent " + d.length + " Outcome record(s)");
-                            buttonSendOutcomesdata.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendOutcomesdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -751,7 +753,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendDemographicdata.setText("Sent " + d.length + " Demographic record(s)");
-                            buttonSendDemographicdata.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendDemographicdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -815,7 +817,7 @@ public class PushActivity extends AppCompatActivity {
                             deathViewModel.add(d);
                             progress.dismiss();
                             buttondth.setText("Sent " + d.length + " Death record(s)");
-                            buttondth.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttondth.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -881,7 +883,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonvpm.setText("Sent " + d.length + " VPM record(s)");
-                            buttonvpm.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonvpm.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -945,7 +947,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendSocio.setText("Sent " + d.length + " record(s)");
-                            buttonSendSocio.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendSocio.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -1012,7 +1014,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendRes.setText("Sent " + d.length + " Residency record(s)");
-                            buttonSendRes.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendRes.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -1077,7 +1079,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendImg.setText("Sent " + d.length + " Inmigration record(s)");
-                            buttonSendImg.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendImg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -1143,7 +1145,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendOmg.setText("Sent " + d.length + " Outmigration record(s)");
-                            buttonSendOmg.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendOmg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -1211,7 +1213,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendAmend.setText("Sent " + d.length + " Amendment record(s)");
-                            buttonSendAmend.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendAmend.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -1278,7 +1280,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendVac.setText("Sent " + d.length + " Vaccination record(s)");
-                            buttonSendVac.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendVac.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 
@@ -1343,7 +1345,7 @@ public class PushActivity extends AppCompatActivity {
 
                             progress.dismiss();
                             buttonSendDup.setText("Sent " + d.length + " Duplicate record(s)");
-                            buttonSendDup.setTextColor(Color.parseColor("#FFFFFFFF"));
+                            buttonSendDup.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                         }
                     }
 

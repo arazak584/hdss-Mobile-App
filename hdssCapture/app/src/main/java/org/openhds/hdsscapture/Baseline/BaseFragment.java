@@ -48,6 +48,7 @@ public class BaseFragment extends Fragment implements BaseAdapter.LocationClickL
     private Socialgroup socialgroup;
     public static  Locations selectedLocation;
     private SocialgroupViewModel socialgroupViewModel;
+    private Individual individual;
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private HouseAdapter houseAdapter;

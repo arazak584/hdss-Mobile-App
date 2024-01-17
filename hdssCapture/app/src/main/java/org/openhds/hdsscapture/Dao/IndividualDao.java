@@ -131,20 +131,20 @@ public interface IndividualDao {
             "AND (fullName LIKE :id OR compno LIKE :id OR ghanacard LIKE :id)")
     List<Individual> retrieveByMotherSearch(String id);
 
-    @Query("SELECT * FROM individual WHERE endType = 1 AND gender = 1 AND compno = :id AND firstName!='FAKE'" +
+    @Query("SELECT * FROM individual WHERE endType = 1 AND gender = 1 AND compno = :id AND firstName!='FAKE' " +
             "AND strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) >=(SELECT father_age from config) " +
             "UNION " +
             "SELECT * FROM individual WHERE extId = 'UNK' order by dob DESC")
     List<Individual> retrieveByFather(String id);
 
-    @Query("SELECT * FROM individual  WHERE endType!=3 and compno=:id and firstName!='FAKE' order by dob ")
-    List<Individual> retrieveDup(String id);
+    @Query("SELECT * FROM individual  WHERE endType!=3 and compno=:id and firstName!='FAKE' and uuid!=:ids order by dob ")
+    List<Individual> retrieveDup(String id,String ids);
 
     @Query("SELECT * FROM individual WHERE endType=1 and gender=1 and compno=:id and firstName!='FAKE' and " +
             " strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) >=(SELECT rel_age from config) order by dob")
     List<Individual> retrievePartner(String id);
 
-    @Query("SELECT *, firstName || ' ' || lastName as fullName FROM individual WHERE gender = 1 AND endType = 1 and firstName!='FAKE' AND " +
+    @Query("SELECT *, firstName || ' ' || lastName as fullName FROM individual WHERE gender = 1 AND endType = 1 AND firstName!='FAKE' AND " +
             "strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) >=(SELECT father_age from config) AND " +
             "(fullName LIKE :id OR compno LIKE :id OR ghanacard LIKE :id)")
     List<Individual> retrieveByFatherSearch(String id);

@@ -733,6 +733,24 @@ public class IndividualFragment extends Fragment {
             }
 
             try {
+                if (!binding.earliest.getText().toString().trim().isEmpty() && !binding.editTextStartDate.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
+                    Date edate = f.parse(binding.earliest.getText().toString().trim());
+                    if (edate.after(stdate)) {
+                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Earliest Date");
+                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Earliest Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.editTextStartDate.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+
+            try {
                 if (!binding.omgg.oldStartDate.getText().toString().trim().isEmpty() && !binding.editTextStartDate.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
@@ -853,9 +871,8 @@ public class IndividualFragment extends Fragment {
                     socialgroupAmendment.groupName = finalData.getFirstName() + ' ' + finalData.getLastName();
                     socialgroupAmendment.uuid = socialgroup.uuid;
                     socialgroupAmendment.complete =1;
-
                     socialgroupViewModel.update(socialgroupAmendment);
-                    Log.d("IndividualFragment", "selectedIndividual is " +finalData.getFirstName());
+                    //Toast.makeText(requireContext(), "Successfully Amended Household Head", Toast.LENGTH_LONG).show();
                 }
 
             } catch (ExecutionException e) {

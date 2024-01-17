@@ -19,6 +19,7 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.fragment.ClusterFragment;
+import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 
 import java.util.ArrayList;
 import java.util.List;

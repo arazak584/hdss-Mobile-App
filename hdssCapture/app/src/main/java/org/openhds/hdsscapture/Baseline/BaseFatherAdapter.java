@@ -29,6 +29,7 @@ public class BaseFatherAdapter extends RecyclerView.Adapter<BaseFatherAdapter.Vi
     BaseFatherDialogFragment activity;
     LayoutInflater inflater;
     private final Locations locations;
+    private Individual individual;
     private final List<Individual> individualList;
 
     public interface FatherSelectionListener {

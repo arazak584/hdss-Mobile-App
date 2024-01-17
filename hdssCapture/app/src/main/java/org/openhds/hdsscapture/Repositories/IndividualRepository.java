@@ -185,9 +185,9 @@ public class IndividualRepository {
         return future.get();
     }
 
-    public List<Individual> retrieveDup(String id) throws ExecutionException, InterruptedException {
+    public List<Individual> retrieveDup(String id,String ids) throws ExecutionException, InterruptedException {
 
-        Callable<List<Individual>> callable = () -> dao.retrieveDup(id);
+        Callable<List<Individual>> callable = () -> dao.retrieveDup(id, ids);
 
         Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
 

@@ -17,6 +17,7 @@ import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.fragment.ClusterFragment;
+import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 
 import java.util.ArrayList;
 import java.util.List;

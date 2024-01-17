@@ -218,6 +218,11 @@ public class PregnancyoutcomeFragment extends Fragment {
                 binding.setPregoutcome(data);
                 binding.buttonOutcomeConception.setEnabled(false);
                 binding.buttonOutcomeStartDate.setEnabled(false);
+                binding.recAnc.setEnabled(false);
+                binding.monthPg.setEnabled(false);
+                binding.whoAnc.setEnabled(false);
+                binding.numAnc.setEnabled(false);
+                binding.preguuid.setEnabled(false);
 
                 Pregnancy dts = pregnancyViewModel.out(HouseMembersFragment.selectedIndividual.uuid);
                 if (dts != null){
@@ -242,6 +247,12 @@ public class PregnancyoutcomeFragment extends Fragment {
                     data.who_anc = dts.attend_you;
                     data.num_anc = dts.anc_visits;
                     data.pregnancy_uuid = dts.uuid;
+
+                    binding.recAnc.setEnabled(false);
+                    binding.monthPg.setEnabled(false);
+                    binding.whoAnc.setEnabled(false);
+                    binding.numAnc.setEnabled(false);
+                    binding.preguuid.setEnabled(false);
                 }
                 if(data.pregnancy_uuid ==null){
                     Toast.makeText(getContext(), "Kindly Pick the Pregnancy Before you pick the Outcome", Toast.LENGTH_LONG).show();
@@ -830,10 +841,10 @@ public class PregnancyoutcomeFragment extends Fragment {
             boolean anc = false;
             if (finalData.rec_anc == 1 && !binding.numAnc.getText().toString().trim().isEmpty()) {
                 int totalmth = Integer.parseInt(binding.numAnc.getText().toString().trim());
-                if (totalmth < 1 || totalmth > 15) {
+                if (totalmth < 1 || totalmth > 20) {
                     anc = true;
-                    binding.numAnc.setError("Maximum Number of ANC Visit is 15");
-                    Toast.makeText(getActivity(), "Maximum Number of ANC Visit is 15", Toast.LENGTH_LONG).show();
+                    binding.numAnc.setError("Maximum Number of ANC Visit is 20");
+                    Toast.makeText(getActivity(), "Maximum Number of ANC Visit is 20", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -852,10 +863,10 @@ public class PregnancyoutcomeFragment extends Fragment {
             boolean iptt = false;
             if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.manyIpt.getText().toString().trim().isEmpty()) {
                 int totalmth = Integer.parseInt(binding.manyIpt.getText().toString().trim());
-                if (totalmth < 1 || totalmth > 7) {
+                if (totalmth < 1 || totalmth > 10) {
                     iptt = true;
-                    binding.manyIpt.setError("Number of IPT taken Cannot be More than 7");
-                    Toast.makeText(getActivity(), "Number of IPT taken Cannot be More than 7", Toast.LENGTH_LONG).show();
+                    binding.manyIpt.setError("Number of IPT taken Cannot be More than 10");
+                    Toast.makeText(getActivity(), "Number of IPT taken Cannot be More than 10", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -962,13 +973,16 @@ public class PregnancyoutcomeFragment extends Fragment {
                             // Calculate the total difference in months
                             int totalDiffMonths = yearDiff * 12 + monthDiff;
 
-                            if (totalDiffMonths <= 5 && inf.type==1 || inf.type==2) {
+                            if (totalDiffMonths <= 5 && (inf.type == 1 || inf.type == 2)) {
+                                // Display message for Live Birth or Still Birth
                                 Toast.makeText(getActivity(), "Outcome cannot be Live Birth or Still Birth for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
                                 return;
-                            }else if (totalDiffMonths > 5 && inf.type==3){
+                            } else if (totalDiffMonths > 5 && inf.type == 3) {
+                                // Display message for Miscarriage
                                 Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
                                 return;
                             }
+
 
                         }
                     } catch (ParseException e) {
@@ -1070,10 +1084,12 @@ public class PregnancyoutcomeFragment extends Fragment {
                             // Calculate the total difference in months
                             int totalDiffMonths = yearDiff * 12 + monthDiff;
 
-                            if (totalDiffMonths <= 5 && inf.type==1 || inf.type==2) {
+                            if (totalDiffMonths <= 5 && (inf.type == 1 || inf.type == 2)) {
+                                // Display message for Live Birth or Still Birth
                                 Toast.makeText(getActivity(), "Outcome cannot be Live Birth or Still Birth for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
                                 return;
-                            }else if (totalDiffMonths > 5 && inf.type==3){
+                            } else if (totalDiffMonths > 5 && inf.type == 3) {
+                                // Display message for Miscarriage
                                 Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
                                 return;
                             }
@@ -1177,10 +1193,12 @@ public class PregnancyoutcomeFragment extends Fragment {
                             // Calculate the total difference in months
                             int totalDiffMonths = yearDiff * 12 + monthDiff;
 
-                            if (totalDiffMonths <= 5 && inf.type==1 || inf.type==2) {
+                            if (totalDiffMonths <= 5 && (inf.type == 1 || inf.type == 2)) {
+                                // Display message for Live Birth or Still Birth
                                 Toast.makeText(getActivity(), "Outcome cannot be Live Birth or Still Birth for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
                                 return;
-                            }else if (totalDiffMonths > 5 && inf.type==3){
+                            } else if (totalDiffMonths > 5 && inf.type == 3) {
+                                // Display message for Miscarriage
                                 Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
                                 return;
                             }
@@ -1284,10 +1302,12 @@ public class PregnancyoutcomeFragment extends Fragment {
                             // Calculate the total difference in months
                             int totalDiffMonths = yearDiff * 12 + monthDiff;
 
-                            if (totalDiffMonths <= 5 && inf.type==1 || inf.type==2) {
+                            if (totalDiffMonths <= 5 && (inf.type == 1 || inf.type == 2)) {
+                                // Display message for Live Birth or Still Birth
                                 Toast.makeText(getActivity(), "Outcome cannot be Live Birth or Still Birth for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
                                 return;
-                            }else if (totalDiffMonths > 5 && inf.type==3){
+                            } else if (totalDiffMonths > 5 && inf.type == 3) {
+                                // Display message for Miscarriage
                                 Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
                                 return;
                             }

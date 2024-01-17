@@ -184,7 +184,7 @@ public class DeathFragment extends DialogFragment {
                 data = new Death();
 
                 VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
-                Visit dts = visitViewModel.find(socialgroup.uuid);
+                Visit dts = visitViewModel.find(socialgroup.getUuid());
                 if (dts != null){
                     data.visit_uuid = dts.uuid;
                 }
@@ -209,8 +209,8 @@ public class DeathFragment extends DialogFragment {
                 data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.villname = level6Data.getName();
                 data.villcode = level6Data.getExtId();
-                data.visit_uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
+                //data.visit_uuid = dts.uuid;
                 data.househead = socialgroup.getGroupName();
                 data.socialgroup_uuid = socialgroup.uuid;
 

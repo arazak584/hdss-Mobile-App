@@ -1,5 +1,7 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,11 +13,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
+import org.openhds.hdsscapture.Activity.LocationActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
@@ -110,6 +115,7 @@ public class AmendmentFragment extends DialogFragment {
         binding = FragmentAmendmentBinding.inflate(inflater, container, false);
         //binding.setIndividual(individual);
 
+
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
         ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
 
@@ -122,6 +128,8 @@ public class AmendmentFragment extends DialogFragment {
             }
 
         });
+
+
 
         binding.buttonReplDob.setOnClickListener(v -> {
             if (!TextUtils.isEmpty(binding.replDob.getText())) {
@@ -426,4 +434,6 @@ public class AmendmentFragment extends DialogFragment {
             return bundleKey;
         }
     }
+
+
 }

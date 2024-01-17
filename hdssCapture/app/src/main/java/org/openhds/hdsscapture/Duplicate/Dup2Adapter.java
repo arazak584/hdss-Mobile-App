@@ -18,6 +18,7 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.fragment.ClusterFragment;
+import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,7 +136,7 @@ public class Dup2Adapter extends RecyclerView.Adapter<Dup2Adapter.ViewHolder>{
 
             if(ClusterFragment.selectedLocation != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveDup(ClusterFragment.selectedLocation.getCompno());
+                    List<Individual> list = individualViewModel.retrieveDup(ClusterFragment.selectedLocation.getCompno(), HouseMembersFragment.selectedIndividual.getUuid());
 
                     if (list != null) {
                         individualList.addAll(list);

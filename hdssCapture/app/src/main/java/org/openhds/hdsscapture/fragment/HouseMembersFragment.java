@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -94,7 +95,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private List<EndEvents> filterAll;
     private DeathViewModel deathViewModel;
     private OutmigrationViewModel outmigrationViewModel;
-
+    private SocialgroupViewModel viewModel;
+    private TextView name;
     public interface IndividualClickListener {
         void onIndividualClick(Individual selectedIndividual);
     }
@@ -147,12 +149,12 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         //Ended Events
         deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
+        viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
         query();
 
         //final TextView hh = view.findViewById(R.id.textView_compextId);
-        final TextView name = view.findViewById(R.id.textView_hh);
-
-        if (socialgroup != null) {
+        name = view.findViewById(R.id.textView_hh);
+         if (socialgroup != null) {
             name.setText(socialgroup.getGroupName() + "-" + socialgroup.getExtId());
         }else{
             name.setText("Loading...");
@@ -182,9 +184,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         });
 
         TextView min = view.findViewById(R.id.minor);
-        SocialgroupViewModel smodel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
         try {
-            Socialgroup data = smodel.minor(socialgroup.uuid);
+            Socialgroup data = viewModel.minor(socialgroup.uuid);
             if (data != null) {
                 min.setText("Household Head is Minor");
                 min.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.Red));

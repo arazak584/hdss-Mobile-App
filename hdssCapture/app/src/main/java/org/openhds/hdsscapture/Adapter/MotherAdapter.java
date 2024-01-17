@@ -18,6 +18,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.fragment.ClusterFragment;
+import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class MotherAdapter extends RecyclerView.Adapter<MotherAdapter.ViewHolder
     LayoutInflater inflater;
     private final Locations locations;
     private final List<Individual> individualList;
+    private Individual individual;
 
     public interface MotherSelectionListener {
         void onMotherSelected(String motherId);
