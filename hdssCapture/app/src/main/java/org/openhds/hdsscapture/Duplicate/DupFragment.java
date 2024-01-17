@@ -335,26 +335,12 @@ public class DupFragment extends DialogFragment {
             //finalData.complete=1;
             viewModel.add(finalData);
             IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-            try {
-                Individual data = individualViewModel.visited(HouseMembersFragment.selectedIndividual.uuid);
-                if (data != null) {
-                    IndividualVisited visited = new IndividualVisited();
-                    visited.uuid = binding.getDup().individual_uuid;
-                    visited.complete = 2;
-                    individualViewModel.visited(visited);
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
             if (binding.getDup().numberofdup>=1 && finalData.complete ==1) {
                 IndividualEnd endInd = new IndividualEnd();
                 endInd.endType = 4;
                 endInd.uuid = binding.getDup().dup_uuid;
-                endInd.complete = endInd.complete;
+                endInd.complete = 1;
                 individualViewModel.dthupdate(endInd);
             }
 
@@ -362,7 +348,7 @@ public class DupFragment extends DialogFragment {
                 IndividualEnd endInd = new IndividualEnd();
                 endInd.endType = 4;
                 endInd.uuid = binding.getDup().dup1_uuid;
-                endInd.complete = endInd.complete;
+                endInd.complete = 1;
                 individualViewModel.dthupdate(endInd);
             }
 
@@ -370,7 +356,7 @@ public class DupFragment extends DialogFragment {
                 IndividualEnd endInd = new IndividualEnd();
                 endInd.endType = 4;
                 endInd.uuid = binding.getDup().dup2_uuid;
-                endInd.complete = endInd.complete;
+                endInd.complete = 1;
                 individualViewModel.dthupdate(endInd);
             }
 
