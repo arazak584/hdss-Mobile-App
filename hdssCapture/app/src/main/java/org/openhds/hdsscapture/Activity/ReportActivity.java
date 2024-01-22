@@ -299,29 +299,35 @@ public class ReportActivity extends AppCompatActivity {
             sesCounter.index = 11;
             list.add(11, sesCounter);
 
+            ReportCounter sesCounters = new ReportCounter();
+            sesCounters.name = "Updated Profile";
+            sesCounters.count = hdssSociodemoViewModel.counts(startDate, endDate, username);
+            sesCounters.index = 12;
+            list.add(12, sesCounters);
+
             ReportCounter dthCounter = new ReportCounter();
             dthCounter.name = "Death";
             dthCounter.count = deathViewModel.count(startDate, endDate, username);
-            dthCounter.index = 12;
-            list.add(12, dthCounter);
+            dthCounter.index = 13;
+            list.add(13, dthCounter);
 
             ReportCounter amendCounter = new ReportCounter();
             amendCounter.name = "Amendment";
             amendCounter.count = amendmentViewModel.count(startDate, endDate, username);
-            amendCounter.index = 13;
-            list.add(13, amendCounter);
+            amendCounter.index = 14;
+            list.add(14, amendCounter);
 
             ReportCounter relationshipCounter = new ReportCounter();
             relationshipCounter.name = "Relationship";
             relationshipCounter.count = relationshipViewModel.count(startDate, endDate, username);
-            relationshipCounter.index = 14;
-            list.add(14, relationshipCounter);
+            relationshipCounter.index = 15;
+            list.add(15, relationshipCounter);
 
             ReportCounter vacCounter = new ReportCounter();
             vacCounter.name = "Vaccination";
             vacCounter.count = vaccinationViewModel.count(startDate, endDate, username);
-            vacCounter.index = 15;
-            list.add(15, vacCounter);
+            vacCounter.index = 16;
+            list.add(16, vacCounter);
 
 
             reportAdapter = new ReportAdapter(this);

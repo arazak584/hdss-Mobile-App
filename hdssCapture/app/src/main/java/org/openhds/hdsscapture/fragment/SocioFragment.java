@@ -104,10 +104,11 @@ public class SocioFragment extends Fragment {
             HdssSociodemo data = viewModel.findses(socialgroup.uuid);
             if (data != null) {
                 binding.setSociodemo(data);
+                binding.getSociodemo().setFormcompldate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             } else {
                 data = new HdssSociodemo();
 
-                binding.formcompldate.setVisibility(View.GONE);
+                //binding.formcompldate.setVisibility(View.GONE);
 
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
@@ -133,6 +134,7 @@ public class SocioFragment extends Fragment {
 
                 binding.setSociodemo(data);
                 binding.getSociodemo().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                binding.getSociodemo().setFormcompldate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -198,7 +200,7 @@ public class SocioFragment extends Fragment {
                     return;
                 }
 
-            data.formcompldate = new Date();
+            //data.formcompldate = new Date();
             data.complete = 1;
             data.fw_uuid = fieldworkerData.getFw_uuid();
 

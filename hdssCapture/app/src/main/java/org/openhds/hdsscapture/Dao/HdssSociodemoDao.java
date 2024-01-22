@@ -9,6 +9,7 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.HdssSociodemo;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Vaccination;
 
 import java.util.Date;
@@ -51,4 +52,12 @@ public interface HdssSociodemoDao {
     @Query("SELECT COUNT(*) FROM sociodemo a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
+
+    @Query("SELECT COUNT(*) FROM sociodemo a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
+            " WHERE formcompldate BETWEEN :startDate AND :endDate AND b.username = :username AND insertDate <  (SELECT startDate FROM round ORDER BY roundNumber DESC LIMIT 1) AND" +
+            " formcompldate >= (SELECT startDate FROM round ORDER BY roundNumber DESC LIMIT 1)")
+    long counts(Date startDate, Date endDate, String username);
+
+    @Query("SELECT * FROM locations WHERE insertDate > (SELECT startDate FROM round ORDER BY roundNumber DESC LIMIT 1) order by insertDate DESC")
+    List<Locations> repo();
 }

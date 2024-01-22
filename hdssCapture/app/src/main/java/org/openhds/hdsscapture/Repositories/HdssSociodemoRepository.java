@@ -63,5 +63,11 @@ public class HdssSociodemoRepository {
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }
+
+    public long counts(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.counts(startDate, endDate, username);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
     
 }

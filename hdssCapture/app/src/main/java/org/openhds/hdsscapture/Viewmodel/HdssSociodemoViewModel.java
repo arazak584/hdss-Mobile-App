@@ -38,6 +38,10 @@ public class HdssSociodemoViewModel extends AndroidViewModel {
         return hdssSociodemoRepository.count(startDate, endDate, username);
     }
 
+    public long counts(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
+        return hdssSociodemoRepository.counts(startDate, endDate, username);
+    }
+
     public void add(HdssSociodemo s){
         hdssSociodemoRepository.create(s);
     }

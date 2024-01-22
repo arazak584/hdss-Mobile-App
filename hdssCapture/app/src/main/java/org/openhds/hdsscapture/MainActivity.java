@@ -331,6 +331,13 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Toast.makeText(context, "Database reset successful", Toast.LENGTH_SHORT).show();
+
+                        // Start the LoginActivity
+                        Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(loginIntent);
+
+                        // Finish the current MainActivity if necessary
+                        finish();
                     }
                 });
             }
