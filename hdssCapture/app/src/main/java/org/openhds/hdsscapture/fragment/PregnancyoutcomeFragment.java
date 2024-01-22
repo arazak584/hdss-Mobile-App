@@ -236,8 +236,6 @@ public class PregnancyoutcomeFragment extends Fragment {
                 }
             } else {
                 data = new Pregnancyoutcome();
-
-
                 Pregnancy dts = pregnancyViewModel.out(HouseMembersFragment.selectedIndividual.uuid);
                 if (dts != null){
                     data.outcomeDate = dts.outcome_date;

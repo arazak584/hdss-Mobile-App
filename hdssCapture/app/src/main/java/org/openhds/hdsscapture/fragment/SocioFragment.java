@@ -181,6 +181,9 @@ public class SocioFragment extends Fragment {
         if (save) {
             final HdssSociodemo data = binding.getSociodemo();
 
+            final Intent i = getActivity().getIntent();
+            final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
                 final boolean validateOnComplete = true;//finaldata.mnh01_form_complete == 1;
                 boolean hasErrors = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
                 hasErrors = hasErrors || new Handler().hasInvalidInput(binding.sociob.MAINLAYOUT, validateOnComplete, false);
@@ -197,6 +200,7 @@ public class SocioFragment extends Fragment {
 
             data.formcompldate = new Date();
             data.complete = 1;
+            data.fw_uuid = fieldworkerData.getFw_uuid();
 
             boolean mar = false;
             boolean val = false;

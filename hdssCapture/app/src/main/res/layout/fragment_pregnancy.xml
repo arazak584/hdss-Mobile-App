@@ -117,6 +117,23 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
+                    android:hint="@string/uuid"
+                    android:text="@string/uuid">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/uuid_preg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={preg.uuid}"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
                     android:hint="@string/fw"
                     android:text="@string/fw">
 

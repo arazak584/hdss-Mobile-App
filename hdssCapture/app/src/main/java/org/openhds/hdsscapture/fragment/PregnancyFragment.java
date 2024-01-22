@@ -491,12 +491,15 @@ public class PregnancyFragment extends DialogFragment {
             }
 
             try {
-                if (!binding.lastPreg.getText().toString().trim().isEmpty() && !binding.editTextRecordedDate.getText().toString().trim().isEmpty()) {
+                if (!binding.lastPreg.getText().toString().trim().isEmpty() && !binding.editTextRecordedDate.getText().toString().trim().isEmpty()
+                        && !binding.uuidPreg.getText().toString().trim().isEmpty() && !binding.uuid.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date stdate = f.parse(binding.lastPreg.getText().toString().trim());
                     Date edate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
+                    String uuid = binding.uuid.getText().toString().trim();
+                    String uuidPreg = binding.uuidPreg.getText().toString().trim();
                     String formattedDate = f.format(stdate);
-                    if (edate.before(stdate)) {
+                    if (edate.before(stdate) && !uuid.equals(uuidPreg)) {
                         binding.editTextRecordedDate.setError("Pregnancy with a later Date exist " + formattedDate);
                         Toast.makeText(getActivity(), "Pregnancy with a later Date exist " + formattedDate, Toast.LENGTH_LONG).show();
                         return;

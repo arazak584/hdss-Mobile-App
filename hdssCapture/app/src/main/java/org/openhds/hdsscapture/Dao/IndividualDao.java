@@ -91,16 +91,16 @@ public interface IndividualDao {
 //            "(fullName LIKE :searchText OR compno LIKE :searchText OR ghanacard LIKE :searchText) ORDER BY hohID,dob")
 //    List<Individual> retrieveBySearch(String id, String searchText);
 
-    @Query("SELECT *, firstName || ' ' || lastName as fullName, endType FROM individual " +
+    @Query("SELECT *, firstName || ' ' || lastName as fullName, lastName || ' ' ||  firstName as Names, endType FROM individual " +
             "WHERE endType != 3 AND firstName != 'FAKE' " +
             "AND ((:id IS NULL) OR (village LIKE :id)) " +
-            "AND (fullName LIKE :searchText OR compno LIKE :searchText OR ghanacard LIKE :searchText) ORDER BY hohID, dob")
+            "AND (fullName LIKE :searchText OR Names LIKE :searchText OR compno LIKE :searchText OR ghanacard LIKE :searchText) ORDER BY hohID, dob")
     List<Individual> retrieveBySearch(String id, String searchText);
 
 
-    @Query("SELECT *, firstName || ' ' || lastName as fullName FROM individual " +
+    @Query("SELECT *, firstName || ' ' || lastName as fullName, lastName || ' ' ||  firstName as Names FROM individual " +
             " WHERE endType!=3 AND firstName!='FAKE' " +
-            " AND (fullName LIKE :id OR compno LIKE :id OR ghanacard LIKE :id) ORDER BY dob")
+            " AND (fullName LIKE :id OR Names LIKE :id OR compno LIKE :id OR ghanacard LIKE :id) ORDER BY dob")
     List<Individual> retrieveBy(String id);
 
 //    @Query("SELECT * FROM individual WHERE uuid IN (SELECT a.uuid FROM individual AS a " +
@@ -126,9 +126,9 @@ public interface IndividualDao {
 //            "(firstName LIKE :id OR lastName LIKE :id OR c.compno LIKE :id)")
 //    List<Individual> retrieveByMotherSearch(String id);
 
-    @Query("SELECT *, firstName || ' ' || lastName as fullName FROM individual WHERE gender = 2 AND endType = 1 AND " +
+    @Query("SELECT *, firstName || ' ' || lastName as fullName, lastName || ' ' ||  firstName as Names FROM individual WHERE gender = 2 AND endType = 1 AND " +
             "strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) >=(SELECT mother_age from config) " +
-            "AND (fullName LIKE :id OR compno LIKE :id OR ghanacard LIKE :id)")
+            "AND (fullName LIKE :id OR Names LIKE :id OR compno LIKE :id OR ghanacard LIKE :id)")
     List<Individual> retrieveByMotherSearch(String id);
 
     @Query("SELECT * FROM individual WHERE endType = 1 AND gender = 1 AND compno = :id AND firstName!='FAKE' " +
@@ -144,9 +144,9 @@ public interface IndividualDao {
             " strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) >=(SELECT rel_age from config) order by dob")
     List<Individual> retrievePartner(String id);
 
-    @Query("SELECT *, firstName || ' ' || lastName as fullName FROM individual WHERE gender = 1 AND endType = 1 AND firstName!='FAKE' AND " +
+    @Query("SELECT *, firstName || ' ' || lastName as fullName, lastName || ' ' ||  firstName as Names FROM individual WHERE gender = 1 AND endType = 1 AND firstName!='FAKE' AND " +
             "strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) >=(SELECT father_age from config) AND " +
-            "(fullName LIKE :id OR compno LIKE :id OR ghanacard LIKE :id)")
+            "(fullName LIKE :id OR Names LIKE :id OR compno LIKE :id OR ghanacard LIKE :id)")
     List<Individual> retrieveByFatherSearch(String id);
 
     @Query("SELECT * FROM individual where uuid=:id")
