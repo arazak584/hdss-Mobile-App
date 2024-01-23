@@ -154,7 +154,9 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Locations>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        buttonSendLocationdata.setText("Failed to Send Location Data");
+                        buttonSendLocationdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Location Data", Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -220,7 +222,9 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Visit>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed to send Visitdata", Toast.LENGTH_LONG).show();
+                        buttonSendVisit.setText("Failed to Send Visit Data");
+                        buttonSendVisit.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to send Visit data", Toast.LENGTH_LONG).show();
                         Log.e(TAG, t.getMessage());
 
                     }
@@ -299,6 +303,8 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Listing>> call, @NonNull Throwable t) {
                         progress.dismiss();
+                        buttonSendList.setText("Failed to Send Listing Data");
+                        buttonSendList.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
                         Toast.makeText(PushActivity.this, "Failed to send Listing", Toast.LENGTH_LONG).show();
                         Log.e(TAG, t.getMessage());
 
@@ -367,7 +373,9 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Individual>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        buttonSendIndividualdata.setText("Failed to Send Individual Data");
+                        buttonSendIndividualdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Individual Data", Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -433,7 +441,9 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Socialgroup>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        buttonSendSocialgroupdata.setText("Failed to Send Socialgroup Data");
+                        buttonSendSocialgroupdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Socialgroup Data", Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -499,7 +509,9 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Relationship>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        buttonSendRelationshipdata.setText("Failed to Send Relationship Data");
+                        buttonSendRelationshipdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Relationship Data", Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -564,7 +576,9 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Pregnancy>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        buttonSendPregnancydata.setText("Failed to Send Pregnancy Data");
+                        buttonSendPregnancydata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Pregnancy Data", Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -629,7 +643,9 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Pregnancyoutcome>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        buttonSendOutcomedata.setText("Failed to Send Pregnancy Outcome Data");
+                        buttonSendOutcomedata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Pregnancy Outcome Data", Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -693,7 +709,9 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Outcome>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        buttonSendOutcomesdata.setText("Failed to Send Outcome Data");
+                        buttonSendOutcomesdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Outcome Data", Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -760,7 +778,9 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Demographic>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        buttonSendDemographicdata.setText("Failed to Send Demographic Data");
+                        buttonSendDemographicdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Demographic Data", Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -824,7 +844,9 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Death>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        buttondth.setText("Failed to Send Death Data");
+                        buttondth.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Death Data", Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -890,6 +912,8 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Vpm>> call, @NonNull Throwable t) {
                         progress.dismiss();
+                        buttonvpm.setText("Failed to Send VPM Data");
+                        buttonvpm.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
                         Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
 
                     }
@@ -954,6 +978,8 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<HdssSociodemo>> call, @NonNull Throwable t) {
                         progress.dismiss();
+                        buttonSendSocio.setText("Failed to Send SES Data");
+                        buttonSendSocio.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
                         Toast.makeText(PushActivity.this, "Failed to send SES Data", Toast.LENGTH_LONG).show();
                         Log.e(TAG, t.getMessage());
 
@@ -1021,7 +1047,9 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Residency>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(PushActivity.this, "Failed to Send Residency Data", Toast.LENGTH_LONG).show();
+                        buttonSendRes.setText("Failed to Send Residency Data");
+                        buttonSendRes.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
 
                     }
                 });
@@ -1086,7 +1114,9 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Inmigration>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        buttonSendImg.setText("Failed to Send Inmigration Data");
+                        buttonSendImg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Inmigration Data", Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -1152,7 +1182,9 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Outmigration>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        buttonSendOmg.setText("Failed to Send Outmigration Data");
+                        buttonSendOmg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Outmigration Data", Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -1220,7 +1252,9 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Amendment>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        buttonSendAmend.setText("Failed to Send Amendment Data");
+                        buttonSendAmend.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Amendment Data", Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -1287,7 +1321,9 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Vaccination>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        buttonSendVac.setText("Failed to Send Vaccination Data");
+                        buttonSendVac.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Vaccination Data", Toast.LENGTH_LONG).show();
 
                     }
                 });
@@ -1352,7 +1388,9 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Duplicate>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
+                        buttonSendVac.setText("Failed to Send Vaccination Data");
+                        buttonSendVac.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Vaccination Data", Toast.LENGTH_LONG).show();
 
                     }
                 });
