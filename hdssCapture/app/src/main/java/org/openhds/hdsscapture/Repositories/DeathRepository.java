@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.DeathDao;
 import org.openhds.hdsscapture.entity.Death;
+import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 
 import java.util.Date;
@@ -48,6 +49,15 @@ public class DeathRepository {
         return future.get();
     }
 
+    public Death retrieve(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Death> callable = () -> dao.retrieve(id);
+
+        Future<Death> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public Death finds(String id) throws ExecutionException, InterruptedException {
 
         Callable<Death> callable = () -> dao.finds(id);
@@ -60,6 +70,16 @@ public class DeathRepository {
     public List<Death> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Death>> callable = () -> dao.retrieveToSync();
+
+        Future<List<Death>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+
+    public List<Death> retrieveDth(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Death>> callable = () -> dao.retrieveDth(id);
 
         Future<List<Death>> future = Executors.newSingleThreadExecutor().submit(callable);
 

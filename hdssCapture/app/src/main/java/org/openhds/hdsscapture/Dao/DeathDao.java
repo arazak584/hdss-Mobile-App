@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import org.openhds.hdsscapture.entity.Death;
+import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 
 import java.util.Date;
@@ -30,9 +31,15 @@ public interface DeathDao {
     @Query("SELECT * FROM death where individual_uuid=:id and complete IS NOT NULL")
     Death finds(String id);
 
+    @Query("SELECT * FROM death where individual_uuid=:id")
+    Death retrieve(String id);
+
     @Query("SELECT * FROM death WHERE complete=1")
     List<Death> retrieveToSync();
 
+
+    @Query("SELECT * FROM death WHERE socialgroup_uuid=:id order by dob")
+    List<Death> retrieveDth(String id);
 
     @Query("SELECT a.*,groupName as firstName,b.extId as lastName,d.compno as compno FROM death as a INNER JOIN socialgroup as b ON a.individual_uuid=b.individual_uuid " +
             " INNER JOIN residency as c on b.uuid=c.socialgroup_uuid " +

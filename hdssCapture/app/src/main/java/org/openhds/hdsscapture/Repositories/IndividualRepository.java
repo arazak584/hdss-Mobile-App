@@ -95,6 +95,7 @@ public class IndividualRepository {
         return future.get();
     }
 
+
     public List<Individual> retrieveReturn(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Individual>> callable = () -> dao.retrieveReturn(id);

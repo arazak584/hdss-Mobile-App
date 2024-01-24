@@ -10,6 +10,10 @@
             name="death"
             type="org.openhds.hdsscapture.entity.Death" />
 
+        <variable
+            name="individual"
+            type="org.openhds.hdsscapture.entity.Individual" />
+
 
         <variable
             name="eventname"

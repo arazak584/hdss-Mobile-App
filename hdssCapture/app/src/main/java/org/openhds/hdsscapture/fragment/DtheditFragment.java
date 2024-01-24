@@ -1,0 +1,114 @@
+package org.openhds.hdsscapture.fragment;
+
+import android.app.ProgressDialog;
+import android.os.Bundle;
+
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+
+import org.openhds.hdsscapture.Adapter.DthAdapter;
+import org.openhds.hdsscapture.Adapter.SearchAdapter;
+import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.databinding.FragmentDtheditBinding;
+import org.openhds.hdsscapture.databinding.FragmentSearchBinding;
+import org.openhds.hdsscapture.entity.Death;
+import org.openhds.hdsscapture.entity.Hierarchy;
+import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Residency;
+import org.openhds.hdsscapture.entity.Socialgroup;
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link DtheditFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class DtheditFragment extends DialogFragment {
+
+    private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
+    private static final String SOCIAL_ID = "SOCIAL_ID";
+
+    private Locations locations;
+    private Socialgroup socialgroup;
+    private Death death;
+    private FragmentDtheditBinding binding;
+
+    public DtheditFragment() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param locations    Parameter 2.
+     * @param socialgroup Parameter 3.
+     * @return A new instance of fragment DtheditFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static DtheditFragment newInstance(Locations locations, Socialgroup socialgroup) {
+        DtheditFragment fragment = new DtheditFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(LOC_LOCATION_IDS, locations);
+        args.putParcelable(SOCIAL_ID, socialgroup);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            this.socialgroup = getArguments().getParcelable(SOCIAL_ID);
+            this.locations = getArguments().getParcelable(LOC_LOCATION_IDS);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        //return inflater.inflate(R.layout.fragment_dthedit, container, false);
+        binding = FragmentDtheditBinding.inflate(inflater, container, false);
+
+        Button closeButton = binding.getRoot().findViewById(R.id.button_close);
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_dth);
+        final DthAdapter adapter = new DthAdapter(this, locations, socialgroup, death );
+        final DeathViewModel deathViewModel = new ViewModelProvider(requireActivity()).get(DeathViewModel.class);
+
+        //recyclerView.setHasFixedSize(true);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                RecyclerView.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+        recyclerView.setAdapter(adapter);
+
+        //Load Individual Deaths
+        adapter.dth(deathViewModel);
+
+        View view = binding.getRoot();
+        return view;
+    }
+
+
+}

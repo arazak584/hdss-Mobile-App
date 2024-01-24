@@ -3,15 +3,19 @@ package org.openhds.hdsscapture.fragment;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -79,7 +83,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private static final String EVENT_ID = "EVENT_ID";
     private final String TAG = "LOCATION.TAG";
 
-
+    ImageView imageView;
     private Locations locations;
     private Socialgroup socialgroup;
     private FragmentHouseMembersBinding binding;
@@ -150,7 +154,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
         viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-        query();
+        //query();
 
         //final TextView hh = view.findViewById(R.id.textView_compextId);
         name = view.findViewById(R.id.textView_hh);
@@ -370,6 +374,31 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+
+        imageView = view.findViewById(R.id.menu);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(getActivity(), v); // Use getActivity() to get the Context
+                popupMenu.getMenuInflater().inflate(R.menu.edit_event, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int itemId = item.getItemId();
+                        if (itemId == R.id.dth) {
+                            // open DialogFragment DthFragment
+                            DtheditFragment.newInstance(locations, socialgroup)
+                             .show(getChildFragmentManager(), "DtheditFragment");
+                        } else if (itemId == R.id.omg) {
+                            // open DialogFragment OmgFragment
+                        }
+                        return true;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
 
 
 
@@ -815,47 +844,47 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     }
 
 
-    private void query() {
-        List<EndEvents> list = new ArrayList<>();
-
-        try {
-            int d = 1;
-            for (Death death : deathViewModel.end(socialgroup.uuid)) {
-                EndEvents endEvent = new EndEvents();
-                endEvent.eventName = "Death ";
-                endEvent.eventId = "" + death.lastName + " " + death.firstName;
-                endEvent.eventDate = "" + death.getInsertDate();
-                endEvent.eventError = "";
-                list.add(endEvent);
-                d++;
-            }
-
-            int a = 1;
-            for (Outmigration e : outmigrationViewModel.end(socialgroup.uuid)) {
-                EndEvents endEvent = new EndEvents();
-                endEvent.eventName = "Outmigration ";
-                endEvent.eventId = "" + e.visit_uuid + " " + e.location_uuid;
-                endEvent.eventDate = "" + e.getInsertDate();
-                endEvent.eventError = "";
-                list.add(endEvent);
-                a++;
-            }
-
-            // Assuming filterAll is a field in your class
-            filterAll = new ArrayList<>(list);
-
-            // Assuming eventsAdapter is a field in your class
-            eventsAdapter = new EndEventsAdapter(requireContext(), this);
-            eventsAdapter.setQueries(list);
-
-            RecyclerView recyclerView = view.findViewById(R.id.recyclerView_end);
-            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-            recyclerView.setAdapter(eventsAdapter);
-
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void query() {
+//        List<EndEvents> list = new ArrayList<>();
+//
+//        try {
+//            int d = 1;
+//            for (Death death : deathViewModel.end(socialgroup.uuid)) {
+//                EndEvents endEvent = new EndEvents();
+//                endEvent.eventName = "Death ";
+//                endEvent.eventId = "" + death.lastName + " " + death.firstName;
+//                endEvent.eventDate = "" + death.getInsertDate();
+//                endEvent.eventError = "";
+//                list.add(endEvent);
+//                d++;
+//            }
+//
+//            int a = 1;
+//            for (Outmigration e : outmigrationViewModel.end(socialgroup.uuid)) {
+//                EndEvents endEvent = new EndEvents();
+//                endEvent.eventName = "Outmigration ";
+//                endEvent.eventId = "" + e.visit_uuid + " " + e.location_uuid;
+//                endEvent.eventDate = "" + e.getInsertDate();
+//                endEvent.eventError = "";
+//                list.add(endEvent);
+//                a++;
+//            }
+//
+//            // Assuming filterAll is a field in your class
+//            filterAll = new ArrayList<>(list);
+//
+//            // Assuming eventsAdapter is a field in your class
+//            eventsAdapter = new EndEventsAdapter(requireContext(), this);
+//            eventsAdapter.setQueries(list);
+//
+//            RecyclerView recyclerView = view.findViewById(R.id.recyclerView_end);
+//            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+//            recyclerView.setAdapter(eventsAdapter);
+//
+//        } catch (ExecutionException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 
