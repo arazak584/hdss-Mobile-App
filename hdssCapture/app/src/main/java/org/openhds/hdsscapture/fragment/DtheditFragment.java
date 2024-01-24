@@ -39,11 +39,13 @@ public class DtheditFragment extends DialogFragment {
 
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String SOCIAL_ID = "SOCIAL_ID";
+    private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
 
     private Locations locations;
     private Socialgroup socialgroup;
     private Death death;
     private FragmentDtheditBinding binding;
+    private Individual individual;
 
     public DtheditFragment() {
         // Required empty public constructor
@@ -55,14 +57,16 @@ public class DtheditFragment extends DialogFragment {
      *
      * @param locations    Parameter 2.
      * @param socialgroup Parameter 3.
+     * @param individual Parameter 4.
      * @return A new instance of fragment DtheditFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DtheditFragment newInstance(Locations locations, Socialgroup socialgroup) {
+    public static DtheditFragment newInstance(Locations locations, Socialgroup socialgroup,Individual individual) {
         DtheditFragment fragment = new DtheditFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(SOCIAL_ID, socialgroup);
+        args.putParcelable(INDIVIDUAL_ID, individual);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,6 +77,7 @@ public class DtheditFragment extends DialogFragment {
         if (getArguments() != null) {
             this.socialgroup = getArguments().getParcelable(SOCIAL_ID);
             this.locations = getArguments().getParcelable(LOC_LOCATION_IDS);
+            this.individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
     }
 
@@ -93,8 +98,8 @@ public class DtheditFragment extends DialogFragment {
         });
 
         final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_dth);
-        final DthAdapter adapter = new DthAdapter(this, locations, socialgroup, death );
-        final DeathViewModel deathViewModel = new ViewModelProvider(requireActivity()).get(DeathViewModel.class);
+        final DthAdapter adapter = new DthAdapter(this, locations, socialgroup);
+        final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
         //recyclerView.setHasFixedSize(true);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -104,7 +109,7 @@ public class DtheditFragment extends DialogFragment {
         recyclerView.setAdapter(adapter);
 
         //Load Individual Deaths
-        adapter.dth(deathViewModel);
+        adapter.dth(individualViewModel);
 
         View view = binding.getRoot();
         return view;

@@ -3,6 +3,7 @@ package org.openhds.hdsscapture.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,7 @@ import java.util.concurrent.ExecutionException;
  * Use the {@link DthFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DthFragment extends DialogFragment {
+public class DthFragment extends Fragment {
 
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
@@ -70,7 +71,7 @@ public class DthFragment extends DialogFragment {
     private Locations locations;
     private Socialgroup socialgroup;
     private Individual individual;
-    private Death death;
+    private Death dth;
     private FragmentDeathBinding binding;
 
     public DthFragment() {
@@ -82,19 +83,17 @@ public class DthFragment extends DialogFragment {
      * this fragment using the provided parameters.
      *
      * @param locations Parameter 1.
-     * @param death Parameter 2.
-     * @param socialgroup Parameter 3.
-     * @param individual Parameter 4.
+     * @param socialgroup Parameter 2.
+     * @param individual Parameter 3.
      * @return A new instance of fragment DeathFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DthFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup,Death death) {
+    public static DthFragment newInstance(Locations locations, Socialgroup socialgroup,Individual individual) {
         DthFragment fragment = new DthFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
-        args.putParcelable(DEATH_ID, death);
         fragment.setArguments(args);
         return fragment;
     }
@@ -106,7 +105,6 @@ public class DthFragment extends DialogFragment {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
-            death = getArguments().getParcelable(DEATH_ID);
         }
     }
 
@@ -115,7 +113,7 @@ public class DthFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentDeathBinding.inflate(inflater, container, false);
-        binding.setDeath(death);
+        //binding.setDeath(death);
 
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
 
@@ -282,6 +280,7 @@ public class DthFragment extends DialogFragment {
             v.villcode = binding.getDeath().villcode;
             vpmViewModel.add(v);
 
+            finalData.complete = 1;
             viewModel.add(finalData);
 
             //Set Relationship to Widowed
@@ -293,7 +292,7 @@ public class DthFragment extends DialogFragment {
                     RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
                     relationshipUpdate.endType = 2;
                     relationshipUpdate.endDate = binding.getDeath().deathDate;
-                    relationshipUpdate.individualA_uuid = HouseMembersFragment.selectedIndividual.uuid;
+                    relationshipUpdate.individualA_uuid = binding.getDeath().individual_uuid;
                     relationshipUpdate.complete = 1;
                     relbModel.update(relationshipUpdate);
                 }
@@ -306,13 +305,13 @@ public class DthFragment extends DialogFragment {
             //Set Relationship to Dead
             RelationshipViewModel relModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
             try {
-                Relationship data = relModel.find(HouseMembersFragment.selectedIndividual.uuid);
+                Relationship data = relModel.find(individual.uuid);
                 if (data != null && !binding.dthDeathDate.getText().toString().trim().isEmpty()) {
 
                     RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
                     relationshipUpdate.endType = 4;
                     relationshipUpdate.endDate = binding.getDeath().deathDate;
-                    relationshipUpdate.individualA_uuid = HouseMembersFragment.selectedIndividual.uuid;
+                    relationshipUpdate.individualA_uuid = binding.getDeath().individual_uuid;
                     relationshipUpdate.complete = 1;
                     relModel.update(relationshipUpdate);
                 }
@@ -326,7 +325,7 @@ public class DthFragment extends DialogFragment {
             //End Residency In residency entity
             ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
             try {
-                Residency data = resModel.dth(HouseMembersFragment.selectedIndividual.uuid);
+                Residency data = resModel.dth(individual.uuid);
                 if (data != null) {
                     ResidencyAmendment residencyAmendment = new ResidencyAmendment();
                     residencyAmendment.endType = 3;
@@ -346,7 +345,7 @@ public class DthFragment extends DialogFragment {
             //End Residency In individual entity
             IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
             try {
-                Individual data = individualViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+                Individual data = individualViewModel.find(individual.uuid);
                 if (data != null) {
                     IndividualEnd endInd = new IndividualEnd();
                     endInd.endType = 3;

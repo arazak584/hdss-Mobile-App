@@ -37,10 +37,6 @@ public interface DeathDao {
     @Query("SELECT * FROM death WHERE complete=1")
     List<Death> retrieveToSync();
 
-
-    @Query("SELECT * FROM death WHERE socialgroup_uuid=:id order by dob")
-    List<Death> retrieveDth(String id);
-
     @Query("SELECT a.*,groupName as firstName,b.extId as lastName,d.compno as compno FROM death as a INNER JOIN socialgroup as b ON a.individual_uuid=b.individual_uuid " +
             " INNER JOIN residency as c on b.uuid=c.socialgroup_uuid " +
             " INNER JOIN individual as d on c.individual_uuid=d.uuid " +

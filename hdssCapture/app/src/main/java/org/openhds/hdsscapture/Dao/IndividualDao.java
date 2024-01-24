@@ -169,6 +169,9 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual WHERE hohID=:id AND firstName='FAKE' AND endType=1")
     Individual unk(String id);
 
+    @Query("SELECT b.uuid,b.firstName,b.lastName,a.insertDate,a.socialgroup_uuid,a.extId  FROM death as a INNER JOIN individual as b on a.individual_uuid=b.uuid WHERE socialgroup_uuid=:id")
+    List<Individual> retrieveDth(String id);
+
 //    @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
 //            " INNER JOIN residency c on b.uuid=c.socialgroup_uuid INNER JOIN locations d " +
 //            " ON c.location_uuid=d.uuid " +

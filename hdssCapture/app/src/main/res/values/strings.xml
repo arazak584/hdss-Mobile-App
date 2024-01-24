@@ -300,7 +300,7 @@
     <string name="location_uuid">Locations UUID</string>
     <string name="clusteruuid">Cluster uuid</string>
     <string name="visituuid">Visit Uuid</string>
-    <string name="comp_yrs">Completed Years of Education</string>
+    <string name="comp_yrs">Number of years Completed at the selected level (E.g JHS, years 3)</string>
     <string name="villcode">Village Code</string>
     <string name="resuuid">Residency UUID</string>
     <string name="savedata">Save Changes</string>

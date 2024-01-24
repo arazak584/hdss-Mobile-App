@@ -388,7 +388,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                         int itemId = item.getItemId();
                         if (itemId == R.id.dth) {
                             // open DialogFragment DthFragment
-                            DtheditFragment.newInstance(locations, socialgroup)
+                            DtheditFragment.newInstance(locations, socialgroup, individual)
                              .show(getChildFragmentManager(), "DtheditFragment");
                         } else if (itemId == R.id.omg) {
                             // open DialogFragment OmgFragment

@@ -214,6 +214,15 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public List<Individual> retrieveDth(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.retrieveDth(id);
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public Individual mother(String id) throws ExecutionException, InterruptedException {
 
         Callable<Individual> callable = () -> dao.mother(id);

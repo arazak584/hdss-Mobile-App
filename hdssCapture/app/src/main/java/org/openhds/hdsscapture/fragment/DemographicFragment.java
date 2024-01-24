@@ -162,10 +162,10 @@ public class DemographicFragment extends DialogFragment {
             boolean compyrs = false;
             if (!binding.compYrs.getText().toString().trim().isEmpty()) {
                 int yrs = Integer.parseInt(binding.compYrs.getText().toString().trim());
-                if (yrs < 0 || yrs > 30) {
+                if (yrs < 0 || yrs > 6) {
                     compyrs = true;
-                    binding.compYrs.setError("Cannot be less than 1 or More than 30");
-                    Toast.makeText(getActivity(), "Cannot be less than 1 or More than 30", Toast.LENGTH_SHORT).show();
+                    binding.compYrs.setError("Cannot be less than 1 or More than 6");
+                    Toast.makeText(getActivity(), "Cannot be less than 1 or More than 6", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }

@@ -76,16 +76,6 @@ public class DeathRepository {
         return future.get();
     }
 
-
-    public List<Death> retrieveDth(String id) throws ExecutionException, InterruptedException {
-
-        Callable<List<Death>> callable = () -> dao.retrieveDth(id);
-
-        Future<List<Death>> future = Executors.newSingleThreadExecutor().submit(callable);
-
-        return future.get();
-    }
-
     public List<Death> end(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Death>> callable = () -> dao.end(id);

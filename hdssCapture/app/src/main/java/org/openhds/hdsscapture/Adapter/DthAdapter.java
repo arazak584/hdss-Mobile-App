@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Adapter;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
@@ -21,8 +23,11 @@ import org.openhds.hdsscapture.fragment.DeathFragment;
 import org.openhds.hdsscapture.fragment.DthFragment;
 import org.openhds.hdsscapture.fragment.DtheditFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 public class DthAdapter extends RecyclerView.Adapter<DthAdapter.ViewHolder> {
@@ -31,21 +36,18 @@ public class DthAdapter extends RecyclerView.Adapter<DthAdapter.ViewHolder> {
     LayoutInflater inflater;
     private final Locations locations;
     private final Socialgroup socialgroup;
-    private final Death death;
-    private Individual individual;
-    private final List<Death> deathList;
+    private final List<Individual> individualList;
 
-    public DthAdapter(DtheditFragment activity, Locations locations, Socialgroup socialgroup,Death death) {
+    public DthAdapter(DtheditFragment activity, Locations locations, Socialgroup socialgroup) {
         this.activity = activity;
         this.locations = locations;
         this.socialgroup = socialgroup;
-        this.death = death;
-        deathList = new ArrayList<>();
+        individualList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView firstname, lastname, permid, dod, insertDate;
+        TextView firstname, lastname, permid, insertDate;
         LinearLayout linearLayout;
         CardView cardView;
 
@@ -54,7 +56,6 @@ public class DthAdapter extends RecyclerView.Adapter<DthAdapter.ViewHolder> {
             this.permid = view.findViewById(R.id.dth_permid);
             this.firstname = view.findViewById(R.id.dth_firstname);
             this.lastname = view.findViewById(R.id.dth_lastname);
-            this.dod = view.findViewById(R.id.text_dod);
             this.insertDate = view.findViewById(R.id.text_insertdate);
             this.cardView = view.findViewById(R.id.deadIndividual);
         }
@@ -72,34 +73,42 @@ public class DthAdapter extends RecyclerView.Adapter<DthAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull DthAdapter.ViewHolder holder, int position) {
-        final Death dth = deathList.get(position);
+        final Individual individual = individualList.get(position);
+        Log.d("Death", "Death OUT ID" + individual.uuid);
+        Date insertDate = individual.insertDate;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        String formattedInsertDate = sdf.format(insertDate);
 
-
-        holder.permid.setText(dth.getExtId());
-        holder.firstname.setText(dth.getFirstName());
-        holder.lastname.setText(dth.getLastName());
-        holder.dod.setText(dth.getDeathDate());
-        holder.insertDate.setText(dth.getInsertDate());
+        holder.permid.setText(individual.getExtId());
+        holder.firstname.setText(individual.getFirstName());
+        holder.lastname.setText(individual.getLastName());
+        holder.insertDate.setText(formattedInsertDate);
+        //holder.insertDate.setText(individual.insertDate);
 
         holder.cardView.setOnClickListener(v -> {
-            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    DthFragment.newInstance( individual,locations, socialgroup, death )).commit();
+            if (individual != null) {
+                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                        DthFragment.newInstance(locations, socialgroup, individual)).commit();
+                Log.d("Death", "Death ID" + individual.uuid);
+            }else {
+                Toast.makeText(activity.getActivity(), "Error: Some data is null", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
     @Override
     public int getItemCount() {
-        return deathList.size();
+        return individualList.size();
     }
 
-    public void dth(DeathViewModel deathViewModel) {
-        deathList.clear();
+    public void dth(IndividualViewModel individualViewModel) {
+        individualList.clear();
         if(socialgroup != null)
             try {
-                List<Death> list = deathViewModel.retrieveDth(socialgroup.getUuid());
+                List<Individual> list = individualViewModel.retrieveDth(socialgroup.getUuid());
 
                 if (list != null) {
-                    deathList.addAll(list);
+                    individualList.addAll(list);
                 }
 
                 if (list.isEmpty()) {

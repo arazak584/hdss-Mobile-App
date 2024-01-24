@@ -95,6 +95,10 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.unk(id);
     }
 
+    public List<Individual> retrieveDth(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.retrieveDth(id);
+    }
+
     public Individual mother(String id) throws ExecutionException, InterruptedException {
         return individualRepository.mother(id);
     }

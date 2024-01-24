@@ -41,10 +41,6 @@ public class DeathViewModel extends AndroidViewModel {
         return deathRepository.findToSync();
     }
 
-    public List<Death> retrieveDth(String id) throws ExecutionException, InterruptedException {
-        return deathRepository.retrieveDth(id);
-    }
-
     public List<Death> end(String id) throws ExecutionException, InterruptedException {
         return deathRepository.end(id);
     }
