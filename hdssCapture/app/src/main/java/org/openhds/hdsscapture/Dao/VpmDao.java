@@ -22,7 +22,7 @@ public interface VpmDao {
     @Query("DELETE FROM vpm")
     void deleteAll();
 
-    @Query("SELECT * FROM vpm WHERE complete=1")
+    @Query("SELECT * FROM vpm WHERE complete!=0")
     List<Vpm> retrieveToSync();
 
     @Query("SELECT * FROM vpm where individual_uuid=:id")

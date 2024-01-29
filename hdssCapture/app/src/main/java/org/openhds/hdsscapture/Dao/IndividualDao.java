@@ -152,6 +152,9 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual where uuid=:id")
     Individual find(String id);
 
+    @Query("SELECT * FROM individual where uuid=:id AND endType=3")
+    Individual restore(String id);
+
     @Query("SELECT * FROM individual WHERE endType=1 and compno=:id and firstName!='FAKE' and " +
             " strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) >=(SELECT hoh_age from config) order by dob")
     List<Individual> retrieveHOH(String id);
@@ -169,8 +172,13 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual WHERE hohID=:id AND firstName='FAKE' AND endType=1")
     Individual unk(String id);
 
-    @Query("SELECT b.uuid,b.firstName,b.lastName,a.insertDate,a.socialgroup_uuid,a.extId  FROM death as a INNER JOIN individual as b on a.individual_uuid=b.uuid WHERE socialgroup_uuid=:id")
+    @Query("SELECT b.uuid,b.firstName,b.lastName,a.insertDate,a.socialgroup_uuid,a.extId,a.edit  FROM death as a " +
+            "INNER JOIN individual as b on a.individual_uuid=b.uuid WHERE edit!=2 AND endType=3 AND socialgroup_uuid=:id")
     List<Individual> retrieveDth(String id);
+
+    @Query("SELECT b.uuid,b.firstName,b.lastName,a.insertDate,a.socialgroup_uuid,b.extId,location_uuid,residency_uuid  FROM outmigration as a " +
+            "INNER JOIN individual as b on a.individual_uuid=b.uuid WHERE socialgroup_uuid=:id AND endType=2 AND edit!=2 ")
+    List<Individual> retrieveOmg(String id);
 
 //    @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
 //            " INNER JOIN residency c on b.uuid=c.socialgroup_uuid INNER JOIN locations d " +

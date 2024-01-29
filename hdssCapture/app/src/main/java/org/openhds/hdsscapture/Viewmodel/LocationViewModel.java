@@ -55,8 +55,8 @@ public class LocationViewModel extends AndroidViewModel {
         return locationRepository.count(startDate, endDate, username);
     }
 
-    public List<Locations> repo() throws ExecutionException, InterruptedException {
-        return locationRepository.repo();
+    public List<Locations> repo(String id) throws ExecutionException, InterruptedException {
+        return locationRepository.repo(id);
     }
 
     public void add(Locations data){

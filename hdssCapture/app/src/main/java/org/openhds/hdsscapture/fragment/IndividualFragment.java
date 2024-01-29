@@ -912,6 +912,7 @@ public class IndividualFragment extends Fragment {
                     omg.residency_uuid = binding.getOmgg().old_residency;
                     omg.fw_uuid = fieldworkerData.fw_uuid;
                     omg.complete = 1;
+                    omg.edit = 1;
                     omg.visit_uuid = binding.getInmigration().visit_uuid;
                     omg.socialgroup_uuid = binding.getOmgg().socialgroup_uuid;
 

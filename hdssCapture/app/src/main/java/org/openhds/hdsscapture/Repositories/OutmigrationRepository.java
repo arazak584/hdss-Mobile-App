@@ -63,6 +63,24 @@ public class OutmigrationRepository {
         return future.get();
     }
 
+    public Outmigration edit(String id,String locid) throws ExecutionException, InterruptedException {
+
+        Callable<Outmigration> callable = () -> dao.edit(id,locid);
+
+        Future<Outmigration> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Outmigration finds(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Outmigration> callable = () -> dao.finds(id);
+
+        Future<Outmigration> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Outmigration> end(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Outmigration>> callable = () -> dao.end(id);

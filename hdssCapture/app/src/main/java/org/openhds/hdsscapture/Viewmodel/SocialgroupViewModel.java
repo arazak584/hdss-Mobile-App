@@ -72,8 +72,8 @@ public class SocialgroupViewModel extends AndroidViewModel {
         return socialgroupRepository.errors();
     }
 
-    public List<Socialgroup> repo() throws ExecutionException, InterruptedException {
-        return socialgroupRepository.repo();
+    public List<Socialgroup> repo(String id) throws ExecutionException, InterruptedException {
+        return socialgroupRepository.repo(id);
     }
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {

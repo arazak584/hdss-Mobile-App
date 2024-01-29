@@ -375,9 +375,10 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             e.printStackTrace();
         }
 
+        AppCompatButton event = view.findViewById(R.id.menu);
 
-        imageView = view.findViewById(R.id.menu);
-        imageView.setOnClickListener(new View.OnClickListener() {
+        //imageView = view.findViewById(R.id.menu);
+        event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PopupMenu popupMenu = new PopupMenu(getActivity(), v); // Use getActivity() to get the Context
@@ -392,6 +393,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                              .show(getChildFragmentManager(), "DtheditFragment");
                         } else if (itemId == R.id.omg) {
                             // open DialogFragment OmgFragment
+                            OmgeditFragment.newInstance(locations, socialgroup, individual)
+                                    .show(getChildFragmentManager(), "OmgeditFragment");
                         }
                         return true;
                     }

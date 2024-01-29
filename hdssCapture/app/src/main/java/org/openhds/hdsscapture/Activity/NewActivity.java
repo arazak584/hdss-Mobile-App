@@ -6,11 +6,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.SearchView;
 
 import org.openhds.hdsscapture.Adapter.ViewsAdapter;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.subqueries.Newloc;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
@@ -41,6 +43,11 @@ public class NewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new);
 
+        final Intent f = getIntent();
+        final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
+        String username = fieldworkerDatas.getFw_uuid();
+        //Toast.makeText(MainActivity.this, "Welcome " + status, Toast.LENGTH_LONG).show();
+
         searchView = findViewById(R.id.searchloc);
 
         // Set a query hint
@@ -57,12 +64,16 @@ public class NewActivity extends AppCompatActivity {
     private void query() {
         List<Newloc> list = new ArrayList<>();
 
+        final Intent i = getIntent();
+        final Fieldworker fieldworkerDatas = i.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
+        String username = fieldworkerDatas.getFw_uuid();
+
         try {
 
             final SimpleDateFormat f = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
 
             int c = 1;
-            for (Socialgroup e : socialgroupViewModel.repo()) {
+            for (Socialgroup e : socialgroupViewModel.repo(username)) {
                 String formattedDate = f.format(e.insertDate);
                 Newloc r1 = new Newloc();
                 r1.id1 = c + ". New Household";
@@ -79,7 +90,7 @@ public class NewActivity extends AppCompatActivity {
 
 
             int d=1;
-            for (Locations e : locationViewModel.repo()) {
+            for (Locations e : locationViewModel.repo(username)) {
                 String formattedDate = f.format(e.insertDate);
                 Newloc r1 = new Newloc();
                 r1.id1 = d + ". New Location";

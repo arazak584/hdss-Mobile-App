@@ -70,6 +70,15 @@ public class ResidencyRepository {
         return future.get();
     }
 
+    public Residency resomg(String id,String locid) throws ExecutionException, InterruptedException {
+
+        Callable<Residency> callable = () -> dao.resomg(id, locid);
+
+        Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public Residency findEnd(String id,String locid) throws ExecutionException, InterruptedException {
 
         Callable<Residency> callable = () -> dao.findEnd(id, locid);
@@ -128,6 +137,15 @@ public class ResidencyRepository {
     public Residency dth(String id) throws ExecutionException, InterruptedException {
 
         Callable<Residency> callable = () -> dao.dth(id);
+
+        Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Residency restore(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Residency> callable = () -> dao.restore(id);
 
         Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
 

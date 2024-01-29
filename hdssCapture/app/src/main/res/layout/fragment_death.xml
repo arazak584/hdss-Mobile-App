@@ -460,6 +460,61 @@
                             android:inputType="textPersonName|textCapCharacters"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
+                        <TableLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="16dp">
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <RadioGroup
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:onCheckedChanged="@{death::setEdit}"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:visibility="gone"
+                                    android:id="@+id/edit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:text="@string/wrongdeath"
+                                    android:textAlignment="gravity" />
+
+                                <RadioButton
+                                    android:visibility="gone"
+                                    android:id="@+id/yn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:checked="@{death.edit==2}"
+                                    android:tag="2"
+                                    android:text="@string/yes" />
+
+                                <RadioButton
+                                    android:visibility="gone"
+                                    android:id="@+id/no"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:checked="@{death.edit==1}"
+                                    android:tag="1"
+                                    android:text="@string/no" />
+
+                                <RadioButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:checked="@{death.edit==0}"
+                                    android:tag="0"
+                                    android:visibility="gone" />
+
+                            </RadioGroup>
+
+                        </TableRow>
+                        </TableLayout>
+
+
                 </LinearLayout>
                 </LinearLayout>
 

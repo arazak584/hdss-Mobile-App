@@ -113,9 +113,9 @@ public class LocationRepository {
         return future.get();
     }
 
-    public List<Locations> repo() throws ExecutionException, InterruptedException {
+    public List<Locations> repo(String id) throws ExecutionException, InterruptedException {
 
-        Callable<List<Locations>> callable = () -> dao.repo();
+        Callable<List<Locations>> callable = () -> dao.repo(id);
 
         Future<List<Locations>> future = Executors.newSingleThreadExecutor().submit(callable);
 

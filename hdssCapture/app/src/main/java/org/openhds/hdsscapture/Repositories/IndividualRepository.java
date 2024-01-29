@@ -205,6 +205,15 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public Individual restore(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Individual> callable = () -> dao.restore(id);
+
+        Future<Individual> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public Individual unk(String id) throws ExecutionException, InterruptedException {
 
         Callable<Individual> callable = () -> dao.unk(id);
@@ -217,6 +226,15 @@ public class IndividualRepository {
     public List<Individual> retrieveDth(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Individual>> callable = () -> dao.retrieveDth(id);
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Individual> retrieveOmg(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.retrieveOmg(id);
 
         Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
 

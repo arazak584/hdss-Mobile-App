@@ -32,6 +32,10 @@ public class ResidencyViewModel extends AndroidViewModel {
         return residencyRepository.findRes(id, locid);
     }
 
+    public Residency resomg(String id,String locid) throws ExecutionException, InterruptedException {
+        return residencyRepository.resomg(id, locid);
+    }
+
     public Residency findEnd(String id,String locid) throws ExecutionException, InterruptedException {
         return residencyRepository.findEnd(id, locid);
     }
@@ -63,6 +67,10 @@ public class ResidencyViewModel extends AndroidViewModel {
 
     public Residency dth(String id) throws ExecutionException, InterruptedException {
         return residencyRepository.dth(id);
+    }
+
+    public Residency restore(String id) throws ExecutionException, InterruptedException {
+        return residencyRepository.restore(id);
     }
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {

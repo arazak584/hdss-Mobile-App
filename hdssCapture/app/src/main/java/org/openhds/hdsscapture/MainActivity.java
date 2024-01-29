@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
         final Button views = findViewById(R.id.btnloc);
         views.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(), NewActivity.class);
+            i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
             startActivity(i);
         });
 

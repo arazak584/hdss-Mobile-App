@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">HDSS Capture</string>
-    <string name="versions">v2023.0.5</string>
+    <string name="versions">v2023.0.6</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>
@@ -682,6 +682,9 @@
     <string name="duplicates">Duplicates</string>
     <string name="dups">List of Duplicates</string>
     <string name="reset">Reset Database</string>
+    <string name="wrongdeath">Is it a Wrong Death?</string>
+    <string name="wrongomg">Is it a Wrong Outmigration?</string>
+    <string name="edit_event">Edit Events</string>
 
     //SocioDemo End
 

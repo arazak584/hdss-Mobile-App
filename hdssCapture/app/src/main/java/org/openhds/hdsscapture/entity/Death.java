@@ -6,6 +6,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -441,6 +442,17 @@ public class Death extends BaseObservable implements Parcelable {
         }
 
     }
+
+    public void setEdit(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            edit = Integer.parseInt(TAG);
+        }
+    }
+
 
     //SPINNERS ENTITY FOR DEATH PLACE
     public void setDeathPlace(AdapterView<?> parent, View view, int position, long id) {

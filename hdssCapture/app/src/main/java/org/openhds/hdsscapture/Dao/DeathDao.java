@@ -28,13 +28,13 @@ public interface DeathDao {
     @Query("SELECT * FROM death where individual_uuid=:id")
     Death find(String id);
 
-    @Query("SELECT * FROM death where individual_uuid=:id and complete IS NOT NULL")
+    @Query("SELECT * FROM death where individual_uuid=:id and edit IS NULL")
     Death finds(String id);
 
     @Query("SELECT * FROM death where individual_uuid=:id")
     Death retrieve(String id);
 
-    @Query("SELECT * FROM death WHERE complete=1")
+    @Query("SELECT * FROM death WHERE complete!=0")
     List<Death> retrieveToSync();
 
     @Query("SELECT a.*,groupName as firstName,b.extId as lastName,d.compno as compno FROM death as a INNER JOIN socialgroup as b ON a.individual_uuid=b.individual_uuid " +

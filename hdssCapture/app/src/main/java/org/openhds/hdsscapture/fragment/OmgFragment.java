@@ -2,20 +2,21 @@ package org.openhds.hdsscapture.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.RadioButton;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
@@ -23,15 +24,12 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
-import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
-import org.openhds.hdsscapture.databinding.FragmentDeathBinding;
 import org.openhds.hdsscapture.databinding.FragmentOutmigrationBinding;
 import org.openhds.hdsscapture.entity.Configsettings;
-import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
@@ -55,10 +53,10 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link OutmigrationFragment#newInstance} factory method to
+ * Use the {@link OmgFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OutmigrationFragment extends DialogFragment {
+public class OmgFragment extends Fragment {
 
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
@@ -69,7 +67,7 @@ public class OutmigrationFragment extends DialogFragment {
     private Individual individual;
     private FragmentOutmigrationBinding binding;
 
-    public OutmigrationFragment() {
+    public OmgFragment() {
         // Required empty public constructor
     }
 
@@ -83,8 +81,8 @@ public class OutmigrationFragment extends DialogFragment {
      * @return A new instance of fragment OutmigrationFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static OutmigrationFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
-        OutmigrationFragment fragment = new OutmigrationFragment();
+    public static OmgFragment newInstance(Locations locations, Socialgroup socialgroup,Individual individual ) {
+        OmgFragment fragment = new OmgFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(SOCIAL_ID, socialgroup);
@@ -110,15 +108,14 @@ public class OutmigrationFragment extends DialogFragment {
         binding = FragmentOutmigrationBinding.inflate(inflater, container, false);
 
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            if (bundle.containsKey((OutmigrationFragment.DATE_BUNDLES.DATE.getBundleKey()))) {
-                final String result = bundle.getString(OutmigrationFragment.DATE_BUNDLES.DATE.getBundleKey());
+            if (bundle.containsKey((OmgFragment.DATE_BUNDLES.DATE.getBundleKey()))) {
+                final String result = bundle.getString(OmgFragment.DATE_BUNDLES.DATE.getBundleKey());
                 binding.omgDate.setText(result);
             }
         });
@@ -134,7 +131,7 @@ public class OutmigrationFragment extends DialogFragment {
                     selectedDate.setTime(date);
 
                     // Create DatePickerFragment with the parsed date
-                    DialogFragment newFragment = new DatePickerFragment(OutmigrationFragment.DATE_BUNDLES.DATE.getBundleKey(), selectedDate);
+                    DialogFragment newFragment = new DatePickerFragment(OmgFragment.DATE_BUNDLES.DATE.getBundleKey(), selectedDate);
                     newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
 
                 } catch (ParseException e) {
@@ -142,7 +139,7 @@ public class OutmigrationFragment extends DialogFragment {
                 }
             } else {
                 final Calendar c = Calendar.getInstance();
-                DialogFragment newFragment = new DatePickerFragment(OutmigrationFragment.DATE_BUNDLES.DATE.getBundleKey(), c);
+                DialogFragment newFragment = new DatePickerFragment(OmgFragment.DATE_BUNDLES.DATE.getBundleKey(), c);
                 newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
             }
         });
@@ -162,53 +159,21 @@ public class OutmigrationFragment extends DialogFragment {
             e.printStackTrace();
         }
 
+        TextView text = binding.getRoot().findViewById(R.id.edit);
+        RadioButton yn = binding.getRoot().findViewById(R.id.yn);
+        RadioButton no = binding.getRoot().findViewById(R.id.no);
         OutmigrationViewModel viewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
         try {
-            Outmigration data = viewModel.edit(HouseMembersFragment.selectedIndividual.uuid,ClusterFragment.selectedLocation.uuid);
-            VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
+            Outmigration data = viewModel.find(individual.uuid, ClusterFragment.selectedLocation.uuid);
             if (data != null) {
                 binding.setOutmigration(data);
-                data.edit = null;
-            } else {
-                data = new Outmigration();
-
-                Visit dts = visitViewModel.find(socialgroup.uuid);
-                if (dts != null){
-                    data.visit_uuid = dts.uuid;
-                }
-
-                ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-                Residency dataRes = resModel.findRes(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
-                if (dataRes != null){
-                    data.startDate = dataRes.startDate;
-                    data.residency_uuid = dataRes.uuid;
-                }
-
-                String uuid = UUID.randomUUID().toString();
-                String uuidString = uuid.replaceAll("-", "");
-
-                data.uuid=uuidString;
-                data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
-                data.complete = 1;
-                data.socialgroup_uuid = socialgroup.uuid;
-                data.location_uuid = ClusterFragment.selectedLocation.uuid;
-
-
-                Date currentDate = new Date(); // Get the current date and time
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(currentDate);
-                // Extract the hour, minute, and second components
-                int hh = cal.get(Calendar.HOUR_OF_DAY);
-                int mm = cal.get(Calendar.MINUTE);
-                int ss = cal.get(Calendar.SECOND);
-                // Format the components into a string with leading zeros
-                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
-                data.sttime = timeString;
-
-
-                binding.setOutmigration(data);
-                binding.getOutmigration().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                ind.setText(individual.firstName + " " + individual.lastName);
+                text.setVisibility(View.VISIBLE);
+                yn.setVisibility(View.VISIBLE);
+                no.setVisibility(View.VISIBLE);
+                data.edit = 1;
+            }else {
+                Toast.makeText(requireContext(), "THIS CANNOT BE UPDATED", Toast.LENGTH_SHORT).show();
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -293,14 +258,16 @@ public class OutmigrationFragment extends DialogFragment {
             if (finalData.sttime !=null && finalData.edtime==null){
                 finalData.edtime = endtime;
             }
-            finalData.complete = 1;
+
+            finalData.complete = binding.getOutmigration().edit;
             viewModel.add(finalData);
 
+            //1==No
             //End Residency In residency entity
             ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
             try {
-                Residency data = resModel.dth(HouseMembersFragment.selectedIndividual.uuid);
-                if (data != null) {
+                Residency data = resModel.dth(individual.uuid);
+                if (data != null && binding.getOutmigration().edit==1) {
                     ResidencyAmendment residencyAmendment = new ResidencyAmendment();
                     residencyAmendment.endType = 2;
                     residencyAmendment.endDate = binding.getOutmigration().recordedDate;
@@ -316,13 +283,49 @@ public class OutmigrationFragment extends DialogFragment {
                 e.printStackTrace();
             }
 
+            //Restore Residency In residency entity
+            try {
+                Residency data = resModel.resomg(individual.uuid, ClusterFragment.selectedLocation.uuid);
+                if (data != null && binding.getOutmigration().edit==2) {
+                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+                    residencyAmendment.endType = 1;
+                    residencyAmendment.endDate = null;
+                    residencyAmendment.uuid = binding.getOutmigration().residency_uuid;
+                    residencyAmendment.complete = 1;
+                    resModel.update(residencyAmendment);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             //End Residency In individual entity
             IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
             try {
-                Individual data = individualViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
-                if (data != null) {
+                Individual data = individualViewModel.find(individual.uuid);
+                if (data != null && binding.getOutmigration().edit==1) {
                     IndividualEnd endInd = new IndividualEnd();
                     endInd.endType = 2;
+                    endInd.uuid = binding.getOutmigration().individual_uuid;
+                    endInd.complete = 1;
+
+                    individualViewModel.dthupdate(endInd);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //Restore Residency In individual entity
+            try {
+                Individual data = individualViewModel.find(individual.uuid);
+                if (data != null && binding.getOutmigration().edit==2) {
+                    IndividualEnd endInd = new IndividualEnd();
+                    endInd.endType = 1;
                     endInd.uuid = binding.getOutmigration().individual_uuid;
                     endInd.complete = 1;
 

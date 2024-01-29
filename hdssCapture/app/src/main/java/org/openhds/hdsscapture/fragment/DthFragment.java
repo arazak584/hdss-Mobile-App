@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -164,12 +165,20 @@ public class DthFragment extends Fragment {
             e.printStackTrace();
         }
 
+        TextView text = binding.getRoot().findViewById(R.id.edit);
+        RadioButton yn = binding.getRoot().findViewById(R.id.yn);
+        RadioButton no = binding.getRoot().findViewById(R.id.no);
+
         DeathViewModel viewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         try {
             Death data = viewModel.retrieve(individual.uuid);
             if (data != null) {
                 binding.setDeath(data);
                 ind.setText(data.firstName + " " + data.lastName);
+                text.setVisibility(View.VISIBLE);
+                yn.setVisibility(View.VISIBLE);
+                no.setVisibility(View.VISIBLE);
+                data.edit = 1;
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -257,7 +266,7 @@ public class DthFragment extends Fragment {
 
             VpmViewModel vpmViewModel = new ViewModelProvider(this).get(VpmViewModel.class);
             Vpm v = new Vpm();
-            v.complete = 1;
+            v.complete = binding.getDeath().edit;
             v.uuid = binding.getDeath().uuid;
             v.individual_uuid = binding.getDeath().individual_uuid;
             v.deathDate = binding.getDeath().deathDate;
@@ -280,14 +289,14 @@ public class DthFragment extends Fragment {
             v.villcode = binding.getDeath().villcode;
             vpmViewModel.add(v);
 
-            finalData.complete = 1;
+            finalData.complete = binding.getDeath().edit;
             viewModel.add(finalData);
 
             //Set Relationship to Widowed
             RelationshipViewModel relbModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
             try {
                 Relationship data = relbModel.finds(individual.uuid);
-                if (data != null && !binding.dthDeathDate.getText().toString().trim().isEmpty()) {
+                if (data != null && binding.getDeath().edit != null && binding.getDeath().edit == 1) {
 
                     RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
                     relationshipUpdate.endType = 2;
@@ -302,11 +311,29 @@ public class DthFragment extends Fragment {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+            //Restore
+            try {
+                Relationship data = relbModel.finds(individual.uuid);
+            if (data != null && binding.getDeath().edit != null && binding.getDeath().edit == 2){
+                RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
+                relationshipUpdate.endType = 1;
+                relationshipUpdate.endDate = null;
+                relationshipUpdate.individualA_uuid = binding.getDeath().individual_uuid;
+                relationshipUpdate.complete = 1;
+                relbModel.update(relationshipUpdate);
+            }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             //Set Relationship to Dead
             RelationshipViewModel relModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
             try {
                 Relationship data = relModel.find(individual.uuid);
-                if (data != null && !binding.dthDeathDate.getText().toString().trim().isEmpty()) {
+                if (data != null && binding.getDeath().edit != null && binding.getDeath().edit == 1) {
 
                     RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
                     relationshipUpdate.endType = 4;
@@ -322,14 +349,51 @@ public class DthFragment extends Fragment {
                 e.printStackTrace();
             }
 
+            //Restore
+            try {
+                Relationship data = relModel.find(individual.uuid);
+            if (data != null && binding.getDeath().edit != null && binding.getDeath().edit == 2){
+                RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
+                relationshipUpdate.endType = 1;
+                relationshipUpdate.endDate = null;
+                relationshipUpdate.individualA_uuid = binding.getDeath().individual_uuid;
+                relationshipUpdate.complete = 1;
+                relModel.update(relationshipUpdate);
+            }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             //End Residency In residency entity
             ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
             try {
                 Residency data = resModel.dth(individual.uuid);
-                if (data != null) {
+                if (data != null && binding.getDeath().edit != null && binding.getDeath().edit == 1) {
                     ResidencyAmendment residencyAmendment = new ResidencyAmendment();
                     residencyAmendment.endType = 3;
                     residencyAmendment.endDate = binding.getDeath().deathDate;
+                    residencyAmendment.uuid = binding.getDeath().residency_uuid;
+                    residencyAmendment.complete = 1;
+
+                    resModel.update(residencyAmendment);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //Restore Residency In residency entity
+            try {
+                Residency data = resModel.restore(individual.uuid);
+                if (data != null && binding.getDeath().edit != null && binding.getDeath().edit == 2){
+
+                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+                    residencyAmendment.endType = 1;
+                    residencyAmendment.endDate = null;
                     residencyAmendment.uuid = binding.getDeath().residency_uuid;
                     residencyAmendment.complete = 1;
 
@@ -346,12 +410,28 @@ public class DthFragment extends Fragment {
             IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
             try {
                 Individual data = individualViewModel.find(individual.uuid);
-                if (data != null) {
+                if (data != null && binding.getDeath().edit != null && binding.getDeath().edit == 1) {
                     IndividualEnd endInd = new IndividualEnd();
                     endInd.endType = 3;
                     endInd.uuid = binding.getDeath().individual_uuid;
                     endInd.complete = 1;
+                    individualViewModel.dthupdate(endInd);
+                }
 
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //Restore Residency In individual entity
+            try {
+                Individual data = individualViewModel.restore(individual.uuid);
+                if (data != null && binding.getDeath().edit != null && binding.getDeath().edit == 2) {
+                    IndividualEnd endInd = new IndividualEnd();
+                    endInd.endType = 1;
+                    endInd.uuid = binding.getDeath().individual_uuid;
+                    endInd.complete = 1;
                     individualViewModel.dthupdate(endInd);
                 }
 

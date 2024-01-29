@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
@@ -83,6 +84,9 @@ public class Outmigration extends BaseObservable implements Parcelable {
 
     @Expose
     public String socialgroup_uuid;
+
+    @Expose
+    public Integer edit;
 
     public Outmigration(){}
 
@@ -329,5 +333,15 @@ public class Outmigration extends BaseObservable implements Parcelable {
             setReason_oth(null);
         }
 
+    }
+
+    public void setEdit(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            edit = Integer.parseInt(TAG);
+        }
     }
 }

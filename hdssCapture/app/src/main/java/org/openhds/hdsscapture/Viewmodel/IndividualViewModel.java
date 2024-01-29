@@ -91,12 +91,20 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.find(id);
     }
 
+    public Individual restore(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.restore(id);
+    }
+
     public Individual unk(String id) throws ExecutionException, InterruptedException {
         return individualRepository.unk(id);
     }
 
     public List<Individual> retrieveDth(String id) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveDth(id);
+    }
+
+    public List<Individual> retrieveOmg(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.retrieveOmg(id);
     }
 
     public Individual mother(String id) throws ExecutionException, InterruptedException {

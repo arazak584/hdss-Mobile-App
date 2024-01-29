@@ -159,9 +159,9 @@ public class SocialgroupRepository {
         return future.get();
     }
 
-    public List<Socialgroup> repo() throws ExecutionException, InterruptedException {
+    public List<Socialgroup> repo(String id) throws ExecutionException, InterruptedException {
 
-        Callable<List<Socialgroup>> callable = () -> dao.repo();
+        Callable<List<Socialgroup>> callable = () -> dao.repo(id);
 
         Future<List<Socialgroup>> future = Executors.newSingleThreadExecutor().submit(callable);
 

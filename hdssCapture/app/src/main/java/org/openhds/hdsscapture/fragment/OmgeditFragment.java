@@ -2,29 +2,43 @@ package org.openhds.hdsscapture.fragment;
 
 import android.os.Bundle;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import org.openhds.hdsscapture.Adapter.DthAdapter;
+import org.openhds.hdsscapture.Adapter.OmgAdapter;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.databinding.FragmentDtheditBinding;
+import org.openhds.hdsscapture.databinding.FragmentOmgeditBinding;
+import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Socialgroup;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link OmgeditFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OmgeditFragment extends Fragment {
+public class OmgeditFragment extends DialogFragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
+    private static final String SOCIAL_ID = "SOCIAL_ID";
+    private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Locations locations;
+    private Socialgroup socialgroup;
+    private FragmentOmgeditBinding binding;
+    private Individual individual;
 
     public OmgeditFragment() {
         // Required empty public constructor
@@ -34,16 +48,18 @@ public class OmgeditFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param locations    Parameter 2.
+     * @param socialgroup Parameter 3.
+     * @param individual Parameter 4.
      * @return A new instance of fragment OmgeditFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static OmgeditFragment newInstance(String param1, String param2) {
+    public static OmgeditFragment newInstance(Locations locations, Socialgroup socialgroup,Individual individual) {
         OmgeditFragment fragment = new OmgeditFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelable(LOC_LOCATION_IDS, locations);
+        args.putParcelable(SOCIAL_ID, socialgroup);
+        args.putParcelable(INDIVIDUAL_ID, individual);
         fragment.setArguments(args);
         return fragment;
     }
@@ -52,8 +68,9 @@ public class OmgeditFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            this.socialgroup = getArguments().getParcelable(SOCIAL_ID);
+            this.locations = getArguments().getParcelable(LOC_LOCATION_IDS);
+            this.individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
     }
 
@@ -61,6 +78,32 @@ public class OmgeditFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_omgedit, container, false);
+        //return inflater.inflate(R.layout.fragment_omgedit, container, false);
+        binding = FragmentOmgeditBinding.inflate(inflater, container, false);
+
+        Button closeButton = binding.getRoot().findViewById(R.id.button_close);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+        final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_omg);
+        final OmgAdapter adapter = new OmgAdapter(this, locations, socialgroup);
+        final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
+
+        //recyclerView.setHasFixedSize(true);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                RecyclerView.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
+        recyclerView.setAdapter(adapter);
+
+        //Load Individual Deaths
+        adapter.omg(individualViewModel);
+
+        View view = binding.getRoot();
+        return view;
     }
 }

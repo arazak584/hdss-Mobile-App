@@ -761,6 +761,8 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.firstName = "Still";
                 data.lastName = "Birth";
                 data.gender = 3;
+                data.deathDate = binding.getPregoutcome().outcomeDate;
+                data.dob = binding.getPregoutcome().outcomeDate;
                 data.compno = ClusterFragment.selectedLocation.getCompno();
                 data.extId = "ST-"+ HouseMembersFragment.selectedIndividual.getExtId();
                 data.compname = ClusterFragment.selectedLocation.getLocationName();

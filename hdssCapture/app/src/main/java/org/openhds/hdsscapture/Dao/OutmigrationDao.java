@@ -27,11 +27,17 @@ public interface OutmigrationDao {
             " where b.residency_uuid IS NULL AND a.individual_uuid=:id and a.location_uuid!=:locid and endType=1")
     Outmigration createOmg(String id, String locid);
 
-    @Query("SELECT * FROM outmigration WHERE complete=1")
+    @Query("SELECT * FROM outmigration WHERE complete!=0")
     List<Outmigration> retrieveomgToSync();
 
-    @Query("SELECT * FROM outmigration where individual_uuid=:id and location_uuid=:locid")
+    @Query("SELECT * FROM outmigration WHERE individual_uuid=:id AND location_uuid=:locid")
     Outmigration find(String id,String locid);
+
+    @Query("SELECT * FROM outmigration WHERE individual_uuid=:id AND location_uuid=:locid AND edit IS NULL")
+    Outmigration edit(String id,String locid);
+
+    @Query("SELECT * FROM outmigration WHERE individual_uuid=:id")
+    Outmigration finds(String id);
 
     @Query("SELECT COUNT(*) FROM outmigration a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE date(insertDate/1000,'unixepoch') BETWEEN date(:startDate/1000,'unixepoch') AND date(:endDate/1000,'unixepoch') AND b.username = :username")

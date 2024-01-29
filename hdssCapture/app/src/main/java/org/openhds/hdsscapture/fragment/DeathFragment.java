@@ -339,6 +339,7 @@ public class DeathFragment extends DialogFragment {
             v.villcode = binding.getDeath().villcode;
             vpmViewModel.add(v);
 
+            finalData.complete = 1;
             viewModel.add(finalData);
 
             //Set Relationship to Widowed

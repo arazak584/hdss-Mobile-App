@@ -43,7 +43,6 @@ public class DtheditFragment extends DialogFragment {
 
     private Locations locations;
     private Socialgroup socialgroup;
-    private Death death;
     private FragmentDtheditBinding binding;
     private Individual individual;
 
