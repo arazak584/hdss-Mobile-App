@@ -168,7 +168,6 @@ public class OutmigrationFragment extends DialogFragment {
             VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
             if (data != null) {
                 binding.setOutmigration(data);
-                data.edit = null;
             } else {
                 data = new Outmigration();
 
@@ -193,7 +192,6 @@ public class OutmigrationFragment extends DialogFragment {
                 data.complete = 1;
                 data.socialgroup_uuid = socialgroup.uuid;
                 data.location_uuid = ClusterFragment.selectedLocation.uuid;
-                data.edit = null;
 
                 Date currentDate = new Date(); // Get the current date and time
                 Calendar cal = Calendar.getInstance();

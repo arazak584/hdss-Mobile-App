@@ -180,7 +180,7 @@ public class QueryActivity extends AppCompatActivity {
                 //String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
                 r1.name = k + ". Household ID: " +  e.getHohID();
-                r1.extid = "Compno: " + e.compno + " - Househead: " + e.lastName;
+                r1.extid = "Compno: " + e.compno;
                 r1.date = "";
                 r1.error = "Only Minors Left in Household";
                 r1.index = k;
