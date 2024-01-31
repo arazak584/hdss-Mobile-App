@@ -175,14 +175,14 @@ public interface IndividualDao {
     @Query("SELECT b.uuid, b.firstName, b.lastName, a.insertDate, a.socialgroup_uuid, a.extId, a.edit " +
             "FROM death as a " +
             "INNER JOIN individual as b ON a.individual_uuid = b.uuid " +
-            "WHERE (a.edit IS NULL OR a.edit = 1) AND endType = 3 AND b.compno = :id")
+            "WHERE a.edit NOT IN (2) AND endType = 3 AND b.compno = :id")
     List<Individual> retrieveDth(String id);
 
 
     @Query("SELECT b.uuid,b.firstName,b.lastName,a.insertDate,a.socialgroup_uuid,b.extId,location_uuid,residency_uuid" +
             " FROM outmigration as a " +
             "INNER JOIN individual as b on a.individual_uuid=b.uuid " +
-            "WHERE (a.edit IS NULL OR a.edit = 1) AND endType = 2 AND socialgroup_uuid=:id ")
+            "WHERE a.edit NOT IN (2) AND endType = 2 AND socialgroup_uuid=:id ")
     List<Individual> retrieveOmg(String id);
 
     //(a.edit IS NULL OR a.edit = 1)
