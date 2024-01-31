@@ -341,6 +341,14 @@ public class Death extends BaseObservable implements Parcelable {
         this.socialgroup_uuid = socialgroup_uuid;
     }
 
+    public Integer getEdit() {
+        return edit;
+    }
+
+    public void setEdit(Integer edit) {
+        this.edit = edit;
+    }
+
     public Integer getAgeAtDeath() {
 
         if (dob == null && deathDate==null) {

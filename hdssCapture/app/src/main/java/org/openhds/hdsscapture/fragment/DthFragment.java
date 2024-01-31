@@ -45,6 +45,7 @@ import org.openhds.hdsscapture.entity.Vpm;
 import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
 import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
+import org.openhds.hdsscapture.entity.subentity.VpmUpdate;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -265,32 +266,72 @@ public class DthFragment extends Fragment {
             }
 
             VpmViewModel vpmViewModel = new ViewModelProvider(this).get(VpmViewModel.class);
-            Vpm v = new Vpm();
-            v.complete = binding.getDeath().edit;
-            v.uuid = binding.getDeath().uuid;
-            v.individual_uuid = binding.getDeath().individual_uuid;
-            v.deathDate = binding.getDeath().deathDate;
-            v.dob = binding.getDeath().dob;
-            v.insertDate =binding.getDeath().insertDate;
-            v.firstName = binding.getDeath().firstName;
-            v.lastName = binding.getDeath().lastName;
-            v.gender = binding.getDeath().gender;
-            v.compno = binding.getDeath().compno;
-            v.visit_uuid = binding.getDeath().visit_uuid;
-            v.deathCause = binding.getDeath().deathCause;
-            v.deathPlace = binding.getDeath().deathPlace;
-            v.deathPlace_oth = binding.getDeath().deathPlace_oth;
-            v.respondent = binding.getDeath().respondent;
-            v.fw_uuid = binding.getDeath().fw_uuid;
-            v.extId = binding.getDeath().extId;
-            v.househead = binding.getDeath().househead;
-            v.compname = binding.getDeath().compname;
-            v.villname = binding.getDeath().villname;
-            v.villcode = binding.getDeath().villcode;
-            vpmViewModel.add(v);
+
 
             finalData.complete = binding.getDeath().edit;
             viewModel.add(finalData);
+
+            //Update VPM
+            String existingUuid = binding.getDeath().uuid;
+            try {
+                Vpm existingVpm = vpmViewModel.finds(existingUuid);
+                if (existingVpm != null) {
+                    VpmUpdate u = new VpmUpdate();
+
+                    u.complete = binding.getDeath().edit;
+                    u.uuid = binding.getDeath().uuid;
+                    u.individual_uuid = binding.getDeath().individual_uuid;
+                    u.deathDate = binding.getDeath().deathDate;
+                    u.dob = binding.getDeath().dob;
+                    u.insertDate =binding.getDeath().insertDate;
+                    u.firstName = binding.getDeath().firstName;
+                    u.lastName = binding.getDeath().lastName;
+                    u.gender = binding.getDeath().gender;
+                    u.compno = binding.getDeath().compno;
+                    u.visit_uuid = binding.getDeath().visit_uuid;
+                    u.deathCause = binding.getDeath().deathCause;
+                    u.deathPlace = binding.getDeath().deathPlace;
+                    u.deathPlace_oth = binding.getDeath().deathPlace_oth;
+                    u.respondent = binding.getDeath().respondent;
+                    u.fw_uuid = binding.getDeath().fw_uuid;
+                    u.extId = binding.getDeath().extId;
+                    u.househead = binding.getDeath().househead;
+                    u.compname = binding.getDeath().compname;
+                    u.villname = binding.getDeath().villname;
+                    u.villcode = binding.getDeath().villcode;
+                    vpmViewModel.update(u);
+                } else {
+                    Vpm v = new Vpm();
+                    v.complete = binding.getDeath().edit;
+                    v.uuid = binding.getDeath().uuid;
+                    v.individual_uuid = binding.getDeath().individual_uuid;
+                    v.deathDate = binding.getDeath().deathDate;
+                    v.dob = binding.getDeath().dob;
+                    v.insertDate =binding.getDeath().insertDate;
+                    v.firstName = binding.getDeath().firstName;
+                    v.lastName = binding.getDeath().lastName;
+                    v.gender = binding.getDeath().gender;
+                    v.compno = binding.getDeath().compno;
+                    v.visit_uuid = binding.getDeath().visit_uuid;
+                    v.deathCause = binding.getDeath().deathCause;
+                    v.deathPlace = binding.getDeath().deathPlace;
+                    v.deathPlace_oth = binding.getDeath().deathPlace_oth;
+                    v.respondent = binding.getDeath().respondent;
+                    v.fw_uuid = binding.getDeath().fw_uuid;
+                    v.extId = binding.getDeath().extId;
+                    v.househead = binding.getDeath().househead;
+                    v.compname = binding.getDeath().compname;
+                    v.villname = binding.getDeath().villname;
+                    v.villcode = binding.getDeath().villcode;
+                    vpmViewModel.add(v);
+                    Log.d("death", "Update Succesful" + v.deathDate);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             //Set Relationship to Widowed
             RelationshipViewModel relbModel = new ViewModelProvider(this).get(RelationshipViewModel.class);

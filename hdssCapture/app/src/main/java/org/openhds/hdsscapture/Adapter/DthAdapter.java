@@ -19,6 +19,7 @@ import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
 import org.openhds.hdsscapture.fragment.DeathFragment;
 import org.openhds.hdsscapture.fragment.DthFragment;
 import org.openhds.hdsscapture.fragment.DtheditFragment;
@@ -105,7 +106,7 @@ public class DthAdapter extends RecyclerView.Adapter<DthAdapter.ViewHolder> {
         individualList.clear();
         if(socialgroup != null)
             try {
-                List<Individual> list = individualViewModel.retrieveDth(socialgroup.getUuid());
+                List<Individual> list = individualViewModel.retrieveDth(ClusterFragment.selectedLocation.getCompno());
 
                 if (list != null) {
                     individualList.addAll(list);

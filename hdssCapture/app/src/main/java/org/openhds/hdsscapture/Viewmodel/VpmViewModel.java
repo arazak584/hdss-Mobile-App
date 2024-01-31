@@ -9,6 +9,8 @@ import org.openhds.hdsscapture.Repositories.DeathRepository;
 import org.openhds.hdsscapture.Repositories.VpmRepository;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Vpm;
+import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
+import org.openhds.hdsscapture.entity.subentity.VpmUpdate;
 
 import java.util.Date;
 import java.util.List;
@@ -31,6 +33,14 @@ public class VpmViewModel extends AndroidViewModel {
 
     public Vpm find(String id) throws ExecutionException, InterruptedException {
         return vpmRepository.find(id);
+    }
+
+    public Vpm finds(String id) throws ExecutionException, InterruptedException {
+        return vpmRepository.finds(id);
+    }
+
+    public int update(VpmUpdate s){
+        return vpmRepository.update(s);
     }
 
     public void add(Vpm data){vpmRepository.create(data);}

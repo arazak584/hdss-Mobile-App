@@ -964,10 +964,10 @@ public class Pregnancyoutcome1Fragment extends Fragment {
             boolean iptm = false;
             if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.firstRec.getText().toString().trim().isEmpty()) {
                 int totalmth = Integer.parseInt(binding.firstRec.getText().toString().trim());
-                if (totalmth < 4) {
+                if (totalmth < 3) {
                     iptm = true;
-                    binding.firstRec.setError("IPT is given at 16 weeks (4 Months)");
-                    Toast.makeText(getActivity(), "IPT is given at 16 weeks (4 Months)", Toast.LENGTH_LONG).show();
+                    binding.firstRec.setError("IPT is given at 13 weeks (3 Months)");
+                    Toast.makeText(getActivity(), "IPT is given at 13 weeks (3 Months)", Toast.LENGTH_LONG).show();
                     return;
                 }
             }

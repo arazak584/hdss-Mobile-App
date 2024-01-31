@@ -210,6 +210,7 @@ public class DeathFragment extends DialogFragment {
                 data.villname = level6Data.getName();
                 data.villcode = level6Data.getExtId();
                 data.complete = 1;
+                //data.edit = null;
                 //data.visit_uuid = dts.uuid;
                 data.househead = socialgroup.getGroupName();
                 data.socialgroup_uuid = socialgroup.uuid;

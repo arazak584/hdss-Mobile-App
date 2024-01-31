@@ -94,7 +94,7 @@ public interface IndividualDao {
     @Query("SELECT *, firstName || ' ' || lastName as fullName, lastName || ' ' ||  firstName as Names, endType FROM individual " +
             "WHERE endType != 3 AND firstName != 'FAKE' " +
             "AND ((:id IS NULL) OR (village LIKE :id)) " +
-            "AND (fullName LIKE :searchText OR Names LIKE :searchText OR compno LIKE :searchText OR ghanacard LIKE :searchText) ORDER BY hohID, dob")
+            "AND (fullName LIKE :searchText OR Names LIKE :searchText OR compno LIKE :searchText OR ghanacard LIKE :searchText) ORDER BY dob")
     List<Individual> retrieveBySearch(String id, String searchText);
 
 
@@ -172,14 +172,20 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual WHERE hohID=:id AND firstName='FAKE' AND endType=1")
     Individual unk(String id);
 
-    @Query("SELECT b.uuid,b.firstName,b.lastName,a.insertDate,a.socialgroup_uuid,a.extId,a.edit  FROM death as a " +
-            "INNER JOIN individual as b on a.individual_uuid=b.uuid WHERE edit!=2 AND endType=3 AND socialgroup_uuid=:id")
+    @Query("SELECT b.uuid, b.firstName, b.lastName, a.insertDate, a.socialgroup_uuid, a.extId, a.edit " +
+            "FROM death as a " +
+            "INNER JOIN individual as b ON a.individual_uuid = b.uuid " +
+            "WHERE (a.edit IS NULL OR a.edit = 1) AND endType = 3 AND b.compno = :id")
     List<Individual> retrieveDth(String id);
 
-    @Query("SELECT b.uuid,b.firstName,b.lastName,a.insertDate,a.socialgroup_uuid,b.extId,location_uuid,residency_uuid  FROM outmigration as a " +
-            "INNER JOIN individual as b on a.individual_uuid=b.uuid WHERE socialgroup_uuid=:id AND endType=2 AND edit!=2 ")
+
+    @Query("SELECT b.uuid,b.firstName,b.lastName,a.insertDate,a.socialgroup_uuid,b.extId,location_uuid,residency_uuid" +
+            " FROM outmigration as a " +
+            "INNER JOIN individual as b on a.individual_uuid=b.uuid " +
+            "WHERE (a.edit IS NULL OR a.edit = 1) AND endType = 2 AND socialgroup_uuid=:id ")
     List<Individual> retrieveOmg(String id);
 
+    //(a.edit IS NULL OR a.edit = 1)
 //    @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
 //            " INNER JOIN residency c on b.uuid=c.socialgroup_uuid INNER JOIN locations d " +
 //            " ON c.location_uuid=d.uuid " +
