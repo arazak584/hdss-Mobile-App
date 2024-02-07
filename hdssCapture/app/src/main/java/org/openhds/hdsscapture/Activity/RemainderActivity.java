@@ -87,6 +87,13 @@ public class RemainderActivity extends AppCompatActivity {
             }
         });
 
+        final ExtendedFloatingActionButton areas = findViewById(R.id.btn_areas);
+        areas.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(),ScheduleActivity.class);
+            //i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
+            startActivity(i);
+        });
+
         final ExtendedFloatingActionButton remainder = findViewById(R.id.btn_remain_location);
         remainder.setOnClickListener(new View.OnClickListener() {
             @Override

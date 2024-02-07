@@ -114,6 +114,15 @@ public class HierarchyRepository {
         return future.get();
     }
 
+    public List<Hierarchy> repo(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Hierarchy>> callable = () -> dao.repo(id);
+
+        Future<List<Hierarchy>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
 
 
 }

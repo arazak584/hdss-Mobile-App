@@ -180,6 +180,15 @@ public class DthFragment extends Fragment {
                 yn.setVisibility(View.VISIBLE);
                 no.setVisibility(View.VISIBLE);
                 data.edit = 1;
+
+                ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+                Residency dataRes = resModel.findRes(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
+                if (dataRes != null){
+                    //data.dob = dataRes.startDate;
+                    binding.setRes(dataRes);
+                    data.residency_uuid = dataRes.uuid;
+                }
+
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();

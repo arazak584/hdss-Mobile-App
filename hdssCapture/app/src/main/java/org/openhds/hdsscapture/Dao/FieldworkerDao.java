@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Fieldworker;
+import org.openhds.hdsscapture.entity.Hierarchy;
 
 import java.util.List;
 
@@ -34,4 +35,7 @@ public interface FieldworkerDao {
 
     @Query("SELECT * FROM fieldworker WHERE username=:id")
     Fieldworker retrieves(String id);
+
+    @Query("SELECT * FROM fieldworker order by username")
+    List<Fieldworker> fw();
 }

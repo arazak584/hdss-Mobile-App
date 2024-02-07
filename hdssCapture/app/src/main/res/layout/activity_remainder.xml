@@ -56,13 +56,33 @@
             android:inputType="textCapCharacters"
             android:hint="Search Village" />
 
+        <LinearLayout
+            android:id="@+id/report_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/dates"
+            android:orientation="horizontal">
 
 
-
-    </LinearLayout>
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/btn_remain_location"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/MidnightBlue"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            app:fabSize="mini"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="Submit" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/btn_areas"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
             android:textColor="@color/MidnightBlue"
@@ -73,7 +93,11 @@
             app:fabSize="mini"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="View Remaining Compounds" />
+            android:text="Work Schedule" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
         <View
             android:layout_width="match_parent"

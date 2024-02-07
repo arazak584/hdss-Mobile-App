@@ -51,4 +51,12 @@ public class FieldworkerRepository {
 
         return future.get();
     }
+
+    public List<Fieldworker> fw() throws ExecutionException, InterruptedException {
+        Callable<List<Fieldworker>> callable = () -> dao.fw();
+
+        Future<List<Fieldworker>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
 }

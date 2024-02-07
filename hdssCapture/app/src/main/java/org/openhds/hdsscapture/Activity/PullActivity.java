@@ -447,6 +447,12 @@ public class PullActivity extends AppCompatActivity {
                         .addColumn("sttime").build();
 
                 downloadAndProcessDataset("residency.zip", "residency.csv", () -> dao.downloadResidency(authorizationHeader), Residency.class, residencySchema, residencyCounts, res);
+
+                // Reset counts to 0 when the button is clicked
+                resetCountOnClick(ind);
+                resetCountOnClick(loc);
+                resetCountOnClick(soc);
+                resetCountOnClick(res);
             }
 
             private <T> void downloadAndProcessDataset(String zipFileName, String extractedFileName, Supplier<Call<ResponseBody>> downloadCallSupplier, Class<T> entityClass, CsvSchema schema, AtomicLong countKey, String files) {
@@ -693,7 +699,14 @@ public class PullActivity extends AppCompatActivity {
                         .addColumn("religion").addColumn("religion_oth").addColumn("sttime").addColumn("tribe").addColumn("tribe_oth").build();
 
                 downloadAndProcessDataset("demographics.zip", "demographics.csv", () -> dao.downloadDemography(authorizationHeader), Demographic.class, demographicsSchema, demographicsCounts, dem);
+
+                // Reset counts to 0 when the button is clicked
+                resetCountOnClick(preg);
+                resetCountOnClick(rel);
+                resetCountOnClick(dem);
             }
+
+
 
             private <T> void downloadAndProcessDataset(String zipFileName, String extractedFileName, Supplier<Call<ResponseBody>> downloadCallSupplier, Class<T> entityClass, CsvSchema schema, AtomicLong countKey, String files) {
                 textView_Sync.setText("Downloading " + files + " Dataset");
@@ -982,6 +995,9 @@ public class PullActivity extends AppCompatActivity {
 
                 downloadAndProcessDataset("vaccination.zip", "vaccination.csv", () -> dao.downloadVaccination(authorizationHeader), Vaccination.class, vaccinationSchema, vaccinationCounts, vac);
 
+                // Reset counts to 0 when the button is clicked
+                resetCountOnClick(ses);
+                resetCountOnClick(vac);
             }
 
             private <T> void downloadAndProcessDataset(String zipFileName, String extractedFileName, Supplier<Call<ResponseBody>> downloadCallSupplier, Class<T> entityClass, CsvSchema schema, AtomicLong countKey, String files) {
@@ -1379,9 +1395,6 @@ public class PullActivity extends AppCompatActivity {
 //                        }
 //                    } catch (IOException e) {
 //                        e.printStackTrace();
-//                        progress.dismiss();
-//                        textView_SyncVac.setText("Error while unzipping or inserting data.");
-//                        textView_SyncVac.setTextColor(Color.RED);
 //                    }
 //                }
 //            }
@@ -1390,6 +1403,9 @@ public class PullActivity extends AppCompatActivity {
     }
 
     public long getCountFromSharedPreferences(String entityName) {
+//                        progress.dismiss();
+//                        textView_SyncVac.setText("Error while unzipping or inserting data.");
+//                        textView_SyncVac.setTextColor(Color.RED);
         SharedPreferences sharedPreferences = getSharedPreferences("entity_counts", MODE_PRIVATE);
         String countKey = getEntityKey(entityName);
         return sharedPreferences.getLong(countKey, 0);
@@ -1406,6 +1422,13 @@ public class PullActivity extends AppCompatActivity {
     private String getEntityKey(String entityName) {
         return entityName.toLowerCase() + "_count";
     }
+
+    // Add this method to your class
+    public void resetCountOnClick(String entityName) {
+        // Set the count to 0
+        saveCountsToSharedPreferences(entityName, 0);
+    }
+
 
     public void AppInfo(View view) {
         showDialogInfo(null, DOWNLOAD_SES);

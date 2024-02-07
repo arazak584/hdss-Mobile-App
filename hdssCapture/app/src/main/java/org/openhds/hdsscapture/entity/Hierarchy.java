@@ -21,25 +21,25 @@ public class Hierarchy extends BaseObservable implements Parcelable {
     @NotNull
     @PrimaryKey
     @ColumnInfo(name = "uuid")
-    private String uuid;
+    public String uuid;
 
     @ColumnInfo(name = "extId")
-    private String extId;
+    public String extId;
 
     @ColumnInfo(name = "town")
-    private String town;
+    public String town;
 
     @ColumnInfo(name = "name")
-    private String name;
+    public String name;
 
     @ColumnInfo(name = "area")
-    private String area;
+    public String area;
 
     @ColumnInfo(name = "parent_uuid")
-    private String parent_uuid;
+    public String parent_uuid;
 
     @ColumnInfo(name = "level_uuid")
-    private String level_uuid;
+    public String level_uuid;
 
     @ColumnInfo(name = "fw_name")
     public String fw_name;

@@ -14,6 +14,9 @@
             name="individual"
             type="org.openhds.hdsscapture.entity.Individual" />
 
+        <variable
+            name="res"
+            type="org.openhds.hdsscapture.entity.Residency" />
 
         <variable
             name="eventname"
@@ -267,6 +270,25 @@
                             android:inputType="textPersonName"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:visibility="visible"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:hint="@string/actual_dob"
+                            android:text="@string/actual_dob">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dob"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={death.dob}"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:visibility="visible"
@@ -283,7 +305,7 @@
                             android:id="@+id/dth_dob"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@={death.dob}"
+                            android:text="@={res.startDate}"
                             android:inputType="textPersonName"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
