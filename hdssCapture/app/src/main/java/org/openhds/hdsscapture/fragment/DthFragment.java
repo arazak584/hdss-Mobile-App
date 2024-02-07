@@ -182,7 +182,7 @@ public class DthFragment extends Fragment {
                 data.edit = 1;
 
                 ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-                Residency dataRes = resModel.findRes(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
+                Residency dataRes = resModel.findDth(individual.uuid, ClusterFragment.selectedLocation.uuid);
                 if (dataRes != null){
                     //data.dob = dataRes.startDate;
                     binding.setRes(dataRes);

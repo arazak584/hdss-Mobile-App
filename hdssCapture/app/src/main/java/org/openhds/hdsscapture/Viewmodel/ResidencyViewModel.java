@@ -32,6 +32,10 @@ public class ResidencyViewModel extends AndroidViewModel {
         return residencyRepository.findRes(id, locid);
     }
 
+    public Residency findDth(String id,String locid) throws ExecutionException, InterruptedException {
+        return residencyRepository.findDth(id, locid);
+    }
+
     public Residency resomg(String id,String locid) throws ExecutionException, InterruptedException {
         return residencyRepository.resomg(id, locid);
     }

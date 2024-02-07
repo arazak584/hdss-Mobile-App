@@ -931,7 +931,7 @@ public class PregnancyoutcomeFragment extends Fragment {
 
 
 
-            if (finalData.numberofBirths != null) {
+            if (binding.getPregoutcome().numberofBirths != null) {
 
                 if (finalData.numberofBirths >= 1) {
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.childFetus1.OUTCOMELAYOUT, validateOnComplete, false);
@@ -1003,13 +1003,13 @@ public class PregnancyoutcomeFragment extends Fragment {
                         ind.uuid= prg.individual_uuid;
                         ind.gender = prg.gender;
                         ind.mother_uuid= prg.mother_uuid;
-                        ind.father_uuid= finalData.father_uuid;
+                        ind.father_uuid= binding.getPregoutcome().father_uuid;
                         ind.firstName= prg.firstName;
                         ind.lastName= prg.lastName;
                         ind.extId= prg.extId;
                         ind.insertDate=prg.insertDate;
-                        ind.fw_uuid= finalData.fw_uuid;
-                        ind.dob = finalData.outcomeDate;
+                        ind.fw_uuid= binding.getPregoutcome().fw_uuid;
+                        ind.dob = binding.getPregoutcome().outcomeDate;
                         ind.complete = 1;
                         ind.dobAspect = 1;
                         ind.hohID = socialgroup.extId;
@@ -1026,13 +1026,13 @@ public class PregnancyoutcomeFragment extends Fragment {
                         Outcome prg = binding.getPregoutcome1();
                         res.uuid= prg.residency_uuid;
                         res.individual_uuid = prg.individual_uuid;
-                        res.startDate= finalData.outcomeDate;
+                        res.startDate= binding.getPregoutcome().outcomeDate;
                         res.endType= 1;
                         res.startType= 2;
                         res.insertDate= prg.insertDate;
                         res.location_uuid= ClusterFragment.selectedLocation.uuid;
                         res.socialgroup_uuid = socialgroup.uuid;
-                        res.fw_uuid= finalData.fw_uuid;
+                        res.fw_uuid= binding.getPregoutcome().fw_uuid;
                         res.rltn_head = prg.rltn_head;
                         res.complete = 1;
 
@@ -1113,13 +1113,13 @@ public class PregnancyoutcomeFragment extends Fragment {
                         ind.uuid= prg.individual_uuid;
                         ind.gender = prg.gender;
                         ind.mother_uuid= prg.mother_uuid;
-                        ind.father_uuid= finalData.father_uuid;
+                        ind.father_uuid= binding.getPregoutcome().father_uuid;
                         ind.firstName= prg.firstName;
                         ind.lastName= prg.lastName;
                         ind.extId= prg.extId;
                         ind.insertDate=prg.insertDate;
-                        ind.fw_uuid= finalData.fw_uuid;
-                        ind.dob = finalData.outcomeDate;
+                        ind.fw_uuid= binding.getPregoutcome().fw_uuid;
+                        ind.dob = binding.getPregoutcome().outcomeDate;
                         ind.complete = 1;
                         ind.dobAspect = 1;
                         ind.hohID = socialgroup.extId;
@@ -1136,13 +1136,13 @@ public class PregnancyoutcomeFragment extends Fragment {
                         Outcome prg = binding.getPregoutcome2();
                         res.uuid= prg.residency_uuid;
                         res.individual_uuid = prg.individual_uuid;
-                        res.startDate= finalData.outcomeDate;
+                        res.startDate= binding.getPregoutcome().outcomeDate;
                         res.endType= 1;
                         res.startType= 2;
                         res.insertDate= prg.insertDate;
                         res.location_uuid= ClusterFragment.selectedLocation.uuid;
                         res.socialgroup_uuid = socialgroup.uuid;
-                        res.fw_uuid= finalData.fw_uuid;
+                        res.fw_uuid= binding.getPregoutcome().fw_uuid;
                         res.rltn_head = prg.rltn_head;
                         res.complete = 1;
 
@@ -1222,13 +1222,13 @@ public class PregnancyoutcomeFragment extends Fragment {
                         ind.uuid= prg.individual_uuid;
                         ind.gender = prg.gender;
                         ind.mother_uuid= prg.mother_uuid;
-                        ind.father_uuid= finalData.father_uuid;
+                        ind.father_uuid= binding.getPregoutcome().father_uuid;
                         ind.firstName= prg.firstName;
                         ind.lastName= prg.lastName;
                         ind.extId= prg.extId;
                         ind.insertDate=prg.insertDate;
-                        ind.fw_uuid= finalData.fw_uuid;
-                        ind.dob = finalData.outcomeDate;
+                        ind.fw_uuid= binding.getPregoutcome().fw_uuid;
+                        ind.dob = binding.getPregoutcome().outcomeDate;
                         ind.complete = 1;
                         ind.dobAspect = 1;
                         ind.hohID = socialgroup.extId;
@@ -1245,13 +1245,13 @@ public class PregnancyoutcomeFragment extends Fragment {
                         Outcome prg = binding.getPregoutcome3();
                         res.uuid= prg.residency_uuid;
                         res.individual_uuid = prg.individual_uuid;
-                        res.startDate= finalData.outcomeDate;
+                        res.startDate= binding.getPregoutcome().outcomeDate;
                         res.endType= 1;
                         res.startType= 2;
                         res.insertDate= prg.insertDate;
                         res.location_uuid= ClusterFragment.selectedLocation.uuid;
                         res.socialgroup_uuid = socialgroup.uuid;
-                        res.fw_uuid= finalData.fw_uuid;
+                        res.fw_uuid= binding.getPregoutcome().fw_uuid;
                         res.rltn_head = prg.rltn_head;
                         res.complete = 1;
 
@@ -1331,13 +1331,13 @@ public class PregnancyoutcomeFragment extends Fragment {
                         ind.uuid= prg.individual_uuid;
                         ind.gender = prg.gender;
                         ind.mother_uuid= prg.mother_uuid;
-                        ind.father_uuid= finalData.father_uuid;
+                        ind.father_uuid= binding.getPregoutcome().father_uuid;
                         ind.firstName= prg.firstName;
                         ind.lastName= prg.lastName;
                         ind.extId= prg.extId;
                         ind.insertDate=prg.insertDate;
-                        ind.fw_uuid= finalData.fw_uuid;
-                        ind.dob = finalData.outcomeDate;
+                        ind.fw_uuid= binding.getPregoutcome().fw_uuid;
+                        ind.dob = binding.getPregoutcome().outcomeDate;
                         ind.complete = 1;
                         ind.dobAspect = 1;
                         ind.hohID = socialgroup.extId;
@@ -1354,13 +1354,13 @@ public class PregnancyoutcomeFragment extends Fragment {
                         Outcome prg = binding.getPregoutcome4();
                         res.uuid= prg.residency_uuid;
                         res.individual_uuid = prg.individual_uuid;
-                        res.startDate= finalData.outcomeDate;
+                        res.startDate= binding.getPregoutcome().outcomeDate;
                         res.endType= 1;
                         res.startType= 2;
                         res.insertDate= prg.insertDate;
                         res.location_uuid= ClusterFragment.selectedLocation.uuid;
                         res.socialgroup_uuid = socialgroup.uuid;
-                        res.fw_uuid= finalData.fw_uuid;
+                        res.fw_uuid= binding.getPregoutcome().fw_uuid;
                         res.rltn_head = prg.rltn_head;
                         res.complete = 1;
 
@@ -1506,7 +1506,10 @@ public class PregnancyoutcomeFragment extends Fragment {
                 }
 
                 //Replicate Same Changes to Pregnancyoutcome1Fragment
-                if (finalData.stillbirth == 1) {
+                if ((binding.getPregoutcome1() != null && binding.getPregoutcome1().type != null && binding.getPregoutcome1().type == 2) ||
+                        (binding.getPregoutcome2() != null && binding.getPregoutcome2().type != null && binding.getPregoutcome2().type == 2) ||
+                        (binding.getPregoutcome3() != null && binding.getPregoutcome3().type != null && binding.getPregoutcome3().type == 2) ||
+                        (binding.getPregoutcome4() != null && binding.getPregoutcome4().type != null && binding.getPregoutcome4().type == 2))  {
 
                     try {
                         if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.vpm.dthDob.getText().toString().trim().isEmpty()
@@ -1568,7 +1571,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
                 if (data != null) {
                     IndividualVisited visited = new IndividualVisited();
-                    visited.uuid = finalData.mother_uuid;
+                    visited.uuid = binding.getPregoutcome().mother_uuid;
                     visited.complete = 2;
                     iview.visited(visited);
                 }

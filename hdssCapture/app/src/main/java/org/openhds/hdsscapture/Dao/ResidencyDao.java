@@ -46,6 +46,9 @@ public interface ResidencyDao {
     @Query("SELECT * FROM residency where individual_uuid=:id and location_uuid=:locid and endType=1")
     Residency findRes(String id, String locid);
 
+    @Query("SELECT * FROM residency where individual_uuid=:id and location_uuid=:locid and endType=3")
+    Residency findDth(String id, String locid);
+
     @Query("SELECT * FROM residency where individual_uuid=:id and location_uuid!=:locid and endType=1")
     Residency findEnd(String id, String locid);
 
