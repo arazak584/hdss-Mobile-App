@@ -113,6 +113,19 @@ public class LocationRepository {
         return future.get();
     }
 
+    public long counts(String id) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.counts(id);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    public long done(String id) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.done(id);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+
     public List<Locations> repo(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Locations>> callable = () -> dao.repo(id);

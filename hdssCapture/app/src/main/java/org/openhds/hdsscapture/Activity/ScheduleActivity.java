@@ -24,6 +24,7 @@ import org.openhds.hdsscapture.Adapter.WorkAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
+import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
@@ -49,8 +50,11 @@ public class ScheduleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
 
+        final LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
+        final ListingViewModel listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
+
         searchView = findViewById(R.id.searcharea);
-        workAdapter = new WorkAdapter(this,level6Data);
+        workAdapter = new WorkAdapter(this,level6Data, locationViewModel, listingViewModel);
 
         //Pull All Data Collectors
         final FieldworkerViewModel fieldworkerViewModel = new ViewModelProvider(this).get(FieldworkerViewModel.class);
@@ -81,7 +85,7 @@ public class ScheduleActivity extends AppCompatActivity {
         //Adapter Recycler
 
         final RecyclerView recyclerView = findViewById(R.id.my_recycler_area);
-        final WorkAdapter adapter = new WorkAdapter(this, level6Data);
+        final WorkAdapter adapter = new WorkAdapter(this, level6Data, locationViewModel, listingViewModel);
         final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(this).get(HierarchyViewModel.class);
 
         //recyclerView.setHasFixedSize(true);

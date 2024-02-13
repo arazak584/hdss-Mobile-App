@@ -12,12 +12,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Activity.RemainderActivity;
 import org.openhds.hdsscapture.Activity.ScheduleActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
+import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Locations;
@@ -36,9 +39,13 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.ViewHolder>{
     private final List<Hierarchy> hierarchyList;
     private final Hierarchy level6Data;
     private List<Hierarchy> filter;
-    public WorkAdapter(ScheduleActivity activity, Hierarchy level6Data) {
+    private final LocationViewModel locationViewModel;
+    private final ListingViewModel listingViewModel;
+    public WorkAdapter(ScheduleActivity activity, Hierarchy level6Data, LocationViewModel locationViewModel, ListingViewModel listingViewModel) {
         this.activity = activity;
         this.level6Data = level6Data;
+        this.locationViewModel = locationViewModel;
+        this.listingViewModel = listingViewModel;
         hierarchyList = new ArrayList<>();
         inflater = LayoutInflater.from(activity);
     }
@@ -93,13 +100,35 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull WorkAdapter.ViewHolder holder, int position) {
         final Hierarchy hierarchy = hierarchyList.get(position);
 
+
 //        int itemNumber = position + 1;
 //        holder.title.setText(itemNumber + "");
 
         holder.title.setText(hierarchy.name);
         holder.id2.setText(hierarchy.area);
         holder.id3.setText(hierarchy.town);
-        holder.id4.setText(hierarchy.parent_uuid);
+
+        try {
+            // Assuming you have access to the necessary ViewModel instances
+            long count = locationViewModel.done(hierarchy.uuid);
+            long counts = listingViewModel.done(hierarchy.parent_uuid);
+
+            if (counts!=0 & count > counts) {
+                holder.id4.setText(hierarchy.parent_uuid + " IN PROGRESS");
+                holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Blue));
+            }else if(count == counts){
+                holder.id4.setText(hierarchy.parent_uuid + " DONE");
+                holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_blackgreen_end));
+            }else{
+                holder.id4.setText(hierarchy.parent_uuid + " NOT STARTED");
+                holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Red));
+            }
+
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            // Handle exceptions appropriately, for example, show an error message
+            Toast.makeText(activity, "Error updating counts", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -130,4 +159,6 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.ViewHolder>{
 
         notifyDataSetChanged();
     }
+
+
 }

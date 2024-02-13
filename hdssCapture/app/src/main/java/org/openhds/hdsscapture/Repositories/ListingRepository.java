@@ -63,6 +63,12 @@ public class ListingRepository {
         return future.get();
     }
 
+    public long done(String id) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.done(id);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
     public List<Listing> error() throws ExecutionException, InterruptedException {
 
         Callable<List<Listing>> callable = () -> dao.error();

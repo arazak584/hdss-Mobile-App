@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -31,14 +32,19 @@ import org.openhds.hdsscapture.Adapter.HouseholdAdapter;
 import org.openhds.hdsscapture.Adapter.LocationAdapter;
 import org.openhds.hdsscapture.Dialog.FilterDialogFragment;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
+import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -104,6 +110,7 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_cluster, container, false);
 
+        TextView done = view.findViewById(R.id.compl);
         final Intent i = getActivity().getIntent();
         final Hierarchy level6Data = i.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
 
@@ -136,6 +143,7 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
         final RecyclerView recyclerView = view.findViewById(R.id.compoundsview);
         final LocationAdapter adapter = new LocationAdapter(this, level6Data, this);
         final LocationViewModel locationViewModel = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
+        final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
         //recyclerView.setHasFixedSize(true);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -171,6 +179,21 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
 //            }
 //
 //        });
+
+        try {
+            // Call the counts method on locationViewModel to retrieve data
+            long count = locationViewModel.counts(level6Data.uuid);
+            long counts = individualViewModel.counts(level6Data.name);
+                // Update UI with the count (assuming done is a TextView)
+                //done.setText(String.valueOf(count));
+                done.setText("(" + String.valueOf(count) + ", " + String.valueOf(counts) + ")");
+                done.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.Green));
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
         final AppCompatButton add_location = view.findViewById(R.id.button_new_location);
         add_location.setOnClickListener(v -> {

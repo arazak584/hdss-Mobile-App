@@ -274,6 +274,11 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public long counts(String id) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.counts(id);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
 
     public List<Individual> error() throws ExecutionException, InterruptedException {
 

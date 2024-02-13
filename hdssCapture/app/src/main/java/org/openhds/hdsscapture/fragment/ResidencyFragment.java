@@ -206,6 +206,7 @@ public class ResidencyFragment extends Fragment {
                 Toast.makeText(requireContext(), "All fields are Required", Toast.LENGTH_LONG).show();
                 return;
             }
+            finalData.complete = 1;
             viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
             IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);

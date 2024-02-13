@@ -44,5 +44,7 @@ public interface ListingDao {
             " where b.location_uuid IS NULL GROUP BY a.location_uuid")
     List<Listing> error();
 
+    @Query("SELECT COUNT(*) FROM listing WHERE village=:id")
+    long done(String id);
 
 }

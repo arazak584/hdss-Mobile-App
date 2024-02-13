@@ -147,17 +147,16 @@
                 android:background="@color/white"
                 android:orientation="horizontal">
 
-
-                <SearchView
-                    android:id="@+id/hse_search"
+                <TextView
+                    android:id="@+id/compl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAlignment="center"
                     android:minHeight="48dip"
-                    android:inputType="textPersonName|textCapCharacters"
-                    android:queryHint="@string/hse_searchid">
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textSize="20sp" />
 
-                    <requestFocus />
-                </SearchView>
 
             </LinearLayout>
 

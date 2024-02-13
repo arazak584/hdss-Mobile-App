@@ -169,6 +169,10 @@ public interface IndividualDao {
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username AND a.firstName!='FAKE'")
     long countIndividuals(Date startDate, Date endDate, String username);
 
+    @Query("SELECT COUNT(DISTINCT hohID) FROM individual as a LEFT JOIN visit as b on a.hohID=b.houseExtId " +
+            "WHERE village=:id AND b.houseExtId IS NULL AND endType=1")
+    long counts(String id);
+
     @Query("SELECT * FROM individual WHERE hohID=:id AND firstName='FAKE' AND endType=1")
     Individual unk(String id);
 

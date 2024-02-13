@@ -73,6 +73,13 @@ public interface LocationDao {
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
+    @Query("SELECT COUNT(*) FROM Locations as a LEFT JOIN listing as b on a.compno=b.compno " +
+            "WHERE locationLevel_uuid=:id AND b.compno IS NULL")
+    long counts(String id);
+
+    @Query("SELECT COUNT(*) FROM Locations WHERE locationLevel_uuid=:id")
+    long done(String id);
+
     @Query("SELECT * FROM locations WHERE insertDate > (SELECT startDate FROM round ORDER BY roundNumber DESC LIMIT 1) AND fw_uuid=:id order by insertDate DESC")
     List<Locations> repo(String id);
 

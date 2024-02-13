@@ -123,6 +123,10 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.countIndividuals(startDate, endDate, username);
     }
 
+    public long counts(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.counts(id);
+    }
+
     public List<Individual> error() throws ExecutionException, InterruptedException {
         return individualRepository.error();
     }

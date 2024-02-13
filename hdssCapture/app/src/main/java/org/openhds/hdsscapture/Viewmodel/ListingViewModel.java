@@ -35,6 +35,10 @@ public class ListingViewModel extends AndroidViewModel {
         return listingRepository.count(startDate, endDate, username);
     }
 
+    public long done(String id) throws ExecutionException, InterruptedException {
+        return listingRepository.done(id);
+    }
+
     public List<Listing> error() throws ExecutionException, InterruptedException {
         return listingRepository.error();
     }
