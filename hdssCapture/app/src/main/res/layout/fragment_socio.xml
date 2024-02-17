@@ -6,14 +6,6 @@
     <data>
 
         <variable
-            name="socialgroup"
-            type="org.openhds.hdsscapture.entity.Socialgroup" />
-
-        <variable
-            name="individual"
-            type="org.openhds.hdsscapture.entity.Individual" />
-
-        <variable
             name="sociodemo"
             type="org.openhds.hdsscapture.entity.HdssSociodemo" />
 

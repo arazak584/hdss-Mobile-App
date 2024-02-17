@@ -737,7 +737,7 @@ public class IndividualFragment extends Fragment {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
                     Date edate = f.parse(binding.earliest.getText().toString().trim());
-                    if (edate.after(stdate)) {
+                    if (edate.after(stdate) && binding.getInmigration().reason!=null) {
                         binding.editTextStartDate.setError("Start Date Cannot Be Less than Earliest Date");
                         Toast.makeText(getActivity(), "Start Date Cannot Be Less than Earliest Date", Toast.LENGTH_LONG).show();
                         return;
@@ -866,9 +866,23 @@ public class IndividualFragment extends Fragment {
             try {
                 Socialgroup data = socialgroupViewModel.find(socialgroup.uuid);
                 if (data !=null) {
+
+//                    data.individual_uuid = binding.getIndividual().uuid;
+//                    data.uuid = socialgroup.uuid;
+//                    data.extId = data.extId;
+//                    data.groupName = binding.getIndividual().getFirstName() + ' ' + binding.getIndividual().getLastName();
+//                    data.visit_uuid = data.visit_uuid;
+//                    data.insertDate = data.insertDate;
+//                    data.fw_uuid = data.fw_uuid;
+//                    data.groupType = data.groupType;
+//                    data.complete = 1;
+//                    data.sttime = data.sttime;
+//                    data.edtime = data.edtime;
+//                    socialgroupViewModel.add(data);
+
                     SocialgroupAmendment socialgroupAmendment = new SocialgroupAmendment();
-                    socialgroupAmendment.individual_uuid = finalData.uuid;
-                    socialgroupAmendment.groupName = finalData.getFirstName() + ' ' + finalData.getLastName();
+                    socialgroupAmendment.individual_uuid = binding.getIndividual().uuid;
+                    socialgroupAmendment.groupName = binding.getIndividual().getFirstName() + ' ' + binding.getIndividual().getLastName();
                     socialgroupAmendment.uuid = socialgroup.uuid;
                     socialgroupAmendment.complete =1;
                     socialgroupViewModel.update(socialgroupAmendment);

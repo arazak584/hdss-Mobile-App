@@ -296,15 +296,15 @@ public class ListingFragment extends Fragment {
                     } else {
                         locationz.locationName = finalData.locationName;
                     }
-                    locationz.status = finalData.status;
-                    locationz.locationLevel_uuid = finalData.cluster_id;
-                    locationz.extId = finalData.vill_extId;
-                    locationz.longitude = finalData.longitude;
-                    locationz.latitude = finalData.latitude;
-                    locationz.accuracy = finalData.accuracy;
+                    locationz.status = binding.getListing().status;
+                    locationz.locationLevel_uuid = binding.getListing().cluster_id;
+                    locationz.extId = binding.getListing().vill_extId;
+                    locationz.longitude = binding.getListing().longitude;
+                    locationz.latitude = binding.getListing().latitude;
+                    locationz.accuracy = binding.getListing().accuracy;
 
                     // Assuming vill_extId is a String
-                    String villExtId = finalData.vill_extId;
+                    String villExtId = binding.getListing().vill_extId;
                     String compExtId = finalData.compextId;
 
                     // Determine the desired format for compExtId based on the length of villExtId

@@ -100,7 +100,6 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private DeathViewModel deathViewModel;
     private OutmigrationViewModel outmigrationViewModel;
     private SocialgroupViewModel viewModel;
-    private TextView name;
     public interface IndividualClickListener {
         void onIndividualClick(Individual selectedIndividual);
     }
@@ -157,9 +156,9 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         //query();
 
         //final TextView hh = view.findViewById(R.id.textView_compextId);
-        name = view.findViewById(R.id.textView_hh);
+        TextView name = view.findViewById(R.id.textView_hh);
          if (socialgroup != null) {
-            name.setText(socialgroup.getGroupName() + "-" + socialgroup.getExtId());
+            name.setText(socialgroup.groupName + "-" + socialgroup.getExtId());
         }else{
             name.setText("Loading...");
         }
@@ -202,6 +201,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
 
         VisitViewModel vmodel = new ViewModelProvider(this).get(VisitViewModel.class);
         try {

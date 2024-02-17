@@ -203,11 +203,16 @@ public interface IndividualDao {
             " strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) < (SELECT hoh_age from config) GROUP BY b.extId order by dob")
     List<Individual> error();
 
-    @Query("SELECT a.*,d.compextId,c.extId as houseExtId,c.groupName as lastName FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
-            " INNER JOIN socialgroup c on b.socialgroup_uuid=c.uuid INNER JOIN locations d " +
-            " ON b.location_uuid=d.uuid " +
-            " WHERE firstName!='FAKE' and groupName='UNK' and b.endType=1 " +
-            " GROUP BY c.extId")
+//    @Query("SELECT a.* FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
+//            " INNER JOIN socialgroup c on b.socialgroup_uuid=c.uuid INNER JOIN locations d " +
+//            " ON b.location_uuid=d.uuid " +
+//            " WHERE firstName!='FAKE' and groupName='UNK' and b.endType=1 " +
+//            " GROUP BY c.extId")
+//    List<Individual> err();
+
+    @Query("SELECT a.* FROM individual as a INNER JOIN socialgroup b on a.hohID=b.extId " +
+            " WHERE firstName!='FAKE' and groupName='UNK' and endType=1 " +
+            " GROUP BY b.extId")
     List<Individual> err();
 
 //    @Query("SELECT * FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +

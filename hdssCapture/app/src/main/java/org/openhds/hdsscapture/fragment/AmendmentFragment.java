@@ -312,6 +312,7 @@ public class AmendmentFragment extends DialogFragment {
                 if (data != null) {
                     IndividualAmendment amend = new IndividualAmendment();
                     amend.uuid = finalData.individual_uuid;
+                    amend.complete = 1;
                     if (!binding.replFirstName.getText().toString().trim().isEmpty()) {
                         amend.firstName = binding.getAmendment().repl_firstName;
                     } else {
@@ -344,7 +345,6 @@ public class AmendmentFragment extends DialogFragment {
                     } else {
                         amend.dob = finalData.orig_dob;
                     }
-                    amend.complete = 1;
                     individualViewModel.update(amend);
                 }
             } catch (ExecutionException e) {
