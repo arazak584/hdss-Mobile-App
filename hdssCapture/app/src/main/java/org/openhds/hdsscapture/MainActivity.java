@@ -8,14 +8,22 @@ import static org.openhds.hdsscapture.AppConstants.DATA_SYNC;
 import static org.openhds.hdsscapture.AppConstants.DATA_VIEWS;
 
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,30 +39,42 @@ import org.openhds.hdsscapture.Activity.PushActivity;
 import org.openhds.hdsscapture.Activity.ReportActivity;
 import org.openhds.hdsscapture.Utilities.SimpleDialog;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
+import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
+import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Listing;
+import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.fragment.InfoFragment;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
-//    private ListingViewModel listingViewModel;
-//    private DeathViewModel deathViewModel;
-//    private IndividualViewModel individualViewModel;
-//    private OutcomeViewModel outcomeViewModel;
     private Button send;
     private int status;
     private ProgressDialog progressDialog;
+    private TextView liveDateTimeTextView;
+    private TextView wks;
+    private String fw;
+
+    private void checkLocationStatusAndShowPrompt() {
+        if (isLocationEnabled(this)) {
+            // Location is enabled, proceed with your logic
+        } else {
+            // Location is not enabled, show prompt
+            showLocationSettingsPrompt();
+        }
+    }
 
     private void showDialogInfo(String message, String codeFragment) {
         SimpleDialog simpleDialog = SimpleDialog.newInstance(message, codeFragment);
@@ -66,18 +86,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        checkLocationStatusAndShowPrompt();
+        wks = findViewById(R.id.textInMiddle);
+
         final Intent f = getIntent();
         final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
-        //Integer status = fieldworkerDatas.getStatus();
+        fw = fieldworkerDatas.getUsername();
         status = (fieldworkerDatas != null) ? fieldworkerDatas.getStatus() : 0;  // Default to 0 or another appropriate value
+        calculatePercentage();
         //Toast.makeText(MainActivity.this, "Welcome " + fieldworkerDatas.firstName + " " + fieldworkerDatas.lastName, Toast.LENGTH_LONG).show();
         //Toast.makeText(MainActivity.this, "Welcome " + status, Toast.LENGTH_LONG).show();
 
+
         send = findViewById(R.id.btnpush);
-//        listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
-//        deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
-//        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-//        outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
 
         final Button update = findViewById(R.id.btnupdate);
         update.setOnClickListener(v -> {
@@ -101,12 +122,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Access Denied", Toast.LENGTH_SHORT).show();
             }
         });
-
-//        final Button remainder = findViewById(R.id.btncensus);
-//        remainder.setOnClickListener(v -> {
-//            Intent i = new Intent(getApplicationContext(),RemainderActivity.class);
-//            startActivity(i);
-//        });
 
         final Button control = findViewById(R.id.btnreport);
         control.setOnClickListener(v -> {
@@ -179,101 +194,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
-//        try {
-//            List<Listing> data = listingViewModel.error();
-//            if (data != null && !data.isEmpty() && status == 1) {
-//                send.setEnabled(false);
-//            } else {
-//                send.setEnabled(true);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
-//        try {
-//            List<Death> data = deathViewModel.error();
-//                if (data != null && status == 1) {
-//                    send.setEnabled(false);
-//                } else {
-//                    send.setEnabled(true);
-//                }
-//        } catch (ExecutionException e) {
-//            throw new RuntimeException(e);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-//        try {
-//            List<Individual> data = individualViewModel.error();
-//            if (data != null && status == 1) {
-//                send.setEnabled(false);
-//            } else {
-//                send.setEnabled(true);
-//            }
-//        } catch (ExecutionException e) {
-//            throw new RuntimeException(e);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-//        try {
-//            List<Individual> data = individualViewModel.errors();
-//            if (data != null && status == 1) {
-//                send.setEnabled(false);
-//            } else {
-//                send.setEnabled(true);
-//            }
-//        } catch (ExecutionException e) {
-//            throw new RuntimeException(e);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
-//        try {
-//            List<Outcome> data = outcomeViewModel.error();
-//            if (data != null && status == 1) {
-//                send.setEnabled(false);
-//            } else {
-//                send.setEnabled(true);
-//            }
-//        } catch (ExecutionException e) {
-//            throw new RuntimeException(e);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-
 
     }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        try {
-//            List<Listing> data = listingViewModel.error();
-//            List<Death> dth = deathViewModel.error();
-//            List<Outcome> out = outcomeViewModel.error();
-//            List<Individual> ind = individualViewModel.error();
-//            List<Individual> inds = individualViewModel.errors();
-//
-//            if (status == 1 && ((data != null && !data.isEmpty()) || (dth != null && !dth.isEmpty())
-//                    || (ind != null && !ind.isEmpty()) || (inds != null && !inds.isEmpty()) || (out != null && !out.isEmpty()))) {
-//                send.setEnabled(false);
-//            } else {
-//                send.setEnabled(true);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            // Handle errors appropriately, e.g., show a message to the user or log it
-//            e.printStackTrace();
-//            Toast.makeText(this, "Error checking conditions", Toast.LENGTH_SHORT).show();
-//        }
-//    }
-
-
 
     public void startAppInfo(View view) {
         showDialogInfo(null, DATA_CAPTURE);
@@ -344,4 +266,71 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    public static boolean isLocationEnabled(Context context) {
+        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager != null) {
+            boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            return isGpsEnabled || isNetworkEnabled;
+        }
+        return false;
+    }
+
+    private void showLocationSettingsPrompt() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Location Disabled");
+        builder.setMessage("Please enable location for this app in your device settings to pick GPS");
+        builder.setPositiveButton("Go to Settings", (dialog, which) -> {
+            // Open app settings
+            Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(intent);
+        });
+        // Set dialog not closable
+        builder.setCancelable(false);
+        builder.show();
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            // Handle cancel button click
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        calculatePercentage();
+        if (!isLocationEnabled(this)) {
+            showLocationSettingsPrompt();
+        }
+    }
+
+    private void calculatePercentage() {
+        LocationViewModel viewModels = new ViewModelProvider(this).get(LocationViewModel.class);
+
+        try {
+            long totalLocations = viewModels.work(fw);
+            long editedLocations = viewModels.works(fw);
+
+            if (totalLocations > 0) {
+                // Calculate the percentage of edited locations
+                double percentage = ((double) editedLocations / totalLocations) * 100;
+
+                // Format the percentage to display two decimal places
+                String formattedPercentage = String.format(Locale.getDefault(), "%.2f", percentage);
+
+                ProgressBar circularProgressBar = findViewById(R.id.circularProgressBar);
+                circularProgressBar.setMax((int) totalLocations);
+                circularProgressBar.setProgress((int) Math.min(editedLocations, totalLocations));
+                wks.setText(formattedPercentage + "% ");
+
+                // Now you have the percentage value, and you can use it as needed
+                // For example, you can log it or display it in your app
+                Log.d("Percentage", "Percentage of edited locations: " + percentage);
+            }
+
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

@@ -122,91 +122,97 @@ public class LoginActivity extends AppCompatActivity  {
 //        String base64Credentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
 //        String authorizationHeader = "Basic " + base64Credentials;
 
-
-        final Button button_SyncFw = findViewById(R.id.button_SyncFieldworkerData);
-        button_SyncFw.setOnClickListener(v -> {
-            final TextView textView_SyncFw = findViewById(R.id.textView_SyncFieldworkerData);
-            textView_SyncFw.setText("");
-
-            // Get the username and password from the EditText fields
-            String enteredUsername = username.getText().toString().trim();
-            String enteredPassword = password.getText().toString().trim();
-            if (TextUtils.isEmpty(enteredUsername) || TextUtils.isEmpty(enteredPassword)) {
-                Toast.makeText(LoginActivity.this, "Wrong Username or Password", Toast.LENGTH_LONG).show();
-                return;
-            }
-
-            // Construct Basic Authentication header
-            String credentials = enteredUsername + ":" + enteredPassword;
-            String base64Credentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
-            String authorizationHeader = "Basic " + base64Credentials;
-
-            // Save authorizationHeader in SharedPreferences
-            SharedPreferences preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("authorizationHeader", authorizationHeader);
-            editor.apply();
-
-            // Show the ProgressBar
-            progressBar.setVisibility(View.VISIBLE);
-
-            final FieldworkerViewModel viewModel = new ViewModelProvider(this).get(FieldworkerViewModel.class);
-
-            // Modify the service method to accept the credentials in the header
-            Call<DataWrapper<Fieldworker>> c_callable = dao.getFw(authorizationHeader);
-            c_callable.enqueue(new Callback<DataWrapper<Fieldworker>>() {
-                @Override
-                public void onResponse(Call<DataWrapper<Fieldworker>> call, Response<DataWrapper<Fieldworker>> response) {
-                    if (response != null && response.isSuccessful()) {
-                        DataWrapper<Fieldworker> dataWrapper = response.body();
-                        if (dataWrapper != null) {
-                            List<Fieldworker> fieldworkers = dataWrapper.getData();
-                            if (fieldworkers != null && !fieldworkers.isEmpty()) {
-                                // Process the data
-                                Fieldworker[] fieldworkerArray = fieldworkers.toArray(new Fieldworker[0]);
-                                viewModel.add(fieldworkerArray);
-                                progressBar.setVisibility(View.GONE);
-                                textView_SyncFw.setText("Successful Download of " + fieldworkers.size() + " Data Collectors");
-                                textView_SyncFw.setTextColor(ContextCompat.getColor(textView_SyncFw.getContext(), R.color.LimeGreen));
-                                //textView_SyncFw.setTextColor(Color.GREEN);
-                            } else {
-                                // Handle empty or null fieldworkers list
-                                handleEmptyFieldworkers();
-                            }
-                        } else {
-                            // Handle null dataWrapper
-                            handleNullDataWrapper();
-                        }
-                    } else {
-                        // Handle unsuccessful response
-                        progressBar.setVisibility(View.GONE);
-                        textView_SyncFw.setText("Unsuccessful response: " + response.code());
-                        textView_SyncFw.setTextColor(Color.RED);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<DataWrapper<Fieldworker>> call, Throwable t) {
-                    // Handle failure
-                    progressBar.setVisibility(View.GONE);
-                    textView_SyncFw.setText("Fieldworker Sync Error!");
-                    textView_SyncFw.setTextColor(Color.RED);
-                }
-
-                private void handleEmptyFieldworkers() {
-                    progressBar.setVisibility(View.GONE);
-                    textView_SyncFw.setText("Fieldworkers data is empty or null");
-                    textView_SyncFw.setTextColor(Color.RED);
-                }
-
-                private void handleNullDataWrapper() {
-                    progressBar.setVisibility(View.GONE);
-                    textView_SyncFw.setText("DataWrapper is null");
-                    textView_SyncFw.setTextColor(Color.RED);
-                }
-            });
-
+        final Button superv = findViewById(R.id.button_Supervisor);
+        superv.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), SupervisorActivity.class);
+            startActivity(i);
         });
+
+
+//        final Button button_SyncFw = findViewById(R.id.button_SyncFieldworkerData);
+//        button_SyncFw.setOnClickListener(v -> {
+//            final TextView textView_SyncFw = findViewById(R.id.textView_SyncFieldworkerData);
+//            textView_SyncFw.setText("");
+//
+//            // Get the username and password from the EditText fields
+//            String enteredUsername = username.getText().toString().trim();
+//            String enteredPassword = password.getText().toString().trim();
+//            if (TextUtils.isEmpty(enteredUsername) || TextUtils.isEmpty(enteredPassword)) {
+//                Toast.makeText(LoginActivity.this, "Wrong Username or Password", Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//
+//            // Construct Basic Authentication header
+//            String credentials = enteredUsername + ":" + enteredPassword;
+//            String base64Credentials = Base64.encodeToString(credentials.getBytes(), Base64.NO_WRAP);
+//            String authorizationHeader = "Basic " + base64Credentials;
+//
+//            // Save authorizationHeader in SharedPreferences
+//            SharedPreferences preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+//            SharedPreferences.Editor editor = preferences.edit();
+//            editor.putString("authorizationHeader", authorizationHeader);
+//            editor.apply();
+//
+//            // Show the ProgressBar
+//            progressBar.setVisibility(View.VISIBLE);
+//
+//            final FieldworkerViewModel viewModel = new ViewModelProvider(this).get(FieldworkerViewModel.class);
+//
+//            // Modify the service method to accept the credentials in the header
+//            Call<DataWrapper<Fieldworker>> c_callable = dao.getFw(authorizationHeader);
+//            c_callable.enqueue(new Callback<DataWrapper<Fieldworker>>() {
+//                @Override
+//                public void onResponse(Call<DataWrapper<Fieldworker>> call, Response<DataWrapper<Fieldworker>> response) {
+//                    if (response != null && response.isSuccessful()) {
+//                        DataWrapper<Fieldworker> dataWrapper = response.body();
+//                        if (dataWrapper != null) {
+//                            List<Fieldworker> fieldworkers = dataWrapper.getData();
+//                            if (fieldworkers != null && !fieldworkers.isEmpty()) {
+//                                // Process the data
+//                                Fieldworker[] fieldworkerArray = fieldworkers.toArray(new Fieldworker[0]);
+//                                viewModel.add(fieldworkerArray);
+//                                progressBar.setVisibility(View.GONE);
+//                                textView_SyncFw.setText("Successful Download of " + fieldworkers.size() + " Data Collectors");
+//                                textView_SyncFw.setTextColor(ContextCompat.getColor(textView_SyncFw.getContext(), R.color.LimeGreen));
+//                                //textView_SyncFw.setTextColor(Color.GREEN);
+//                            } else {
+//                                // Handle empty or null fieldworkers list
+//                                handleEmptyFieldworkers();
+//                            }
+//                        } else {
+//                            // Handle null dataWrapper
+//                            handleNullDataWrapper();
+//                        }
+//                    } else {
+//                        // Handle unsuccessful response
+//                        progressBar.setVisibility(View.GONE);
+//                        textView_SyncFw.setText("Unsuccessful response: " + response.code());
+//                        textView_SyncFw.setTextColor(Color.RED);
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<DataWrapper<Fieldworker>> call, Throwable t) {
+//                    // Handle failure
+//                    progressBar.setVisibility(View.GONE);
+//                    textView_SyncFw.setText("Fieldworker Sync Error!");
+//                    textView_SyncFw.setTextColor(Color.RED);
+//                }
+//
+//                private void handleEmptyFieldworkers() {
+//                    progressBar.setVisibility(View.GONE);
+//                    textView_SyncFw.setText("Fieldworkers data is empty or null");
+//                    textView_SyncFw.setTextColor(Color.RED);
+//                }
+//
+//                private void handleNullDataWrapper() {
+//                    progressBar.setVisibility(View.GONE);
+//                    textView_SyncFw.setText("DataWrapper is null");
+//                    textView_SyncFw.setTextColor(Color.RED);
+//                }
+//            });
+//
+//        });
 
 
 

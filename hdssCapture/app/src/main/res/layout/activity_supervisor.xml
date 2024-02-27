@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/loginMainLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context=".Activity.LoginActivity">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".Activity.SupervisorActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/loginLogoLayout"
@@ -39,7 +37,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/login_signin_msg_lbl"
+                android:text="@string/dataco"
                 android:textColor="@color/color_text_darkgray"
                 android:gravity="center"
                 android:textSize="30sp" />
@@ -89,7 +87,7 @@
                 android:layout_marginTop="8dip"
                 android:background="@drawable/txtbox_rone_wbevel"
                 android:labelFor="@id/text_username"
-                android:inputType="textCapCharacters"
+                android:inputType="textAutoComplete"
                 android:maxLines="1"
                 android:paddingStart="20dip"
                 android:paddingEnd="20dip"
@@ -139,22 +137,35 @@
 
 
         <Button
-            android:id="@+id/btnLogin"
+            android:id="@+id/button_SyncFieldworkerData"
             android:layout_width="300dip"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="6dip"
-            android:background="@drawable/btnd_rone_dgbevel"
-            android:elevation="10sp"
-            android:text="@string/login_form_login"
+            android:background="@drawable/btnd_rone_black"
+            android:text="@string/syncFieldworker"
             android:textColor="@android:color/background_light"
-            android:textSize="18sp"
-            android:translationZ="10dip" />
+            android:textSize="18sp" />
 
+        <TextView
+            android:id="@+id/textView_SyncFieldworkerData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textSize="18sp" />
 
+        <!-- progress -->
+        <ProgressBar
+            android:id="@+id/login_progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dip"
+            android:visibility="gone" />
 
-
-        </LinearLayout>
+    </LinearLayout>
 
     <!-- copyright-->
     <LinearLayout
@@ -164,34 +175,10 @@
         android:gravity="center"
         android:orientation="vertical"
         android:layout_marginBottom="10dp"
-        android:layout_marginTop="35dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginButtonsLayout">
-
-        <Button
-            android:id="@+id/apiSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@android:color/transparent"
-            android:drawableStart="@drawable/btn_setting"
-            android:drawablePadding="5dip"
-            android:text="@string/login_settings_lbl"
-            android:textColor="@color/color_text_darkgray" />
-
-        <Button
-            android:id="@+id/button_Supervisor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@android:color/transparent"
-            android:drawableStart="@drawable/d_user"
-            android:drawablePadding="5dip"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:text="@string/dac"/>
 
 
         <TextView
@@ -202,8 +189,7 @@
             android:textAppearance="?android:attr/textAppearance"
             android:textSize="20dp"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
-             />
+            android:textColor="@android:color/black"/>
 
         <TextView
             android:id="@+id/txtCopyrightCompany"

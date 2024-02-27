@@ -80,6 +80,14 @@ public interface LocationDao {
     @Query("SELECT COUNT(*) FROM Locations WHERE locationLevel_uuid=:id")
     long done(String id);
 
+    @Query("SELECT COUNT(a.compno) FROM Locations as a INNER JOIN locationhierarchy as b on a.locationLevel_uuid=b.uuid " +
+            "WHERE fw_name=:id")
+    long work(String id);
+
+    @Query("SELECT COUNT(a.compno) FROM Locations as a INNER JOIN locationhierarchy as b on a.locationLevel_uuid=b.uuid " +
+            "WHERE fw_name=:id AND complete IS NOT NULL")
+    long works(String id);
+
     @Query("SELECT * FROM locations WHERE insertDate > (SELECT startDate FROM round ORDER BY roundNumber DESC LIMIT 1) AND fw_uuid=:id order by insertDate DESC")
     List<Locations> repo(String id);
 

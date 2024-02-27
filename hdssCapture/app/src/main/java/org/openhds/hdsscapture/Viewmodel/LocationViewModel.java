@@ -62,6 +62,14 @@ public class LocationViewModel extends AndroidViewModel {
     public long done(String id) throws ExecutionException, InterruptedException {
         return locationRepository.done(id);
     }
+
+    public long work(String id) throws ExecutionException, InterruptedException {
+        return locationRepository.work(id);
+    }
+
+    public long works(String id) throws ExecutionException, InterruptedException {
+        return locationRepository.works(id);
+    }
     public List<Locations> repo(String id) throws ExecutionException, InterruptedException {
         return locationRepository.repo(id);
     }

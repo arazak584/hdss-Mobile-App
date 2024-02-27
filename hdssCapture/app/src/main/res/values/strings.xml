@@ -686,6 +686,14 @@
     <string name="wrongomg">Is it a Wrong Outmigration?</string>
     <string name="edit_event">Edit Events</string>
     <string name="workarea">Working Areas</string>
+    <string name="title_activity_screen">ScreenActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="fws">FIELDWORKER</string>
+    <string name="supervisor">SUPERVISOR</string>
+    <string name="dataco">Download Data Collectors</string>
+    <string name="dac">DOWNLOAD USERS</string>
 
     //SocioDemo End
 
