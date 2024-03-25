@@ -423,19 +423,33 @@ public class LocationFragment extends DialogFragment {
                 String locs = binding.locationcompno.getText().toString().trim();
                 String site = binding.site.getSelectedItem().toString();
 
-                if (!vill.startsWith(locs.substring(0, 2))) {
                     if (site.equals("KHDSS")) {
-                        loc = true;
-                    } else if (site.equals("NHDSS") && !vill.startsWith(locs.substring(0, 3))) {
-                        nhrc = true;
-                    } else if (site.equals("DHDSS") && !vill.startsWith(locs.substring(0, 4))) {
-                        dhrc = true;
+                        if (!vill.substring(0, 2).equals(locs.substring(0, 2))) {
+                            Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
+                            binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
+                            loc = true;
+                            return;
+                        }
+                    } else if (site.equals("NHDSS")) {
+                        if (!vill.startsWith(locs.substring(0, 3))) {
+                            Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
+                            binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
+                            nhrc = true;
+                            return;
+                        }
+                    } else if (site.equals("DHDSS")) {
+                        if (!vill.startsWith(locs.substring(0, 4))) {
+                            Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
+                            binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
+                            dhrc = true;
+                            return;
+                        }
                     }
 
-                    Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
-                    binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
-                    return;
-                }
+//                    Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
+//                    binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
+//                    return;
+
             }
 
             Date end = new Date(); // Get the current date and time

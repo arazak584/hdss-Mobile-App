@@ -128,6 +128,9 @@ public class Pregnancyoutcome extends BaseObservable {
     @Expose
     public String pregnancy_uuid;
 
+    @Expose
+    public String location;
+
     public Pregnancyoutcome(){}
 
 
@@ -427,6 +430,14 @@ public class Pregnancyoutcome extends BaseObservable {
 
     public void setPregnancy_uuid(String pregnancy_uuid) {
         this.pregnancy_uuid = pregnancy_uuid;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getNumberOfLiveBirths() {

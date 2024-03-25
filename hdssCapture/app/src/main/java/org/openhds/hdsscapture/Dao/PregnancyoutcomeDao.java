@@ -28,8 +28,14 @@ PregnancyoutcomeDao {
     @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id ORDER BY outcomeDate ASC LIMIT 1")
     Pregnancyoutcome find(String id);
 
+    @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id and location=:locid ORDER BY outcomeDate ASC LIMIT 1")
+    Pregnancyoutcome findloc(String id, String locid);
+
     @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id AND id=2")
     Pregnancyoutcome finds(String id);
+
+    @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id AND location=:locid AND id=2")
+    Pregnancyoutcome findsloc(String id, String locid);
 
     @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id and extra=1")
     Pregnancyoutcome findout(String id);

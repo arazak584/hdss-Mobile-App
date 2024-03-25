@@ -274,7 +274,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
         ResidencyViewModel residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         try {
-            Pregnancyoutcome data = viewModel.finds(HouseMembersFragment.selectedIndividual.uuid);
+            Pregnancyoutcome data = viewModel.findsloc(HouseMembersFragment.selectedIndividual.uuid,ClusterFragment.selectedLocation.uuid);
             if (data != null) {
                 binding.setPregoutcome(data);
                 binding.extras.setVisibility(View.GONE);
@@ -336,6 +336,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
                 data.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
+                data.location = ClusterFragment.selectedLocation.uuid;
 //                data.complete = 1;
                 data.extra = 2;
                 data.id = 2;
@@ -377,7 +378,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
         try {
             final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD5 + 0 + roundData.roundNumber;
-            Outcome data = outcomeViewModel.find(child_id);
+            Outcome data = outcomeViewModel.find(child_id,ClusterFragment.selectedLocation.uuid);
             if (data != null) {
                 data.preg_uuid = binding.getPregoutcome().getUuid();
                 binding.setPregoutcome1(data);
@@ -422,6 +423,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.childuuid = uuidString;
                 //data.mother_uuid = HouseMembersFragment.selectedIndividual.uuid;
                 data.residency_uuid = rsi;
+                data.location = ClusterFragment.selectedLocation.uuid;
 
                 data.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.child_idx = AppConstants.CHILD5;
@@ -464,7 +466,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
         try {
             final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD6 + 0 + roundData.roundNumber;
-            Outcome data = outcomeViewModel.find(child_id);
+            Outcome data = outcomeViewModel.find(child_id,ClusterFragment.selectedLocation.uuid);
             if (data != null) {
                 data.preg_uuid = binding.getPregoutcome().getUuid();
                 binding.setPregoutcome2(data);
@@ -512,6 +514,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.childuuid = uuidString;
                 //data.mother_uuid = HouseMembersFragment.selectedIndividual.uuid;
                 data.residency_uuid = rsi;
+                data.location = ClusterFragment.selectedLocation.uuid;
 
                 data.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.child_idx = AppConstants.CHILD6;
@@ -556,7 +559,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
         try {
             final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD7 + 0 + roundData.roundNumber;
-            Outcome data = outcomeViewModel.find(child_id);
+            Outcome data = outcomeViewModel.find(child_id,ClusterFragment.selectedLocation.uuid);
             if (data != null) {
                 data.preg_uuid = binding.getPregoutcome().getUuid();
                 binding.setPregoutcome3(data);
@@ -604,6 +607,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.childuuid = uuidString;
                 //data.mother_uuid = HouseMembersFragment.selectedIndividual.uuid;
                 data.residency_uuid = rsi;
+                data.location = ClusterFragment.selectedLocation.uuid;
 
                 data.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.child_idx = AppConstants.CHILD7;
@@ -649,7 +653,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
 
         try {
             final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD8 + 0 + roundData.roundNumber;
-            Outcome data = outcomeViewModel.find(child_id);
+            Outcome data = outcomeViewModel.find(child_id,ClusterFragment.selectedLocation.uuid);
             if (data != null) {
                 data.preg_uuid = binding.getPregoutcome().getUuid();
                 binding.setPregoutcome4(data);
@@ -697,6 +701,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.childuuid = uuidString;
                 //data.mother_uuid = HouseMembersFragment.selectedIndividual.uuid;
                 data.residency_uuid = rsi;
+                data.location = ClusterFragment.selectedLocation.uuid;
 
                 data.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.child_idx = AppConstants.CHILD8;

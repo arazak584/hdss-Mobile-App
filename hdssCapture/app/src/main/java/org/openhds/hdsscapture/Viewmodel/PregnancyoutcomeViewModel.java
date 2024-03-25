@@ -30,8 +30,16 @@ public class PregnancyoutcomeViewModel extends AndroidViewModel {
         return pregnancyoutcomeRepository.find(id);
     }
 
+    public Pregnancyoutcome findloc(String id,String locid) throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.findloc(id,locid);
+    }
+
     public Pregnancyoutcome finds(String id) throws ExecutionException, InterruptedException {
         return pregnancyoutcomeRepository.finds(id);
+    }
+
+    public Pregnancyoutcome findsloc(String id,String locid) throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.findsloc(id,locid);
     }
 
     public Pregnancyoutcome findout(String id) throws ExecutionException, InterruptedException {

@@ -108,8 +108,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         send.setOnClickListener(v -> {
+            if (fieldworkerDatas != null && fieldworkerDatas.status != null && fieldworkerDatas.status == 1) {
                 Intent i = new Intent(getApplicationContext(), PushActivity.class);
                 startActivity(i);
+            } else {
+                // Display a message or take appropriate action when the condition is not met
+                Toast.makeText(MainActivity.this, "Access Denied", Toast.LENGTH_SHORT).show();
+            }
         });
 
         final Button pull = findViewById(R.id.btnpull);

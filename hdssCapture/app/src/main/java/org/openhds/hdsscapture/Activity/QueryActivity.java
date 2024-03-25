@@ -181,7 +181,7 @@ public class QueryActivity extends AppCompatActivity {
                 Queries r1 = new Queries();
                 r1.name = k + ". Household ID: " +  e.getHohID();
                 r1.extid = "Compno: " + e.compno;
-                r1.date = "";
+                r1.date = "" + e.village;
                 r1.error = "Only Minors Left in Household";
                 r1.index = k;
                 list.add(r1);

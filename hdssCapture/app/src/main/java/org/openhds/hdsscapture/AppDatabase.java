@@ -72,7 +72,7 @@ import java.util.concurrent.Executors;
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
         Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class, Duplicate.class,
         ApiUrl.class, Configsettings.class, Form.class, Vpm.class
-        }, version = 2 , exportSchema = true)
+        }, version = 3 , exportSchema = true)
 
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -108,10 +108,11 @@ public abstract class AppDatabase extends RoomDatabase {
     // If the version of the database is 2 you upgrade to 3 then set the MIGRATION_2_3 which means version 2 to 3
     //Then write the script to implement the change
 
-    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE outmigration ADD COLUMN edit INTEGER");
+            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN location TEXT");
+            database.execSQL("ALTER TABLE outcome ADD COLUMN location TEXT");
             //database.execSQL("ALTER TABLE locations ADD COLUMN ord INTEGER DEFAULT 0");
         }
     };
@@ -126,7 +127,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                 AppDatabase.class, "hdss")
                                 .addCallback(sRoomDatabaseCallback)
-                                .addMigrations(MIGRATION_1_2)
+                                .addMigrations(MIGRATION_2_3)
                                 .fallbackToDestructiveMigrationOnDowngrade()
                                 .build();
             }

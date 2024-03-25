@@ -39,16 +39,42 @@ public interface HierarchyDao {
     List<Hierarchy> retrieveLevel2(String id);
 
     @Query("select a.* from locationhierarchy as a left join locationhierarchy as b" +
+            " on a.parent_uuid=b.uuid INNER JOIN locationhierarchy c on a.uuid=c.parent_uuid " +
+            " INNER JOIN locationhierarchy d on c.uuid=d.parent_uuid " +
+            " INNER JOIN locationhierarchy e on d.uuid=e.parent_uuid " +
+            " INNER JOIN locationhierarchy f on e.uuid=f.parent_uuid " +
+            "where a.level_uuid='hierarchyLevelId2' and f.fw_name=:fw and a.parent_uuid=:id GROUP BY a.uuid order by a.name")
+    List<Hierarchy> retrieveLevel2i(String id,String fw);
+
+    @Query("select a.* from locationhierarchy as a left join locationhierarchy as b" +
             " on a.parent_uuid=b.uuid where a.level_uuid='hierarchyLevelId3' and a.parent_uuid=:id order by a.name")
     List<Hierarchy> retrieveLevel3(String id);
+
+    @Query("select a.* from locationhierarchy as a left join locationhierarchy as b" +
+            " on a.parent_uuid=b.uuid INNER JOIN locationhierarchy c on a.uuid=c.parent_uuid " +
+            " INNER JOIN locationhierarchy d on c.uuid=d.parent_uuid " +
+            " INNER JOIN locationhierarchy e on d.uuid=e.parent_uuid " +
+            "where a.level_uuid='hierarchyLevelId3' and e.fw_name=:fw and a.parent_uuid=:id GROUP BY a.uuid order by a.name")
+    List<Hierarchy> retrieveLevel3i(String id,String fw);
 
     @Query("select a.* from locationhierarchy as a left join locationhierarchy as b" +
             " on a.parent_uuid=b.uuid where a.level_uuid='hierarchyLevelId4' and a.parent_uuid=:id order by a.name")
     List<Hierarchy> retrieveLevel4(String id);
 
     @Query("select a.* from locationhierarchy as a left join locationhierarchy as b" +
+            " on a.parent_uuid=b.uuid INNER JOIN locationhierarchy c on a.uuid=c.parent_uuid " +
+            " INNER JOIN locationhierarchy d on c.uuid=d.parent_uuid " +
+            "where a.level_uuid='hierarchyLevelId4' and d.fw_name=:fw and a.parent_uuid=:id GROUP BY a.uuid order by a.name")
+    List<Hierarchy> retrieveLevel4i(String id,String fw);
+
+    @Query("select a.* from locationhierarchy as a left join locationhierarchy as b" +
             " on a.parent_uuid=b.uuid where a.level_uuid='hierarchyLevelId5' and a.parent_uuid=:id order by a.name")
     List<Hierarchy> retrieveLevel5(String id);
+
+    @Query("select a.* from locationhierarchy as a left join locationhierarchy as b" +
+            " on a.parent_uuid=b.uuid INNER JOIN locationhierarchy c on a.uuid=c.parent_uuid " +
+            "where a.level_uuid='hierarchyLevelId5' and c.fw_name=:fw and a.parent_uuid=:id GROUP BY a.uuid order by a.name")
+    List<Hierarchy> retrieveLevel5i(String id,String fw);
 
     @Query("select a.* from locationhierarchy as a left join locationhierarchy as b" +
             " on a.parent_uuid=b.uuid where a.level_uuid='hierarchyLevelId6' and a.parent_uuid=:id order by a.name")

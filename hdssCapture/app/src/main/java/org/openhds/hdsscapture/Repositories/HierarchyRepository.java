@@ -78,6 +78,42 @@ public class HierarchyRepository {
         return future.get();
     }
 
+    public List<Hierarchy> retrieveLevel5i(String id,String fw) throws ExecutionException, InterruptedException {
+
+        Callable<List<Hierarchy>> callable = () -> dao.retrieveLevel5i(id,fw);
+
+        Future<List<Hierarchy>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Hierarchy> retrieveLevel4i(String id,String fw) throws ExecutionException, InterruptedException {
+
+        Callable<List<Hierarchy>> callable = () -> dao.retrieveLevel4i(id,fw);
+
+        Future<List<Hierarchy>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Hierarchy> retrieveLevel3i(String id,String fw) throws ExecutionException, InterruptedException {
+
+        Callable<List<Hierarchy>> callable = () -> dao.retrieveLevel3i(id,fw);
+
+        Future<List<Hierarchy>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Hierarchy> retrieveLevel2i(String id,String fw) throws ExecutionException, InterruptedException {
+
+        Callable<List<Hierarchy>> callable = () -> dao.retrieveLevel2i(id,fw);
+
+        Future<List<Hierarchy>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Hierarchy> retrieveLevel6(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Hierarchy>> callable = () -> dao.retrieveLevel6(id);

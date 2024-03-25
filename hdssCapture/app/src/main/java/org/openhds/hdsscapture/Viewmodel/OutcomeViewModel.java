@@ -27,8 +27,8 @@ public class OutcomeViewModel extends AndroidViewModel {
         return outcomeRepository.findToSync();
     }
 
-    public Outcome find(String id) throws ExecutionException, InterruptedException {
-        return outcomeRepository.find(id);
+    public Outcome find(String id,String locid) throws ExecutionException, InterruptedException {
+        return outcomeRepository.find(id,locid);
     }
 
     public List<Outcome> error() throws ExecutionException, InterruptedException {

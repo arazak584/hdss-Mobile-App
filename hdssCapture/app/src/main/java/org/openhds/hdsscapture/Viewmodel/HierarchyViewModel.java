@@ -41,6 +41,22 @@ public class HierarchyViewModel extends AndroidViewModel {
         return hierarchyRepository.retrieveLevel5(id);
     }
 
+    public List<Hierarchy> retrieveLevel5i(String id,String fw) throws ExecutionException, InterruptedException {
+        return hierarchyRepository.retrieveLevel5i(id,fw);
+    }
+
+    public List<Hierarchy> retrieveLevel4i(String id,String fw) throws ExecutionException, InterruptedException {
+        return hierarchyRepository.retrieveLevel4i(id,fw);
+    }
+
+    public List<Hierarchy> retrieveLevel3i(String id,String fw) throws ExecutionException, InterruptedException {
+        return hierarchyRepository.retrieveLevel3i(id,fw);
+    }
+
+    public List<Hierarchy> retrieveLevel2i(String id,String fw) throws ExecutionException, InterruptedException {
+        return hierarchyRepository.retrieveLevel2i(id,fw);
+    }
+
     public List<Hierarchy> retrieveLevel6(String id) throws ExecutionException, InterruptedException {
         return hierarchyRepository.retrieveLevel6(id);
     }

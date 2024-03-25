@@ -52,8 +52,8 @@ public class OutcomeRepository {
         return future.get();
     }
 
-    public Outcome find(String id) throws ExecutionException, InterruptedException {
-        Callable<Outcome> callable = () -> dao.find(id);
+    public Outcome find(String id,String locid) throws ExecutionException, InterruptedException {
+        Callable<Outcome> callable = () -> dao.find(id,locid);
         Future<Outcome> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }

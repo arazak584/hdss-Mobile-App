@@ -37,6 +37,6 @@ OutcomeDao {
             "WHERE b.uuid is NULL and endType=1 ")
     List<Outcome> error();
 
-    @Query("SELECT * FROM outcome where uuid=:id")
-    Outcome find(String id);
+    @Query("SELECT * FROM outcome where uuid=:id AND location=:locid")
+    Outcome find(String id,String locid);
 }

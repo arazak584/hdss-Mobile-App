@@ -98,6 +98,9 @@ public class Outcome extends BaseObservable {
     @Expose
     public String weig_hcard;//Record weight in kilograms from Health Card
 
+    @Expose
+    public String location;
+
     public Outcome(){}
 
     @Ignore
@@ -203,6 +206,14 @@ public class Outcome extends BaseObservable {
 
     public void setWeig_hcard(String weig_hcard) {
         this.weig_hcard = weig_hcard;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     //SPINNERS ENTITY

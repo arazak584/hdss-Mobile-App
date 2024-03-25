@@ -47,8 +47,20 @@ public class PregnancyoutcomeRepository {
         return future.get();
     }
 
+    public Pregnancyoutcome findloc(String id,String locid) throws ExecutionException, InterruptedException {
+        Callable<Pregnancyoutcome> callable = () -> dao.findloc(id,locid);
+        Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
     public Pregnancyoutcome finds(String id) throws ExecutionException, InterruptedException {
         Callable<Pregnancyoutcome> callable = () -> dao.finds(id);
+        Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    public Pregnancyoutcome findsloc(String id,String locid) throws ExecutionException, InterruptedException {
+        Callable<Pregnancyoutcome> callable = () -> dao.findsloc(id,locid);
         Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }
