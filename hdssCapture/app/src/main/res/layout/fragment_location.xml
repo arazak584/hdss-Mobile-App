@@ -99,6 +99,24 @@
                     android:inputType="text"
                     app:backgroundTint="#FF0000" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/site"/>
+
+                <Spinner
+                    android:id="@+id/site"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    selection="@{locations.site}"
+                    android:onItemSelected="@{locations::setSite}"
+                    android:spinnerMode="dialog"
+                    android:padding="10dp"/>
+
 
                 <EditText
                     android:id="@+id/locationcluster"
@@ -123,26 +141,10 @@
                     android:inputType="textPersonName|textCapCharacters"/>
 
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/site"/>
 
-                <Spinner
-                    android:id="@+id/site"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    selection="@{locations.site}"
-                    android:onItemSelected="@{locations::setSite}"
-                    android:spinnerMode="dialog"
-                    android:padding="20dp"/>
 
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:id="@+id/locationextid"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"

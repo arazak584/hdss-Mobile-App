@@ -281,15 +281,8 @@ public class LocationFragment extends DialogFragment {
             binding.getLocations().complete = 1;
         }
 
+        // Check if binding.site is null or does not have a selected item
         if (binding.getLocations().site == null) {
-            // If site is null, set it to the default available option (in this case, 1).
-            binding.getLocations().site = 1;
-        } else if (binding.getLocations().site == 1 || binding.getLocations().site == 2 || binding.getLocations().site == 3) {
-            // If site is already set to 1, 2, or 3, do nothing as it's a valid option.
-            // No need to change the value.
-        } else {
-            // If site is not null and not one of the valid options (1, 2, or 3), you can handle the error or set it to another default value.
-            // For example, you can set it to 1 as the default:
             binding.getLocations().site = 1;
         }
 
@@ -380,10 +373,6 @@ public class LocationFragment extends DialogFragment {
             }
 
 
-
-
-
-
             try {
                 Locations locations1 = null;
                 if(locations.getCompno()!=null) {
@@ -424,6 +413,7 @@ public class LocationFragment extends DialogFragment {
                 String site = binding.site.getSelectedItem().toString();
 
                     if (site.equals("KHDSS")) {
+                        Log.d("Location", "Kintampo "+ site);
                         if (!vill.substring(0, 2).equals(locs.substring(0, 2))) {
                             Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
                             binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
@@ -431,6 +421,7 @@ public class LocationFragment extends DialogFragment {
                             return;
                         }
                     } else if (site.equals("NHDSS")) {
+                        Log.d("Location", "Navrongo "+ site);
                         if (!vill.startsWith(locs.substring(0, 3))) {
                             Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
                             binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
@@ -438,6 +429,7 @@ public class LocationFragment extends DialogFragment {
                             return;
                         }
                     } else if (site.equals("DHDSS")) {
+                        Log.d("Location", "Dodowa "+ site);
                         if (!vill.startsWith(locs.substring(0, 4))) {
                             Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
                             binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
@@ -445,10 +437,6 @@ public class LocationFragment extends DialogFragment {
                             return;
                         }
                     }
-
-//                    Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
-//                    binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
-//                    return;
 
             }
 

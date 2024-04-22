@@ -633,6 +633,14 @@ public class IndividualFragment extends Fragment {
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.INDIVIDUALLAYOUT, validateOnComplete, false);
 
+            boolean missedout = false;
+
+            if (img.migType!=null && img.migType==2 && img.reason==19){
+                missedout = true;
+                Toast.makeText(getActivity(), "Reason cannot be missed out for Internal Inmigration", Toast.LENGTH_LONG).show();
+                return;
+            }
+
             try {
                 if (!binding.dob.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);

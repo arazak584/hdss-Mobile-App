@@ -146,6 +146,20 @@ public class QueryActivity extends AppCompatActivity {
 //
 //            }
 
+            int l=1;
+            for (Listing e : listingViewModel.error()) {
+                //String formattedDate = f.format(e.insertDate);
+                Queries r1 = new Queries();
+                r1.name = l + ". Compno: " + e.compno;
+                r1.extid = "Cluster: " + e.compextId + " - Compound Name: " +e.locationName;
+                r1.date = "";
+                r1.error = "Listing Not Picked";
+                r1.index = l;
+                list.add(r1);
+                l++;
+
+            }
+
             int d=1;
             for (Death e : deathViewModel.error()) {
                 //String formattedDate = f.format(e.insertDate);
@@ -173,19 +187,6 @@ public class QueryActivity extends AppCompatActivity {
                 list.add(r1);
                 g++;
 
-            }
-
-            int k=1;
-            for (Individual e : individualViewModel.errors()) {
-                //String formattedDate = f.format(e.insertDate);
-                Queries r1 = new Queries();
-                r1.name = k + ". Household ID: " +  e.getHohID();
-                r1.extid = "Compno: " + e.compno;
-                r1.date = "" + e.village;
-                r1.error = "Only Minors Left in Household";
-                r1.index = k;
-                list.add(r1);
-                k++;
             }
 
             int h=1;
@@ -221,19 +222,19 @@ public class QueryActivity extends AppCompatActivity {
 
             }
 
-            int l=1;
-            for (Listing e : listingViewModel.error()) {
+            int k=1;
+            for (Individual e : individualViewModel.errors()) {
                 //String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
-                r1.name = l + ". Compno: " + e.compno;
-                r1.extid = "Cluster: " + e.compextId + " - Compound Name: " +e.locationName;
-                r1.date = "";
-                r1.error = "Listing Not Picked";
-                r1.index = l;
+                r1.name = k + ". Household ID: " +  e.getHohID();
+                r1.extid = "Compno: " + e.compno;
+                r1.date = "" + e.village;
+                r1.error = "Only Minors Left in Household";
+                r1.index = k;
                 list.add(r1);
-                l++;
-
+                k++;
             }
+
 
 //            int o=1;
 //            for (Individual e : individualViewModel.merror()) {

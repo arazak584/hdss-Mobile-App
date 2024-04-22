@@ -215,6 +215,15 @@ public class ListingFragment extends Fragment {
                 binding.locationName.setEnabled(false);
                 binding.clusterCode.setEnabled(false);
                 binding.villcode.setEnabled(false);
+
+                String regex = "[A-Z]{2}\\d{4}";
+                String input = ClusterFragment.selectedLocation.getCompno();
+                if (!input.matches(regex)){
+                    binding.buttonChangeCluster.setEnabled(false);
+                }else{
+                    binding.buttonChangeCluster.setEnabled(true);
+                }
+
             } else {
                 data = new Listing();
 
@@ -231,6 +240,14 @@ public class ListingFragment extends Fragment {
                 data.longitude = ClusterFragment.selectedLocation.getLongitude();
                 data.latitude = ClusterFragment.selectedLocation.getLatitude();
                 data.accuracy = ClusterFragment.selectedLocation.getAccuracy();
+
+                String regex = "[A-Z]{2}\\d{4}";
+                String input = ClusterFragment.selectedLocation.getCompno();
+                if (!input.matches(regex)){
+                    binding.buttonChangeCluster.setEnabled(false);
+                }else{
+                    binding.buttonChangeCluster.setEnabled(true);
+                }
 
                 binding.locationName.setEnabled(false);
                 binding.clusterCode.setEnabled(false);

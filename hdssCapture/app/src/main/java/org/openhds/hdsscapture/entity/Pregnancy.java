@@ -223,7 +223,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
         try {
             this.lastClinicVisitDate = f.parse(lastClinicVisitDate);
         } catch (ParseException e) {
-            System.out.println("Visit Date Error " + e.getMessage());
+            System.out.println("Clinic Date Error " + e.getMessage());
         }
     }
 
