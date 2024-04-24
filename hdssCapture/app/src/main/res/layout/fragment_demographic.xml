@@ -10,6 +10,10 @@
             name="demographic"
             type="org.openhds.hdsscapture.entity.Demographic" />
 
+        <variable
+            name="individual"
+            type="org.openhds.hdsscapture.entity.Individual" />
+
 
     </data>
 
@@ -120,9 +124,26 @@
                     android:textSize="20sp"
                     tools:ignore="TextContrastCheck" />
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/age"
+                    android:text="@string/age">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/age"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <com.google.android.material.textfield.TextInputLayout
-                android:visibility="gone"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -140,6 +161,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
+                    goneUnless="@{individual.age>11}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -148,6 +170,7 @@
                     android:text="@string/own_phone"/>
 
                 <Spinner
+                    goneUnless="@{individual.age>11}"
                     android:id="@+id/demo_phone"
                     selection="@{demographic.phone}"
                     android:layout_width="match_parent"
@@ -295,6 +318,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
+                    goneUnless="@{individual.age>11}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -303,6 +327,7 @@
                     android:text="@string/occupations"/>
 
                 <Spinner
+                    goneUnless="@{individual.age>11}"
                     android:id="@+id/occupation"
                     selection="@{demographic.occupation}"
                     android:layout_width="match_parent"
@@ -332,6 +357,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
+                    goneUnless="@{individual.age>11}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -340,6 +366,7 @@
                     android:text="@string/marital"/>
 
                 <Spinner
+                    goneUnless="@{individual.age>11}"
                     android:id="@+id/marital"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

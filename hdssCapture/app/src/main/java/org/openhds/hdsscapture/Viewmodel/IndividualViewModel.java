@@ -11,6 +11,7 @@ import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
+import org.openhds.hdsscapture.entity.subentity.IndividualPhone;
 import org.openhds.hdsscapture.entity.subentity.IndividualResidency;
 import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 
@@ -159,6 +160,9 @@ public class IndividualViewModel extends AndroidViewModel {
 
     public int visited(IndividualVisited e){
         return individualRepository.visited(e);
+    }
+    public int contact(IndividualPhone e){
+        return individualRepository.contact(e);
     }
     public int updateres(IndividualResidency e){
         return individualRepository.updateres(e);

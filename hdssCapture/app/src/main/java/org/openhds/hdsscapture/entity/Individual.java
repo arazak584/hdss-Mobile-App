@@ -155,6 +155,9 @@ public class Individual extends BaseObservable implements Parcelable {
     @Expose
     public Integer origin;
 
+    @Expose
+    public String phone1;
+
     public Individual() {
     }
 
@@ -474,6 +477,17 @@ public class Individual extends BaseObservable implements Parcelable {
         this.origin = origin;
     }
 
+    public String getPhone1() {
+        return phone1;
+    }
+
+    public void setPhone1(String phone1) {
+        if (phone1 != null && phone1.length() == 9) {
+            this.phone1 = "0" + phone1;
+        } else {
+            this.phone1 = phone1;
+        }
+    }
 
     protected Individual(Parcel in) {
         this.uuid = in.readString();
@@ -498,6 +512,7 @@ public class Individual extends BaseObservable implements Parcelable {
         this.compno = in.readString();
         this.village = in.readString();
         this.hohID = in.readString();
+        this.phone1 = in.readString();
 
     }
 
@@ -542,6 +557,7 @@ public class Individual extends BaseObservable implements Parcelable {
         dest.writeString(this.compno);
         dest.writeString(this.village);
         dest.writeString(this.hohID);
+        dest.writeString(this.phone1);
 
     }
 

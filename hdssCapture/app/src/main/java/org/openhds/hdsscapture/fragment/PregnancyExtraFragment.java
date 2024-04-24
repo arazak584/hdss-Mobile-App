@@ -565,6 +565,17 @@ public class PregnancyExtraFragment extends DialogFragment {
                 e.printStackTrace();
             }
 
+            boolean anc = false;
+            if (finalData.anteNatalClinic == 1 && !binding.ancVisits.getText().toString().trim().isEmpty()) {
+                int totalmth = Integer.parseInt(binding.ancVisits.getText().toString().trim());
+                if (totalmth < 1 || totalmth > 20) {
+                    anc = true;
+                    binding.ancVisits.setError("Maximum Number of ANC Visit is 20");
+                    Toast.makeText(getActivity(), "Maximum Number of ANC Visit is 20", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.PREGNANCYLAYOUT, validateOnComplete, false);
 

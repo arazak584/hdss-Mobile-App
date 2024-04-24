@@ -433,7 +433,7 @@ public class PullActivity extends AppCompatActivity {
                         .addColumn("firstName").addColumn("fw_uuid").addColumn("gender").addColumn("ghanacard").addColumn("insertDate")
                         .addColumn("lastName").addColumn("otherName").addColumn("father_uuid").addColumn("mother_uuid")
                         .addColumn("sttime").addColumn("endType").addColumn("compno")
-                        .addColumn("village").addColumn("hohID").build();
+                        .addColumn("village").addColumn("hohID").addColumn("phone1").build();
 
                 downloadAndProcessDataset("individual.zip", "individual.csv", () -> dao.downloadIndividual(authorizationHeader), Individual.class, individualsSchema, individualCounts, ind, this::downloadAndProcessSocialgroup);
             }

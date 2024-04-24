@@ -10,9 +10,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
@@ -28,6 +31,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.IndividualPhone;
 import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
@@ -113,18 +117,28 @@ public class DemographicFragment extends DialogFragment {
                 binding.setDemographic(data);
                 binding.getDemographic().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                if(data.phone1 !=null){
-                    data.phone=1;
-                }
+
             } else {
                 data = new Demographic();
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
-                data.phone = 1;
 
                 binding.setDemographic(data);
                 binding.getDemographic().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        IndividualViewModel indage = new ViewModelProvider(this).get(IndividualViewModel.class);
+        try {
+            Individual datae = indage.find(HouseMembersFragment.selectedIndividual.uuid);
+            if (datae != null) {
+                binding.setIndividual(datae);
+
+                AppCompatEditText age = binding.getRoot().findViewById(R.id.age);
+                age.setText(String.valueOf(datae.getAge()));
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -201,6 +215,23 @@ public class DemographicFragment extends DialogFragment {
                     visited.uuid = finalData.individual_uuid;
                     visited.complete = 2;
                     iview.visited(visited);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //Update Phone Number for Individual
+            try {
+                Individual data = iview.find(HouseMembersFragment.selectedIndividual.uuid);
+                String phone1 = binding.getDemographic().phone1;
+                if (data != null && phone1 != null && phone1.length() == 10) {
+                    IndividualPhone cnt = new IndividualPhone();
+                    cnt.uuid = finalData.individual_uuid;
+                    cnt.phone1 = binding.getDemographic().phone1;
+                    iview.contact(cnt);
                 }
 
             } catch (ExecutionException e) {

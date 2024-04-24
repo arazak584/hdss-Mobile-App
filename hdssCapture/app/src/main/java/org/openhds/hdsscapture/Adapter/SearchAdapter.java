@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
@@ -87,12 +88,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         holder.compno.setText(individual.getCompno());
         Integer end = individual.getEndType();
         String hh = individual.getHohID();
-        if(end != null && end!=2){
-            holder.hhid.setText(individual.getHohID());
-            holder.hhid.setVisibility(View.VISIBLE);
+        String ph = individual.getPhone1();
+        if(ph != null && ph.length() == 10){
+            holder.hhid.setText(ph);
+            //holder.hhid.setVisibility(View.VISIBLE);
+            holder.hhid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
         }else{
-            holder.hhid.setText(null);
-            holder.hhid.setVisibility(View.GONE);
+            holder.hhid.setText("No Contact");
+            holder.hhid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+            //holder.hhid.setVisibility(View.GONE);
         }
         //holder.hhid.setText(String.valueOf(individual.age));
         String otherName = individual.getOtherName();

@@ -123,12 +123,12 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         }else{
             holder.gender.setText("Female");
         }
-        Integer status = individual.endType;
-        if (status == 1) {
-            holder.status.setText("(" + "Active" + ")");
+        String ph = individual.phone1;
+        if (ph != null && ph.length() == 10) {
+            holder.status.setText("(" + ph + ")");
             holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
         } else {
-            holder.status.setText("(" + "Outmigrated" + ")");
+            holder.status.setText("(" + "No Contact" + ")");
             holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
         }
         Integer st = individual.complete;

@@ -10,6 +10,7 @@ import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
+import org.openhds.hdsscapture.entity.subentity.IndividualPhone;
 import org.openhds.hdsscapture.entity.subentity.IndividualResidency;
 import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 
@@ -58,6 +59,12 @@ public class IndividualRepository {
     public int visited(IndividualVisited e) {
         AtomicInteger row = new AtomicInteger();
         AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.visited(e)));
+        return row.intValue();
+    }
+
+    public int contact(IndividualPhone e) {
+        AtomicInteger row = new AtomicInteger();
+        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.contact(e)));
         return row.intValue();
     }
 
