@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView wks;
     private String fw;
     private ApiDao dao;
+    private ProgressDialog progress;
 
     public String getLastSyncDatetime() {
         SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
@@ -130,17 +131,20 @@ public class MainActivity extends AppCompatActivity {
             setLastSyncDatetime(lastSyncDatetime);
         }
 
+        AppJson api = AppJson.getInstance(this);
+        dao = api.getJsonApi();
+
+        progress = new ProgressDialog(MainActivity.this);
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setCancelable(false);
+
         //Sync LocationHierarchy and Settings
         final Button syncSettings = findViewById(R.id.button_settings);
         syncSettings.setOnClickListener(v -> {
 
-            final TextView textView_SyncHierarchyData = findViewById(R.id.syncCodebookMessage);
-            final ProgressBar progressBar = findViewById(R.id.codebookProgressBar);
-            textView_SyncHierarchyData.setText("");
-            progressBar.setProgress(0);
-
+            progress.show();
             //when region is synched, sync Hierarchy
-            textView_SyncHierarchyData.setText("Updating Hierarchy...");
+            progress.setMessage("Updating Hierarchy...");
             final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(MainActivity.this).get(HierarchyViewModel.class);
             Call<DataWrapper<Hierarchy>> c_callable = dao.getAllHierarchy(authorizationHeader);
             c_callable.enqueue(new Callback<DataWrapper<Hierarchy>>() {
@@ -151,8 +155,8 @@ public class MainActivity extends AppCompatActivity {
 
 
                     //Sync Round
-                    textView_SyncHierarchyData.setText("Updating Round...");
-                    final RoundViewModel round = new ViewModelProvider(PullActivity.this).get(RoundViewModel.class);
+                    progress.setMessage("Updating Round...");
+                    final RoundViewModel round = new ViewModelProvider(MainActivity.this).get(RoundViewModel.class);
                     Call<DataWrapper<Round>> c_callable = dao.getRound(authorizationHeader);
                     c_callable.enqueue(new Callback<DataWrapper<Round>>() {
                         @Override
@@ -165,8 +169,8 @@ public class MainActivity extends AppCompatActivity {
                             round.add(i);
 
                             //Sync Round
-                            textView_SyncHierarchyData.setText("Updating Codebook...");
-                            final CodeBookViewModel codeBook = new ViewModelProvider(PullActivity.this).get(CodeBookViewModel.class);
+                            progress.setMessage("Updating Codebook...");
+                            final CodeBookViewModel codeBook = new ViewModelProvider(MainActivity.this).get(CodeBookViewModel.class);
                             Call<DataWrapper<CodeBook>> c_callable = dao.getCodeBook(authorizationHeader);
                             c_callable.enqueue(new Callback<DataWrapper<CodeBook>>() {
                                 @Override
@@ -175,8 +179,8 @@ public class MainActivity extends AppCompatActivity {
                                     codeBook.add(co);
 
                                     //Sync Fieldworker
-                                    textView_SyncHierarchyData.setText("Updating Fieldworker...");
-                                    final FieldworkerViewModel fieldworkerViewModel = new ViewModelProvider(PullActivity.this).get(FieldworkerViewModel.class);
+                                    progress.setMessage("Updating Fieldworker...");
+                                    final FieldworkerViewModel fieldworkerViewModel = new ViewModelProvider(MainActivity.this).get(FieldworkerViewModel.class);
                                     Call<DataWrapper<Fieldworker>> c_callable = dao.getFw(authorizationHeader);
                                     c_callable.enqueue(new Callback<DataWrapper<Fieldworker>>() {
                                         @Override
@@ -185,37 +189,27 @@ public class MainActivity extends AppCompatActivity {
                                             fieldworkerViewModel.add(fw);
 
                                             //Sync Settings
-                                            textView_SyncHierarchyData.setText("Updating Settings...");
-                                            final ConfigViewModel configViewModel = new ViewModelProvider(PullActivity.this).get(ConfigViewModel.class);
+                                            progress.setMessage("Updating Settings...");
+                                            final ConfigViewModel configViewModel = new ViewModelProvider(MainActivity.this).get(ConfigViewModel.class);
                                             Call<DataWrapper<Configsettings>> c_callable = dao.getConfig(authorizationHeader);
                                             c_callable.enqueue(new Callback<DataWrapper<Configsettings>>() {
                                                 @Override
                                                 public void onResponse(Call<DataWrapper<Configsettings>> call, Response<DataWrapper<Configsettings>> response) {
                                                     Configsettings[] cng = response.body().getData().toArray(new Configsettings[0]);
                                                     configViewModel.add(cng);
-                                                    progressBar.setProgress(100);
 
-                                                    final AtomicReference<String> lastSyncDatetime = new AtomicReference<>(getLastSyncDatetime());
-
-                                                    // Inside the synchronization process after a successful sync
-                                                    // Only change the date if there is another sync
-                                                    String currentDateWithTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date());
-                                                    if (!currentDateWithTime.equals(lastSyncDatetime.get())) {
-                                                        syncEntityDateTextView.setText(currentDateWithTime);
-                                                        lastSyncDatetime.set(currentDateWithTime);
-                                                        setLastSyncDatetime(currentDateWithTime);
-                                                    }
-                                                    textView_SyncHierarchyData.setText("Codebook and Locationhierarchy updated Successfully");
-                                                    textView_SyncHierarchyData.setTextColor(Color.parseColor("#32CD32"));
+                                                    progress.dismiss();
+                                                    syncSettings.setText("Sync Successful");
+                                                    syncSettings.setTextColor(Color.parseColor("#32CD32"));
 
                                                 }
 
 
                                                 @Override
                                                 public void onFailure(Call<DataWrapper<Configsettings>> call, Throwable t) {
-                                                    progressBar.setProgress(0);
-                                                    textView_SyncHierarchyData.setText("Settings Sync Error!");
-                                                    textView_SyncHierarchyData.setTextColor(Color.RED);
+                                                    progress.dismiss();
+                                                    syncSettings.setText("Settings Sync Error!");
+                                                    syncSettings.setTextColor(Color.RED);
                                                 }
                                             });
                                         }
@@ -224,27 +218,27 @@ public class MainActivity extends AppCompatActivity {
 
                                         @Override
                                         public void onFailure(Call<DataWrapper<Fieldworker>> call, Throwable t) {
-                                            progressBar.setProgress(0);
-                                            textView_SyncHierarchyData.setText("Fieldworker Sync Error!");
-                                            textView_SyncHierarchyData.setTextColor(Color.RED);
+                                            progress.dismiss();
+                                            syncSettings.setText("Fieldworker Sync Error!");
+                                            syncSettings.setTextColor(Color.RED);
                                         }
                                     });
                                 }
 
                                 @Override
                                 public void onFailure(Call<DataWrapper<CodeBook>> call, Throwable t) {
-                                    progressBar.setProgress(0);
-                                    textView_SyncHierarchyData.setText("Codebook Sync Error!");
-                                    textView_SyncHierarchyData.setTextColor(Color.RED);
+                                    progress.dismiss();
+                                    syncSettings.setText("Codebook Sync Error!");
+                                    syncSettings.setTextColor(Color.RED);
                                 }
                             });
                         }
 
                         @Override
                         public void onFailure(Call<DataWrapper<Round>> call, Throwable t) {
-                            progressBar.setProgress(0);
-                            textView_SyncHierarchyData.setText("Round Sync Error!");
-                            textView_SyncHierarchyData.setTextColor(Color.RED);
+                            progress.dismiss();
+                            syncSettings.setText("Round Sync Error!");
+                            syncSettings.setTextColor(Color.RED);
                         }
                     });
                 }
@@ -252,9 +246,9 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<DataWrapper<Hierarchy>> call, Throwable t) {
-                    progressBar.setProgress(0);
-                    textView_SyncHierarchyData.setText("Hierarchy Sync Error!");
-                    textView_SyncHierarchyData.setTextColor(Color.RED);
+                    progress.dismiss();
+                    syncSettings.setText("Hierarchy Sync Error!");
+                    syncSettings.setTextColor(Color.RED);
                 }
             });
 
