@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,26 +38,43 @@ import org.openhds.hdsscapture.Activity.NewActivity;
 import org.openhds.hdsscapture.Activity.PullActivity;
 import org.openhds.hdsscapture.Activity.PushActivity;
 import org.openhds.hdsscapture.Activity.ReportActivity;
+import org.openhds.hdsscapture.Dao.ApiDao;
 import org.openhds.hdsscapture.Utilities.SimpleDialog;
+import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
+import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
+import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
+import org.openhds.hdsscapture.entity.CodeBook;
+import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Fieldworker;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outcome;
+import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.fragment.InfoFragment;
+import org.openhds.hdsscapture.wrapper.DataWrapper;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicReference;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,6 +84,19 @@ public class MainActivity extends AppCompatActivity {
     private TextView liveDateTimeTextView;
     private TextView wks;
     private String fw;
+    private ApiDao dao;
+
+    public String getLastSyncDatetime() {
+        SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
+        return prefs.getString("lastSyncDatetime", "");
+    }
+
+    private void setLastSyncDatetime(String datetime) {
+        SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("lastSyncDatetime", datetime);
+        editor.apply();
+    }
 
     private void checkLocationStatusAndShowPrompt() {
         if (isLocationEnabled(this)) {
@@ -85,6 +116,151 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        //Settings Download API USERNAME PASSWORD
+        SharedPreferences preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        String authorizationHeader = preferences.getString("authorizationHeader", null);
+
+        // Initialize the last sync datetime when the activity is created
+        String lastSyncDatetime = getLastSyncDatetime();
+        if (lastSyncDatetime.isEmpty()) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
+            lastSyncDatetime = sdf.format(new Date());
+            setLastSyncDatetime(lastSyncDatetime);
+        }
+
+        //Sync LocationHierarchy and Settings
+        final Button syncSettings = findViewById(R.id.button_settings);
+        syncSettings.setOnClickListener(v -> {
+
+            final TextView textView_SyncHierarchyData = findViewById(R.id.syncCodebookMessage);
+            final ProgressBar progressBar = findViewById(R.id.codebookProgressBar);
+            textView_SyncHierarchyData.setText("");
+            progressBar.setProgress(0);
+
+            //when region is synched, sync Hierarchy
+            textView_SyncHierarchyData.setText("Updating Hierarchy...");
+            final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(MainActivity.this).get(HierarchyViewModel.class);
+            Call<DataWrapper<Hierarchy>> c_callable = dao.getAllHierarchy(authorizationHeader);
+            c_callable.enqueue(new Callback<DataWrapper<Hierarchy>>() {
+                @Override
+                public void onResponse(Call<DataWrapper<Hierarchy>> call, Response<DataWrapper<Hierarchy>> response) {
+                    Hierarchy[] hierarchies = response.body().getData().toArray(new Hierarchy[0]);
+                    hierarchyViewModel.add(hierarchies);
+
+
+                    //Sync Round
+                    textView_SyncHierarchyData.setText("Updating Round...");
+                    final RoundViewModel round = new ViewModelProvider(PullActivity.this).get(RoundViewModel.class);
+                    Call<DataWrapper<Round>> c_callable = dao.getRound(authorizationHeader);
+                    c_callable.enqueue(new Callback<DataWrapper<Round>>() {
+                        @Override
+                        public void onResponse(Call<DataWrapper<Round>> call, Response<DataWrapper<Round>> response) {
+                            Round[] i = response.body().getData().toArray(new Round[0]);
+                            for (Round rounds : i) {
+                                rounds.insertDate = new Date();
+                                Log.d("DateInsertion", "Round insert date: " + rounds.insertDate);
+                            }
+                            round.add(i);
+
+                            //Sync Round
+                            textView_SyncHierarchyData.setText("Updating Codebook...");
+                            final CodeBookViewModel codeBook = new ViewModelProvider(PullActivity.this).get(CodeBookViewModel.class);
+                            Call<DataWrapper<CodeBook>> c_callable = dao.getCodeBook(authorizationHeader);
+                            c_callable.enqueue(new Callback<DataWrapper<CodeBook>>() {
+                                @Override
+                                public void onResponse(Call<DataWrapper<CodeBook>> call, Response<DataWrapper<CodeBook>> response) {
+                                    CodeBook[] co = response.body().getData().toArray(new CodeBook[0]);
+                                    codeBook.add(co);
+
+                                    //Sync Fieldworker
+                                    textView_SyncHierarchyData.setText("Updating Fieldworker...");
+                                    final FieldworkerViewModel fieldworkerViewModel = new ViewModelProvider(PullActivity.this).get(FieldworkerViewModel.class);
+                                    Call<DataWrapper<Fieldworker>> c_callable = dao.getFw(authorizationHeader);
+                                    c_callable.enqueue(new Callback<DataWrapper<Fieldworker>>() {
+                                        @Override
+                                        public void onResponse(Call<DataWrapper<Fieldworker>> call, Response<DataWrapper<Fieldworker>> response) {
+                                            Fieldworker[] fw = response.body().getData().toArray(new Fieldworker[0]);
+                                            fieldworkerViewModel.add(fw);
+
+                                            //Sync Settings
+                                            textView_SyncHierarchyData.setText("Updating Settings...");
+                                            final ConfigViewModel configViewModel = new ViewModelProvider(PullActivity.this).get(ConfigViewModel.class);
+                                            Call<DataWrapper<Configsettings>> c_callable = dao.getConfig(authorizationHeader);
+                                            c_callable.enqueue(new Callback<DataWrapper<Configsettings>>() {
+                                                @Override
+                                                public void onResponse(Call<DataWrapper<Configsettings>> call, Response<DataWrapper<Configsettings>> response) {
+                                                    Configsettings[] cng = response.body().getData().toArray(new Configsettings[0]);
+                                                    configViewModel.add(cng);
+                                                    progressBar.setProgress(100);
+
+                                                    final AtomicReference<String> lastSyncDatetime = new AtomicReference<>(getLastSyncDatetime());
+
+                                                    // Inside the synchronization process after a successful sync
+                                                    // Only change the date if there is another sync
+                                                    String currentDateWithTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date());
+                                                    if (!currentDateWithTime.equals(lastSyncDatetime.get())) {
+                                                        syncEntityDateTextView.setText(currentDateWithTime);
+                                                        lastSyncDatetime.set(currentDateWithTime);
+                                                        setLastSyncDatetime(currentDateWithTime);
+                                                    }
+                                                    textView_SyncHierarchyData.setText("Codebook and Locationhierarchy updated Successfully");
+                                                    textView_SyncHierarchyData.setTextColor(Color.parseColor("#32CD32"));
+
+                                                }
+
+
+                                                @Override
+                                                public void onFailure(Call<DataWrapper<Configsettings>> call, Throwable t) {
+                                                    progressBar.setProgress(0);
+                                                    textView_SyncHierarchyData.setText("Settings Sync Error!");
+                                                    textView_SyncHierarchyData.setTextColor(Color.RED);
+                                                }
+                                            });
+                                        }
+
+
+
+                                        @Override
+                                        public void onFailure(Call<DataWrapper<Fieldworker>> call, Throwable t) {
+                                            progressBar.setProgress(0);
+                                            textView_SyncHierarchyData.setText("Fieldworker Sync Error!");
+                                            textView_SyncHierarchyData.setTextColor(Color.RED);
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onFailure(Call<DataWrapper<CodeBook>> call, Throwable t) {
+                                    progressBar.setProgress(0);
+                                    textView_SyncHierarchyData.setText("Codebook Sync Error!");
+                                    textView_SyncHierarchyData.setTextColor(Color.RED);
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFailure(Call<DataWrapper<Round>> call, Throwable t) {
+                            progressBar.setProgress(0);
+                            textView_SyncHierarchyData.setText("Round Sync Error!");
+                            textView_SyncHierarchyData.setTextColor(Color.RED);
+                        }
+                    });
+                }
+
+
+                @Override
+                public void onFailure(Call<DataWrapper<Hierarchy>> call, Throwable t) {
+                    progressBar.setProgress(0);
+                    textView_SyncHierarchyData.setText("Hierarchy Sync Error!");
+                    textView_SyncHierarchyData.setTextColor(Color.RED);
+                }
+            });
+
+
+        });
+
 
         checkLocationStatusAndShowPrompt();
         wks = findViewById(R.id.textInMiddle);

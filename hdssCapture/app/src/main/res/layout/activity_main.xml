@@ -10,6 +10,10 @@
     tools:context=".MainActivity">
 <!--    android:background="@drawable/background"-->
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="fill">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -330,6 +334,14 @@
             android:textAllCaps="true"
             android:textColor="@color/white" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="2dp"
+            android:paddingBottom="3dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
         <Button
             android:id="@+id/button_url"
             android:text="Download Update"
@@ -342,6 +354,20 @@
             android:textAllCaps="true"
             android:layout_marginBottom="5dp"/>
 
+        <Button
+            android:id="@+id/button_settings"
+            android:text="@string/setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:drawableStart="@drawable/downloads"
+            android:backgroundTint="@color/DarkBlue"
+            android:textAllCaps="true"
+            android:layout_marginBottom="5dp"/>
+        </LinearLayout>
+
     </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
