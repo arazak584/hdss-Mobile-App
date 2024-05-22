@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
@@ -98,7 +99,7 @@ import retrofit2.Response;
 public class PullActivity extends AppCompatActivity {
 
     private ApiDao dao;
-    private ProgressDialog progress;
+    private ProgressDialog progres;
     private IndividualRepository individualRepository;
     private IndividualDao individualDao;
     private LocationDao locationDao;
@@ -171,6 +172,8 @@ public class PullActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pull);
 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         final Button sync = findViewById(R.id.syncDetails);
         sync.setOnClickListener(v -> {
             ProgressDialogFragment progressDialogFragment = new ProgressDialogFragment();
@@ -206,8 +209,9 @@ public class PullActivity extends AppCompatActivity {
         hdssSociodemoDao = appDatabase.hdssSociodemoDao();
         vaccinationDao = appDatabase.vaccinationDao();
 
-        progress = new ProgressDialog(PullActivity.this);
-        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progres = new ProgressDialog(PullActivity.this);
+        progres.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progres.setCancelable(false);
 
 
         AppJson api = AppJson.getInstance(this);
@@ -217,9 +221,9 @@ public class PullActivity extends AppCompatActivity {
         button_SyncCodeBook.setOnClickListener(v -> {
             final TextView textView_SyncCodeBook = findViewById(R.id.textView_SyncCodebook);
             textView_SyncCodeBook.setText("");
-            progress.show();
+            progres.show();
 
-            progress.setMessage("Updating Data Dictionary...");
+            progres.setMessage("Updating Data Dictionary...");
             final CodeBookViewModel viewModel = new ViewModelProvider(this).get(CodeBookViewModel.class);
 
             Call<DataWrapper<CodeBook>> c_callable = dao.getCodeBook();
@@ -228,7 +232,7 @@ public class PullActivity extends AppCompatActivity {
                 public void onResponse(Call<DataWrapper<CodeBook>> call, Response<DataWrapper<CodeBook>> response) {
                     CodeBook[] d = response.body().getData().toArray(new CodeBook[0]);
                     viewModel.add(d);
-                    progress.dismiss();
+                    progres.dismiss();
                     textView_SyncCodeBook.setText("Codebook Updated 100%!");
                     textView_SyncCodeBook.setTextColor(Color.rgb(0, 114, 133));
                 }
@@ -262,10 +266,12 @@ public class PullActivity extends AppCompatActivity {
             final TextView textView_SyncHierarchyData = findViewById(R.id.syncCodebookMessage);
             final ProgressBar progressBar = findViewById(R.id.codebookProgressBar);
             textView_SyncHierarchyData.setText("");
+            progres.show();
             progressBar.setProgress(0);
 
             //when region is synched, sync Hierarchy
             textView_SyncHierarchyData.setText("Updating Hierarchy...");
+            progres.setMessage("Updating Hierarchy...");
             final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(PullActivity.this).get(HierarchyViewModel.class);
             Call<DataWrapper<Hierarchy>> c_callable = dao.getAllHierarchy(authorizationHeader);
             c_callable.enqueue(new Callback<DataWrapper<Hierarchy>>() {
@@ -277,6 +283,7 @@ public class PullActivity extends AppCompatActivity {
 
                     //Sync Round
                     textView_SyncHierarchyData.setText("Updating Round...");
+                    progres.setMessage("Updating Round...");
                     final RoundViewModel round = new ViewModelProvider(PullActivity.this).get(RoundViewModel.class);
                     Call<DataWrapper<Round>> c_callable = dao.getRound(authorizationHeader);
                     c_callable.enqueue(new Callback<DataWrapper<Round>>() {
@@ -291,6 +298,7 @@ public class PullActivity extends AppCompatActivity {
 
                             //Sync Round
                             textView_SyncHierarchyData.setText("Updating Codebook...");
+                            progres.setMessage("Updating Codebook...");
                             final CodeBookViewModel codeBook = new ViewModelProvider(PullActivity.this).get(CodeBookViewModel.class);
                             Call<DataWrapper<CodeBook>> c_callable = dao.getCodeBook(authorizationHeader);
                             c_callable.enqueue(new Callback<DataWrapper<CodeBook>>() {
@@ -301,6 +309,7 @@ public class PullActivity extends AppCompatActivity {
 
                                     //Sync Fieldworker
                                     textView_SyncHierarchyData.setText("Updating Fieldworker...");
+                                    progres.setMessage("Updating Fieldworker...");
                                     final FieldworkerViewModel fieldworkerViewModel = new ViewModelProvider(PullActivity.this).get(FieldworkerViewModel.class);
                                     Call<DataWrapper<Fieldworker>> c_callable = dao.getFw(authorizationHeader);
                                     c_callable.enqueue(new Callback<DataWrapper<Fieldworker>>() {
@@ -311,6 +320,7 @@ public class PullActivity extends AppCompatActivity {
 
                                             //Sync Settings
                                             textView_SyncHierarchyData.setText("Updating Settings...");
+                                            progres.setMessage("Updating Settings...");
                                             final ConfigViewModel configViewModel = new ViewModelProvider(PullActivity.this).get(ConfigViewModel.class);
                                             Call<DataWrapper<Configsettings>> c_callable = dao.getConfig(authorizationHeader);
                                             c_callable.enqueue(new Callback<DataWrapper<Configsettings>>() {
@@ -318,6 +328,7 @@ public class PullActivity extends AppCompatActivity {
                                                 public void onResponse(Call<DataWrapper<Configsettings>> call, Response<DataWrapper<Configsettings>> response) {
                                                     Configsettings[] cng = response.body().getData().toArray(new Configsettings[0]);
                                                     configViewModel.add(cng);
+                                                    progres.dismiss();
                                                     progressBar.setProgress(100);
 
                                                     final AtomicReference<String> lastSyncDatetime = new AtomicReference<>(getLastSyncDatetime());
@@ -338,6 +349,7 @@ public class PullActivity extends AppCompatActivity {
 
                                                 @Override
                                                 public void onFailure(Call<DataWrapper<Configsettings>> call, Throwable t) {
+                                                    progres.dismiss();
                                                     progressBar.setProgress(0);
                                                     textView_SyncHierarchyData.setText("Settings Sync Error!");
                                                     textView_SyncHierarchyData.setTextColor(Color.RED);
@@ -349,6 +361,7 @@ public class PullActivity extends AppCompatActivity {
 
                                         @Override
                                         public void onFailure(Call<DataWrapper<Fieldworker>> call, Throwable t) {
+                                            progres.dismiss();
                                             progressBar.setProgress(0);
                                             textView_SyncHierarchyData.setText("Fieldworker Sync Error!");
                                             textView_SyncHierarchyData.setTextColor(Color.RED);
@@ -358,6 +371,7 @@ public class PullActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onFailure(Call<DataWrapper<CodeBook>> call, Throwable t) {
+                                    progres.dismiss();
                                     progressBar.setProgress(0);
                                     textView_SyncHierarchyData.setText("Codebook Sync Error!");
                                     textView_SyncHierarchyData.setTextColor(Color.RED);
@@ -367,6 +381,7 @@ public class PullActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<DataWrapper<Round>> call, Throwable t) {
+                            progres.dismiss();
                             progressBar.setProgress(0);
                             textView_SyncHierarchyData.setText("Round Sync Error!");
                             textView_SyncHierarchyData.setTextColor(Color.RED);
@@ -377,6 +392,7 @@ public class PullActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<DataWrapper<Hierarchy>> call, Throwable t) {
+                    progres.dismiss();
                     progressBar.setProgress(0);
                     textView_SyncHierarchyData.setText("Hierarchy Sync Error!");
                     textView_SyncHierarchyData.setTextColor(Color.RED);
@@ -501,6 +517,8 @@ public class PullActivity extends AppCompatActivity {
             private <T> void downloadAndProcessDataset(String zipFileName, String extractedFileName, Supplier<Call<ResponseBody>> downloadCallSupplier, Class<T> entityClass, CsvSchema schema, AtomicLong countKey, String files, Runnable nextStep) {
                 textView_Sync.setText("Downloading " + files + " Dataset");
                 progressBar.setProgress(0);
+                progres.setTitle("Downloading " + files + " Dataset");
+                progres.show();
 
                 // File path for the downloaded file
                 File file = new File(getExternalCacheDir(), zipFileName);
@@ -564,6 +582,7 @@ public class PullActivity extends AppCompatActivity {
                                     File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
                                     CsvMapper mapper = new CsvMapper();
                                     MappingIterator<T> iterator = mapper.readerFor(entityClass).with(schema).readValues(unzippedFile);
+                                    progres.show();
                                     progressBar.setProgress(0);
                                     long[] totalRecords = new long[1];
                                     CsvMapper countMapper = new CsvMapper();
@@ -610,15 +629,43 @@ public class PullActivity extends AppCompatActivity {
                                                 runOnUiThread(() -> {
                                                     long currentCount = counts.incrementAndGet();
                                                     int progress = (int) (((double) currentCount / totalRecords[0]) * 100);
-
-                                                    // Update UI every 500 records (you can adjust this value)
-                                                    if (currentCount % 1000 == 0 || currentCount == totalRecords[0]) {
+                                                    int totalRecordsCount = (int) totalRecords[0];
+                                                    int cnt = (int) currentCount;
+                                                    // Update UI every 500 records or when the task is complete
+                                                    if (currentCount % 500 == 0 || currentCount == totalRecords[0]) {
                                                         runOnUiThread(() -> {
                                                             textView_Sync.setText("Saving " + progress + "% of " + files);
                                                             progressBar.setProgress(progress);
+                                                            progres.setMax(totalRecordsCount);
+                                                            progres.setProgress(cnt); // Set progress based on current count
+
+                                                            // Assuming 'progres' is a ProgressDialog
+                                                            progres.setMessage("Saving " + currentCount + " of " + totalRecords[0] + " " + files);
+
+                                                            // Ensure the style is set correctly
+                                                            progres.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+
+                                                            // If ProgressDialog is indeterminate, set it to false
+                                                            if (progres.isIndeterminate()) {
+                                                                progres.setIndeterminate(false);
+                                                            }
                                                         });
                                                     }
                                                 });
+
+//                                                runOnUiThread(() -> {
+//                                                    long currentCount = counts.incrementAndGet();
+//                                                    int progress = (int) (((double) currentCount / totalRecords[0]) * 100);
+//
+//                                                    // Update UI every 500 records (you can adjust this value)
+//                                                    if (currentCount % 1000 == 0 || currentCount == totalRecords[0]) {
+//                                                        runOnUiThread(() -> {
+//                                                            textView_Sync.setText("Saving " + progress + "% of " + files);
+//                                                            progressBar.setProgress(progress);
+//                                                            progres.setMessage("Saving " + currentCount + " of " + totalRecords[0] +" " + files);
+//                                                        });
+//                                                    }
+//                                                });
                                             }
                                         }
                                         if (batchCount > 0) {
@@ -639,9 +686,10 @@ public class PullActivity extends AppCompatActivity {
                                         runOnUiThread(() -> {
                                             long finalCount = counts.get();
                                             int finalProgress = (int) (((double) finalCount / totalRecords[0]) * 100);
-                                            textView_Sync.setText("Successful Download of " + files);
+                                            textView_Sync.setText("Successful Download ");
                                             textView_Sync.setTextColor(Color.parseColor("#32CD32"));
                                             progressBar.setProgress(finalProgress);
+                                            progres.dismiss();
                                             //Log.d("Three", "Location Count: " + files + " " + finalCount);
                                             saveCountsToSharedPreferences(files, finalCount);
 
@@ -674,6 +722,7 @@ public class PullActivity extends AppCompatActivity {
                         // Show error message
                         textView_Sync.setText("Download Error! Retry or Contact Administrator");
                         progressBar.setProgress(0);
+                        progres.dismiss();
                         //textView_Syncses.setTextColor(Color.RED);
                     }
                 });
@@ -788,6 +837,8 @@ public class PullActivity extends AppCompatActivity {
 
             private <T> void downloadAndProcessDataset(String zipFileName, String extractedFileName, Supplier<Call<ResponseBody>> downloadCallSupplier, Class<T> entityClass, CsvSchema schema, AtomicLong countKey, String files, Runnable nextStep) {
                 textView_Sync.setText("Downloading " + files + " Dataset");
+                progres.setTitle("Downloading " + files + " Dataset");
+                progres.show();
                 progressBar.setProgress(0);
 
                 // File path for the downloaded file
@@ -796,7 +847,7 @@ public class PullActivity extends AppCompatActivity {
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        //progress.show();
+                        //progres.show();
                         if (response.isSuccessful()) {
                             try {
                                 // Read the response body into a file
@@ -851,6 +902,7 @@ public class PullActivity extends AppCompatActivity {
                                     CsvMapper mapper = new CsvMapper();
                                     MappingIterator<T> iterator = mapper.readerFor(entityClass).with(schema).readValues(unzippedFile);
                                     progressBar.setProgress(0);
+                                    progres.show();
                                     long[] totalRecords = new long[1];
                                     CsvMapper countMapper = new CsvMapper();
                                     //CsvSchema countSchema = CsvSchema.emptySchema();  // No header since CSV has no header
@@ -893,16 +945,44 @@ public class PullActivity extends AppCompatActivity {
                                                 runOnUiThread(() -> {
                                                     long currentCount = counts.incrementAndGet();
                                                     int progress = (int) (((double) currentCount / totalRecords[0]) * 100);
-                                                    //int progressPercentage = (int) (((double) countKey.get() / totalRecords) * 100);
-
-                                                    // Update UI every 500 records (you can adjust this value)
-                                                    if (currentCount % 1000 == 0 || currentCount == totalRecords[0]) {
+                                                    int totalRecordsCount = (int) totalRecords[0];
+                                                    int cnt = (int) currentCount;
+                                                    // Update UI every 500 records or when the task is complete
+                                                    if (currentCount % 500 == 0 || currentCount == totalRecords[0]) {
                                                         runOnUiThread(() -> {
                                                             textView_Sync.setText("Saving " + progress + "% of " + files);
                                                             progressBar.setProgress(progress);
+                                                            progres.setMax(totalRecordsCount);
+                                                            progres.setProgress(cnt); // Set progress based on current count
+
+                                                            // Assuming 'progres' is a ProgressDialog
+                                                            progres.setMessage("Saving " + currentCount + " of " + totalRecords[0] + " " + files);
+
+                                                            // Ensure the style is set correctly
+                                                            progres.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+
+                                                            // If ProgressDialog is indeterminate, set it to false
+                                                            if (progres.isIndeterminate()) {
+                                                                progres.setIndeterminate(false);
+                                                            }
                                                         });
                                                     }
                                                 });
+
+//                                                runOnUiThread(() -> {
+//                                                    long currentCount = counts.incrementAndGet();
+//                                                    int progress = (int) (((double) currentCount / totalRecords[0]) * 100);
+//                                                    //int progressPercentage = (int) (((double) countKey.get() / totalRecords) * 100);
+//
+//                                                    // Update UI every 500 records (you can adjust this value)
+//                                                    if (currentCount % 1000 == 0 || currentCount == totalRecords[0]) {
+//                                                        runOnUiThread(() -> {
+//                                                            textView_Sync.setText("Saving " + progress + "% of " + files);
+//                                                            progressBar.setProgress(progress);
+//                                                            progres.setMessage("Saving " + currentCount + " of " + totalRecords[0] +" " + files);
+//                                                        });
+//                                                    }
+//                                                });
                                             }
                                         }
                                         if (batchCount > 0) {
@@ -920,10 +1000,11 @@ public class PullActivity extends AppCompatActivity {
                                         runOnUiThread(() -> {
                                             long finalCount = counts.get();
                                             int finalProgress = (int) (((double) finalCount / totalRecords[0]) * 100);
-                                            textView_Sync.setText("Successful Download of " + files);
+                                            textView_Sync.setText("Successful Download");
                                             textView_Sync.setTextColor(Color.parseColor("#32CD32"));
                                             progressBar.setProgress(finalProgress);
                                             saveCountsToSharedPreferences(files, finalCount);
+                                            progres.dismiss();
 
                                             // Execute the next step
                                             nextStep.run();
@@ -955,6 +1036,7 @@ public class PullActivity extends AppCompatActivity {
                         // Show error message
                         textView_Sync.setText("Download Error! Retry or Contact Administrator");
                         progressBar.setProgress(0);
+                        progres.dismiss();
                         //textView_Syncses.setTextColor(Color.RED);
                     }
                 });
@@ -1113,6 +1195,8 @@ public class PullActivity extends AppCompatActivity {
             private <T> void downloadAndProcessDataset(String zipFileName, String extractedFileName, Supplier<Call<ResponseBody>> downloadCallSupplier, Class<T> entityClass, CsvSchema schema, AtomicLong countKey, String files, Runnable nextStep) {
                 textView_Sync.setText("Downloading " + files + " Dataset");
                 progressBar.setProgress(0);
+                progres.setTitle("Downloading " + files + " Dataset");
+                progres.show();
 
                 // File path for the downloaded file
                 File file = new File(getExternalCacheDir(), zipFileName);
@@ -1175,6 +1259,7 @@ public class PullActivity extends AppCompatActivity {
                                     CsvMapper mapper = new CsvMapper();
                                     MappingIterator<T> iterator = mapper.readerFor(entityClass).with(schema).readValues(unzippedFile);
                                     progressBar.setProgress(0);
+                                    progres.show();
                                     long[] totalRecords = new long[1];
                                     CsvMapper countMapper = new CsvMapper();
                                     //CsvSchema countSchema = CsvSchema.emptySchema();  // No header since CSV has no header
@@ -1214,15 +1299,30 @@ public class PullActivity extends AppCompatActivity {
                                                 runOnUiThread(() -> {
                                                     long currentCount = counts.incrementAndGet();
                                                     int progress = (int) (((double) currentCount / totalRecords[0]) * 100);
-
-                                                    // Update UI every 500 records (you can adjust this value)
+                                                    int totalRecordsCount = (int) totalRecords[0];
+                                                    int cnt = (int) currentCount;
+                                                    // Update UI every 500 records or when the task is complete
                                                     if (currentCount % 500 == 0 || currentCount == totalRecords[0]) {
                                                         runOnUiThread(() -> {
                                                             textView_Sync.setText("Saving " + progress + "% of " + files);
                                                             progressBar.setProgress(progress);
+                                                            progres.setMax(totalRecordsCount);
+                                                            progres.setProgress(cnt); // Set progress based on current count
+
+                                                            // Assuming 'progres' is a ProgressDialog
+                                                            progres.setMessage("Saving " + currentCount + " of " + totalRecords[0] + " " + files);
+
+                                                            // Ensure the style is set correctly
+                                                            progres.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+
+                                                            // If ProgressDialog is indeterminate, set it to false
+                                                            if (progres.isIndeterminate()) {
+                                                                progres.setIndeterminate(false);
+                                                            }
                                                         });
                                                     }
                                                 });
+
                                             }
                                         }
                                         if (batchCount > 0) {
@@ -1237,9 +1337,11 @@ public class PullActivity extends AppCompatActivity {
                                         runOnUiThread(() -> {
                                             long finalCount = counts.get();
                                             int finalProgress = (int) (((double) finalCount / totalRecords[0]) * 100);
-                                            textView_Sync.setText("Successful Download of " + files);
+                                            textView_Sync.setText("Successful Download");
                                             textView_Sync.setTextColor(Color.parseColor("#32CD32"));
                                             progressBar.setProgress(finalProgress);
+                                            progres.setMax(finalProgress);
+                                            progres.dismiss();
 
                                             saveCountsToSharedPreferences(files, finalCount);
                                             // Execute the next step
@@ -1272,6 +1374,7 @@ public class PullActivity extends AppCompatActivity {
                         // Show error message
                         textView_Sync.setText("Download Error! Retry or Contact Administrator");
                         progressBar.setProgress(0);
+                        progres.dismiss();
                         //textView_Syncses.setTextColor(Color.RED);
                     }
                 });

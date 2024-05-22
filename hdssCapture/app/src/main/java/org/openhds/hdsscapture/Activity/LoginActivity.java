@@ -92,6 +92,7 @@ public class LoginActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         // //Allow access on phones with screen size 7 inches and above
 //        if (!isScreenSizeGreaterThanEqual7Inch(this)) {
 //            // Display a message for small screens
