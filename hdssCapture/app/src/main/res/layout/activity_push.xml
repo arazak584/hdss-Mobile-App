@@ -67,21 +67,6 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonSendVisit"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/send_visit"
-            android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
-            android:layout_gravity="center" />
-
 <!--        <TextView-->
 <!--            android:id="@+id/textViewSendVisit"-->
 <!--            android:layout_width="match_parent"-->
@@ -143,6 +128,21 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_socialgroup"
+            android:drawableRight="@drawable/send"
+            android:background="@drawable/btnd_rone_white"
+            android:textColor="@android:color/background_light"
+            android:layout_gravity="center" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonSendVisit"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/send_visit"
             android:drawableRight="@drawable/send"
             android:background="@drawable/btnd_rone_white"
             android:textColor="@android:color/background_light"
@@ -446,6 +446,21 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_duplicate"
+            android:drawableRight="@drawable/send"
+            android:background="@drawable/btnd_rone_white"
+            android:textColor="@android:color/background_light"
+            android:layout_gravity="center" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonSendCom"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/send_community"
             android:drawableRight="@drawable/send"
             android:background="@drawable/btnd_rone_white"
             android:textColor="@android:color/background_light"

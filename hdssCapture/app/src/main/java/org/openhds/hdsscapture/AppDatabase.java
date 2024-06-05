@@ -13,6 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import org.openhds.hdsscapture.Dao.AmendmentDao;
 import org.openhds.hdsscapture.Dao.ApiUrlDao;
 import org.openhds.hdsscapture.Dao.CodeBookDao;
+import org.openhds.hdsscapture.Dao.CommunityDao;
 import org.openhds.hdsscapture.Dao.ConfigDao;
 import org.openhds.hdsscapture.Dao.DeathDao;
 import org.openhds.hdsscapture.Dao.DemographicDao;
@@ -40,6 +41,7 @@ import org.openhds.hdsscapture.Utilities.Converter;
 import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.ApiUrl;
 import org.openhds.hdsscapture.entity.CodeBook;
+import org.openhds.hdsscapture.entity.CommunityReport;
 import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
@@ -71,7 +73,7 @@ import java.util.concurrent.Executors;
         Relationship.class, Locations.class, Residency.class, Pregnancyoutcome.class, Individual.class, Round.class, Demographic.class,
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
         Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class, Duplicate.class,
-        ApiUrl.class, Configsettings.class, Form.class, Vpm.class
+        ApiUrl.class, Configsettings.class, Form.class, Vpm.class, CommunityReport.class
         }, version = 3 , exportSchema = true)
 
 @TypeConverters({Converter.class})
@@ -103,6 +105,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract ConfigDao configDao();
     public abstract OdkDao odkDao();
     public abstract VpmDao vpmDao();
+    public abstract CommunityDao communityDao();
 
     //Migrate to another version when a variable is added to and entity.
     // If the version of the database is 2 you upgrade to 3 then set the MIGRATION_2_3 which means version 2 to 3
@@ -173,6 +176,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 configDao().deleteAll();
                 odkDao().deleteAll();
                 vpmDao().deleteAll();
+                communityDao().deleteAll();
 
                 // Perform any other necessary cleanup or initialization
 

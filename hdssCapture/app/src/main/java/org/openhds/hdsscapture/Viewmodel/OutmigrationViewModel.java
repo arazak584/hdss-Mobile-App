@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.OutmigrationRepository;
 import org.openhds.hdsscapture.entity.Death;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Outmigration;
 
 import java.util.Date;
@@ -44,6 +45,9 @@ public class OutmigrationViewModel extends AndroidViewModel {
         return outmigrationRepository.end(id);
     }
 
+    public List<Outmigration> reject(String id) throws ExecutionException, InterruptedException {
+        return outmigrationRepository.reject(id);
+    }
     public List<Outmigration> findToSync() throws ExecutionException, InterruptedException {
         return outmigrationRepository.findToSync();
     }
@@ -54,6 +58,10 @@ public class OutmigrationViewModel extends AndroidViewModel {
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         return outmigrationRepository.count(startDate, endDate, username);
+    }
+
+    public long rej(String uuid) throws ExecutionException, InterruptedException {
+        return outmigrationRepository.rej(uuid);
     }
 
     //public void add(Death... data){     deathRepository.create(data);  }

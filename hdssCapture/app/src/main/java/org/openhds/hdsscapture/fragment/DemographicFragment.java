@@ -6,11 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -110,6 +113,10 @@ public class DemographicFragment extends DialogFragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
+        final AppCompatEditText cmt = binding.getRoot().findViewById(R.id.txt_comment);
+        final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
+        final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
+
         DemographicViewModel viewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
         try {
             Demographic data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid);
@@ -117,6 +124,17 @@ public class DemographicFragment extends DialogFragment {
                 binding.setDemographic(data);
                 binding.getDemographic().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                 data.fw_uuid = fieldworkerData.getFw_uuid();
+
+                if(data.status!=null && data.status==2){
+                    cmt.setVisibility(View.VISIBLE);
+                    rsv.setVisibility(View.VISIBLE);
+                    rsvd.setVisibility(View.VISIBLE);
+                    cmt.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.pop));
+                }else{
+                    cmt.setVisibility(View.GONE);
+                    rsv.setVisibility(View.GONE);
+                    rsvd.setVisibility(View.GONE);
+                }
 
             } else {
                 data = new Demographic();

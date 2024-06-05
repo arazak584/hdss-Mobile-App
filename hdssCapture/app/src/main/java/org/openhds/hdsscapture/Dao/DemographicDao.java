@@ -10,6 +10,7 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.DemographicAmendment;
@@ -58,4 +59,10 @@ public interface DemographicDao {
 
     @Query("SELECT * FROM demographic where individual_uuid='7bfeb156db724f56808cb87551a16cd7'")
     List<Demographic> error();
+
+    @Query("SELECT a.individual_uuid,b.firstName as sttime,b.lastName as edtime,b.extId as occupation_oth,b.compno as visit_uuid,a.insertDate,a.comment,a.fw_uuid FROM demographic a INNER JOIN individual b on a.individual_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 order by a.insertDate DESC")
+    List<Demographic> reject(String id);
+
+    @Query("SELECT COUNT(*) FROM demographic WHERE status=2 AND fw_uuid = :uuid ")
+    long rej(String uuid);
 }

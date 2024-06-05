@@ -4,6 +4,7 @@ import android.app.Application;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.RelationshipDao;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 
@@ -75,4 +76,18 @@ public class RelationshipRepository {
         return future.get();
     }
 
+    public long rej(String uuid) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.rej(uuid);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    public List<Relationship> reject(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Relationship>> callable = () -> dao.reject(id);
+
+        Future<List<Relationship>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
 }

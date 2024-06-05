@@ -55,12 +55,33 @@
             android:textColor="@color/black"
             android:textAlignment="center"/>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:hint="@string/comment"
+            android:text="@string/comment">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:visibility="gone"
+                android:id="@+id/txt_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:text="@={demographic.comment}"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
             android:layout_margin="5dp"
             android:background="@color/colorPrimaryDark" />
+
+
 
         <ScrollView
             android:layout_width="match_parent"
@@ -375,6 +396,46 @@
                     android:gravity="left"
                     android:spinnerMode="dialog"
                     android:padding="15dp"/>
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/resolve"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/query_reslve" />
+
+                <RadioGroup
+                    android:visibility="gone"
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onCheckedChanged="@{demographic::setStatus}"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/no_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{demographic.status==3}"
+                        android:tag="3"
+                        android:text="@string/yes" />
+
+                    <RadioButton
+                        android:id="@+id/no_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{demographic.status==2}"
+                        android:tag="2"
+                        android:text="@string/no" />
+
+                    <RadioButton
+                        android:visibility="invisible"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{demographic.status==0}"
+                        android:tag="0"/>
+                </RadioGroup>
 
 
                 <TextView

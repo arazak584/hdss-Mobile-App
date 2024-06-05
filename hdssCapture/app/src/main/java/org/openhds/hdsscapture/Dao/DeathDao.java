@@ -9,6 +9,7 @@ import androidx.room.Query;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Outmigration;
 
 import java.util.Date;
 import java.util.List;
@@ -52,5 +53,11 @@ public interface DeathDao {
 
     @Query("SELECT * FROM death WHERE socialgroup_uuid=:id")
     List<Death> end(String id);
+
+    @Query("SELECT a.uuid,b.firstName as sttime,b.lastName as edtime,b.extId as deathPlace_oth,b.compno as visit_uuid,a.insertDate,a.comment,a.fw_uuid FROM death a INNER JOIN individual b on a.individual_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 order by a.insertDate DESC")
+    List<Death> reject(String id);
+
+    @Query("SELECT COUNT(*) FROM death WHERE status=2 AND fw_uuid = :uuid ")
+    long rej(String uuid);
 
 }

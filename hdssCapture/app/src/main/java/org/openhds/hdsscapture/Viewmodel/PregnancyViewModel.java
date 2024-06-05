@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.PregnancyRepository;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 
 import java.util.Date;
@@ -61,6 +62,14 @@ public class PregnancyViewModel extends AndroidViewModel {
 
     public long count(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
         return pregnancyRepository.count(startDate, endDate, username);
+    }
+
+    public long rej(String uuid) throws ExecutionException, InterruptedException {
+        return pregnancyRepository.rej(uuid);
+    }
+
+    public List<Pregnancy> reject(String id) throws ExecutionException, InterruptedException {
+        return pregnancyRepository.reject(id);
     }
 
     public void add(Pregnancy data){ pregnancyRepository.create(data);}

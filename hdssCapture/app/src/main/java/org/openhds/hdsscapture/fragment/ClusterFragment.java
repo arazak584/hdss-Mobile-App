@@ -114,6 +114,9 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
         final Intent i = getActivity().getIntent();
         final Hierarchy level6Data = i.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
 
+        final Intent j = getActivity().getIntent();
+        final Hierarchy level5Data = j.getParcelableExtra(HierarchyActivity.LEVEL5_DATA);
+
         final RecyclerView recyclerViewHousehold = view.findViewById(R.id.recyclerView_householdids);
 
         DividerItemDecoration dividerItemDecorations = new DividerItemDecoration(recyclerViewHousehold.getContext(),
@@ -200,6 +203,12 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
             final Locations locations = new Locations();
             LocationFragment.newInstance(level6Data, locations)
                     .show(getChildFragmentManager(), "LocationFragment");
+        });
+
+        final AppCompatButton add_com = view.findViewById(R.id.button_new_community);
+        add_com.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    CommunityReportFragment.newInstance(level5Data)).commit();
         });
 
         final AppCompatButton add_listing = view.findViewById(R.id.button_listing);

@@ -253,6 +253,46 @@
                     android:layout_height="match_parent"
                     android:src="@android:drawable/ic_dialog_info"
                     android:backgroundTint="@color/Green"
+                    android:onClick="startViewInfo" />
+
+                <Button
+                    android:id="@+id/btnReject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="@string/reject"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:textAlignment="textStart"
+                    android:textSize="25sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="15dp"
+            android:orientation="vertical"
+            android:background="@drawable/cardview_elevated">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@android:drawable/ic_dialog_info"
+                    android:backgroundTint="@color/Green"
                     android:onClick="startDownloadInfo" />
 
                 <Button

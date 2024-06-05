@@ -23,6 +23,7 @@ import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.Dao.ApiDao;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
+import org.openhds.hdsscapture.Viewmodel.CommunityViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.DuplicateViewModel;
@@ -42,6 +43,7 @@ import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.Viewmodel.VpmViewModel;
 import org.openhds.hdsscapture.entity.Amendment;
+import org.openhds.hdsscapture.entity.CommunityReport;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Duplicate;
@@ -1391,9 +1393,77 @@ public class PushActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Call<DataWrapper<Duplicate>> call, @NonNull Throwable t) {
                         progress.dismiss();
-                        buttonSendVac.setText("Failed to Send Vaccination Data");
-                        buttonSendVac.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        buttonSendDup.setText("Failed to Send Vaccination Data");
+                        buttonSendDup.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
                         Toast.makeText(PushActivity.this, "Failed to Send Vaccination Data", Toast.LENGTH_LONG).show();
+
+                    }
+                });
+            } else {
+                progress.dismiss();
+            }
+
+        });
+
+
+        //PUSH Duplicates
+        final Button buttonSendcom = findViewById(R.id.buttonSendCom);
+        //final TextView textViewSendDup = findViewById(R.id.textViewSendDup);
+        final CommunityViewModel communityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
+
+        //GET MODIFIED DATA
+        final List<CommunityReport> communityReportList = new ArrayList<>();
+        try {
+            communityReportList.addAll(communityViewModel.retrieveToSync());
+            buttonSendcom.setText("Community Report (" + communityReportList.size() + ") to send");
+            buttonSendcom.setTextColor(Color.WHITE);
+            if (communityReportList.isEmpty()) {
+                buttonSendcom.setVisibility(View.GONE);
+                //textViewSendDup.setVisibility(View.GONE);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        buttonSendcom.setOnClickListener(v -> {
+            progress.setMessage(getResources().getString(R.string.init_syncing));
+            progress.show();
+
+            //WRAP THE DATA
+            final DataWrapper<CommunityReport> data = new DataWrapper<>(communityReportList);
+
+            //SEND THE DATA
+            if (data.getData() != null && !data.getData().isEmpty()) {
+
+                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
+
+
+                final Call<DataWrapper<CommunityReport>> c_callable = dao.sendCommunity(authorizationHeader,data);
+                c_callable.enqueue(new Callback<DataWrapper<CommunityReport>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DataWrapper<CommunityReport>> call, Response<DataWrapper<CommunityReport>> response) {
+                        if (response != null && response.body() != null && response.isSuccessful()
+                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
+
+                            CommunityReport[] d = data.getData().toArray(new CommunityReport[0]);
+
+                            for (CommunityReport elem : d) {
+                                elem.complete = 0;
+                            }
+                            communityViewModel.add(d);
+
+                            progress.dismiss();
+                            buttonSendcom.setText("Sent " + d.length + " Community record(s)");
+                            buttonSendcom.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<DataWrapper<CommunityReport>> call, @NonNull Throwable t) {
+                        progress.dismiss();
+                        buttonSendcom.setText("Failed to Send Community Report Data");
+                        buttonSendcom.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Community Report Data", Toast.LENGTH_LONG).show();
 
                     }
                 });

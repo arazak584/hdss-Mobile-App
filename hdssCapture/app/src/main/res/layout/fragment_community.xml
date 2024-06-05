@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="community"
+            type="org.openhds.hdsscapture.entity.CommunityReport" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/MAIN_LAYOUT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".fragment.CommunityFragment">
+
+        <TextView
+            android:id="@+id/txt_community"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/community"
+            android:textSize="30sp"
+            android:textAllCaps="true"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_margin="5dp"
+            android:background="@color/colorPrimaryDark" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/item"/>
+
+            <Spinner
+                android:id="@+id/itemlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:minHeight="48dp"
+                selection="@{community.item}"
+                android:onItemSelected="@{community::setItem}"
+                android:padding="15dp"
+                android:spinnerMode="dialog"
+                android:focusable="true" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/namefac"
+                android:text="@string/namefac">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={community.name}"
+                    android:inputType="textPersonName|textCapCharacters"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/desc"
+                android:text="@string/desc">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/uuid"
+                    android:layout_width="match_parent"
+                    android:text="@={community.description}"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/button_gps"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="@string/gps"
+                tools:ignore="DuplicateSpeakableTextCheck"
+                android:background="@drawable/btnd_save"
+                android:layout_gravity="center"
+                android:textColor="@android:color/background_light"
+                app:icon="@drawable/ic_baseline_my_location_24" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/progress_bar"
+                android:visibility="gone">
+            </ProgressBar>
+
+
+
+            <EditText
+                android:id="@+id/longitude"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/member_filter_textbox_size"
+                android:textColor="@color/black"
+                android:paddingLeft="20dp"
+                android:gravity="center_vertical"
+                android:focusable="false"
+                android:hint="@string/longitude"
+                android:text="@={community.longitude}"
+                android:focusableInTouchMode="false"
+                android:inputType="textPersonName|textCapCharacters"
+                android:background="@drawable/txtbox_rone_wbevel"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+
+
+            <EditText
+                android:id="@+id/latitude"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textColor="@color/black"
+                android:paddingStart="20dp"
+                android:hint="@string/latitude"
+                android:focusable="false"
+                android:text="@={community.latitude}"
+                android:focusableInTouchMode="false"
+                android:inputType="textPersonName|textCapCharacters"
+                android:background="@drawable/txtbox_rone_wbevel"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="16dp" />
+
+
+            <EditText
+                android:id="@+id/accuracy"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textColor="@color/black"
+                android:paddingStart="20dp"
+                android:focusable="false"
+                android:hint="@string/accuracy"
+                android:text="@={community.accuracy}"
+                android:focusableInTouchMode="false"
+                android:inputType="textPersonName|textCapCharacters"
+                android:background="@drawable/txtbox_rone_wbevel"/>
+
+
+
+        </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/buttonSaveClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/btnd_save"
+                android:textColor="@android:color/background_light"
+                android:text="@string/saveclosedata" />
+
+            <Button
+                android:id="@+id/buttonClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/btnd_close"
+                android:textColor="@android:color/background_light"
+                android:text="@string/closedata" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

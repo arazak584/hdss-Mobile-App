@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.RelationshipRepository;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 
@@ -39,6 +40,13 @@ public class RelationshipViewModel extends AndroidViewModel {
         return relationshipRepository.count(startDate, endDate, username);
     }
 
+    public long rej(String uuid) throws ExecutionException, InterruptedException {
+        return relationshipRepository.rej(uuid);
+    }
+
+    public List<Relationship> reject(String id) throws ExecutionException, InterruptedException {
+        return relationshipRepository.reject(id);
+    }
 
     public void add(Relationship data){ relationshipRepository.create(data);}
 

@@ -3,6 +3,7 @@ package org.openhds.hdsscapture.Dao;
 
 import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.CodeBook;
+import org.openhds.hdsscapture.entity.CommunityReport;
 import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
@@ -43,6 +44,9 @@ public interface ApiDao {
     @GET("/api/round")
     Call<DataWrapper<Round>> getRound(@Header("Authorization") String authorizationHeader);
 
+    @GET("/api/community")
+    Call<DataWrapper<CommunityReport>> getCommunity(@Header("Authorization") String authorizationHeader);
+
     @GET("/api/visit")
     Call<DataWrapper<Visit>> getVisit(@Header("Authorization") String authorizationHeader);
 
@@ -57,6 +61,22 @@ public interface ApiDao {
 
     @GET("/api/hierarchy/all")
     Call<DataWrapper<Hierarchy>> getAllHierarchy(@Header("Authorization") String authorizationHeader);
+
+    //Rejection API
+    @GET("/api/inmigration/reject")
+    Call<DataWrapper<Inmigration>> getImg(@Header("Authorization") String authorizationHeader);
+    @GET("/api/outmigration/reject")
+    Call<DataWrapper<Outmigration>> getOmg(@Header("Authorization") String authorizationHeader);
+    @GET("/api/outcome/reject")
+    Call<DataWrapper<Pregnancyoutcome>> getOut(@Header("Authorization") String authorizationHeader);
+    @GET("/api/relationship/reject")
+    Call<DataWrapper<Relationship>> getRel(@Header("Authorization") String authorizationHeader);
+    @GET("/api/death/reject")
+    Call<DataWrapper<Death>> getDth(@Header("Authorization") String authorizationHeader);
+    @GET("/api/pregnancy/reject")
+    Call<DataWrapper<Pregnancy>> getPreg(@Header("Authorization") String authorizationHeader);
+    @GET("/api/demographic/reject")
+    Call<DataWrapper<Demographic>> getDemo(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/zip/location")
     Call<ResponseBody> downloadLocation(@Header("Authorization") String authorizationHeader);
@@ -141,6 +161,9 @@ public interface ApiDao {
 
     @POST("/api/duplicate")
     Call<DataWrapper<Duplicate>> sendDup(@Header("Authorization") String authorizationHeader,@Body DataWrapper<Duplicate> dataModal);
+
+    @POST("/api/community")
+    Call<DataWrapper<CommunityReport>> sendCommunity(@Header("Authorization") String authorizationHeader,@Body DataWrapper<CommunityReport> dataModal);
 
 
 }

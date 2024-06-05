@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
@@ -98,12 +99,72 @@ public class Inmigration extends BaseObservable implements Parcelable {
     @Expose
     public String location_uuid;
 
+    @Expose
+    public String comment;
+
+    @Expose
+    public Integer status = 0;
+    @Expose
+    public String supervisor;
+    @Expose
+    public Date approveDate;
+
     public Inmigration(){}
 
 
     @Ignore
     private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
+    @Ignore
+    private transient final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+
+    public void setStatus(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            status = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(String supervisor) {
+        this.supervisor = supervisor;
+    }
+
+    public String getApproveDate() {
+        if (approveDate == null) return "";
+        return g.format(approveDate);
+    }
+
+    public void setApproveDate(String approveDate) {
+        try {
+            this.approveDate = g.parse(approveDate);
+        } catch (ParseException e) {
+            System.out.println("Date Error " + e.getMessage());
+        }
+    }
 
     public String getInsertDate() {
         if (insertDate == null) return "";

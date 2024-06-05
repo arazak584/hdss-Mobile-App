@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.InmigrationRepository;
 import org.openhds.hdsscapture.entity.Inmigration;
+import org.openhds.hdsscapture.entity.Socialgroup;
 
 import java.util.Date;
 import java.util.List;
@@ -30,8 +31,16 @@ public class InmigrationViewModel extends AndroidViewModel {
         return inmigrationRepository.find(id,locid);
     }
 
+    public List<Inmigration> reject(String id) throws ExecutionException, InterruptedException {
+        return inmigrationRepository.reject(id);
+    }
+
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         return inmigrationRepository.count(startDate, endDate, username);
+    }
+
+    public long rej(String uuid) throws ExecutionException, InterruptedException {
+        return inmigrationRepository.rej(uuid);
     }
 
     public void add(Inmigration data){ inmigrationRepository.create(data);}

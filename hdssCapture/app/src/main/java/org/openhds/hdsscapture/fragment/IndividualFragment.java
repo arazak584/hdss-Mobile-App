@@ -635,10 +635,12 @@ public class IndividualFragment extends Fragment {
 
             boolean missedout = false;
 
-            if (img.migType!=null && img.migType==2 && img.reason==19){
-                missedout = true;
-                Toast.makeText(getActivity(), "Reason cannot be missed out for Internal Inmigration", Toast.LENGTH_LONG).show();
-                return;
+            if (img.migType!=null && img.migType==2){
+                if (img.reason!=null && img.reason==19) {
+                    missedout = true;
+                    Toast.makeText(getActivity(), "Reason cannot be missed out for Internal Inmigration", Toast.LENGTH_LONG).show();
+                    return;
+                }
             }
 
             try {

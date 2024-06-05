@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
@@ -58,5 +59,9 @@ public interface RelationshipDao {
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
+    @Query("SELECT a.individualA_uuid,a.uuid,b.firstName as sttime,b.lastName as edtime,b.extId as individualB_uuid,b.compno as visit_uuid,a.insertDate,a.comment,a.fw_uuid FROM relationship a INNER JOIN individual b on a.individualA_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 order by a.insertDate DESC")
+    List<Relationship> reject(String id);
 
+    @Query("SELECT COUNT(*) FROM relationship WHERE status=2 AND fw_uuid = :uuid ")
+    long rej(String uuid);
 }

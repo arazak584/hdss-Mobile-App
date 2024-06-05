@@ -5,6 +5,7 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.InmigrationDao;
 import org.openhds.hdsscapture.entity.Inmigration;
+import org.openhds.hdsscapture.entity.Socialgroup;
 
 import java.util.Date;
 import java.util.List;
@@ -57,4 +58,20 @@ public class InmigrationRepository {
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }
+
+    public long rej(String uuid) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.rej(uuid);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    public List<Inmigration> reject(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Inmigration>> callable = () -> dao.reject(id);
+
+        Future<List<Inmigration>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
 }

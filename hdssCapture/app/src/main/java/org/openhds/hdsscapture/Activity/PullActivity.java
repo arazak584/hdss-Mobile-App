@@ -49,6 +49,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Repositories.IndividualRepository;
 import org.openhds.hdsscapture.Utilities.SimpleDialog;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.CommunityViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
@@ -56,6 +57,7 @@ import org.openhds.hdsscapture.Viewmodel.OdkViewModel;
 import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.entity.CodeBook;
+import org.openhds.hdsscapture.entity.CommunityReport;
 import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Fieldworker;
@@ -266,12 +268,15 @@ public class PullActivity extends AppCompatActivity {
             final TextView textView_SyncHierarchyData = findViewById(R.id.syncCodebookMessage);
             final ProgressBar progressBar = findViewById(R.id.codebookProgressBar);
             textView_SyncHierarchyData.setText("");
+            progres.setTitle("Downloading ");
+            progres.setProgress(0);
+            progres.setMax(100);
             progres.show();
             progressBar.setProgress(0);
 
             //when region is synched, sync Hierarchy
             textView_SyncHierarchyData.setText("Updating Hierarchy...");
-            progres.setMessage("Updating Hierarchy...");
+            progres.setTitle("Updating Hierarchy...");
             final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(PullActivity.this).get(HierarchyViewModel.class);
             Call<DataWrapper<Hierarchy>> c_callable = dao.getAllHierarchy(authorizationHeader);
             c_callable.enqueue(new Callback<DataWrapper<Hierarchy>>() {
@@ -283,7 +288,7 @@ public class PullActivity extends AppCompatActivity {
 
                     //Sync Round
                     textView_SyncHierarchyData.setText("Updating Round...");
-                    progres.setMessage("Updating Round...");
+                    progres.setTitle("Updating Round...");
                     final RoundViewModel round = new ViewModelProvider(PullActivity.this).get(RoundViewModel.class);
                     Call<DataWrapper<Round>> c_callable = dao.getRound(authorizationHeader);
                     c_callable.enqueue(new Callback<DataWrapper<Round>>() {
@@ -298,7 +303,7 @@ public class PullActivity extends AppCompatActivity {
 
                             //Sync Round
                             textView_SyncHierarchyData.setText("Updating Codebook...");
-                            progres.setMessage("Updating Codebook...");
+                            progres.setTitle("Updating Codebook...");
                             final CodeBookViewModel codeBook = new ViewModelProvider(PullActivity.this).get(CodeBookViewModel.class);
                             Call<DataWrapper<CodeBook>> c_callable = dao.getCodeBook(authorizationHeader);
                             c_callable.enqueue(new Callback<DataWrapper<CodeBook>>() {
@@ -309,7 +314,7 @@ public class PullActivity extends AppCompatActivity {
 
                                     //Sync Fieldworker
                                     textView_SyncHierarchyData.setText("Updating Fieldworker...");
-                                    progres.setMessage("Updating Fieldworker...");
+                                    progres.setTitle("Updating Fieldworker...");
                                     final FieldworkerViewModel fieldworkerViewModel = new ViewModelProvider(PullActivity.this).get(FieldworkerViewModel.class);
                                     Call<DataWrapper<Fieldworker>> c_callable = dao.getFw(authorizationHeader);
                                     c_callable.enqueue(new Callback<DataWrapper<Fieldworker>>() {
@@ -318,9 +323,20 @@ public class PullActivity extends AppCompatActivity {
                                             Fieldworker[] fw = response.body().getData().toArray(new Fieldworker[0]);
                                             fieldworkerViewModel.add(fw);
 
+                                            //Sync Community
+                                            textView_SyncHierarchyData.setText("Updating Community Report...");
+                                            progres.setTitle("Updating Community Report...");
+                                            final CommunityViewModel communityViewModel = new ViewModelProvider(PullActivity.this).get(CommunityViewModel.class);
+                                            Call<DataWrapper<CommunityReport>> c_callable = dao.getCommunity(authorizationHeader);
+                                            c_callable.enqueue(new Callback<DataWrapper<CommunityReport>>() {
+                                                @Override
+                                                public void onResponse(Call<DataWrapper<CommunityReport>> call, Response<DataWrapper<CommunityReport>> response) {
+                                                    CommunityReport[] cm = response.body().getData().toArray(new CommunityReport[0]);
+                                                    communityViewModel.add(cm);
+
                                             //Sync Settings
                                             textView_SyncHierarchyData.setText("Updating Settings...");
-                                            progres.setMessage("Updating Settings...");
+                                            progres.setTitle("Updating Settings...");
                                             final ConfigViewModel configViewModel = new ViewModelProvider(PullActivity.this).get(ConfigViewModel.class);
                                             Call<DataWrapper<Configsettings>> c_callable = dao.getConfig(authorizationHeader);
                                             c_callable.enqueue(new Callback<DataWrapper<Configsettings>>() {
@@ -357,7 +373,15 @@ public class PullActivity extends AppCompatActivity {
                                             });
                                         }
 
-
+                                                @Override
+                                                public void onFailure(Call<DataWrapper<CommunityReport>> call, Throwable t) {
+                                                    progres.dismiss();
+                                                    progressBar.setProgress(0);
+                                                    textView_SyncHierarchyData.setText("Community Report Sync Error!");
+                                                    textView_SyncHierarchyData.setTextColor(Color.RED);
+                                                }
+                                            });
+                                        }
 
                                         @Override
                                         public void onFailure(Call<DataWrapper<Fieldworker>> call, Throwable t) {
@@ -516,9 +540,11 @@ public class PullActivity extends AppCompatActivity {
 
             private <T> void downloadAndProcessDataset(String zipFileName, String extractedFileName, Supplier<Call<ResponseBody>> downloadCallSupplier, Class<T> entityClass, CsvSchema schema, AtomicLong countKey, String files, Runnable nextStep) {
                 textView_Sync.setText("Downloading " + files + " Dataset");
-                progressBar.setProgress(0);
                 progres.setTitle("Downloading " + files + " Dataset");
                 progres.show();
+                progres.setProgress(0);
+                progres.setMax(0);
+                progressBar.setProgress(0);
 
                 // File path for the downloaded file
                 File file = new File(getExternalCacheDir(), zipFileName);
@@ -637,6 +663,7 @@ public class PullActivity extends AppCompatActivity {
                                                             textView_Sync.setText("Saving " + progress + "% of " + files);
                                                             progressBar.setProgress(progress);
                                                             progres.setMax(totalRecordsCount);
+                                                            progres.setTitle("Downloading " + files + " Dataset");
                                                             progres.setProgress(cnt); // Set progress based on current count
 
                                                             // Assuming 'progres' is a ProgressDialog
@@ -723,7 +750,7 @@ public class PullActivity extends AppCompatActivity {
                         textView_Sync.setText("Download Error! Retry or Contact Administrator");
                         progressBar.setProgress(0);
                         progres.dismiss();
-                        //textView_Syncses.setTextColor(Color.RED);
+                        textView_Sync.setTextColor(Color.RED);
                     }
                 });
             }
@@ -771,7 +798,8 @@ public class PullActivity extends AppCompatActivity {
                         .addColumn("fw_uuid").addColumn("healthfacility").addColumn("how_many").addColumn("insertDate").addColumn("lastClinicVisitDate")
                         .addColumn("medicineforpregnancy").addColumn("outcome").addColumn("outcome_date").addColumn("own_bnet")
                         .addColumn("pregnancyNumber").addColumn("recordedDate").addColumn("slp_bednet").addColumn("trt_bednet").addColumn("ttinjection")
-                        .addColumn("why_no").addColumn("why_no_other").addColumn("individual_uuid").addColumn("sttime").addColumn("visit_uuid").build();
+                        .addColumn("why_no").addColumn("why_no_other").addColumn("individual_uuid").addColumn("sttime").addColumn("visit_uuid")
+                        .addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate").build();
 
                 downloadAndProcessDataset("pregnancy.zip", "pregnancy.csv", () -> dao.downloadPregnancy(authorizationHeader), Pregnancy.class, pregnancySchema, pregnancyCounts, preg, this::downloadRelationship);
 
@@ -783,7 +811,8 @@ public class PullActivity extends AppCompatActivity {
                         .addColumn("uuid").addColumn("aIsToB").addColumn("edtime").addColumn("endDate").addColumn("endType")
                         .addColumn("fw_uuid").addColumn("individualA_uuid").addColumn("individualB_uuid").addColumn("insertDate").addColumn("lcow").addColumn("mar")
                         .addColumn("mrank").addColumn("nchdm").addColumn("nwive").addColumn("polygamous")
-                        .addColumn("startDate").addColumn("sttime").addColumn("tnbch").build();
+                        .addColumn("startDate").addColumn("sttime").addColumn("tnbch").addColumn("comment")
+                        .addColumn("status").addColumn("supervisor").addColumn("approveDate").build();
 
                 downloadAndProcessDataset("relationship.zip", "relationship.csv", () -> dao.downloadRelationship(authorizationHeader), Relationship.class, relationshipSchema, relationshipCounts, rel, this::downloadDemographics);
             }
@@ -794,7 +823,8 @@ public class PullActivity extends AppCompatActivity {
                         .addColumn("individual_uuid").addColumn("comp_yrs").addColumn("edtime").addColumn("education").addColumn("fw_uuid")
                         .addColumn("insertDate").addColumn("marital").addColumn("occupation").addColumn("occupation_oth")
                         .addColumn("phone1").addColumn("phone2")
-                        .addColumn("religion").addColumn("religion_oth").addColumn("sttime").addColumn("tribe").addColumn("tribe_oth").build();
+                        .addColumn("religion").addColumn("religion_oth").addColumn("sttime").addColumn("tribe").addColumn("tribe_oth")
+                        .addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate").build();
 
                 downloadAndProcessDataset("demographics.zip", "demographics.csv", () -> dao.downloadDemography(authorizationHeader), Demographic.class, demographicsSchema, demographicsCounts, dem, () -> {
 
@@ -839,6 +869,8 @@ public class PullActivity extends AppCompatActivity {
                 textView_Sync.setText("Downloading " + files + " Dataset");
                 progres.setTitle("Downloading " + files + " Dataset");
                 progres.show();
+                progres.setProgress(0);
+                progres.setMax(0);
                 progressBar.setProgress(0);
 
                 // File path for the downloaded file
@@ -951,9 +983,11 @@ public class PullActivity extends AppCompatActivity {
                                                     if (currentCount % 500 == 0 || currentCount == totalRecords[0]) {
                                                         runOnUiThread(() -> {
                                                             textView_Sync.setText("Saving " + progress + "% of " + files);
+                                                            progres.setTitle("Downloading " + files + " Dataset");
                                                             progressBar.setProgress(progress);
                                                             progres.setMax(totalRecordsCount);
                                                             progres.setProgress(cnt); // Set progress based on current count
+
 
                                                             // Assuming 'progres' is a ProgressDialog
                                                             progres.setMessage("Saving " + currentCount + " of " + totalRecords[0] + " " + files);
@@ -1037,7 +1071,7 @@ public class PullActivity extends AppCompatActivity {
                         textView_Sync.setText("Download Error! Retry or Contact Administrator");
                         progressBar.setProgress(0);
                         progres.dismiss();
-                        //textView_Syncses.setTextColor(Color.RED);
+                        textView_Sync.setTextColor(Color.RED);
                     }
                 });
 
@@ -1196,6 +1230,8 @@ public class PullActivity extends AppCompatActivity {
                 textView_Sync.setText("Downloading " + files + " Dataset");
                 progressBar.setProgress(0);
                 progres.setTitle("Downloading " + files + " Dataset");
+                progres.setProgress(0);
+                progres.setMax(0);
                 progres.show();
 
                 // File path for the downloaded file
@@ -1305,6 +1341,7 @@ public class PullActivity extends AppCompatActivity {
                                                     if (currentCount % 500 == 0 || currentCount == totalRecords[0]) {
                                                         runOnUiThread(() -> {
                                                             textView_Sync.setText("Saving " + progress + "% of " + files);
+                                                            progres.setTitle("Downloading " + files + " Dataset");
                                                             progressBar.setProgress(progress);
                                                             progres.setMax(totalRecordsCount);
                                                             progres.setProgress(cnt); // Set progress based on current count
@@ -1375,7 +1412,7 @@ public class PullActivity extends AppCompatActivity {
                         textView_Sync.setText("Download Error! Retry or Contact Administrator");
                         progressBar.setProgress(0);
                         progres.dismiss();
-                        //textView_Syncses.setTextColor(Color.RED);
+                        textView_Sync.setTextColor(Color.RED);
                     }
                 });
 

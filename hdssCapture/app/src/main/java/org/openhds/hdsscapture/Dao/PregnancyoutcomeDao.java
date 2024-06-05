@@ -5,6 +5,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 
 import java.util.Date;
@@ -46,4 +47,10 @@ PregnancyoutcomeDao {
     @Query("SELECT COUNT(*) FROM pregnancyoutcome a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
+
+    @Query("SELECT a.uuid,b.firstName as sttime,b.lastName as edtime,b.extId as father_uuid,b.compno as visit_uuid,a.insertDate,a.comment,a.fw_uuid FROM pregnancyoutcome a INNER JOIN individual b on a.mother_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 order by a.insertDate DESC")
+    List<Pregnancyoutcome> reject(String id);
+
+    @Query("SELECT COUNT(*) FROM pregnancyoutcome WHERE status=2 AND fw_uuid = :uuid ")
+    long rej(String uuid);
 }

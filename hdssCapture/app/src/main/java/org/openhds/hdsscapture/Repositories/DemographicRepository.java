@@ -5,6 +5,7 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.DemographicDao;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
 import java.util.Date;
@@ -65,6 +66,21 @@ public class DemographicRepository {
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         Callable<Long> callable = () -> dao.count(startDate, endDate, username);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    public long rej(String uuid) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.rej(uuid);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    public List<Demographic> reject(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Demographic>> callable = () -> dao.reject(id);
+
+        Future<List<Demographic>> future = Executors.newSingleThreadExecutor().submit(callable);
+
         return future.get();
     }
 }

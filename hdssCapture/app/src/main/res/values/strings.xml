@@ -695,6 +695,17 @@
     <string name="dataco">Download Data Collectors</string>
     <string name="dac">DOWNLOAD USERS</string>
     <string name="setting">Download Assignment</string>
+    <string name="reject">Rejections</string>
+    <string name="rejections">Rejections to Resolve</string>
+    <string name="query_reslve">Has the query been resolved?</string>
+    <string name="comment">Comment</string>
+    <string name="community">Community</string>
+    <string name="item">Select Item</string>
+    <string name="namefac">Name of Facility</string>
+    <string name="desc">Description</string>
+    <string name="add">ADD</string>
+    <string name="communityrep">Community Report</string>
+    <string name="send_community">Send Community Report</string>
 
     //SocioDemo End
 

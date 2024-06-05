@@ -8,6 +8,7 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Pregnancy;
+import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.PregnancyobsAmendment;
 
@@ -70,4 +71,10 @@ public interface PregnancyDao {
     @Query("SELECT COUNT(*) FROM pregnancy a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
+
+    @Query("SELECT a.uuid,b.firstName as sttime,b.lastName as edtime,b.extId as bnet_loc_other,b.compno as visit_uuid,a.insertDate,a.comment,a.fw_uuid FROM pregnancy a INNER JOIN individual b on a.individual_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 order by a.insertDate DESC")
+    List<Pregnancy> reject(String id);
+
+    @Query("SELECT COUNT(*) FROM pregnancy WHERE status=2 AND fw_uuid = :uuid ")
+    long rej(String uuid);
 }

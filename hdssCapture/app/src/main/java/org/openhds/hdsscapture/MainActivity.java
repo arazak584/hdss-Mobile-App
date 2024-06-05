@@ -16,6 +16,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,29 +40,44 @@ import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.Activity.NewActivity;
 import org.openhds.hdsscapture.Activity.PullActivity;
 import org.openhds.hdsscapture.Activity.PushActivity;
+import org.openhds.hdsscapture.Activity.RejectionsActivity;
 import org.openhds.hdsscapture.Activity.ReportActivity;
 import org.openhds.hdsscapture.Dao.ApiDao;
 import org.openhds.hdsscapture.Utilities.SimpleDialog;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.CommunityViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
+import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
+import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
+import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
+import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
+import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.entity.CodeBook;
+import org.openhds.hdsscapture.entity.CommunityReport;
 import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Death;
+import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outcome;
+import org.openhds.hdsscapture.entity.Outmigration;
+import org.openhds.hdsscapture.entity.Pregnancy;
+import org.openhds.hdsscapture.entity.Pregnancyoutcome;
+import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.fragment.InfoFragment;
@@ -85,8 +102,26 @@ public class MainActivity extends AppCompatActivity {
     private TextView liveDateTimeTextView;
     private TextView wks;
     private String fw;
+    private String fws;
     private ApiDao dao;
     private ProgressDialog progress;
+
+    private DeathViewModel deathViewModel;
+    private InmigrationViewModel inmigrationViewModel;
+    private OutmigrationViewModel outmigrationViewModel;
+    private DemographicViewModel demographicViewModel;
+    private PregnancyoutcomeViewModel pregnancyoutcomeViewModel;
+    private PregnancyViewModel pregnancyViewModel;
+    private RelationshipViewModel relationshipViewModel;
+    private Button reject;
+    private  SharedPreferences preferences;
+    private String authorizationHeader;
+
+    public boolean isInternetAvailable() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
 
     public String getLastSyncDatetime() {
         SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
@@ -119,7 +154,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+        authorizationHeader = preferences.getString("authorizationHeader", null);
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
+        outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
+        deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+        pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
+        pregnancyoutcomeViewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
+        demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
+        relationshipViewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
+
         //Settings Download API USERNAME PASSWORD
         SharedPreferences preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
         String authorizationHeader = preferences.getString("authorizationHeader", null);
@@ -189,6 +236,15 @@ public class MainActivity extends AppCompatActivity {
                                             Fieldworker[] fw = response.body().getData().toArray(new Fieldworker[0]);
                                             fieldworkerViewModel.add(fw);
 
+                                            //Sync Community
+                                            final CommunityViewModel communityViewModel = new ViewModelProvider(MainActivity.this).get(CommunityViewModel.class);
+                                            Call<DataWrapper<CommunityReport>> c_callable = dao.getCommunity(authorizationHeader);
+                                            c_callable.enqueue(new Callback<DataWrapper<CommunityReport>>() {
+                                                @Override
+                                                public void onResponse(Call<DataWrapper<CommunityReport>> call, Response<DataWrapper<CommunityReport>> response) {
+                                                    CommunityReport[] cm = response.body().getData().toArray(new CommunityReport[0]);
+                                                    communityViewModel.add(cm);
+
                                             //Sync Settings
                                             progress.setMessage("Updating Settings...");
                                             final ConfigViewModel configViewModel = new ViewModelProvider(MainActivity.this).get(ConfigViewModel.class);
@@ -215,7 +271,14 @@ public class MainActivity extends AppCompatActivity {
                                             });
                                         }
 
-
+                                                @Override
+                                                public void onFailure(Call<DataWrapper<CommunityReport>> call, Throwable t) {
+                                                    progress.dismiss();
+                                                    syncSettings.setText("Community Report Sync Error!");
+                                                    syncSettings.setTextColor(Color.RED);
+                                                }
+                                            });
+                                        }
 
                                         @Override
                                         public void onFailure(Call<DataWrapper<Fieldworker>> call, Throwable t) {
@@ -259,10 +322,13 @@ public class MainActivity extends AppCompatActivity {
 
         checkLocationStatusAndShowPrompt();
         wks = findViewById(R.id.textInMiddle);
+        countRejected();
+        startDownloadProcess();
 
         final Intent f = getIntent();
         final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
         fw = fieldworkerDatas.getUsername();
+        fws = fieldworkerDatas.getFw_uuid();
         status = (fieldworkerDatas != null) ? fieldworkerDatas.getStatus() : 0;  // Default to 0 or another appropriate value
         calculatePercentage();
         //Toast.makeText(MainActivity.this, "Welcome " + fieldworkerDatas.firstName + " " + fieldworkerDatas.lastName, Toast.LENGTH_LONG).show();
@@ -318,6 +384,14 @@ public class MainActivity extends AppCompatActivity {
             i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
             startActivity(i);
         });
+
+//        reject = findViewById(R.id.btnReject);
+//        reject.setText("REJECTIONS");
+//        reject.setOnClickListener(v -> {
+//            Intent i = new Intent(getApplicationContext(), RejectionsActivity.class);
+//            i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
+//            startActivity(i);
+//        });
 
         final Button info = findViewById(R.id.btninfo);
         info.setOnClickListener(new View.OnClickListener() {
@@ -474,6 +548,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         calculatePercentage();
+        countRejected();
+        startDownloadProcess();
         if (!isLocationEnabled(this)) {
             showLocationSettingsPrompt();
         }
@@ -506,6 +582,154 @@ public class MainActivity extends AppCompatActivity {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void countRejected() {
+
+        try {
+            long totalImg = inmigrationViewModel.rej(fws);
+            long totalOmg = outmigrationViewModel.rej(fws);
+            long totalPre = pregnancyViewModel.rej(fws);
+            long totalOut = pregnancyoutcomeViewModel.rej(fws);
+            long totalDem = demographicViewModel.rej(fws);
+            long totalDth = deathViewModel.rej(fws);
+            long totalRel = relationshipViewModel.rej(fws);
+
+            long totalRejected = totalImg + totalOmg + totalPre + totalOut + totalDem + totalDth + totalRel;
+
+            final Intent f = getIntent();
+            final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
+
+            // Update the button text
+            reject = findViewById(R.id.btnReject);
+            reject.setText("REJECTIONS " + "(" +totalRejected + ")");
+
+            // Set the OnClickListener
+            reject.setOnClickListener(v -> {
+                Intent i = new Intent(getApplicationContext(), RejectionsActivity.class);
+                i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
+                startActivity(i);
+            });
+
+            //reject.setText("REJECTED " + totalRejected);
+            Log.d("MainActivity", "Rejections " + totalRejected);
+
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private void startDownloadProcess() {
+
+        if (!isInternetAvailable()) {
+            return;
+        }
+
+        final InmigrationViewModel inmigrationViewModel = new ViewModelProvider(MainActivity.this).get(InmigrationViewModel.class);
+        Call<DataWrapper<Inmigration>> c_callable = dao.getImg(authorizationHeader);
+        c_callable.enqueue(new Callback<DataWrapper<Inmigration>>() {
+            @Override
+            public void onResponse(Call<DataWrapper<Inmigration>> call, Response<DataWrapper<Inmigration>> response) {
+                Inmigration[] img = response.body().getData().toArray(new Inmigration[0]);
+                inmigrationViewModel.add(img);
+
+                // Next Step: Outmigration
+                final OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(MainActivity.this).get(OutmigrationViewModel.class);
+                Call<DataWrapper<Outmigration>> c_callable = dao.getOmg(authorizationHeader);
+                c_callable.enqueue(new Callback<DataWrapper<Outmigration>>() {
+                    @Override
+                    public void onResponse(Call<DataWrapper<Outmigration>> call, Response<DataWrapper<Outmigration>> response) {
+                        Outmigration[] i = response.body().getData().toArray(new Outmigration[0]);
+                        outmigrationViewModel.add(i);
+
+                        // Next Step: Death
+                        final DeathViewModel deathViewModel = new ViewModelProvider(MainActivity.this).get(DeathViewModel.class);
+                        Call<DataWrapper<Death>> c_callable = dao.getDth(authorizationHeader);
+                        c_callable.enqueue(new Callback<DataWrapper<Death>>() {
+                            @Override
+                            public void onResponse(Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
+                                Death[] co = response.body().getData().toArray(new Death[0]);
+                                deathViewModel.add(co);
+
+                                // Next Step: Pregnancy
+                                final PregnancyViewModel pregnancyViewModel = new ViewModelProvider(MainActivity.this).get(PregnancyViewModel.class);
+                                Call<DataWrapper<Pregnancy>> c_callable = dao.getPreg(authorizationHeader);
+                                c_callable.enqueue(new Callback<DataWrapper<Pregnancy>>() {
+                                    @Override
+                                    public void onResponse(Call<DataWrapper<Pregnancy>> call, Response<DataWrapper<Pregnancy>> response) {
+                                        Pregnancy[] fw = response.body().getData().toArray(new Pregnancy[0]);
+                                        pregnancyViewModel.add(fw);
+
+                                                // Next Step: Demographic
+                                        final DemographicViewModel demographicViewModel = new ViewModelProvider(MainActivity.this).get(DemographicViewModel.class);
+                                        Call<DataWrapper<Demographic>> c_callable = dao.getDemo(authorizationHeader);
+                                        c_callable.enqueue(new Callback<DataWrapper<Demographic>>() {
+                                            @Override
+                                            public void onResponse(Call<DataWrapper<Demographic>> call, Response<DataWrapper<Demographic>> response) {
+                                                Demographic[] dm = response.body().getData().toArray(new Demographic[0]);
+                                                demographicViewModel.add(dm);
+
+                                                // Next Step: Relationship
+                                                final RelationshipViewModel relationshipViewModel = new ViewModelProvider(MainActivity.this).get(RelationshipViewModel.class);
+                                                Call<DataWrapper<Relationship>> c_callable = dao.getRel(authorizationHeader);
+                                                c_callable.enqueue(new Callback<DataWrapper<Relationship>>() {
+                                                    @Override
+                                                    public void onResponse(Call<DataWrapper<Relationship>> call, Response<DataWrapper<Relationship>> response) {
+                                                        Relationship[] rel = response.body().getData().toArray(new Relationship[0]);
+                                                        relationshipViewModel.add(rel);
+
+                                                        // Final Step: Pregnancy Outcome
+                                                        final PregnancyoutcomeViewModel pregout = new ViewModelProvider(MainActivity.this).get(PregnancyoutcomeViewModel.class);
+                                                        Call<DataWrapper<Pregnancyoutcome>> c_callable = dao.getOut(authorizationHeader);
+                                                        c_callable.enqueue(new Callback<DataWrapper<Pregnancyoutcome>>() {
+                                                            @Override
+                                                            public void onResponse(Call<DataWrapper<Pregnancyoutcome>> call, Response<DataWrapper<Pregnancyoutcome>> response) {
+                                                                Pregnancyoutcome[] cng = response.body().getData().toArray(new Pregnancyoutcome[0]);
+                                                                pregout.add(cng);
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(Call<DataWrapper<Pregnancyoutcome>> call, Throwable t) {
+                                                            }
+                                                        });
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(Call<DataWrapper<Relationship>> call, Throwable t) {
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<DataWrapper<Demographic>> call, Throwable t) {
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<DataWrapper<Pregnancy>> call, Throwable t) {
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onFailure(Call<DataWrapper<Death>> call, Throwable t) {
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Call<DataWrapper<Outmigration>> call, Throwable t) {
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<DataWrapper<Inmigration>> call, Throwable t) {
+            }
+        });
     }
 
 

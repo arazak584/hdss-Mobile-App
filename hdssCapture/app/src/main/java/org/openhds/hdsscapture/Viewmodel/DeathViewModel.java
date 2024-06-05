@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import org.openhds.hdsscapture.Repositories.DeathRepository;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
 
 import java.util.Date;
@@ -53,8 +54,16 @@ public class DeathViewModel extends AndroidViewModel {
         return deathRepository.count(startDate, endDate, username);
     }
 
+    public long rej(String uuid) throws ExecutionException, InterruptedException {
+        return deathRepository.rej(uuid);
+    }
+
     public List<Death> repo() throws ExecutionException, InterruptedException {
         return deathRepository.repo();
+    }
+
+    public List<Death> reject(String id) throws ExecutionException, InterruptedException {
+        return deathRepository.reject(id);
     }
 
     public void add(Death data){ deathRepository.create(data);}

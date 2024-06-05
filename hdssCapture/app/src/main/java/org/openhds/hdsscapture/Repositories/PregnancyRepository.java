@@ -4,6 +4,7 @@ import android.app.Application;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.PregnancyDao;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 
 import java.util.Date;
@@ -118,6 +119,21 @@ public class PregnancyRepository {
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         Callable<Long> callable = () -> dao.count(startDate, endDate, username);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    public long rej(String uuid) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.rej(uuid);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    public List<Pregnancy> reject(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Pregnancy>> callable = () -> dao.reject(id);
+
+        Future<List<Pregnancy>> future = Executors.newSingleThreadExecutor().submit(callable);
+
         return future.get();
     }
 }

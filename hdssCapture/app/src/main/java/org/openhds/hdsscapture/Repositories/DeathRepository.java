@@ -8,6 +8,7 @@ import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.DeathDao;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
 
 import java.util.Date;
@@ -100,9 +101,24 @@ public class DeathRepository {
         return future.get();
     }
 
+    public long rej(String uuid) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.rej(uuid);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
     public List<Death> repo() throws ExecutionException, InterruptedException {
 
         Callable<List<Death>> callable = () -> dao.repo();
+
+        Future<List<Death>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Death> reject(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Death>> callable = () -> dao.reject(id);
 
         Future<List<Death>> future = Executors.newSingleThreadExecutor().submit(callable);
 
