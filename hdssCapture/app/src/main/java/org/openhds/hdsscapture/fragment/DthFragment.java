@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -170,6 +172,10 @@ public class DthFragment extends Fragment {
         RadioButton yn = binding.getRoot().findViewById(R.id.yn);
         RadioButton no = binding.getRoot().findViewById(R.id.no);
 
+        final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
+        final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
+        final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
+
         DeathViewModel viewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         try {
             Death data = viewModel.retrieve(individual.uuid);
@@ -180,6 +186,16 @@ public class DthFragment extends Fragment {
                 yn.setVisibility(View.VISIBLE);
                 no.setVisibility(View.VISIBLE);
                 data.edit = 1;
+
+                if(data.status!=null && data.status==2){
+                    cmt.setVisibility(View.VISIBLE);
+                    rsv.setVisibility(View.VISIBLE);
+                    rsvd.setVisibility(View.VISIBLE);
+                }else{
+                    cmt.setVisibility(View.GONE);
+                    rsv.setVisibility(View.GONE);
+                    rsvd.setVisibility(View.GONE);
+                }
 
                 ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
                 Residency dataRes = resModel.findDth(individual.uuid, ClusterFragment.selectedLocation.uuid);

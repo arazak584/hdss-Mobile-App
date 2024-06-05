@@ -1,17 +1,20 @@
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/newLoc"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="8dp">
 
     <GridLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:columnCount="2"
-        android:rowCount="5">
+        android:rowCount="4">
 
         <!-- First Column -->
         <TextView
@@ -23,7 +26,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:layout_column="0"
             android:layout_row="0"
-            tools:ignore="HardcodedText" />
+            tools:text="ID 1" />
 
         <TextView
             android:id="@+id/txt_id2"
@@ -32,7 +35,7 @@
             android:textStyle="bold"
             android:layout_column="0"
             android:layout_row="1"
-            tools:ignore="HardcodedText" />
+            tools:text="ID 2" />
 
         <TextView
             android:id="@+id/txt_id3"
@@ -41,7 +44,7 @@
             android:textStyle="bold"
             android:layout_column="0"
             android:layout_row="2"
-            tools:ignore="HardcodedText" />
+            tools:text="ID 3" />
 
         <TextView
             android:id="@+id/txt_id4"
@@ -49,30 +52,31 @@
             android:layout_height="wrap_content"
             android:layout_column="0"
             android:layout_row="3"
-            tools:ignore="HardcodedText" />
+            tools:text="ID 4" />
 
         <!-- Second Column -->
-        <EditText
-            android:id="@+id/txt_id5"
-            android:layout_width="wrap_content"
+        <ScrollView
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/Ivory"
-            android:elevation="4dp"
-            android:inputType="textMultiLine"
-            android:lines="5"
-            android:maxLines="10"
-            android:minLines="1"
-            android:padding="10dp"
-            android:enabled="false"
-            android:maxLength="1000"
             android:layout_column="1"
             android:layout_rowSpan="4"
-            android:layout_row="0"/>
+            android:layout_row="0"
+            android:layout_gravity="fill"
+            android:fillViewport="true">
+
+            <TextView
+                android:id="@+id/txt_id5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="10dp"
+                android:textColor="@color/purple_700"
+                android:maxLength="1000"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                tools:text="This is a sample comment box. You can add your comment here."/>
+        </ScrollView>
 
     </GridLayout>
-
-
-
-
 
 </androidx.cardview.widget.CardView>

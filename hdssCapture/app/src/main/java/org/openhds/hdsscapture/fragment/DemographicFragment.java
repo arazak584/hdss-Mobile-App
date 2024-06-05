@@ -113,7 +113,7 @@ public class DemographicFragment extends DialogFragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
-        final AppCompatEditText cmt = binding.getRoot().findViewById(R.id.txt_comment);
+        final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
         final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
         final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
 
@@ -129,7 +129,6 @@ public class DemographicFragment extends DialogFragment {
                     cmt.setVisibility(View.VISIBLE);
                     rsv.setVisibility(View.VISIBLE);
                     rsvd.setVisibility(View.VISIBLE);
-                    cmt.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.pop));
                 }else{
                     cmt.setVisibility(View.GONE);
                     rsv.setVisibility(View.GONE);
