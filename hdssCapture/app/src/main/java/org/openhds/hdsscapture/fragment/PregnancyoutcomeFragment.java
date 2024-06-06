@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -206,6 +207,10 @@ public class PregnancyoutcomeFragment extends Fragment {
         final Intent j = getActivity().getIntent();
         final Hierarchy level6Data = j.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
 
+        final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
+        final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
+        final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
+
         PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         OutcomeViewModel outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
         VpmViewModel vpmViewModel = new ViewModelProvider(this).get(VpmViewModel.class);
@@ -223,6 +228,16 @@ public class PregnancyoutcomeFragment extends Fragment {
                 binding.whoAnc.setEnabled(false);
                 binding.numAnc.setEnabled(false);
                 binding.preguuid.setEnabled(false);
+
+                if(data.status!=null && data.status==2){
+                    cmt.setVisibility(View.VISIBLE);
+                    rsv.setVisibility(View.VISIBLE);
+                    rsvd.setVisibility(View.VISIBLE);
+                }else{
+                    cmt.setVisibility(View.GONE);
+                    rsv.setVisibility(View.GONE);
+                    rsvd.setVisibility(View.GONE);
+                }
 
                 Pregnancy dts = pregnancyViewModel.out(HouseMembersFragment.selectedIndividual.uuid);
                 if (dts != null){

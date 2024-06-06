@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -159,6 +160,10 @@ public class OmgFragment extends Fragment {
             e.printStackTrace();
         }
 
+        final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
+        final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
+        final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
+
         TextView text = binding.getRoot().findViewById(R.id.edit);
         RadioButton yn = binding.getRoot().findViewById(R.id.yn);
         RadioButton no = binding.getRoot().findViewById(R.id.no);
@@ -172,6 +177,17 @@ public class OmgFragment extends Fragment {
                 yn.setVisibility(View.VISIBLE);
                 no.setVisibility(View.VISIBLE);
                 data.edit = 1;
+
+                if(data.status!=null && data.status==2){
+                    cmt.setVisibility(View.VISIBLE);
+                    rsv.setVisibility(View.VISIBLE);
+                    rsvd.setVisibility(View.VISIBLE);
+                }else{
+                    cmt.setVisibility(View.GONE);
+                    rsv.setVisibility(View.GONE);
+                    rsvd.setVisibility(View.GONE);
+                }
+
             }else {
                 Toast.makeText(requireContext(), "THIS CANNOT BE UPDATED", Toast.LENGTH_SHORT).show();
             }

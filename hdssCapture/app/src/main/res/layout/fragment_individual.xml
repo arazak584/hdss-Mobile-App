@@ -64,7 +64,16 @@
             android:textSize="30sp"
             android:textStyle="bold" />
 
-
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/txt_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:text="@={inmigration.comment}"
+            android:textColor="@color/purple_700"
+            android:gravity="start"/>
 
         <View
             android:layout_width="match_parent"
@@ -918,7 +927,45 @@
 
             </LinearLayout>
 
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/resolve"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/query_reslve" />
 
+                <RadioGroup
+                    android:visibility="gone"
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onCheckedChanged="@{inmigration::setStatus}"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/no_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{inmigration.status==3}"
+                        android:tag="3"
+                        android:text="@string/yes" />
+
+                    <RadioButton
+                        android:id="@+id/no_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{inmigration.status==2}"
+                        android:tag="2"
+                        android:text="@string/no" />
+
+                    <RadioButton
+                        android:visibility="invisible"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{inmigration.status==0}"
+                        android:tag="0"/>
+                </RadioGroup>
 
             </LinearLayout>
 

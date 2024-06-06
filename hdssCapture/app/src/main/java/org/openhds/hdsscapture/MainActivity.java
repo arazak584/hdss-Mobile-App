@@ -323,7 +323,7 @@ public class MainActivity extends AppCompatActivity {
         checkLocationStatusAndShowPrompt();
         wks = findViewById(R.id.textInMiddle);
         countRejected();
-        startDownloadProcess();
+        //startDownloadProcess();
 
         final Intent f = getIntent();
         final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
@@ -549,7 +549,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         calculatePercentage();
         countRejected();
-        startDownloadProcess();
+        //startDownloadProcess();
         if (!isLocationEnabled(this)) {
             showLocationSettingsPrompt();
         }
@@ -621,116 +621,122 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void startDownloadProcess() {
-
-        if (!isInternetAvailable()) {
-            return;
-        }
-
-        final InmigrationViewModel inmigrationViewModel = new ViewModelProvider(MainActivity.this).get(InmigrationViewModel.class);
-        Call<DataWrapper<Inmigration>> c_callable = dao.getImg(authorizationHeader);
-        c_callable.enqueue(new Callback<DataWrapper<Inmigration>>() {
-            @Override
-            public void onResponse(Call<DataWrapper<Inmigration>> call, Response<DataWrapper<Inmigration>> response) {
-                Inmigration[] img = response.body().getData().toArray(new Inmigration[0]);
-                inmigrationViewModel.add(img);
-
-                // Next Step: Outmigration
-                final OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(MainActivity.this).get(OutmigrationViewModel.class);
-                Call<DataWrapper<Outmigration>> c_callable = dao.getOmg(authorizationHeader);
-                c_callable.enqueue(new Callback<DataWrapper<Outmigration>>() {
-                    @Override
-                    public void onResponse(Call<DataWrapper<Outmigration>> call, Response<DataWrapper<Outmigration>> response) {
-                        Outmigration[] i = response.body().getData().toArray(new Outmigration[0]);
-                        outmigrationViewModel.add(i);
-
-                        // Next Step: Death
-                        final DeathViewModel deathViewModel = new ViewModelProvider(MainActivity.this).get(DeathViewModel.class);
-                        Call<DataWrapper<Death>> c_callable = dao.getDth(authorizationHeader);
-                        c_callable.enqueue(new Callback<DataWrapper<Death>>() {
-                            @Override
-                            public void onResponse(Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
-                                Death[] co = response.body().getData().toArray(new Death[0]);
-                                deathViewModel.add(co);
-
-                                // Next Step: Pregnancy
-                                final PregnancyViewModel pregnancyViewModel = new ViewModelProvider(MainActivity.this).get(PregnancyViewModel.class);
-                                Call<DataWrapper<Pregnancy>> c_callable = dao.getPreg(authorizationHeader);
-                                c_callable.enqueue(new Callback<DataWrapper<Pregnancy>>() {
-                                    @Override
-                                    public void onResponse(Call<DataWrapper<Pregnancy>> call, Response<DataWrapper<Pregnancy>> response) {
-                                        Pregnancy[] fw = response.body().getData().toArray(new Pregnancy[0]);
-                                        pregnancyViewModel.add(fw);
-
-                                                // Next Step: Demographic
-                                        final DemographicViewModel demographicViewModel = new ViewModelProvider(MainActivity.this).get(DemographicViewModel.class);
-                                        Call<DataWrapper<Demographic>> c_callable = dao.getDemo(authorizationHeader);
-                                        c_callable.enqueue(new Callback<DataWrapper<Demographic>>() {
-                                            @Override
-                                            public void onResponse(Call<DataWrapper<Demographic>> call, Response<DataWrapper<Demographic>> response) {
-                                                Demographic[] dm = response.body().getData().toArray(new Demographic[0]);
-                                                demographicViewModel.add(dm);
-
-                                                // Next Step: Relationship
-                                                final RelationshipViewModel relationshipViewModel = new ViewModelProvider(MainActivity.this).get(RelationshipViewModel.class);
-                                                Call<DataWrapper<Relationship>> c_callable = dao.getRel(authorizationHeader);
-                                                c_callable.enqueue(new Callback<DataWrapper<Relationship>>() {
-                                                    @Override
-                                                    public void onResponse(Call<DataWrapper<Relationship>> call, Response<DataWrapper<Relationship>> response) {
-                                                        Relationship[] rel = response.body().getData().toArray(new Relationship[0]);
-                                                        relationshipViewModel.add(rel);
-
-                                                        // Final Step: Pregnancy Outcome
-                                                        final PregnancyoutcomeViewModel pregout = new ViewModelProvider(MainActivity.this).get(PregnancyoutcomeViewModel.class);
-                                                        Call<DataWrapper<Pregnancyoutcome>> c_callable = dao.getOut(authorizationHeader);
-                                                        c_callable.enqueue(new Callback<DataWrapper<Pregnancyoutcome>>() {
-                                                            @Override
-                                                            public void onResponse(Call<DataWrapper<Pregnancyoutcome>> call, Response<DataWrapper<Pregnancyoutcome>> response) {
-                                                                Pregnancyoutcome[] cng = response.body().getData().toArray(new Pregnancyoutcome[0]);
-                                                                pregout.add(cng);
-                                                            }
-
-                                                            @Override
-                                                            public void onFailure(Call<DataWrapper<Pregnancyoutcome>> call, Throwable t) {
-                                                            }
-                                                        });
-                                                    }
-
-                                                    @Override
-                                                    public void onFailure(Call<DataWrapper<Relationship>> call, Throwable t) {
-                                                    }
-                                                });
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<DataWrapper<Demographic>> call, Throwable t) {
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<DataWrapper<Pregnancy>> call, Throwable t) {
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onFailure(Call<DataWrapper<Death>> call, Throwable t) {
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onFailure(Call<DataWrapper<Outmigration>> call, Throwable t) {
-                    }
-                });
-            }
-
-            @Override
-            public void onFailure(Call<DataWrapper<Inmigration>> call, Throwable t) {
-            }
-        });
-    }
+//    private void startDownloadProcess() {
+//
+//        if (!isInternetAvailable()) {
+//            return;
+//        }
+//
+//        final InmigrationViewModel inmigrationViewModel = new ViewModelProvider(MainActivity.this).get(InmigrationViewModel.class);
+//        Call<DataWrapper<Inmigration>> c_callable = dao.getImg(authorizationHeader);
+//        c_callable.enqueue(new Callback<DataWrapper<Inmigration>>() {
+//            @Override
+//            public void onResponse(Call<DataWrapper<Inmigration>> call, Response<DataWrapper<Inmigration>> response) {
+//                Inmigration[] img = response.body().getData().toArray(new Inmigration[0]);
+//                for (Inmigration item : img) {
+//                    item.complete = 1;
+//                }
+//                inmigrationViewModel.add(img);
+//
+//                // Next Step: Outmigration
+//                final OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(MainActivity.this).get(OutmigrationViewModel.class);
+//                Call<DataWrapper<Outmigration>> c_callable = dao.getOmg(authorizationHeader);
+//                c_callable.enqueue(new Callback<DataWrapper<Outmigration>>() {
+//                    @Override
+//                    public void onResponse(Call<DataWrapper<Outmigration>> call, Response<DataWrapper<Outmigration>> response) {
+//                        Outmigration[] i = response.body().getData().toArray(new Outmigration[0]);
+//                        for (Outmigration item : i) {
+//                            item.complete = 1;
+//                        }
+//                        outmigrationViewModel.add(i);
+//
+//                        // Next Step: Death
+//                        final DeathViewModel deathViewModel = new ViewModelProvider(MainActivity.this).get(DeathViewModel.class);
+//                        Call<DataWrapper<Death>> c_callable = dao.getDth(authorizationHeader);
+//                        c_callable.enqueue(new Callback<DataWrapper<Death>>() {
+//                            @Override
+//                            public void onResponse(Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
+//                                Death[] co = response.body().getData().toArray(new Death[0]);
+//                                deathViewModel.add(co);
+//
+//                                // Next Step: Pregnancy
+//                                final PregnancyViewModel pregnancyViewModel = new ViewModelProvider(MainActivity.this).get(PregnancyViewModel.class);
+//                                Call<DataWrapper<Pregnancy>> c_callable = dao.getPreg(authorizationHeader);
+//                                c_callable.enqueue(new Callback<DataWrapper<Pregnancy>>() {
+//                                    @Override
+//                                    public void onResponse(Call<DataWrapper<Pregnancy>> call, Response<DataWrapper<Pregnancy>> response) {
+//                                        Pregnancy[] fw = response.body().getData().toArray(new Pregnancy[0]);
+//                                        pregnancyViewModel.add(fw);
+//
+//                                                // Next Step: Demographic
+//                                        final DemographicViewModel demographicViewModel = new ViewModelProvider(MainActivity.this).get(DemographicViewModel.class);
+//                                        Call<DataWrapper<Demographic>> c_callable = dao.getDemo(authorizationHeader);
+//                                        c_callable.enqueue(new Callback<DataWrapper<Demographic>>() {
+//                                            @Override
+//                                            public void onResponse(Call<DataWrapper<Demographic>> call, Response<DataWrapper<Demographic>> response) {
+//                                                Demographic[] dm = response.body().getData().toArray(new Demographic[0]);
+//                                                demographicViewModel.add(dm);
+//
+//                                                // Next Step: Relationship
+//                                                final RelationshipViewModel relationshipViewModel = new ViewModelProvider(MainActivity.this).get(RelationshipViewModel.class);
+//                                                Call<DataWrapper<Relationship>> c_callable = dao.getRel(authorizationHeader);
+//                                                c_callable.enqueue(new Callback<DataWrapper<Relationship>>() {
+//                                                    @Override
+//                                                    public void onResponse(Call<DataWrapper<Relationship>> call, Response<DataWrapper<Relationship>> response) {
+//                                                        Relationship[] rel = response.body().getData().toArray(new Relationship[0]);
+//                                                        relationshipViewModel.add(rel);
+//
+//                                                        // Final Step: Pregnancy Outcome
+//                                                        final PregnancyoutcomeViewModel pregout = new ViewModelProvider(MainActivity.this).get(PregnancyoutcomeViewModel.class);
+//                                                        Call<DataWrapper<Pregnancyoutcome>> c_callable = dao.getOut(authorizationHeader);
+//                                                        c_callable.enqueue(new Callback<DataWrapper<Pregnancyoutcome>>() {
+//                                                            @Override
+//                                                            public void onResponse(Call<DataWrapper<Pregnancyoutcome>> call, Response<DataWrapper<Pregnancyoutcome>> response) {
+//                                                                Pregnancyoutcome[] cng = response.body().getData().toArray(new Pregnancyoutcome[0]);
+//                                                                pregout.add(cng);
+//                                                            }
+//
+//                                                            @Override
+//                                                            public void onFailure(Call<DataWrapper<Pregnancyoutcome>> call, Throwable t) {
+//                                                            }
+//                                                        });
+//                                                    }
+//
+//                                                    @Override
+//                                                    public void onFailure(Call<DataWrapper<Relationship>> call, Throwable t) {
+//                                                    }
+//                                                });
+//                                            }
+//
+//                                            @Override
+//                                            public void onFailure(Call<DataWrapper<Demographic>> call, Throwable t) {
+//                                            }
+//                                        });
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(Call<DataWrapper<Pregnancy>> call, Throwable t) {
+//                                    }
+//                                });
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Call<DataWrapper<Death>> call, Throwable t) {
+//                            }
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<DataWrapper<Outmigration>> call, Throwable t) {
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onFailure(Call<DataWrapper<Inmigration>> call, Throwable t) {
+//            }
+//        });
+//    }
 
 
 }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -218,6 +219,10 @@ public class PregnancyFragment extends DialogFragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
+        final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
+        final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
+        final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
+
         PregnancyViewModel viewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         PregnancyViewModel pviewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
@@ -225,6 +230,16 @@ public class PregnancyFragment extends DialogFragment {
             Pregnancy data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid);
             if (data != null) {
                 binding.setPregnancy(data);
+
+                if(data.status!=null && data.status==2){
+                    cmt.setVisibility(View.VISIBLE);
+                    rsv.setVisibility(View.VISIBLE);
+                    rsvd.setVisibility(View.VISIBLE);
+                }else{
+                    cmt.setVisibility(View.GONE);
+                    rsv.setVisibility(View.GONE);
+                    rsvd.setVisibility(View.GONE);
+                }
             } else {
                 data = new Pregnancy();
 

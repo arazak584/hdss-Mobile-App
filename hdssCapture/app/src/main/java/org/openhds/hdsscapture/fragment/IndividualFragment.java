@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatEditText;
@@ -531,10 +533,24 @@ public class IndividualFragment extends Fragment {
             e.printStackTrace();
         }
 
+        final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
+        final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
+        final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
+
         try {
             Inmigration dataimg = inmigrationViewModel.find(individual.uuid,ClusterFragment.selectedLocation.uuid);
             if (dataimg != null && binding.getResidency().img!=null) {
                 binding.setInmigration(dataimg);
+
+                if(dataimg.status!=null && dataimg.status==2){
+                    cmt.setVisibility(View.VISIBLE);
+                    rsv.setVisibility(View.VISIBLE);
+                    rsvd.setVisibility(View.VISIBLE);
+                }else{
+                    cmt.setVisibility(View.GONE);
+                    rsv.setVisibility(View.GONE);
+                    rsvd.setVisibility(View.GONE);
+                }
 
             } else {
                 dataimg = new Inmigration();

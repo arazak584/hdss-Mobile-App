@@ -37,7 +37,7 @@ public interface CommunityDao {
     @Query("SELECT * FROM community WHERE complete=1")
     List<CommunityReport> retrieveToSync();
 
-    @Query("SELECT * FROM community WHERE community=:id")
+    @Query("SELECT uuid,community,insertDate,name,codeLabel as description FROM community a INNER JOIN codebook b ON a.item=b.codeValue WHERE codeFeature='itemlist' AND community=:id  ORDER BY item")
     List<CommunityReport> retrieves(String id);
 
     @Query("SELECT * FROM community WHERE community='ABC'")

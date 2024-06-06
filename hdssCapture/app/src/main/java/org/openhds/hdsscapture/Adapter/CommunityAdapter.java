@@ -50,7 +50,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView insertdate, name;
+        TextView insertdate, name, desc;
         LinearLayout linearLayout;
         CardView cardView;
 
@@ -58,6 +58,7 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
             super(view);
             this.insertdate = view.findViewById(R.id.text_insertdate);
             this.name = view.findViewById(R.id.text_name);
+            this.desc = view.findViewById(R.id.text_desc);
             this.cardView = view.findViewById(R.id.CommunityReport);
         }
     }
@@ -76,8 +77,11 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
     public void onBindViewHolder(@NonNull CommunityAdapter.ViewHolder holder, int position) {
         final CommunityReport communityReport = communityList.get(position);
 
+        int autoNumber = calculateAutoNumber(communityReport.getDescription(), position);
         holder.insertdate.setText(communityReport.getInsertDate());
         holder.name.setText(communityReport.getName());
+        holder.desc.setText(String.valueOf(autoNumber) + ". " + communityReport.description);
+        holder.desc.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
 
         holder.cardView.setOnClickListener(v -> {
             String uuid = communityReport.getUuid().toString(); // Assuming CommunityReport has a getUuid() method
@@ -86,13 +90,31 @@ public class CommunityAdapter extends RecyclerView.Adapter<CommunityAdapter.View
                     .replace(R.id.container_cluster, fragment)
                     .addToBackStack(null)
                     .commit();
-            Log.d("Community", "Community UUID " + uuid);
+            //Log.d("Community", "Community UUID " + uuid);
         });
+
+
 
 //        holder.cardView.setOnClickListener(v -> {
 //            activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
 //                    CommunityRegFragment.newInstance()).commit();
 //        });
+    }
+
+    // Method to calculate auto-number based on description
+    private int calculateAutoNumber(String description, int currentPosition) {
+        int autoNumber = 1; // Initialize auto-number to 1
+
+        // Loop through previous items to find items with the same description
+        for (int i = 0; i < currentPosition; i++) {
+            CommunityReport report = communityList.get(i);
+            // If the description matches, increment auto-number
+            if (report.getDescription().equals(description)) {
+                autoNumber++;
+            }
+        }
+
+        return autoNumber;
     }
 
     @Override
