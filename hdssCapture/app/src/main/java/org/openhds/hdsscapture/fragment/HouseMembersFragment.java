@@ -477,7 +477,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 String TextChoh = "Change Household Head";
                 String TextSes = "Socio-Economic Status";
                 String TextVac = "Vaccination";
-                String TextRelhoh = "Change Household";
+                String TextRelhoh = "Update Membership";
 
                 // Disable all buttons if Visit data is null
                 boolean isVisitDataNull = (data == null);
