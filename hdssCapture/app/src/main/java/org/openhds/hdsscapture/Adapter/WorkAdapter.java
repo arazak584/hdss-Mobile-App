@@ -104,31 +104,59 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.ViewHolder>{
 //        int itemNumber = position + 1;
 //        holder.title.setText(itemNumber + "");
 
-        holder.title.setText(hierarchy.name);
-        holder.id2.setText(hierarchy.area);
-        holder.id3.setText(hierarchy.town);
+        holder.title.setText(hierarchy.dist);
+        holder.id2.setText(hierarchy.subdist);
+        holder.id3.setText(hierarchy.village);
+
+        String cps = hierarchy.extId;
+        String cp = hierarchy.town;
+        String hh = hierarchy.area;
 
         try {
-            // Assuming you have access to the necessary ViewModel instances
-            long count = locationViewModel.done(hierarchy.uuid);
-            long counts = listingViewModel.done(hierarchy.parent_uuid);
+            int cpsInt = Integer.parseInt(cps);
+            int cpInt = Integer.parseInt(cp);
+            int hhInt = Integer.parseInt(hh);
 
-            if (counts!=0 & count > counts) {
-                holder.id4.setText(hierarchy.parent_uuid + " IN PROGRESS");
+            if (cpInt > 0 && cpInt < cpsInt && hhInt > 0) {
+                holder.id4.setText(hierarchy.cluster + " (" + cp + ", " + hh + ") " + " IN PROGRESS");
                 holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Blue));
-            }else if(count == counts){
-                holder.id4.setText(hierarchy.parent_uuid + " DONE");
+            } else if (cpsInt == cpInt && hhInt <= 0) {
+                holder.id4.setText(hierarchy.cluster + " (" + cp + ", " + hh + ") " + " DONE");
                 holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_blackgreen_end));
-            }else{
-                holder.id4.setText(hierarchy.parent_uuid + " NOT STARTED");
+            } else {
+                holder.id4.setText(hierarchy.cluster + " (" + cp + ", " + hh + ") " + " NOT STARTED");
                 holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Red));
             }
-
-        } catch (ExecutionException | InterruptedException e) {
+        } catch (NumberFormatException e) {
+            // Handle the exception if the string cannot be parsed to an integer
             e.printStackTrace();
-            // Handle exceptions appropriately, for example, show an error message
-            Toast.makeText(activity, "Error updating counts", Toast.LENGTH_SHORT).show();
+            // Optionally, you can show an error message or handle it accordingly
         }
+
+//
+//        try {
+//            // Assuming you have access to the necessary ViewModel instances
+//            long count = locationViewModel.done(hierarchy.uuid);
+//            long counts = listingViewModel.done(hierarchy.parent_uuid);
+//            long hse = locationViewModel.hseCount(hierarchy.parent_uuid);
+//            long rem = count - counts;
+//
+//            if (counts!=0 & count > counts & hse > 0) {
+//                holder.id4.setText(hierarchy.parent_uuid + " (" + rem + ", " + hse + ") " + " IN PROGRESS");
+//                holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Blue));
+//            }else if(count == counts & hse <= 0){
+//                holder.id4.setText(hierarchy.parent_uuid + " (" + rem + ", " + hse + ") " + " DONE");
+//                holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_blackgreen_end));
+//            }else{
+//                holder.id4.setText(hierarchy.parent_uuid + " (" + rem + ", " + hse + ") " + " NOT STARTED");
+//                holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Red));
+//            }
+//
+//        } catch (ExecutionException | InterruptedException e) {
+//            e.printStackTrace();
+//            // Handle exceptions appropriately, for example, show an error message
+//            Toast.makeText(activity, "Error updating counts", Toast.LENGTH_SHORT).show();
+//        }
 
     }
 

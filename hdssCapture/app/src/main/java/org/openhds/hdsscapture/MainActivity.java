@@ -41,6 +41,7 @@ import org.openhds.hdsscapture.Activity.NewActivity;
 import org.openhds.hdsscapture.Activity.PullActivity;
 import org.openhds.hdsscapture.Activity.PushActivity;
 import org.openhds.hdsscapture.Activity.RejectionsActivity;
+import org.openhds.hdsscapture.Activity.RemainderActivity;
 import org.openhds.hdsscapture.Activity.ReportActivity;
 import org.openhds.hdsscapture.Dao.ApiDao;
 import org.openhds.hdsscapture.Utilities.SimpleDialog;
@@ -382,6 +383,12 @@ public class MainActivity extends AppCompatActivity {
         views.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(), NewActivity.class);
             i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
+            startActivity(i);
+        });
+
+        final Button remainder = findViewById(R.id.btnSchedule);
+        remainder.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), RemainderActivity.class);
             startActivity(i);
         });
 

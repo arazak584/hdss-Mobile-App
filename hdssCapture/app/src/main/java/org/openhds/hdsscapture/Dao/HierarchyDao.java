@@ -96,9 +96,16 @@ public interface HierarchyDao {
     @Query("SELECT * FROM locationhierarchy where level_uuid='hierarchyLevelId5' order by name")
     List<Hierarchy> retrieveVillage();
 
-    @Query("SELECT a.uuid,d.name,c.name as area,b.name as town,a.name as parent_uuid FROM locationhierarchy as a INNER JOIN locationhierarchy as b on a.parent_uuid=b.uuid " +
-            "INNER JOIN locationhierarchy as c on b.parent_uuid=c.uuid " +
-            " INNER JOIN locationhierarchy as d on c.parent_uuid=d.uuid WHERE a.fw_name=:id AND a.level_uuid='hierarchyLevelId6' order by a.name")
+    @Query("SELECT a.uuid,d.name as dist,c.name as subdist,b.name as village,a.name as cluster, " +
+            " COUNT(DISTINCT CASE WHEN f.complete IS NULL THEN f.uuid ELSE NULL END) AS town, " +
+            " COUNT(DISTINCT CASE WHEN f.uuid IS NOT NULL THEN f.uuid ELSE NULL END) AS extId, " +
+            " COUNT(DISTINCT CASE WHEN h.endType = 1 THEN h.hohID ELSE NULL END) AS area " +
+            " FROM locationhierarchy as a INNER JOIN locationhierarchy as b on a.parent_uuid=b.uuid " +
+            " INNER JOIN locationhierarchy as c on b.parent_uuid=c.uuid " +
+            " INNER JOIN locationhierarchy as d on c.parent_uuid=d.uuid " +
+            " LEFT JOIN locations f on a.uuid=f.locationLevel_uuid " +
+            " LEFT JOIN individual h on a.name=h.village " +
+            " WHERE a.fw_name=:id AND a.level_uuid='hierarchyLevelId6' GROUP BY a.uuid order by a.name")
     List<Hierarchy> repo(String id);
 
 }

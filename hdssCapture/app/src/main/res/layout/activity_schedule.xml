@@ -30,10 +30,6 @@
 
     </LinearLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="fill">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,18 +38,6 @@
             android:gravity="center"
             android:orientation="vertical"
             android:visibility="visible">
-
-            <SearchView
-                android:visibility="gone"
-                android:id="@+id/searcharea"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="48dip"
-                android:inputType="textPersonName|textCapCharacters"
-                android:queryHint="@string/search">
-
-                <requestFocus />
-            </SearchView>
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteUser"
@@ -91,7 +75,5 @@
 
         </LinearLayout>
 
-
-    </ScrollView>
 
 </LinearLayout>

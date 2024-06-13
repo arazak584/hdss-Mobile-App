@@ -36,6 +36,7 @@ import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.DuplicateViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
@@ -53,6 +54,7 @@ import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
@@ -330,6 +332,13 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             e.printStackTrace();
         }
 
+        final AppCompatButton img = view.findViewById(R.id.img);
+        img.setOnClickListener(v -> {
+            //final Vaccination vaccination = new Vaccination();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    InmigrationFragment.newInstance(individual, locations, socialgroup)).commit();
+        });
+
         final AppCompatButton ses = view.findViewById(R.id.ses);
         ses.setOnClickListener(v -> {
             //final HdssSociodemo hdssSociodemo = new HdssSociodemo();
@@ -444,6 +453,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             AppCompatButton ses = view.findViewById(R.id.ses);
             AppCompatButton vac = view.findViewById(R.id.vac);
             AppCompatButton relhoh = view.findViewById(R.id.relhoh);
+            AppCompatButton img = view.findViewById(R.id.img);
             View id1 = view.findViewById(R.id.id1);
             View id2 = view.findViewById(R.id.id2);
             View id3 = view.findViewById(R.id.id3);
@@ -478,6 +488,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 String TextSes = "Socio-Economic Status";
                 String TextVac = "Vaccination";
                 String TextRelhoh = "Update Membership";
+
 
                 // Disable all buttons if Visit data is null
                 boolean isVisitDataNull = (data == null);
@@ -708,6 +719,23 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 id4.setVisibility(View.VISIBLE);
                 id14.setVisibility(View.VISIBLE);
                 id9.setVisibility(View.VISIBLE);
+            }
+
+            InmigrationViewModel imgViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
+            try {
+                Inmigration data = imgViewModel.find(selectedIndividual.uuid,ClusterFragment.selectedLocation.uuid);
+                if (data != null) {
+                    String TextImg = "Update Inmigration";
+                    img.setVisibility(View.VISIBLE);
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(img, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(img, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
             }
 
             //Extra Pregnancy Outcome

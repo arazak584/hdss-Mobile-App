@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 @Entity(tableName = "locationhierarchy",
-        indices = {@Index(value = {"uuid","parent_uuid"}, unique = false)})
+        indices = {@Index(value = {"uuid","parent_uuid","name","fw_name"}, unique = false)})
 public class Hierarchy extends BaseObservable implements Parcelable {
 
     @NotNull
@@ -43,6 +43,18 @@ public class Hierarchy extends BaseObservable implements Parcelable {
 
     @ColumnInfo(name = "fw_name")
     public String fw_name;
+
+    @ColumnInfo(name = "dist")
+    public String dist;
+
+    @ColumnInfo(name = "subdist")
+    public String subdist;
+
+    @ColumnInfo(name = "village")
+    public String village;
+
+    @ColumnInfo(name = "cluster")
+    public String cluster;
 
     public Hierarchy() {
     }
@@ -122,6 +134,38 @@ public class Hierarchy extends BaseObservable implements Parcelable {
 
     public void setFw_name(String fw_name) {
         this.fw_name = fw_name;
+    }
+
+    public String getDist() {
+        return dist;
+    }
+
+    public void setDist(String dist) {
+        this.dist = dist;
+    }
+
+    public String getSubdist() {
+        return subdist;
+    }
+
+    public void setSubdist(String subdist) {
+        this.subdist = subdist;
+    }
+
+    public String getVillage() {
+        return village;
+    }
+
+    public void setVillage(String village) {
+        this.village = village;
+    }
+
+    public String getCluster() {
+        return cluster;
+    }
+
+    public void setCluster(String cluster) {
+        this.cluster = cluster;
     }
 
     protected Hierarchy(Parcel in) {

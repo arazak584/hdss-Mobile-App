@@ -9,6 +9,8 @@ import org.openhds.hdsscapture.Repositories.OutmigrationRepository;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Outmigration;
+import org.openhds.hdsscapture.entity.subentity.OmgUpdate;
+import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 
 import java.util.Date;
 import java.util.List;
@@ -64,5 +66,8 @@ public class OutmigrationViewModel extends AndroidViewModel {
         return outmigrationRepository.rej(uuid);
     }
 
+    public int update(OmgUpdate s){
+        return outmigrationRepository.update(s);
+    }
     //public void add(Death... data){     deathRepository.create(data);  }
 }

@@ -1,6 +1,7 @@
 package org.openhds.hdsscapture.fragment;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,11 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -23,6 +26,8 @@ import androidx.lifecycle.ViewModelProvider;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.Activity.LocationActivity;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.Dialog.FatherDialogFragment;
+import org.openhds.hdsscapture.Dialog.MotherDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
@@ -74,6 +79,7 @@ public class AmendmentFragment extends DialogFragment {
     private Individual individual;
     private FragmentAmendmentBinding binding;
     private EventForm eventForm;
+    private ProgressDialog progressDialog;
 
     public AmendmentFragment() {
         // Required empty public constructor
@@ -130,6 +136,59 @@ public class AmendmentFragment extends DialogFragment {
 
         });
 
+        // Find the button view
+        Button showDialogButton = binding.getRoot().findViewById(R.id.button_individual_mother);
+        Button showDialogButton1 = binding.getRoot().findViewById(R.id.button_individual_father);
+        // Set a click listener on the button for mother
+        showDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                progressDialog = new ProgressDialog(requireContext());
+                progressDialog.setMessage("Loading Mothers...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+
+                progressDialog.show();
+
+                // Simulate long operation
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 500);
+
+                // Show the dialog fragment
+                MotherDialogFragment.newInstance(locations,socialgroup)
+                        .show(getChildFragmentManager(), "MotherDialogFragment");
+            }
+        });
+        // Set a click listener on the button for father
+        showDialogButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressDialog = new ProgressDialog(requireContext());
+                progressDialog.setMessage("Loading Fathers...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+
+                progressDialog.show();
+
+                // Simulate long operation
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 500);
+
+                // Show the dialog fragment
+                FatherDialogFragment.newInstance(locations,socialgroup)
+                        .show(getChildFragmentManager(), "FatherDialogFragment");
+            }
+        });
+
 
 
         binding.buttonReplDob.setOnClickListener(v -> {
@@ -160,6 +219,7 @@ public class AmendmentFragment extends DialogFragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
+        IndividualViewModel inds = new ViewModelProvider(this).get(IndividualViewModel.class);
         AmendmentViewModel viewModel = new ViewModelProvider(this).get(AmendmentViewModel.class);
         ResidencyViewModel resViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         try {
@@ -190,6 +250,16 @@ public class AmendmentFragment extends DialogFragment {
                 data.orig_gender = HouseMembersFragment.selectedIndividual.getGender();
                 data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
 
+                Individual datae = inds.mother(HouseMembersFragment.selectedIndividual.uuid);
+                if (datae!=null){
+                    data.mother_uuid=datae.uuid;
+                }
+
+                Individual dataf = inds.father(HouseMembersFragment.selectedIndividual.uuid);
+                if (dataf!=null){
+                    data.father_uuid=dataf.uuid;
+                }
+
                 binding.amendFirstName.setEnabled(false);
                 binding.amendLastName.setEnabled(false);
                 binding.amendOtherName.setEnabled(false);
@@ -208,6 +278,37 @@ public class AmendmentFragment extends DialogFragment {
             if (datas != null) {
                 binding.setRes(datas);
 
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            Individual datae = inds.mother(HouseMembersFragment.selectedIndividual.uuid);
+            if (datae != null) {
+                binding.setMother(datae);
+                AppCompatEditText name = binding.getRoot().findViewById(R.id.mother_name);
+                AppCompatEditText dob = binding.getRoot().findViewById(R.id.mother_dob);
+                AppCompatEditText age = binding.getRoot().findViewById(R.id.mothers_age);
+                name.setText(datae.firstName + " " + datae.lastName);
+                dob.setText(datae.getDob());
+                age.setText(String.valueOf(datae.getAge()));
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Individual data = inds.father(HouseMembersFragment.selectedIndividual.uuid);
+            if (data != null) {
+                binding.setFather(data);
+                AppCompatEditText name = binding.getRoot().findViewById(R.id.father_name);
+                AppCompatEditText dob = binding.getRoot().findViewById(R.id.father_dob);
+                AppCompatEditText age = binding.getRoot().findViewById(R.id.fathers_age);
+                name.setText(data.firstName + " " + data.lastName);
+                dob.setText(data.getDob());
+                age.setText(String.valueOf(data.getAge()));
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -313,6 +414,8 @@ public class AmendmentFragment extends DialogFragment {
                 if (data != null) {
                     IndividualAmendment amend = new IndividualAmendment();
                     amend.uuid = finalData.individual_uuid;
+                    amend.father_uuid = binding.getAmendment().father_uuid;
+                    amend.mother_uuid = binding.getAmendment().mother_uuid;
                     amend.complete = 1;
                     if (!binding.replFirstName.getText().toString().trim().isEmpty()) {
                         amend.firstName = binding.getAmendment().repl_firstName;

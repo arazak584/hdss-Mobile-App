@@ -59,6 +59,10 @@ public class LocationViewModel extends AndroidViewModel {
         return locationRepository.counts(id);
     }
 
+    public long hseCount(String id) throws ExecutionException, InterruptedException {
+        return locationRepository.hseCount(id);
+    }
+
     public long done(String id) throws ExecutionException, InterruptedException {
         return locationRepository.done(id);
     }

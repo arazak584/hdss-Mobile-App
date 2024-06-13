@@ -8,12 +8,14 @@ import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.AppConstants;
@@ -81,6 +83,12 @@ public class Amendment extends BaseObservable {
     public Integer complete;
     @Expose
     public String fw_uuid;
+
+    @Expose
+    public String mother_uuid;
+
+    @Expose
+    public String father_uuid;
 
     public Amendment(){}
 
@@ -223,6 +231,22 @@ public class Amendment extends BaseObservable {
 
     public void setRepl_ghanacard(String repl_ghanacard) {
         this.repl_ghanacard = repl_ghanacard;
+    }
+
+    public String getMother_uuid() {
+        return mother_uuid;
+    }
+
+    public void setMother_uuid(String mother_uuid) {
+        this.mother_uuid = mother_uuid;
+    }
+
+    public String getFather_uuid() {
+        return father_uuid;
+    }
+
+    public void setFather_uuid(String father_uuid) {
+        this.father_uuid = father_uuid;
     }
 
     public void setYn_firstName(RadioGroup view, int checkedId) {

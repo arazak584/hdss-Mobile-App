@@ -7,6 +7,8 @@ import org.openhds.hdsscapture.Dao.OutmigrationDao;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Outmigration;
+import org.openhds.hdsscapture.entity.subentity.OmgUpdate;
+import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 
 import java.util.Date;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class OutmigrationRepository {
 
@@ -24,6 +27,11 @@ public class OutmigrationRepository {
         dao = db.outmigrationDao();
     }
 
+    public int update(OmgUpdate s) {
+        AtomicInteger row = new AtomicInteger();
+        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
+        return row.intValue();
+    }
 
     public void create(Outmigration data) {
         AppDatabase.databaseWriteExecutor.execute(() -> {

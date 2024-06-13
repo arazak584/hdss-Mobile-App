@@ -119,6 +119,12 @@ public class LocationRepository {
         return future.get();
     }
 
+    public long hseCount(String id) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.hseCount(id);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
     public long done(String id) throws ExecutionException, InterruptedException {
         Callable<Long> callable = () -> dao.done(id);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);

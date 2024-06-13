@@ -36,10 +36,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="15dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="15dp"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
         android:orientation="vertical"
         android:background="@drawable/cardview_elevated">
 
@@ -71,15 +71,15 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="16dp" />
+            android:layout_height="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
@@ -111,15 +111,15 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="16dp" />
+            android:layout_height="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
@@ -151,15 +151,15 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="16dp" />
+            android:layout_height="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
@@ -191,15 +191,15 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="16dp" />
+            android:layout_height="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
@@ -231,15 +231,15 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="16dp" />
+            android:layout_height="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
@@ -271,15 +271,15 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="16dp" />
+            android:layout_height="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
@@ -301,6 +301,46 @@
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:text="@string/downlods"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"
+                    android:textAlignment="textStart"
+                    android:textSize="25sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:orientation="vertical"
+            android:background="@drawable/cardview_elevated">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@android:drawable/ic_dialog_info"
+                    android:backgroundTint="@color/Green"
+                    android:onClick="startDownloadInfo" />
+
+                <Button
+                    android:id="@+id/btnSchedule"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="@string/workshedule"
                     android:textAllCaps="true"
                     android:textStyle="bold"
                     android:textAlignment="textStart"

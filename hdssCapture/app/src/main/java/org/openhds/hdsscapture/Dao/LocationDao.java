@@ -77,6 +77,10 @@ public interface LocationDao {
             "WHERE locationLevel_uuid=:id AND b.compno IS NULL")
     long counts(String id);
 
+    @Query("SELECT COUNT(DISTINCT hohID) FROM individual as a LEFT JOIN visit as b on a.hohID=b.houseExtId " +
+            "WHERE village=:id AND b.houseExtId IS NULL AND endType=1")
+    long hseCount(String id);
+
     @Query("SELECT COUNT(*) FROM Locations WHERE locationLevel_uuid=:id")
     long done(String id);
 

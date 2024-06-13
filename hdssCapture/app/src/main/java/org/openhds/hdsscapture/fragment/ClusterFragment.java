@@ -110,7 +110,7 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_cluster, container, false);
 
-        TextView done = view.findViewById(R.id.compl);
+        //TextView done = view.findViewById(R.id.compl);
         final Intent i = getActivity().getIntent();
         final Hierarchy level6Data = i.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
 
@@ -183,19 +183,19 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
 //
 //        });
 
-        try {
-            // Call the counts method on locationViewModel to retrieve data
-            long count = locationViewModel.counts(level6Data.uuid);
-            long counts = individualViewModel.counts(level6Data.name);
-                // Update UI with the count (assuming done is a TextView)
-                //done.setText(String.valueOf(count));
-                done.setText("(" + String.valueOf(count) + ", " + String.valueOf(counts) + ")");
-                done.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.Green));
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            // Call the counts method on locationViewModel to retrieve data
+//            long count = locationViewModel.counts(level6Data.uuid);
+//            long counts = individualViewModel.counts(level6Data.name);
+//                // Update UI with the count (assuming done is a TextView)
+//                //done.setText(String.valueOf(count));
+//                done.setText("(" + String.valueOf(count) + ", " + String.valueOf(counts) + ")");
+//                done.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.Green));
+//        } catch (ExecutionException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
 
         final AppCompatButton add_location = view.findViewById(R.id.button_new_location);
@@ -275,8 +275,8 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
         // Update the householdAdapter with the selected location
         if (householdAdapter != null) {
             householdAdapter.setSelectedLocation(ClusterFragment.selectedLocation);
-            TextView compno = view.findViewById(R.id.textView_compounds);
-            compno.setText(selectedLocation.compno);
+            //TextView compno = view.findViewById(R.id.textView_compounds);
+            //compno.setText(selectedLocation.compno);
             AppCompatButton add_household = view.findViewById(R.id.button_newhousehold);
             final AppCompatButton add_listing = view.findViewById(R.id.button_listing);
             add_household.setVisibility(View.VISIBLE);

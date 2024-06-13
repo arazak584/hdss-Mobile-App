@@ -4,10 +4,14 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Outmigration;
+import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.OmgUpdate;
+import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 
 import java.util.Date;
 import java.util.List;
@@ -23,6 +27,9 @@ public interface OutmigrationDao {
 
     @Query("DELETE FROM outmigration")
     void deleteAll();
+
+    @Update(entity = Outmigration.class)
+    int update(OmgUpdate s);
 
     @Query("SELECT * FROM residency as a LEFT JOIN outmigration as b on a.uuid=b.residency_uuid" +
             " where b.residency_uuid IS NULL AND a.individual_uuid=:id and a.location_uuid!=:locid and endType=1")

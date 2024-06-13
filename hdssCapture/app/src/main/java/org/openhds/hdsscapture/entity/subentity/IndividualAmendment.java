@@ -13,4 +13,7 @@ public class IndividualAmendment {
     public String otherName;
     public String ghanacard;
     public Integer complete;
+    public String father_uuid;
+    public String mother_uuid;
+
 }
