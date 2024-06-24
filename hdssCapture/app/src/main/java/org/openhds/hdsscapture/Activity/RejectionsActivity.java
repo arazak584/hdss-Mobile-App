@@ -24,8 +24,10 @@ import org.openhds.hdsscapture.Adapter.ViewsAdapter;
 import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.Dao.ApiDao;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Repositories.HdssSociodemoRepository;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
+import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
@@ -34,9 +36,11 @@ import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
+import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Fieldworker;
+import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outmigration;
@@ -44,6 +48,7 @@ import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.subqueries.Newloc;
 import org.openhds.hdsscapture.entity.subqueries.RejectEvent;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
@@ -70,6 +75,8 @@ public class RejectionsActivity extends AppCompatActivity {
     private PregnancyoutcomeViewModel pregnancyoutcomeViewModel;
     private PregnancyViewModel pregnancyViewModel;
     private RelationshipViewModel relationshipViewModel;
+    private VaccinationViewModel vaccinationViewModel;
+    private HdssSociodemoViewModel hdssSociodemoViewModel;
 
     private RejectAdapter viewsAdapter;
     private List<RejectEvent> filterAll;
@@ -116,6 +123,8 @@ public class RejectionsActivity extends AppCompatActivity {
         pregnancyoutcomeViewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
         relationshipViewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
+        vaccinationViewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
+        hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
 
         //Sync LocationHierarchy
         final ExtendedFloatingActionButton dwd = findViewById(R.id.btn_reject);
@@ -368,6 +377,26 @@ public class RejectionsActivity extends AppCompatActivity {
                                                         Relationship[] rel = response.body().getData().toArray(new Relationship[0]);
                                                         relationshipViewModel.add(rel);
 
+                                                        // Next Step: Vaccination
+                                                        progres.setMessage("Downloading...");
+                                                        final VaccinationViewModel vaccinationViewModel = new ViewModelProvider(RejectionsActivity.this).get(VaccinationViewModel.class);
+                                                        Call<DataWrapper<Vaccination>> c_callable = dao.getVac(authorizationHeader);
+                                                        c_callable.enqueue(new Callback<DataWrapper<Vaccination>>() {
+                                                        @Override
+                                                        public void onResponse(Call<DataWrapper<Vaccination>> call, Response<DataWrapper<Vaccination>> response) {
+                                                        Vaccination[] vac = response.body().getData().toArray(new Vaccination[0]);
+                                                        vaccinationViewModel.add(vac);
+
+                                                            // Next Step: Ses
+                                                            progres.setMessage("Downloading...");
+                                                            final HdssSociodemoViewModel hdssSociodemoViewModel = new ViewModelProvider(RejectionsActivity.this).get(HdssSociodemoViewModel.class);
+                                                            Call<DataWrapper<HdssSociodemo>> c_callable = dao.getSes(authorizationHeader);
+                                                            c_callable.enqueue(new Callback<DataWrapper<HdssSociodemo>>() {
+                                                                @Override
+                                                                public void onResponse(Call<DataWrapper<HdssSociodemo>> call, Response<DataWrapper<HdssSociodemo>> response) {
+                                                                    HdssSociodemo[] ses = response.body().getData().toArray(new HdssSociodemo[0]);
+                                                                    hdssSociodemoViewModel.add(ses);
+
                                                         // Final Step: Pregnancy Outcome
                                                         progres.setMessage("Downloading...");
                                                         final PregnancyoutcomeViewModel pregout = new ViewModelProvider(RejectionsActivity.this).get(PregnancyoutcomeViewModel.class);
@@ -384,7 +413,23 @@ public class RejectionsActivity extends AppCompatActivity {
                                                             @Override
                                                             public void onFailure(Call<DataWrapper<Pregnancyoutcome>> call, Throwable t) {
                                                                 progres.dismiss();
-                                                                Toast.makeText(RejectionsActivity.this, "Download Error", Toast.LENGTH_LONG).show();
+                                                                Toast.makeText(RejectionsActivity.this, "Outcome Download Error", Toast.LENGTH_LONG).show();
+                                                            }
+                                                        });
+                                                    }
+
+                                                                @Override
+                                                                public void onFailure(Call<DataWrapper<HdssSociodemo>> call, Throwable t) {
+                                                                    progres.dismiss();
+                                                                    Toast.makeText(RejectionsActivity.this, "SES Download Error", Toast.LENGTH_LONG).show();
+                                                                }
+                                                            });
+                                                        }
+
+                                                            @Override
+                                                            public void onFailure(Call<DataWrapper<Vaccination>> call, Throwable t) {
+                                                                progres.dismiss();
+                                                                Toast.makeText(RejectionsActivity.this, "Vac Download Error", Toast.LENGTH_LONG).show();
                                                             }
                                                         });
                                                     }
@@ -392,7 +437,7 @@ public class RejectionsActivity extends AppCompatActivity {
                                                     @Override
                                                     public void onFailure(Call<DataWrapper<Relationship>> call, Throwable t) {
                                                         progres.dismiss();
-                                                        Toast.makeText(RejectionsActivity.this, "Download Error", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(RejectionsActivity.this, "Rel Download Error", Toast.LENGTH_LONG).show();
                                                     }
                                                 });
                                             }
@@ -400,7 +445,7 @@ public class RejectionsActivity extends AppCompatActivity {
                                             @Override
                                             public void onFailure(Call<DataWrapper<Demographic>> call, Throwable t) {
                                                 progres.dismiss();
-                                                Toast.makeText(RejectionsActivity.this, "Download Error", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(RejectionsActivity.this, "Dem Download Error", Toast.LENGTH_LONG).show();
                                             }
                                         });
                                     }
@@ -408,7 +453,7 @@ public class RejectionsActivity extends AppCompatActivity {
                                     @Override
                                     public void onFailure(Call<DataWrapper<Pregnancy>> call, Throwable t) {
                                         progres.dismiss();
-                                        Toast.makeText(RejectionsActivity.this, "Download Error", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(RejectionsActivity.this, "Preg Download Error", Toast.LENGTH_LONG).show();
                                     }
                                 });
                             }
@@ -416,7 +461,7 @@ public class RejectionsActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(Call<DataWrapper<Death>> call, Throwable t) {
                                 progres.dismiss();
-                                Toast.makeText(RejectionsActivity.this, "Download Error", Toast.LENGTH_LONG).show();
+                                Toast.makeText(RejectionsActivity.this, "Death Download Error", Toast.LENGTH_LONG).show();
                             }
                         });
                     }
@@ -424,7 +469,7 @@ public class RejectionsActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<DataWrapper<Outmigration>> call, Throwable t) {
                         progres.dismiss();
-                        Toast.makeText(RejectionsActivity.this, "Download Error", Toast.LENGTH_LONG).show();
+                        Toast.makeText(RejectionsActivity.this, "Omg Download Error", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -432,7 +477,7 @@ public class RejectionsActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<DataWrapper<Inmigration>> call, Throwable t) {
                 progres.dismiss();
-                Toast.makeText(RejectionsActivity.this, "Download Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(RejectionsActivity.this, "Img Download Error", Toast.LENGTH_LONG).show();
             }
         });
     }

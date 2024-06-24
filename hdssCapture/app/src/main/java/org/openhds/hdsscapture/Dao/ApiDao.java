@@ -77,6 +77,10 @@ public interface ApiDao {
     Call<DataWrapper<Pregnancy>> getPreg(@Header("Authorization") String authorizationHeader);
     @GET("/api/demographic/reject")
     Call<DataWrapper<Demographic>> getDemo(@Header("Authorization") String authorizationHeader);
+    @GET("/api/vac/reject")
+    Call<DataWrapper<Vaccination>> getVac(@Header("Authorization") String authorizationHeader);
+    @GET("/api/ses/reject")
+    Call<DataWrapper<HdssSociodemo>> getSes(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/zip/location")
     Call<ResponseBody> downloadLocation(@Header("Authorization") String authorizationHeader);

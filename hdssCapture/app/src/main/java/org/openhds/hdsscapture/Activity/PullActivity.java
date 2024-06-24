@@ -1167,7 +1167,8 @@ public class PullActivity extends AppCompatActivity {
                         .addColumn("toilet_spfy_fcorres").addColumn("tractor_fcorres").addColumn("tractor_num_fcorres")
                         .addColumn("tricycles_fcorres").addColumn("tricycles_num_fcorres").addColumn("tv_fcorres")
                         .addColumn("tv_num_fcorres").addColumn("uuid").addColumn("wash_fcorres").addColumn("wash_num_fcorres")
-                        .addColumn("watch_fcorres").addColumn("watch_num_fcorres").build();
+                        .addColumn("watch_fcorres").addColumn("watch_num_fcorres")
+                        .addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate").build();
 
                 downloadAndProcessDataset("ses.zip", "ses.csv", () -> dao.downloadSes(authorizationHeader), HdssSociodemo.class, sesSchema, sesCounts, ses, this::downloadVac);
 
@@ -1189,7 +1190,8 @@ public class PullActivity extends AppCompatActivity {
                         .addColumn("rota3").addColumn("rtss18").addColumn("rtss6").addColumn("rtss7").addColumn("rtss9")
                         .addColumn("sbf").addColumn("scar").addColumn("slpbednet").addColumn("socialgroup_uuid")
                         .addColumn("stm").addColumn("sttime").addColumn("sty").addColumn("uuid").addColumn("vitaminA12").addColumn("vitaminA18")
-                        .addColumn("vitaminA6").addColumn("weight").addColumn("yellow_fever").build();
+                        .addColumn("vitaminA6").addColumn("weight").addColumn("yellow_fever")
+                        .addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate").build();
 
                 downloadAndProcessDataset("vaccination.zip", "vaccination.csv", () -> dao.downloadVaccination(authorizationHeader), Vaccination.class, vaccinationSchema, vaccinationCounts, vac, () -> {
                     deleteFiles(getExternalCacheDir());

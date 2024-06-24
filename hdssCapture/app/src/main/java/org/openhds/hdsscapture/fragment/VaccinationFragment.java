@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -418,6 +419,10 @@ public class VaccinationFragment extends Fragment {
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
+        final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
+        final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
+        final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
+
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
@@ -426,6 +431,21 @@ public class VaccinationFragment extends Fragment {
             Vaccination data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid);
             if (data != null) {
                 binding.setVaccination(data);
+
+                if(data.status!=null && data.status==2){
+                    cmt.setVisibility(View.VISIBLE);
+                    rsv.setVisibility(View.VISIBLE);
+                    rsvd.setVisibility(View.VISIBLE);
+                }else{
+                    cmt.setVisibility(View.GONE);
+                    rsv.setVisibility(View.GONE);
+                    rsvd.setVisibility(View.GONE);
+                }
+
+                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.location_uuid = ClusterFragment.selectedLocation.uuid;
+                data.socialgroup_uuid = socialgroup.uuid;
+                data.dob = HouseMembersFragment.selectedIndividual.dob;
 
                 if (data.bcg!=null){
                     binding.btnBcg.setEnabled(false);
@@ -687,7 +707,7 @@ public class VaccinationFragment extends Fragment {
 //                    }
 //                }
 
-
+                data.fw_uuid = fieldworkerData.getFw_uuid();data.fw_uuid = fieldworkerData.getFw_uuid();
 
             } else {
                 data = new Vaccination();
