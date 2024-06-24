@@ -255,6 +255,36 @@ public class RejectionsActivity extends AppCompatActivity {
                 l++;
             }
 
+            int m=1;
+            for (Vaccination e : vaccinationViewModel.reject(username)) {
+                String formattedDate = f.format(e.insertDate);
+                RejectEvent r1 = new RejectEvent();
+                r1.id1 = m + ". Vaccination";
+                r1.id2 = "" + e.sttime + " " + e.edtime;
+                r1.id3 = "" + e.visit_uuid+ " - " + e.socialgroup_uuid;
+                r1.id4 = "" + formattedDate;
+                r1.id5 = "" + e.comment;
+                r1.index = m;
+
+                list.add(r1);
+                m++;
+            }
+
+            int n=1;
+            for (HdssSociodemo e : hdssSociodemoViewModel.reject(username)) {
+                String formattedDate = f.format(e.insertDate);
+                RejectEvent r1 = new RejectEvent();
+                r1.id1 = n + ". SES - Profile";
+                r1.id2 = "" + e.sttime + " - " + e.edtime;
+                r1.id3 = "" + e.visit_uuid;
+                r1.id4 = "" + formattedDate;
+                r1.id5 = "" + e.comment;
+                r1.index = n;
+
+                list.add(r1);
+                n++;
+            }
+
 
 
 

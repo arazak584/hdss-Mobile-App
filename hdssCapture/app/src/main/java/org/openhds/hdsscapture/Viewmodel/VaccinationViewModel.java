@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.VaccinationRepository;
+import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Vaccination;
 
 import java.util.Date;
@@ -31,6 +32,10 @@ public class VaccinationViewModel extends AndroidViewModel {
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         return vaccinationRepository.count(startDate, endDate, username);
+    }
+
+    public List<Vaccination> reject(String id) throws ExecutionException, InterruptedException {
+        return vaccinationRepository.reject(id);
     }
 
     public void add(Vaccination data){

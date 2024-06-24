@@ -4,6 +4,7 @@ import android.app.Application;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.VaccinationDao;
+import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Vaccination;
 
 import java.util.Date;
@@ -57,6 +58,15 @@ public class VaccinationRepository {
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         Callable<Long> callable = () -> dao.count(startDate, endDate, username);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    public List<Vaccination> reject(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Vaccination>> callable = () -> dao.reject(id);
+
+        Future<List<Vaccination>> future = Executors.newSingleThreadExecutor().submit(callable);
+
         return future.get();
     }
 

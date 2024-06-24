@@ -5,6 +5,7 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.HdssSociodemoDao;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
+import org.openhds.hdsscapture.entity.Vaccination;
 
 import java.util.Date;
 import java.util.List;
@@ -52,6 +53,15 @@ public class HdssSociodemoRepository {
     public List<HdssSociodemo> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<HdssSociodemo>> callable = () -> dao.retrieveToSync();
+
+        Future<List<HdssSociodemo>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<HdssSociodemo> reject(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<HdssSociodemo>> callable = () -> dao.reject(id);
 
         Future<List<HdssSociodemo>> future = Executors.newSingleThreadExecutor().submit(callable);
 
