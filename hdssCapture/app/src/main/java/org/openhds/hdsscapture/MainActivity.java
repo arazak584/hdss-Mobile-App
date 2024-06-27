@@ -51,6 +51,7 @@ import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
+import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
@@ -62,6 +63,7 @@ import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
+import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.entity.CodeBook;
 import org.openhds.hdsscapture.entity.CommunityReport;
@@ -114,6 +116,8 @@ public class MainActivity extends AppCompatActivity {
     private PregnancyoutcomeViewModel pregnancyoutcomeViewModel;
     private PregnancyViewModel pregnancyViewModel;
     private RelationshipViewModel relationshipViewModel;
+    private HdssSociodemoViewModel hdssSociodemoViewModel;
+    private VaccinationViewModel vaccinationViewModel;
     private Button reject;
     private  SharedPreferences preferences;
     private String authorizationHeader;
@@ -167,6 +171,8 @@ public class MainActivity extends AppCompatActivity {
         pregnancyoutcomeViewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
         relationshipViewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
+        vaccinationViewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
+        hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
 
         //Settings Download API USERNAME PASSWORD
         SharedPreferences preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
@@ -601,8 +607,10 @@ public class MainActivity extends AppCompatActivity {
             long totalDem = demographicViewModel.rej(fws);
             long totalDth = deathViewModel.rej(fws);
             long totalRel = relationshipViewModel.rej(fws);
+            long totalses = hdssSociodemoViewModel.rej(fws);
+            long totalvac = vaccinationViewModel.rej(fws);
 
-            long totalRejected = totalImg + totalOmg + totalPre + totalOut + totalDem + totalDth + totalRel;
+            long totalRejected = totalImg + totalOmg + totalPre + totalOut + totalDem + totalDth + totalRel +totalses +totalvac;
 
             final Intent f = getIntent();
             final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);

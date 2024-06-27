@@ -66,4 +66,7 @@ public interface HdssSociodemoDao {
 
     @Query("SELECT * FROM locations WHERE insertDate > (SELECT startDate FROM round ORDER BY roundNumber DESC LIMIT 1) order by insertDate DESC")
     List<Locations> repo();
+
+    @Query("SELECT COUNT(*) FROM sociodemo WHERE status=2 AND fw_uuid = :uuid ")
+    long rej(String uuid);
 }

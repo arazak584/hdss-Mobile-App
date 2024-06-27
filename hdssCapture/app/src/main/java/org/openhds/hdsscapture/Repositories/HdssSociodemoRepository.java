@@ -79,5 +79,10 @@ public class HdssSociodemoRepository {
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }
-    
+
+    public long rej(String uuid) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.rej(uuid);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
 }

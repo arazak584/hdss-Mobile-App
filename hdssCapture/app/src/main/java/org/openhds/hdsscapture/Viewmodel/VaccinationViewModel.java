@@ -38,6 +38,10 @@ public class VaccinationViewModel extends AndroidViewModel {
         return vaccinationRepository.reject(id);
     }
 
+    public long rej(String uuid) throws ExecutionException, InterruptedException {
+        return vaccinationRepository.rej(uuid);
+    }
+
     public void add(Vaccination data){
         vaccinationRepository.create(data);
     }

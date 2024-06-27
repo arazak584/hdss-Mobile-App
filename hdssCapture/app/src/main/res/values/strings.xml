@@ -372,7 +372,7 @@
     <string name="drink_water"><b>SECTION D Household Assets: Drinking Water</b></string>
     <string name="H2O_FCORRES_SOCIO">D1 What is the main source of drinking water for members of your household\?</string>
     <string name="H2O_SPFY_FCORRES_SOCIO">D1a Other Specify</string>
-    <string name="H2O_DIST_FCORRES_SOCIO">D2 How far away is this source of drinking water</string>
+    <string name="H2O_DIST_FCORRES_SOCIO">D2 How far away is this source of drinking water(In Meters)</string>
     <string name="H2O_HOURS_FCORRES_SOCIO">D3 How long does it take to get water and come back</string>
     <string name="H2O_PREP_FCORRES_SOCIO">D4 Do you do anything to this water before you drink it\?</string>
     <string name="H2O_PREP_SPFY_FCORRES_SOCIO">D5 What do you usually do to this water before you drink it\?</string>

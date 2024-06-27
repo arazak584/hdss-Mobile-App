@@ -477,7 +477,7 @@ public class HdssSociodemo extends BaseObservable {
     }
 
     public String getApproveDate() {
-        if (approveDate == null) return "";
+        if (approveDate == null) return null;
         return g.format(approveDate);
     }
 
@@ -1144,7 +1144,7 @@ public class HdssSociodemo extends BaseObservable {
         if (view.findViewById(checkedId) != null) {
             final String TAG = "" + view.findViewById(checkedId).getTag();
             form_comments_yn = Integer.parseInt(TAG);
-            form_comments_txt = "";
+            form_comments_txt = null;
             notifyPropertyChanged(BR._all);
         }
     }
@@ -2488,16 +2488,19 @@ public class HdssSociodemo extends BaseObservable {
                 setMarital_age(null);
 
             if (religion_scorres == null || religion_scorres != AppConstants.OTHER_SPECIFY)
-                religion_spfy_scorres = "";
+                religion_spfy_scorres = null;
 
             if (cethnic == null || cethnic != AppConstants.OTHER_SPECIFY)
-                othr_trb_spfy_cethnic = "";
+                othr_trb_spfy_cethnic = null;
 
             if (head_hh_fcorres == null || head_hh_fcorres != AppConstants.OTHER_SPECIFY)
-                head_hh_spfy_fcorres = "";
+                head_hh_spfy_fcorres = null;
 
             if (h2o_fcorres == null || h2o_fcorres != AppConstants.OTHER_SPECIFY)
-                h2o_spfy_fcorres = "";
+                h2o_spfy_fcorres = null;
+
+            if (form_comments_yn == null || form_comments_yn !=AppConstants.YES)
+                form_comments_txt = null;
 
             if (h2o_prep_fcorres == null || h2o_prep_fcorres != AppConstants.YES) {
 
@@ -2510,7 +2513,7 @@ public class HdssSociodemo extends BaseObservable {
             }
 
             if (toilet_fcorres == null || toilet_fcorres != AppConstants.OTHER_SPECIFY)
-                toilet_spfy_fcorres = "";
+                toilet_spfy_fcorres = null;
 
             if (toilet_fcorres == null || toilet_fcorres == 12) {
                 toilet_loc_fcorres = null;
@@ -2518,19 +2521,19 @@ public class HdssSociodemo extends BaseObservable {
             }
 
             if (toilet_loc_fcorres == null || toilet_loc_fcorres != AppConstants.OTHER_SPECIFY)
-                toilet_loc_spfy_fcorres = "";
+                toilet_loc_spfy_fcorres = null;
 
             if (toilet_share_fcorres == null || toilet_share_fcorres != AppConstants.YES)
                 toilet_share_num_fcorres = AppConstants.NOSELECT;
 
             if (ext_wall_fcorres == null || ext_wall_fcorres != AppConstants.OTHER_SPECIFY)
-                ext_wall_spfy_fcorres = "";
+                ext_wall_spfy_fcorres = null;
 
             if (floor_fcorres == null || floor_fcorres != AppConstants.OTHER_SPECIFY)
-                floor_spfy_fcorres = "";
+                floor_spfy_fcorres = null;
 
             if (roof_fcorres == null || roof_fcorres != AppConstants.OTHER_SPECIFY)
-                roof_spfy_fcorres = "";
+                roof_spfy_fcorres = null;
 
             if (mobile_fcorres == null || mobile_fcorres != AppConstants.YES) {
                 setMobile_num_fcorres(null);
@@ -2618,7 +2621,7 @@ public class HdssSociodemo extends BaseObservable {
                 setTractor_num_fcorres(null);
 
             if (own_rent_scorres == null || own_rent_scorres != AppConstants.OTHER_SPECIFY)
-                own_rent_spfy_scorres = "";
+                own_rent_spfy_scorres = null;
 
             if (land_fcorres == null || land_fcorres != AppConstants.YES) {
                 land_use_fcorres_1 = null;
@@ -2631,7 +2634,7 @@ public class HdssSociodemo extends BaseObservable {
             }
 
             if (land_use_fcorres_88 == null || land_use_fcorres_88 != AppConstants.OTHER_SPECIFY)
-                land_use_spfy_fcorres_88 = "";
+                land_use_spfy_fcorres_88 = null;
 
             if (livestock_fcorres == null || livestock_fcorres != AppConstants.YES) {
 
@@ -2686,21 +2689,21 @@ public class HdssSociodemo extends BaseObservable {
                 setHorse_num_fcorres(null);
 
             if (animal_othr_fcorres == null || animal_othr_fcorres != AppConstants.YES) {
-                animal_othr_spfy_fcorres = "";
+                animal_othr_spfy_fcorres = null;
                 setAnimal_othr_num_fcorres(null);
             }
 
-            if (job_scorres == null || (job_scorres > 15 && job_scorres != AppConstants.OTHER_SPECIFY))
-                job_othr_spfy_scorres = "";
+            if (job_scorres == null || job_scorres != AppConstants.OTHER_SPECIFY)
+                job_othr_spfy_scorres = null;
 
-            if (ptr_scorres == null || (ptr_scorres > 15 && ptr_scorres != AppConstants.OTHER_SPECIFY))
-                ptr_othr_spfy_scorres = "";
+            if (ptr_scorres == null || ptr_scorres != AppConstants.OTHER_SPECIFY)
+                ptr_othr_spfy_scorres = null;
 
             if (stove_fcorres == null || stove_fcorres != AppConstants.OTHER_SPECIFY)
-                stove_spfy_fcorres = "";
+                stove_spfy_fcorres = null;
 
             if (stove_fuel_fcorres_88 == null || stove_fuel_fcorres_88 != AppConstants.YES)
-                stove_fuel_spfy_fcorres_88 = "";
+                stove_fuel_spfy_fcorres_88 = null;
 
             if (cooking_inside_fcorres == null || cooking_inside_fcorres != AppConstants.YES)
                 cooking_room_fcorres = null;

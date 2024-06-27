@@ -47,6 +47,10 @@ public class HdssSociodemoViewModel extends AndroidViewModel {
         return hdssSociodemoRepository.counts(startDate, endDate, username);
     }
 
+    public long rej(String uuid) throws ExecutionException, InterruptedException {
+        return hdssSociodemoRepository.rej(uuid);
+    }
+
     public void add(HdssSociodemo s){
         hdssSociodemoRepository.create(s);
     }

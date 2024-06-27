@@ -77,6 +77,9 @@ public class Death extends BaseObservable implements Parcelable {
     public Integer deathCause;
 
     @Expose
+    public String deathCause_oth;
+
+    @Expose
     public Integer deathPlace;
 
     @Expose
@@ -407,6 +410,14 @@ public class Death extends BaseObservable implements Parcelable {
 
     public void setEdit(Integer edit) {
         this.edit = edit;
+    }
+
+    public String getDeathCause_oth() {
+        return deathCause_oth;
+    }
+
+    public void setDeathCause_oth(String deathCause_oth) {
+        this.deathCause_oth = deathCause_oth;
     }
 
     public Integer getAgeAtDeath() {
