@@ -35,6 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:spinnerMode="dialog"
+            android:padding="5dp"
             android:onItemSelected="@{sociodemo::setStove_fcorres}" />
 
         <LinearLayout
@@ -771,6 +772,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:spinnerMode="dialog"
+            android:padding="5dp"
             android:onItemSelected="@{sociodemo::setCooking_loc_fcorres}" />
 
     <LinearLayout

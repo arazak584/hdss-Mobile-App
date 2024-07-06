@@ -79,6 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:spinnerMode="dialog"
+                android:padding="5dp"
                 android:onItemSelected="@{sociodemo::setSmoke_in_oecdosfrq}" />
 
         </LinearLayout>
@@ -139,6 +140,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:spinnerMode="dialog"
+                android:padding="5dp"
                 android:onItemSelected="@{sociodemo::setSmoke_hhold_in_oecdosfrq}" />
 
         </LinearLayout>

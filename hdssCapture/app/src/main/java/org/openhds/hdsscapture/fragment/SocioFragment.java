@@ -157,19 +157,19 @@ public class SocioFragment extends Fragment {
         }
 
 
-        loadCodeData(binding.socioa.MARITALSCORRES, "MARITAL_SCORRES");
-        loadCodeData(binding.socioa.RELIGIONSCORRES, "religion");
-        loadCodeData(binding.socioa.CETHNIC, "tribe");
-        loadCodeData(binding.socioa.HEADHHFCORRES, "rltnhead");
-        loadCodeData(binding.sociob.H2OFCORRES, "H2O_FCORRES");
-        loadCodeData(binding.sociob.TOILETFCORRES, "TOILET_FCORRES");
-        loadCodeData(binding.sociob.TOILETLOCFCORRES, "TOILET_LOC_FCORRES");
-        loadCodeData(binding.sociob.TOILETSHARENUMFCORRES, "TOILET_SHARE_NUM_FCORRES");
-        loadCodeData(binding.sociob.EXTWALLFCORRES, "EXT_WALL_FCORRES");
-        loadCodeData(binding.sociob.FLOORFCORRES, "FLOOR_FCORRES");
-        loadCodeData(binding.sociob.ROOFFCORRES, "ROOF_FCORRES");
-        loadCodeData(binding.socioc.MOBILEACCESSFCORRES, "MOBILE_ACCESS_FCORRES");
-        loadCodeData(binding.socioc.OWNRENTSCORRES, "OWN_RENT_SCORRES");
+        loadCodeData(binding.MARITALSCORRES, "MARITAL_SCORRES");
+        loadCodeData(binding.RELIGIONSCORRES, "religion");
+        loadCodeData(binding.CETHNIC, "tribe");
+        loadCodeData(binding.HEADHHFCORRES, "rltnhead");
+        loadCodeData(binding.H2OFCORRES, "H2O_FCORRES");
+        loadCodeData(binding.TOILETFCORRES, "TOILET_FCORRES");
+        loadCodeData(binding.TOILETLOCFCORRES, "TOILET_LOC_FCORRES");
+        loadCodeData(binding.TOILETSHARENUMFCORRES, "TOILET_SHARE_NUM_FCORRES");
+        loadCodeData(binding.EXTWALLFCORRES, "EXT_WALL_FCORRES");
+        loadCodeData(binding.FLOORFCORRES, "FLOOR_FCORRES");
+        loadCodeData(binding.ROOFFCORRES, "ROOF_FCORRES");
+        loadCodeData(binding.MOBILEACCESSFCORRES, "MOBILE_ACCESS_FCORRES");
+        loadCodeData(binding.OWNRENTSCORRES, "OWN_RENT_SCORRES");
         loadCodeData(binding.socioe.JOBSCORRES, "JOB");
         loadCodeData(binding.socioe.PTRSCORRES, "JOB");
         loadCodeData(binding.sociof.STOVEFCORRES, "STOVE_FCORRES");
@@ -204,8 +204,8 @@ public class SocioFragment extends Fragment {
 
                 final boolean validateOnComplete = true;//finaldata.mnh01_form_complete == 1;
                 boolean hasErrors = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
-                hasErrors = hasErrors || new Handler().hasInvalidInput(binding.sociob.MAINLAYOUT, validateOnComplete, false);
-                hasErrors = hasErrors || new Handler().hasInvalidInput(binding.socioc.MAINLAYOUT, validateOnComplete, false);
+//                hasErrors = hasErrors || new Handler().hasInvalidInput(binding.sociob.MAINLAYOUT, validateOnComplete, false);
+//                hasErrors = hasErrors || new Handler().hasInvalidInput(binding.socioc.MAINLAYOUT, validateOnComplete, false);
                 hasErrors = hasErrors || new Handler().hasInvalidInput(binding.sociod.MAINLAYOUT, validateOnComplete, false);
                 hasErrors = hasErrors || new Handler().hasInvalidInput(binding.socioe.MAINLAYOUT, validateOnComplete, false);
                 hasErrors = hasErrors || new Handler().hasInvalidInput(binding.sociof.MAINLAYOUT, validateOnComplete, false);
@@ -222,22 +222,22 @@ public class SocioFragment extends Fragment {
 
             boolean mar = false;
             boolean val = false;
-            if (data.marital_scorres == 1 && !binding.socioa.MARITALAGE.getText().toString().trim().isEmpty()) {
-                int totalmth = Integer.parseInt(binding.socioa.MARITALAGE.getText().toString().trim());
+            if (data.marital_scorres == 1 && !binding.MARITALAGE.getText().toString().trim().isEmpty()) {
+                int totalmth = Integer.parseInt(binding.MARITALAGE.getText().toString().trim());
                 if (totalmth < 10) {
                     mar = true;
-                    binding.socioa.MARITALAGE.setError("Maximum Age Allowed is 10");
+                    binding.MARITALAGE.setError("Maximum Age Allowed is 10");
                     Toast.makeText(getActivity(), "Maximum Age Allowed is 10", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
 
-            if (!binding.socioa.HOUSEOCCTOTFCORRES.getText().toString().trim().isEmpty() && !binding.socioa.HOUSEOCCLT5FCORRES.getText().toString().trim().isEmpty()) {
-                int totalpeople = Integer.parseInt(binding.socioa.HOUSEOCCTOTFCORRES.getText().toString().trim());
-                int total5 = Integer.parseInt(binding.socioa.HOUSEOCCLT5FCORRES.getText().toString().trim());
+            if (!binding.HOUSEOCCTOTFCORRES.getText().toString().trim().isEmpty() && !binding.HOUSEOCCLT5FCORRES.getText().toString().trim().isEmpty()) {
+                int totalpeople = Integer.parseInt(binding.HOUSEOCCTOTFCORRES.getText().toString().trim());
+                int total5 = Integer.parseInt(binding.HOUSEOCCLT5FCORRES.getText().toString().trim());
                 if (totalpeople < total5) {
                     val = true;
-                    binding.socioa.HOUSEOCCLT5FCORRES.setError("Children aged five cannot be more than total Individuals in household");
+                    binding.HOUSEOCCLT5FCORRES.setError("Children aged five cannot be more than total Individuals in household");
                     Toast.makeText(getActivity(), "Children aged five cannot be more than total Individuals in household", Toast.LENGTH_LONG).show();
                     return;
                 }

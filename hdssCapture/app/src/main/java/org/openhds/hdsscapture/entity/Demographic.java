@@ -99,6 +99,10 @@ public class Demographic extends BaseObservable implements Parcelable {
     public String supervisor;
     @Expose
     public Date approveDate;
+    @Expose
+    public Integer denomination;
+    @Expose
+    public Integer akan_tribe;
 
     public Demographic(){}
 
@@ -305,6 +309,22 @@ public class Demographic extends BaseObservable implements Parcelable {
         this.visit_uuid = visit_uuid;
     }
 
+    public Integer getDenomination() {
+        return denomination;
+    }
+
+    public void setDenomination(Integer denomination) {
+        this.denomination = denomination;
+    }
+
+    public Integer getAkan_tribe() {
+        return akan_tribe;
+    }
+
+    public void setAkan_tribe(Integer akan_tribe) {
+        this.akan_tribe = akan_tribe;
+    }
+
     protected Demographic(Parcel in) {
         this.individual_uuid = in.readString();
         this.insertDate = (Date) in.readSerializable();
@@ -316,6 +336,8 @@ public class Demographic extends BaseObservable implements Parcelable {
         this.phone1 = in.readString();
         this.phone2 = in.readString();
         this.fw_uuid = in.readString();
+        this.denomination = in.readInt();
+        this.akan_tribe = in.readInt();
 //        this.edtime = (Date) in.readSerializable();
 //        this.sttime = (Date) in.readSerializable();
     }
@@ -349,6 +371,8 @@ public class Demographic extends BaseObservable implements Parcelable {
         dest.writeString(this.phone1);
         dest.writeString(this.phone2);
         dest.writeString(this.fw_uuid);
+        dest.writeInt(this.denomination);
+        dest.writeInt(this.akan_tribe);
 //        dest.writeSerializable(this.edtime);
 //        dest.writeSerializable(this.sttime);
     }
@@ -484,12 +508,49 @@ public class Demographic extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);
         }
+    }
 
+    public void setAkan_tribe(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            akan_tribe = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            akan_tribe = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
+        }
+    }
+
+    public void setDenomination(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            denomination = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            denomination = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
+        }
     }
 
     private void patternSkipper(View view) {
 
         if (view != null) {
+
+            if(tribe == null || tribe!=1)
+                setAkan_tribe(null);
+
+            if (religion == null || religion !=1)
+                setDenomination(null);
 
             notifyPropertyChanged(BR._all);
         }

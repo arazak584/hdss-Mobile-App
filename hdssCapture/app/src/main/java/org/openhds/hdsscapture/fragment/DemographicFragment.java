@@ -169,6 +169,8 @@ public class DemographicFragment extends DialogFragment {
         loadCodeData(binding.marital, "marital");
         loadCodeData(binding.demoComplete, "submit");
         loadCodeData(binding.demoPhone, "complete");
+        loadCodeData(binding.akan, "akan");
+        loadCodeData(binding.denomination, "denomination");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 

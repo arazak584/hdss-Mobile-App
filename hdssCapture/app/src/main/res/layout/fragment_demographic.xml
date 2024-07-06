@@ -251,6 +251,27 @@
                     android:padding="10dp"
                     android:spinnerMode="dialog" />
 
+                <TextView
+                    goneUnless="@{demographic.tribe==1}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/akan_specify"/>
+
+                <Spinner
+                    goneUnless="@{demographic.tribe==1}"
+                    android:id="@+id/akan"
+                    selection="@{demographic.akan_tribe}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{demographic::setAkan_tribe}"
+                    android:padding="15dp"
+                    android:spinnerMode="dialog"/>
+
                 <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{demographic.tribe==77}"
                     android:layout_width="match_parent"
@@ -285,6 +306,27 @@
                     android:gravity="left"
                     android:minHeight="48dp"
                     android:onItemSelected="@{demographic::setReligions}"
+                    android:padding="15dp"
+                    android:spinnerMode="dialog"/>
+
+                <TextView
+                    goneUnless="@{demographic.religion==1}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/denomination_specify"/>
+
+                <Spinner
+                    goneUnless="@{demographic.religion==1}"
+                    android:id="@+id/denomination"
+                    selection="@{demographic.denomination}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{demographic::setDenomination}"
                     android:padding="15dp"
                     android:spinnerMode="dialog"/>
 
