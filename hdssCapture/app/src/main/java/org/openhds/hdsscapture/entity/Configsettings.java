@@ -51,6 +51,8 @@ public class Configsettings extends BaseObservable implements Parcelable {
 
     @ColumnInfo(name = "enumeration")
     public boolean enumeration;
+    @Expose
+    public String site;
 
 
     public Configsettings() {
@@ -141,7 +143,13 @@ public class Configsettings extends BaseObservable implements Parcelable {
             }
     }
 
+    public String getSite() {
+        return site;
+    }
 
+    public void setSite(String site) {
+        this.site = site;
+    }
 
     protected Configsettings(Parcel in) {
         this.id = in.readString();
@@ -150,6 +158,7 @@ public class Configsettings extends BaseObservable implements Parcelable {
         this.father_age = in.readInt();
         this.rel_age = in.readInt();
         this.earliestDate = (Date) in.readSerializable();
+        this.site = in.readString();
     }
 
     public static final Creator<Configsettings> CREATOR = new Creator<Configsettings>() {
@@ -177,6 +186,7 @@ public class Configsettings extends BaseObservable implements Parcelable {
         dest.writeInt(this.father_age);
         dest.writeInt(this.rel_age);
         dest.writeSerializable(this.earliestDate);
+        dest.writeString(this.site);
     }
 
     @Override

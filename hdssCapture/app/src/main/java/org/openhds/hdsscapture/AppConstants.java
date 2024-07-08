@@ -75,5 +75,6 @@ public class AppConstants {
     public static final String DOWNLOAD_SES = "file:///android_asset/ses_download.html";
     public static final String DOWNLOAD_IND = "file:///android_asset/ind_download.html";
     public static final String DOWNLOAD_DEMO = "file:///android_asset/demo_download.html";
+    public static final String DENO_INFO = "file:///android_asset/deno_views.html";
 
 }

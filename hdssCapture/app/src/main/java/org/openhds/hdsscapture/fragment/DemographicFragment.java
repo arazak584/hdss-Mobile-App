@@ -1,5 +1,8 @@
 package org.openhds.hdsscapture.fragment;
 
+import static org.openhds.hdsscapture.AppConstants.DATA_CAPTURE;
+import static org.openhds.hdsscapture.AppConstants.DENO_INFO;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -24,6 +28,7 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.SimpleDialog;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
@@ -56,6 +61,7 @@ public class DemographicFragment extends DialogFragment {
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String SOCIAL_ID = "SOCIAL_ID";
+    public static final String DENO_INFO = "file:///android_asset/deno_views.html";
 
     // TODO: Rename and change types of parameters
     private Locations locations;
@@ -63,6 +69,11 @@ public class DemographicFragment extends DialogFragment {
     private Individual individual;
     private FragmentDemographicBinding binding;
     private Demographic demographic;
+
+    private void showDialogInfo(String message, String codeFragment) {
+        SimpleDialog simpleDialog = SimpleDialog.newInstance(message, codeFragment);
+        simpleDialog.show(getChildFragmentManager(), SimpleDialog.INFO_DIALOG_TAG);
+    }
 
     public DemographicFragment() {
         // Required empty public constructor
@@ -106,9 +117,16 @@ public class DemographicFragment extends DialogFragment {
         binding = FragmentDemographicBinding.inflate(inflater, container, false);
         binding.setDemographic(demographic);
 
-
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
         ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
+
+        ImageButton appInfoButton = binding.getRoot().findViewById(R.id.deno_button);
+        appInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                denoInfo(v);
+            }
+        });
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
@@ -301,5 +319,8 @@ public class DemographicFragment extends DialogFragment {
             e.printStackTrace();
         }
 
+    }
+    public void denoInfo(View view) {
+        showDialogInfo(null, DENO_INFO);
     }
 }

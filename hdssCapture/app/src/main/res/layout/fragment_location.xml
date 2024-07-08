@@ -219,7 +219,7 @@
                     android:focusable="false"
                     android:text="@={locations.latitude}"
                     android:focusableInTouchMode="false"
-                    android:inputType="textPersonName|textCapCharacters"
+                    android:inputType="numberDecimal"
                     android:background="@drawable/txtbox_rone_wbevel"/>
 
                 <Space

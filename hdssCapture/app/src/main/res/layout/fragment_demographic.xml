@@ -309,14 +309,29 @@
                     android:padding="15dp"
                     android:spinnerMode="dialog"/>
 
+            <LinearLayout
+                goneUnless="@{demographic.religion==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/deno_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@android:drawable/ic_dialog_info"
+                    android:backgroundTint="@color/white"
+                    android:onClick="denoInfo" />
+
                 <TextView
-                    goneUnless="@{demographic.religion==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
                     android:textColor="@color/black"
                     android:text="@string/denomination_specify"/>
+
+            </LinearLayout>
 
                 <Spinner
                     goneUnless="@{demographic.religion==1}"

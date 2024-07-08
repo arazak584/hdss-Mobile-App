@@ -50,6 +50,9 @@ public interface LocationDao {
     @Query("SELECT * FROM Locations WHERE complete=1")
     List<Locations> retrieveToSync();
 
+    @Query("SELECT * FROM Locations a INNER JOIN locationhierarchy b ON a.locationLevel_uuid=b.uuid WHERE fw_name=:id")
+    List<Locations> retrieveAll(String id);
+
     @Query("SELECT * FROM Locations WHERE locationLevel_uuid=:id order by compno")
     List<Locations> retrieveByClusterId(String id);
 

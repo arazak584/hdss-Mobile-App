@@ -34,6 +34,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.openhds.hdsscapture.Activity.MapActivity;
 import org.openhds.hdsscapture.Activity.QueryActivity;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.Activity.LoginActivity;
@@ -173,10 +174,6 @@ public class MainActivity extends AppCompatActivity {
         relationshipViewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
         vaccinationViewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
         hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
-
-        //Settings Download API USERNAME PASSWORD
-        SharedPreferences preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
-        String authorizationHeader = preferences.getString("authorizationHeader", null);
 
         // Initialize the last sync datetime when the activity is created
         String lastSyncDatetime = getLastSyncDatetime();
@@ -347,6 +344,13 @@ public class MainActivity extends AppCompatActivity {
         final Button update = findViewById(R.id.btnupdate);
         update.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(),HierarchyActivity.class);
+            i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
+            startActivity(i);
+        });
+
+        final Button map = findViewById(R.id.btnMap);
+        map.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), MapActivity.class);
             i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
             startActivity(i);
         });
