@@ -56,7 +56,7 @@
                 android:textColor="@color/black"
                 android:text="@string/item"/>
 
-            <Spinner
+            <org.openhds.hdsscapture.SearchableSpinner
                 android:id="@+id/itemlist"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

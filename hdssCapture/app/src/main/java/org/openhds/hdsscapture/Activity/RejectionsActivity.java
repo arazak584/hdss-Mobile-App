@@ -151,7 +151,7 @@ public class RejectionsActivity extends AppCompatActivity {
             for (Inmigration e : inmigrationViewModel.reject(username)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
-                r1.id1 = c + ". Inmigration";
+                r1.id1 = c + ". Inmigration" + " (" + e.supervisor + ")";
                 r1.id2 = "" + e.sttime + " " + e.edtime;
                 r1.id3 = "" + e.visit_uuid+ " - " + e.reason_oth;
                 r1.id4 = "" + formattedDate;
@@ -169,7 +169,7 @@ public class RejectionsActivity extends AppCompatActivity {
             for (Outmigration e : outmigrationViewModel.reject(username)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
-                r1.id1 = d + ". Outmigration";
+                r1.id1 = d + ". Outmigration" + " (" + e.supervisor + ")";
                 r1.id2 = "" + e.sttime + " " + e.edtime;
                 r1.id3 = "" + e.visit_uuid+ " - " + e.reason_oth;
                 r1.id4 = "" + formattedDate;
@@ -184,7 +184,7 @@ public class RejectionsActivity extends AppCompatActivity {
             for (Death e : deathViewModel.reject(username)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
-                r1.id1 = g + ". Death";
+                r1.id1 = g + ". Death" + " (" + e.supervisor + ")";
                 r1.id2 = "" + e.sttime + " " + e.edtime;
                 r1.id3 = "" + e.visit_uuid+ " - " + e.deathPlace_oth;
                 r1.id4 = "" + formattedDate;
@@ -199,7 +199,7 @@ public class RejectionsActivity extends AppCompatActivity {
             for (Relationship e : relationshipViewModel.reject(username)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
-                r1.id1 = h + ". Relationship";
+                r1.id1 = h + ". Relationship" + " (" + e.supervisor + ")";
                 r1.id2 = "" + e.sttime + " " + e.edtime;
                 r1.id3 = "" + e.visit_uuid+ " - " + e.individualB_uuid;
                 r1.id4 = "" + formattedDate;
@@ -214,7 +214,7 @@ public class RejectionsActivity extends AppCompatActivity {
             for (Pregnancy e : pregnancyViewModel.reject(username)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
-                r1.id1 = j + ". Pregnancy";
+                r1.id1 = j + ". Pregnancy" + " (" + e.supervisor + ")";
                 r1.id2 = "" + e.sttime + " " + e.edtime;
                 r1.id3 = "" + e.visit_uuid+ " - " + e.bnet_loc_other;
                 r1.id4 = "" + formattedDate;
@@ -229,7 +229,7 @@ public class RejectionsActivity extends AppCompatActivity {
             for (Pregnancyoutcome e : pregnancyoutcomeViewModel.reject(username)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
-                r1.id1 = k + ". Pregnancy Outcome";
+                r1.id1 = k + ". Pregnancy Outcome" + " (" + e.supervisor + ")";
                 r1.id2 = "" + e.sttime + " " + e.edtime;
                 r1.id3 = "" + e.visit_uuid+ " - " + e.father_uuid;
                 r1.id4 = "" + formattedDate;
@@ -244,7 +244,7 @@ public class RejectionsActivity extends AppCompatActivity {
             for (Demographic e : demographicViewModel.reject(username)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
-                r1.id1 = l + ". Demographic";
+                r1.id1 = l + ". Demographic" + " (" + e.supervisor + ")";
                 r1.id2 = "" + e.sttime + " " + e.edtime;
                 r1.id3 = "" + e.visit_uuid+ " - " + e.occupation_oth;
                 r1.id4 = "" + formattedDate;
@@ -259,7 +259,7 @@ public class RejectionsActivity extends AppCompatActivity {
             for (Vaccination e : vaccinationViewModel.reject(username)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
-                r1.id1 = m + ". Vaccination";
+                r1.id1 = m + ". Vaccination" + " (" + e.supervisor + ")";
                 r1.id2 = "" + e.sttime + " " + e.edtime;
                 r1.id3 = "" + e.visit_uuid+ " - " + e.socialgroup_uuid;
                 r1.id4 = "" + formattedDate;
@@ -274,7 +274,7 @@ public class RejectionsActivity extends AppCompatActivity {
             for (HdssSociodemo e : hdssSociodemoViewModel.reject(username)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
-                r1.id1 = n + ". SES - Profile";
+                r1.id1 = n + ". SES - Profile" + " (" + e.supervisor + ")";
                 r1.id2 = "" + e.sttime + " - " + e.edtime;
                 r1.id3 = "" + e.visit_uuid;
                 r1.id4 = "" + formattedDate;

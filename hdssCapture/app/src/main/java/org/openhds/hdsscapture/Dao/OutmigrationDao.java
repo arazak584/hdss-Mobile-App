@@ -54,7 +54,7 @@ public interface OutmigrationDao {
     @Query("SELECT a.uuid,a.insertDate,a.residency_uuid,b.firstName as visit_uuid,b.lastName as location_uuid FROM outmigration as a inner join individual as b on a.individual_uuid=b.uuid WHERE socialgroup_uuid=:id")
     List<Outmigration> end(String id);
 
-    @Query("SELECT a.residency_uuid,b.firstName as sttime,b.lastName as edtime,b.extId as reason_oth,b.compno as visit_uuid,a.insertDate,a.comment,a.fw_uuid FROM outmigration a INNER JOIN individual b on a.individual_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 order by a.insertDate DESC")
+    @Query("SELECT a.residency_uuid,b.firstName as sttime,b.lastName as edtime,b.extId as reason_oth,b.compno as visit_uuid,a.insertDate,a.comment,a.fw_uuid,a.supervisor FROM outmigration a INNER JOIN individual b on a.individual_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 order by a.insertDate DESC")
     List<Outmigration> reject(String id);
 
     @Query("SELECT COUNT(*) FROM outmigration WHERE status=2 AND fw_uuid = :uuid ")

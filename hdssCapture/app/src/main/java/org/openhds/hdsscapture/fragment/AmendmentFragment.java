@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.FatherDialogFragment;
 import org.openhds.hdsscapture.Dialog.MotherDialogFragment;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Utilities.Calculators;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
@@ -189,8 +192,6 @@ public class AmendmentFragment extends DialogFragment {
             }
         });
 
-
-
         binding.buttonReplDob.setOnClickListener(v -> {
             if (!TextUtils.isEmpty(binding.replDob.getText())) {
                 // If replDob is not empty, parse the date and use it as the initial date
@@ -314,6 +315,19 @@ public class AmendmentFragment extends DialogFragment {
             e.printStackTrace();
         }
 
+        IndividualViewModel indage = new ViewModelProvider(this).get(IndividualViewModel.class);
+        try {
+            Individual datae = indage.find(HouseMembersFragment.selectedIndividual.uuid);
+            if (datae != null) {
+                binding.setIndividual(datae);
+
+                EditText age = binding.getRoot().findViewById(R.id.individ_age);
+                age.setText(String.valueOf(datae.getAge()));
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
         //Codebook
         loadCodeData(binding.amendComplete, "submit");
         loadCodeData(binding.amendGender, "gender");
@@ -359,6 +373,31 @@ public class AmendmentFragment extends DialogFragment {
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.AMENDLAYOUT, validateOnComplete, false);
+
+            boolean agedif = false;
+            boolean modif = false;
+
+            if (!binding.fathers.fathersAge.getText().toString().trim().isEmpty() && !binding.individAge.getText().toString().trim().isEmpty()) {
+                int fAgeValue = Integer.parseInt(binding.fathers.fathersAge.getText().toString().trim());
+                int individidAgeValue = Integer.parseInt(binding.individAge.getText().toString().trim());
+                if (fAgeValue - individidAgeValue < 10) {
+                    agedif = true;
+                    binding.fathers.fathersAge.setError("Father selected is too young to be the father of this Individual");
+                    Toast.makeText(getActivity(), "Father selected is too young to be the father of this Individual", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
+
+            if (!binding.mothers.mothersAge.getText().toString().trim().isEmpty() && !binding.individAge.getText().toString().trim().isEmpty()) {
+                int mthgeValue = Integer.parseInt(binding.mothers.mothersAge.getText().toString().trim());
+                int individidAge = Integer.parseInt(binding.individAge.getText().toString().trim());
+                if (mthgeValue - individidAge < 10) {
+                    modif = true;
+                    binding.mothers.mothersAge.setError("Mother selected is too young to be the mother of this Individual");
+                    Toast.makeText(getActivity(), "Mother selected is too young to be the mother of this Individual", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            }
 
             boolean gh = false;
 

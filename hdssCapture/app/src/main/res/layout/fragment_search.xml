@@ -57,7 +57,7 @@
                 android:layout_height="50dp"
                 android:textColor="@color/black"
                 android:paddingStart="20dp"
-                android:hint="Compno or Name Or Ghanacard"
+                android:hint="@string/search_ind"
                 android:inputType="textPersonName|textCapCharacters"
                 android:background="@drawable/txtbox_rone_wbevel"/>
 

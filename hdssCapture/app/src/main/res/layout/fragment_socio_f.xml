@@ -29,7 +29,7 @@
                     android:textColor="@color/black"
             android:text="@string/STOVE_FCORRES_SOCIO" />
 
-        <Spinner
+        <org.openhds.hdsscapture.SearchableSpinner
             android:id="@+id/STOVE_FCORRES"
             selection="@{sociodemo.stove_fcorres}"
             android:layout_width="match_parent"
@@ -765,7 +765,7 @@
             android:textColor="@color/black"
             android:text="@string/COOKING_LOC_FCORRES_SOCIO" />
 
-        <Spinner
+        <org.openhds.hdsscapture.SearchableSpinner
             goneUnless="@{sociodemo.stove_fcorres!=10}"
             android:id="@+id/COOKING_LOC_FCORRES"
             selection="@{sociodemo.cooking_loc_fcorres}"

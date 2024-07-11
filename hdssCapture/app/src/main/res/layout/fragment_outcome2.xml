@@ -92,7 +92,7 @@
             android:textColor="@color/black"
             android:text="@string/pregoutcome"/>
 
-        <Spinner
+        <org.openhds.hdsscapture.SearchableSpinner
             android:id="@+id/out2_type"
             selection="@{pregoutcome2.type}"
             android:layout_width="match_parent"
@@ -206,7 +206,7 @@
             android:textColor="@color/black"
             android:text="@string/gender"/>
 
-        <Spinner
+        <org.openhds.hdsscapture.SearchableSpinner
             android:id="@+id/gender"
             goneUnless="@{pregoutcome2.type==1}"
             selection="@{pregoutcome2.gender}"
@@ -228,7 +228,7 @@
             android:textColor="@color/black"
             android:text="@string/rltn_head"/>
 
-        <Spinner
+        <org.openhds.hdsscapture.SearchableSpinner
             android:id="@+id/rltn_head"
             goneUnless="@{pregoutcome2.type==1}"
             selection="@{pregoutcome2.rltn_head}"
@@ -249,7 +249,7 @@
             android:textColor="@color/black"
             android:text="@string/chd_weight"/>
 
-        <Spinner
+        <org.openhds.hdsscapture.SearchableSpinner
             goneUnless="@{pregoutcome2.type==1}"
             android:id="@+id/chd_weight"
             android:layout_width="match_parent"
@@ -286,7 +286,7 @@
             android:textColor="@color/black"
             android:text="@string/chd_size"/>
 
-        <Spinner
+        <org.openhds.hdsscapture.SearchableSpinner
             goneUnless="@{pregoutcome2.type==1}"
             android:id="@+id/chd_size"
             android:layout_width="match_parent"

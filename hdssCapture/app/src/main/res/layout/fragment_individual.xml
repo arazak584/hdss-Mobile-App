@@ -249,7 +249,7 @@
                     android:textColor="@color/black"
                     android:text="@string/other_name"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:id="@+id/other"
                     selection="@{individual.other}"
                     android:layout_width="match_parent"
@@ -284,7 +284,7 @@
                     android:textColor="@color/black"
                     android:text="@string/gh"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:id="@+id/gh"
                     selection="@{individual.gh}"
                     android:layout_width="match_parent"
@@ -354,7 +354,7 @@
                     android:textColor="@color/black"
                     android:text="@string/dob"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:id="@+id/dobAspect"
                     selection="@{individual.dobAspect}"
                     android:layout_width="match_parent"
@@ -392,7 +392,7 @@
                     android:textColor="@color/black"
                     android:text="@string/gender"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:id="@+id/gender"
                     selection="@{individual.gender}"
                     android:layout_width="match_parent"
@@ -414,7 +414,7 @@
                     android:textColor="@color/black"
                     android:text="@string/mother"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/mother"
                     selection="@{individual.mother}"
@@ -480,7 +480,7 @@
                     android:textColor="@color/black"
                     android:text="@string/father"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/father"
                     selection="@{individual.father}"
@@ -591,7 +591,7 @@
                     android:padding="5dp"
                     android:text="@string/rltn_head"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:id="@+id/rltn_head"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -647,7 +647,7 @@
                 android:textColor="@color/black"
                 android:text="@string/migtype"/>
 
-            <Spinner
+            <org.openhds.hdsscapture.SearchableSpinner
                 android:visibility="gone"
                 android:id="@+id/migtype"
                 selection="@{inmigration.migType}"
@@ -668,7 +668,7 @@
                 android:textColor="@color/black"
                 android:text="@string/origin"/>
 
-            <Spinner
+            <org.openhds.hdsscapture.SearchableSpinner
                 goneUnless="@{residency.img==1}"
                 android:id="@+id/origin"
                 selection="@{inmigration.origin}"
@@ -689,7 +689,7 @@
                 android:textColor="@color/black"
                 android:text="@string/reason"/>
 
-            <Spinner
+            <org.openhds.hdsscapture.SearchableSpinner
                 goneUnless="@{residency.img==1}"
                 android:id="@+id/reason"
                 selection="@{inmigration.reason}"
@@ -761,7 +761,7 @@
                     android:textColor="@color/black"
                     android:text="@string/farm"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:id="@+id/farm"
                     selection="@{inmigration.farm}"
                     android:layout_width="match_parent"
@@ -797,7 +797,7 @@
                     android:textColor="@color/black"
                     android:text="@string/food_yn"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:id="@+id/food_yn"
                     selection="@{inmigration.food_yn}"
                     android:layout_width="match_parent"
@@ -817,7 +817,7 @@
                     android:textColor="@color/black"
                     android:text="@string/food_crops"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     goneUnless="@{inmigration.food_yn==1}"
                     android:id="@+id/food_crops"
                     selection="@{inmigration.food_crops}"
@@ -837,7 +837,7 @@
                     android:textColor="@color/black"
                     android:text="@string/cash_yn"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:id="@+id/cash_yn"
                     selection="@{inmigration.cash_yn}"
                     android:layout_width="match_parent"
@@ -857,7 +857,7 @@
                     android:textColor="@color/black"
                     android:text="@string/food_crops"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     goneUnless="@{inmigration.cash_yn==1}"
                     android:id="@+id/cash_crops"
                     selection="@{inmigration.cash_crops}"
@@ -877,7 +877,7 @@
                     android:textColor="@color/black"
                     android:text="@string/livestock_yn"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:id="@+id/livestock_yn"
                     selection="@{inmigration.livestock_yn}"
                     android:layout_width="match_parent"
@@ -897,7 +897,7 @@
                     android:textColor="@color/black"
                     android:text="@string/food_crops"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     goneUnless="@{inmigration.livestock_yn==1}"
                     android:id="@+id/livestock"
                     selection="@{inmigration.livestock}"

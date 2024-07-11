@@ -240,7 +240,7 @@
                     android:textColor="@color/black"
                     android:text="@string/tribe"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:id="@+id/tribe"
                     selection="@{demographic.tribe}"
                     android:layout_width="match_parent"
@@ -248,8 +248,8 @@
                     android:gravity="left"
                     android:minHeight="48dp"
                     android:onItemSelected="@{demographic::setTribes}"
-                    android:padding="10dp"
-                    android:spinnerMode="dialog" />
+                    android:padding="10dp" />
+
 
                 <TextView
                     goneUnless="@{demographic.tribe==1}"
@@ -415,7 +415,7 @@
                     android:textColor="@color/black"
                     android:text="@string/occupations"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     goneUnless="@{individual.age>11}"
                     android:id="@+id/occupation"
                     selection="@{demographic.occupation}"

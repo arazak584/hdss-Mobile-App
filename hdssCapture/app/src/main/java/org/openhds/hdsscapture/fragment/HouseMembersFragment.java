@@ -260,9 +260,14 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
         final AppCompatButton demo = view.findViewById(R.id.demographic);
         demo.setOnClickListener(v -> {
-            DemographicFragment.newInstance(individual, locations, socialgroup)
-                    .show(getChildFragmentManager(), "DemographicFragment");
+            //final Death death = new Death();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    DemographicFragment.newInstance(individual,locations, socialgroup)).commit();
         });
+//        demo.setOnClickListener(v -> {
+//            DemographicFragment.newInstance(individual, locations, socialgroup)
+//                    .show(getChildFragmentManager(), "DemographicFragment");
+//        });
 
         final AppCompatButton dth = view.findViewById(R.id.death);
         dth.setOnClickListener(v -> {

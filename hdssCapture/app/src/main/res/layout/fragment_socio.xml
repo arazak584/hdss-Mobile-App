@@ -292,7 +292,7 @@
                                     android:textColor="@color/black"
                                     android:text="@string/CETHNIC_SOCIO" />
 
-                                <Spinner
+                                <org.openhds.hdsscapture.SearchableSpinner
                                     android:id="@+id/CETHNIC"
                                     selection="@{sociodemo.cethnic}"
                                     android:layout_width="match_parent"
@@ -427,7 +427,7 @@
                                 android:textColor="@color/black"
                                 android:text="@string/H2O_FCORRES_SOCIO" />
 
-                            <Spinner
+                            <org.openhds.hdsscapture.SearchableSpinner
                                 android:id="@+id/H2O_FCORRES"
                                 selection="@{sociodemo.h2o_fcorres}"
                                 android:layout_width="match_parent"
@@ -820,7 +820,7 @@
                                 android:textColor="@color/black"
                                 android:text="@string/TOILET_FCORRES_SOCIO" />
 
-                            <Spinner
+                            <org.openhds.hdsscapture.SearchableSpinner
                                 android:id="@+id/TOILET_FCORRES"
                                 selection="@{sociodemo.toilet_fcorres}"
                                 android:layout_width="match_parent"

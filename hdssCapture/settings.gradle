@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "hdssCapture"
 include ':app'
+include ':hdsscapture'

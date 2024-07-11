@@ -168,7 +168,7 @@
                 android:textColor="@color/black"
                 android:text="@string/grouptype"/>
 
-            <Spinner
+            <org.openhds.hdsscapture.SearchableSpinner
                 android:id="@+id/select_groupType"
                 selection="@{socialgroup.groupType}"
                 android:layout_width="match_parent"
@@ -188,7 +188,7 @@
                 android:textColor="@color/black"
                 android:text="@string/form_complete"/>
 
-            <Spinner
+            <org.openhds.hdsscapture.SearchableSpinner
                 android:visibility="gone"
                 android:id="@+id/residency_complete"
                 android:layout_width="match_parent"

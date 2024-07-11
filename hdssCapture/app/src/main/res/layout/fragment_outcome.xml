@@ -224,7 +224,7 @@
                     android:textColor="@color/black"
                     android:text="@string/father"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/father"
                     android:layout_width="match_parent"
@@ -353,7 +353,7 @@
                     android:textColor="@color/black"
                     android:text="@string/birthplace"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:id="@+id/birthplace"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -372,7 +372,7 @@
                     android:textColor="@color/black"
                     android:text="@string/not_del"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     goneUnless="@{pregoutcome.b_place==5 || pregoutcome.b_place==4 || pregoutcome.b_place==6 }"
                     android:id="@+id/not_del"
                     android:layout_width="match_parent"
@@ -408,7 +408,7 @@
                     android:textColor="@color/black"
                     android:text="@string/ass_del"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:id="@+id/ass_del"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -444,7 +444,7 @@
                     android:textColor="@color/black"
                     android:text="@string/how_del"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:id="@+id/how_del"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -479,7 +479,7 @@
                     android:textColor="@color/black"
                     android:text="@string/rec_anc"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:id="@+id/rec_anc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -498,7 +498,7 @@
                     android:textColor="@color/black"
                     android:text="@string/why_no_anc"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     goneUnless="@{pregoutcome.rec_anc==2}"
                     android:id="@+id/why_no_anc"
                     android:layout_width="match_parent"
@@ -518,7 +518,7 @@
                     android:textColor="@color/black"
                     android:text="@string/where_anc"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     goneUnless="@{pregoutcome.rec_anc==1}"
                     android:id="@+id/where_anc"
                     android:layout_width="match_parent"
@@ -555,7 +555,7 @@
                     android:textColor="@color/black"
                     android:text="@string/who_anc"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     goneUnless="@{pregoutcome.rec_anc==1}"
                     android:id="@+id/who_anc"
                     android:layout_width="match_parent"
@@ -615,7 +615,7 @@
                     android:textColor="@color/black"
                     android:text="@string/rec_ipt"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     goneUnless="@{pregoutcome.rec_anc==1}"
                     android:id="@+id/rec_ipt"
                     android:layout_width="match_parent"
@@ -832,7 +832,7 @@
                         android:textColor="@color/black"
                         android:text="@string/first_nb"/>
 
-                    <Spinner
+                    <org.openhds.hdsscapture.SearchableSpinner
                         goneUnless="@{pregoutcome1.type==1 || pregoutcome2.type==1 || pregoutcome3.type==1 || pregoutcome4.type==1}"
                         android:id="@+id/first_nb"
                         android:layout_width="match_parent"
@@ -902,7 +902,7 @@
                     android:textColor="@color/black"
                     android:text="@string/extras"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:id="@+id/extras"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -921,7 +921,7 @@
                     android:textColor="@color/black"
                     android:text="@string/form_complete"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/individual_complete"
                     android:layout_width="match_parent"

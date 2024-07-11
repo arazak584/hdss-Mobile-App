@@ -224,7 +224,7 @@
                     android:textColor="@color/black"
                     android:text="@string/dob"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/dobAspect"
                     android:layout_width="match_parent"
@@ -263,7 +263,7 @@
                     android:textColor="@color/black"
                     android:text="@string/gender"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/gender"
                     android:layout_width="match_parent"
@@ -377,7 +377,7 @@
                     android:textColor="@color/black"
                     android:text="@string/grouptype"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:id="@+id/select_groupType"
                     selection="@{socialgroup.groupType}"
                     android:layout_width="match_parent"
@@ -431,7 +431,7 @@
                     android:padding="5dp"
                     android:text="@string/starttype"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/starttype"
                     android:layout_width="match_parent"
@@ -471,7 +471,7 @@
                     android:padding="5dp"
                     android:text="@string/endtype"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/endtype"
                     android:layout_width="match_parent"
@@ -490,7 +490,7 @@
                     android:padding="5dp"
                     android:text="@string/rltn_head"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/rltn_head"
                     android:layout_width="match_parent"
@@ -510,7 +510,7 @@
                     android:textColor="@color/black"
                     android:text="@string/form_complete"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/individual_complete"
                     android:layout_width="match_parent"

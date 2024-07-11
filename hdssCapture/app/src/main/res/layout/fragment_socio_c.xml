@@ -283,7 +283,7 @@
                     android:textColor="@color/black"
             android:text="@string/MOBILE_ACCESS_FCORRES_SOCIO" />
 
-        <Spinner
+        <org.openhds.hdsscapture.SearchableSpinner
             android:id="@+id/MOBILE_ACCESS_FCORRES"
             selection="@{sociodemo.mobile_access_fcorres}"
             android:layout_width="match_parent"
@@ -2132,7 +2132,7 @@
                     android:textColor="@color/black"
             android:text="@string/OWN_RENT_SCORRES_SOCIO" />
 
-        <Spinner
+        <org.openhds.hdsscapture.SearchableSpinner
             android:id="@+id/OWN_RENT_SCORRES"
             selection="@{sociodemo.own_rent_scorres}"
             android:layout_width="match_parent"

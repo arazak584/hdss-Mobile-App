@@ -73,7 +73,7 @@
                 android:textColor="@color/black"
                 android:text="@string/SMOKE_IN_OECDOSFRQ_SOCIO" />
 
-            <Spinner
+            <org.openhds.hdsscapture.SearchableSpinner
                 android:id="@+id/SMOKE_IN_OECDOSFRQ"
                 selection="@{sociodemo.smoke_in_oecdosfrq}"
                 android:layout_width="match_parent"
@@ -134,7 +134,7 @@
                 android:textColor="@color/black"
                 android:text="@string/SMOKE_HHOLD_IN_OECDOSFRQ_SOCIO" />
 
-            <Spinner
+            <org.openhds.hdsscapture.SearchableSpinner
                 android:id="@+id/SMOKE_HHOLD_IN_OECDOSFRQ"
                 selection="@{sociodemo.smoke_hhold_in_oecdosfrq}"
                 android:layout_width="match_parent"

@@ -227,7 +227,7 @@
             android:textColor="@color/black"
             android:text="@string/housepresent"/>
 
-        <Spinner
+        <org.openhds.hdsscapture.SearchableSpinner
             android:id="@+id/realVisit"
             selection="@{visit.realVisit}"
             android:layout_width="match_parent"
@@ -246,7 +246,7 @@
             android:padding="5dp"
             android:text="@string/form_complete"/>
 
-        <Spinner
+        <org.openhds.hdsscapture.SearchableSpinner
             android:visibility="gone"
             android:id="@+id/visitcomplete"
             android:layout_width="match_parent"
