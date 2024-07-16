@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +65,7 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
     private HouseholdAdapter householdAdapter;
     private View view;
     private Button button;
+    private ProgressBar progressBar;
 
     public interface LocationClickListener {
         void onLocationClick(Locations selectedLocation);
@@ -117,8 +119,11 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
         final Intent j = getActivity().getIntent();
         final Hierarchy level5Data = j.getParcelableExtra(HierarchyActivity.LEVEL5_DATA);
 
-        final RecyclerView recyclerViewHousehold = view.findViewById(R.id.recyclerView_householdids);
+        // Initialize ProgressBar
+        progressBar = view.findViewById(R.id.progress_bar);
 
+        //Household Adapter
+        final RecyclerView recyclerViewHousehold = view.findViewById(R.id.recyclerView_householdids);
         DividerItemDecoration dividerItemDecorations = new DividerItemDecoration(recyclerViewHousehold.getContext(),
                 RecyclerView.VERTICAL);
         recyclerViewHousehold.addItemDecoration(dividerItemDecorations);
@@ -146,7 +151,6 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
         final RecyclerView recyclerView = view.findViewById(R.id.compoundsview);
         final LocationAdapter adapter = new LocationAdapter(this, level6Data, this);
         final LocationViewModel locationViewModel = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
-        final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
         //recyclerView.setHasFixedSize(true);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -271,6 +275,8 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
         ClusterFragment.selectedLocation = selectedLocation; // Always update the selectedLocation variable
         //Log.d("ClusterFragment", "onLocationClick called for location: " + selectedLocation.getCompno());
         //Toast.makeText(requireContext(), "Location clicked: " + selectedLocation.getCompno(), Toast.LENGTH_SHORT).show();
+        // Show ProgressBar when location is clicked
+//        showProgressBar();
 
         // Update the householdAdapter with the selected location
         if (householdAdapter != null) {
@@ -281,13 +287,30 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
             final AppCompatButton add_listing = view.findViewById(R.id.button_listing);
             add_household.setVisibility(View.VISIBLE);
             add_listing.setVisibility(View.VISIBLE);
+
         } else {
             AppCompatButton add_household = view.findViewById(R.id.button_newhousehold);
             final AppCompatButton add_listing = view.findViewById(R.id.button_listing);
             add_household.setVisibility(View.GONE);
             add_listing.setVisibility(View.GONE);
+
         }
 
+        //hideProgressBar();
+    }
+
+    public void showProgressBar() {
+        if (progressBar == null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+
+    public void hideProgressBar() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
     }
 
 

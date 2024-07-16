@@ -44,6 +44,7 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
     private final FragmentActivity activity1;
     private Individual individual;
 
+
     public HouseholdAdapter(Context context, ClusterFragment activity, Locations selectedLocation, Socialgroup socialgroup, SocialgroupViewModel socialgroupViewModel) {
         this.activity1 = activity.requireActivity();
         this.activity = activity;
@@ -115,9 +116,9 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
     }
 
     public void setSelectedLocation(Locations selectedLocation) {
-
         socialgroupList.clear();
         if (selectedLocation != null) {
+
             try {
                 List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(selectedLocation.getCompno());
 
@@ -134,30 +135,10 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
             }
         }
 
+        //activity.hideProgressBar();
         notifyDataSetChanged();
+        //activity.hideProgressBar();
     }
 
-
-//    public void search(SocialgroupViewModel socialgroupViewModel) {
-//        socialgroupList.clear();
-//        if(locations != null)
-//            try {
-//                List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(locations.getCompno());
-//
-//                if (list != null) {
-//                    socialgroupList.addAll(list);
-//                }
-//                if (list.isEmpty()) {
-//                    Toast.makeText(activity.getActivity(), "No household Found", Toast.LENGTH_SHORT).show();
-//                }
-//
-//            } catch (ExecutionException e) {
-//                e.printStackTrace();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        notifyDataSetChanged();
-//        activity.dismissLoadingDialog();
-//    }
 
 }

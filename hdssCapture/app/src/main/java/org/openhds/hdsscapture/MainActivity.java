@@ -414,7 +414,7 @@ public class MainActivity extends AppCompatActivity {
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (fieldworkerDatas != null && fieldworkerDatas.status != null && fieldworkerDatas.status == 2) {
+                if (fieldworkerDatas != null && fieldworkerDatas.status != null && fieldworkerDatas.status == 1) {
                     InfoFragment dialogFragment = new InfoFragment();
                     dialogFragment.show(getSupportFragmentManager(), "InfoFragment");
                 } else {
@@ -427,7 +427,7 @@ public class MainActivity extends AppCompatActivity {
         buttonUrl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.parse("https://github.com/arn-techsystem/openAB/releases"); // replace with your URL
+                Uri uri = Uri.parse("https://github.com/arn-techsystem/openAB/releases/download/v2023.0.1/app-debug.apk"); // replace with your URL
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
             }
