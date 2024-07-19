@@ -30,8 +30,8 @@ public class MapActivity extends AppCompatActivity {
 
     private MapView map;
     private LocationViewModel locationViewModel;
-    private Map<String, Marker> markerMap = new HashMap<>();
-    private ExecutorService executor = Executors.newSingleThreadExecutor();
+    private final Map<String, Marker> markerMap = new HashMap<>();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private Fieldworker fieldworkerDatas;
 
     // Define the bounding box coordinates
@@ -62,15 +62,12 @@ public class MapActivity extends AppCompatActivity {
 
         // Set up the search input field
         EditText searchInput = findViewById(R.id.searchInput);
-        searchInput.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-                    searchLocation(searchInput.getText().toString().toUpperCase());
-                    return true;
-                }
-                return false;
+        searchInput.setOnKeyListener((v, keyCode, event) -> {
+            if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                searchLocation(searchInput.getText().toString().toUpperCase());
+                return true;
             }
+            return false;
         });
 
         // Load locations and display them on the map
@@ -81,49 +78,62 @@ public class MapActivity extends AppCompatActivity {
         executor.submit(() -> {
             try {
                 List<Locations> locations = locationViewModel.retrieveAll(fieldworkerDatas.getUsername());
-                runOnUiThread(() -> {
-                    if (locations != null) {
-                        for (Locations location : locations) {
-                            double latitude = Double.parseDouble(location.latitude);
-                            double longitude = Double.parseDouble(location.longitude);
-
-                            // Check if the location is within the bounding box
-                            if (latitude >= MIN_LATITUDE && latitude <= MAX_LATITUDE &&
-                                    longitude >= MIN_LONGITUDE && longitude <= MAX_LONGITUDE) {
-
-                                GeoPoint geoPoint = new GeoPoint(latitude, longitude);
-                                Marker marker = new Marker(map);
-                                marker.setPosition(geoPoint);
-                                marker.setTitle(location.compno);
-                                marker.setSnippet(location.locationName);
-
-                                // Set the marker color based on the 'complete' attribute
-                                if (location.complete == null) {
-                                    marker.setIcon(getResources().getDrawable(R.drawable.marker_red));
-                                } else {
-                                    marker.setIcon(getResources().getDrawable(R.drawable.marker_green));
-                                }
-
-                                map.getOverlays().add(marker);
-                                markerMap.put(location.compno, marker);
-                            }
-                        }
-
-                        if (!locations.isEmpty()) {
-                            Locations firstLocation = locations.get(0);
-                            double latitude = Double.parseDouble(firstLocation.latitude);
-                            double longitude = Double.parseDouble(firstLocation.longitude);
-                            if (latitude != 0.0 && longitude != 0.0) {
-                                map.getController().setCenter(new GeoPoint(latitude, longitude));
-                            }
-                        }
-                    }
-                });
+                runOnUiThread(() -> displayLocationsOnMap(locations));
             } catch (Exception e) {
                 e.printStackTrace();
                 runOnUiThread(() -> Toast.makeText(MapActivity.this, "Error retrieving data", Toast.LENGTH_SHORT).show());
             }
         });
+    }
+
+    private void displayLocationsOnMap(List<Locations> locations) {
+        if (locations != null) {
+            for (Locations location : locations) {
+                try {
+                    double latitude = Double.parseDouble(location.latitude);
+                    double longitude = Double.parseDouble(location.longitude);
+
+                    if (isWithinBoundingBox(latitude, longitude)) {
+                        GeoPoint geoPoint = new GeoPoint(latitude, longitude);
+                        Marker marker = createMarker(location, geoPoint);
+                        map.getOverlays().add(marker);
+                        markerMap.put(location.compno, marker);
+                    }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (!locations.isEmpty()) {
+                centerMapOnFirstLocation(locations.get(0));
+            }
+        }
+    }
+
+    private boolean isWithinBoundingBox(double latitude, double longitude) {
+        return latitude >= MIN_LATITUDE && latitude <= MAX_LATITUDE &&
+                longitude >= MIN_LONGITUDE && longitude <= MAX_LONGITUDE;
+    }
+
+    private Marker createMarker(Locations location, GeoPoint geoPoint) {
+        Marker marker = new Marker(map);
+        marker.setPosition(geoPoint);
+        marker.setTitle(location.compno);
+        marker.setSnippet(location.locationName);
+        marker.setIcon(getResources().getDrawable(location.complete == null ? R.drawable.marker_red : R.drawable.marker_green));
+        return marker;
+    }
+
+    private void centerMapOnFirstLocation(Locations location) {
+        try {
+            double latitude = Double.parseDouble(location.latitude);
+            double longitude = Double.parseDouble(location.longitude);
+            if (latitude != 0.0 && longitude != 0.0) {
+                map.getController().setCenter(new GeoPoint(latitude, longitude));
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
     }
 
     private void searchLocation(String compno) {
