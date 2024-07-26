@@ -177,6 +177,8 @@ public class OmgFragment extends Fragment {
                 yn.setVisibility(View.VISIBLE);
                 no.setVisibility(View.VISIBLE);
                 data.edit = 1;
+                data.socialgroup_uuid = socialgroup.uuid;
+                data.location_uuid = ClusterFragment.selectedLocation.getUuid();
 
                 if(data.status!=null && data.status==2){
                     cmt.setVisibility(View.VISIBLE);
@@ -275,14 +277,14 @@ public class OmgFragment extends Fragment {
                 finalData.edtime = endtime;
             }
 
-            finalData.complete = binding.getOutmigration().edit;
+            finalData.complete = 1;
             viewModel.add(finalData);
 
             //1==No
             //End Residency In residency entity
             ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
             try {
-                Residency data = resModel.dth(individual.uuid);
+                Residency data = resModel.dth(individual.uuid, ClusterFragment.selectedLocation.uuid);
                 if (data != null && binding.getOutmigration().edit==1) {
                     ResidencyAmendment residencyAmendment = new ResidencyAmendment();
                     residencyAmendment.endType = 2;

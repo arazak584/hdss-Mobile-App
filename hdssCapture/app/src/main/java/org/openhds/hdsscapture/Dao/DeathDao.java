@@ -35,6 +35,11 @@ public interface DeathDao {
     @Query("SELECT * FROM death where individual_uuid=:id")
     Death retrieve(String id);
 
+//    @Query("SELECT a.uuid,a.individual_uuid,a.insertDate,deathDate,respondent,compname,villname,villcode," +
+//            "b.dob,b.firstName,b.lastName,b.gender,b.compno,a.visit_uuid,a.residency_uuid,a.socialgroup_uuid,comment,status " +
+//            "deathCause,deathCause_oth,deathPlace,deathPlace_oth,a.fw_uuid,a.edit,supervisor,approveDate FROM death a INNER JOIN individual b on a.individual_uuid=b.uuid where individual_uuid=:id")
+//    Death retrieve(String id);
+
     @Query("SELECT * FROM death WHERE complete!=0")
     List<Death> retrieveToSync();
 

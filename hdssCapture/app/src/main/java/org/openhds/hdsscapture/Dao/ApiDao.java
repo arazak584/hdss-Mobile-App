@@ -15,6 +15,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
@@ -81,6 +82,9 @@ public interface ApiDao {
     Call<DataWrapper<Vaccination>> getVac(@Header("Authorization") String authorizationHeader);
     @GET("/api/ses/reject")
     Call<DataWrapper<HdssSociodemo>> getSes(@Header("Authorization") String authorizationHeader);
+
+    @GET("/api/mor/reject")
+    Call<DataWrapper<Morbidity>> getMor(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/zip/location")
     Call<ResponseBody> downloadLocation(@Header("Authorization") String authorizationHeader);
@@ -169,5 +173,7 @@ public interface ApiDao {
     @POST("/api/community")
     Call<DataWrapper<CommunityReport>> sendCommunity(@Header("Authorization") String authorizationHeader,@Body DataWrapper<CommunityReport> dataModal);
 
+    @POST("/api/morbidity")
+    Call<DataWrapper<Morbidity>> sendMorbidity(@Header("Authorization") String authorizationHeader, @Body DataWrapper<Morbidity> dataModal);
 
 }

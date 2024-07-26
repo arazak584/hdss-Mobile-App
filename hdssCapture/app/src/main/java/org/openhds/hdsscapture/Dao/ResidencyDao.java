@@ -71,8 +71,8 @@ public interface ResidencyDao {
     @Query("SELECT * FROM residency where individual_uuid=:id ORDER BY startDate ASC LIMIT 1")
     Residency amend(String id);
 
-    @Query("SELECT * FROM residency where individual_uuid=:id and endType=1 ORDER BY startDate ASC")
-    Residency dth(String id);
+    @Query("SELECT * FROM residency where individual_uuid=:id AND location_uuid=:locid and endType=1 ORDER BY startDate ASC")
+    Residency dth(String id, String locid);
 
     @Query("SELECT * FROM residency where individual_uuid=:id and endType=3 ORDER BY startDate ASC")
     Residency restore(String id);

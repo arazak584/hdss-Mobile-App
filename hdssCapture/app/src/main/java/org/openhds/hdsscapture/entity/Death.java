@@ -124,7 +124,7 @@ public class Death extends BaseObservable implements Parcelable {
     public String comment;
 
     @Expose
-    public Integer status = 0;
+    public Integer status;
     @Expose
     public String supervisor;
     @Expose
@@ -156,14 +156,6 @@ public class Death extends BaseObservable implements Parcelable {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 
     public String getSupervisor() {

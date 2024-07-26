@@ -125,7 +125,7 @@ public class InmigrationFragment extends Fragment {
             Inmigration dataimg = inmigrationViewModel.find(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
             if (dataimg != null) {
                 binding.setInmigration(dataimg);
-
+                dataimg.location_uuid = ClusterFragment.selectedLocation.getUuid();
                 if (dataimg.status != null && dataimg.status == 2) {
                     cmt.setVisibility(View.VISIBLE);
                     rsv.setVisibility(View.VISIBLE);
@@ -212,28 +212,6 @@ public class InmigrationFragment extends Fragment {
 
             finalData.complete = 1;
             inmigrationViewModel.add(finalData);
-
-            OutmigrationViewModel omgModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
-            try {
-                Outmigration data = omgModel.finds(individual.uuid);
-//                if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim()))
-                if (data != null) {
-                    OmgUpdate omg = new OmgUpdate();
-
-                    omg.residency_uuid = binding.getInmigration().residency_uuid;
-                    omg.destination = binding.getInmigration().origin;
-                    omg.reason = binding.getInmigration().reason;
-                    omg.reason_oth = binding.getInmigration().reason_oth;
-                    omg.complete = 1;
-                    omg.edit = 1;
-
-                    omgModel.update(omg);
-                }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
         }
         if (close) {

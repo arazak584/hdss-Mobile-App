@@ -69,8 +69,8 @@ public class ResidencyViewModel extends AndroidViewModel {
         return residencyRepository.amend(id);
     }
 
-    public Residency dth(String id) throws ExecutionException, InterruptedException {
-        return residencyRepository.dth(id);
+    public Residency dth(String id, String locid) throws ExecutionException, InterruptedException {
+        return residencyRepository.dth(id,locid);
     }
 
     public Residency restore(String id) throws ExecutionException, InterruptedException {

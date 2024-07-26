@@ -31,6 +31,7 @@ import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
+import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
@@ -43,6 +44,7 @@ import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
@@ -77,6 +79,7 @@ public class RejectionsActivity extends AppCompatActivity {
     private RelationshipViewModel relationshipViewModel;
     private VaccinationViewModel vaccinationViewModel;
     private HdssSociodemoViewModel hdssSociodemoViewModel;
+    private MorbidityViewModel morbidityViewModel;
 
     private RejectAdapter viewsAdapter;
     private List<RejectEvent> filterAll;
@@ -125,6 +128,7 @@ public class RejectionsActivity extends AppCompatActivity {
         relationshipViewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
         vaccinationViewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
         hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
+        morbidityViewModel = new ViewModelProvider(this).get(MorbidityViewModel.class);
 
         //Sync LocationHierarchy
         final ExtendedFloatingActionButton dwd = findViewById(R.id.btn_reject);
@@ -285,6 +289,21 @@ public class RejectionsActivity extends AppCompatActivity {
                 n++;
             }
 
+            int p=1;
+            for (Morbidity e : morbidityViewModel.reject(username)) {
+                String formattedDate = f.format(e.insertDate);
+                RejectEvent r1 = new RejectEvent();
+                r1.id1 = p + ". Morbidity" + " (" + e.supervisor + ")";
+                r1.id2 = "" + e.ind_name;
+                r1.id3 = "" + e.compno + " - " + e.fw_name;
+                r1.id4 = "" + formattedDate;
+                r1.id5 = "" + e.comment;
+                r1.index = p;
+
+                list.add(r1);
+                p++;
+            }
+
 
 
 
@@ -424,8 +443,18 @@ public class RejectionsActivity extends AppCompatActivity {
                                                             c_callable.enqueue(new Callback<DataWrapper<HdssSociodemo>>() {
                                                                 @Override
                                                                 public void onResponse(Call<DataWrapper<HdssSociodemo>> call, Response<DataWrapper<HdssSociodemo>> response) {
-                                                                    HdssSociodemo[] ses = response.body().getData().toArray(new HdssSociodemo[0]);
-                                                                    hdssSociodemoViewModel.add(ses);
+                                                                HdssSociodemo[] ses = response.body().getData().toArray(new HdssSociodemo[0]);
+                                                                hdssSociodemoViewModel.add(ses);
+                                                                    // Next Step: Ses
+
+                                                                    progres.setMessage("Downloading...");
+                                                                    final MorbidityViewModel morbidityViewModel = new ViewModelProvider(RejectionsActivity.this).get(MorbidityViewModel.class);
+                                                                    Call<DataWrapper<Morbidity>> c_callable = dao.getMor(authorizationHeader);
+                                                                    c_callable.enqueue(new Callback<DataWrapper<Morbidity>>() {
+                                                                        @Override
+                                                                        public void onResponse(Call<DataWrapper<Morbidity>> call, Response<DataWrapper<Morbidity>> response) {
+                                                                            Morbidity[] mor = response.body().getData().toArray(new Morbidity[0]);
+                                                                            morbidityViewModel.add(mor);
 
                                                         // Final Step: Pregnancy Outcome
                                                         progres.setMessage("Downloading...");
@@ -447,6 +476,14 @@ public class RejectionsActivity extends AppCompatActivity {
                                                             }
                                                         });
                                                     }
+
+                                                                        @Override
+                                                                        public void onFailure(Call<DataWrapper<Morbidity>> call, Throwable t) {
+                                                                            progres.dismiss();
+                                                                            Toast.makeText(RejectionsActivity.this, "Morbidity Download Error", Toast.LENGTH_LONG).show();
+                                                                        }
+                                                                    });
+                                                                }
 
                                                                 @Override
                                                                 public void onFailure(Call<DataWrapper<HdssSociodemo>> call, Throwable t) {

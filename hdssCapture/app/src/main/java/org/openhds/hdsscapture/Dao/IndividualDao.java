@@ -170,6 +170,9 @@ public interface IndividualDao {
             " date('now', '-5 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
     List<Individual> retrieveChild(String id);
 
+    @Query("SELECT * FROM individual WHERE endType=1 and hohID=:id and firstName!='FAKE'  order by dob")
+    List<Individual> morbidity(String id);
+
     @Query("SELECT COUNT(*) FROM individual a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username AND a.firstName!='FAKE'")
     long countIndividuals(Date startDate, Date endDate, String username);
@@ -181,17 +184,17 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual WHERE hohID=:id AND firstName='FAKE' AND endType=1")
     Individual unk(String id);
 
-    @Query("SELECT b.uuid, b.firstName, b.lastName, a.insertDate, a.socialgroup_uuid, a.extId " +
+    @Query("SELECT b.uuid, b.firstName, b.lastName, a.insertDate, a.socialgroup_uuid, b.extId " +
             "FROM death as a " +
             "INNER JOIN individual as b ON a.individual_uuid = b.uuid " +
             "WHERE (a.edit IS NULL OR a.edit != 2) AND endType = 3 AND b.compno = :id GROUP BY b.extId")
     List<Individual> retrieveDth(String id);
 
 
-    @Query("SELECT b.uuid,b.firstName,b.lastName,a.insertDate,a.socialgroup_uuid,b.extId,location_uuid,residency_uuid" +
+    @Query("SELECT b.uuid,b.firstName,b.lastName,a.insertDate,b.hohID socialgroup_uuid,b.extId,location_uuid,residency_uuid" +
             " FROM outmigration as a " +
             "INNER JOIN individual as b on a.individual_uuid=b.uuid " +
-            "WHERE (a.edit IS NULL OR a.edit != 2) AND endType = 2 AND socialgroup_uuid=:id ")
+            "WHERE (a.edit IS NULL OR a.edit != 2) AND endType = 2 AND hohID=:id ")
     List<Individual> retrieveOmg(String id);
 
     //(a.edit IS NULL OR a.edit = 1)

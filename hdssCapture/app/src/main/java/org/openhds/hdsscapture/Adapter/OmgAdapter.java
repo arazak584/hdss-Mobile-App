@@ -103,7 +103,7 @@ public class OmgAdapter extends RecyclerView.Adapter<OmgAdapter.ViewHolder>{
         individualList.clear();
         if(socialgroup != null)
             try {
-                List<Individual> list = individualViewModel.retrieveOmg(socialgroup.getUuid());
+                List<Individual> list = individualViewModel.retrieveOmg(socialgroup.getExtId());
 
                 if (list != null) {
                     individualList.addAll(list);

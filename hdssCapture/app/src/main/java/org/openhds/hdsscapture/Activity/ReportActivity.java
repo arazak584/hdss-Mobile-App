@@ -29,6 +29,7 @@ import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
+import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
@@ -67,6 +68,7 @@ public class ReportActivity extends AppCompatActivity {
     private AmendmentViewModel amendmentViewModel;
     private VaccinationViewModel vaccinationViewModel;
     private ResidencyViewModel residencyViewModel;
+    private MorbidityViewModel morbidityViewModel;
     private ReportAdapter reportAdapter;
 
     private EditText startDateEditText, endDateEditText, usernameEditText;
@@ -152,6 +154,7 @@ public class ReportActivity extends AppCompatActivity {
         amendmentViewModel = new ViewModelProvider(this).get(AmendmentViewModel.class);
         vaccinationViewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
         residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+        morbidityViewModel = new ViewModelProvider(this).get(MorbidityViewModel.class);
 
         AppCompatButton generateReportButton = findViewById(R.id.bt_report);
         generateReportButton.setOnClickListener(new View.OnClickListener() {
@@ -330,6 +333,12 @@ public class ReportActivity extends AppCompatActivity {
             vacCounter.count = vaccinationViewModel.count(startDate, endDate, username);
             vacCounter.index = 16;
             list.add(16, vacCounter);
+
+            ReportCounter mobCounter = new ReportCounter();
+            mobCounter.name = "Morbidity";
+            mobCounter.count = morbidityViewModel.count(startDate, endDate, username);
+            mobCounter.index = 17;
+            list.add(17, mobCounter);
 
 
             reportAdapter = new ReportAdapter(this);

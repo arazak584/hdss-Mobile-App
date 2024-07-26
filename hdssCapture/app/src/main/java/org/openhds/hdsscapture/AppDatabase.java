@@ -25,6 +25,7 @@ import org.openhds.hdsscapture.Dao.IndividualDao;
 import org.openhds.hdsscapture.Dao.InmigrationDao;
 import org.openhds.hdsscapture.Dao.ListingDao;
 import org.openhds.hdsscapture.Dao.LocationDao;
+import org.openhds.hdsscapture.Dao.MorbidityDao;
 import org.openhds.hdsscapture.Dao.OdkDao;
 import org.openhds.hdsscapture.Dao.OutcomeDao;
 import org.openhds.hdsscapture.Dao.OutmigrationDao;
@@ -53,6 +54,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
@@ -73,8 +75,8 @@ import java.util.concurrent.Executors;
         Relationship.class, Locations.class, Residency.class, Pregnancyoutcome.class, Individual.class, Round.class, Demographic.class,
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
         Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class, Duplicate.class,
-        ApiUrl.class, Configsettings.class, Form.class, Vpm.class, CommunityReport.class
-        }, version = 1 , exportSchema = true)
+        ApiUrl.class, Configsettings.class, Form.class, Vpm.class, CommunityReport.class, Morbidity.class
+        }, version = 2 , exportSchema = true)
 
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -106,17 +108,67 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract OdkDao odkDao();
     public abstract VpmDao vpmDao();
     public abstract CommunityDao communityDao();
+    public abstract MorbidityDao morbidityDao();
 
     //Migrate to another version when a variable is added to and entity.
     // If the version of the database is 2 you upgrade to 3 then set the MIGRATION_2_3 which means version 2 to 3
     //Then write the script to implement the change
 
-    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN location TEXT");
             database.execSQL("ALTER TABLE outcome ADD COLUMN location TEXT");
             //database.execSQL("ALTER TABLE locations ADD COLUMN ord INTEGER DEFAULT 0");
+        }
+    };
+
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            // Create the new table
+            database.execSQL("CREATE TABLE morbidity (" +
+                    "individual_uuid TEXT NOT NULL PRIMARY KEY, " +
+                    "insertDate INTEGER, " +  // Date stored as INTEGER (timestamp)
+                    "complete INTEGER, " +
+                    "fw_uuid TEXT, " +
+                    "uuid TEXT, " +
+                    "location_uuid TEXT, " +
+                    "socialgroup_uuid TEXT, " +
+                    "ind_name TEXT, " +
+                    "fever INTEGER, " +
+                    "fever_days INTEGER, " +
+                    "fever_treat INTEGER, " +
+                    "hypertension INTEGER, " +
+                    "hypertension_dur INTEGER, " +
+                    "hypertension_trt INTEGER, " +
+                    "diabetes INTEGER, " +
+                    "diabetes_dur INTEGER, " +
+                    "diabetes_trt INTEGER, " +
+                    "heart INTEGER, " +
+                    "heart_dur INTEGER, " +
+                    "heart_trt INTEGER, " +
+                    "stroke INTEGER, " +
+                    "stroke_dur INTEGER, " +
+                    "stroke_trt INTEGER, " +
+                    "sickle INTEGER, " +
+                    "sickle_dur INTEGER, " +
+                    "sickle_trt INTEGER, " +
+                    "asthma INTEGER, " +
+                    "asthma_dur INTEGER, " +
+                    "asthma_trt INTEGER, " +
+                    "epilepsy INTEGER, " +
+                    "epilepsy_dur INTEGER, " +
+                    "epilepsy_trt INTEGER, " +
+                    "comment TEXT, " +
+                    "status INTEGER DEFAULT 0, " +
+                    "supervisor TEXT, " +
+                    "approveDate INTEGER, " +  // Date stored as INTEGER (timestamp)
+                    "fw_name TEXT, " +
+                    "compno TEXT)");
+
+            // Create indices
+            database.execSQL("CREATE INDEX index_morbidity_individual_uuid_fw_uuid_complete_socialgroup_uuid ON morbidity(individual_uuid, fw_uuid, complete, socialgroup_uuid)");
         }
     };
 
@@ -130,7 +182,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                 AppDatabase.class, "hdss")
                                 .addCallback(sRoomDatabaseCallback)
-                                //.addMigrations(MIGRATION_1_2)
+                                .addMigrations(MIGRATION_1_2)
                                 .fallbackToDestructiveMigrationOnDowngrade()
                                 .build();
             }
@@ -177,6 +229,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 odkDao().deleteAll();
                 vpmDao().deleteAll();
                 communityDao().deleteAll();
+                morbidityDao().deleteAll();
 
                 // Perform any other necessary cleanup or initialization
 

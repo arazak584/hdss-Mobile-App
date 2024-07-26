@@ -201,7 +201,7 @@
                     android:textColor="@color/black"
                     android:text="@string/own_phone"/>
 
-                <Spinner
+                <org.openhds.hdsscapture.SearchableSpinner
                     goneUnless="@{individual.age>11}"
                     android:id="@+id/demo_phone"
                     selection="@{demographic.phone}"

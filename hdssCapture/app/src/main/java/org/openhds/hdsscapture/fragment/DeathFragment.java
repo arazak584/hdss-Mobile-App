@@ -387,7 +387,7 @@ public class DeathFragment extends DialogFragment {
             //End Residency In residency entity
             ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
             try {
-                Residency data = resModel.dth(HouseMembersFragment.selectedIndividual.uuid);
+                Residency data = resModel.dth(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
                 if (data != null) {
                     ResidencyAmendment residencyAmendment = new ResidencyAmendment();
                     residencyAmendment.endType = 3;

@@ -32,6 +32,7 @@ import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
+import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
@@ -52,6 +53,7 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
@@ -1406,7 +1408,7 @@ public class PushActivity extends AppCompatActivity {
         });
 
 
-        //PUSH Duplicates
+        //PUSH Community
         final Button buttonSendcom = findViewById(R.id.buttonSendCom);
         //final TextView textViewSendDup = findViewById(R.id.textViewSendDup);
         final CommunityViewModel communityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
@@ -1473,6 +1475,74 @@ public class PushActivity extends AppCompatActivity {
 
         });
 
+
+
+        //PUSH Morbidity
+        final Button buttonSendmor = findViewById(R.id.buttonSendMor);
+        //final TextView textViewSendDup = findViewById(R.id.textViewSendDup);
+        final MorbidityViewModel morbidityViewModel = new ViewModelProvider(this).get(MorbidityViewModel.class);
+
+        //GET MODIFIED DATA
+        final List<Morbidity> morbidityList = new ArrayList<>();
+        try {
+            morbidityList.addAll(morbidityViewModel.retrieveToSync());
+            buttonSendmor.setText("Morbidity Report (" + morbidityList.size() + ") to send");
+            buttonSendmor.setTextColor(Color.WHITE);
+            if (morbidityList.isEmpty()) {
+                buttonSendmor.setVisibility(View.GONE);
+                //textViewSendDup.setVisibility(View.GONE);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        buttonSendmor.setOnClickListener(v -> {
+            progress.setMessage(getResources().getString(R.string.init_syncing));
+            progress.show();
+
+            //WRAP THE DATA
+            final DataWrapper<Morbidity> data = new DataWrapper<>(morbidityList);
+
+            //SEND THE DATA
+            if (data.getData() != null && !data.getData().isEmpty()) {
+
+                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
+
+
+                final Call<DataWrapper<Morbidity>> c_callable = dao.sendMorbidity(authorizationHeader,data);
+                c_callable.enqueue(new Callback<DataWrapper<Morbidity>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DataWrapper<Morbidity>> call, Response<DataWrapper<Morbidity>> response) {
+                        if (response != null && response.body() != null && response.isSuccessful()
+                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
+
+                            Morbidity[] d = data.getData().toArray(new Morbidity[0]);
+
+                            for (Morbidity elem : d) {
+                                elem.complete = 0;
+                            }
+                            morbidityViewModel.add(d);
+
+                            progress.dismiss();
+                            buttonSendmor.setText("Sent " + d.length + " Morbidity record(s)");
+                            buttonSendmor.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<DataWrapper<Morbidity>> call, @NonNull Throwable t) {
+                        progress.dismiss();
+                        buttonSendmor.setText("Failed to Send Morbidity Report Data");
+                        buttonSendmor.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Morbidity Report Data", Toast.LENGTH_LONG).show();
+
+                    }
+                });
+            } else {
+                progress.dismiss();
+            }
+
+        });
 
 
     }

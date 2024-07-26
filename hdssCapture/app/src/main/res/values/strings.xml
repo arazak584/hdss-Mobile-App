@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">HDSS Capture</string>
-    <string name="versions">v2024.0.11</string>
+    <string name="versions">v2024.0.12</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>
@@ -712,6 +712,27 @@
     <string name="denomination_specify">Specify Denomination</string>
     <string name="sitemap">SITE MAP</string>
     <string name="search_ind">Compno or Name Or Ghanacard or Telephone</string>
+    <string name="morbidity">Morbidity Assessment</string>
     //SocioDemo End
+
+    //Morbidity
+    <string name="fevers"> Have your had fever in the past two weeks?</string>
+    <string name="inds_name"> Name of Individual</string>
+    <string name="treats"> Did you take any treatment for the fever?</string>
+    <string name="days"> If Yes, How Many Days did the fever last?</string>
+    <string name="hoh_member"> Do you have any of these conditions?</string>
+    <string name="dur"> If Yes, Duration in years (Enter 0 if less than 1 year)</string>
+    <string name="trt"> Do you receive any treatment for this condition?</string>
+    <string name="hypertension"><b> Hypertension</b></string>
+    <string name="heart"> <b> Heart Disease</b></string>
+    <string name="diabetes"><b>Diabetes Mellitus</b></string>
+    <string name="stroke"> <b>Stroke</b></string>
+    <string name="sickle"> <b>Sickle Cell Disease</b></string>
+    <string name="asthma"> <b>Asthma</b></string>
+    <string name="epilepsy"> <b>Epilepsy</b></string>
+    <string name="indA_uuid">Individual UUID</string>
+    <string name="indA_name">Individual Name</string>
+    <string name="send_morbidity">Send Morbidity</string>
+
 
 </resources>

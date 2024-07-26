@@ -58,6 +58,7 @@ import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
+import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
@@ -119,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
     private RelationshipViewModel relationshipViewModel;
     private HdssSociodemoViewModel hdssSociodemoViewModel;
     private VaccinationViewModel vaccinationViewModel;
+    private MorbidityViewModel morbidityViewModel;
     private Button reject;
     private  SharedPreferences preferences;
     private String authorizationHeader;
@@ -174,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
         relationshipViewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
         vaccinationViewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
         hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
+        morbidityViewModel = new ViewModelProvider(this).get(MorbidityViewModel.class);
 
         // Initialize the last sync datetime when the activity is created
         String lastSyncDatetime = getLastSyncDatetime();
@@ -613,8 +616,9 @@ public class MainActivity extends AppCompatActivity {
             long totalRel = relationshipViewModel.rej(fws);
             long totalses = hdssSociodemoViewModel.rej(fws);
             long totalvac = vaccinationViewModel.rej(fws);
+            long totalmor = morbidityViewModel.rej(fws);
 
-            long totalRejected = totalImg + totalOmg + totalPre + totalOut + totalDem + totalDth + totalRel +totalses +totalvac;
+            long totalRejected = totalImg + totalOmg + totalPre + totalOut + totalDem + totalDth + totalRel +totalses +totalvac +totalmor;
 
             final Intent f = getIntent();
             final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);

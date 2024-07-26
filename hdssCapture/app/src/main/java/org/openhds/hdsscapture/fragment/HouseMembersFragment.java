@@ -37,6 +37,7 @@ import org.openhds.hdsscapture.Viewmodel.DuplicateViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
+import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
@@ -56,6 +57,7 @@ import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
@@ -351,6 +353,13 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                     SocioFragment.newInstance(individual, locations, socialgroup)).commit();
         });
 
+        final AppCompatButton mor = view.findViewById(R.id.morbidity);
+        mor.setOnClickListener(v -> {
+            //final HdssSociodemo hdssSociodemo = new HdssSociodemo();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    MorbidityFragment.newInstance(individual, locations, socialgroup)).commit();
+        });
+
 
         final AppCompatButton vac = view.findViewById(R.id.vac);
         vac.setOnClickListener(v -> {
@@ -459,6 +468,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             AppCompatButton vac = view.findViewById(R.id.vac);
             AppCompatButton relhoh = view.findViewById(R.id.relhoh);
             AppCompatButton img = view.findViewById(R.id.img);
+            AppCompatButton mor = view.findViewById(R.id.morbidity);
             View id1 = view.findViewById(R.id.id1);
             View id2 = view.findViewById(R.id.id2);
             View id3 = view.findViewById(R.id.id3);
@@ -473,6 +483,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             View id12 = view.findViewById(R.id.id12);
             View id13 = view.findViewById(R.id.id13);
             View id14 = view.findViewById(R.id.id14);
+            View id15 = view.findViewById(R.id.id15);
+            View id16 = view.findViewById(R.id.id16);
 
             VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
             try {
@@ -491,8 +503,10 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 String TextRel = "Relationship";
                 String TextChoh = "Change Household Head";
                 String TextSes = "Socio-Economic Status";
+                String TextMor = "Morbidity Assessment";
                 String TextVac = "Vaccination";
                 String TextRelhoh = "Update Membership";
+                String TextImg = "Update Inmigration";
 
 
                 // Disable all buttons if Visit data is null
@@ -525,6 +539,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 setButtonText(vac, !isVisitDataNull, TextVac);
                 setButtonEnabled(relhoh, !isVisitDataNull);
                 setButtonText(relhoh, !isVisitDataNull, TextRelhoh);
+                setButtonEnabled(mor, !isVisitDataNull);
+                setButtonText(mor, !isVisitDataNull, TextMor);
 
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -665,6 +681,21 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
             }
 
+            MorbidityViewModel m = new ViewModelProvider(this).get(MorbidityViewModel.class);
+            try {
+                Morbidity data = m.finds(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(mor, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(mor, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
             SocialgroupViewModel h = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             try {
                 Socialgroup data = h.findhse(socialgroup.uuid);
@@ -724,6 +755,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 id4.setVisibility(View.VISIBLE);
                 id14.setVisibility(View.VISIBLE);
                 id9.setVisibility(View.VISIBLE);
+                mor.setVisibility(View.VISIBLE);
+                id15.setVisibility(View.VISIBLE);
             }
 
             InmigrationViewModel imgViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
@@ -775,7 +808,6 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         }
 
 
-
             if (selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2){
                 preg.setVisibility(View.VISIBLE);
                 outcome.setVisibility(View.VISIBLE);
@@ -800,11 +832,13 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             if (selectedIndividual.getAge() >= hoh){
                 ses.setVisibility(View.VISIBLE);
                 choh.setVisibility(View.VISIBLE);
+                mor.setVisibility(View.VISIBLE);
                 id12.setVisibility(View.VISIBLE);
                 id11.setVisibility(View.VISIBLE);
             }else{
                 ses.setVisibility(View.GONE);
                 choh.setVisibility(View.GONE);
+                mor.setVisibility(View.GONE);
                 id12.setVisibility(View.GONE);
                 id11.setVisibility(View.GONE);
             }

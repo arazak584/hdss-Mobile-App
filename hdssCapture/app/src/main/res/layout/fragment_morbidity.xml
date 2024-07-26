@@ -1,0 +1,1069 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="morbidity"
+            type="org.openhds.hdsscapture.entity.Morbidity" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".fragment.MorbidityFragment">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/morbidity"
+            android:textAllCaps="true"
+            android:textColor="@color/colorPrimary"
+            android:textSize="30sp"
+             />
+
+        <TextView
+        android:id="@+id/ind"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textAlignment="center"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_margin="5dp"
+        android:background="@color/colorPrimaryDark" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/txt_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:text="@={morbidity.comment}"
+            android:textColor="@color/purple_700"
+            android:gravity="start"/>
+
+
+        <ScrollView
+            android:id="@+id/MAIN_LAYOUT"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:hint="@string/fw"
+                    android:padding="5dp"
+                    android:text="@string/fw"
+                    android:visibility="gone">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/rel_fw"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:text="@={morbidity.fw_uuid}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:id="@+id/editText_insertDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:minHeight="40dp"
+                    android:text="@={morbidity.insertDate}"
+                    android:textSize="20sp"
+                    android:visibility="gone"
+                    tools:ignore="TextContrastCheck" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:hint="@string/uuid"
+                    android:padding="5dp"
+                    android:text="@string/uuid"
+                    android:visibility="gone">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/uuid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName"
+                        android:text="@={morbidity.individual_uuid}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:hint="@string/name"
+                    android:padding="5dp"
+                    android:text="@string/name"
+                    android:visibility="gone">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/ind_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName"
+                        android:text="@={morbidity.ind_name}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:hint="@string/location_select"
+                    android:padding="5dp"
+                    android:text="@string/location_select"
+                    android:visibility="gone">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/location_extid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName"
+                        android:text="@={morbidity.location_uuid}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:hint="@string/household_select"
+                    android:padding="5dp"
+                    android:text="@string/household_select"
+                    android:visibility="gone">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/household"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName"
+                        android:text="@={morbidity.socialgroup_uuid}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:hint="@string/location_select"
+                    android:padding="5dp"
+                    android:text="@string/location_select"
+                    android:visibility="gone">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/compno"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName"
+                        android:text="@={morbidity.compno}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="@string/fevers"
+                    android:textAlignment="gravity"
+                    android:textColor="@color/black" />
+
+                <RadioGroup
+                    android:id="@+id/FEVERS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onCheckedChanged="@{morbidity::setFever}"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/FEVERS_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{morbidity.fever==1}"
+                        android:tag="1"
+                        android:text="@string/yes" />
+
+                    <RadioButton
+                        android:id="@+id/FEVERS_0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{morbidity.fever==2}"
+                        android:tag="2"
+                        android:text="@string/no" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{morbidity.fever==0}"
+                        android:tag="0"
+                        android:visibility="invisible" />
+                </RadioGroup>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{morbidity.fever==1}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/days"
+                    android:text="@string/days">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/fever_days"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={morbidity.fever_days}"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    goneUnless="@{morbidity.fever==1}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/treats"/>
+
+                <org.openhds.hdsscapture.SearchableSpinner
+                    android:id="@+id/fever_treat"
+                    goneUnless="@{morbidity.fever==1}"
+                    selection="@{morbidity.fever_treat}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{morbidity::setFever_treat}"
+                    android:padding="10dp"
+                    android:spinnerMode="dialog" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hoh_member"
+                    android:padding="15dp"/>
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:text="@string/hypertension"
+                            android:textAlignment="gravity" />
+
+                        <RadioGroup
+                            android:id="@+id/RADIO_FCORRES"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{morbidity::setHypertension}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/RADIO_FCORRES_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.hypertension==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/RADIO_FCORRES_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.hypertension==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <TableRow
+                        android:padding="5dp"
+                        goneUnless="@{morbidity.hypertension==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:text="@string/trt"
+                            android:textAlignment="gravity" />
+
+                        <RadioGroup
+                            android:id="@+id/trt_FCORRES"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{morbidity::setHypertension_trt}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/trt_FCORRES_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.hypertension_trt==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/trt_FCORRES_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.hypertension_trt==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            goneUnless="@{morbidity.hypertension==1}"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:gravity="start"
+                             android:hint="@string/dur"
+                             android:padding="5dp"
+                             android:text="@string/dur">
+
+                         <androidx.appcompat.widget.AppCompatEditText
+                             android:id="@+id/hypertension_dur"
+                             android:layout_width="match_parent"
+                             android:layout_height="wrap_content"
+                             android:inputType="number"
+                             android:text="@={morbidity.hypertension_dur}" />
+                             </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/diabetes"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black"
+                            />
+
+                        <RadioGroup
+                            android:id="@+id/DIA_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{morbidity::setDiabetes}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/DIA_1_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.diabetes==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/DIA_1_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.diabetes==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+
+                        </RadioGroup>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:padding="5dp"
+                        goneUnless="@{morbidity.diabetes==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/trt"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black" />
+
+                        <RadioGroup
+                            android:id="@+id/DIA_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{morbidity::setHypertension_trt}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/DIA_2_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.diabetes_trt==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/DIA_2_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.diabetes_trt==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        goneUnless="@{morbidity.diabetes==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:hint="@string/dur"
+                        android:padding="5dp"
+                        android:text="@string/dur">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/diabetes_dur"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:text="@={morbidity.diabetes_dur}" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/heart"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black"
+                            />
+
+                        <RadioGroup
+                            android:id="@+id/HE_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{morbidity::setHeart}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/HE_1_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.heart==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/He_1_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.heart==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+
+                        </RadioGroup>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:padding="5dp"
+                        goneUnless="@{morbidity.heart==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/trt"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black" />
+
+                        <RadioGroup
+                            android:id="@+id/HE_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{morbidity::setHeart_trt}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/HE_2_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.heart_trt==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/heart_trt_2_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.heart_trt==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        goneUnless="@{morbidity.heart==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:hint="@string/dur"
+                        android:padding="5dp"
+                        android:text="@string/dur">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/heart_dur"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:text="@={morbidity.heart_dur}" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/stroke"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black"
+                            />
+
+                        <RadioGroup
+                            android:id="@+id/stroke_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{morbidity::setStroke}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/stroke_1_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.stroke==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/stroke_1_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.stroke==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+
+                        </RadioGroup>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:padding="5dp"
+                        goneUnless="@{morbidity.stroke==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/trt"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black" />
+
+                        <RadioGroup
+                            android:id="@+id/stroke_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{morbidity::setStroke_trt}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/stroke_2_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.stroke_trt==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/stroke_trt_2_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.stroke_trt==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        goneUnless="@{morbidity.stroke==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:hint="@string/dur"
+                        android:padding="5dp"
+                        android:text="@string/dur">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/stroke_dur"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:text="@={morbidity.stroke_dur}" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/sickle"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black"
+                            />
+
+                        <RadioGroup
+                            android:id="@+id/sickle_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{morbidity::setSickle}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/sickle_1_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.sickle==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/sickle_1_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.sickle==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+
+                        </RadioGroup>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:padding="5dp"
+                        goneUnless="@{morbidity.sickle==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/trt"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black" />
+
+                        <RadioGroup
+                            android:id="@+id/sickle_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{morbidity::setSickle_trt}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/sickle_2_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.sickle_trt==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/sickle_trt_2_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.sickle_trt==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        goneUnless="@{morbidity.sickle==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:hint="@string/dur"
+                        android:padding="5dp"
+                        android:text="@string/dur">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/sickle_dur"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:text="@={morbidity.sickle_dur}" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/asthma"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black"
+                            />
+
+                        <RadioGroup
+                            android:id="@+id/asthma_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{morbidity::setAsthma}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/asthma_1_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.asthma==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/asthma_1_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.asthma==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+
+                        </RadioGroup>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:padding="5dp"
+                        goneUnless="@{morbidity.asthma==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/trt"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black" />
+
+                        <RadioGroup
+                            android:id="@+id/asthma_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{morbidity::setAsthma_trt}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/asthma_2_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.asthma_trt==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/asthma_trt_2_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.asthma_trt==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        goneUnless="@{morbidity.asthma==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:hint="@string/dur"
+                        android:padding="5dp"
+                        android:text="@string/dur">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/asthma_dur"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:text="@={morbidity.asthma_dur}" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/epilepsy"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black"
+                            />
+
+                        <RadioGroup
+                            android:id="@+id/epilepsy_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{morbidity::setEpilepsy}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/epilepsy_1_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.epilepsy==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/epilepsy_1_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.epilepsy==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+
+                        </RadioGroup>
+
+                    </TableRow>
+
+                    <TableRow
+                        android:padding="5dp"
+                        goneUnless="@{morbidity.epilepsy==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="@string/trt"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black" />
+
+                        <RadioGroup
+                            android:id="@+id/epilepsy_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{morbidity::setEpilepsy_trt}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/epilepsy_2_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.epilepsy_trt==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/epilepsy_trt_2_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{morbidity.epilepsy_trt==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        goneUnless="@{morbidity.epilepsy==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:hint="@string/dur"
+                        android:padding="5dp"
+                        android:text="@string/dur">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/epilepsy_dur"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:text="@={morbidity.epilepsy_dur}" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </TableLayout>
+
+
+
+
+                <TextView
+                    android:id="@+id/resolve"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/query_reslve"
+                    android:textColor="@color/black"
+                    android:visibility="gone" />
+
+                <RadioGroup
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onCheckedChanged="@{morbidity::setStatus}"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <RadioButton
+                        android:id="@+id/no_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{morbidity.status==3}"
+                        android:tag="3"
+                        android:text="@string/yes" />
+
+                    <RadioButton
+                        android:id="@+id/no_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{morbidity.status==2}"
+                        android:tag="2"
+                        android:text="@string/no" />
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{morbidity.status==0}"
+                        android:tag="0"
+                        android:visibility="invisible" />
+                </RadioGroup>
+
+            </LinearLayout>
+            </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/buttonSaveClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/btnd_save"
+                android:textColor="@android:color/background_light"
+                android:text="@string/saveclosedata" />
+
+            <Button
+                android:id="@+id/buttonClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/btnd_close"
+                android:textColor="@android:color/background_light"
+                android:text="@string/closedata" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</layout>

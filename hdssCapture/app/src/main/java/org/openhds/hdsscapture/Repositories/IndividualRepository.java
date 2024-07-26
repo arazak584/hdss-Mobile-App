@@ -130,6 +130,15 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public List<Individual> morbidity(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.morbidity(id);
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Individual> retrieveByMother(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Individual>> callable = () -> dao.retrieveByMother(id);

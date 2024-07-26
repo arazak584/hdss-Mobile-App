@@ -120,6 +120,8 @@ public class DthFragment extends Fragment {
         //binding.setDeath(death);
 
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
+        final Intent j = getActivity().getIntent();
+        final Hierarchy level6Data = j.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -181,11 +183,32 @@ public class DthFragment extends Fragment {
             Death data = viewModel.retrieve(individual.uuid);
             if (data != null) {
                 binding.setDeath(data);
-                ind.setText(data.firstName + " " + data.lastName);
                 text.setVisibility(View.VISIBLE);
                 yn.setVisibility(View.VISIBLE);
                 no.setVisibility(View.VISIBLE);
                 data.edit = 1;
+
+                data.villname = level6Data.getName();
+                data.villcode = level6Data.getExtId();
+                data.compname = ClusterFragment.selectedLocation.getLocationName();
+                data.compno = ClusterFragment.selectedLocation.getCompno();
+                Log.d("Death", "Status: " + data.status);
+                //data.edit = null;
+                //data.visit_uuid = dts.uuid;
+                data.househead = socialgroup.getGroupName();
+                data.socialgroup_uuid = socialgroup.uuid;
+
+                IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+                Individual dataInd = individualViewModel.find(individual.uuid);
+                if (dataInd != null){
+
+                    data.dob = dataInd.dob;
+                    data.firstName = dataInd.firstName;
+                    data.lastName = dataInd.lastName;
+                    data.extId = dataInd.extId;
+                    data.gender = dataInd.gender;
+                    ind.setText(dataInd.firstName + " " + dataInd.lastName);
+                }
 
                 if(data.status!=null && data.status==2){
                     cmt.setVisibility(View.VISIBLE);
@@ -435,7 +458,7 @@ public class DthFragment extends Fragment {
             //End Residency In residency entity
             ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
             try {
-                Residency data = resModel.dth(individual.uuid);
+                Residency data = resModel.dth(individual.uuid, ClusterFragment.selectedLocation.uuid);
                 if (data != null && binding.getDeath().edit != null && binding.getDeath().edit == 1) {
                     ResidencyAmendment residencyAmendment = new ResidencyAmendment();
                     residencyAmendment.endType = 3;

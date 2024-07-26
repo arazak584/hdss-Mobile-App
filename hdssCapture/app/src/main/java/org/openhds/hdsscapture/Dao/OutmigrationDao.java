@@ -38,7 +38,7 @@ public interface OutmigrationDao {
     @Query("SELECT * FROM outmigration WHERE complete!=0")
     List<Outmigration> retrieveomgToSync();
 
-    @Query("SELECT * FROM outmigration WHERE individual_uuid=:id AND location_uuid=:locid")
+    @Query("SELECT * FROM outmigration a INNER JOIN residency b on a.residency_uuid=b.uuid WHERE a.individual_uuid=:id AND b.location_uuid=:locid")
     Outmigration find(String id,String locid);
 
     @Query("SELECT * FROM outmigration WHERE individual_uuid=:id AND location_uuid=:locid AND edit IS NULL")
