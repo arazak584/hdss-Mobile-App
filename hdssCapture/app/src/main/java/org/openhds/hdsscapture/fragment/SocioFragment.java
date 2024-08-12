@@ -177,6 +177,27 @@ public class SocioFragment extends Fragment {
         loadCodeData(binding.sociog.SMOKEINOECDOSFRQ, "FRQ");
         loadCodeData(binding.sociog.SMOKEHHOLDINOECDOSFRQ, "FRQ");
         loadCodeData(binding.socioz.socioComplete, "submit");
+        loadCodeData(binding.sociod.petVac, "pet_vac");
+//        loadCodeData(binding.id0001, "salt");
+//        loadCodeData(binding.id0002, "ynd");
+        loadCodeData(binding.id0003, "nhis");
+        loadCodeData(binding.id0004, "submit");
+        loadCodeData(binding.id0005, "nhis_no");
+        loadCodeData(binding.sociod.id00061Option, "crop");
+        loadCodeData(binding.sociod.id00071Option, "crop");
+        loadCodeData(binding.sociod.id00081Option, "crop");
+        loadCodeData(binding.sociod.id00091Option, "crop");
+        loadCodeData(binding.sociod.id00101Option, "crop");
+        loadCodeData(binding.sociod.id00111Option, "crop");
+        loadCodeData(binding.sociod.id00111Option, "crop");
+        loadCodeData(binding.sociod.id00121Option, "crop");
+        loadCodeData(binding.sociod.id00131Option, "crop");
+        loadCodeData(binding.sociod.id00141Option, "crop");
+        loadCodeData(binding.sociod.id00151Option, "crop");
+        loadCodeData(binding.sociod.id00161Option, "crop");
+        loadCodeData(binding.sociod.id00171Option, "crop");
+        loadCodeData(binding.sociod.id00181Option, "crop");
+        loadCodeData(binding.sociod.id00191Option, "crop");
 
 
         binding.buttonSaveClose.setOnClickListener(v -> {

@@ -386,7 +386,7 @@
                              android:layout_height="wrap_content"
                              android:inputType="number"
                              android:text="@={morbidity.hypertension_dur}" />
-                             </com.google.android.material.textfield.TextInputLayout>
+                         </com.google.android.material.textfield.TextInputLayout>
 
 
                     <TableRow

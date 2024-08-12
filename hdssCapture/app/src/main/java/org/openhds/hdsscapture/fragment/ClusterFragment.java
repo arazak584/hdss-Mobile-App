@@ -300,12 +300,10 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
     }
 
     public void showProgressBar() {
-        if (progressBar == null) {
+        if (progressBar != null) {
             progressBar.setVisibility(View.VISIBLE);
         }
     }
-
-
 
     public void hideProgressBar() {
         if (progressBar != null) {

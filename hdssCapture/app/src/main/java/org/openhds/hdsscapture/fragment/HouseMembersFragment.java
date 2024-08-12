@@ -2,8 +2,10 @@ package org.openhds.hdsscapture.fragment;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
@@ -67,6 +70,7 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subqueries.EndEvents;
+import org.openhds.hdsscapture.odk.OdkFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,12 +86,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String SOCIAL_ID = "SOCIAL_ID";
-    private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
-    private static final String EVENT_ID = "EVENT_ID";
-    private final String TAG = "LOCATION.TAG";
-
-    ImageView imageView;
+    private static final int ODK_REQUEST_CODE = 1;
     private Locations locations;
     private Socialgroup socialgroup;
     private FragmentHouseMembersBinding binding;
@@ -375,15 +375,6 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                     ResidencyFragment.newInstance(individual, locations, socialgroup)).commit();
         });
 
-//        final AppCompatButton add_individual = binding.getRoot().findViewById(R.id.button_newindividual);
-//        add_individual.setOnClickListener(v -> {
-//
-//            final Individual individual = new Individual();
-//
-//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-//                    IndividualFragment.newInstance(individual,residency, locations, socialgroup)).commit();
-//        });
-
         PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
 
         try {
@@ -426,12 +417,25 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             }
         });
 
+        AppCompatButton odkButton = view.findViewById(R.id.odk);
+        odkButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setType("vnd.android.cursor.dir/vnd.odk.form");
+            startActivity(intent);
+        });
 
+//        odkButton.setOnClickListener(v -> {
+//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                    OdkFragment.newInstance(locations, socialgroup,individual )).commit();
+//        });
 
 
         return view;
 
     }
+
+
+
 
     @Override
     public void onIndividualClick(Individual selectedIndividual) {

@@ -316,6 +316,898 @@
                     tools:ignore="Autofill,LabelFor" />
             </LinearLayout>
 
+            <LinearLayout
+                goneUnless="@{sociodemo.land_use_fcorres_2==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:padding="5dp"
+                    android:text="@string/crop" />
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!-- id0006 -->
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:text="@string/id0006"
+                            android:textAlignment="gravity" />
+
+                        <RadioGroup
+                            android:id="@+id/id0006"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setId0006}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/id0006_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0006==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/id0006_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0006==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <TextView
+                        goneUnless="@{sociodemo.id0006==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:text="@string/crop_use"/>
+
+                    <org.openhds.hdsscapture.SearchableSpinner
+                        goneUnless="@{sociodemo.id0006==1}"
+                        android:id="@+id/id0006_1_option"
+                        selection="@{sociodemo.id0006_1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:minHeight="48dp"
+                        android:onItemSelected="@{sociodemo::setId0006_1}"
+                        android:padding="10dp"
+                        android:spinnerMode="dialog" />
+
+                    <!-- id0007 -->
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:text="@string/id0007"
+                            android:textAlignment="gravity" />
+
+                        <RadioGroup
+                            android:id="@+id/id0007"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setId0007}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/id0007_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0007==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/id0007_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0007==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <TextView
+                        goneUnless="@{sociodemo.id0007==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:text="@string/crop_use"/>
+
+                    <org.openhds.hdsscapture.SearchableSpinner
+                        goneUnless="@{sociodemo.id0007==1}"
+                        android:id="@+id/id0007_1_option"
+                        selection="@{sociodemo.id0007_1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:minHeight="48dp"
+                        android:onItemSelected="@{sociodemo::setId0007_1}"
+                        android:padding="10dp"
+                        android:spinnerMode="dialog" />
+
+                    <!-- id0008 -->
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:text="@string/id0008"
+                            android:textAlignment="gravity" />
+
+                        <RadioGroup
+                            android:id="@+id/id0008"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setId0008}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/id0008_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0008==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/id0008_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0008==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <TextView
+                        goneUnless="@{sociodemo.id0008==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:text="@string/crop_use"/>
+
+                    <org.openhds.hdsscapture.SearchableSpinner
+                        goneUnless="@{sociodemo.id0008==1}"
+                        android:id="@+id/id0008_1_option"
+                        selection="@{sociodemo.id0008_1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:minHeight="48dp"
+                        android:onItemSelected="@{sociodemo::setId0008_1}"
+                        android:padding="10dp"
+                        android:spinnerMode="dialog" />
+
+                    <!-- id0009 -->
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:text="@string/id0009"
+                            android:textAlignment="gravity" />
+
+                        <RadioGroup
+                            android:id="@+id/id0009"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setId0009}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/id0009_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0009==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/id0009_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0009==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <TextView
+                        goneUnless="@{sociodemo.id0009==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:text="@string/crop_use"/>
+
+                    <org.openhds.hdsscapture.SearchableSpinner
+                        goneUnless="@{sociodemo.id0009==1}"
+                        android:id="@+id/id0009_1_option"
+                        selection="@{sociodemo.id0009_1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:minHeight="48dp"
+                        android:onItemSelected="@{sociodemo::setId0009_1}"
+                        android:padding="10dp"
+                        android:spinnerMode="dialog" />
+
+                    <!-- id0010 -->
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:text="@string/id0010"
+                            android:textAlignment="gravity" />
+
+                        <RadioGroup
+                            android:id="@+id/id0010"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setId0010}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/id0010_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0010==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/id0010_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0010==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <TextView
+                        goneUnless="@{sociodemo.id0010==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:text="@string/crop_use"/>
+
+                    <org.openhds.hdsscapture.SearchableSpinner
+                        goneUnless="@{sociodemo.id0010==1}"
+                        android:id="@+id/id0010_1_option"
+                        selection="@{sociodemo.id0010_1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:minHeight="48dp"
+                        android:onItemSelected="@{sociodemo::setId0010_1}"
+                        android:padding="10dp"
+                        android:spinnerMode="dialog" />
+
+                    <!-- id0011 -->
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:text="@string/id0011"
+                            android:textAlignment="gravity" />
+
+                        <RadioGroup
+                            android:id="@+id/id0011"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setId0011}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/id0011_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0011==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/id0011_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0011==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <TextView
+                        goneUnless="@{sociodemo.id0011==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:text="@string/crop_use"/>
+
+                    <org.openhds.hdsscapture.SearchableSpinner
+                        goneUnless="@{sociodemo.id0011==1}"
+                        android:id="@+id/id0011_1_option"
+                        selection="@{sociodemo.id0011_1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:minHeight="48dp"
+                        android:onItemSelected="@{sociodemo::setId0011_1}"
+                        android:padding="10dp"
+                        android:spinnerMode="dialog" />
+
+                    <!-- id0012 -->
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:text="@string/id0012"
+                            android:textAlignment="gravity" />
+
+                        <RadioGroup
+                            android:id="@+id/id0012"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setId0012}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/id0012_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0012==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/id0012_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0012==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <TextView
+                        goneUnless="@{sociodemo.id0012==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:text="@string/crop_use"/>
+
+                    <org.openhds.hdsscapture.SearchableSpinner
+                        goneUnless="@{sociodemo.id0012==1}"
+                        android:id="@+id/id0012_1_option"
+                        selection="@{sociodemo.id0012_1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:minHeight="48dp"
+                        android:onItemSelected="@{sociodemo::setId0012_1}"
+                        android:padding="10dp"
+                        android:spinnerMode="dialog" />
+
+                    <!-- id0013 -->
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:text="@string/id0013"
+                            android:textAlignment="gravity" />
+
+                        <RadioGroup
+                            android:id="@+id/id0013"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setId0013}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/id0013_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0013==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/id0013_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0013==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <TextView
+                        goneUnless="@{sociodemo.id0013==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:text="@string/crop_use"/>
+
+                    <org.openhds.hdsscapture.SearchableSpinner
+                        goneUnless="@{sociodemo.id0013==1}"
+                        android:id="@+id/id0013_1_option"
+                        selection="@{sociodemo.id0013_1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:minHeight="48dp"
+                        android:onItemSelected="@{sociodemo::setId0013_1}"
+                        android:padding="10dp"
+                        android:spinnerMode="dialog" />
+
+                    <!-- id0014 -->
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:text="@string/id0014"
+                            android:textAlignment="gravity" />
+
+                        <RadioGroup
+                            android:id="@+id/id0014"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setId0014}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/id0014_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0014==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/id0014_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0014==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <TextView
+                        goneUnless="@{sociodemo.id0014==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:text="@string/crop_use"/>
+
+                    <org.openhds.hdsscapture.SearchableSpinner
+                        goneUnless="@{sociodemo.id0014==1}"
+                        android:id="@+id/id0014_1_option"
+                        selection="@{sociodemo.id0014_1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:minHeight="48dp"
+                        android:onItemSelected="@{sociodemo::setId0014_1}"
+                        android:padding="10dp"
+                        android:spinnerMode="dialog" />
+
+                    <!-- id0015 -->
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:text="@string/id0015"
+                            android:textAlignment="gravity" />
+
+                        <RadioGroup
+                            android:id="@+id/id0015"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setId0015}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/id0015_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0015==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/id0015_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0015==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <TextView
+                        goneUnless="@{sociodemo.id0015==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:text="@string/crop_use"/>
+
+                    <org.openhds.hdsscapture.SearchableSpinner
+                        goneUnless="@{sociodemo.id0015==1}"
+                        android:id="@+id/id0015_1_option"
+                        selection="@{sociodemo.id0015_1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:minHeight="48dp"
+                        android:onItemSelected="@{sociodemo::setId0015_1}"
+                        android:padding="10dp"
+                        android:spinnerMode="dialog" />
+
+                    <!-- id0016 -->
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:text="@string/id0016"
+                            android:textAlignment="gravity" />
+
+                        <RadioGroup
+                            android:id="@+id/id0016"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setId0016}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/id0016_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0016==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/id0016_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0016==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <TextView
+                        goneUnless="@{sociodemo.id0016==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:text="@string/crop_use"/>
+
+                    <org.openhds.hdsscapture.SearchableSpinner
+                        goneUnless="@{sociodemo.id0016==1}"
+                        android:id="@+id/id0016_1_option"
+                        selection="@{sociodemo.id0016_1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:minHeight="48dp"
+                        android:onItemSelected="@{sociodemo::setId0016_1}"
+                        android:padding="10dp"
+                        android:spinnerMode="dialog" />
+
+                    <!-- id0017 -->
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:text="@string/id0017"
+                            android:textAlignment="gravity" />
+
+                        <RadioGroup
+                            android:id="@+id/id0017"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setId0017}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/id0017_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0017==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/id0017_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0017==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <TextView
+                        goneUnless="@{sociodemo.id0017==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:text="@string/crop_use"/>
+
+                    <org.openhds.hdsscapture.SearchableSpinner
+                        goneUnless="@{sociodemo.id0017==1}"
+                        android:id="@+id/id0017_1_option"
+                        selection="@{sociodemo.id0017_1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:minHeight="48dp"
+                        android:onItemSelected="@{sociodemo::setId0017_1}"
+                        android:padding="10dp"
+                        android:spinnerMode="dialog" />
+
+                    <!-- id0018 -->
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:text="@string/id0018"
+                            android:textAlignment="gravity" />
+
+                        <RadioGroup
+                            android:id="@+id/id0018"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setId0018}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/id0018_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0018==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/id0018_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0018==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <TextView
+                        goneUnless="@{sociodemo.id0018==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:text="@string/crop_use"/>
+
+                    <org.openhds.hdsscapture.SearchableSpinner
+                        goneUnless="@{sociodemo.id0018==1}"
+                        android:id="@+id/id0018_1_option"
+                        selection="@{sociodemo.id0018_1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:minHeight="48dp"
+                        android:onItemSelected="@{sociodemo::setId0018_1}"
+                        android:padding="10dp"
+                        android:spinnerMode="dialog" />
+
+                    <!-- id0019 -->
+                    <TableRow
+                        android:padding="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:gravity="center_vertical"
+                            android:text="@string/id0019"
+                            android:textAlignment="gravity" />
+
+                        <RadioGroup
+                            android:id="@+id/id0019"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setId0019}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/id0019_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0019==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/id0019_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.id0019==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                        </RadioGroup>
+                    </TableRow>
+
+                    <TextView
+                        goneUnless="@{sociodemo.id0019==1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:text="@string/crop_use"/>
+
+                    <org.openhds.hdsscapture.SearchableSpinner
+                        goneUnless="@{sociodemo.id0019==1}"
+                        android:id="@+id/id0019_1_option"
+                        selection="@{sociodemo.id0019_1}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:minHeight="48dp"
+                        android:onItemSelected="@{sociodemo::setId0019_1}"
+                        android:padding="10dp"
+                        android:spinnerMode="dialog" />
+                </TableLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{sociodemo.id0019==1}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:hint="@string/id0021"
+                    android:padding="5dp"
+                    android:text="@string/id0021">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/id0021"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:text="@={sociodemo.id0021}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <TextView
@@ -852,6 +1744,403 @@
                     tools:ignore="Autofill,LabelFor" />
 
             </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="@string/pet" />
+
+        <RadioGroup
+            android:id="@+id/PET_FCORRES"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{sociodemo::setPets}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/PET_FCORRES_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.pets==1}"
+                android:tag="1"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/PET_FCORRES_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{sociodemo.pets==2}"
+                android:tag="2"
+                android:text="@string/no" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/pets" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:text="@string/dogs"
+                        android:textAlignment="gravity" />
+
+
+                    <RadioGroup
+                        android:id="@+id/Dog_FCORRES"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{sociodemo::setDogs}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/DOG_FCORRES_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.dogs==1}"
+                            android:tag="1"
+                            android:text="@string/yes"
+                            tools:ignore="DuplicateSpeakableTextCheck" />
+
+                        <RadioButton
+                            android:id="@+id/DOG_FCORRES_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.dogs==2}"
+                            android:tag="2"
+                            android:text="@string/no"
+                            tools:ignore="DuplicateSpeakableTextCheck" />
+
+                    </RadioGroup>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:text="@string/guinea_pigs"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/PIGS_FCORRES"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{sociodemo::setGuinea_pigs}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/PIGS_FCORRES_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.guinea_pigs==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/PIGS_FCORRES_0"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.guinea_pigs==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+
+                    </RadioGroup>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:text="@string/cats"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/CATS_FCORRES"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{sociodemo::setCats}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/CATS_FCORRES_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.cats==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/CATS_FCORRES_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.cats==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+
+                    </RadioGroup>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:text="@string/fish"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/FISH_FCORRES"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{sociodemo::setFish}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/FISH_FCORRES_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.fish==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/FISH_FCORRES_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.fish==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+                    </RadioGroup>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:text="@string/birds"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/birds_FCORRES"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{sociodemo::setBirds}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/birds_FCORRES_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.birds==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/birds_FCORRES_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.birds==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+                    </RadioGroup>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:text="@string/rabbits"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/RABBIT_FCORRES"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{sociodemo::setRabbits}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/RABBIT_FCORRES_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.rabbits==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/RABBIT_FCORRES_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.rabbits==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+                    </RadioGroup>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:text="@string/reptiles"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/REPTILES_FCORRES"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{sociodemo::setReptiles}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/REPTILES_FCORRES_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.reptiles==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/REPTILES_FCORRES_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.reptiles==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+                    </RadioGroup>
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical"
+                        android:text="@string/pet_other"
+                        android:textAlignment="gravity" />
+
+                    <RadioGroup
+                        android:id="@+id/PET_OTHER_FCORRES"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{sociodemo::setPet_other}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/PET_OTHER_FCORRES_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.pet_other==1}"
+                            android:tag="1"
+                            android:text="@string/yes" />
+
+                        <RadioButton
+                            android:id="@+id/PET_OTHER_FCORRES_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{sociodemo.pet_other==2}"
+                            android:tag="2"
+                            android:text="@string/no" />
+                    </RadioGroup>
+
+                </TableRow>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{sociodemo.pet_other==1}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:hint="@string/pet_other_spfy"
+                    android:padding="5dp"
+                    android:text="@string/pet_other_spfy">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/hypertension_dur"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:text="@={sociodemo.pet_other_spfy}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    goneUnless="@{sociodemo.dogs==1 || sociodemo.cats==1}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/pet_vac"/>
+
+                <org.openhds.hdsscapture.SearchableSpinner
+                    goneUnless="@{sociodemo.dogs==1 || sociodemo.cats==1}"
+                    android:id="@+id/pet_vac"
+                    selection="@{sociodemo.pet_vac}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{sociodemo::setPet_vac}"
+                    android:padding="10dp"
+                    android:spinnerMode="dialog" />
+
+
+            </TableLayout>
+
 
         </LinearLayout>
 

@@ -53,12 +53,14 @@ import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
+import org.openhds.hdsscapture.Viewmodel.HierarchyLevelViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
+import org.openhds.hdsscapture.Viewmodel.OdkViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
@@ -74,6 +76,7 @@ import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
+import org.openhds.hdsscapture.entity.HierarchyLevel;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Listing;
@@ -86,6 +89,7 @@ import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.fragment.InfoFragment;
+import org.openhds.hdsscapture.odk.Form;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
 import java.text.SimpleDateFormat;
@@ -252,6 +256,24 @@ public class MainActivity extends AppCompatActivity {
                                                     CommunityReport[] cm = response.body().getData().toArray(new CommunityReport[0]);
                                                     communityViewModel.add(cm);
 
+                                                    //Sync HierarchyLevel
+                                                    final HierarchyLevelViewModel hieViewModel = new ViewModelProvider(MainActivity.this).get(HierarchyLevelViewModel.class);
+                                                    Call<DataWrapper<HierarchyLevel>> c_callable = dao.getHierarchyLevel(authorizationHeader);
+                                                    c_callable.enqueue(new Callback<DataWrapper<HierarchyLevel>>() {
+                                                        @Override
+                                                        public void onResponse(Call<DataWrapper<HierarchyLevel>> call, Response<DataWrapper<HierarchyLevel>> response) {
+                                                        HierarchyLevel[] hie = response.body().getData().toArray(new HierarchyLevel[0]);
+                                                        hieViewModel.add(hie);
+
+                                                      //Sync ODK
+//                                                    final OdkViewModel odkViewModel = new ViewModelProvider(MainActivity.this).get(OdkViewModel.class);
+//                                                    Call<DataWrapper<Form>> c_callable = dao.getOdk(authorizationHeader);
+//                                                    c_callable.enqueue(new Callback<DataWrapper<Form>>() {
+//                                                        @Override
+//                                                        public void onResponse(Call<DataWrapper<Form>> call, Response<DataWrapper<Form>> response) {
+//                                                        Form[] odk = response.body().getData().toArray(new Form[0]);
+//                                                        odkViewModel.add(odk);
+
                                             //Sync Settings
                                             progress.setMessage("Updating Settings...");
                                             final ConfigViewModel configViewModel = new ViewModelProvider(MainActivity.this).get(ConfigViewModel.class);
@@ -277,6 +299,26 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                             });
                                         }
+
+//                                                        @Override
+//                                                        public void onFailure(Call<DataWrapper<Form>> call, Throwable t) {
+//                                                            progress.dismiss();
+//                                                            syncSettings.setText("ODK Sync Error!");
+//                                                            syncSettings.setTextColor(Color.RED);
+//                                                            Log.d("ODK ERROR", "Error" + t);
+//                                                        }
+//                                                    });
+//                                                  }
+
+                                                        @Override
+                                                        public void onFailure(Call<DataWrapper<HierarchyLevel>> call, Throwable t) {
+                                                            progress.dismiss();
+                                                            syncSettings.setText("Hierarchy Level Sync Error!");
+                                                            syncSettings.setTextColor(Color.RED);
+                                                            Log.d("ODK ERROR", "Error" + t);
+                                                        }
+                                                    });
+                                                }
 
                                                 @Override
                                                 public void onFailure(Call<DataWrapper<CommunityReport>> call, Throwable t) {

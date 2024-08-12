@@ -43,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textStyle="bold"
+                android:textIsSelectable="true"
                 android:textSize="15sp" />
 
 
@@ -578,6 +579,14 @@
                     android:layout_gravity="center"
                     android:background="@color/Green" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:visibility="gone"
+                    android:id="@+id/my_recycler_view_odk"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:scrollbars="vertical"/>
+
             <TextView
                 android:id="@+id/minor"
                 android:layout_width="match_parent"
@@ -611,6 +620,23 @@
                 android:contentDescription="@string/external"
                 android:src="@drawable/ic_baseline_add_24"
                 android:text="@string/edit_event"
+                android:layout_gravity="center"
+                android:background="@color/DarkBlue"
+                android:textColor="@android:color/background_light"
+                app:fabSize="normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:ignore="ImageContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/odk"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="5dp"
+                android:contentDescription="@string/ODK"
+                android:src="@drawable/ic_baseline_add_24"
+                android:text="@string/extraforms"
                 android:layout_gravity="center"
                 android:background="@color/DarkBlue"
                 android:textColor="@android:color/background_light"

@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.SearchView;
@@ -49,6 +50,7 @@ import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
+import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.subqueries.Newloc;
@@ -57,6 +59,7 @@ import org.openhds.hdsscapture.wrapper.DataWrapper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
@@ -233,11 +236,11 @@ public class RejectionsActivity extends AppCompatActivity {
             for (Pregnancyoutcome e : pregnancyoutcomeViewModel.reject(username)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
-                r1.id1 = k + ". Pregnancy Outcome" + " (" + e.supervisor + ")";
+                r1.id1 = k + ". Outcome" + " (" + e.supervisor + ")";
                 r1.id2 = "" + e.sttime + " " + e.edtime;
                 r1.id3 = "" + e.visit_uuid+ " - " + e.father_uuid;
                 r1.id4 = "" + formattedDate;
-                r1.id5 = "" + e.comment;
+                r1.id5 = "" + e.getComment();
                 r1.index = k;
 
                 list.add(r1);
@@ -403,8 +406,38 @@ public class RejectionsActivity extends AppCompatActivity {
                                 c_callable.enqueue(new Callback<DataWrapper<Pregnancy>>() {
                                     @Override
                                     public void onResponse(Call<DataWrapper<Pregnancy>> call, Response<DataWrapper<Pregnancy>> response) {
-                                        Pregnancy[] fw = response.body().getData().toArray(new Pregnancy[0]);
-                                        pregnancyViewModel.add(fw);
+                                        try {
+                                        if (response.body() != null && response.body().getData() != null) {
+                                            Pregnancy[] newPregs = response.body().getData().toArray(new Pregnancy[0]);
+                                            for (Pregnancy newPregnancy : newPregs) {
+                                                // Fetch the existing pregnancy record by UUID
+                                                Pregnancy existingPregnancy = pregnancyViewModel.ins(newPregnancy.uuid);
+                                                if (existingPregnancy != null) {
+                                                    // Preserve location and id fields from the existing record
+                                                    newPregnancy.extra = existingPregnancy.extra;
+                                                    newPregnancy.outcome = existingPregnancy.outcome;
+                                                    newPregnancy.id = existingPregnancy.id;
+                                                    newPregnancy.complete = 0;
+
+                                                    Log.d("Insertion", "Pregnancy insert outcome: " + existingPregnancy.outcome);
+                                                }
+                                            }
+                                            pregnancyViewModel.add(newPregs);
+                                        } else {
+                                            Log.e("Error", "Response body or data is null");
+                                        }
+
+                                        } catch (ExecutionException e) {
+                                            Log.e("Error", "ExecutionException occurred while fetching existing pregnancy: " + e.getMessage());
+                                            e.printStackTrace();
+                                        } catch (InterruptedException e) {
+                                            Log.e("Error", "InterruptedException occurred while fetching existing pregnancy: " + e.getMessage());
+                                            e.printStackTrace();
+                                            Thread.currentThread().interrupt(); // Restore interrupted status
+                                        } catch (Exception e) {
+                                            Log.e("Error", "An unexpected error occurred: " + e.getMessage());
+                                            e.printStackTrace();
+                                        }
 
                                         // Next Step: Demographic
                                         progres.setMessage("Downloading...");
@@ -463,8 +496,37 @@ public class RejectionsActivity extends AppCompatActivity {
                                                         c_callable.enqueue(new Callback<DataWrapper<Pregnancyoutcome>>() {
                                                             @Override
                                                             public void onResponse(Call<DataWrapper<Pregnancyoutcome>> call, Response<DataWrapper<Pregnancyoutcome>> response) {
-                                                                Pregnancyoutcome[] cng = response.body().getData().toArray(new Pregnancyoutcome[0]);
-                                                                pregout.add(cng);
+                                                                try {
+                                                                if (response.body() != null && response.body().getData() != null) {
+                                                                    Pregnancyoutcome[] newPregs = response.body().getData().toArray(new Pregnancyoutcome[0]);
+                                                                    for (Pregnancyoutcome newPregnancy : newPregs) {
+                                                                                                                                               // Fetch the existing pregnancy record by ID
+                                                                        Pregnancyoutcome existingPregnancy = pregout.ins(newPregnancy.uuid);
+                                                                        if (existingPregnancy != null) {
+                                                                            // Preserve location and id fields from the existing record
+                                                                            newPregnancy.location = existingPregnancy.location;
+                                                                            newPregnancy.id = existingPregnancy.id;
+                                                                            newPregnancy.complete = 0;
+                                                                            Log.d("Insertion", "Outcome Location: " + existingPregnancy.location);
+                                                                        }
+                                                                    }
+                                                                    pregout.add(newPregs);
+                                                                } else {
+                                                                    Log.e("Error", "Response body or data is null");
+                                                                }
+                                                                } catch (ExecutionException e) {
+                                                                    Log.e("Error", "ExecutionException occurred while fetching existing pregnancy: " + e.getMessage());
+                                                                    e.printStackTrace();
+                                                                } catch (InterruptedException e) {
+                                                                    Log.e("Error", "InterruptedException occurred while fetching existing pregnancy: " + e.getMessage());
+                                                                    e.printStackTrace();
+                                                                    Thread.currentThread().interrupt(); // Restore interrupted status
+                                                                } catch (Exception e) {
+                                                                    Log.e("Error", "An unexpected error occurred: " + e.getMessage());
+                                                                    e.printStackTrace();
+                                                                }
+
+
                                                                 progres.dismiss();
                                                                 refreshActivity();
                                                             }

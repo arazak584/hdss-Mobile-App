@@ -39,8 +39,8 @@ public class OutmigrationViewModel extends AndroidViewModel {
         return outmigrationRepository.edit(id,locid);
     }
 
-    public Outmigration finds(String id) throws ExecutionException, InterruptedException {
-        return outmigrationRepository.finds(id);
+    public Outmigration finds(String id,String res) throws ExecutionException, InterruptedException {
+        return outmigrationRepository.finds(id,res);
     }
 
     public List<Outmigration> end(String id) throws ExecutionException, InterruptedException {

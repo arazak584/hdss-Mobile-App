@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">HDSS Capture</string>
-    <string name="versions">v2024.0.12</string>
+    <string name="versions">v2024.0.15</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>
@@ -140,6 +140,17 @@
     <string name="outcome_number">Number of Outcomes</string>
     <string name="child_extid">Child Permid</string>
     <string name="outcometype">Type of Outcome</string>
+    <string name="id1001">Did you ever breastfeed the child?</string>
+    <string name="id1002">How long after delivery did you first put child to the breast?</string>
+    <string name="id1003">In the first 2 days after birth was the child given anything other than breastmilk to drink (water, infant formula)</string>
+    <string name="id1004">Are you still breastfeeding the child?</string>
+    <string name="id1005">What did you feed the child with in the first 6 months of birth?</string>
+    <string name="id1006">Do you have plans to have more children?</string>
+    <string name="id1007">If YES, how long will you want to wait before becoming pregnant again?</string>
+    <string name="id1008">Are you currently using any family planning method to delay or prevent pregnancy?</string>
+    <string name="id1009">If Yes/NO, what will be your specific family planning method of preference when finally you decide to use one?</string>
+
+
     <string name="demographics">Demographics</string>
     <string name="marital">Marital Status</string>
     <string name="education">Educational Level</string>
@@ -269,6 +280,11 @@
     <string name="first_preg">Is this your first Pregnancy?</string>
     <string name="pregnancyNumber">Total number of pregnancies to date</string>
     <string name="title_activity_remainder">RemainderActivity</string>
+    <string name="family_planning"><b>Family Planning</b></string>
+    <string name="preg_ready">When you got pregnant, did you want to get pregnant at that time?</string>
+    <string name="family_plan">Before this pregnancy,  did you ever use any Family Planning method to delay or prevent getting pregnant?</string>
+    <string name="plan_method">If YES, which of the following methods of family planning did you use to delay or prevent getting pregnant?</string>
+    <string name="plan_method_oth">Other Method, Specify</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
@@ -465,6 +481,18 @@
     <string name="HORSE_FCORRES_SOCIO">H3g.Horse</string>
     <string name="ANIMAL_OTHR_FCORRES_SOCIO">H3o Other</string>
     <string name="ANIMAL_OTHR_FCORRES_SOCIO_SPFY">H3os Other->Specify</string>
+    <string name="dogs"> Dogs	</string>
+    <string name="guinea_pigs"> Guinea Pigs/Pigs</string>
+    <string name="cats"> Cats</string>
+    <string name="fish"> Fish</string>
+    <string name="birds"> Birds (e.g., parrots, canaries, finches)</string>
+    <string name="rabbits"> Rabbits</string>
+    <string name="reptiles"> Reptiles (e.g., turtles, lizards, snakes) </string>
+    <string name="pet_other">  Other Pet</string>
+    <string name="pet_vac"> What is the vaccination status of your pet(s) against rabies(s)?</string>
+    <string name="pet_other_spfy"> Other Specify</string>
+
+
 
     <string name="occupation"><b>SECTION I Occupation</b></string>
     <string name="JOB_SCORRES_SOCIO">I1 What is your main occupation\? That is, what is the main kind of work that you do to generate income\?</string>
@@ -606,7 +634,7 @@
     <string name="fever">In the last two weeks did the child report Fever</string>
     <string name="treat">Did you seek for treatment?</string>
     <string name="diarrhoea">In the last two weeks did the child report diarrhoea?</string>
-    <string name="arti">In the last two weeks did the child report ARTI?</string>
+    <string name="arti">In the last two weeks did the child report acute respiratory tract infection?</string>
     <string name="muac">Mid-Upper Arm circumference (MUAC)</string>
     <string name="filter">FILTER</string>
     <string name="extid">Cluster</string>
@@ -733,6 +761,33 @@
     <string name="indA_uuid">Individual UUID</string>
     <string name="indA_name">Individual Name</string>
     <string name="send_morbidity">Send Morbidity</string>
+    <string name="extraforms">ODK Forms</string>
+    <string name="pets">Do you keep any of the ff animals in your household?</string>
+    <string name="pet">Do you keep pets?</string>
+    <string name="crop">What type of crops are grown?</string>
+    <string name="breastfeed"><b>BREAST FEEDING</b></string>
+
+    <string name="id0001"> What type of salt does household mainly use?</string>
+    <string name="id0002"> Do you think the salt contains iodine?</string>
+    <string name="id0003"> Are you or any member of your household registered with Health insurance scheme?</string>
+    <string name="id0004"> If yes, has any of you used your Insurance in the last 6 months?</string>
+    <string name="id0005"> If no, why did you not register in the scheme?</string>
+    <string name="id0006"><b>Pepper</b></string>
+    <string name="id0007"><b>Onion</b></string>
+    <string name="id0008"><b>Tomato</b></string>
+    <string name="id0009"><b>Garden eggs</b></string>
+    <string name="id0010"><b>Export vegetables</b></string>
+    <string name="id0011"><b>Mango</b></string>
+    <string name="id0012"><b>Pineapple</b></string>
+    <string name="id0013"><b>Watermelon</b></string>
+    <string name="id0014"><b>Maize</b></string>
+    <string name="id0015"><b>Rice</b></string>
+    <string name="id0016"><b>Cassava</b></string>
+    <string name="id0017"><b>Plantain</b></string>
+    <string name="id0018"><b>Beans</b></string>
+    <string name="id0019"><b>Others</b></string>
+    <string name="id0021">Specify Others</string>
+    <string name="crop_use"> What market do you produce for?</string>
 
 
 </resources>

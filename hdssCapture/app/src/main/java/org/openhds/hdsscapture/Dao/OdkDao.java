@@ -21,7 +21,7 @@ public interface OdkDao {
     @Query("DELETE FROM Form")
     void deleteAll();
 
-    @Query("SELECT * FROM Form")
+    @Query("SELECT * FROM Form where enabled = 1")
     List<Form> find();
 
 }

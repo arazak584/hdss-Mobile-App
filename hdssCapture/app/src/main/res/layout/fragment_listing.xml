@@ -50,22 +50,22 @@
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:padding="5dp"
                     android:hint="@string/fw"
-                    android:text="@string/fw">
+                    android:padding="5dp"
+                    android:text="@string/fw"
+                    android:visibility="gone">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/location_fw"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={listing.fw_uuid}"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:inputType="textPersonName|textCapCharacters"/>
+                        android:inputType="textPersonName|textCapCharacters"
+                        android:text="@={listing.fw_uuid}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -74,27 +74,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/visitDate"
-                    tools:ignore="DuplicateSpeakableTextCheck"
                     android:visibility="gone"
-                    app:icon="@drawable/ic_baseline_calendar_month_24" />
+                    app:icon="@drawable/ic_baseline_calendar_month_24"
+                    tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:padding="5dp"
                     android:hint="@string/visitDate"
-                    android:text="@string/visitDate">
+                    android:padding="5dp"
+                    android:text="@string/visitDate"
+                    android:visibility="visible">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/location_insertDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={listing.insertDate}"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:inputType="textPersonName|textCapCharacters"/>
+                        android:inputType="textPersonName|textCapCharacters"
+                        android:text="@={listing.insertDate}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -102,57 +102,56 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:padding="5dp"
                     android:hint="@string/compoundnumber"
+                    android:padding="5dp"
                     android:text="@string/compoundnumber">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/locationcompno"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={listing.compno}"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:inputType="textPersonName|textCapCharacters"/>
+                        android:inputType="textPersonName|textCapCharacters"
+                        android:text="@={listing.compno}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:padding="5dp"
                     android:hint="@string/location_uuid"
-                    android:text="@string/location_uuid">
+                    android:padding="5dp"
+                    android:text="@string/location_uuid"
+                    android:visibility="gone">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/uuid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={listing.location_uuid}"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:inputType="textPersonName|textCapCharacters"/>
+                        android:inputType="textPersonName|textCapCharacters"
+                        android:text="@={listing.location_uuid}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:padding="5dp"
                     android:hint="Compound Number"
+                    android:padding="5dp"
                     android:text="Compound Number">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/locationextid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={listing.compextId}"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:inputType="textPersonName|textCapCharacters"/>
+                        android:inputType="textPersonName|textCapCharacters"
+                        android:text="@={listing.compextId}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -160,56 +159,54 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:gravity="start"
-                    android:padding="5dp"
                     android:hint="@string/compound"
-                    app:isRequired="true"
-                    android:text="@string/compound">
+                    android:padding="5dp"
+                    android:text="@string/compound"
+                    app:isRequired="true">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/locationName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={listing.locationName}"
-                        android:inputType="textPersonName|textCapCharacters"/>
+                        android:inputType="textPersonName|textCapCharacters"
+                        android:text="@={listing.locationName}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/button_gps"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/gps"
-                    tools:ignore="DuplicateSpeakableTextCheck"
-                    android:background="@drawable/btnd_save"
                     android:layout_gravity="center"
+                    android:background="@drawable/btnd_save"
+                    android:text="@string/gps"
                     android:textColor="@android:color/background_light"
-                    app:icon="@drawable/ic_baseline_my_location_24" />
+                    app:icon="@drawable/ic_baseline_my_location_24"
+                    tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="16dp" />
 
                 <ProgressBar
+                    android:id="@+id/progress_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/progress_bar"
-                    android:visibility="gone">
-                </ProgressBar>
-
+                    android:visibility="gone"></ProgressBar>
 
 
                 <EditText
                     android:id="@+id/longitude"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/member_filter_textbox_size"
-                    android:textColor="@color/black"
-                    android:paddingLeft="20dp"
-                    android:gravity="center_vertical"
+                    android:background="@drawable/txtbox_rone_wbevel"
                     android:focusable="false"
-                    android:hint="@string/longitude"
-                    android:text="@={listing.longitude}"
                     android:focusableInTouchMode="false"
+                    android:gravity="center_vertical"
+                    android:hint="@string/longitude"
                     android:inputType="textPersonName|textCapCharacters"
-                    android:background="@drawable/txtbox_rone_wbevel"/>
+                    android:paddingLeft="20dp"
+                    android:text="@={listing.longitude}"
+                    android:textColor="@color/black" />
 
                 <Space
                     android:layout_width="match_parent"
@@ -220,14 +217,14 @@
                     android:id="@+id/latitude"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:textColor="@color/black"
-                    android:paddingStart="20dp"
-                    android:hint="@string/latitude"
+                    android:background="@drawable/txtbox_rone_wbevel"
                     android:focusable="false"
-                    android:text="@={listing.latitude}"
                     android:focusableInTouchMode="false"
+                    android:hint="@string/latitude"
                     android:inputType="textPersonName|textCapCharacters"
-                    android:background="@drawable/txtbox_rone_wbevel"/>
+                    android:paddingStart="20dp"
+                    android:text="@={listing.latitude}"
+                    android:textColor="@color/black" />
 
                 <Space
                     android:layout_width="match_parent"
@@ -238,14 +235,14 @@
                     android:id="@+id/accuracy"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:textColor="@color/black"
-                    android:paddingStart="20dp"
+                    android:background="@drawable/txtbox_rone_wbevel"
                     android:focusable="false"
-                    android:hint="@string/accuracy"
-                    android:text="@={listing.accuracy}"
                     android:focusableInTouchMode="false"
+                    android:hint="@string/accuracy"
                     android:inputType="textPersonName|textCapCharacters"
-                    android:background="@drawable/txtbox_rone_wbevel"/>
+                    android:paddingStart="20dp"
+                    android:text="@={listing.accuracy}"
+                    android:textColor="@color/black" />
 
                 <Space
                     android:layout_width="match_parent"
@@ -256,8 +253,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/correctcompname"/>
+                    android:text="@string/correctcompname"
+                    android:textColor="@color/black" />
 
 
                 <org.openhds.hdsscapture.SearchableSpinner
@@ -268,8 +265,8 @@
                     android:gravity="left"
                     android:minHeight="48dp"
                     android:onItemSelected="@{listing::setCorrect_yn}"
-                    android:spinnerMode="dialog"
-                    android:padding="20dp" />
+                    android:padding="20dp"
+                    android:spinnerMode="dialog" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{listing.correct_yn==2}"
@@ -277,26 +274,26 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:gravity="start"
-                    android:padding="5dp"
                     android:hint="@string/compoundcorrect"
-                    app:isRequired="true"
-                    android:text="@string/compoundcorrect">
+                    android:padding="5dp"
+                    android:text="@string/compoundcorrect"
+                    app:isRequired="true">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/repllocationName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={listing.repl_locationName}"
-                        android:inputType="textPersonName|textCapCharacters"/>
+                        android:inputType="textPersonName|textCapCharacters"
+                        android:text="@={listing.repl_locationName}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/button_change_cluster"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/changecluster"
                     android:background="@drawable/btnd_save"
                     android:enabled="false"
+                    android:text="@string/changecluster"
                     android:textColor="@android:color/background_light"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -305,34 +302,34 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:gravity="start"
-                    android:padding="5dp"
                     android:hint="@string/cluster"
+                    android:padding="5dp"
                     android:text="@string/cluster">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/villcode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={listing.vill_extId}"
-                        android:inputType="textPersonName|textCapCharacters"/>
+                        android:inputType="textPersonName|textCapCharacters"
+                        android:text="@={listing.vill_extId}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:gravity="start"
-                    android:padding="5dp"
                     android:hint="@string/cluster"
-                    android:text="@string/cluster">
+                    android:padding="5dp"
+                    android:text="@string/cluster"
+                    android:visibility="gone">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/cluster_code"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={listing.cluster_id}"
-                        android:inputType="textPersonName|textCapCharacters"/>
+                        android:inputType="textPersonName|textCapCharacters"
+                        android:text="@={listing.cluster_id}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -340,18 +337,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:gravity="start"
-                    android:padding="5dp"
                     android:hint="@string/fieldworker"
+                    android:padding="5dp"
                     android:text="@string/fieldworker">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/fw_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={listing.fw_name}"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:inputType="textPersonName|textCapCharacters"/>
+                        android:inputType="textPersonName|textCapCharacters"
+                        android:text="@={listing.fw_name}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -359,18 +356,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="12dp"
                     android:gravity="start"
-                    android:padding="5dp"
                     android:hint="@string/village"
+                    android:padding="5dp"
                     android:text="@string/village">
 
                     <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/village"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={listing.village}"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:inputType="textPersonName|textCapCharacters"/>
+                        android:inputType="textPersonName|textCapCharacters"
+                        android:text="@={listing.village}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -379,8 +376,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/location_status"/>
+                    android:text="@string/location_status"
+                    android:textColor="@color/black" />
 
 
                 <org.openhds.hdsscapture.SearchableSpinner
@@ -396,22 +393,22 @@
 
 
                 <TextView
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
                     android:padding="5dp"
-                    android:text="@string/form_complete"/>
+                    android:text="@string/form_complete"
+                    android:visibility="gone" />
 
                 <org.openhds.hdsscapture.SearchableSpinner
-                    android:visibility="gone"
                     android:id="@+id/complete"
+                    selection="@{listing.complete}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
-                    selection="@{listing.complete}"
                     android:onItemSelected="@{listing::setComplete}"
-                    android:padding="20dp"/>
+                    android:padding="20dp"
+                    android:visibility="gone" />
 
 
             </LinearLayout>

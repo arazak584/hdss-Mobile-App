@@ -11,6 +11,7 @@ import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Hierarchy;
+import org.openhds.hdsscapture.entity.HierarchyLevel;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Listing;
@@ -54,14 +55,17 @@ public interface ApiDao {
     @GET("/api/settings/parameter")
     Call<DataWrapper<Configsettings>> getConfig(@Header("Authorization") String authorizationHeader);
 
-    @GET("/api/odk/enabled")
-    Call<DataWrapper<Form>> getExtra(@Header("Authorization") String authorizationHeader);
+    @GET("/api/odk")
+    Call<DataWrapper<Form>> getOdk(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/fieldworker")
     Call<DataWrapper<Fieldworker>> getFw(@Header("Authorization") String credentials);
 
     @GET("/api/hierarchy/all")
     Call<DataWrapper<Hierarchy>> getAllHierarchy(@Header("Authorization") String authorizationHeader);
+
+    @GET("/api/hierarchylevel")
+    Call<DataWrapper<HierarchyLevel>> getHierarchyLevel(@Header("Authorization") String authorizationHeader);
 
     //Rejection API
     @GET("/api/inmigration/reject")

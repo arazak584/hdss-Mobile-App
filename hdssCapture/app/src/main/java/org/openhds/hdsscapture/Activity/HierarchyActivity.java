@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,11 +28,13 @@ import org.openhds.hdsscapture.Duplicate.DuplicateActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
+import org.openhds.hdsscapture.Viewmodel.HierarchyLevelViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
 import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
+import org.openhds.hdsscapture.entity.HierarchyLevel;
 import org.openhds.hdsscapture.entity.Round;
 
 import java.util.ArrayList;
@@ -72,6 +75,51 @@ public class HierarchyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_hierarchy);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        HierarchyLevelViewModel hModel = new ViewModelProvider(this).get(HierarchyLevelViewModel.class);
+        List<HierarchyLevel> hierarchyLevels = null;
+
+        try {
+            hierarchyLevels = hModel.retrieve();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+// Find TextView elements by ID
+        TextView l1 = findViewById(R.id.textView3);
+        TextView l2 = findViewById(R.id.textView4);
+        TextView l3 = findViewById(R.id.textView5);
+        TextView l4 = findViewById(R.id.textView6);
+        TextView l5 = findViewById(R.id.textView7);
+        TextView l6 = findViewById(R.id.textView8);
+
+// Iterate over the hierarchyLevels list and set the corresponding TextView text
+        if (hierarchyLevels != null) {
+            for (HierarchyLevel level : hierarchyLevels) {
+                switch (level.getKeyIdentifier()) {
+                    case 1:
+                        l1.setText(level.getName());
+                        break;
+                    case 2:
+                        l2.setText(level.getName());
+                        break;
+                    case 3:
+                        l3.setText(level.getName());
+                        break;
+                    case 4:
+                        l4.setText(level.getName());
+                        break;
+                    case 5:
+                        l5.setText(level.getName());
+                        break;
+                    case 6:
+                        l6.setText(level.getName());
+                        break;
+                }
+            }
+        }
+
+
 
         final Intent f = getIntent();
         final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);

@@ -1,6 +1,5 @@
 package org.openhds.hdsscapture.Activity;
 
-import static org.openhds.hdsscapture.AppConstants.DATA_QUERY;
 import static org.openhds.hdsscapture.AppConstants.DOWNLOAD_DEMO;
 import static org.openhds.hdsscapture.AppConstants.DOWNLOAD_IND;
 import static org.openhds.hdsscapture.AppConstants.DOWNLOAD_SES;
@@ -45,6 +44,7 @@ import org.openhds.hdsscapture.Dialog.ExtraDownloadSummary;
 import org.openhds.hdsscapture.Dialog.IndividualDownloadSummary;
 import org.openhds.hdsscapture.Dialog.OtherDownloadSummary;
 import org.openhds.hdsscapture.Dialog.ProgressDialogFragment;
+import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Repositories.IndividualRepository;
 import org.openhds.hdsscapture.Utilities.SimpleDialog;
@@ -52,10 +52,9 @@ import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.CommunityViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
+import org.openhds.hdsscapture.Viewmodel.HierarchyLevelViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
-import org.openhds.hdsscapture.Viewmodel.OdkViewModel;
 import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
-import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.entity.CodeBook;
 import org.openhds.hdsscapture.entity.CommunityReport;
 import org.openhds.hdsscapture.entity.Configsettings;
@@ -63,6 +62,7 @@ import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Hierarchy;
+import org.openhds.hdsscapture.entity.HierarchyLevel;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Pregnancy;
@@ -71,8 +71,6 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
-import org.openhds.hdsscapture.entity.Visit;
-import org.openhds.hdsscapture.odk.Form;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
 import java.io.File;
@@ -213,7 +211,7 @@ public class PullActivity extends AppCompatActivity {
 
         progres = new ProgressDialog(PullActivity.this);
         progres.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progres.setCancelable(false);
+        progres.setCancelable(true);
 
 
         AppJson api = AppJson.getInstance(this);
@@ -334,7 +332,16 @@ public class PullActivity extends AppCompatActivity {
                                                     CommunityReport[] cm = response.body().getData().toArray(new CommunityReport[0]);
                                                     communityViewModel.add(cm);
 
-                                            //Sync Settings
+                                                    //Sync HierarchyLevel
+                                                    final HierarchyLevelViewModel hieViewModel = new ViewModelProvider(PullActivity.this).get(HierarchyLevelViewModel.class);
+                                                    Call<DataWrapper<HierarchyLevel>> c_callable = dao.getHierarchyLevel(authorizationHeader);
+                                                    c_callable.enqueue(new Callback<DataWrapper<HierarchyLevel>>() {
+                                                        @Override
+                                                        public void onResponse(Call<DataWrapper<HierarchyLevel>> call, Response<DataWrapper<HierarchyLevel>> response) {
+                                                            HierarchyLevel[] hie = response.body().getData().toArray(new HierarchyLevel[0]);
+                                                            hieViewModel.add(hie);
+
+                                                            //Sync Settings
                                             textView_SyncHierarchyData.setText("Updating Settings...");
                                             progres.setTitle("Updating Settings...");
                                             final ConfigViewModel configViewModel = new ViewModelProvider(PullActivity.this).get(ConfigViewModel.class);
@@ -372,6 +379,16 @@ public class PullActivity extends AppCompatActivity {
                                                 }
                                             });
                                         }
+
+                                                        @Override
+                                                        public void onFailure(Call<DataWrapper<HierarchyLevel>> call, Throwable t) {
+                                                            progres.dismiss();
+                                                            progressBar.setProgress(0);
+                                                            textView_SyncHierarchyData.setText("ODK Sync Error!");
+                                                            textView_SyncHierarchyData.setTextColor(Color.RED);
+                                                        }
+                                                    });
+                                                }
 
                                                 @Override
                                                 public void onFailure(Call<DataWrapper<CommunityReport>> call, Throwable t) {
@@ -799,7 +816,9 @@ public class PullActivity extends AppCompatActivity {
                         .addColumn("medicineforpregnancy").addColumn("outcome").addColumn("outcome_date").addColumn("own_bnet")
                         .addColumn("pregnancyNumber").addColumn("recordedDate").addColumn("slp_bednet").addColumn("trt_bednet").addColumn("ttinjection")
                         .addColumn("why_no").addColumn("why_no_other").addColumn("individual_uuid").addColumn("sttime").addColumn("visit_uuid")
-                        .addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate").build();
+                        .addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate")
+                        .addColumn("preg_ready").addColumn("family_plan").addColumn("plan_method").addColumn("plan_method_oth")
+                        .build();
 
                 downloadAndProcessDataset("pregnancy.zip", "pregnancy.csv", () -> dao.downloadPregnancy(authorizationHeader), Pregnancy.class, pregnancySchema, pregnancyCounts, preg, this::downloadRelationship);
 
@@ -1168,7 +1187,12 @@ public class PullActivity extends AppCompatActivity {
                         .addColumn("tricycles_fcorres").addColumn("tricycles_num_fcorres").addColumn("tv_fcorres")
                         .addColumn("tv_num_fcorres").addColumn("uuid").addColumn("wash_fcorres").addColumn("wash_num_fcorres")
                         .addColumn("watch_fcorres").addColumn("watch_num_fcorres")
-                        .addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate").build();
+                        .addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate")
+                        .addColumn("pets").addColumn("dogs").addColumn("guinea_pigs").addColumn("cats").addColumn("fish").addColumn("birds")
+                        .addColumn("rabbits").addColumn("reptiles").addColumn("pet_other").addColumn("pet_other_spfy").addColumn("pet_vac")
+                        .addColumn("id0006").addColumn("id0006_1").addColumn("id0007").addColumn("id0007_1").addColumn("id0008").addColumn("id0008_1").addColumn("id0009").addColumn("id0009_1").addColumn("id0010")
+                        .addColumn("id0010_1").addColumn("id0011").addColumn("id0011_1").addColumn("id0012").addColumn("id0012_1").addColumn("id0014").addColumn("id0014_1").addColumn("id0015").addColumn("id0015_1").addColumn("id0016").addColumn("id0016_1").addColumn("id0017").addColumn("id0017_1").addColumn("id0018").addColumn("id0018_1").addColumn("id0019").addColumn("id0019_1").addColumn("id0013").addColumn("id0013_1").addColumn("id0021")
+                        .build();
 
                 downloadAndProcessDataset("ses.zip", "ses.csv", () -> dao.downloadSes(authorizationHeader), HdssSociodemo.class, sesSchema, sesCounts, ses, this::downloadVac);
 

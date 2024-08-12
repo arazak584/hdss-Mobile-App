@@ -107,6 +107,25 @@ public class Pregnancyoutcome extends BaseObservable {
     public Integer many_ipt;//How many times did you take IPT in front of a nurse during the pregnancy?
 
     @Expose
+    public Integer id1001;//Did you ever breastfeed the child?
+    @Expose
+    public Integer id1002;//How long after delivery did you first put child to the breast?
+    @Expose
+    public Integer id1003;//In the first 2 days after birth was the child given anything other than breastmilk to drink (water, infant formula)
+    @Expose
+    public Integer id1004;//Are you still breastfeeding the child?
+    @Expose
+    public Integer id1005;//What did you feed the child with in the first 6 months of birth?
+    @Expose
+    public Integer id1006;//Do you have plans to have more children?
+    @Expose
+    public Integer id1007;//If YES, how long will you want to wait before becoming pregnant again?
+    @Expose
+    public Integer id1008;//Are you currently using any family planning method to delay or prevent pregnancy?
+    @Expose
+    public Integer id1009;//If Yes/NO, what will be your specific family planning method of preference when finally you decide to use one?
+
+    @Expose
     public Integer stillbirth;
     @Expose
     public Integer father;
@@ -711,6 +730,160 @@ public class Pregnancyoutcome extends BaseObservable {
 
     }
 
+    public void setId1001(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id1001 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id1001 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+
+    }
+
+    public void setId1002(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id1002 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id1002 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+
+    }
+
+    public void setId1003(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id1003 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id1003 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+
+    }
+
+    public void setId1004(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id1004 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id1004 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+
+    }
+
+    public void setId1005(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id1005 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id1005 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+
+    }
+
+    public void setId1006(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id1006 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id1006 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+
+    }
+
+    public void setId1007(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id1007 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id1007 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+
+    }
+
+    public void setId1008(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id1008 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id1008 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+
+    }
+
+    public void setId1009(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id1009 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id1009 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+
+    }
+
+
     //Still Birth
 
     public void setStillbirth(RadioGroup view, int checkedId) {
@@ -802,6 +975,20 @@ public class Pregnancyoutcome extends BaseObservable {
             if(rec_ipt == null || rec_ipt!=1){
                 setFirst_rec(null);
                 setMany_ipt(null);
+            }
+
+            if(id1001== null || id1001!=1){
+                id1002 = null;
+                id1003 = null;
+                id1004 = null;
+            }
+
+            if(id1006== null || id1006!=1){
+                id1007 = null;
+            }
+
+            if(id1008== null || id1008!=1){
+                id1009 = null;
             }
 
             notifyPropertyChanged(BR._all);

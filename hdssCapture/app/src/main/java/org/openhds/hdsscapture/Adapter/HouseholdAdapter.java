@@ -4,6 +4,7 @@ import static androidx.core.content.ContentProviderCompat.requireContext;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -115,29 +116,53 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
         return socialgroupList.size();
     }
 
+//    public void setSelectedLocation(Locations selectedLocation) {
+//        socialgroupList.clear();
+//        if (selectedLocation != null) {
+//
+//            try {
+//                List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(selectedLocation.getCompno());
+//
+//                if (list != null) {
+//                    socialgroupList.addAll(list);
+//                }
+//                if (list.isEmpty()){
+//                    Toast.makeText(activity.getActivity(), "No Active Household In " + selectedLocation.getCompno(), Toast.LENGTH_SHORT).show();
+//                }
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        //activity.hideProgressBar();
+//        notifyDataSetChanged();
+//        //activity.hideProgressBar();
+//    }
+
     public void setSelectedLocation(Locations selectedLocation) {
         socialgroupList.clear();
         if (selectedLocation != null) {
+            activity.showProgressBar(); // Show the ProgressBar
+            new Handler().postDelayed(() -> { // Simulate delay for loading
+                try {
+                    List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(selectedLocation.getCompno());
 
-            try {
-                List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(selectedLocation.getCompno());
-
-                if (list != null) {
-                    socialgroupList.addAll(list);
+                    if (list != null) {
+                        socialgroupList.addAll(list);
+                    }
+                    if (list.isEmpty()){
+                        Toast.makeText(activity.getActivity(), "No Active Household In " + selectedLocation.getCompno(), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    activity.hideProgressBar(); // Hide the ProgressBar
                 }
-                if (list.isEmpty()){
-                    Toast.makeText(activity.getActivity(), "No Active Household In " + selectedLocation.getCompno(), Toast.LENGTH_SHORT).show();
-                }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+                notifyDataSetChanged();
+            }, 100); // You can adjust the delay as needed
         }
-
-        //activity.hideProgressBar();
-        notifyDataSetChanged();
-        //activity.hideProgressBar();
     }
 
 

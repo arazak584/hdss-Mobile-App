@@ -21,6 +21,7 @@ import org.openhds.hdsscapture.Dao.DuplicateDao;
 import org.openhds.hdsscapture.Dao.FieldworkerDao;
 import org.openhds.hdsscapture.Dao.HdssSociodemoDao;
 import org.openhds.hdsscapture.Dao.HierarchyDao;
+import org.openhds.hdsscapture.Dao.HierarchyLevelDao;
 import org.openhds.hdsscapture.Dao.IndividualDao;
 import org.openhds.hdsscapture.Dao.InmigrationDao;
 import org.openhds.hdsscapture.Dao.ListingDao;
@@ -50,6 +51,7 @@ import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Hierarchy;
+import org.openhds.hdsscapture.entity.HierarchyLevel;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Listing;
@@ -75,8 +77,8 @@ import java.util.concurrent.Executors;
         Relationship.class, Locations.class, Residency.class, Pregnancyoutcome.class, Individual.class, Round.class, Demographic.class,
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
         Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class, Duplicate.class,
-        ApiUrl.class, Configsettings.class, Form.class, Vpm.class, CommunityReport.class, Morbidity.class
-        }, version = 2 , exportSchema = true)
+        ApiUrl.class, Configsettings.class, Form.class, Vpm.class, CommunityReport.class, Morbidity.class, HierarchyLevel.class
+        }, version = 3 , exportSchema = true)
 
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -109,6 +111,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract VpmDao vpmDao();
     public abstract CommunityDao communityDao();
     public abstract MorbidityDao morbidityDao();
+    public abstract HierarchyLevelDao hierarchyLevelDao();
 
     //Migrate to another version when a variable is added to and entity.
     // If the version of the database is 2 you upgrade to 3 then set the MIGRATION_2_3 which means version 2 to 3
@@ -117,9 +120,69 @@ public abstract class AppDatabase extends RoomDatabase {
     static final Migration MIGRATION_2_3 = new Migration(2, 3) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN location TEXT");
-            database.execSQL("ALTER TABLE outcome ADD COLUMN location TEXT");
-            //database.execSQL("ALTER TABLE locations ADD COLUMN ord INTEGER DEFAULT 0");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN pets INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN dogs INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN guinea_pigs INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN cats INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN fish INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN birds INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN rabbits INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN reptiles INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN pet_other INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN pet_other_spfy TEXT");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN pet_vac INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0001 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0002 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0003 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0004 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0005 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0006 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0006_1 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0007 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0007_1 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0008 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0008_1 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0009 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0009_1 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0010 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0010_1 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0011 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0011_1 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0012 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0012_1 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0013 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0013_1 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0014 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0014_1 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0015 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0015_1 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0016 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0016_1 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0017 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0017_1 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0018 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0018_1 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0019 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0019_1 INTEGER");
+            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0021 TEXT");
+            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1001 INTEGER");
+            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1002 INTEGER");
+            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1003 INTEGER");
+            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1004 INTEGER");
+            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1005 INTEGER");
+            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1006 INTEGER");
+            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1007 INTEGER");
+            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1008 INTEGER");
+            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1009 INTEGER");
+            database.execSQL("ALTER TABLE pregnancy ADD COLUMN preg_ready INTEGER");
+            database.execSQL("ALTER TABLE pregnancy ADD COLUMN family_plan INTEGER");
+            database.execSQL("ALTER TABLE pregnancy ADD COLUMN plan_method INTEGER");
+            database.execSQL("ALTER TABLE pregnancy ADD COLUMN plan_method_oth TEXT");
+
+            database.execSQL("CREATE TABLE IF NOT EXISTS hierarchylevel (" +
+                    "uuid TEXT NOT NULL PRIMARY KEY, " +
+                    "keyIdentifier INTEGER, " +
+                    "name TEXT)");
         }
     };
 
@@ -127,7 +190,7 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             // Create the new table
-            database.execSQL("CREATE TABLE morbidity (" +
+            database.execSQL("CREATE TABLE IF NOT EXISTS morbidity (" +
                     "individual_uuid TEXT NOT NULL PRIMARY KEY, " +
                     "insertDate INTEGER, " +  // Date stored as INTEGER (timestamp)
                     "complete INTEGER, " +
@@ -182,7 +245,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                 AppDatabase.class, "hdss")
                                 .addCallback(sRoomDatabaseCallback)
-                                .addMigrations(MIGRATION_1_2)
+                                .addMigrations(MIGRATION_1_2,MIGRATION_2_3)
                                 .fallbackToDestructiveMigrationOnDowngrade()
                                 .build();
             }
@@ -230,7 +293,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 vpmDao().deleteAll();
                 communityDao().deleteAll();
                 morbidityDao().deleteAll();
-
+                hierarchyLevelDao().deleteAll();
                 // Perform any other necessary cleanup or initialization
 
                 // Invoke the callback when all entities are reset

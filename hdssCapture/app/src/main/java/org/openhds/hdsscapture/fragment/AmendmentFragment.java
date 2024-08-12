@@ -372,7 +372,7 @@ public class AmendmentFragment extends DialogFragment {
             }
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.AMENDLAYOUT, validateOnComplete, false);
+            boolean hasErrors = new Handler().hasInvalidInput(binding.AMENDLAYOUTS, validateOnComplete, false);
 
             boolean agedif = false;
             boolean modif = false;
@@ -466,9 +466,14 @@ public class AmendmentFragment extends DialogFragment {
                     } else {
                         amend.lastName = finalData.orig_lastName;
                     }
-                    if (!binding.replOtherName.getText().toString().trim().isEmpty()) {
+//                    if (!binding.replOtherName.getText().toString().trim().isEmpty()) {
+//                        amend.otherName = binding.getAmendment().repl_otherName;
+//                    } else {
+//                        amend.otherName = finalData.orig_otherName;
+//                    }
+                    if (binding.getAmendment().yn_otherName!=null & binding.getAmendment().yn_otherName ==1){
                         amend.otherName = binding.getAmendment().repl_otherName;
-                    } else {
+                    }else {
                         amend.otherName = finalData.orig_otherName;
                     }
                     if (!binding.replGhanacard.getText().toString().trim().isEmpty()) {

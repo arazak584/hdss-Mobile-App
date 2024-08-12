@@ -325,6 +325,9 @@ public class PregnancyFragment extends DialogFragment {
         loadCodeData(binding.medicineforpregnancy, "complete");
         loadCodeData(binding.medicineforpregnancy, "complete");
         loadCodeData(binding.extra, "complete");
+        loadCodeData(binding.pregReady, "more_chd");
+        loadCodeData(binding.familyPlan, "complete");
+        loadCodeData(binding.planMethod, "fam_plan_method");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 

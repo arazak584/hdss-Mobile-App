@@ -75,13 +75,14 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/AMEND_LAYOUTS"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:visibility="gone"
-                    android:layout_width="match_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
@@ -659,23 +660,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                goneUnless="@{amendment.yn_otherName==1}"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:padding="5dp"
-                android:hint="@string/replothname"
-                android:text="@string/replothname">
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/repl_otherName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@={amendment.repl_otherName}"
-                    android:inputType="textPersonName|textCapCharacters"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -812,6 +796,31 @@
                 android:padding="15dp"/>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/OTHER_LAYOUT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                goneUnless="@{amendment.yn_otherName==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/replothname"
+                android:text="@string/replothname">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/repl_otherName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={amendment.repl_otherName}"
+                    android:inputType="textPersonName|textCapCharacters"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
 
 
     </LinearLayout>

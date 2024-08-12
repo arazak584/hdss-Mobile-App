@@ -218,7 +218,7 @@ public class PregnancyoutcomeFragment extends Fragment {
         ResidencyViewModel residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         try {
-            Pregnancyoutcome data = viewModel.findloc(HouseMembersFragment.selectedIndividual.uuid,ClusterFragment.selectedLocation.uuid);
+            Pregnancyoutcome data = viewModel.findloc(HouseMembersFragment.selectedIndividual.uuid,ClusterFragment.selectedLocation.compno);
             if (data != null) {
                 binding.setPregoutcome(data);
                 binding.buttonOutcomeConception.setEnabled(false);
@@ -228,6 +228,7 @@ public class PregnancyoutcomeFragment extends Fragment {
                 binding.whoAnc.setEnabled(false);
                 binding.numAnc.setEnabled(false);
                 binding.preguuid.setEnabled(false);
+                data.location = ClusterFragment.selectedLocation.uuid;
 
                 if(data.status!=null && data.status==2){
                     cmt.setVisibility(View.VISIBLE);
@@ -770,6 +771,15 @@ public class PregnancyoutcomeFragment extends Fragment {
         loadCodeData(binding.childFetus3.chdSize, codeBookViewModel, "size");
         loadCodeData(binding.childFetus4.chdWeight, codeBookViewModel, "complete");
         loadCodeData(binding.childFetus4.chdSize, codeBookViewModel, "size");
+        loadCodeData(binding.id1001, codeBookViewModel, "complete");
+        loadCodeData(binding.id1002, codeBookViewModel, "how_lng");
+        loadCodeData(binding.id1003, codeBookViewModel, "complete");
+        loadCodeData(binding.id1004, codeBookViewModel, "complete");
+        loadCodeData(binding.id1005, codeBookViewModel, "feed_chd");
+        loadCodeData(binding.id1006, codeBookViewModel, "more_chd");
+        loadCodeData(binding.id1007, codeBookViewModel, "preg_chd");
+        loadCodeData(binding.id1008, codeBookViewModel, "complete");
+        loadCodeData(binding.id1009, codeBookViewModel, "fam_plan_method");
 
 
         binding.buttonSaveClose.setOnClickListener(v -> {

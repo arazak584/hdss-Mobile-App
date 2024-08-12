@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.Activity.LocationActivity;
 import org.openhds.hdsscapture.Adapter.CommunityAdapter;
@@ -105,7 +107,7 @@ public class CommunityReportFragment extends Fragment {
 
 
 
-        final Button add_community= binding.getRoot().findViewById(R.id.buttonAdd);
+        final FloatingActionButton add_community= binding.getRoot().findViewById(R.id.buttonAdd);
         add_community.setOnClickListener(v -> {
             final CommunityReport communityReport = new CommunityReport();
             CommunityFragment.newInstance()

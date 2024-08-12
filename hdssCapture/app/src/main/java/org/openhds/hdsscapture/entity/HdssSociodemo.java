@@ -425,6 +425,96 @@ public class HdssSociodemo extends BaseObservable {
     public String supervisor;
     @Expose
     public Date approveDate;
+    @Expose
+    public Integer pets;
+    @Expose
+    public Integer dogs;
+    @Expose
+    public Integer guinea_pigs;
+    @Expose
+    public Integer cats;
+    @Expose
+    public Integer fish;
+    @Expose
+    public Integer birds;
+    @Expose
+    public Integer rabbits;
+    @Expose
+    public Integer reptiles;
+    @Expose
+    public Integer pet_other;
+    @Expose
+    public String pet_other_spfy;
+    @Expose
+    public Integer pet_vac;
+    @Expose
+    public Integer id0001;
+    @Expose
+    public Integer id0002;
+    @Expose
+    public Integer id0003;
+    @Expose
+    public Integer id0004;
+    @Expose
+    public Integer id0005;
+    @Expose
+    public Integer id0006;
+    @Expose
+    public Integer id0006_1;
+    @Expose
+    public Integer id0007;
+    @Expose
+    public Integer id0007_1;
+    @Expose
+    public Integer id0008;
+    @Expose
+    public Integer id0008_1;
+    @Expose
+    public Integer  id0009;
+    @Expose
+    public Integer  id0009_1;
+    @Expose
+    public Integer  id0010;
+    @Expose
+    public Integer  id0010_1;
+    @Expose
+    public Integer  id0011;
+    @Expose
+    public Integer  id0011_1;
+    @Expose
+    public Integer  id0012;
+    @Expose
+    public Integer  id0012_1;
+    @Expose
+    public Integer  id0013;
+    @Expose
+    public Integer  id0013_1;
+    @Expose
+    public Integer  id0014;
+    @Expose
+    public Integer  id0014_1;
+    @Expose
+    public Integer  id0015;
+    @Expose
+    public Integer  id0015_1;
+    @Expose
+    public Integer  id0016;
+    @Expose
+    public Integer  id0016_1;
+    @Expose
+    public Integer  id0017;
+    @Expose
+    public Integer  id0017_1;
+    @Expose
+    public Integer  id0018;
+    @Expose
+    public Integer  id0018_1;
+    @Expose
+    public Integer  id0019;
+    @Expose
+    public Integer  id0019_1;
+    @Expose
+    public String  id0021;
 
     public HdssSociodemo() {
     }
@@ -1533,7 +1623,6 @@ public class HdssSociodemo extends BaseObservable {
         if (view.findViewById(checkedId) != null) {
             final String TAG = "" + view.findViewById(checkedId).getTag();
             blender_fcorres = Integer.parseInt(TAG);
-
             patternSkipper(view);
         }
 
@@ -1666,6 +1755,7 @@ public class HdssSociodemo extends BaseObservable {
         if (view.findViewById(checkedId) != null) {
             final String TAG = "" + view.findViewById(checkedId).getTag();
             land_use_fcorres_2 = Integer.parseInt(TAG);
+            patternSkipper(view);
         }
     }
 
@@ -1887,6 +1977,104 @@ public class HdssSociodemo extends BaseObservable {
         }
     }
 
+    public void setPets(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            pets = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setDogs(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            dogs = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setGuinea_pigs(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            guinea_pigs = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setCats(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            cats = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setFish(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            fish = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setBirds(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            birds = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setRabbits(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            rabbits = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setReptiles(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            reptiles = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setPet_other(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            pet_other = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
 
     //SPINNER STARTS HERE
 
@@ -1906,7 +2094,6 @@ public class HdssSociodemo extends BaseObservable {
 
         }
         patternSkipper(view);
-
     }
 
 
@@ -2092,6 +2279,24 @@ public class HdssSociodemo extends BaseObservable {
         } else {
             final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
             roof_fcorres = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+
+        }
+        patternSkipper(view);
+
+    }
+
+    public void setPet_vac(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            pet_vac = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            pet_vac = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
 
@@ -2411,6 +2616,451 @@ public class HdssSociodemo extends BaseObservable {
 
     }
 
+    public void setId0001(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0001 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0001 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0002(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0002 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0002 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0003(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0003 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0003 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0004(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0004 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0004 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0005(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0005 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0005 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0006(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            id0006 = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0006_1(AdapterView<?> parent, View view, int position, long id) {
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0006_1 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0006_1 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0007(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            id0007 = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0007_1(AdapterView<?> parent, View view, int position, long id) {
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0007_1 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0007_1 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0008(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            id0008 = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0008_1(AdapterView<?> parent, View view, int position, long id) {
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0008_1 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0008_1 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0009(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            id0009 = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0009_1(AdapterView<?> parent, View view, int position, long id) {
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0009_1 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0009_1 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0010(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            id0010 = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0010_1(AdapterView<?> parent, View view, int position, long id) {
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0010_1 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0010_1 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0011(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            id0011 = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0011_1(AdapterView<?> parent, View view, int position, long id) {
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0011_1 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0011_1 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0012(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            id0012 = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0012_1(AdapterView<?> parent, View view, int position, long id) {
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0012_1 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0012_1 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0013(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            id0013 = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0013_1(AdapterView<?> parent, View view, int position, long id) {
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0013_1 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0013_1 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0014(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            id0014 = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0014_1(AdapterView<?> parent, View view, int position, long id) {
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0014_1 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0014_1 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0015(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            id0015 = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0015_1(AdapterView<?> parent, View view, int position, long id) {
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0015_1 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0015_1 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0016(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            id0016 = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0016_1(AdapterView<?> parent, View view, int position, long id) {
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0016_1 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0016_1 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0017(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            id0017 = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0017_1(AdapterView<?> parent, View view, int position, long id) {
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0017_1 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0017_1 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0018(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            id0018 = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0018_1(AdapterView<?> parent, View view, int position, long id) {
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0018_1 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0018_1 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0019(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            id0019 = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public void setId0019_1(AdapterView<?> parent, View view, int position, long id) {
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            id0019_1 = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            id0019_1 = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
+        }
+    }
+
+
 
 
     public void setHouse_room_child_fcorres(RadioGroup view, int checkedId) {
@@ -2713,6 +3363,45 @@ public class HdssSociodemo extends BaseObservable {
 
             if (smoke_hhold_oecoccur == null || smoke_hhold_oecoccur != AppConstants.YES)
                 smoke_hhold_in_oecdosfrq = null;
+
+            if (id0001 == null || id0001 == 3)
+                id0002 = null;
+
+            if (id0003 == null || id0003 != AppConstants.YES)
+                id0004 = null;
+
+            if (id0003 == null || id0003 != AppConstants.NO)
+                id0005 = null;
+
+            if(id0006 == null || id0006 != 1)
+                id0006_1 = null;
+            if(id0007 == null || id0007 != 1)
+                id0007_1 = null;
+            if(id0008 == null || id0008 != 1)
+                id0008_1 = null;
+
+            if(id0009 == null || id0009 != 1)
+                id0009_1 = null;
+            if(id0010 == null || id0010 != 1)
+                id0010_1 = null;
+            if(id0011 == null || id0011 != 1)
+                id0011_1 = null;
+            if(id0012 == null || id0012 != 1)
+                id0012_1 = null;
+            if(id0013 == null || id0013 != 1)
+                id0013_1 = null;
+            if(id0014 == null || id0014 != 1)
+                id0014_1 = null;
+            if(id0015 == null || id0015 != 1)
+                id0015_1 = null;
+            if(id0016 == null || id0016 != 1)
+                id0016_1 = null;
+            if(id0017 == null || id0017 != 1)
+                id0017_1 = null;
+            if(id0018 == null || id0018 != 1)
+                id0018_1 = null;
+            if(id0019 == null || id0019 != 1)
+                id0019_1 = null;
 
 
             notifyPropertyChanged(BR._all);

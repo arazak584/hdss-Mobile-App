@@ -155,6 +155,14 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     public String supervisor;
     @Expose
     public Date approveDate;
+    @Expose
+    public Integer preg_ready;//When you got pregnant, did you want to get pregnant at that time?
+    @Expose
+    public Integer family_plan;//Before this pregnancy,  did you ever use any Family Planning method to delay or prevent getting pregnant?
+    @Expose
+    public Integer plan_method;//If YES, which of the following methods of family planning did you use to delay or prevent getting pregnant?
+    @Expose
+    public String plan_method_oth;//Other Method, Specify
 
     public Pregnancy(){}
 
@@ -877,6 +885,54 @@ public class Pregnancy extends BaseObservable implements Parcelable {
         patternSkipper(view);
     }
 
+    public void setPreg_ready(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            preg_ready = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            preg_ready = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+    }
+
+    public void setFamily_plan(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            family_plan = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            family_plan = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+    }
+
+    public void setPlan_method(AdapterView<?> parent, View view, int position, long id) {
+
+        if (position != parent.getSelectedItemPosition()) {
+            parent.setSelection(position);
+        }
+        if (position == 0) {
+            plan_method = AppConstants.NOSELECT;
+        } else {
+            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
+            plan_method = kv.codeValue;
+            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
+            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        }
+        patternSkipper(view);
+    }
+
     private void patternSkipper(View view) {
 
         if (view != null) {
@@ -928,6 +984,11 @@ public class Pregnancy extends BaseObservable implements Parcelable {
 
             if(first_preg != null && first_preg==1){
                 this.pregnancyNumber=AppConstants.COMPLETE;
+            }
+
+            if(family_plan==null || family_plan!=1){
+                plan_method = null;
+                plan_method_oth = null;
             }
 
             notifyPropertyChanged(BR._all);

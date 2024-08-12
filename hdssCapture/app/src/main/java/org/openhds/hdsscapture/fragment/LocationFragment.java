@@ -222,13 +222,13 @@ public class LocationFragment extends DialogFragment {
 
         if(locations.extId==null && locations.compno!=null){
             //binding.getLocations().extId = level6Data.getExtId();
-            binding.getLocations().extId = locations.compextId.substring(0, 3);
+            binding.getLocations().extId = level6Data.getExtId();
         }
-
-        if(locations.extId==null && locations.compno!=null && locations.site==3){
-            //binding.getLocations().extId = level6Data.getExtId();
-            binding.getLocations().extId = locations.compextId.substring(0, 4);
-        }
+//
+//        if(locations.extId==null && locations.compno!=null && locations.site==3){
+//            //binding.getLocations().extId = level6Data.getExtId();
+//            binding.getLocations().extId = level6Data.getExtId();
+//        }
 
         if(locations.vill_extId==null){
             binding.getLocations().vill_extId = level6Data.getParent_uuid();
@@ -403,42 +403,42 @@ public class LocationFragment extends DialogFragment {
                 return;
             }
 
-            boolean loc = false;
-            boolean nhrc = false;
-            boolean dhrc = false;
-
-            if (!binding.locationcluster.getText().toString().trim().isEmpty() && !binding.locationcompno.getText().toString().trim().isEmpty() && binding.site.getSelectedItem() != null) {
-                String vill = binding.locationcluster.getText().toString().trim();
-                String locs = binding.locationcompno.getText().toString().trim();
-                String site = binding.site.getSelectedItem().toString();
-
-                    if (site.equals("KHDSS")) {
-                        Log.d("Location", "Kintampo "+ site);
-                        if (!vill.substring(0, 2).equals(locs.substring(0, 2))) {
-                            Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
-                            binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
-                            loc = true;
-                            return;
-                        }
-                    } else if (site.equals("NHDSS")) {
-                        Log.d("Location", "Navrongo "+ site);
-                        if (!vill.startsWith(locs.substring(0, 3))) {
-                            Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
-                            binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
-                            nhrc = true;
-                            return;
-                        }
-                    } else if (site.equals("DHDSS")) {
-                        Log.d("Location", "Dodowa "+ site);
-                        if (!vill.startsWith(locs.substring(0, 4))) {
-                            Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
-                            binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
-                            dhrc = true;
-                            return;
-                        }
-                    }
-
-            }
+//            boolean loc = false;
+//            boolean nhrc = false;
+//            boolean dhrc = false;
+//
+//            if (!binding.locationcluster.getText().toString().trim().isEmpty() && !binding.locationcompno.getText().toString().trim().isEmpty() && binding.site.getSelectedItem() != null) {
+//                String vill = binding.locationcluster.getText().toString().trim();
+//                String locs = binding.locationcompno.getText().toString().trim();
+//                String site = binding.site.getSelectedItem().toString();
+//
+//                    if (site.equals("KHDSS")) {
+//                        Log.d("Location", "Kintampo "+ site);
+//                        if (!vill.substring(0, 2).equals(locs.substring(0, 2))) {
+//                            Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
+//                            binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
+//                            loc = true;
+//                            return;
+//                        }
+//                    } else if (site.equals("NHDSS")) {
+//                        Log.d("Location", "Navrongo "+ site);
+//                        if (!vill.startsWith(locs.substring(0, 3))) {
+//                            Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
+//                            binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
+//                            nhrc = true;
+//                            return;
+//                        }
+//                    } else if (site.equals("DHDSS")) {
+//                        Log.d("Location", "Dodowa "+ site);
+//                        if (!vill.startsWith(locs.substring(0, 4))) {
+//                            Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
+//                            binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
+//                            dhrc = true;
+//                            return;
+//                        }
+//                    }
+//
+//            }
 
             Date end = new Date(); // Get the current date and time
             // Create a Calendar instance and set it to the current date and time

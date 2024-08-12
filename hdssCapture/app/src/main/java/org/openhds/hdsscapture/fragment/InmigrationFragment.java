@@ -213,6 +213,29 @@ public class InmigrationFragment extends Fragment {
             finalData.complete = 1;
             inmigrationViewModel.add(finalData);
 
+            OutmigrationViewModel omgModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
+            String res = finalData.residency_uuid;
+            try {
+                Outmigration data = omgModel.finds(HouseMembersFragment.selectedIndividual.uuid,res);
+
+                if (data != null) {
+                    OmgUpdate omg = new OmgUpdate();
+
+                    omg.residency_uuid = binding.getInmigration().residency_uuid;
+                    omg.destination = binding.getInmigration().origin;
+                    omg.reason = binding.getInmigration().reason;
+                    omg.reason_oth = binding.getInmigration().reason_oth;
+                    omg.complete = 1;
+                    omg.edit = 1;
+
+                    omgModel.update(omg);
+                }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,

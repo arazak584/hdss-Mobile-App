@@ -81,9 +81,9 @@ public class OutmigrationRepository {
         return future.get();
     }
 
-    public Outmigration finds(String id) throws ExecutionException, InterruptedException {
+    public Outmigration finds(String id,String res) throws ExecutionException, InterruptedException {
 
-        Callable<Outmigration> callable = () -> dao.finds(id);
+        Callable<Outmigration> callable = () -> dao.finds(id,res);
 
         Future<Outmigration> future = Executors.newSingleThreadExecutor().submit(callable);
 
