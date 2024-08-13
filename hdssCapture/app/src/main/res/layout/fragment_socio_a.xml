@@ -17,6 +17,37 @@
         android:padding="10dp"
         android:orientation="vertical">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:hint="@string/household_select"
+            android:text="@string/household_select">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:id="@+id/household"
+                android:text="@={sociodemo.socialgroup_uuid}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <TextView
             android:layout_width="match_parent"
@@ -224,6 +255,40 @@
             android:textSize="20sp"
             android:textColor="@color/black"
             tools:ignore="Autofill,LabelFor" />
+    </LinearLayout>
+    </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/btnd_close"
+                android:textColor="@android:color/background_light"
+                android:text="@string/closedata" />
+
+            <Button
+                android:id="@+id/buttonSaveClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:background="@drawable/btnd_save"
+                android:textColor="@android:color/background_light"
+                android:text="@string/next" />
+
+
+
+        </LinearLayout>
+
+
     </LinearLayout>
 
 </layout>

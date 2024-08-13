@@ -725,7 +725,7 @@ public class PregnancyoutcomeFragment extends Fragment {
             configsettings = configViewModel.findAll();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date dt = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).earliestDate : null;
-            AppCompatEditText editText = binding.getRoot().findViewById(R.id.earliest);
+            TextView editText = binding.getRoot().findViewById(R.id.earliest);
             if (dt != null) {
                 String formattedDate = dateFormat.format(dt);
                 editText.setText(formattedDate);

@@ -350,7 +350,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         ses.setOnClickListener(v -> {
             //final HdssSociodemo hdssSociodemo = new HdssSociodemo();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    SocioFragment.newInstance(individual, locations, socialgroup)).commit();
+                    SocioAFragment.newInstance(individual, locations, socialgroup)).commit();
         });
 
         final AppCompatButton mor = view.findViewById(R.id.morbidity);

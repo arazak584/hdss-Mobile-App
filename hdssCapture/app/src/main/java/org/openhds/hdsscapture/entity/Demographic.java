@@ -454,9 +454,7 @@ public class Demographic extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);
         }
-        if(occupation == null || occupation!=77){
-            setOccupation_oth(null);
-        }
+
     }
 
     //SPINNERS ENTITY Marital
@@ -551,6 +549,9 @@ public class Demographic extends BaseObservable implements Parcelable {
 
             if (religion == null || religion !=1)
                 setDenomination(null);
+
+            if (occupation == null || occupation !=77)
+                setOccupation_oth(null);
 
             notifyPropertyChanged(BR._all);
         }

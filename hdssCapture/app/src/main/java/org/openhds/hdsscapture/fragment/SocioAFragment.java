@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,14 +19,14 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
+import org.openhds.hdsscapture.databinding.FragmentSocioABinding;
+import org.openhds.hdsscapture.databinding.FragmentSocioBBinding;
 import org.openhds.hdsscapture.databinding.FragmentSocioBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.SimpleDateFormat;
@@ -40,12 +39,11 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SocioFragment#newInstance} factory method to
+ * Use the {@link SocioAFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SocioFragment extends Fragment {
+public class SocioAFragment extends Fragment {
 
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String SOCIAL_ID = "SOCIAL_ID";
@@ -55,7 +53,7 @@ public class SocioFragment extends Fragment {
     private Individual individual;
     private FragmentSocioBinding binding;
 
-    public SocioFragment() {
+    public SocioAFragment() {
         // Required empty public constructor
     }
 
@@ -69,8 +67,8 @@ public class SocioFragment extends Fragment {
      * @return A new instance of fragment SocioFragment.
      */
     //
-    public static SocioFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
-        SocioFragment fragment = new SocioFragment();
+    public static SocioAFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
+        SocioAFragment fragment = new SocioAFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(SOCIAL_ID, socialgroup);
@@ -93,17 +91,14 @@ public class SocioFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        //return inflater.inflate(R.layout.fragment_socio_b, container, false);
         binding = FragmentSocioBinding.inflate(inflater, container, false);
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
-        final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
-        final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
-        final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
-
         HdssSociodemoViewModel viewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
-
+        final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
         try {
             HdssSociodemo data = viewModel.findses(socialgroup.uuid);
             if (data != null) {
@@ -111,17 +106,13 @@ public class SocioFragment extends Fragment {
 
                 if(data.status!=null && data.status==2){
                     cmt.setVisibility(View.VISIBLE);
-                    rsv.setVisibility(View.VISIBLE);
-                    rsvd.setVisibility(View.VISIBLE);
                 }else{
                     cmt.setVisibility(View.GONE);
-                    rsv.setVisibility(View.GONE);
-                    rsvd.setVisibility(View.GONE);
                 }
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 binding.getSociodemo().setFormcompldate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-            } else {
+            }else {
                 data = new HdssSociodemo();
 
                 //binding.formcompldate.setVisibility(View.GONE);
@@ -156,49 +147,13 @@ public class SocioFragment extends Fragment {
             e.printStackTrace();
         }
 
-
-//        loadCodeData(binding.MARITALSCORRES, "MARITAL_SCORRES");
-//        loadCodeData(binding.RELIGIONSCORRES, "religion");
-//        loadCodeData(binding.CETHNIC, "tribe");
-//        loadCodeData(binding.HEADHHFCORRES, "rltnhead");
-//        loadCodeData(binding.sociob.H2OFCORRES, "H2O_FCORRES");
-//        loadCodeData(binding.sociob.TOILETFCORRES, "TOILET_FCORRES");
-//        loadCodeData(binding.sociob.TOILETLOCFCORRES, "TOILET_LOC_FCORRES");
-//        loadCodeData(binding.sociob.TOILETSHARENUMFCORRES, "TOILET_SHARE_NUM_FCORRES");
-//        loadCodeData(binding.sociob.EXTWALLFCORRES, "EXT_WALL_FCORRES");
-//        loadCodeData(binding.sociob.FLOORFCORRES, "FLOOR_FCORRES");
-//        loadCodeData(binding.sociob.ROOFFCORRES, "ROOF_FCORRES");
-//        loadCodeData(binding.socioc.MOBILEACCESSFCORRES, "MOBILE_ACCESS_FCORRES");
-//        loadCodeData(binding.socioc.OWNRENTSCORRES, "OWN_RENT_SCORRES");
-//        loadCodeData(binding.socioe.JOBSCORRES, "JOB");
-//        loadCodeData(binding.socioe.PTRSCORRES, "JOB");
-//        loadCodeData(binding.sociof.STOVEFCORRES, "STOVE_FCORRES");
-//        loadCodeData(binding.sociof.COOKINGLOCFCORRES, "COOKING_LOC_FCORRES");
-//        loadCodeData(binding.sociog.SMOKEINOECDOSFRQ, "FRQ");
-//        loadCodeData(binding.sociog.SMOKEHHOLDINOECDOSFRQ, "FRQ");
-//        loadCodeData(binding.socioz.socioComplete, "submit");
-//        loadCodeData(binding.sociod.petVac, "pet_vac");
-////        loadCodeData(binding.id0001, "salt");
-////        loadCodeData(binding.id0002, "ynd");
-//        loadCodeData(binding.id0003, "nhis");
-//        loadCodeData(binding.id0004, "submit");
-//        loadCodeData(binding.id0005, "nhis_no");
-//        loadCodeData(binding.sociod.id00061Option, "crop");
-//        loadCodeData(binding.sociod.id00071Option, "crop");
-//        loadCodeData(binding.sociod.id00081Option, "crop");
-//        loadCodeData(binding.sociod.id00091Option, "crop");
-//        loadCodeData(binding.sociod.id00101Option, "crop");
-//        loadCodeData(binding.sociod.id00111Option, "crop");
-//        loadCodeData(binding.sociod.id00111Option, "crop");
-//        loadCodeData(binding.sociod.id00121Option, "crop");
-//        loadCodeData(binding.sociod.id00131Option, "crop");
-//        loadCodeData(binding.sociod.id00141Option, "crop");
-//        loadCodeData(binding.sociod.id00151Option, "crop");
-//        loadCodeData(binding.sociod.id00161Option, "crop");
-//        loadCodeData(binding.sociod.id00171Option, "crop");
-//        loadCodeData(binding.sociod.id00181Option, "crop");
-//        loadCodeData(binding.sociod.id00191Option, "crop");
-
+        loadCodeData(binding.MARITALSCORRES, "MARITAL_SCORRES");
+        loadCodeData(binding.RELIGIONSCORRES, "religion");
+        loadCodeData(binding.CETHNIC, "tribe");
+        loadCodeData(binding.HEADHHFCORRES, "rltnhead");
+        loadCodeData(binding.id0003, "nhis");
+        loadCodeData(binding.id0004, "submit");
+        loadCodeData(binding.id0005, "nhis_no");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
@@ -215,31 +170,18 @@ public class SocioFragment extends Fragment {
         return view;
     }
 
+
     private void save(boolean save, boolean close, HdssSociodemoViewModel viewModel) {
 
         if (save) {
             final HdssSociodemo data = binding.getSociodemo();
 
-            final Intent i = getActivity().getIntent();
-            final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
-
-                final boolean validateOnComplete = true;//finaldata.mnh01_form_complete == 1;
-                boolean hasErrors = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
-//                hasErrors = hasErrors || new Handler().hasInvalidInput(binding.sociob.MAINLAYOUT, validateOnComplete, false);
-//                hasErrors = hasErrors || new Handler().hasInvalidInput(binding.socioc.MAINLAYOUT, validateOnComplete, false);
-//                hasErrors = hasErrors || new Handler().hasInvalidInput(binding.sociod.MAINLAYOUT, validateOnComplete, false);
-//                hasErrors = hasErrors || new Handler().hasInvalidInput(binding.socioe.MAINLAYOUT, validateOnComplete, false);
-//                hasErrors = hasErrors || new Handler().hasInvalidInput(binding.sociof.MAINLAYOUT, validateOnComplete, false);
-//                hasErrors = hasErrors || new Handler().hasInvalidInput(binding.sociog.MAINLAYOUT, validateOnComplete, false);
-//                hasErrors = hasErrors || new Handler().hasInvalidInput(binding.socioz.MAINLAYOUT, validateOnComplete, false);
-                if (hasErrors) {
-                    Toast.makeText(requireContext(), "All fields are Required", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-            data.formcompldate = new Date();
-            data.complete = 1;
-            data.fw_uuid = fieldworkerData.getFw_uuid();
+            final boolean validateOnComplete = true;
+            boolean hasErrors = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
+            if (hasErrors) {
+                Toast.makeText(requireContext(), "All fields are Required", Toast.LENGTH_LONG).show();
+                return;
+            }
 
             boolean mar = false;
             boolean val = false;
@@ -247,8 +189,8 @@ public class SocioFragment extends Fragment {
                 int totalmth = Integer.parseInt(binding.MARITALAGE.getText().toString().trim());
                 if (totalmth < 10) {
                     mar = true;
-                    binding.MARITALAGE.setError("Maximum Age Allowed is 10");
-                    Toast.makeText(getActivity(), "Maximum Age Allowed is 10", Toast.LENGTH_LONG).show();
+                    binding.MARITALAGE.setError("Minimum Age Allowed is 10");
+                    Toast.makeText(getActivity(), "Minimum Age Allowed is 10", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -264,32 +206,18 @@ public class SocioFragment extends Fragment {
                 }
             }
 
-
-            Date end = new Date(); // Get the current date and time
-            // Create a Calendar instance and set it to the current date and time
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(end);
-            // Extract the hour, minute, and second components
-            int hh = cal.get(Calendar.HOUR_OF_DAY);
-            int mm = cal.get(Calendar.MINUTE);
-            int ss = cal.get(Calendar.SECOND);
-            // Format the components into a string with leading zeros
-            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
-
-            if (data.sttime !=null && data.edtime==null){
-                data.edtime = endtime;
-            }
             viewModel.add(data);
-            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+            //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
         }
-        if (close) {
+        if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseMembersFragment.newInstance(locations, socialgroup, individual)).commit();
+                    SocioBFragment.newInstance(individual,locations, socialgroup)).commit();
+        }else {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    HouseMembersFragment.newInstance(locations, socialgroup,individual)).commit();
         }
-
 
     }
-
 
     private void loadCodeData(Spinner spinner, final String codeFeature) {
         final CodeBookViewModel viewModel = new ViewModelProvider(this).get(CodeBookViewModel.class);

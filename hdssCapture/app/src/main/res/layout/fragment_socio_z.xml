@@ -17,6 +17,50 @@
         android:padding="10dp"
         android:orientation="vertical">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/txt_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:text="@={sociodemo.comment}"
+            android:textColor="@color/purple_700"
+            android:gravity="start"
+            android:justificationMode="inter_word"
+            android:textAlignment="viewStart"
+            android:lineSpacingExtra="2dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:hint="@string/household_select"
+            android:text="@string/household_select">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:id="@+id/household"
+                android:text="@={sociodemo.socialgroup_uuid}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
         <TextView
             android:id="@+id/MNH03_FORM_COMMENTS_YN_PROC"
             android:layout_width="match_parent"
@@ -127,6 +171,37 @@
             android:gravity="left"
             android:textColor="#000301"
             android:padding="15dp"/>
+
+    </LinearLayout>
+    </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/Red"
+                android:textColor="@android:color/background_light"
+                android:text="@string/previous" />
+
+            <Button
+                android:id="@+id/buttonSaveClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/Green"
+                android:textColor="@android:color/background_light"
+                android:text="@string/save" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

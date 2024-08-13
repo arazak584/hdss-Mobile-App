@@ -44,14 +44,14 @@
         <activity
             android:name=".Activity.RejectionsActivity"
             android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
             android:name=".Activity.SupervisorActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.ScheduleActivity"
             android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.Dialog.Alert" />
+            android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert" />
         <activity
             android:name=".Duplicate.DuplicateActivity"
             android:exported="false" />
@@ -79,11 +79,11 @@
             android:name=".Activity.HierarchyActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".Activity.RemainderActivity"
             android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar" />
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
