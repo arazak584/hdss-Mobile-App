@@ -78,7 +78,7 @@ import java.util.concurrent.Executors;
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
         Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class, Duplicate.class,
         ApiUrl.class, Configsettings.class, Form.class, Vpm.class, CommunityReport.class, Morbidity.class, HierarchyLevel.class
-        }, version = 3 , exportSchema = true)
+        }, version = 4 , exportSchema = true)
 
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -186,6 +186,16 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_3_4 = new Migration(3, 4) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE inmigration ADD COLUMN why_ext TEXT");
+            database.execSQL("ALTER TABLE inmigration ADD COLUMN why_int TEXT");
+            database.execSQL("ALTER TABLE inmigration ADD COLUMN how_lng INTEGER");
+
+        }
+    };
+
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
@@ -245,7 +255,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                 AppDatabase.class, "hdss")
                                 .addCallback(sRoomDatabaseCallback)
-                                .addMigrations(MIGRATION_1_2,MIGRATION_2_3)
+                                .addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_3_4)
                                 .fallbackToDestructiveMigrationOnDowngrade()
                                 .build();
             }

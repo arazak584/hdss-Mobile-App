@@ -8,7 +8,9 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
+import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Vaccination;
 
@@ -64,9 +66,11 @@ public interface HdssSociodemoDao {
             " formcompldate >= (SELECT startDate FROM round ORDER BY roundNumber DESC LIMIT 1)")
     long counts(Date startDate, Date endDate, String username);
 
-    @Query("SELECT * FROM locations WHERE insertDate > (SELECT startDate FROM round ORDER BY roundNumber DESC LIMIT 1) order by insertDate DESC")
-    List<Locations> repo();
-
     @Query("SELECT COUNT(*) FROM sociodemo WHERE status=2 AND fw_uuid = :uuid ")
     long rej(String uuid);
+
+    @Query("SELECT a.*,groupName as visit_uuid,b.extId as form_comments_txt,c.compno as id0021 FROM sociodemo as a INNER JOIN socialgroup as b ON a.socialgroup_uuid=b.uuid " +
+            " INNER JOIN locations as c on a.location_uuid=c.uuid " +
+            " where a.form_comments_yn IS NULL GROUP BY a.socialgroup_uuid")
+    List<HdssSociodemo> error();
 }

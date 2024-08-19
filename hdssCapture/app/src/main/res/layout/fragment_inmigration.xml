@@ -10,6 +10,10 @@
             name="inmigration"
             type="org.openhds.hdsscapture.entity.Inmigration" />
 
+        <variable
+            name="res"
+            type="org.openhds.hdsscapture.entity.Residency" />
+
 
         <import type="android.view.View" />
 
@@ -108,7 +112,43 @@
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/earliest"
+                    android:text="@string/earliest">
 
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/earliest"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/edate"
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/preenddate"
+                    android:text="@string/preenddate">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:visibility="gone"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/endDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={res.endDate}"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:visibility="gone"
@@ -120,7 +160,6 @@
                     android:text="@string/migtype"/>
 
                 <Spinner
-                    android:visibility="gone"
                     android:id="@+id/migtype"
                     selection="@{inmigration.migType}"
                     android:layout_width="match_parent"
@@ -185,8 +224,59 @@
                         android:inputType="textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/how_lng"
+                    android:text="@string/how_lng">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/how_lng"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={inmigration.how_lng}"
+                        android:inputType="number"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{inmigration.migType==1 &amp; inmigration.origin==1 || inmigration.origin==2}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textSize="18sp"
+                    android:hint="@string/why_ext"
+                    android:text="@string/why_ext">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/why_ext"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:inputType="textMultiLine"
+                        android:text="@={inmigration.why_ext}"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{inmigration.migType==2 &amp; inmigration.origin>2}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textSize="18sp"
+                    android:hint="@string/why_int"
+                    android:text="@string/why_int">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/why_int"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:inputType="textMultiLine"
+                        android:text="@={inmigration.why_int}"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <Button
-                    android:visibility="gone"
                     android:id="@+id/button_img_imgDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -197,7 +287,6 @@
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -212,7 +301,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={inmigration.recordedDate}"
-                        android:inputType="number"/>
+                        android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout

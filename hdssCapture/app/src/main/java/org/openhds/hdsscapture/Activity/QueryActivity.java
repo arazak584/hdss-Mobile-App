@@ -15,6 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Adapter.ErrorAdapter;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
+import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
+import org.openhds.hdsscapture.entity.HdssSociodemo;
+import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.subqueries.Queries;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
@@ -43,6 +47,8 @@ public class QueryActivity extends AppCompatActivity {
     private OutcomeViewModel outcomeViewModel;
     private ResidencyViewModel residencyViewModel;
     private ListingViewModel listingViewModel;
+    private HdssSociodemoViewModel hdssSociodemoViewModel;
+    private PregnancyoutcomeViewModel pregnancyoutcomeViewModel;
     private ProgressDialog progress;
     private RecyclerView recyclerView;
 
@@ -70,6 +76,8 @@ public class QueryActivity extends AppCompatActivity {
         outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
         residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
+        hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
+        pregnancyoutcomeViewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
 
         Button generateQueryButton = findViewById(R.id.btn_query);
 
@@ -119,33 +127,33 @@ public class QueryActivity extends AppCompatActivity {
             final SimpleDateFormat f = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
             final SimpleDateFormat z = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 
-//            int c=1;
-//            for (Socialgroup e : socialgroupViewModel.error()) {
-//                //String formattedDate = f.format(e.insertDate);
-//                Queries r1 = new Queries();
-//                r1.name = c + ". Household ID: " + e.extId;
-//                r1.extid = "Compno: " + e.visit_uuid + " - Household Head: " + e.groupName;
-//                r1.date = "";
-//                r1.error = "UNK as Respondent";
-//                r1.index = c;
-//
-//                list.add(r1);
-//                c++;
-//            }
+            int c=1;
+            for (Pregnancyoutcome e : pregnancyoutcomeViewModel.error()) {
+                //String formattedDate = f.format(e.insertDate);
+                Queries r1 = new Queries();
+                r1.name = c + ". PerM ID: " + e.pregnancy_uuid;
+                r1.extid = "Compno: " + e.location + " - Name: " + e.mother_uuid + " " + e.father_uuid;
+                r1.date = "";
+                r1.error = "Incomplete Pregnancy Outcome Form";
+                r1.index = c;
 
-//            int n=1;
-//            for (Socialgroup e : socialgroupViewModel.error()) {
-//                //String formattedDate = f.format(e.insertDate);
-//                Queries r1 = new Queries();
-//                r1.name = "Household " ;
-//                r1.extid = "Cluster: " + e.extId + " - Household Head: " + e.groupName;
-//                r1.date = "Household ID" + e.complete;
-//                r1.error = "New Households Created ";
-//                r1.index = n;
-//
-//                list.add(r1);
-//
-//            }
+                list.add(r1);
+                c++;
+            }
+
+            int n=1;
+            for (HdssSociodemo e : hdssSociodemoViewModel.error()) {
+                //String formattedDate = f.format(e.insertDate);
+                Queries r1 = new Queries();
+                r1.name = "Socio-Economic " ;
+                r1.extid = "Compno: " + e.id0021 + " - Household Head: " + e.visit_uuid;
+                r1.date = "Household ID: " + e.form_comments_txt;
+                r1.error = "Incomplete SES Form ";
+                r1.index = n;
+
+                list.add(r1);
+
+            }
 
             int l=1;
             for (Listing e : listingViewModel.error()) {

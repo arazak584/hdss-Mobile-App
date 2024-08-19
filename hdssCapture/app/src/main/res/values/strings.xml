@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name" translatable="false">HDSS Capture</string>
-    <string name="versions">v2024.0.15</string>
+    <string name="app_name" translatable="true">HDSS Capture</string>
+    <string name="versions">v2024.0.16</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>
@@ -787,6 +787,10 @@
     <string name="id0019"><b>Others</b></string>
     <string name="id0021">Specify Others</string>
     <string name="crop_use"> What market do you produce for?</string>
+    <string name="how_lng">How long have you lived here in this compound (in months) before this in-migration?</string>
+    <string name="why_ext">Why External In-migration when the person\'s Origin is within the HDSS Area?</string>
+    <string name="why_int">Why Internal In-migration when the person\'s Origin is outside the HDSS Area?</string>
+    <string name="preenddate">Previous End Date</string>
 
 
 </resources>

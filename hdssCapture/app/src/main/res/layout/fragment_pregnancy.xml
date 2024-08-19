@@ -623,7 +623,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         goneUnless="@{pregnancy.bnet_loc==77}"
-                            android:layout_width="match_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="5dp"

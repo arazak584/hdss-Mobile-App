@@ -5,6 +5,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 
@@ -36,6 +37,10 @@ PregnancyoutcomeDao {
             "where a.mother_uuid=:id and b.compno=:locid ORDER BY outcomeDate ASC LIMIT 1")
     Pregnancyoutcome findloc(String id, String locid);
 
+    @Query("SELECT a.* FROM pregnancyoutcome a INNER JOIN individual b ON a.mother_uuid=b.uuid " +
+            "where a.uuid=:id and b.hohID=:locid")
+    Pregnancyoutcome findedit(String id, String locid);
+
     @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id AND id=2")
     Pregnancyoutcome finds(String id);
 
@@ -45,6 +50,11 @@ PregnancyoutcomeDao {
 
     @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id and extra=1")
     Pregnancyoutcome findout(String id);
+
+    @Query("SELECT a.uuid,b.firstName as visit_uuid,pregnancy_uuid,b.lastName as father_uuid,b.extId as fw_uuid,outcomeDate,a.mother_uuid " +
+            " FROM pregnancyoutcome as a INNER JOIN individual as b ON a.mother_uuid = b.uuid " +
+            " WHERE b.hohID = :id ")
+    List<Pregnancyoutcome> retrieveOutcome(String id);
 
     @Query("SELECT * FROM pregnancyoutcome where uuid=:id")
     Pregnancyoutcome ins(String id);
@@ -61,4 +71,8 @@ PregnancyoutcomeDao {
 
     @Query("SELECT COUNT(*) FROM pregnancyoutcome WHERE status=2 AND fw_uuid = :uuid ")
     long rej(String uuid);
+
+    @Query("SELECT a.uuid,b.extId as pregnancy_uuid,b.compno as location,b.firstName as mother_uuid,b.lastName as father_uuid FROM pregnancyoutcome a " +
+            " INNER JOIN individual as b on a.mother_uuid=b.uuid WHERE a.complete IS NULL ")
+    List<Pregnancyoutcome> error();
 }

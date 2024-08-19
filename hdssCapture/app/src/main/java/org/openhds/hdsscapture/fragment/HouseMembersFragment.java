@@ -2,26 +2,21 @@ package org.openhds.hdsscapture.fragment;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,6 +26,8 @@ import org.openhds.hdsscapture.Adapter.EndEventsAdapter;
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
 import org.openhds.hdsscapture.Dialog.PregnancyDialogFragment;
 import org.openhds.hdsscapture.Duplicate.DupFragment;
+import org.openhds.hdsscapture.OutcomeFragment.BirthExtraFragment;
+import org.openhds.hdsscapture.OutcomeFragment.BirthFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
@@ -52,7 +49,6 @@ import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.databinding.FragmentHouseMembersBinding;
 import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.Configsettings;
-import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
@@ -61,7 +57,6 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Morbidity;
-import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
@@ -70,9 +65,7 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subqueries.EndEvents;
-import org.openhds.hdsscapture.odk.OdkFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -104,6 +97,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private DeathViewModel deathViewModel;
     private OutmigrationViewModel outmigrationViewModel;
     private SocialgroupViewModel viewModel;
+    private  Pregnancy pregnancy;
+    private Pregnancyoutcome pregnancyoutcome;
     public interface IndividualClickListener {
         void onIndividualClick(Individual selectedIndividual);
     }
@@ -290,14 +285,14 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         outcome.setOnClickListener(v -> {
             //final Pregnancyoutcome pregnancyoutcome = new Pregnancyoutcome();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    PregnancyoutcomeFragment.newInstance(individual, locations, socialgroup)).commit();
+                    BirthFragment.newInstance(individual, locations, socialgroup)).commit();
         });
 
         final AppCompatButton outcome2 = view.findViewById(R.id.outcome2);
         outcome2.setOnClickListener(v -> {
             //final Pregnancyoutcome pregnancyoutcome = new Pregnancyoutcome();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    Pregnancyoutcome1Fragment.newInstance(individual, locations, socialgroup)).commit();
+                    BirthExtraFragment.newInstance(individual, locations, socialgroup)).commit();
         });
 
         final AppCompatButton amend = view.findViewById(R.id.amend);
@@ -403,13 +398,22 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                         int itemId = item.getItemId();
                         if (itemId == R.id.dth) {
                             // open DialogFragment DthFragment
-                            DtheditFragment.newInstance(locations, socialgroup, individual)
-                             .show(getChildFragmentManager(), "DtheditFragment");
+                            DthAdapterFragment.newInstance(locations, socialgroup, individual)
+                             .show(getChildFragmentManager(), "DthAdapterFragment");
                         } else if (itemId == R.id.omg) {
                             // open DialogFragment OmgFragment
-                            OmgeditFragment.newInstance(locations, socialgroup, individual)
-                                    .show(getChildFragmentManager(), "OmgeditFragment");
+                            OmgAdapterFragment.newInstance(locations, socialgroup, individual)
+                                    .show(getChildFragmentManager(), "OmgAdapterFragment");
                         }
+//                        else if (itemId == R.id.preg){
+//                            // open DialogFragment OmgFragment
+//                            PregAdapterFragment.newInstance(locations, socialgroup, individual,pregnancy)
+//                                    .show(getChildFragmentManager(), "PregAdapterFragment");
+//                        }else if (itemId == R.id.outcome){
+//                            // open DialogFragment OmgFragment
+//                            OutcomeAdapterFragment.newInstance(locations, socialgroup, individual,pregnancyoutcome)
+//                                    .show(getChildFragmentManager(), "OutcomeAdapterFragment");
+//                        }
                         return true;
                     }
                 });

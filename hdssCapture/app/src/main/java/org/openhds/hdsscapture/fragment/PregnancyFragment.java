@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.OutcomeFragment.BirthFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
@@ -240,6 +241,8 @@ public class PregnancyFragment extends DialogFragment {
                     rsv.setVisibility(View.GONE);
                     rsvd.setVisibility(View.GONE);
                 }
+                data.fw_uuid = fieldworkerData.getFw_uuid();
+                binding.getPregnancy().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             } else {
                 data = new Pregnancy();
 
@@ -622,7 +625,7 @@ public class PregnancyFragment extends DialogFragment {
         }
         if (save && binding.getPregnancy().outcome==1) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    PregnancyoutcomeFragment.newInstance(individual, locations, socialgroup)).commit();
+                    BirthFragment.newInstance(individual, locations, socialgroup)).commit();
         }else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     HouseMembersFragment.newInstance(locations, socialgroup,individual)).commit();

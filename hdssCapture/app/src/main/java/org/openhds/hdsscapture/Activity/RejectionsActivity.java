@@ -500,13 +500,14 @@ public class RejectionsActivity extends AppCompatActivity {
                                                                 if (response.body() != null && response.body().getData() != null) {
                                                                     Pregnancyoutcome[] newPregs = response.body().getData().toArray(new Pregnancyoutcome[0]);
                                                                     for (Pregnancyoutcome newPregnancy : newPregs) {
-                                                                                                                                               // Fetch the existing pregnancy record by ID
+                                                                        // Fetch the existing outcome record by ID
                                                                         Pregnancyoutcome existingPregnancy = pregout.ins(newPregnancy.uuid);
                                                                         if (existingPregnancy != null) {
                                                                             // Preserve location and id fields from the existing record
                                                                             newPregnancy.location = existingPregnancy.location;
                                                                             newPregnancy.id = existingPregnancy.id;
                                                                             newPregnancy.complete = 0;
+                                                                            newPregnancy.extra = existingPregnancy.extra;
                                                                             Log.d("Insertion", "Outcome Location: " + existingPregnancy.location);
                                                                         }
                                                                     }

@@ -3,9 +3,12 @@ package org.openhds.hdsscapture.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +18,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
@@ -28,6 +34,7 @@ import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.databinding.FragmentIndividualBinding;
 import org.openhds.hdsscapture.databinding.FragmentInmigrationBinding;
 import org.openhds.hdsscapture.databinding.FragmentOutmigrationBinding;
+import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
@@ -39,6 +46,7 @@ import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
 import org.openhds.hdsscapture.entity.subentity.OmgUpdate;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
+import org.openhds.hdsscapture.entity.subentity.ResidencyUpdate;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
@@ -62,6 +70,7 @@ public class InmigrationFragment extends Fragment {
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String SOCIAL_ID = "SOCIAL_ID";
+    private final String TAG = "IMG.TAG";
     private Locations locations;
     private Residency residency;
     private Socialgroup socialgroup;
@@ -115,11 +124,47 @@ public class InmigrationFragment extends Fragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
+        //CHOOSING THE DATE
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            if (bundle.containsKey((InmigrationFragment.DATE_BUNDLES.DATE.getBundleKey()))) {
+                final String result = bundle.getString(InmigrationFragment.DATE_BUNDLES.DATE.getBundleKey());
+                binding.imgDate.setText(result);
+            }
+        });
+
+        binding.buttonImgImgDate.setOnClickListener(v -> {
+            if (!TextUtils.isEmpty(binding.imgDate.getText())) {
+                // If Date is not empty, parse the date and use it as the initial date
+                String currentDate = binding.imgDate.getText().toString();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+                try {
+                    Date date = sdf.parse(currentDate);
+                    Calendar selectedDate = Calendar.getInstance();
+                    selectedDate.setTime(date);
+
+                    // Create DatePickerFragment with the parsed date
+                    DialogFragment newFragment = new DatePickerFragment(InmigrationFragment.DATE_BUNDLES.DATE.getBundleKey(), selectedDate);
+                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                final Calendar c = Calendar.getInstance();
+                DialogFragment newFragment = new DatePickerFragment(InmigrationFragment.DATE_BUNDLES.DATE.getBundleKey(), c);
+                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+            }
+        });
+
         InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
+        ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
 
         final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
         final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
         final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
+
+        Spinner mySpinner = binding.getRoot().findViewById(R.id.migtype);
+        mySpinner.setEnabled(false);
 
         try {
             Inmigration dataimg = inmigrationViewModel.find(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
@@ -158,6 +203,39 @@ public class InmigrationFragment extends Fragment {
 
         } catch(ExecutionException | InterruptedException e) {
         e.printStackTrace(); }
+
+        //Get End Date for the last moveout
+        TextInputLayout end = binding.getRoot().findViewById(R.id.edate);
+        AppCompatEditText ends = binding.getRoot().findViewById(R.id.endDate);
+        try {
+            Residency datas = viewModel.finds(HouseMembersFragment.selectedIndividual.uuid);
+            if (datas != null) {
+                binding.setRes(datas);
+                end.setVisibility(View.VISIBLE);
+                ends.setVisibility(View.VISIBLE);
+            }else{
+                end.setVisibility(View.GONE);
+                ends.setVisibility(View.GONE);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //Get Earliest Event Date
+        ConfigViewModel configViewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
+        List<Configsettings> configsettings = null;
+        try {
+            configsettings = configViewModel.findAll();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date dt = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).earliestDate : null;
+            AppCompatEditText editText = binding.getRoot().findViewById(R.id.earliest);
+            if (dt != null) {
+                String formattedDate = dateFormat.format(dt);
+                editText.setText(formattedDate);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
 
         //LOAD SPINNERS
         loadCodeData(binding.reason,  "reason");
@@ -210,9 +288,52 @@ public class InmigrationFragment extends Fragment {
                 }
             }
 
+            try {
+                if (!binding.earliest.getText().toString().trim().isEmpty() && !binding.imgDate.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date stdate = f.parse(binding.earliest.getText().toString().trim());
+                    Date edate = f.parse(binding.imgDate.getText().toString().trim());
+                    Date currentDate = new Date();
+                    if (edate.before(stdate)) {
+                        binding.imgDate.setError("Date of Inmigration Cannot Be Less than Earliest Event Date");
+                        Toast.makeText(getActivity(), "Date of Inmigration  Cannot Be Less than Earliest Event Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (edate.after(currentDate)) {
+                        binding.imgDate.setError("Date of Outmigration Cannot Be Future Date");
+                        Toast.makeText(getActivity(), "Date of Outmigration Cannot Be Future Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.imgDate.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+
+            try {
+                if (!binding.endDate.getText().toString().trim().isEmpty() && !binding.imgDate.getText().toString().trim().isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date stdate = f.parse(binding.endDate.getText().toString().trim());
+                    Date edate = f.parse(binding.imgDate.getText().toString().trim());
+                    if (edate.before(stdate)) {
+                        binding.imgDate.setError("Date of Inmigration Cannot Be Less than Last OMG Date");
+                        Toast.makeText(getActivity(), "Date of Inmigration  Cannot Be Less than Last OMG Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    // clear error if validation passes
+                    binding.imgDate.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+
             finalData.complete = 1;
             inmigrationViewModel.add(finalData);
 
+            //Update Outmigration
             OutmigrationViewModel omgModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
             String res = finalData.residency_uuid;
             try {
@@ -220,15 +341,30 @@ public class InmigrationFragment extends Fragment {
 
                 if (data != null) {
                     OmgUpdate omg = new OmgUpdate();
-
                     omg.residency_uuid = binding.getInmigration().residency_uuid;
                     omg.destination = binding.getInmigration().origin;
                     omg.reason = binding.getInmigration().reason;
                     omg.reason_oth = binding.getInmigration().reason_oth;
                     omg.complete = 1;
                     omg.edit = 1;
-
                     omgModel.update(omg);
+                }
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //Update StartDate For Residency
+            ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+            try {
+                Residency data = resModel.updateres(res);
+                if (data != null) {
+                    ResidencyUpdate item = new ResidencyUpdate();
+                    item.uuid = binding.getInmigration().residency_uuid;
+                    item.startDate = binding.getInmigration().recordedDate;
+                    item.complete = 1;
+                    resModel.update(item);
                 }
             } catch (ExecutionException e) {
                 e.printStackTrace();

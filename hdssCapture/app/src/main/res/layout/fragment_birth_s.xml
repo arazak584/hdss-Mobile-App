@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="death"
+            type="org.openhds.hdsscapture.entity.Vpm" />
+
+        <variable
+            name="pregoutcome"
+            type="org.openhds.hdsscapture.entity.Pregnancyoutcome" />
+
+        <variable
+            name="pregoutcome1"
+            type="org.openhds.hdsscapture.entity.Outcome" />
+
+        <variable
+            name="pregoutcome2"
+            type="org.openhds.hdsscapture.entity.Outcome" />
+
+        <variable
+            name="pregoutcome3"
+            type="org.openhds.hdsscapture.entity.Outcome" />
+
+        <variable
+            name="pregoutcome4"
+            type="org.openhds.hdsscapture.entity.Outcome" />
+
+    </data>
+
+    <LinearLayout
+        android:id="@+id/OUTCOME_LAYOUT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            goneUnless="@{pregoutcome1.type==1 || pregoutcome2.type==1 || pregoutcome3.type==1 || pregoutcome4.type==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="@string/first_nb"/>
+
+        <org.openhds.hdsscapture.SearchableSpinner
+            goneUnless="@{pregoutcome1.type==1 || pregoutcome2.type==1 || pregoutcome3.type==1 || pregoutcome4.type==1}"
+            android:id="@+id/first_nb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:spinnerMode="dialog"
+            selection="@{pregoutcome.first_nb}"
+            android:onItemSelected="@{pregoutcome::setFirst_nb}"
+            android:padding="10dp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            goneUnless="@{pregoutcome.first_nb==2}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:hint="@string/l_birth"
+            android:text="@string/l_birth">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/l_birth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={pregoutcome.l_birth}"
+                android:inputType="number"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:hint="@string/numberOfLiveBirths"
+            android:text="@string/numberOfLiveBirths">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:id="@+id/numberOfLiveBirths"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={pregoutcome.numberOfLiveBirths}"
+                android:inputType="textPersonName"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            goneUnless="@{pregoutcome1.type==1 || pregoutcome2.type==1 || pregoutcome3.type==1 || pregoutcome4.type==1}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/breastfeed" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/id1001"/>
+
+            <org.openhds.hdsscapture.SearchableSpinner
+                android:id="@+id/id1001"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{pregoutcome.id1001}"
+                android:onItemSelected="@{pregoutcome::setId1001}"
+                android:gravity="left"
+                android:spinnerMode="dialog"
+                android:padding="15dp"/>
+
+            <TextView
+                goneUnless="@{pregoutcome.id1001==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/id1002"/>
+
+            <org.openhds.hdsscapture.SearchableSpinner
+                goneUnless="@{pregoutcome.id1001==1}"
+                android:id="@+id/id1002"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{pregoutcome.id1002}"
+                android:onItemSelected="@{pregoutcome::setId1002}"
+                android:gravity="left"
+                android:spinnerMode="dialog"
+                android:padding="15dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/id1003"/>
+
+            <org.openhds.hdsscapture.SearchableSpinner
+                android:id="@+id/id1003"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{pregoutcome.id1003}"
+                android:onItemSelected="@{pregoutcome::setId1003}"
+                android:gravity="left"
+                android:spinnerMode="dialog"
+                android:padding="15dp"/>
+
+            <TextView
+                goneUnless="@{pregoutcome.id1001==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/id1004"/>
+
+            <org.openhds.hdsscapture.SearchableSpinner
+                goneUnless="@{pregoutcome.id1001==1}"
+                android:id="@+id/id1004"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{pregoutcome.id1004}"
+                android:onItemSelected="@{pregoutcome::setId1004}"
+                android:gravity="left"
+                android:spinnerMode="dialog"
+                android:padding="15dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:text="@string/id1005"/>
+
+            <org.openhds.hdsscapture.SearchableSpinner
+                android:id="@+id/id1005"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                selection="@{pregoutcome.id1005}"
+                android:onItemSelected="@{pregoutcome::setId1005}"
+                android:gravity="left"
+                android:spinnerMode="dialog"
+                android:padding="15dp"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/exts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="@string/extras"/>
+
+        <org.openhds.hdsscapture.SearchableSpinner
+            android:id="@+id/extras"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            selection="@{pregoutcome.extra}"
+            android:onItemSelected="@{pregoutcome::setExtra}"
+            android:gravity="left"
+            android:spinnerMode="dialog"
+            android:padding="15dp"/>
+
+        <TextView
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="@string/form_complete"/>
+
+        <org.openhds.hdsscapture.SearchableSpinner
+            android:visibility="gone"
+            android:id="@+id/individual_complete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            selection="@{pregoutcome.complete}"
+            android:onItemSelected="@{pregoutcome::setComplete}"
+            android:gravity="left"
+            android:spinnerMode="dialog"
+            android:padding="15dp"/>
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/resolve"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/Red"
+            android:text="@string/query_reslve" />
+
+        <RadioGroup
+            android:visibility="gone"
+            android:id="@+id/status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onCheckedChanged="@{pregoutcome::setStatus}"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/no_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{pregoutcome.status==3}"
+                android:tag="3"
+                android:text="@string/yes" />
+
+            <RadioButton
+                android:id="@+id/no_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{pregoutcome.status==2}"
+                android:tag="2"
+                android:text="@string/no" />
+
+            <RadioButton
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="@{pregoutcome.status==0}"
+                android:tag="0"/>
+        </RadioGroup>
+
+
+    </LinearLayout>
+    </ScrollView>
+        <LinearLayout
+            android:id="@+id/linearLayout_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/Red"
+                android:textColor="@android:color/background_light"
+                android:text="@string/previous" />
+
+            <Button
+                android:id="@+id/buttonSaveClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/Green"
+                android:textColor="@android:color/background_light"
+                android:text="@string/save" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

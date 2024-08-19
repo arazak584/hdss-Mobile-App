@@ -27,12 +27,19 @@ public class PregnancyoutcomeViewModel extends AndroidViewModel {
         return pregnancyoutcomeRepository.findToSync();
     }
 
+    public List<Pregnancyoutcome> error() throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.error();
+    }
+
     public Pregnancyoutcome find(String id) throws ExecutionException, InterruptedException {
         return pregnancyoutcomeRepository.find(id);
     }
 
     public Pregnancyoutcome findloc(String id,String locid) throws ExecutionException, InterruptedException {
         return pregnancyoutcomeRepository.findloc(id,locid);
+    }
+    public Pregnancyoutcome findedit(String id,String locid) throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.findedit(id,locid);
     }
 
     public Pregnancyoutcome finds(String id) throws ExecutionException, InterruptedException {
@@ -65,6 +72,10 @@ public class PregnancyoutcomeViewModel extends AndroidViewModel {
 
     public List<Pregnancyoutcome> reject(String id) throws ExecutionException, InterruptedException {
         return pregnancyoutcomeRepository.reject(id);
+    }
+
+    public List<Pregnancyoutcome> retrieveOutcome(String id) throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.retrieveOutcome(id);
     }
 
     public void add(Pregnancyoutcome data){ pregnancyoutcomeRepository.create(data);}

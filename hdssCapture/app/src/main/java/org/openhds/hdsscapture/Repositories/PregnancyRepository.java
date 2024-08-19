@@ -4,6 +4,7 @@ import android.app.Application;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.PregnancyDao;
+import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 
@@ -80,6 +81,15 @@ public class PregnancyRepository {
         return future.get();
     }
 
+    public Pregnancy lastpregs(String id,Date recordedDate) throws ExecutionException, InterruptedException {
+
+        Callable<Pregnancy> callable = () -> dao.lastpregs(id,recordedDate);
+
+        Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public Pregnancy lastpreg(String id) throws ExecutionException, InterruptedException {
 
         Callable<Pregnancy> callable = () -> dao.lastpreg(id);
@@ -103,6 +113,15 @@ public class PregnancyRepository {
         Callable<Pregnancy> callable = () -> dao.ins(id);
 
         Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Pregnancy> retrievePreg(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Pregnancy>> callable = () -> dao.retrievePreg(id);
+
+        Future<List<Pregnancy>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }

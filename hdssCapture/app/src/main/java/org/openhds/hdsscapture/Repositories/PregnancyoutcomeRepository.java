@@ -42,6 +42,12 @@ public class PregnancyoutcomeRepository {
         return future.get();
     }
 
+    public List<Pregnancyoutcome> error() throws ExecutionException, InterruptedException {
+        Callable<List<Pregnancyoutcome>> callable = () -> dao.error();
+        Future<List<Pregnancyoutcome>> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
     public Pregnancyoutcome find(String id) throws ExecutionException, InterruptedException {
         Callable<Pregnancyoutcome> callable = () -> dao.find(id);
         Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
@@ -50,6 +56,12 @@ public class PregnancyoutcomeRepository {
 
     public Pregnancyoutcome findloc(String id,String locid) throws ExecutionException, InterruptedException {
         Callable<Pregnancyoutcome> callable = () -> dao.findloc(id,locid);
+        Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    public Pregnancyoutcome findedit(String id,String locid) throws ExecutionException, InterruptedException {
+        Callable<Pregnancyoutcome> callable = () -> dao.findedit(id,locid);
         Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }
@@ -99,6 +111,15 @@ public class PregnancyoutcomeRepository {
     public List<Pregnancyoutcome> reject(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Pregnancyoutcome>> callable = () -> dao.reject(id);
+
+        Future<List<Pregnancyoutcome>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Pregnancyoutcome> retrieveOutcome(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Pregnancyoutcome>> callable = () -> dao.retrieveOutcome(id);
 
         Future<List<Pregnancyoutcome>> future = Executors.newSingleThreadExecutor().submit(callable);
 

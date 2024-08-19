@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.PregnancyRepository;
+import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 
@@ -44,6 +45,10 @@ public class PregnancyViewModel extends AndroidViewModel {
         return pregnancyRepository.out2(id);
     }
 
+    public Pregnancy lastpregs(String id,Date recordedDate) throws ExecutionException, InterruptedException {
+        return pregnancyRepository.lastpregs(id,recordedDate);
+    }
+
     public Pregnancy lastpreg(String id) throws ExecutionException, InterruptedException {
         return pregnancyRepository.lastpreg(id);
     }
@@ -56,6 +61,9 @@ public class PregnancyViewModel extends AndroidViewModel {
         return pregnancyRepository.ins(id);
     }
 
+    public List<Pregnancy> retrievePreg(String id) throws ExecutionException, InterruptedException {
+        return pregnancyRepository.retrievePreg(id);
+    }
     public Pregnancy findss(String id) throws ExecutionException, InterruptedException {
         return pregnancyRepository.findss(id);
     }

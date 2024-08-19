@@ -149,12 +149,16 @@ public class PushActivity extends AppCompatActivity {
                                 Log.e("PUSH.tag", "Has value " + elem.getCompno());
                             }
                             locationViewModel.add(d);
-
-
                             progress.dismiss();
                             buttonSendLocationdata.setText("Sent " + d.length + " record(s)");
                             //textViewSendLocationdata.setTextColor(Color.rgb(0, 114, 133));
                             buttonSendLocationdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendLocationdata.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendLocationdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -175,8 +179,6 @@ public class PushActivity extends AppCompatActivity {
 
 
         //PUSH VISIT DATA
-        //final Button buttonSendVisit = findViewById(R.id.buttonSendVisit);
-        //final TextView textViewSendVisit = findViewById(R.id.textViewSendVisit);
         final VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
 
         //GET MODIFIED DATA
@@ -223,6 +225,12 @@ public class PushActivity extends AppCompatActivity {
                             buttonSendVisit.setText("Sent " + d.length + " record(s)");
                             buttonSendVisit.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
                             //buttonSendVisit.setTextColor(Color.parseColor("#FFFFFFFF"));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendVisit.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendVisit.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -241,25 +249,6 @@ public class PushActivity extends AppCompatActivity {
             }
 
         });
-
-        //PUSH LISTING DATA
-        //final Button buttonSendList = findViewById(R.id.buttonSendList);
-        //final TextView textViewSendList = findViewById(R.id.textViewSendList);
-
-//        try {
-//            List<Listing> data = listingViewModel.error();
-//            if (data != null && !data.isEmpty()) {
-//                buttonSendList.setEnabled(false);
-//                buttonSendVisit.setEnabled(false);
-//                buttonSendList.setText("Unresolved Query");
-//                buttonSendVisit.setText("Unresolved Query");
-//            } else {
-//                buttonSendList.setEnabled(true);
-//                buttonSendVisit.setEnabled(true);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
 
         //GET MODIFIED DATA
         final List<Listing> listingList = new ArrayList<>();
@@ -304,6 +293,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendList.setText("Sent " + d.length + " record(s)");
                             buttonSendList.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendList.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendList.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -354,10 +349,6 @@ public class PushActivity extends AppCompatActivity {
 
                 progress.setMessage("Sending " + data.getData().size() + " record(s)...");
 
-//                for (Individual elem : data.getData()) {
-//                    elem.complete = 0;
-//                }
-
                 final Call<DataWrapper<Individual>> c_callable = dao.sendIndividualdata(authorizationHeader,data);
                 c_callable.enqueue(new Callback<DataWrapper<Individual>>() {
                     @Override
@@ -374,6 +365,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendIndividualdata.setText("Sent " + d.length + " Individual record(s)");
                             buttonSendIndividualdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendIndividualdata.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendIndividualdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -442,6 +439,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendSocialgroupdata.setText("Sent " + d.length + " Socialgroup record(s)");
                             buttonSendSocialgroupdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendSocialgroupdata.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendSocialgroupdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -510,6 +513,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendRelationshipdata.setText("Sent " + d.length + " Relationship record(s)");
                             buttonSendRelationshipdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendRelationshipdata.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendRelationshipdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -577,6 +586,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendPregnancydata.setText("Sent " + d.length + " Pregnancy record(s)");
                             buttonSendPregnancydata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendPregnancydata.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendPregnancydata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -644,6 +659,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendOutcomedata.setText("Sent " + d.length + " Pregnancy Outcome record(s)");
                             buttonSendOutcomedata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendOutcomedata.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendOutcomedata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -710,6 +731,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendOutcomesdata.setText("Sent " + d.length + " Outcome record(s)");
                             buttonSendOutcomesdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendOutcomesdata.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendOutcomesdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -779,6 +806,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendDemographicdata.setText("Sent " + d.length + " Demographic record(s)");
                             buttonSendDemographicdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendDemographicdata.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendDemographicdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -845,6 +878,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttondth.setText("Sent " + d.length + " Death record(s)");
                             buttondth.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttondth.setText("Failed to Send Data: Error "+ response.code());
+                            buttondth.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -913,6 +952,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonvpm.setText("Sent " + d.length + " VPM record(s)");
                             buttonvpm.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonvpm.setText("Failed to Send Data: Error "+ response.code());
+                            buttonvpm.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -979,6 +1024,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendSocio.setText("Sent " + d.length + " record(s)");
                             buttonSendSocio.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendSocio.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendSocio.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -1048,6 +1099,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendRes.setText("Sent " + d.length + " Residency record(s)");
                             buttonSendRes.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendRes.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendRes.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -1115,6 +1172,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendImg.setText("Sent " + d.length + " Inmigration record(s)");
                             buttonSendImg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendImg.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendImg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -1183,6 +1246,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendOmg.setText("Sent " + d.length + " Outmigration record(s)");
                             buttonSendOmg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendOmg.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendOmg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -1253,6 +1322,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendAmend.setText("Sent " + d.length + " Amendment record(s)");
                             buttonSendAmend.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendAmend.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendAmend.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -1322,6 +1397,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendVac.setText("Sent " + d.length + " Vaccination record(s)");
                             buttonSendVac.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendVac.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendVac.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -1389,6 +1470,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendDup.setText("Sent " + d.length + " Duplicate record(s)");
                             buttonSendDup.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendDup.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendDup.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -1457,6 +1544,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendcom.setText("Sent " + d.length + " Community record(s)");
                             buttonSendcom.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendcom.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendcom.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -1526,6 +1619,12 @@ public class PushActivity extends AppCompatActivity {
                             progress.dismiss();
                             buttonSendmor.setText("Sent " + d.length + " Morbidity record(s)");
                             buttonSendmor.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendmor.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendmor.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
                         }
                     }
 

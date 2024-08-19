@@ -13,16 +13,13 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
-import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.fragment.ClusterFragment;
-import org.openhds.hdsscapture.fragment.DeathFragment;
 import org.openhds.hdsscapture.fragment.DthFragment;
-import org.openhds.hdsscapture.fragment.DtheditFragment;
+import org.openhds.hdsscapture.fragment.DthAdapterFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,13 +30,13 @@ import java.util.concurrent.ExecutionException;
 
 public class DthAdapter extends RecyclerView.Adapter<DthAdapter.ViewHolder> {
 
-    DtheditFragment activity;
+    DthAdapterFragment activity;
     LayoutInflater inflater;
     private final Locations locations;
     private final Socialgroup socialgroup;
     private final List<Individual> individualList;
 
-    public DthAdapter(DtheditFragment activity, Locations locations, Socialgroup socialgroup) {
+    public DthAdapter(DthAdapterFragment activity, Locations locations, Socialgroup socialgroup) {
         this.activity = activity;
         this.locations = locations;
         this.socialgroup = socialgroup;

@@ -7,6 +7,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
@@ -43,20 +44,28 @@ public interface PregnancyDao {
     @Query("SELECT * FROM pregnancy WHERE complete=1")
     List<Pregnancy> retrieveToSync();
 
-    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND outcome IS NOT NULL ORDER BY recordedDate ASC LIMIT 1")
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND outcome IS NOT NULL AND (id IS NULL OR id != 2) ORDER BY recordedDate DESC LIMIT 1")
     Pregnancy find(String id);
 
-    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND outcome=1 ORDER BY recordedDate ASC LIMIT 1")
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND outcome=1 ORDER BY recordedDate DESC LIMIT 1")
     Pregnancy out(String id);
 
-    @Query("SELECT * FROM pregnancy where individual_uuid=:id ORDER BY recordedDate ASC LIMIT 1")
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND (id IS NULL OR id != 2) ORDER BY recordedDate DESC LIMIT 1")
     Pregnancy lastpreg(String id);
+
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND recordedDate < :recordedDate ORDER BY recordedDate DESC LIMIT 1")
+    Pregnancy lastpregs(String id, Date recordedDate);
 
     @Query("SELECT * FROM pregnancy where individual_uuid=:id AND id=2")
     Pregnancy finds(String id);
 
     @Query("SELECT * FROM pregnancy where uuid=:id")
     Pregnancy ins(String id);
+
+    @Query("SELECT a.uuid, b.firstName, b.lastName, a.insertDate,b.hohID, b.extId as visit_uuid,a.recordedDate " +
+            " FROM pregnancy as a INNER JOIN individual as b ON a.individual_uuid = b.uuid " +
+            " WHERE a.insertDate >= (SELECT r.startDate from round r ORDER BY r.roundNumber DESC limit 1) AND (a.outcome IS NULL OR a.outcome != 2) AND b.hohID = :id ")
+    List<Pregnancy> retrievePreg(String id);
 
     @Query("SELECT * FROM pregnancy where individual_uuid=:id AND outcome=1 AND id=2")
     Pregnancy out2(String id);

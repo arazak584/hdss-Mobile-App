@@ -51,6 +51,10 @@ public class HdssSociodemoViewModel extends AndroidViewModel {
         return hdssSociodemoRepository.rej(uuid);
     }
 
+    public List<HdssSociodemo> error() throws ExecutionException, InterruptedException {
+        return hdssSociodemoRepository.error();
+    }
+
     public void add(HdssSociodemo s){
         hdssSociodemoRepository.create(s);
     }

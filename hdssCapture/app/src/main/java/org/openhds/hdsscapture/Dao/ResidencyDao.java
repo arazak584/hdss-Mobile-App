@@ -9,8 +9,10 @@ import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Outcome;
+import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
+import org.openhds.hdsscapture.entity.subentity.ResidencyUpdate;
 
 import java.util.Date;
 import java.util.List;
@@ -37,6 +39,9 @@ public interface ResidencyDao {
     @Update(entity = Residency.class)
     int update(ResidencyAmendment s);
 
+    @Update(entity = Residency.class)
+    int update(ResidencyUpdate s);
+
     @Query("DELETE FROM residency")
     void deleteAll();
 
@@ -54,6 +59,9 @@ public interface ResidencyDao {
 
     @Query("SELECT * FROM residency where individual_uuid=:id AND endDate is not null ORDER BY startDate DESC LIMIT 1")
     Residency finds(String id);
+
+    @Query("SELECT * FROM residency WHERE uuid=:id ")
+    Residency updateres(String id);
 
     @Query("SELECT * FROM residency WHERE complete=1")
     List<Residency> retrieveToSync();

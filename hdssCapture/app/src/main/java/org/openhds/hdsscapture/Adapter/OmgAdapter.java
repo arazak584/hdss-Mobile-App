@@ -17,9 +17,8 @@ import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.fragment.DthFragment;
 import org.openhds.hdsscapture.fragment.OmgFragment;
-import org.openhds.hdsscapture.fragment.OmgeditFragment;
+import org.openhds.hdsscapture.fragment.OmgAdapterFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,13 +29,13 @@ import java.util.concurrent.ExecutionException;
 
 public class OmgAdapter extends RecyclerView.Adapter<OmgAdapter.ViewHolder>{
 
-    OmgeditFragment activity;
+    OmgAdapterFragment activity;
     LayoutInflater inflater;
     private final Locations locations;
     private final Socialgroup socialgroup;
     private final List<Individual> individualList;
 
-    public OmgAdapter(OmgeditFragment activity, Locations locations, Socialgroup socialgroup) {
+    public OmgAdapter(OmgAdapterFragment activity, Locations locations, Socialgroup socialgroup) {
         this.activity = activity;
         this.locations = locations;
         this.socialgroup = socialgroup;

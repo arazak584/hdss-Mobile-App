@@ -83,9 +83,7 @@
                                 android:textStyle="bold"
                                 android:text="@={sociodemo.comment}"
                                 android:textColor="@color/purple_700"
-                                android:gravity="start"
-                                android:textAlignment="viewStart"
-                                android:lineSpacingExtra="2dp"/>
+                                android:gravity="start"/>
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:visibility="gone"

@@ -4,5 +4,9 @@
         android:title="Death"/>
     <item android:id="@+id/omg"
         android:title="Outmigration"/>
+<!--    <item android:id="@+id/preg"-->
+<!--        android:title="Pregnancy"/>-->
+<!--    <item android:id="@+id/outcome"-->
+<!--        android:title="Outcome"/>-->
 
 </menu>

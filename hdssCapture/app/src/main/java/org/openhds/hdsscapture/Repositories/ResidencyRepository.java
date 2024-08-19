@@ -7,6 +7,7 @@ import org.openhds.hdsscapture.Dao.ResidencyDao;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
+import org.openhds.hdsscapture.entity.subentity.ResidencyUpdate;
 
 import java.util.Date;
 import java.util.List;
@@ -38,6 +39,12 @@ public class ResidencyRepository {
     }
 
     public int update(ResidencyAmendment s) {
+        AtomicInteger row = new AtomicInteger();
+        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
+        return row.intValue();
+    }
+
+    public int update(ResidencyUpdate s) {
         AtomicInteger row = new AtomicInteger();
         AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
         return row.intValue();
@@ -100,6 +107,15 @@ public class ResidencyRepository {
     public Residency finds(String id) throws ExecutionException, InterruptedException {
 
         Callable<Residency> callable = () -> dao.finds(id);
+
+        Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Residency updateres(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Residency> callable = () -> dao.updateres(id);
 
         Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
 

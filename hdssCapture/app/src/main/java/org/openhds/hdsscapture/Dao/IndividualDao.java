@@ -190,7 +190,6 @@ public interface IndividualDao {
             "WHERE (a.edit IS NULL OR a.edit != 2) AND endType = 3 AND b.compno = :id GROUP BY b.extId")
     List<Individual> retrieveDth(String id);
 
-
     @Query("SELECT b.uuid,b.firstName,b.lastName,a.insertDate,b.hohID socialgroup_uuid,b.extId,location_uuid,residency_uuid" +
             " FROM outmigration as a " +
             "INNER JOIN individual as b on a.individual_uuid=b.uuid " +

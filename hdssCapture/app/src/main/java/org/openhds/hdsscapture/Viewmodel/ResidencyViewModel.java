@@ -9,6 +9,7 @@ import org.openhds.hdsscapture.Repositories.ResidencyRepository;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
+import org.openhds.hdsscapture.entity.subentity.ResidencyUpdate;
 
 import java.util.Date;
 import java.util.List;
@@ -46,6 +47,10 @@ public class ResidencyViewModel extends AndroidViewModel {
 
     public Residency finds(String id) throws ExecutionException, InterruptedException {
         return residencyRepository.finds(id);
+    }
+
+    public Residency updateres(String id) throws ExecutionException, InterruptedException {
+        return residencyRepository.updateres(id);
     }
 
     public List<Residency> findToSync() throws ExecutionException, InterruptedException {
@@ -91,6 +96,10 @@ public class ResidencyViewModel extends AndroidViewModel {
     }
 
     public int update(ResidencyAmendment s){
+        return residencyRepository.update(s);
+    }
+
+    public int update(ResidencyUpdate s){
         return residencyRepository.update(s);
     }
 }

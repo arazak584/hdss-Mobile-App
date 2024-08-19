@@ -85,4 +85,13 @@ public class HdssSociodemoRepository {
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }
+
+    public List<HdssSociodemo> error() throws ExecutionException, InterruptedException {
+
+        Callable<List<HdssSociodemo>> callable = () -> dao.error();
+
+        Future<List<HdssSociodemo>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
 }

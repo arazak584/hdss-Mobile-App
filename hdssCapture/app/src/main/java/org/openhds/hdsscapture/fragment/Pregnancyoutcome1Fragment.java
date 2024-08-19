@@ -782,10 +782,10 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.firstName = "Still";
                 data.lastName = "Birth";
                 data.gender = 3;
-                data.deathDate = binding.getPregoutcome().outcomeDate;
-                data.dob = binding.getPregoutcome().outcomeDate;
+                //data.deathDate = binding.getPregoutcome().outcomeDate;
+                //data.dob = binding.getPregoutcome().outcomeDate;
                 data.compno = ClusterFragment.selectedLocation.getCompno();
-                data.extId = "ST-"+ HouseMembersFragment.selectedIndividual.getExtId();
+                data.extId = "ST2-"+ HouseMembersFragment.selectedIndividual.getExtId();
                 data.compname = ClusterFragment.selectedLocation.getLocationName();
                 data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.villname = level6Data.getName();
@@ -793,6 +793,7 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                 data.respondent = HouseMembersFragment.selectedIndividual.getFirstName() +" "+ HouseMembersFragment.selectedIndividual.getLastName();
                 data.househead = HouseMembersFragment.selectedIndividual.getFirstName() +" "+ HouseMembersFragment.selectedIndividual.getLastName();
                 data.deathCause = 77;
+                data.deathPlace = 1;
                 data.complete=1;
 
                 binding.setDeath(data);
@@ -1644,36 +1645,40 @@ public class Pregnancyoutcome1Fragment extends Fragment {
                         (binding.getPregoutcome3() != null && binding.getPregoutcome3().type != null && binding.getPregoutcome3().type == 2) ||
                         (binding.getPregoutcome4() != null && binding.getPregoutcome4().type != null && binding.getPregoutcome4().type == 2))  {
 
-                    try {
-                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.vpm.dthDob.getText().toString().trim().isEmpty()
-                                && !binding.vpm.dthDeathDate.getText().toString().trim().isEmpty()) {
-                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                            Date stdate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
-                            Date dob = f.parse(binding.vpm.dthDob.getText().toString().trim());
-                            Date edate = f.parse(binding.vpm.dthDeathDate.getText().toString().trim());
-                            if (!edate.equals(stdate)) {
-                                binding.vpm.dthDeathDate.setError("Date of Outcome Not Equal to Date of Birth");
-                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_LONG).show();
-                                return;
-                            }
-                            if (!dob.equals(stdate)) {
-                                binding.vpm.dthDob.setError("Date of Death Not Equal to Date of Birth");
-                                Toast.makeText(getActivity(), "Date of Death Not Equal to Date of Birth", Toast.LENGTH_LONG).show();
-                                return;
-                            }
-                            // clear error if validation passes
-                            binding.vpm.dthDob.setError(null);
-                        }
-                    } catch (ParseException e) {
-                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.vpm.dthDob.getText().toString().trim().isEmpty()
+//                                && !binding.vpm.dthDeathDate.getText().toString().trim().isEmpty()) {
+//                            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                            Date stdate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+//                            Date dob = f.parse(binding.vpm.dthDob.getText().toString().trim());
+//                            Date edate = f.parse(binding.vpm.dthDeathDate.getText().toString().trim());
+//                            if (!edate.equals(stdate)) {
+//                                binding.vpm.dthDeathDate.setError("Date of Outcome Not Equal to Date of Birth");
+//                                Toast.makeText(getActivity(), "Date of Outcome Not Equal to Date of Birth", Toast.LENGTH_LONG).show();
+//                                return;
+//                            }
+//                            if (!dob.equals(stdate)) {
+//                                binding.vpm.dthDob.setError("Date of Death Not Equal to Date of Birth");
+//                                Toast.makeText(getActivity(), "Date of Death Not Equal to Date of Birth", Toast.LENGTH_LONG).show();
+//                                return;
+//                            }
+//                            // clear error if validation passes
+//                            binding.vpm.dthDob.setError(null);
+//                        }
+//                    } catch (ParseException e) {
+//                        Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//                        e.printStackTrace();
+//                    }
 
 
                     hasErrors = hasErrors || new Handler().hasInvalidInput(binding.vpm.OUTCOMELAYOUT, validateOnComplete, false);
 
                     final Vpm vpm = binding.getDeath();
                     vpm.complete = 1;
+                    vpm.deathDate = binding.getPregoutcome().outcomeDate;
+                    vpm.dob = binding.getPregoutcome().outcomeDate;
+                    vpm.extId = "ST2-"+ HouseMembersFragment.selectedIndividual.getExtId();
+                    vpm.deathPlace = 1;
                     vpmViewModel.add(vpm);
 
                 }

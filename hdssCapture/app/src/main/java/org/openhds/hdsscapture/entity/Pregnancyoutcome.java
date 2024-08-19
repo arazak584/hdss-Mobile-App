@@ -1,6 +1,8 @@
 package org.openhds.hdsscapture.entity;
 
 import android.graphics.Color;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.RadioGroup;
@@ -28,7 +30,7 @@ import java.util.Locale;
 
 @Entity(tableName = "pregnancyoutcome",
 indices = {@Index(value = {"mother_uuid", "father_uuid","fw_uuid","complete"}, unique = false)})
-public class Pregnancyoutcome extends BaseObservable {
+public class Pregnancyoutcome extends BaseObservable implements Parcelable {
 
     @SerializedName("uuid")
     @Expose
@@ -529,6 +531,36 @@ public class Pregnancyoutcome extends BaseObservable {
             this.numberOfLiveBirths = (numberOfLiveBirths == null) ? null : Integer.valueOf(numberOfLiveBirths);
         } catch (NumberFormatException e) {
         }
+    }
+
+    protected Pregnancyoutcome(Parcel in) {
+
+        this.insertDate = (java.util.Date) in.readSerializable();
+        this.outcomeDate = (java.util.Date) in.readSerializable();
+
+    }
+
+    public static final Creator<Pregnancyoutcome> CREATOR = new Creator<Pregnancyoutcome>() {
+        @Override
+        public Pregnancyoutcome createFromParcel(Parcel in) {
+            return new Pregnancyoutcome(in);
+        }
+
+        @Override
+        public Pregnancyoutcome[] newArray(int size) {
+            return new Pregnancyoutcome[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeSerializable(this.insertDate);
+        dest.writeSerializable(this.outcomeDate);
     }
 
     //SPINNERS ENTITY

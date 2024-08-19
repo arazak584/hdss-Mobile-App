@@ -9,6 +9,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -101,6 +102,15 @@ public class Inmigration extends BaseObservable implements Parcelable {
 
     @Expose
     public String comment;
+
+    @Expose
+    public String why_ext;
+
+    @Expose
+    public String why_int;
+
+    @Expose
+    public Integer how_lng;
 
     @Expose
     public Integer status = 0;
@@ -207,6 +217,19 @@ public class Inmigration extends BaseObservable implements Parcelable {
 
     public void setResidency_uuid(@NotNull String residency_uuid) {
         this.residency_uuid = residency_uuid;
+    }
+
+    @Bindable
+    public String getHow_lng() {
+        return how_lng == null ? "" : String.valueOf(how_lng);
+    }
+
+    public void setHow_lng(String how_lng) {
+
+        try {
+            this.how_lng = (how_lng == null) ? null : Integer.valueOf(how_lng);
+        } catch (NumberFormatException e) {
+        }
     }
 
     @NotNull
@@ -364,6 +387,22 @@ public class Inmigration extends BaseObservable implements Parcelable {
         this.location_uuid = location_uuid;
     }
 
+    public String getWhy_ext() {
+        return why_ext;
+    }
+
+    public void setWhy_ext(String why_ext) {
+        this.why_ext = why_ext;
+    }
+
+    public String getWhy_int() {
+        return why_int;
+    }
+
+    public void setWhy_int(String why_int) {
+        this.why_int = why_int;
+    }
+
     protected Inmigration(Parcel in) {
         this.uuid = in.readString();
         this.individual_uuid = in.readString();
@@ -458,7 +497,7 @@ public class Inmigration extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }
-
+        patternSkipper(view);
     }
 
     //SPINNERS ENTITY
@@ -475,7 +514,7 @@ public class Inmigration extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }
-
+        patternSkipper(view);
     }
 
     public void setFarm(AdapterView<?> parent, View view, int position, long id) {
@@ -617,6 +656,14 @@ public class Inmigration extends BaseObservable implements Parcelable {
 
             if(livestock_yn == null || livestock_yn!=1)
                 setLivestock(null);
+
+            if (migType != 1 || (origin != 1 && origin != 2)) {
+                setWhy_ext(null);
+            }
+
+            if (migType != 2 || (origin == 1 || origin == 2)) {
+                setWhy_int(null);
+            }
 
 
             notifyPropertyChanged(BR._all);
