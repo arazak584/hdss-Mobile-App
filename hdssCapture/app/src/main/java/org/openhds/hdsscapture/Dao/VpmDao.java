@@ -31,7 +31,7 @@ public interface VpmDao {
     @Query("SELECT * FROM vpm where individual_uuid=:id")
     Vpm find(String id);
 
-    @Query("SELECT * FROM vpm where uuid=:id")
+    @Query("SELECT * FROM vpm where extId=:id")
     Vpm finds(String id);
 
 }

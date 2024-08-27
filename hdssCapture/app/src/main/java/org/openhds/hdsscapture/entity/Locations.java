@@ -216,24 +216,25 @@ public class Locations extends BaseObservable implements Parcelable {
 
     public void setCompno(String compno) {
         this.compno = compno;
-        if (compno == null) this.compno = null;
-        else
+
+        if (compno != null && extId != null) {
             try {
-                //KINTAMPO
-                if (extId != null && compno != null && compno.length() == 6 && site == 1) {
+                // When Village == 3
+                if (extId.length() == 3) {
                     this.compextId = extId + "00" + compno.substring(2, 6);
-                } //NAVRONGO
-                else if (extId != null && compno != null && compno.length() == 6 && site == 2) {
-                    this.compextId = extId + "000" + compno.substring(3, 6);
-                } //DODOWA
-                else if (extId != null && compno != null && compno.length() == 7 && site == 3) {
+                }
+                // When Village == 4
+                else if (extId.length() == 4) {
                     this.compextId = extId + "00" + compno.substring(4, 7);
                 }
-            }catch (NumberFormatException e) {
+            } catch (StringIndexOutOfBoundsException e) {
+                // Handle cases where substring indices are invalid
+                e.printStackTrace();
             }
+        }
         notifyPropertyChanged(BR._all);
-
     }
+
 
     @Bindable
     public String getLocationName() {

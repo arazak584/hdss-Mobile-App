@@ -19,8 +19,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.OutcomeFragment.Birth3Fragment;
 import org.openhds.hdsscapture.OutcomeFragment.BirthExtraFragment;
-import org.openhds.hdsscapture.OutcomeFragment.BirthExtraSFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
@@ -34,11 +34,9 @@ import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Pregnancy;
-import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
-import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -53,10 +51,10 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link PregnancyExtraFragment#newInstance} factory method to
+ * Use the {@link Pregnancy3Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PregnancyExtraFragment extends DialogFragment {
+public class Pregnancy3Fragment extends DialogFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
@@ -72,7 +70,7 @@ public class PregnancyExtraFragment extends DialogFragment {
     private FragmentPregnancyBinding binding;
 
 
-    public PregnancyExtraFragment() {
+    public Pregnancy3Fragment() {
         // Required empty public constructor
     }
 
@@ -86,8 +84,8 @@ public class PregnancyExtraFragment extends DialogFragment {
      * @return A new instance of fragment PregnancyFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PregnancyExtraFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
-        PregnancyExtraFragment fragment = new PregnancyExtraFragment();
+    public static Pregnancy3Fragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
+        Pregnancy3Fragment fragment = new Pregnancy3Fragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(SOCIAL_ID, socialgroup);
@@ -116,30 +114,35 @@ public class PregnancyExtraFragment extends DialogFragment {
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
         ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
 
-
+        final TextView ex = binding.getRoot().findViewById(R.id.ext);
+        final Spinner extra = binding.getRoot().findViewById(R.id.extra);
         final TextView title = binding.getRoot().findViewById(R.id.preg);
-        title.setText("Pregnancy Observation 2");
+
+        title.setText("Pregnancy Observation 3");
+
+        ex.setVisibility(View.GONE);
+        extra.setVisibility(View.GONE);
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             // We use a String here, but any type that can be put in a Bundle is supported
-             if (bundle.containsKey((PregnancyExtraFragment.DATE_BUNDLES.RECORDDATE.getBundleKey()))) {
-                final String result = bundle.getString(PregnancyExtraFragment.DATE_BUNDLES.RECORDDATE.getBundleKey());
+             if (bundle.containsKey((Pregnancy3Fragment.DATE_BUNDLES.RECORDDATE.getBundleKey()))) {
+                final String result = bundle.getString(Pregnancy3Fragment.DATE_BUNDLES.RECORDDATE.getBundleKey());
                 binding.editTextRecordedDate.setText(result);
             }
 
-            if (bundle.containsKey((PregnancyExtraFragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey()))) {
-                final String result = bundle.getString(PregnancyExtraFragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey());
+            if (bundle.containsKey((Pregnancy3Fragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey()))) {
+                final String result = bundle.getString(Pregnancy3Fragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey());
                 binding.editTextOutcomeDate.setText(result);
             }
 
-            if (bundle.containsKey((PregnancyExtraFragment.DATE_BUNDLES.CLINICDATE.getBundleKey()))) {
-                final String result = bundle.getString(PregnancyExtraFragment.DATE_BUNDLES.CLINICDATE.getBundleKey());
+            if (bundle.containsKey((Pregnancy3Fragment.DATE_BUNDLES.CLINICDATE.getBundleKey()))) {
+                final String result = bundle.getString(Pregnancy3Fragment.DATE_BUNDLES.CLINICDATE.getBundleKey());
                 binding.editTextLastClinicVisitDate.setText(result);
             }
 
-            if (bundle.containsKey((PregnancyExtraFragment.DATE_BUNDLES.EXPECTDATE.getBundleKey()))) {
-                final String result = bundle.getString(PregnancyExtraFragment.DATE_BUNDLES.EXPECTDATE.getBundleKey());
+            if (bundle.containsKey((Pregnancy3Fragment.DATE_BUNDLES.EXPECTDATE.getBundleKey()))) {
+                final String result = bundle.getString(Pregnancy3Fragment.DATE_BUNDLES.EXPECTDATE.getBundleKey());
                 binding.expectedDelivery.setText(result);
             }
 
@@ -156,7 +159,7 @@ public class PregnancyExtraFragment extends DialogFragment {
                     selectedDate.setTime(date);
 
                     // Create DatePickerFragment with the parsed date
-                    DialogFragment newFragment = new DatePickerFragment(PregnancyExtraFragment.DATE_BUNDLES.RECORDDATE.getBundleKey(), selectedDate);
+                    DialogFragment newFragment = new DatePickerFragment(Pregnancy3Fragment.DATE_BUNDLES.RECORDDATE.getBundleKey(), selectedDate);
                     newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
 
                 } catch (ParseException e) {
@@ -164,7 +167,7 @@ public class PregnancyExtraFragment extends DialogFragment {
                 }
             } else {
                 final Calendar c = Calendar.getInstance();
-                DialogFragment newFragment = new DatePickerFragment(PregnancyExtraFragment.DATE_BUNDLES.RECORDDATE.getBundleKey(), c);
+                DialogFragment newFragment = new DatePickerFragment(Pregnancy3Fragment.DATE_BUNDLES.RECORDDATE.getBundleKey(), c);
                 newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
             }
         });
@@ -180,7 +183,7 @@ public class PregnancyExtraFragment extends DialogFragment {
                     selectedDate.setTime(date);
 
                     // Create DatePickerFragment with the parsed date
-                    DialogFragment newFragment = new DatePickerFragment(PregnancyExtraFragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey(), selectedDate);
+                    DialogFragment newFragment = new DatePickerFragment(Pregnancy3Fragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey(), selectedDate);
                     newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
 
                 } catch (ParseException e) {
@@ -188,7 +191,7 @@ public class PregnancyExtraFragment extends DialogFragment {
                 }
             } else {
                 final Calendar c = Calendar.getInstance();
-                DialogFragment newFragment = new DatePickerFragment(PregnancyExtraFragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey(), c);
+                DialogFragment newFragment = new DatePickerFragment(Pregnancy3Fragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey(), c);
                 newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
             }
         });
@@ -204,7 +207,7 @@ public class PregnancyExtraFragment extends DialogFragment {
                     selectedDate.setTime(date);
 
                     // Create DatePickerFragment with the parsed date
-                    DialogFragment newFragment = new DatePickerFragment(PregnancyExtraFragment.DATE_BUNDLES.CLINICDATE.getBundleKey(), selectedDate);
+                    DialogFragment newFragment = new DatePickerFragment(Pregnancy3Fragment.DATE_BUNDLES.CLINICDATE.getBundleKey(), selectedDate);
                     newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
 
                 } catch (ParseException e) {
@@ -212,14 +215,14 @@ public class PregnancyExtraFragment extends DialogFragment {
                 }
             } else {
                 final Calendar c = Calendar.getInstance();
-                DialogFragment newFragment = new DatePickerFragment(PregnancyExtraFragment.DATE_BUNDLES.CLINICDATE.getBundleKey(), c);
+                DialogFragment newFragment = new DatePickerFragment(Pregnancy3Fragment.DATE_BUNDLES.CLINICDATE.getBundleKey(), c);
                 newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
             }
         });
 
         binding.buttonPregExpectDate.setOnClickListener(v -> {
             final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(PregnancyExtraFragment.DATE_BUNDLES.EXPECTDATE.getBundleKey(), c);
+            DialogFragment newFragment = new DatePickerFragment(Pregnancy3Fragment.DATE_BUNDLES.EXPECTDATE.getBundleKey(), c);
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
@@ -234,9 +237,10 @@ public class PregnancyExtraFragment extends DialogFragment {
         PregnancyViewModel pviewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
         try {
-            Pregnancy data = viewModel.finds(HouseMembersFragment.selectedIndividual.uuid);
+            Pregnancy data = viewModel.find3(HouseMembersFragment.selectedIndividual.uuid);
             if (data != null) {
                 binding.setPregnancy(data);
+                binding.extra.setEnabled(false);
 
                 if(data.status!=null && data.status==2){
                     cmt.setVisibility(View.VISIBLE);
@@ -281,7 +285,8 @@ public class PregnancyExtraFragment extends DialogFragment {
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
                 data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
-                data.id = 2;
+                data.extra = 2;
+                data.id = 3;
                 data.first_preg = 2;
 
                 Date currentDate = new Date(); // Get the current date and time
@@ -299,6 +304,7 @@ public class PregnancyExtraFragment extends DialogFragment {
                 binding.setPregnancy(data);
                 binding.getPregnancy().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                 binding.firstPreg.setEnabled(false);
+                binding.extra.setEnabled(false);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -474,10 +480,10 @@ public class PregnancyExtraFragment extends DialogFragment {
             boolean pregs = false;
             if (finalData.first_preg == 2 && !binding.pregnancyNumber.getText().toString().trim().isEmpty()) {
                 int totalbirth = Integer.parseInt(binding.pregnancyNumber.getText().toString().trim());
-                if (totalbirth < 2 || totalbirth > 15) {
+                if (totalbirth < 3 || totalbirth > 15) {
                     pregs = true;
-                    binding.pregnancyNumber.setError("Cannot be less than 2");
-                    Toast.makeText(getActivity(), "Total Pregnancies Cannot be less than 2", Toast.LENGTH_LONG).show();
+                    binding.pregnancyNumber.setError("Cannot be less than 3");
+                    Toast.makeText(getActivity(), "Total Pregnancies Cannot be less than 3", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
@@ -637,7 +643,7 @@ public class PregnancyExtraFragment extends DialogFragment {
         }
         if (save && binding.getPregnancy().outcome==1) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    BirthExtraFragment.newInstance(individual,locations, socialgroup)).commit();
+                    Birth3Fragment.newInstance(individual,locations, socialgroup)).commit();
         }else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     HouseMembersFragment.newInstance(locations, socialgroup, individual)).commit();

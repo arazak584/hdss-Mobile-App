@@ -26,6 +26,7 @@ import org.openhds.hdsscapture.Adapter.EndEventsAdapter;
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
 import org.openhds.hdsscapture.Dialog.PregnancyDialogFragment;
 import org.openhds.hdsscapture.Duplicate.DupFragment;
+import org.openhds.hdsscapture.OutcomeFragment.Birth3Fragment;
 import org.openhds.hdsscapture.OutcomeFragment.BirthExtraFragment;
 import org.openhds.hdsscapture.OutcomeFragment.BirthFragment;
 import org.openhds.hdsscapture.R;
@@ -241,6 +242,13 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                     PregnancyExtraFragment.newInstance(individual,locations, socialgroup)).commit();
         });
 
+        final AppCompatButton preg3 = view.findViewById(R.id.pregnancy3);
+        preg3.setOnClickListener(v -> {
+            //final Pregnancy pregnancy = new Pregnancy();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    Pregnancy3Fragment.newInstance(individual,locations, socialgroup)).commit();
+        });
+
 
         final AppCompatButton dup = view.findViewById(R.id.dup);
         dup.setOnClickListener(v -> {
@@ -293,6 +301,13 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             //final Pregnancyoutcome pregnancyoutcome = new Pregnancyoutcome();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     BirthExtraFragment.newInstance(individual, locations, socialgroup)).commit();
+        });
+
+        final AppCompatButton outcome3 = view.findViewById(R.id.outcome3);
+        outcome3.setOnClickListener(v -> {
+            //final Pregnancyoutcome pregnancyoutcome = new Pregnancyoutcome();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    Birth3Fragment.newInstance(individual, locations, socialgroup)).commit();
         });
 
         final AppCompatButton amend = view.findViewById(R.id.amend);
@@ -467,8 +482,10 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             AppCompatButton omg = view.findViewById(R.id.omg);
             AppCompatButton dem = view.findViewById(R.id.demographic);
             AppCompatButton preg2 = view.findViewById(R.id.pregnancy2);
+            AppCompatButton preg3 = view.findViewById(R.id.pregnancy3);
             AppCompatButton outcome = view.findViewById(R.id.outcome);
             AppCompatButton outcome2 = view.findViewById(R.id.outcome2);
+            AppCompatButton outcome3 = view.findViewById(R.id.outcome3);
             AppCompatButton amend = view.findViewById(R.id.amend);
             AppCompatButton rel = view.findViewById(R.id.rel);
             AppCompatButton choh = view.findViewById(R.id.hoh);
@@ -493,6 +510,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             View id14 = view.findViewById(R.id.id14);
             View id15 = view.findViewById(R.id.id15);
             View id16 = view.findViewById(R.id.id16);
+            View id21 = view.findViewById(R.id.id21);
+            View id22 = view.findViewById(R.id.id22);
 
             VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
             try {
@@ -500,13 +519,15 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
                 // Define default texts for each button
                 String TextDup = "Duplicate";
-                String TextPreg = "Pregnancy";
+                String TextPreg = "Pregnancy (1)";
                 String TextDth = "Death";
                 String TextOmg = "Outmigration";
                 String TextDem = "Demographic";
                 String Textpreg2 = "Pregnancy (2)";
-                String TextOutcome = "Pregnancy Outcome";
+                String Textpreg3 = "Pregnancy (3)";
+                String TextOutcome = "Pregnancy Outcome (1)";
                 String TextOutcome2 = "Pregnancy Outcome (2)";
+                String TextOutcome3 = "Pregnancy Outcome (3)";
                 String TextAmend = "Amendment";
                 String TextRel = "Relationship";
                 String TextChoh = "Change Household Head";
@@ -549,6 +570,10 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 setButtonText(relhoh, !isVisitDataNull, TextRelhoh);
                 setButtonEnabled(mor, !isVisitDataNull);
                 setButtonText(mor, !isVisitDataNull, TextMor);
+                setButtonEnabled(preg3, !isVisitDataNull);
+                setButtonText(preg3, !isVisitDataNull, Textpreg3);
+                setButtonEnabled(outcome3, !isVisitDataNull);
+                setButtonText(outcome3, !isVisitDataNull, TextOutcome3);
 
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -630,9 +655,23 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
             }
 
+            try {
+                Pregnancy data = c.find3(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(preg3, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(preg3, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
             PregnancyoutcomeViewModel d = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
             try {
-                Pregnancyoutcome data = d.find(selectedIndividual.uuid);
+                Pregnancyoutcome data = d.find1(selectedIndividual.uuid);
                 if (data != null) {
                     boolean isComplete = data.complete != null && data.complete == 1;
                     boolean isIncomplete = data.complete != null && data.complete == 0;
@@ -653,6 +692,20 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                     changeDupButtonColor(outcome2, isComplete, isIncomplete);
                 } else {
                     changeDupButtonColor(outcome2, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            try {
+                Pregnancyoutcome data = d.finds3(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(outcome3, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(outcome3, false, false);
                 }
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -787,13 +840,28 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             //Extra Pregnancy Outcome
             PregnancyoutcomeViewModel p = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
             try {
-                Pregnancyoutcome data = p.findout(selectedIndividual.uuid);
+                Pregnancy data = c.outcome2(selectedIndividual.uuid);
                 if (data != null && selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2) {
                     outcome2.setVisibility(View.VISIBLE);
                     id8.setVisibility(View.VISIBLE);
                 } else {
                     outcome2.setVisibility(View.GONE);
                     id8.setVisibility(View.GONE);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            //Extra Pregnancy Outcome 3
+            try {
+                Pregnancy data = c.outcome3(selectedIndividual.uuid);
+                if (data != null && selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2) {
+                    outcome3.setVisibility(View.VISIBLE);
+                    id22.setVisibility(View.VISIBLE);
+                } else {
+                    outcome3.setVisibility(View.GONE);
+                    id22.setVisibility(View.GONE);
                 }
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -814,6 +882,21 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             e.printStackTrace();
             Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
         }
+
+            //Extra Pregnancy 3
+            try {
+                Pregnancy data = c.finds3(selectedIndividual.uuid);
+                if (data != null && selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2) {
+                    preg3.setVisibility(View.VISIBLE);
+                    id21.setVisibility(View.VISIBLE);
+                } else {
+                    preg3.setVisibility(View.GONE);
+                    id21.setVisibility(View.GONE);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
 
 
             if (selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2){

@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,10 +56,10 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link BirthExtraFragment#newInstance} factory method to
+ * Use the {@link Birth3Fragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BirthExtraFragment extends Fragment {
+public class Birth3Fragment extends Fragment {
 
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
@@ -73,7 +72,7 @@ public class BirthExtraFragment extends Fragment {
     private FragmentBirthBinding binding;
     private ProgressDialog progressDialog;
 
-    public BirthExtraFragment() {
+    public Birth3Fragment() {
         // Required empty public constructor
     }
 
@@ -87,8 +86,8 @@ public class BirthExtraFragment extends Fragment {
      * @return A new instance of fragment BirthFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BirthExtraFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
-        BirthExtraFragment fragment = new BirthExtraFragment();
+    public static Birth3Fragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
+        Birth3Fragment fragment = new Birth3Fragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(SOCIAL_ID, socialgroup);
@@ -119,9 +118,8 @@ public class BirthExtraFragment extends Fragment {
 
         final Intent intent = getActivity().getIntent();
         final Round roundData = intent.getParcelableExtra(HierarchyActivity.ROUND_DATA);
-
         final TextView title = binding.getRoot().findViewById(R.id.preg);
-        title.setText("Pregnancy Outcome 2");
+        title.setText("Pregnancy Outcome 3");
 
         Button showDialogButtons = binding.getRoot().findViewById(R.id.button_outcome_father);
 
@@ -153,13 +151,13 @@ public class BirthExtraFragment extends Fragment {
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             // We use a String here, but any type that can be put in a Bundle is supported
-            if (bundle.containsKey((BirthExtraFragment.DATE_BUNDLES.RECORDDATE.getBundleKey()))) {
-                final String result = bundle.getString(BirthExtraFragment.DATE_BUNDLES.RECORDDATE.getBundleKey());
+            if (bundle.containsKey((Birth3Fragment.DATE_BUNDLES.RECORDDATE.getBundleKey()))) {
+                final String result = bundle.getString(Birth3Fragment.DATE_BUNDLES.RECORDDATE.getBundleKey());
                 binding.editTextOutcomeDate.setText(result);
             }
 
-            if (bundle.containsKey((BirthExtraFragment.DATE_BUNDLES.CONCEPTION.getBundleKey()))) {
-                final String result = bundle.getString(BirthExtraFragment.DATE_BUNDLES.CONCEPTION.getBundleKey());
+            if (bundle.containsKey((Birth3Fragment.DATE_BUNDLES.CONCEPTION.getBundleKey()))) {
+                final String result = bundle.getString(Birth3Fragment.DATE_BUNDLES.CONCEPTION.getBundleKey());
                 binding.editTextConception.setText(result);
             }
 
@@ -167,13 +165,13 @@ public class BirthExtraFragment extends Fragment {
 
         binding.buttonOutcomeStartDate.setOnClickListener(v -> {
             final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(BirthExtraFragment.DATE_BUNDLES.RECORDDATE.getBundleKey(), c);
+            DialogFragment newFragment = new DatePickerFragment(Birth3Fragment.DATE_BUNDLES.RECORDDATE.getBundleKey(), c);
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
         binding.buttonOutcomeConception.setOnClickListener(v -> {
             final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(BirthExtraFragment.DATE_BUNDLES.CONCEPTION.getBundleKey(), c);
+            DialogFragment newFragment = new DatePickerFragment(Birth3Fragment.DATE_BUNDLES.CONCEPTION.getBundleKey(), c);
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
@@ -188,7 +186,7 @@ public class BirthExtraFragment extends Fragment {
         PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         try {
-            Pregnancyoutcome data = viewModel.findsloc(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.compno);
+            Pregnancyoutcome data = viewModel.find3(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.compno);
             if (data != null) {
                 binding.setPregoutcome(data);
                 binding.buttonOutcomeConception.setEnabled(false);
@@ -206,7 +204,7 @@ public class BirthExtraFragment extends Fragment {
                     cmt.setVisibility(View.GONE);
                 }
 
-                Pregnancy dts = pregnancyViewModel.out2(HouseMembersFragment.selectedIndividual.uuid);
+                Pregnancy dts = pregnancyViewModel.out3(HouseMembersFragment.selectedIndividual.uuid);
                 if (dts != null){
                     data.outcomeDate = dts.outcome_date;
                     data.conceptionDate = dts.recordedDate;
@@ -216,6 +214,7 @@ public class BirthExtraFragment extends Fragment {
                     data.num_anc = dts.anc_visits;
                     data.pregnancy_uuid = dts.uuid;
                 }
+
                 // Fetch the last record before the current one
                 Pregnancyoutcome previousOutcome = viewModel.lastpregs(HouseMembersFragment.selectedIndividual.uuid, data.outcomeDate);
                 if (previousOutcome != null) {
@@ -223,12 +222,10 @@ public class BirthExtraFragment extends Fragment {
                 } else {
                     binding.lastPreg.setVisibility(View.GONE);
                 }
-
-
             } else {
                 data = new Pregnancyoutcome();
 
-                Pregnancy dts = pregnancyViewModel.out2(HouseMembersFragment.selectedIndividual.uuid);
+                Pregnancy dts = pregnancyViewModel.out3(HouseMembersFragment.selectedIndividual.uuid);
                 if (dts != null){
                     data.outcomeDate = dts.outcome_date;
                     data.conceptionDate = dts.recordedDate;
@@ -253,6 +250,15 @@ public class BirthExtraFragment extends Fragment {
                 if (dta != null){
                     data.visit_uuid = dta.uuid;
                 }
+
+                // Fetch the last record before the current one
+                Pregnancyoutcome previousOutcome = viewModel.lastpregs(HouseMembersFragment.selectedIndividual.uuid, data.outcomeDate);
+                if (previousOutcome != null) {
+                    binding.setPreg(previousOutcome);
+                } else {
+                    binding.lastPreg.setVisibility(View.GONE);
+                }
+
                 final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
@@ -261,7 +267,8 @@ public class BirthExtraFragment extends Fragment {
                 data.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 //data.complete = 1;
                 data.location = ClusterFragment.selectedLocation.uuid;
-                data.id = 2;
+                data.extra = 2;
+                data.id = 3;
 
                 Date currentDate = new Date(); // Get the current date and time
                 // Create a Calendar instance and set it to the current date and time
@@ -276,14 +283,6 @@ public class BirthExtraFragment extends Fragment {
                 data.sttime = timeString;
                 binding.buttonOutcomeConception.setEnabled(false);
                 binding.buttonOutcomeStartDate.setEnabled(false);
-
-                // Fetch the last record before the current one
-                Pregnancyoutcome previousOutcome = viewModel.lastpregs(HouseMembersFragment.selectedIndividual.uuid, data.outcomeDate);
-                if (previousOutcome != null) {
-                    binding.setPreg(previousOutcome);
-                } else {
-                    binding.lastPreg.setVisibility(View.GONE);
-                }
 
                 binding.setPregoutcome(data);
                 binding.getPregoutcome().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
@@ -543,7 +542,7 @@ public class BirthExtraFragment extends Fragment {
 
         if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    BirthExtraAFragment.newInstance(individual, locations, socialgroup)).commit();
+                    Birth3AFragment.newInstance(individual, locations, socialgroup)).commit();
         }else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     HouseMembersFragment.newInstance(locations, socialgroup,individual)).commit();

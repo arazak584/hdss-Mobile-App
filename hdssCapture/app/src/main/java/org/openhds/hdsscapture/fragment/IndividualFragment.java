@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,10 +28,9 @@ import org.openhds.hdsscapture.Dialog.MotherDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Calculators;
 import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.UniqueIDGen;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
-import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
-import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
@@ -45,7 +43,6 @@ import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
-import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Residency;
@@ -54,7 +51,6 @@ import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
-import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -314,6 +310,14 @@ public class IndividualFragment extends Fragment {
                 binding.setIndividual(data);
                 binding.individualExtid.setEnabled(false);
 
+                String indid = data.getExtId();
+                if (indid.length() != 12) {
+                    String id = UniqueIDGen.generateUniqueId(individualViewModel, ClusterFragment.selectedLocation.compextId);
+                    binding.getIndividual().extId = id;
+                }else{
+                    data.extId = data.getExtId();
+                }
+
                 if (binding.getIndividual().dob != null) {
                     final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
                     binding.individAge.setText(String.valueOf(estimatedAge));
@@ -372,21 +376,23 @@ public class IndividualFragment extends Fragment {
 
                 // Generate ID if extId is null
                 if (binding.getIndividual().extId == null) {
-                    final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
-                    int sequenceNumber = 1;
-                    String id = ClusterFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
-                    while (true) {
-                        try {
-                            if (individualViewModels.findAll(id) == null) break;
-                        } catch (ExecutionException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } // check if ID already exists in ViewModel
-                        sequenceNumber++; // increment sequence number if ID exists
-                        id = ClusterFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
-                    }
-                    binding.getIndividual().extId = id; // set the generated ID to the extId property of the Individual object
+                    String id = UniqueIDGen.generateUniqueId(individualViewModel, ClusterFragment.selectedLocation.compextId);
+                    binding.getIndividual().extId = id;
+//                    final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
+//                    int sequenceNumber = 1;
+//                    String id = ClusterFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
+//                    while (true) {
+//                        try {
+//                            if (individualViewModels.findAll(id) == null) break;
+//                        } catch (ExecutionException e) {
+//                            e.printStackTrace();
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        } // check if ID already exists in ViewModel
+//                        sequenceNumber++; // increment sequence number if ID exists
+//                        id = ClusterFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
+//                    }
+//                    binding.getIndividual().extId = id; // set the generated ID to the extId property of the Individual object
                 }
             }
 

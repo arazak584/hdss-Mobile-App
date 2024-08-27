@@ -77,6 +77,10 @@ public class HierarchyViewModel extends AndroidViewModel {
         return hierarchyRepository.repo(id);
     }
 
+    public List<Hierarchy> repos(String id) throws ExecutionException, InterruptedException {
+        return hierarchyRepository.repos(id);
+    }
+
     public void add(Hierarchy data){
         hierarchyRepository.create(data);
     }

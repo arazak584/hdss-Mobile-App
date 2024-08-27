@@ -81,6 +81,15 @@ public class PregnancyRepository {
         return future.get();
     }
 
+    public Pregnancy out3(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Pregnancy> callable = () -> dao.out3(id);
+
+        Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public Pregnancy lastpregs(String id,Date recordedDate) throws ExecutionException, InterruptedException {
 
         Callable<Pregnancy> callable = () -> dao.lastpregs(id,recordedDate);
@@ -102,6 +111,14 @@ public class PregnancyRepository {
     public Pregnancy finds(String id) throws ExecutionException, InterruptedException {
 
         Callable<Pregnancy> callable = () -> dao.finds(id);
+
+        Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+    public Pregnancy find3(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Pregnancy> callable = () -> dao.find3(id);
 
         Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
 
@@ -129,6 +146,33 @@ public class PregnancyRepository {
     public Pregnancy findss(String id) throws ExecutionException, InterruptedException {
 
         Callable<Pregnancy> callable = () -> dao.findss(id);
+
+        Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Pregnancy finds3(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Pregnancy> callable = () -> dao.finds3(id);
+
+        Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Pregnancy outcome2(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Pregnancy> callable = () -> dao.outcome2(id);
+
+        Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Pregnancy outcome3(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Pregnancy> callable = () -> dao.outcome3(id);
 
         Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
 

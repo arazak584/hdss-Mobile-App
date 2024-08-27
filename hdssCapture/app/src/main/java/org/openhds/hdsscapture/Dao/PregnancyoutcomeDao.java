@@ -30,11 +30,14 @@ PregnancyoutcomeDao {
     @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id ORDER BY outcomeDate ASC LIMIT 1")
     Pregnancyoutcome find(String id);
 
+    @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id AND (id IS NULL OR (id != 2 AND id != 3)) ORDER BY outcomeDate ASC LIMIT 1")
+    Pregnancyoutcome find1(String id);
+
 //    @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id and location=:locid ORDER BY outcomeDate ASC LIMIT 1")
 //    Pregnancyoutcome findloc(String id, String locid);
 
     @Query("SELECT a.* FROM pregnancyoutcome a INNER JOIN individual b ON a.mother_uuid=b.uuid " +
-            "where a.mother_uuid=:id and b.compno=:locid ORDER BY outcomeDate ASC LIMIT 1")
+            "where a.mother_uuid=:id and b.compno=:locid AND (id IS NULL OR (id != 2 AND id != 3)) ORDER BY outcomeDate ASC LIMIT 1")
     Pregnancyoutcome findloc(String id, String locid);
 
     @Query("SELECT a.* FROM pregnancyoutcome a INNER JOIN individual b ON a.mother_uuid=b.uuid " +
@@ -44,12 +47,25 @@ PregnancyoutcomeDao {
     @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id AND id=2")
     Pregnancyoutcome finds(String id);
 
+    @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id AND id=3")
+    Pregnancyoutcome finds3(String id);
+
     @Query("SELECT a.* FROM pregnancyoutcome a INNER JOIN individual b ON a.mother_uuid=b.uuid " +
             " where a.mother_uuid=:id and b.compno=:locid AND id=2")
     Pregnancyoutcome findsloc(String id, String locid);
 
-    @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id and extra=1")
+    @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id AND outcomeDate < :recordedDate ORDER BY outcomeDate DESC LIMIT 1")
+    Pregnancyoutcome lastpregs(String id, Date recordedDate);
+
+    @Query("SELECT a.* FROM pregnancyoutcome a INNER JOIN individual b ON a.mother_uuid=b.uuid " +
+            " where a.mother_uuid=:id and b.compno=:locid AND id=3")
+    Pregnancyoutcome find3(String id, String locid);
+
+    @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id and extra=1 AND id IS NULL")
     Pregnancyoutcome findout(String id);
+
+    @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id and extra=1 AND id=2")
+    Pregnancyoutcome findout3(String id);
 
     @Query("SELECT a.uuid,b.firstName as visit_uuid,pregnancy_uuid,b.lastName as father_uuid,b.extId as fw_uuid,outcomeDate,a.mother_uuid " +
             " FROM pregnancyoutcome as a INNER JOIN individual as b ON a.mother_uuid = b.uuid " +

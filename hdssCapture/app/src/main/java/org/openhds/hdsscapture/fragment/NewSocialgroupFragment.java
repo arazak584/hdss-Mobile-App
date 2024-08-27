@@ -17,6 +17,7 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Calculators;
 import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.UniqueIDGen;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
@@ -206,22 +207,11 @@ public class NewSocialgroupFragment extends DialogFragment {
 
         // Generate ID if extId is null
         if (binding.getSocialgroup().extId == null) {
-            final SocialgroupViewModel socialgroupViewModels = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-            int sequenceNumber = 1;
-            String id = ClusterFragment.selectedLocation.compextId + String.format("%02d", sequenceNumber); // generate ID with sequence number padded with zeros
-            while (true) {
-                try {
-                    if (socialgroupViewModels.createhse(id) == null) break;
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } // check if ID already exists in ViewModel
-                sequenceNumber++; // increment sequence number if ID exists
-                id = ClusterFragment.selectedLocation.compextId + String.format("%02d", sequenceNumber); // generate new ID with updated sequence number
-            }
-            binding.getSocialgroup().extId = id; // set the generated ID to the extId property of the Individual object
+            final SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+            String id = UniqueIDGen.generateHouseholdId(socialgroupViewModel, ClusterFragment.selectedLocation.compextId);
             binding.getIndividual().hohID = id;
+            binding.getSocialgroup().extId = id;
+
         }
 
 

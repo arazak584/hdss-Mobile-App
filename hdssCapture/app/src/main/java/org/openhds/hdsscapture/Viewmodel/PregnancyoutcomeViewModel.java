@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.PregnancyoutcomeRepository;
 import org.openhds.hdsscapture.entity.Inmigration;
+import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 
 import java.util.Date;
@@ -35,6 +36,9 @@ public class PregnancyoutcomeViewModel extends AndroidViewModel {
         return pregnancyoutcomeRepository.find(id);
     }
 
+    public Pregnancyoutcome find1(String id) throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.find1(id);
+    }
     public Pregnancyoutcome findloc(String id,String locid) throws ExecutionException, InterruptedException {
         return pregnancyoutcomeRepository.findloc(id,locid);
     }
@@ -46,12 +50,27 @@ public class PregnancyoutcomeViewModel extends AndroidViewModel {
         return pregnancyoutcomeRepository.finds(id);
     }
 
+    public Pregnancyoutcome finds3(String id) throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.finds3(id);
+    }
+
     public Pregnancyoutcome findsloc(String id,String locid) throws ExecutionException, InterruptedException {
         return pregnancyoutcomeRepository.findsloc(id,locid);
     }
 
+    public Pregnancyoutcome lastpregs(String id, Date recordedDate) throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.lastpregs(id,recordedDate);
+    }
+    public Pregnancyoutcome find3(String id,String locid) throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.find3(id,locid);
+    }
+
     public Pregnancyoutcome findout(String id) throws ExecutionException, InterruptedException {
         return pregnancyoutcomeRepository.findout(id);
+    }
+
+    public Pregnancyoutcome findout3(String id) throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.findout3(id);
     }
 
     public Pregnancyoutcome ins(String id) throws ExecutionException, InterruptedException {

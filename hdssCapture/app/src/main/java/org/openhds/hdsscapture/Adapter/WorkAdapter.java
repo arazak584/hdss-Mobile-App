@@ -3,6 +3,7 @@ package org.openhds.hdsscapture.Adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,63 +101,70 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull WorkAdapter.ViewHolder holder, int position) {
         final Hierarchy hierarchy = hierarchyList.get(position);
 
-
-//        int itemNumber = position + 1;
-//        holder.title.setText(itemNumber + "");
-
         holder.title.setText(hierarchy.dist);
         holder.id2.setText(hierarchy.subdist);
         holder.id3.setText(hierarchy.village);
 
-        String cps = hierarchy.extId;
-        String cp = hierarchy.town;
-        String hh = hierarchy.area;
-
-        try {
-            int cpsInt = Integer.parseInt(cps);
-            int cpInt = Integer.parseInt(cp);
-            int hhInt = Integer.parseInt(hh);
-
-            if (cpInt > 0 && cpInt < cpsInt && hhInt > 0) {
-                holder.id4.setText(hierarchy.cluster + " (" + cp + ", " + hh + ") " + " IN PROGRESS");
-                holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Blue));
-            } else if (cpsInt == cpInt && hhInt <= 0) {
-                holder.id4.setText(hierarchy.cluster + " (" + cp + ", " + hh + ") " + " DONE");
-                holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_blackgreen_end));
-            } else {
-                holder.id4.setText(hierarchy.cluster + " (" + cp + ", " + hh + ") " + " NOT STARTED");
-                holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Red));
-            }
-        } catch (NumberFormatException e) {
-            // Handle the exception if the string cannot be parsed to an integer
-            e.printStackTrace();
-            // Optionally, you can show an error message or handle it accordingly
-        }
-
+//        String cps = hierarchy.extId;//Visited Compounds
+//        String cp = hierarchy.town;//Total Compounds
+//        String hh = hierarchy.area;//Total Households
 //
 //        try {
-//            // Assuming you have access to the necessary ViewModel instances
-//            long count = locationViewModel.done(hierarchy.uuid);
-//            long counts = listingViewModel.done(hierarchy.parent_uuid);
-//            long hse = locationViewModel.hseCount(hierarchy.parent_uuid);
-//            long rem = count - counts;
+//            int cpsInt = Integer.parseInt(cps);
+//            int cpInt = Integer.parseInt(cp);
+//            int hhInt = Integer.parseInt(hh);
 //
-//            if (counts!=0 & count > counts & hse > 0) {
-//                holder.id4.setText(hierarchy.parent_uuid + " (" + rem + ", " + hse + ") " + " IN PROGRESS");
+//            if (cpInt > 0 && cpInt < cpsInt && hhInt > 0) {
+//                holder.id4.setText(hierarchy.cluster + " (" + cp + ", " + hh + ") " + " IN PROGRESS");
 //                holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Blue));
-//            }else if(count == counts & hse <= 0){
-//                holder.id4.setText(hierarchy.parent_uuid + " (" + rem + ", " + hse + ") " + " DONE");
+//            } else if (cpsInt == cpInt && hhInt <= 0) {
+//                holder.id4.setText(hierarchy.cluster + " (" + cp + ", " + hh + ") " + " DONE");
 //                holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_blackgreen_end));
-//            }else{
-//                holder.id4.setText(hierarchy.parent_uuid + " (" + rem + ", " + hse + ") " + " NOT STARTED");
+//            } else {
+//                holder.id4.setText(hierarchy.cluster + " (" + cp + ", " + hh + ") " + " NOT STARTED");
 //                holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Red));
 //            }
-//
-//        } catch (ExecutionException | InterruptedException e) {
+//        } catch (NumberFormatException e) {
+//            // Handle the exception if the string cannot be parsed to an integer
 //            e.printStackTrace();
-//            // Handle exceptions appropriately, for example, show an error message
-//            Toast.makeText(activity, "Error updating counts", Toast.LENGTH_SHORT).show();
+//            // Optionally, you can show an error message or handle it accordingly
 //        }
+
+        try {
+            // Assuming you have access to the necessary ViewModel instances
+            long count = locationViewModel.done(hierarchy.uuid);
+            long counts = listingViewModel.done(hierarchy.cluster);
+            long hse = locationViewModel.hseCount(hierarchy.cluster);
+            long rem = count - counts;
+
+            String statusText;
+            int color;
+
+            if (counts > 0 && hse > 0) {
+                statusText = hierarchy.cluster + " (" + rem + ", " + hse + ") " + "IN PROGRESS";
+                color = R.color.Blue;
+            } else if (rem == 0 && hse > 0) {
+                statusText = hierarchy.cluster + " (" + rem + ", " + hse + ") " + "IN PROGRESS";
+                color = R.color.Blue;
+            } else if (rem > 0 && hse == 0) {
+                statusText = hierarchy.cluster + " (" + rem + ", " + hse + ") " + "IN PROGRESS";
+                color = R.color.Blue;
+            } else if (rem <= 0 && hse <= 0) {
+                statusText = hierarchy.cluster + " (" + rem + ", " + hse + ") " + "DONE";
+                color = R.color.color_blackgreen_end;
+            } else {
+                statusText = hierarchy.cluster + " (" + rem + ", " + hse + ") " + "NOT STARTED";
+                color = R.color.Red;
+            }
+
+            holder.id4.setText(statusText);
+            holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), color));
+
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            // Handle exceptions appropriately, for example, show an error message
+            Toast.makeText(activity, "Error updating counts", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -172,7 +180,7 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.ViewHolder>{
             charText = charText.toUpperCase(Locale.getDefault());
 
             try {
-                List<Hierarchy> filteredHierarchy = hierarchyViewModel.repo(charText);
+                List<Hierarchy> filteredHierarchy = hierarchyViewModel.repos(charText);
                 hierarchyList.addAll(filteredHierarchy); // Add filtered data to locationsList
 
                 if (filteredHierarchy.isEmpty()) {

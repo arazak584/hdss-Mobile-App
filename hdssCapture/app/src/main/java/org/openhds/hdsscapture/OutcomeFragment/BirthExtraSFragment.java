@@ -116,12 +116,6 @@ public class BirthExtraSFragment extends Fragment {
         final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
         final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
 
-        final TextView ex = binding.getRoot().findViewById(R.id.exts);
-        final Spinner extra = binding.getRoot().findViewById(R.id.extras);
-
-        ex.setVisibility(View.GONE);
-        extra.setVisibility(View.GONE);
-
         PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         OutcomeViewModel outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
         VpmViewModel vpmViewModel = new ViewModelProvider(this).get(VpmViewModel.class);
@@ -129,8 +123,6 @@ public class BirthExtraSFragment extends Fragment {
             Pregnancyoutcome datas = viewModel.findsloc(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.compno);
             if (datas != null) {
                 binding.setPregoutcome(datas);
-                binding.extras.setVisibility(View.GONE);
-                binding.exts.setVisibility(View.GONE);
 
                 if(datas.status!=null && datas.status==2){
                     rsv.setVisibility(View.VISIBLE);
@@ -197,7 +189,8 @@ public class BirthExtraSFragment extends Fragment {
         }
 
         try {
-            Vpm data = vpmViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+            final String child_id = "ST2-"+ HouseMembersFragment.selectedIndividual.extId;
+            Vpm data = vpmViewModel.find(child_id);
             if (data != null) {
                 binding.setDeath(data);
             } else {
@@ -218,7 +211,7 @@ public class BirthExtraSFragment extends Fragment {
                 data.lastName = "Birth";
                 data.gender = 3;
                 data.compno = ClusterFragment.selectedLocation.getCompno();
-                data.extId = "ST-"+ HouseMembersFragment.selectedIndividual.getExtId();
+                data.extId = "ST2-"+ HouseMembersFragment.selectedIndividual.getExtId();
                 data.compname = ClusterFragment.selectedLocation.getLocationName();
                 data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.villname = level6Data.getName();

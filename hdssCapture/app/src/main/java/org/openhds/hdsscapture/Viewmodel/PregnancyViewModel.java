@@ -44,7 +44,9 @@ public class PregnancyViewModel extends AndroidViewModel {
     public Pregnancy out2(String id) throws ExecutionException, InterruptedException {
         return pregnancyRepository.out2(id);
     }
-
+    public Pregnancy out3(String id) throws ExecutionException, InterruptedException {
+        return pregnancyRepository.out3(id);
+    }
     public Pregnancy lastpregs(String id,Date recordedDate) throws ExecutionException, InterruptedException {
         return pregnancyRepository.lastpregs(id,recordedDate);
     }
@@ -56,6 +58,9 @@ public class PregnancyViewModel extends AndroidViewModel {
     public Pregnancy finds(String id) throws ExecutionException, InterruptedException {
         return pregnancyRepository.finds(id);
     }
+    public Pregnancy find3(String id) throws ExecutionException, InterruptedException {
+        return pregnancyRepository.find3(id);
+    }
 
     public Pregnancy ins(String id) throws ExecutionException, InterruptedException {
         return pregnancyRepository.ins(id);
@@ -66,6 +71,18 @@ public class PregnancyViewModel extends AndroidViewModel {
     }
     public Pregnancy findss(String id) throws ExecutionException, InterruptedException {
         return pregnancyRepository.findss(id);
+    }
+
+    public Pregnancy finds3(String id) throws ExecutionException, InterruptedException {
+        return pregnancyRepository.finds3(id);
+    }
+
+    public Pregnancy outcome2(String id) throws ExecutionException, InterruptedException {
+        return pregnancyRepository.outcome2(id);
+    }
+
+    public Pregnancy outcome3(String id) throws ExecutionException, InterruptedException {
+        return pregnancyRepository.outcome3(id);
     }
 
     public Pregnancy findpreg(String id) throws ExecutionException, InterruptedException {

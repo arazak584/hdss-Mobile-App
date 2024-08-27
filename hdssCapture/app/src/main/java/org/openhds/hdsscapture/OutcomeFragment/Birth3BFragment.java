@@ -45,10 +45,10 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link BirthExtraBFragment#newInstance} factory method to
+ * Use the {@link Birth3BFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BirthExtraBFragment extends Fragment {
+public class Birth3BFragment extends Fragment {
 
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
@@ -60,7 +60,7 @@ public class BirthExtraBFragment extends Fragment {
     private Individual individual;
     private FragmentBirthBBinding binding;
 
-    public BirthExtraBFragment() {
+    public Birth3BFragment() {
         // Required empty public constructor
     }
 
@@ -74,8 +74,8 @@ public class BirthExtraBFragment extends Fragment {
      * @return A new instance of fragment BirthAFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BirthExtraBFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
-        BirthExtraBFragment fragment = new BirthExtraBFragment();
+    public static Birth3BFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
+        Birth3BFragment fragment = new Birth3BFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(SOCIAL_ID, socialgroup);
@@ -108,12 +108,12 @@ public class BirthExtraBFragment extends Fragment {
         PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         OutcomeViewModel outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
         try {
-            Pregnancyoutcome datas = viewModel.findsloc(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.compno);
+            Pregnancyoutcome datas = viewModel.find3(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.compno);
             if (datas != null) {
                 binding.setPregoutcome(datas);
 
                 try {
-                    final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD6 + 0 + roundData.roundNumber;
+                    final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD10 + 0 + roundData.roundNumber;
                     Outcome data = outcomeViewModel.find(child_id,ClusterFragment.selectedLocation.uuid);
                     if (data != null) {
                         data.preg_uuid = binding.getPregoutcome().getUuid();
@@ -162,7 +162,7 @@ public class BirthExtraBFragment extends Fragment {
                         data.location = ClusterFragment.selectedLocation.uuid;
 
                         data.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
-                        data.child_idx = AppConstants.CHILD6;
+                        data.child_idx = AppConstants.CHILD10;
 
                         data.vis_number = 0;
 
@@ -398,9 +398,9 @@ public class BirthExtraBFragment extends Fragment {
             Fragment fragment;
 
             if (lb > 2) {
-                fragment = BirthExtraCFragment.newInstance(individual, locations, socialgroup);
+                fragment = Birth3CFragment.newInstance(individual, locations, socialgroup);
             } else {
-                fragment = BirthExtraSFragment.newInstance(individual, locations, socialgroup);
+                fragment = Birth3SFragment.newInstance(individual, locations, socialgroup);
             }
 
             requireActivity().getSupportFragmentManager().beginTransaction()
@@ -408,7 +408,7 @@ public class BirthExtraBFragment extends Fragment {
                     .commit();
 
         } else if (close) {
-            Fragment fragment = BirthExtraAFragment.newInstance(individual, locations, socialgroup);
+            Fragment fragment = Birth3AFragment.newInstance(individual, locations, socialgroup);
 
             requireActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container_cluster, fragment)

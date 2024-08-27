@@ -37,6 +37,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 public interface ApiDao {
 
@@ -69,26 +70,27 @@ public interface ApiDao {
 
     //Rejection API
     @GET("/api/inmigration/reject")
-    Call<DataWrapper<Inmigration>> getImg(@Header("Authorization") String authorizationHeader);
+    Call<DataWrapper<Inmigration>> getImg(@Header("Authorization") String authorizationHeader, @Query("fw") String fw);
     @GET("/api/outmigration/reject")
-    Call<DataWrapper<Outmigration>> getOmg(@Header("Authorization") String authorizationHeader);
+    Call<DataWrapper<Outmigration>> getOmg(@Header("Authorization") String authorizationHeader, @Query("fw") String fw);
     @GET("/api/outcome/reject")
-    Call<DataWrapper<Pregnancyoutcome>> getOut(@Header("Authorization") String authorizationHeader);
+    Call<DataWrapper<Pregnancyoutcome>> getOut(@Header("Authorization") String authorizationHeader, @Query("fw") String fw);
     @GET("/api/relationship/reject")
-    Call<DataWrapper<Relationship>> getRel(@Header("Authorization") String authorizationHeader);
+    Call<DataWrapper<Relationship>> getRel(@Header("Authorization") String authorizationHeader, @Query("fw") String fw);
+
     @GET("/api/death/reject")
-    Call<DataWrapper<Death>> getDth(@Header("Authorization") String authorizationHeader);
+    Call<DataWrapper<Death>> getDth(@Header("Authorization") String authorizationHeader, @Query("fw") String fw);
     @GET("/api/pregnancy/reject")
-    Call<DataWrapper<Pregnancy>> getPreg(@Header("Authorization") String authorizationHeader);
+    Call<DataWrapper<Pregnancy>> getPreg(@Header("Authorization") String authorizationHeader, @Query("fw") String fw);
     @GET("/api/demographic/reject")
-    Call<DataWrapper<Demographic>> getDemo(@Header("Authorization") String authorizationHeader);
+    Call<DataWrapper<Demographic>> getDemo(@Header("Authorization") String authorizationHeader, @Query("fw") String fw);
     @GET("/api/vac/reject")
-    Call<DataWrapper<Vaccination>> getVac(@Header("Authorization") String authorizationHeader);
+    Call<DataWrapper<Vaccination>> getVac(@Header("Authorization") String authorizationHeader, @Query("fw") String fw);
     @GET("/api/ses/reject")
-    Call<DataWrapper<HdssSociodemo>> getSes(@Header("Authorization") String authorizationHeader);
+    Call<DataWrapper<HdssSociodemo>> getSes(@Header("Authorization") String authorizationHeader, @Query("fw") String fw);
 
     @GET("/api/mor/reject")
-    Call<DataWrapper<Morbidity>> getMor(@Header("Authorization") String authorizationHeader);
+    Call<DataWrapper<Morbidity>> getMor(@Header("Authorization") String authorizationHeader, @Query("fw") String fw);
 
     @GET("/api/zip/location")
     Call<ResponseBody> downloadLocation(@Header("Authorization") String authorizationHeader);

@@ -39,6 +39,7 @@ import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.fragment.UrlFragment;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
+import org.osmdroid.bonuspack.BuildConfig;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -54,6 +55,7 @@ public class LoginActivity extends AppCompatActivity  {
     private Fieldworker fieldworkerDatas;
     private ProgressBar progressBar;
     private AppJson appJson;
+    private TextView txtAppName;
 
     public static final String FIELDWORKER_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.FIELDWORKER_DATA";
     public static final String FIELDWORKER_DATAS = "org.openhds.hdsscapture.activity.MainActivity.FIELDWORKER_DATAS";
@@ -111,7 +113,9 @@ public class LoginActivity extends AppCompatActivity  {
         progress = new ProgressDialog(LoginActivity.this);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
-        progressBar = findViewById(R.id.login_progress);
+        //progressBar = findViewById(R.id.login_progress);
+        txtAppName = findViewById(R.id.txtAppName);
+        txtAppName.setText(getString(R.string.app_name)+" v"+ getString(R.string.versions));
 
         AppJson api = AppJson.getInstance(this);
         dao = api.getJsonApi();

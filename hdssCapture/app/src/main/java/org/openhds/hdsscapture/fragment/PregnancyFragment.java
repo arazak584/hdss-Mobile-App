@@ -241,6 +241,14 @@ public class PregnancyFragment extends DialogFragment {
                     rsv.setVisibility(View.GONE);
                     rsvd.setVisibility(View.GONE);
                 }
+                // Fetch the last record before the current one
+                Pregnancy previousPregnancy = viewModel.lastpregs(data.individual_uuid, data.recordedDate);
+                if (previousPregnancy != null) {
+                    binding.setPreg(previousPregnancy);
+                } else {
+                    binding.lastPreg.setVisibility(View.GONE);
+                }
+
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 binding.getPregnancy().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             } else {
@@ -251,6 +259,18 @@ public class PregnancyFragment extends DialogFragment {
                 Visit dts = visitViewModel.find(socialgroup.uuid);
                 if (dts != null){
                     data.visit_uuid = dts.uuid;
+                }
+
+                // Fetch the last record before the current one
+                if (data.recordedDate != null) {
+                    Pregnancy previousPregnancy = viewModel.lastpregs(data.individual_uuid, data.recordedDate);
+                    if (previousPregnancy != null) {
+                        binding.setPreg(previousPregnancy);
+                    } else {
+                        binding.lastPreg.setVisibility(View.GONE);
+                    }
+                }else{
+                    binding.lastPreg.setVisibility(View.GONE);
                 }
 
                 String uuid = UUID.randomUUID().toString();
@@ -278,16 +298,16 @@ public class PregnancyFragment extends DialogFragment {
             e.printStackTrace();
         }
 
-        try {
-            Pregnancy datas = pviewModel.lastpreg(HouseMembersFragment.selectedIndividual.uuid);
-            if (datas != null) {
-                binding.setPreg(datas);
-            }else{
-                binding.lastPreg.setVisibility(View.GONE);
-            }
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Pregnancy datas = pviewModel.lastpreg(HouseMembersFragment.selectedIndividual.uuid);
+//            if (datas != null) {
+//                binding.setPreg(datas);
+//            }else{
+//                binding.lastPreg.setVisibility(View.GONE);
+//            }
+//        } catch (ExecutionException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         ConfigViewModel configViewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
         List<Configsettings> configsettings = null;

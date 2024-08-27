@@ -1,74 +1,56 @@
 package org.openhds.hdsscapture.OutcomeFragment;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
-import org.openhds.hdsscapture.Dialog.FatherOutcomeDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
-import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
-import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
-import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
-import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.Viewmodel.VpmViewModel;
 import org.openhds.hdsscapture.databinding.FragmentBirthSBinding;
-import org.openhds.hdsscapture.databinding.FragmentOutcomeBinding;
-import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outcome;
-import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
-import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.Vpm;
-import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import org.openhds.hdsscapture.fragment.ClusterFragment;
-import org.openhds.hdsscapture.fragment.DatePickerFragment;
 import org.openhds.hdsscapture.fragment.HouseMembersFragment;
-import org.openhds.hdsscapture.fragment.SocioFFragment;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link BirthSFragment#newInstance} factory method to
+ * Use the {@link Birth3SFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BirthSFragment extends Fragment {
+public class Birth3SFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
@@ -81,7 +63,7 @@ public class BirthSFragment extends Fragment {
     private Individual individual;
     private FragmentBirthSBinding binding;
 
-    public BirthSFragment() {
+    public Birth3SFragment() {
         // Required empty public constructor
     }
 
@@ -95,8 +77,8 @@ public class BirthSFragment extends Fragment {
      * @return A new instance of fragment PregnancyoutcomeFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BirthSFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
-        BirthSFragment fragment = new BirthSFragment();
+    public static Birth3SFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
+        Birth3SFragment fragment = new Birth3SFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(SOCIAL_ID, socialgroup);
@@ -134,13 +116,21 @@ public class BirthSFragment extends Fragment {
         final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
         final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
 
+        final TextView ex = binding.getRoot().findViewById(R.id.exts);
+        final Spinner extra = binding.getRoot().findViewById(R.id.extras);
+
+        ex.setVisibility(View.GONE);
+        extra.setVisibility(View.GONE);
+
         PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         OutcomeViewModel outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
         VpmViewModel vpmViewModel = new ViewModelProvider(this).get(VpmViewModel.class);
         try {
-            Pregnancyoutcome datas = viewModel.findloc(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.compno);
+            Pregnancyoutcome datas = viewModel.find3(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.compno);
             if (datas != null) {
                 binding.setPregoutcome(datas);
+                binding.extras.setVisibility(View.GONE);
+                binding.exts.setVisibility(View.GONE);
 
                 if(datas.status!=null && datas.status==2){
                     rsv.setVisibility(View.VISIBLE);
@@ -151,7 +141,7 @@ public class BirthSFragment extends Fragment {
                 }
 
                 try {
-                    final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD1 + 0 + roundData.roundNumber;
+                    final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD9 + 0 + roundData.roundNumber;
                     Outcome data = outcomeViewModel.find(child_id,ClusterFragment.selectedLocation.uuid);
                     if (data != null) {
                         binding.setPregoutcome1(data);
@@ -163,7 +153,7 @@ public class BirthSFragment extends Fragment {
 
                 //Child2
                 try {
-                    final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD2 + 0 + roundData.roundNumber;
+                    final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD10 + 0 + roundData.roundNumber;
                     Outcome data = outcomeViewModel.find(child_id,ClusterFragment.selectedLocation.uuid);
                     if (data != null) {
                         binding.setPregoutcome2(data);
@@ -175,7 +165,7 @@ public class BirthSFragment extends Fragment {
 
                 //Child3
                 try {
-                    final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD3 + 0 + roundData.roundNumber;
+                    final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD11 + 0 + roundData.roundNumber;
                     Outcome data = outcomeViewModel.find(child_id,ClusterFragment.selectedLocation.uuid);
                     if (data != null) {
                         binding.setPregoutcome3(data);
@@ -187,7 +177,7 @@ public class BirthSFragment extends Fragment {
 
                 //Child4
                 try {
-                    final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD4 + 0 + roundData.roundNumber;
+                    final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD12 + 0 + roundData.roundNumber;
                     Outcome data = outcomeViewModel.find(child_id,ClusterFragment.selectedLocation.uuid);
                     if (data != null) {
                         binding.setPregoutcome4(data);
@@ -197,6 +187,9 @@ public class BirthSFragment extends Fragment {
                     e.printStackTrace();
                 }
 
+            }else{
+                binding.extras.setVisibility(View.GONE);
+                binding.exts.setVisibility(View.GONE);
             }
 
         } catch (ExecutionException | InterruptedException e) {
@@ -204,7 +197,7 @@ public class BirthSFragment extends Fragment {
         }
 
         try {
-            final String child_id = "ST-"+ HouseMembersFragment.selectedIndividual.extId;
+            final String child_id = "ST3-"+ HouseMembersFragment.selectedIndividual.extId;
             Vpm data = vpmViewModel.find(child_id);
             if (data != null) {
                 binding.setDeath(data);
@@ -226,7 +219,7 @@ public class BirthSFragment extends Fragment {
                 data.lastName = "Birth";
                 data.gender = 3;
                 data.compno = ClusterFragment.selectedLocation.getCompno();
-                data.extId = "ST-"+ HouseMembersFragment.selectedIndividual.getExtId();
+                data.extId = "ST3-"+ HouseMembersFragment.selectedIndividual.getExtId();
                 data.compname = ClusterFragment.selectedLocation.getLocationName();
                 data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.villname = level6Data.getName();
@@ -331,7 +324,7 @@ public class BirthSFragment extends Fragment {
                 vpm.deathDate = binding.getPregoutcome().outcomeDate;
                 vpm.dob = binding.getPregoutcome().outcomeDate;
                 vpm.deathPlace = 1;
-                vpm.extId = "ST-" + HouseMembersFragment.selectedIndividual.getExtId();
+                vpm.extId = "ST3-" + HouseMembersFragment.selectedIndividual.getExtId();
                 vpmViewModel.add(vpm);
 
             }
@@ -368,16 +361,16 @@ public class BirthSFragment extends Fragment {
             Fragment fragment;
 
             if (lb == 4) {
-                fragment = BirthDFragment.newInstance(individual, locations, socialgroup);
+                fragment = Birth3DFragment.newInstance(individual, locations, socialgroup);
             } else if (lb == 3) {
-                fragment = BirthCFragment.newInstance(individual, locations, socialgroup);
+                fragment = Birth3CFragment.newInstance(individual, locations, socialgroup);
             } else if (lb == 2) {
-                fragment = BirthBFragment.newInstance(individual, locations, socialgroup);
+                fragment = Birth3BFragment.newInstance(individual, locations, socialgroup);
             } else if (lb == 1) {
-                fragment = BirthAFragment.newInstance(individual, locations, socialgroup);
+                fragment = Birth3AFragment.newInstance(individual, locations, socialgroup);
             } else {
                 // Handle cases where lb is not 1, 2, 3, or 4 if needed
-                fragment = BirthDFragment.newInstance(individual, locations, socialgroup);
+                fragment = Birth3DFragment.newInstance(individual, locations, socialgroup);
             }
 
             requireActivity().getSupportFragmentManager().beginTransaction()

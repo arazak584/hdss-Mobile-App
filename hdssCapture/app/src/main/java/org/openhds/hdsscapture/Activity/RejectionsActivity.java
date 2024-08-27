@@ -105,7 +105,7 @@ public class RejectionsActivity extends AppCompatActivity {
 
         final Intent f = getIntent();
         final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
-        String username = fieldworkerDatas.getFw_uuid();
+        String fw = fieldworkerDatas.getFw_uuid();
 
         progres = new ProgressDialog(RejectionsActivity.this);
         progres.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -371,8 +371,12 @@ public class RejectionsActivity extends AppCompatActivity {
         progres.setMessage("Downloading...");
         progres.show();
 
+        final Intent f = getIntent();
+        final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
+        String fw = fieldworkerDatas.getFw_uuid();
+
         final InmigrationViewModel inmigrationViewModel = new ViewModelProvider(RejectionsActivity.this).get(InmigrationViewModel.class);
-        Call<DataWrapper<Inmigration>> c_callable = dao.getImg(authorizationHeader);
+        Call<DataWrapper<Inmigration>> c_callable = dao.getImg(authorizationHeader, fw);
         c_callable.enqueue(new Callback<DataWrapper<Inmigration>>() {
             @Override
             public void onResponse(Call<DataWrapper<Inmigration>> call, Response<DataWrapper<Inmigration>> response) {
@@ -382,7 +386,7 @@ public class RejectionsActivity extends AppCompatActivity {
                 // Next Step: Outmigration
                 progres.setMessage("Downloading...");
                 final OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(RejectionsActivity.this).get(OutmigrationViewModel.class);
-                Call<DataWrapper<Outmigration>> c_callable = dao.getOmg(authorizationHeader);
+                Call<DataWrapper<Outmigration>> c_callable = dao.getOmg(authorizationHeader, fw);
                 c_callable.enqueue(new Callback<DataWrapper<Outmigration>>() {
                     @Override
                     public void onResponse(Call<DataWrapper<Outmigration>> call, Response<DataWrapper<Outmigration>> response) {
@@ -392,7 +396,7 @@ public class RejectionsActivity extends AppCompatActivity {
                         // Next Step: Death
                         progres.setMessage("Downloading...");
                         final DeathViewModel deathViewModel = new ViewModelProvider(RejectionsActivity.this).get(DeathViewModel.class);
-                        Call<DataWrapper<Death>> c_callable = dao.getDth(authorizationHeader);
+                        Call<DataWrapper<Death>> c_callable = dao.getDth(authorizationHeader, fw);
                         c_callable.enqueue(new Callback<DataWrapper<Death>>() {
                             @Override
                             public void onResponse(Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
@@ -402,7 +406,7 @@ public class RejectionsActivity extends AppCompatActivity {
                                 // Next Step: Pregnancy
                                 progres.setMessage("Downloading...");
                                 final PregnancyViewModel pregnancyViewModel = new ViewModelProvider(RejectionsActivity.this).get(PregnancyViewModel.class);
-                                Call<DataWrapper<Pregnancy>> c_callable = dao.getPreg(authorizationHeader);
+                                Call<DataWrapper<Pregnancy>> c_callable = dao.getPreg(authorizationHeader, fw);
                                 c_callable.enqueue(new Callback<DataWrapper<Pregnancy>>() {
                                     @Override
                                     public void onResponse(Call<DataWrapper<Pregnancy>> call, Response<DataWrapper<Pregnancy>> response) {
@@ -442,7 +446,7 @@ public class RejectionsActivity extends AppCompatActivity {
                                         // Next Step: Demographic
                                         progres.setMessage("Downloading...");
                                         final DemographicViewModel demographicViewModel = new ViewModelProvider(RejectionsActivity.this).get(DemographicViewModel.class);
-                                        Call<DataWrapper<Demographic>> c_callable = dao.getDemo(authorizationHeader);
+                                        Call<DataWrapper<Demographic>> c_callable = dao.getDemo(authorizationHeader, fw);
                                         c_callable.enqueue(new Callback<DataWrapper<Demographic>>() {
                                             @Override
                                             public void onResponse(Call<DataWrapper<Demographic>> call, Response<DataWrapper<Demographic>> response) {
@@ -452,7 +456,7 @@ public class RejectionsActivity extends AppCompatActivity {
                                                 // Next Step: Relationship
                                                 progres.setMessage("Downloading...");
                                                 final RelationshipViewModel relationshipViewModel = new ViewModelProvider(RejectionsActivity.this).get(RelationshipViewModel.class);
-                                                Call<DataWrapper<Relationship>> c_callable = dao.getRel(authorizationHeader);
+                                                Call<DataWrapper<Relationship>> c_callable = dao.getRel(authorizationHeader, fw);
                                                 c_callable.enqueue(new Callback<DataWrapper<Relationship>>() {
                                                     @Override
                                                     public void onResponse(Call<DataWrapper<Relationship>> call, Response<DataWrapper<Relationship>> response) {
@@ -462,7 +466,7 @@ public class RejectionsActivity extends AppCompatActivity {
                                                         // Next Step: Vaccination
                                                         progres.setMessage("Downloading...");
                                                         final VaccinationViewModel vaccinationViewModel = new ViewModelProvider(RejectionsActivity.this).get(VaccinationViewModel.class);
-                                                        Call<DataWrapper<Vaccination>> c_callable = dao.getVac(authorizationHeader);
+                                                        Call<DataWrapper<Vaccination>> c_callable = dao.getVac(authorizationHeader, fw);
                                                         c_callable.enqueue(new Callback<DataWrapper<Vaccination>>() {
                                                         @Override
                                                         public void onResponse(Call<DataWrapper<Vaccination>> call, Response<DataWrapper<Vaccination>> response) {
@@ -472,7 +476,7 @@ public class RejectionsActivity extends AppCompatActivity {
                                                             // Next Step: Ses
                                                             progres.setMessage("Downloading...");
                                                             final HdssSociodemoViewModel hdssSociodemoViewModel = new ViewModelProvider(RejectionsActivity.this).get(HdssSociodemoViewModel.class);
-                                                            Call<DataWrapper<HdssSociodemo>> c_callable = dao.getSes(authorizationHeader);
+                                                            Call<DataWrapper<HdssSociodemo>> c_callable = dao.getSes(authorizationHeader, fw);
                                                             c_callable.enqueue(new Callback<DataWrapper<HdssSociodemo>>() {
                                                                 @Override
                                                                 public void onResponse(Call<DataWrapper<HdssSociodemo>> call, Response<DataWrapper<HdssSociodemo>> response) {
@@ -482,7 +486,7 @@ public class RejectionsActivity extends AppCompatActivity {
 
                                                                     progres.setMessage("Downloading...");
                                                                     final MorbidityViewModel morbidityViewModel = new ViewModelProvider(RejectionsActivity.this).get(MorbidityViewModel.class);
-                                                                    Call<DataWrapper<Morbidity>> c_callable = dao.getMor(authorizationHeader);
+                                                                    Call<DataWrapper<Morbidity>> c_callable = dao.getMor(authorizationHeader, fw);
                                                                     c_callable.enqueue(new Callback<DataWrapper<Morbidity>>() {
                                                                         @Override
                                                                         public void onResponse(Call<DataWrapper<Morbidity>> call, Response<DataWrapper<Morbidity>> response) {
@@ -492,7 +496,7 @@ public class RejectionsActivity extends AppCompatActivity {
                                                         // Final Step: Pregnancy Outcome
                                                         progres.setMessage("Downloading...");
                                                         final PregnancyoutcomeViewModel pregout = new ViewModelProvider(RejectionsActivity.this).get(PregnancyoutcomeViewModel.class);
-                                                        Call<DataWrapper<Pregnancyoutcome>> c_callable = dao.getOut(authorizationHeader);
+                                                        Call<DataWrapper<Pregnancyoutcome>> c_callable = dao.getOut(authorizationHeader, fw);
                                                         c_callable.enqueue(new Callback<DataWrapper<Pregnancyoutcome>>() {
                                                             @Override
                                                             public void onResponse(Call<DataWrapper<Pregnancyoutcome>> call, Response<DataWrapper<Pregnancyoutcome>> response) {

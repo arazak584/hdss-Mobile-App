@@ -108,4 +108,10 @@ public interface HierarchyDao {
             " WHERE a.fw_name=:id AND a.level_uuid='hierarchyLevelId6' GROUP BY a.uuid order by a.name")
     List<Hierarchy> repo(String id);
 
+    @Query("SELECT a.uuid,a.name as cluster,b.name as village,c.name as subdist,d.name as dist " +
+            " FROM locationhierarchy as a INNER JOIN locationhierarchy as b on a.parent_uuid=b.uuid " +
+            " INNER JOIN locationhierarchy as c on b.parent_uuid=c.uuid " +
+            " INNER JOIN locationhierarchy as d on c.parent_uuid=d.uuid " +
+            " WHERE a.fw_name=:id AND a.level_uuid='hierarchyLevelId6' GROUP BY a.uuid order by a.name")
+    List<Hierarchy> repos(String id);
 }

@@ -147,7 +147,6 @@
                 android:id="@+id/search"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
                 android:layout_marginBottom="10dp"
                 android:contentDescription="@string/external"
                 android:src="@drawable/ic_baseline_add_24"
@@ -329,6 +328,31 @@
                 android:layout_gravity="center"
                 android:background="@color/Green" />
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/pregnancy3"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:contentDescription="@string/pregnancy"
+                    android:focusable="true"
+                    android:background="@color/home"
+                    android:text="@string/pregnancy3"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    app:fabSize="mini"
+                    app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                    tools:ignore="ImageContrastCheck" />
+
+                <View
+                    android:visibility="gone"
+                    android:id="@+id/id21"
+                    android:layout_width="250dp"
+                    android:layout_height="2dp"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center"
+                    android:background="@color/Green" />
+
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/outcome"
                 android:layout_width="250dp"
@@ -378,6 +402,31 @@
                 android:layout_margin="5dp"
                 android:layout_gravity="center"
                 android:background="@color/Green" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/outcome3"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:contentDescription="@string/outcome"
+                    android:focusable="true"
+                    android:background="@color/home"
+                    android:text="@string/pregoutcome3"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    app:fabSize="mini"
+                    app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+                    tools:ignore="ImageContrastCheck" />
+
+                <View
+                    android:id="@+id/id22"
+                    android:visibility="gone"
+                    android:layout_width="250dp"
+                    android:layout_height="2dp"
+                    android:layout_margin="5dp"
+                    android:layout_gravity="center"
+                    android:background="@color/Green" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/amend"
@@ -615,7 +664,6 @@
                 android:id="@+id/menu"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
                 android:layout_marginBottom="5dp"
                 android:contentDescription="@string/external"
                 android:src="@drawable/ic_baseline_add_24"
@@ -632,7 +680,6 @@
                 android:id="@+id/odk"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
                 android:layout_marginBottom="5dp"
                 android:contentDescription="@string/ODK"
                 android:src="@drawable/ic_baseline_add_24"

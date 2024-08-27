@@ -44,10 +44,10 @@ public interface PregnancyDao {
     @Query("SELECT * FROM pregnancy WHERE complete=1")
     List<Pregnancy> retrieveToSync();
 
-    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND outcome IS NOT NULL AND (id IS NULL OR id != 2) ORDER BY recordedDate DESC LIMIT 1")
+    @Query("SELECT * FROM pregnancy WHERE individual_uuid = :id AND outcome IS NOT NULL AND (id IS NULL OR (id != 2 AND id != 3)) ORDER BY recordedDate DESC LIMIT 1")
     Pregnancy find(String id);
 
-    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND outcome=1 ORDER BY recordedDate DESC LIMIT 1")
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND outcome=1 AND (id IS NULL OR (id != 2 AND id != 3)) ORDER BY recordedDate DESC LIMIT 1")
     Pregnancy out(String id);
 
     @Query("SELECT * FROM pregnancy where individual_uuid=:id AND (id IS NULL OR id != 2) ORDER BY recordedDate DESC LIMIT 1")
@@ -58,6 +58,9 @@ public interface PregnancyDao {
 
     @Query("SELECT * FROM pregnancy where individual_uuid=:id AND id=2")
     Pregnancy finds(String id);
+
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND id=3")
+    Pregnancy find3(String id);
 
     @Query("SELECT * FROM pregnancy where uuid=:id")
     Pregnancy ins(String id);
@@ -70,8 +73,24 @@ public interface PregnancyDao {
     @Query("SELECT * FROM pregnancy where individual_uuid=:id AND outcome=1 AND id=2")
     Pregnancy out2(String id);
 
-    @Query("SELECT * FROM pregnancy where individual_uuid=:id and extra=1")
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id AND outcome=1 AND id=3")
+    Pregnancy out3(String id);
+
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id and extra=1 AND id IS NULL")
     Pregnancy findss(String id);
+
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id and extra=1 and id=2")
+    Pregnancy finds3(String id);
+
+    //For Displaying Outcome
+
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id and outcome_date IS NOT NULL and id=2")
+    Pregnancy outcome2(String id);
+
+    @Query("SELECT * FROM pregnancy where individual_uuid=:id and outcome_date IS NOT NULL and id=3")
+    Pregnancy outcome3(String id);
+
+    //End
 
     @Query("SELECT * FROM pregnancy where individual_uuid=:id ORDER BY recordedDate DESC LIMIT 1")
     Pregnancy findpreg(String id);

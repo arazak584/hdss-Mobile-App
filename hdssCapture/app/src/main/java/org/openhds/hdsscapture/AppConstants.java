@@ -24,6 +24,8 @@ public class AppConstants {
     public static final int CHILD =1;
     public static final int CHILD1 = 1, CHILD2 = 2, CHILD3 = 3, CHILD4 = 4;
     public static final int CHILD5 = 5, CHILD6 = 6, CHILD7 = 7, CHILD8 = 8;
+
+    public static final int CHILD9 = 9, CHILD10 = 10, CHILD11 = 11, CHILD12 = 12;
     public static final int RES1 = 1, RES2 = 2;
     public static final int PREG1 = 1, PREG2 = 2,PREG3 = 3;
 
