@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.SocialgroupRepository;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.HouseholdAmendment;
 import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 
@@ -89,6 +90,10 @@ public class SocialgroupViewModel extends AndroidViewModel {
     }
 
     public int update(SocialgroupAmendment s){
+        return socialgroupRepository.update(s);
+    }
+
+    public int update(HouseholdAmendment s){
         return socialgroupRepository.update(s);
     }
 

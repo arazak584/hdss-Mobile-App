@@ -657,14 +657,21 @@ public class Inmigration extends BaseObservable implements Parcelable {
             if(livestock_yn == null || livestock_yn!=1)
                 setLivestock(null);
 
-            if (migType != 1 || (origin != 1 && origin != 2)) {
+//            if (migType == 1 && (origin != null && (origin != 1 || origin != 2))) {
+//                setWhy_ext(null);
+//            }
+//
+//            if (migType == 2 && (origin != null && (origin == 1 || origin == 2))) {
+//                setWhy_int(null);
+//            }
+
+            if (!(migType == 1 && (origin != null && (origin == 1 || origin == 2)))) {
                 setWhy_ext(null);
             }
 
-            if (migType != 2 || (origin == 1 || origin == 2)) {
+            if (!(migType == 2 && origin != null && origin > 2)) {
                 setWhy_int(null);
             }
-
 
             notifyPropertyChanged(BR._all);
         }

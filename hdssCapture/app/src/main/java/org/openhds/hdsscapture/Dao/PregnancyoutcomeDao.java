@@ -89,6 +89,6 @@ PregnancyoutcomeDao {
     long rej(String uuid);
 
     @Query("SELECT a.uuid,b.extId as pregnancy_uuid,b.compno as location,b.firstName as mother_uuid,b.lastName as father_uuid FROM pregnancyoutcome a " +
-            " INNER JOIN individual as b on a.mother_uuid=b.uuid WHERE a.complete IS NULL ")
-    List<Pregnancyoutcome> error();
+            " INNER JOIN individual as b on a.mother_uuid=b.uuid WHERE a.complete IS NULL AND a.fw_uuid = :id ")
+    List<Pregnancyoutcome> error(String id);
 }

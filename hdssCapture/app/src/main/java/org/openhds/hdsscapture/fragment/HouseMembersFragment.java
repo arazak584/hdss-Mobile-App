@@ -158,7 +158,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         //final TextView hh = view.findViewById(R.id.textView_compextId);
         TextView name = view.findViewById(R.id.textView_hh);
          if (socialgroup != null) {
-            name.setText(socialgroup.groupName + "-" + socialgroup.getExtId());
+            name.setText(socialgroup.getGroupName() + "-" + socialgroup.getExtId());
         }else{
             name.setText("Loading...");
         }

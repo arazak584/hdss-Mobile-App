@@ -46,8 +46,8 @@ public class OutcomeRepository {
         return future.get();
     }
 
-    public List<Outcome> error() throws ExecutionException, InterruptedException {
-        Callable<List<Outcome>> callable = () -> dao.error();
+    public List<Outcome> error(String id) throws ExecutionException, InterruptedException {
+        Callable<List<Outcome>> callable = () -> dao.error(id);
         Future<List<Outcome>> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }

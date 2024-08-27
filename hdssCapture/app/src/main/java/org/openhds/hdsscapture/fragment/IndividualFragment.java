@@ -301,6 +301,9 @@ public class IndividualFragment extends Fragment {
             }
         });
 
+        Spinner mySpinner = binding.getRoot().findViewById(R.id.migtype);
+        mySpinner.setEnabled(false);
+
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
         InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
@@ -441,6 +444,7 @@ public class IndividualFragment extends Fragment {
 
             if (data != null) {
                 binding.setResidency(data);
+                data.hohID = socialgroup.extId;
                 binding.buttonResidencyStartDate.setEnabled(false);
 
             } else {
@@ -897,20 +901,7 @@ public class IndividualFragment extends Fragment {
             SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             try {
                 Socialgroup data = socialgroupViewModel.find(socialgroup.uuid);
-                if (data !=null) {
-
-//                    data.individual_uuid = binding.getIndividual().uuid;
-//                    data.uuid = socialgroup.uuid;
-//                    data.extId = data.extId;
-//                    data.groupName = binding.getIndividual().getFirstName() + ' ' + binding.getIndividual().getLastName();
-//                    data.visit_uuid = data.visit_uuid;
-//                    data.insertDate = data.insertDate;
-//                    data.fw_uuid = data.fw_uuid;
-//                    data.groupType = data.groupType;
-//                    data.complete = 1;
-//                    data.sttime = data.sttime;
-//                    data.edtime = data.edtime;
-//                    socialgroupViewModel.add(data);
+                if (data !=null && "UNK".equals(data.groupName)) {
 
                     SocialgroupAmendment socialgroupAmendment = new SocialgroupAmendment();
                     socialgroupAmendment.individual_uuid = binding.getIndividual().uuid;

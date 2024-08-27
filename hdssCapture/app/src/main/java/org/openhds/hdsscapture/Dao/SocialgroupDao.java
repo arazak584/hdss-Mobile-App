@@ -10,6 +10,7 @@ import androidx.room.Update;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.HouseholdAmendment;
 import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 
@@ -42,6 +43,9 @@ public interface SocialgroupDao {
     @Update(entity = Socialgroup.class)
     int visited(HvisitAmendment s);
 
+    @Update(entity = Socialgroup.class)
+    int update(HouseholdAmendment s);
+
     @Query("DELETE FROM socialgroup")
     void deleteAll();
 
@@ -54,7 +58,7 @@ public interface SocialgroupDao {
     @Query("SELECT * FROM socialgroup WHERE uuid=:id")
     Socialgroup findhse(String id);
 
-    @Query("SELECT * FROM socialgroup where uuid=:id and groupName='UNK' ")
+    @Query("SELECT * FROM socialgroup where uuid=:id")
     Socialgroup find(String id);
 
     @Query("SELECT * FROM socialgroup where uuid=:id and complete IS NULL")

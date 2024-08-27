@@ -210,9 +210,10 @@
             android:id="@+id/txtDeveloper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/copyright_app_company_lbl"
+            android:text="@string/developed_lbl"
             android:textAppearance="?android:attr/textAppearance"
-            android:textColor="#757575" />
+            android:textStyle="bold"
+            android:textColor="@color/color_text_darkgray"/>
 
         <TextView
             android:id="@+id/txtDevelopers"

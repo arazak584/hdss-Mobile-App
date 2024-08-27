@@ -431,6 +431,7 @@ public class MainActivity extends AppCompatActivity {
         final Button query = findViewById(R.id.btnquerry);
         query.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(), QueryActivity.class);
+            i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
             startActivity(i);
         });
 

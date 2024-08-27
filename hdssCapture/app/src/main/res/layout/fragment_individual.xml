@@ -639,7 +639,6 @@
 
 
             <TextView
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="start"
@@ -648,7 +647,6 @@
                 android:text="@string/migtype"/>
 
             <org.openhds.hdsscapture.SearchableSpinner
-                android:visibility="gone"
                 android:id="@+id/migtype"
                 selection="@{inmigration.migType}"
                 android:layout_width="match_parent"
@@ -734,7 +732,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    goneUnless="@{inmigration.migType==1 &amp; inmigration.origin==1 || inmigration.origin==2}"
+                    goneUnless="@{inmigration.migType==1 &amp; (inmigration.origin==1 || inmigration.origin==2)}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"

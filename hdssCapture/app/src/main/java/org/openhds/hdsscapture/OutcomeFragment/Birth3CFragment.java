@@ -16,6 +16,7 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.UniqueIDGen;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
@@ -128,22 +129,12 @@ public class Birth3CFragment extends Fragment {
                         }
 
                         // Generate ID if extId is null
-                        if (binding.getPregoutcome3().extId == null) {
-                            final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
-                            int sequenceNumber = 1;
-                            String id = ClusterFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
-                            while (true) {
-                                try {
-                                    if (individualViewModels.findAll(id) == null) break;
-                                } catch (ExecutionException e) {
-                                    e.printStackTrace();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                } // check if ID already exists in ViewModel
-                                sequenceNumber++; // increment sequence number if ID exists
-                                id = ClusterFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
-                            }
+                        String indid = data.extId;
+                        if (binding.getPregoutcome3().extId == null || indid.length() != 12) {
+                            String id = UniqueIDGen.generateUniqueId(individualViewModel, ClusterFragment.selectedLocation.compextId);
                             binding.getPregoutcome3().extId = id; // set the generated ID to the extId property of the Individual object
+                        }else{
+                            binding.getPregoutcome3().extId = data.extId;
                         }
 
                     } else {
@@ -179,20 +170,7 @@ public class Birth3CFragment extends Fragment {
 
                         // Generate ID if extId is null
                         if (binding.getPregoutcome3().extId == null) {
-                            final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
-                            int sequenceNumber = 1;
-                            String id = ClusterFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
-                            while (true) {
-                                try {
-                                    if (individualViewModels.findAll(id) == null) break;
-                                } catch (ExecutionException e) {
-                                    e.printStackTrace();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                } // check if ID already exists in ViewModel
-                                sequenceNumber++; // increment sequence number if ID exists
-                                id = ClusterFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
-                            }
+                            String id = UniqueIDGen.generateUniqueId(individualViewModel, ClusterFragment.selectedLocation.compextId);
                             binding.getPregoutcome3().extId = id; // set the generated ID to the extId property of the Individual object
                         }
 

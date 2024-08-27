@@ -1,6 +1,7 @@
 package org.openhds.hdsscapture.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -17,6 +18,7 @@ import org.openhds.hdsscapture.Adapter.ErrorAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
+import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.subqueries.Queries;
@@ -122,13 +124,17 @@ public class QueryActivity extends AppCompatActivity {
     private void query() {
         List<Queries> list = new ArrayList<>();
 
+        final Intent z = getIntent();
+        final Fieldworker fieldworkerDatas = z.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
+        String username = fieldworkerDatas.getFw_uuid();
+
         try {
 
             final SimpleDateFormat f = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
-            final SimpleDateFormat z = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+            //final SimpleDateFormat z = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 
             int c=1;
-            for (Pregnancyoutcome e : pregnancyoutcomeViewModel.error()) {
+            for (Pregnancyoutcome e : pregnancyoutcomeViewModel.error(username)) {
                 //String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
                 r1.name = c + ". PerM ID: " + e.pregnancy_uuid;
@@ -213,7 +219,7 @@ public class QueryActivity extends AppCompatActivity {
             }
 
             int i=1;
-            for (Outcome e : outcomeViewModel.error()) {
+            for (Outcome e : outcomeViewModel.error(username)) {
                 //String formattedDate = f.format(e.insertDate);
                 Queries r1 = new Queries();
                 r1.name = i + ". Compno: " + e.childuuid;

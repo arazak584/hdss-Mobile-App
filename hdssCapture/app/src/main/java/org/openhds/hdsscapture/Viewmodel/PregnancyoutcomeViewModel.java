@@ -28,8 +28,8 @@ public class PregnancyoutcomeViewModel extends AndroidViewModel {
         return pregnancyoutcomeRepository.findToSync();
     }
 
-    public List<Pregnancyoutcome> error() throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.error();
+    public List<Pregnancyoutcome> error(String id) throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.error(id);
     }
 
     public Pregnancyoutcome find(String id) throws ExecutionException, InterruptedException {

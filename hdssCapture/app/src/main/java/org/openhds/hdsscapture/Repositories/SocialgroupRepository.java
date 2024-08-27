@@ -5,6 +5,7 @@ import android.app.Application;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.SocialgroupDao;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.HouseholdAmendment;
 import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 
@@ -39,6 +40,12 @@ public class SocialgroupRepository {
     }
 
     public int update(SocialgroupAmendment s) {
+        AtomicInteger row = new AtomicInteger();
+        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
+        return row.intValue();
+    }
+
+    public int update(HouseholdAmendment s) {
         AtomicInteger row = new AtomicInteger();
         AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
         return row.intValue();

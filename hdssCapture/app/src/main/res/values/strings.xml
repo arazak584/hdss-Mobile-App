@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name" translatable="true">HDSS Capture</string>
-    <string name="versions">2024.0.17</string>
+    <string name="app_name" translatable="true">HDSS CAPTURE</string>
+    <string name="versions">2024.8.27</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>
@@ -663,6 +663,7 @@
     <string name="login_settings_lbl">Api Settings</string>
     <string name="devp">Developed By Abdul Razak Nuhu</string>
     <string name="copyright_app_company_lbl">© 2023 By Abdul Razak Nuhu</string>
+    <string name="developed_lbl">© 2024 RS</string>
     <string name="gps_loading_lbl">Loading GPS Location</string>
     <string name="remain">UNVISITED COMPOUNDS</string>
     <string name="datac">Data Capture</string>

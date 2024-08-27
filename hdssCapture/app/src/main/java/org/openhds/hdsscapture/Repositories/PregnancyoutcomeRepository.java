@@ -43,8 +43,8 @@ public class PregnancyoutcomeRepository {
         return future.get();
     }
 
-    public List<Pregnancyoutcome> error() throws ExecutionException, InterruptedException {
-        Callable<List<Pregnancyoutcome>> callable = () -> dao.error();
+    public List<Pregnancyoutcome> error(String id) throws ExecutionException, InterruptedException {
+        Callable<List<Pregnancyoutcome>> callable = () -> dao.error(id);
         Future<List<Pregnancyoutcome>> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }

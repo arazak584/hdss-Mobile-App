@@ -31,8 +31,8 @@ public class OutcomeViewModel extends AndroidViewModel {
         return outcomeRepository.find(id,locid);
     }
 
-    public List<Outcome> error() throws ExecutionException, InterruptedException {
-        return outcomeRepository.error();
+    public List<Outcome> error(String id) throws ExecutionException, InterruptedException {
+        return outcomeRepository.error(id);
     }
 
     public void add(Outcome data){ outcomeRepository.create(data);}
