@@ -34,6 +34,9 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.findAll(id);
     }
 
+    public List<Individual> hoh(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.hoh(id);
+    }
     public List<Individual> retrieveByLocationId(String id) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveByLocationId(id);
     }

@@ -2,6 +2,7 @@ package org.openhds.hdsscapture.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subentity.HouseholdAmendment;
 import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
+import org.openhds.hdsscapture.entity.subentity.IndividualResidency;
 import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
@@ -124,12 +126,20 @@ public class VisitFragment extends DialogFragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
-
+        SocialgroupViewModel vmodel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
         VisitViewModel viewModel = new ViewModelProvider(this).get(VisitViewModel.class);
         try {
             Visit data = viewModel.find(socialgroup.uuid);
             if (data != null) {
                 binding.setVisit(data);
+
+                data.houseExtId = socialgroup.extId;
+                data.socialgroup_uuid =socialgroup.uuid;
+                if(roundData.roundNumber < 10) {
+                    data.extId = data.houseExtId + "00" + roundData.getRoundNumber();
+                }else {
+                    data.extId = data.houseExtId + "0" + roundData.getRoundNumber();
+                }
 
                 binding.getVisit().setVisitDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             } else {
@@ -198,6 +208,8 @@ public class VisitFragment extends DialogFragment {
         if (save) {
             final Visit finalData = binding.getVisit();
             SocialgroupViewModel vmodel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+            IndividualViewModel imodel = new ViewModelProvider(this).get(IndividualViewModel.class);
+            String id = UniqueIDGen.generateHouseholdId(vmodel, ClusterFragment.selectedLocation.compextId);
 
                 final boolean validateOnComplete = true;//finalData.complete == 1;
                 boolean hasErrors = new Handler().hasInvalidInput(binding.VISITLAYOUT, validateOnComplete, false);
@@ -220,7 +232,8 @@ public class VisitFragment extends DialogFragment {
             String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
 
             if(finalData.houseExtId.length() !=11){
-                String id = UniqueIDGen.generateHouseholdId(vmodel, ClusterFragment.selectedLocation.compextId);
+                Log.d("Individual", "HOHID LENGTH 1: " + finalData.houseExtId);
+                String originalHouseExtId = finalData.houseExtId;
                 finalData.houseExtId = id;
                 if(finalData.roundNumber < 10) {
                     finalData.extId = id + "00" + finalData.getRoundNumber();
@@ -231,6 +244,26 @@ public class VisitFragment extends DialogFragment {
                 item.complete = 1;
                 item.uuid = binding.getVisit().socialgroup_uuid;
                 item.extId = id;
+                vmodel.update(item);
+
+                //Update hohid in individual if hohid length!=11
+                try {
+                    List<Individual> individuals = imodel.hoh(originalHouseExtId);
+                    Log.d("Individual", "HOHID LENGTH 2: " + originalHouseExtId);
+                    // Iterate over each Individual record
+                    for (Individual data : individuals) {
+                        Log.d("Individual", "HOHID LENGTH 2: " + originalHouseExtId);
+                        if (data != null) {
+                            IndividualResidency items = new IndividualResidency();
+                            items.uuid = data.uuid;
+                            items.hohID = id; // Ensure 'id' is the correct value for the update
+                            imodel.updateres(items);
+                        }
+                    }
+
+                }catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
             if (finalData.sttime !=null && finalData.edtime==null){
@@ -238,7 +271,6 @@ public class VisitFragment extends DialogFragment {
             }
 
             viewModel.add(finalData);
-
 
             try {
                 Socialgroup data = vmodel.visit(socialgroup.uuid);

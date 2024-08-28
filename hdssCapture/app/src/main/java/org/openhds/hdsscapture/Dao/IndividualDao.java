@@ -67,6 +67,9 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual WHERE complete=1 order by dob")
     List<Individual> retrieveToSync();
 
+    @Query("SELECT * FROM individual where hohID=:id ")
+    List<Individual> hoh(String id);
+
     @Query("SELECT * from individual WHERE endType=1 and firstName!='FAKE' and hohID=:id order by dob")
     List<Individual> retrieveByLocationId(String id);
 

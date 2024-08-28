@@ -83,6 +83,15 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public List<Individual> hoh(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.hoh(id.toUpperCase());
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
 
     public List<Individual> findToSync() throws ExecutionException, InterruptedException {
 
