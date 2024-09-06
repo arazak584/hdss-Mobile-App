@@ -83,9 +83,18 @@ public class IndividualRepository {
         return future.get();
     }
 
-    public List<Individual> hoh(String id) throws ExecutionException, InterruptedException {
+    public Individual mapregistry(String id) throws ExecutionException, InterruptedException {
 
-        Callable<List<Individual>> callable = () -> dao.hoh(id.toUpperCase());
+        Callable<Individual> callable = () -> dao.mapregistry(id);
+
+        Future<Individual> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Individual> hoh(String comp,String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.hoh(comp,id);
 
         Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
 
@@ -317,6 +326,15 @@ public class IndividualRepository {
     public List<Individual> errors() throws ExecutionException, InterruptedException {
 
         Callable<List<Individual>> callable = () -> dao.errors();
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Individual> nulls() throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.nulls();
 
         Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
 

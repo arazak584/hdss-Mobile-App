@@ -21,6 +21,7 @@ import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
+import org.openhds.hdsscapture.entity.Registry;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
@@ -181,5 +182,8 @@ public interface ApiDao {
 
     @POST("/api/morbidity")
     Call<DataWrapper<Morbidity>> sendMorbidity(@Header("Authorization") String authorizationHeader, @Body DataWrapper<Morbidity> dataModal);
+
+    @POST("/api/registry")
+    Call<DataWrapper<Registry>> sendRegistry(@Header("Authorization") String authorizationHeader, @Body DataWrapper<Registry> dataModal);
 
 }

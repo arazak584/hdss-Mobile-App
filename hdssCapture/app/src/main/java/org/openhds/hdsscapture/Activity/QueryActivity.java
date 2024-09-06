@@ -57,7 +57,7 @@ public class QueryActivity extends AppCompatActivity {
     private ErrorAdapter errorAdapter;
     private List<Queries> filterAll;
     private SearchView searchView;
-
+    private String username;
 
 
 
@@ -67,6 +67,10 @@ public class QueryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_query);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         searchView = findViewById(R.id.search);
+
+        final Intent z = getIntent();
+        final Fieldworker fieldworkerDatas = z.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
+        username = fieldworkerDatas.getFw_uuid();
 
         // Set a query hint
         searchView.setQueryHint(getString(R.string.search));
@@ -90,7 +94,6 @@ public class QueryActivity extends AppCompatActivity {
 
 //                query();
 //                hideLoadingDialog();
-
                 // Simulate long operation
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -124,12 +127,7 @@ public class QueryActivity extends AppCompatActivity {
     private void query() {
         List<Queries> list = new ArrayList<>();
 
-        final Intent z = getIntent();
-        final Fieldworker fieldworkerDatas = z.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
-        String username = fieldworkerDatas.getFw_uuid();
-
         try {
-
             final SimpleDateFormat f = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
             //final SimpleDateFormat z = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 
@@ -145,6 +143,20 @@ public class QueryActivity extends AppCompatActivity {
 
                 list.add(r1);
                 c++;
+            }
+
+             int o=1;
+            for (Individual e : individualViewModel.nulls()) {
+                //String formattedDate = f.format(e.insertDate);
+                Queries r1 = new Queries();
+                r1.name = o + ". Household ID: " +  e.hohID;
+                r1.extid = "Compno: " + e.compno + " - " + e.firstName + " " + e.lastName;
+                r1.date = "PerID: " + e.extId;
+                r1.error = "NULL IDs";
+                r1.index = o;
+                list.add(r1);
+                o++;
+
             }
 
             int n=1;
@@ -250,63 +262,6 @@ public class QueryActivity extends AppCompatActivity {
                 k++;
             }
 
-
-//            int o=1;
-//            for (Individual e : individualViewModel.merror()) {
-//                //String formattedDate = f.format(e.insertDate);
-//                Queries r1 = new Queries();
-//                r1.name = o + ". Household ID: " +  e.houseExtId;
-//                r1.extid = "Compno: " + e.compextId + " - " + e.firstName + " " + e.lastName;
-//                r1.date = "";
-//                r1.error = "Non existent mother";
-//                r1.index = o;
-//                list.add(r1);
-//                o++;
-//
-//            }
-//
-//            int n=1;
-//            for (Individual e : individualViewModel.ferror()) {
-//                //String formattedDate = f.format(e.insertDate);
-//                Queries r1 = new Queries();
-//                r1.name = n + ". Household ID: " +  e.houseExtId;
-//                r1.extid = "Compno: " + e.compextId + " - " + e.firstName + " " + e.lastName;
-//                r1.date = "";
-//                r1.error = "Non existent father";
-//                r1.index = n;
-//                list.add(r1);
-//                n++;
-//
-//            }
-            
-
-//            int h=1;
-//            for (Demographic e : demographicViewModel.error()) {
-//                String formattedDate = z.format(e.sttime);
-//                Queries r1 = new Queries();
-//                r1.name = "Demo " + e.sttime;
-//                r1.extid = "" + e.individual_uuid;
-//                r1.date = "" ;
-//                r1.error = "Demo" + formattedDate;
-//                r1.index = h;
-//
-//                list.add(r1);
-//
-//            }
-
-//            int m=1;
-//            for (Residency e : residencyViewModel.error()) {
-////                String formattedDate = f.format(e.insertDate);
-//                Queries r1 = new Queries();
-//                r1.name = "Residency " + " - " + e.socialgroup_uuid;
-//                r1.extid = "" + e.uuid + " - " +e.location_uuid;
-//                r1.date = "" + e.socialgroup_uuid;
-//                r1.error = "No Socialgroup";
-//                r1.index = m;
-//                list.add(r1);
-//
-//            }
-
             filterAll = new ArrayList<>(list);
 
             errorAdapter = new ErrorAdapter(this);
@@ -336,27 +291,6 @@ public class QueryActivity extends AppCompatActivity {
             }
         });
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.search, menu);
-//        MenuItem item = menu.findItem(R.id.app_bar_search);
-//        SearchView searchView = (SearchView) item.getActionView();
-//        searchView.setQueryHint("Search Notes Here...");
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String s) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String s) {
-//                sFilter(s);
-//                return false;
-//            }
-//        });
-//        return super.onCreateOptionsMenu(menu);
-//    }
 
     private void sFilter(String s) {
         ArrayList<Queries> filterNames = new ArrayList<>();

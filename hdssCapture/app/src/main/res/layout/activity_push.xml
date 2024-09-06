@@ -481,6 +481,21 @@
             android:textColor="@android:color/background_light"
             android:layout_gravity="center" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonSendReg"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/send_registry"
+            android:drawableRight="@drawable/send"
+            android:background="@drawable/btnd_rone_white"
+            android:textColor="@android:color/background_light"
+            android:layout_gravity="center" />
+
 
 <!--        <TextView-->
 <!--            android:id="@+id/textViewSendDup"-->

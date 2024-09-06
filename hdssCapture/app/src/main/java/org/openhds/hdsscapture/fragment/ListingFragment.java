@@ -225,31 +225,31 @@ public class ListingFragment extends Fragment {
                     binding.buttonChangeCluster.setEnabled(true);
                 }
 
-                if (data.compextId == null) {
-                    String villExtId = level6Data.getExtId();
-                    String compExtId = data.compextId;
-                    Log.d("Listing", "Generated Villcode: " + villExtId);
-
-                    // Determine the desired format for compExtId based on the length of villExtId
-                    if (villExtId.length() == 3) {
-                        // If vill_extId has 3 characters, pick the last 4 characters from data.compno
-                        int startIndex = Math.max(data.compno.length() - 4, 0);
-                        compExtId = villExtId + "00" + data.compno.substring(startIndex);
-                        Log.d("Listing", "Generated Compno: " + compExtId);
-                    } else if (villExtId.length() == 4) {
-                        // If vill_extId has 4 characters, pick the last 3 characters from data.compno
-                        int startIndex = Math.max(data.compno.length() - 3, 0);
-                        compExtId = villExtId + "00" + data.compno.substring(startIndex);
-                        Log.d("Listing", "Generated Compno: " + compExtId);
-                    } else {
-                        // Handle other cases or validation as needed
-                        compExtId = ClusterFragment.selectedLocation.getCompextId(); // Keep the original value
-                    }
-
-                    data.compextId = compExtId;
-                } else {
-                    data.compextId = ClusterFragment.selectedLocation.getCompextId();
-                }
+//                if (data.compextId == null) {
+//                    String villExtId = level6Data.getExtId();
+//                    String compExtId = data.compextId;
+//                    Log.d("Listing", "Generated Villcode: " + villExtId);
+//
+//                    // Determine the desired format for compExtId based on the length of villExtId
+//                    if (villExtId.length() == 3) {
+//                        // If vill_extId has 3 characters, pick the last 4 characters from data.compno
+//                        int startIndex = Math.max(data.compno.length() - 4, 0);
+//                        compExtId = villExtId + "00" + data.compno.substring(startIndex);
+//                        Log.d("Listing", "Generated Compno: " + compExtId);
+//                    } else if (villExtId.length() == 4) {
+//                        // If vill_extId has 4 characters, pick the last 3 characters from data.compno
+//                        int startIndex = Math.max(data.compno.length() - 3, 0);
+//                        compExtId = villExtId + "00" + data.compno.substring(startIndex);
+//                        Log.d("Listing", "Generated Compno: " + compExtId);
+//                    } else {
+//                        // Handle other cases or validation as needed
+//                        compExtId = ClusterFragment.selectedLocation.getCompextId(); // Keep the original value
+//                    }
+//
+//                    data.compextId = compExtId;
+//                } else {
+//                    data.compextId = ClusterFragment.selectedLocation.getCompextId();
+//                }
 
 
             } else {
@@ -268,6 +268,7 @@ public class ListingFragment extends Fragment {
                 data.longitude = ClusterFragment.selectedLocation.getLongitude();
                 data.latitude = ClusterFragment.selectedLocation.getLatitude();
                 data.accuracy = ClusterFragment.selectedLocation.getAccuracy();
+                data.compextId = ClusterFragment.selectedLocation.getCompextId();
 
                 String regex = "[A-Z]{2}\\d{4}";
                 String input = ClusterFragment.selectedLocation.getCompno();
@@ -281,31 +282,31 @@ public class ListingFragment extends Fragment {
                 binding.clusterCode.setEnabled(false);
                 binding.villcode.setEnabled(false);
 
-                if (data.compextId == null) {
-                    String villExtId = level6Data.getExtId();
-                    String compExtId = data.compextId;
-                    Log.d("Listing", "Generated Villcode: " + villExtId);
-
-                    // Determine the desired format for compExtId based on the length of villExtId
-                    if (villExtId.length() == 3) {
-                        // If vill_extId has 3 characters, pick the last 4 characters from data.compno
-                        int startIndex = Math.max(data.compno.length() - 4, 0);
-                        compExtId = villExtId + "00" + data.compno.substring(startIndex);
-                        Log.d("Listing", "Generated Compno: " + compExtId);
-                    } else if (villExtId.length() == 4) {
-                        // If vill_extId has 4 characters, pick the last 3 characters from data.compno
-                        int startIndex = Math.max(data.compno.length() - 3, 0);
-                        compExtId = villExtId + "00" + data.compno.substring(startIndex);
-                        Log.d("Listing", "Generated Compno: " + compExtId);
-                    } else {
-                        // Handle other cases or validation as needed
-                        compExtId = ClusterFragment.selectedLocation.getCompextId(); // Keep the original value
-                    }
-
-                    data.compextId = compExtId;
-                } else {
-                    data.compextId = ClusterFragment.selectedLocation.getCompextId();
-                }
+//                if (data.compextId == null) {
+//                    String villExtId = level6Data.getExtId();
+//                    String compExtId = data.compextId;
+//                    Log.d("Listing", "Generated Villcode: " + villExtId);
+//
+//                    // Determine the desired format for compExtId based on the length of villExtId
+//                    if (villExtId.length() == 3) {
+//                        // If vill_extId has 3 characters, pick the last 4 characters from data.compno
+//                        int startIndex = Math.max(data.compno.length() - 4, 0);
+//                        compExtId = villExtId + "00" + data.compno.substring(startIndex);
+//                        Log.d("Listing", "Generated Compno: " + compExtId);
+//                    } else if (villExtId.length() == 4) {
+//                        // If vill_extId has 4 characters, pick the last 3 characters from data.compno
+//                        int startIndex = Math.max(data.compno.length() - 3, 0);
+//                        compExtId = villExtId + "00" + data.compno.substring(startIndex);
+//                        Log.d("Listing", "Generated Compno: " + compExtId);
+//                    } else {
+//                        // Handle other cases or validation as needed
+//                        compExtId = ClusterFragment.selectedLocation.getCompextId(); // Keep the original value
+//                    }
+//
+//                    data.compextId = compExtId;
+//                } else {
+//                    data.compextId = ClusterFragment.selectedLocation.getCompextId();
+//                }
 
                 binding.setListing(data);
                 binding.getListing().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));

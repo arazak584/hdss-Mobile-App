@@ -32,6 +32,7 @@ import org.openhds.hdsscapture.Dao.OutcomeDao;
 import org.openhds.hdsscapture.Dao.OutmigrationDao;
 import org.openhds.hdsscapture.Dao.PregnancyDao;
 import org.openhds.hdsscapture.Dao.PregnancyoutcomeDao;
+import org.openhds.hdsscapture.Dao.RegistryDao;
 import org.openhds.hdsscapture.Dao.RelationshipDao;
 import org.openhds.hdsscapture.Dao.ResidencyDao;
 import org.openhds.hdsscapture.Dao.RoundDao;
@@ -61,6 +62,7 @@ import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
+import org.openhds.hdsscapture.entity.Registry;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
@@ -77,8 +79,8 @@ import java.util.concurrent.Executors;
         Relationship.class, Locations.class, Residency.class, Pregnancyoutcome.class, Individual.class, Round.class, Demographic.class,
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
         Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class, Duplicate.class,
-        ApiUrl.class, Configsettings.class, Form.class, Vpm.class, CommunityReport.class, Morbidity.class, HierarchyLevel.class
-        }, version = 4 , exportSchema = true)
+        ApiUrl.class, Configsettings.class, Form.class, Vpm.class, CommunityReport.class, Morbidity.class, HierarchyLevel.class, Registry.class
+        }, version = 5 , exportSchema = true)
 
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -112,6 +114,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract CommunityDao communityDao();
     public abstract MorbidityDao morbidityDao();
     public abstract HierarchyLevelDao hierarchyLevelDao();
+    public abstract RegistryDao registryDao();
 
     //Migrate to another version when a variable is added to and entity.
     // If the version of the database is 2 you upgrade to 3 then set the MIGRATION_2_3 which means version 2 to 3
@@ -196,6 +199,24 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            // Create the new table
+            database.execSQL("CREATE TABLE IF NOT EXISTS registry (" +
+                    "individual_uuid TEXT NOT NULL PRIMARY KEY, " +
+                    "insertDate INTEGER, " +  // Date stored as INTEGER (timestamp)
+                    "name TEXT, " +
+                    "socialgroup_uuid TEXT, " +
+                    "location_uuid TEXT, " +
+                    "status INTEGER, " +
+                    "complete INTEGER, " +
+                    "fw_uuid TEXT)");
+            // Create indices
+            database.execSQL("CREATE INDEX index_registry_individual_uuid_fw_uuid_complete_socialgroup_uuid ON registry(individual_uuid, fw_uuid, complete, socialgroup_uuid)");
+        }
+    };
+
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
@@ -255,7 +276,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                 AppDatabase.class, "hdss")
                                 .addCallback(sRoomDatabaseCallback)
-                                .addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_3_4)
+                                .addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_3_4,MIGRATION_4_5)
                                 .fallbackToDestructiveMigrationOnDowngrade()
                                 .build();
             }
@@ -304,6 +325,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 communityDao().deleteAll();
                 morbidityDao().deleteAll();
                 hierarchyLevelDao().deleteAll();
+                registryDao().deleteAll();
                 // Perform any other necessary cleanup or initialization
 
                 // Invoke the callback when all entities are reset

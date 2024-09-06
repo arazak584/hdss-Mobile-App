@@ -33,9 +33,12 @@ public class IndividualViewModel extends AndroidViewModel {
     public Individual findAll(String id) throws ExecutionException, InterruptedException {
         return individualRepository.findAll(id);
     }
+    public Individual mapregistry(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.mapregistry(id);
+    }
 
-    public List<Individual> hoh(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.hoh(id);
+    public List<Individual> hoh(String comp,String id) throws ExecutionException, InterruptedException {
+        return individualRepository.hoh(comp,id);
     }
     public List<Individual> retrieveByLocationId(String id) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveByLocationId(id);
@@ -141,6 +144,10 @@ public class IndividualViewModel extends AndroidViewModel {
 
     public List<Individual> errors() throws ExecutionException, InterruptedException {
         return individualRepository.errors();
+    }
+
+    public List<Individual> nulls() throws ExecutionException, InterruptedException {
+        return individualRepository.nulls();
     }
 
     public List<Individual> err() throws ExecutionException, InterruptedException {

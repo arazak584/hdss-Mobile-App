@@ -37,6 +37,7 @@ import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
+import org.openhds.hdsscapture.Viewmodel.RegistryViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
@@ -58,6 +59,7 @@ import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
+import org.openhds.hdsscapture.entity.Registry;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -1570,6 +1572,80 @@ public class PushActivity extends AppCompatActivity {
 
 
 
+        //PUSH Registry
+        final Button buttonSendreg = findViewById(R.id.buttonSendReg);
+        //final TextView textViewSendDup = findViewById(R.id.textViewSendDup);
+        final RegistryViewModel registryViewModel = new ViewModelProvider(this).get(RegistryViewModel.class);
+
+        //GET MODIFIED DATA
+        final List<Registry> registryList = new ArrayList<>();
+        try {
+            registryList.addAll(registryViewModel.findToSync());
+            buttonSendreg.setText("Registry Report (" + registryList.size() + ") to send");
+            buttonSendreg.setTextColor(Color.WHITE);
+            if (registryList.isEmpty()) {
+                buttonSendreg.setVisibility(View.GONE);
+                //textViewSendDup.setVisibility(View.GONE);
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        buttonSendreg.setOnClickListener(v -> {
+            progress.setMessage(getResources().getString(R.string.init_syncing));
+            progress.show();
+
+            //WRAP THE DATA
+            final DataWrapper<Registry> data = new DataWrapper<>(registryList);
+
+            //SEND THE DATA
+            if (data.getData() != null && !data.getData().isEmpty()) {
+
+                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
+
+
+                final Call<DataWrapper<Registry>> c_callable = dao.sendRegistry(authorizationHeader,data);
+                c_callable.enqueue(new Callback<DataWrapper<Registry>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DataWrapper<Registry>> call, Response<DataWrapper<Registry>> response) {
+                        if (response != null && response.body() != null && response.isSuccessful()
+                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
+
+                            Registry[] d = data.getData().toArray(new Registry[0]);
+
+                            for (Registry elem : d) {
+                                elem.complete = 0;
+                            }
+                            registryViewModel.add(d);
+
+                            progress.dismiss();
+                            buttonSendreg.setText("Sent " + d.length + " Registry record(s)");
+                            buttonSendreg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+                        }else {
+                            // Handle the case where the server responds with an error
+                            progress.dismiss();
+                            buttonSendreg.setText("Failed to Send Data: Error "+ response.code());
+                            buttonSendreg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<DataWrapper<Registry>> call, @NonNull Throwable t) {
+                        progress.dismiss();
+                        buttonSendreg.setText("Failed to Send Morbidity Report Data");
+                        buttonSendreg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
+                        Toast.makeText(PushActivity.this, "Failed to Send Registry Data", Toast.LENGTH_LONG).show();
+
+                    }
+                });
+            } else {
+                progress.dismiss();
+            }
+
+        });
+
+
         //PUSH Morbidity
         final Button buttonSendmor = findViewById(R.id.buttonSendMor);
         //final TextView textViewSendDup = findViewById(R.id.textViewSendDup);
@@ -1642,6 +1718,8 @@ public class PushActivity extends AppCompatActivity {
             }
 
         });
+
+
 
 
     }

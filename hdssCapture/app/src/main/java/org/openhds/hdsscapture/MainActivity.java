@@ -45,6 +45,7 @@ import org.openhds.hdsscapture.Activity.RejectionsActivity;
 import org.openhds.hdsscapture.Activity.RemainderActivity;
 import org.openhds.hdsscapture.Activity.ReportActivity;
 import org.openhds.hdsscapture.Dao.ApiDao;
+import org.openhds.hdsscapture.Sync.SyncActivity;
 import org.openhds.hdsscapture.Utilities.SimpleDialog;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.CommunityViewModel;

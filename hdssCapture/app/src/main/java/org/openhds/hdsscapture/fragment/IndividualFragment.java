@@ -307,6 +307,7 @@ public class IndividualFragment extends Fragment {
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
         InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
+        VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
         try {
             Individual data = individualViewModel.find(individual.uuid);
             if (data != null) {
@@ -317,9 +318,11 @@ public class IndividualFragment extends Fragment {
                 if (indid.length() != 12) {
                     String id = UniqueIDGen.generateUniqueId(individualViewModel, ClusterFragment.selectedLocation.compextId);
                     binding.getIndividual().extId = id;
+
                 }else{
                     data.extId = data.getExtId();
                 }
+                //data.hohID = socialgroup.getExtId();
 
                 if (binding.getIndividual().dob != null) {
                     final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
@@ -358,7 +361,7 @@ public class IndividualFragment extends Fragment {
                     data.uuid = uuidString;
                     data.fw_uuid = fieldworkerData.getFw_uuid();
                     data.village = level6Data.getName();
-                    data.hohID = socialgroup.extId;
+                    data.hohID = socialgroup.getExtId();
 
                 Date currentDate = new Date(); // Get the current date and time
                 Calendar cal = Calendar.getInstance();
@@ -573,7 +576,6 @@ public class IndividualFragment extends Fragment {
                 dataimg.individual_uuid = binding.getIndividual().uuid;
                 dataimg.complete = 1;
                 dataimg.location_uuid = ClusterFragment.selectedLocation.uuid;
-                VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
                 Visit dts = visitViewModel.find(socialgroup.uuid);
                 if (dts != null){
                     dataimg.visit_uuid = dts.uuid;
@@ -880,6 +882,27 @@ public class IndividualFragment extends Fragment {
                 img.edtime = endtime;
             }
 
+            //Update The Househead for the new household
+            SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+            try {
+                Socialgroup data = socialgroupViewModel.find(socialgroup.uuid);
+                if (data !=null && "UNK".equals(data.groupName)) {
+
+                    SocialgroupAmendment socialgroupAmendment = new SocialgroupAmendment();
+                    socialgroupAmendment.individual_uuid = finalData.uuid;
+                    socialgroupAmendment.groupName = finalData.getFirstName() + ' ' + finalData.getLastName();
+                    socialgroupAmendment.uuid = socialgroup.uuid;
+                    socialgroupAmendment.complete =1;
+                    socialgroupViewModel.update(socialgroupAmendment);
+                    //Toast.makeText(requireContext(), "Successfully Amended Household Head", Toast.LENGTH_LONG).show();
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             finalData.compno = ClusterFragment.selectedLocation.compno;
             finalData.endType = Data.endType;
             finalData.hohID = socialgroup.extId;
@@ -896,27 +919,6 @@ public class IndividualFragment extends Fragment {
 
             viewModel.add(Data);
             individualViewModel.add(finalData);
-
-            //Update The Househead for the new household
-            SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-            try {
-                Socialgroup data = socialgroupViewModel.find(socialgroup.uuid);
-                if (data !=null && "UNK".equals(data.groupName)) {
-
-                    SocialgroupAmendment socialgroupAmendment = new SocialgroupAmendment();
-                    socialgroupAmendment.individual_uuid = binding.getIndividual().uuid;
-                    socialgroupAmendment.groupName = binding.getIndividual().getFirstName() + ' ' + binding.getIndividual().getLastName();
-                    socialgroupAmendment.uuid = socialgroup.uuid;
-                    socialgroupAmendment.complete =1;
-                    socialgroupViewModel.update(socialgroupAmendment);
-                    //Toast.makeText(requireContext(), "Successfully Amended Household Head", Toast.LENGTH_LONG).show();
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
             final Intent i = getActivity().getIntent();
             final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);

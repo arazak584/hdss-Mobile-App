@@ -225,7 +225,6 @@ public class PregnancyFragment extends DialogFragment {
         final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
 
         PregnancyViewModel viewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
-        PregnancyViewModel pviewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
         try {
             Pregnancy data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid);

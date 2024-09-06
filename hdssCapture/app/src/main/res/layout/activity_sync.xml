@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Sync.SyncActivity">
+
+    <!-- Locations RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewLocations"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonSendSelectedLocations"
+        android:padding="5dp"
+        android:layout_marginBottom="8dp"
+        tools:listitem="@layout/item_location"/>
+
+    <!-- Button for Sending Selected Locations -->
+    <Button
+        android:id="@+id/buttonSendSelectedLocations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Selected Locations"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewLocations"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/recyclerViewVisits"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"
+    android:layout_marginBottom="16dp" />
+
+    <!-- Visit RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewVisits"
+        android:visibility="gone"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/buttonSendSelectedLocations"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonSendSelectedVisits"
+        android:padding="16dp"
+        android:layout_marginBottom="8dp"
+        tools:listitem="@layout/item_visit"/>
+
+    <!-- Button for Sending Selected Visits -->
+    <Button
+        android:id="@+id/buttonSendSelectedVisits"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Selected Visits"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewVisits"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/recyclerViewSocialgroup"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"
+    android:layout_marginBottom="16dp"/>
+
+    <!-- Socialgroup RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewSocialgroup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/buttonSendSelectedVisits"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonSendSelectedSocialgroup"
+        android:padding="5dp"
+        android:layout_marginBottom="8dp"
+    tools:listitem="@layout/item_socialgroup"/>
+
+    <!-- Button for Sending Selected Socialgroup -->
+    <Button
+        android:id="@+id/buttonSendSelectedSocialgroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Selected Socialgroup"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewSocialgroup"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

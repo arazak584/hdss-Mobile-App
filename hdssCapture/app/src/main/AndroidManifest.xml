@@ -35,6 +35,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".Sync.SyncActivity"
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.Light.Dialog.FixedSize"/>
         <!-- <meta-data -->
         <!-- android:name="com.google.android.geo.API_KEY" -->
         <!-- android:value="YOUR_API_KEY"/> -->
@@ -54,9 +58,6 @@
             android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert" />
         <activity
             android:name=".Duplicate.DuplicateActivity"
-            android:exported="false" />
-        <activity
-            android:name=".odk.OdkActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.NewActivity"
@@ -80,7 +81,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".Activity.RemainderActivity"
             android:exported="false"

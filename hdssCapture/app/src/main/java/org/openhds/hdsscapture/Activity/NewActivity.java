@@ -9,10 +9,12 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.SearchView;
 
 import org.openhds.hdsscapture.Adapter.ViewsAdapter;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Sync.SyncActivity;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.subqueries.Newloc;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
@@ -52,6 +54,12 @@ public class NewActivity extends AppCompatActivity {
         //Toast.makeText(MainActivity.this, "Welcome " + status, Toast.LENGTH_LONG).show();
 
         searchView = findViewById(R.id.searchloc);
+
+        final Button sync = findViewById(R.id.btnSync);
+        sync.setOnClickListener(v -> {
+            Intent i = new Intent(getApplicationContext(), SyncActivity.class);
+            startActivity(i);
+        });
 
         // Set a query hint
         searchView.setQueryHint(getString(R.string.search));

@@ -133,13 +133,13 @@ public class VisitFragment extends DialogFragment {
             if (data != null) {
                 binding.setVisit(data);
 
-                data.houseExtId = socialgroup.extId;
-                data.socialgroup_uuid =socialgroup.uuid;
-                if(roundData.roundNumber < 10) {
-                    data.extId = data.houseExtId + "00" + roundData.getRoundNumber();
-                }else {
-                    data.extId = data.houseExtId + "0" + roundData.getRoundNumber();
-                }
+//                data.houseExtId = socialgroup.extId;
+//                data.socialgroup_uuid =socialgroup.uuid;
+//                if(roundData.roundNumber < 10) {
+//                    data.extId = data.houseExtId + "00" + roundData.getRoundNumber();
+//                }else {
+//                    data.extId = data.houseExtId + "0" + roundData.getRoundNumber();
+//                }
 
                 binding.getVisit().setVisitDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
             } else {
@@ -210,6 +210,7 @@ public class VisitFragment extends DialogFragment {
             SocialgroupViewModel vmodel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             IndividualViewModel imodel = new ViewModelProvider(this).get(IndividualViewModel.class);
             String id = UniqueIDGen.generateHouseholdId(vmodel, ClusterFragment.selectedLocation.compextId);
+            String originalHouseExtId = finalData.houseExtId;
 
                 final boolean validateOnComplete = true;//finalData.complete == 1;
                 boolean hasErrors = new Handler().hasInvalidInput(binding.VISITLAYOUT, validateOnComplete, false);
@@ -231,38 +232,37 @@ public class VisitFragment extends DialogFragment {
             // Format the components into a string with leading zeros
             String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
 
+            //Update hohid in individual if hohid length!=11
+            try {
+                List<Individual> individuals = imodel.hoh(ClusterFragment.selectedLocation.compno, originalHouseExtId);
+                Log.d("Individual", "HOHID LENGTH 2: " + originalHouseExtId + " " + ClusterFragment.selectedLocation.compno);
+                Log.d("Individual", "Individuals List Size: " + (individuals != null ? individuals.size() : "null"));
+                // Iterate over each Individual record
+                for (Individual data : individuals) {
+                    Log.d("Individual", "HOHID LENGTH 3: " + originalHouseExtId);
+
+                    if (data != null && originalHouseExtId != null && originalHouseExtId.length() != 11) {
+                        IndividualResidency items = new IndividualResidency();
+                        items.uuid = data.uuid;
+                        items.hohID = id;
+                        imodel.updateres(items);
+                        Log.d("IndividualResidency", "Updated Individual UUID: " + data.uuid + " with new HOHID: " + id);
+                    }
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+
             if(finalData.houseExtId.length() !=11){
                 Log.d("Individual", "HOHID LENGTH 1: " + finalData.houseExtId);
-                String originalHouseExtId = finalData.houseExtId;
+
                 finalData.houseExtId = id;
                 if(finalData.roundNumber < 10) {
                     finalData.extId = id + "00" + finalData.getRoundNumber();
                 }else {
                     finalData.extId = id + "0" + finalData.getRoundNumber();
-                }
-                HouseholdAmendment item = new HouseholdAmendment();
-                item.complete = 1;
-                item.uuid = binding.getVisit().socialgroup_uuid;
-                item.extId = id;
-                vmodel.update(item);
-
-                //Update hohid in individual if hohid length!=11
-                try {
-                    List<Individual> individuals = imodel.hoh(originalHouseExtId);
-                    Log.d("Individual", "HOHID LENGTH 2: " + originalHouseExtId);
-                    // Iterate over each Individual record
-                    for (Individual data : individuals) {
-                        Log.d("Individual", "HOHID LENGTH 2: " + originalHouseExtId);
-                        if (data != null) {
-                            IndividualResidency items = new IndividualResidency();
-                            items.uuid = data.uuid;
-                            items.hohID = id; // Ensure 'id' is the correct value for the update
-                            imodel.updateres(items);
-                        }
-                    }
-
-                }catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
 
@@ -271,6 +271,25 @@ public class VisitFragment extends DialogFragment {
             }
 
             viewModel.add(finalData);
+
+
+            try {
+                Socialgroup data = vmodel.find(socialgroup.uuid);
+                if (data != null && originalHouseExtId.length() !=11) {
+                    HouseholdAmendment item = new HouseholdAmendment();
+                    item.complete = 1;
+                    item.uuid = data.uuid;
+                    item.extId = id;
+                    vmodel.update(item);
+
+                    Log.d("Print", "New HOHID: " + finalData.houseExtId + " " + item.extId);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             try {
                 Socialgroup data = vmodel.visit(socialgroup.uuid);

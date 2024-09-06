@@ -42,6 +42,7 @@ import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
+import org.openhds.hdsscapture.Viewmodel.RegistryViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
@@ -60,6 +61,7 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
+import org.openhds.hdsscapture.entity.Registry;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -268,6 +270,13 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             //final Death death = new Death();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     DemographicFragment.newInstance(individual,locations, socialgroup)).commit();
+        });
+
+        final AppCompatButton reg = view.findViewById(R.id.BTNregistry);
+        reg.setOnClickListener(v -> {
+            //final Death death = new Death();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    RegisterFragment.newInstance(locations, socialgroup,individual)).commit();
         });
 //        demo.setOnClickListener(v -> {
 //            DemographicFragment.newInstance(individual, locations, socialgroup)
@@ -494,6 +503,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             AppCompatButton relhoh = view.findViewById(R.id.relhoh);
             AppCompatButton img = view.findViewById(R.id.img);
             AppCompatButton mor = view.findViewById(R.id.morbidity);
+            AppCompatButton reg = view.findViewById(R.id.BTNregistry);
             View id1 = view.findViewById(R.id.id1);
             View id2 = view.findViewById(R.id.id2);
             View id3 = view.findViewById(R.id.id3);
@@ -536,6 +546,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 String TextVac = "Vaccination";
                 String TextRelhoh = "Update Membership";
                 String TextImg = "Update Inmigration";
+                String TextReg = "Household Registry";
 
 
                 // Disable all buttons if Visit data is null
@@ -574,6 +585,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 setButtonText(preg3, !isVisitDataNull, Textpreg3);
                 setButtonEnabled(outcome3, !isVisitDataNull);
                 setButtonText(outcome3, !isVisitDataNull, TextOutcome3);
+                setButtonEnabled(reg, !isVisitDataNull);
+                setButtonText(reg, !isVisitDataNull, TextReg);
 
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -742,6 +755,21 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
             }
 
+            RegistryViewModel r = new ViewModelProvider(this).get(RegistryViewModel.class);
+            try {
+                Registry data = r.finds(socialgroup.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(reg, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(reg, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
             MorbidityViewModel m = new ViewModelProvider(this).get(MorbidityViewModel.class);
             try {
                 Morbidity data = m.finds(selectedIndividual.uuid);
@@ -818,6 +846,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 id9.setVisibility(View.VISIBLE);
                 mor.setVisibility(View.VISIBLE);
                 id15.setVisibility(View.VISIBLE);
+                reg.setVisibility(View.VISIBLE);
             }
 
             InmigrationViewModel imgViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);

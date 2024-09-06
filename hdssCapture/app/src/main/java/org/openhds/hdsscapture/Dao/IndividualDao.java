@@ -64,11 +64,14 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual where extId=:id ")
     Individual retrieve(String id);
 
+    @Query("SELECT a.* FROM individual a INNER JOIN registry b on a.uuid=b.individual_uuid where a.uuid=:id ")
+    Individual mapregistry(String id);
+
     @Query("SELECT * FROM individual WHERE complete=1 order by dob")
     List<Individual> retrieveToSync();
 
-    @Query("SELECT * FROM individual where hohID=:id ")
-    List<Individual> hoh(String id);
+    @Query("SELECT * FROM individual where compno=:comp AND hohID=:id ")
+    List<Individual> hoh(String comp,String id);
 
     @Query("SELECT * from individual WHERE endType=1 and firstName!='FAKE' and hohID=:id order by dob")
     List<Individual> retrieveByLocationId(String id);
@@ -268,6 +271,9 @@ public interface IndividualDao {
 
     @Query("SELECT * FROM individual Where uuid=:id and complete IS NULL ")
     Individual visited(String id);
+
+    @Query("SELECT * FROM individual WHERE firstName!='FAKE' AND substr(extId, 1, 4) = 'null' ")
+    List<Individual> nulls();
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)

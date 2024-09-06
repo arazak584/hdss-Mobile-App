@@ -208,6 +208,25 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="visible"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/household"
+                    android:text="@string/household">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/hohid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={individual.hohID}"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -716,6 +735,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    goneUnless="@{residency.img==1}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"

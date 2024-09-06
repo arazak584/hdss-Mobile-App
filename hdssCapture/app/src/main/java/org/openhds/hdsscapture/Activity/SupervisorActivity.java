@@ -38,6 +38,7 @@ public class SupervisorActivity extends AppCompatActivity {
     private ProgressDialog progress;
     private ProgressBar progressBar;
     private AppJson appJson;
+    private TextView txtAppName;
 
     @Override
     protected void onResume() {
@@ -63,6 +64,9 @@ public class SupervisorActivity extends AppCompatActivity {
 
         progress = new ProgressDialog(SupervisorActivity.this);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+        txtAppName = findViewById(R.id.txtAppName);
+        txtAppName.setText(getString(R.string.app_name)+" v"+ getString(R.string.versions));
 
         progressBar = findViewById(R.id.login_progress);
 
