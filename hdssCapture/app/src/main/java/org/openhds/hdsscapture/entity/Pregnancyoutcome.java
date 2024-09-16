@@ -1011,7 +1011,6 @@ public class Pregnancyoutcome extends BaseObservable implements Parcelable {
 
             if(id1001== null || id1001!=1){
                 id1002 = null;
-                id1003 = null;
                 id1004 = null;
             }
 
