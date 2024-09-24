@@ -19,6 +19,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.gson.Gson;
+
 import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.Dao.ApiDao;
 import org.openhds.hdsscapture.R;
@@ -1611,10 +1613,15 @@ public class PushActivity extends AppCompatActivity {
                         if (response != null && response.body() != null && response.isSuccessful()
                                 && response.body().getData() != null && !response.body().getData().isEmpty()) {
 
+                            // Log the entire response body for debugging
+                            String responseBodyJson = new Gson().toJson(response.body());
+                            Log.d("API Response", "Response Body: " + responseBodyJson);
+
                             Registry[] d = data.getData().toArray(new Registry[0]);
 
                             for (Registry elem : d) {
                                 elem.complete = 0;
+                                Log.d("Sync", "Registry Insert Date: " + elem.insertDate);
                             }
                             registryViewModel.add(d);
 
@@ -1689,6 +1696,7 @@ public class PushActivity extends AppCompatActivity {
 
                             for (Morbidity elem : d) {
                                 elem.complete = 0;
+
                             }
                             morbidityViewModel.add(d);
 

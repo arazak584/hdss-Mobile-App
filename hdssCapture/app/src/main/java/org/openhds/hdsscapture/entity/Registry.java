@@ -1,10 +1,6 @@
 package org.openhds.hdsscapture.entity;
 
-import android.graphics.Color;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
@@ -12,13 +8,13 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import com.google.gson.annotations.Expose;
 
 import org.jetbrains.annotations.NotNull;
-import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.BR;
-import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
+import org.openhds.hdsscapture.Utilities.DateConverter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,7 +49,7 @@ public class Registry extends BaseObservable {
     public Registry(){}
 
     @Ignore
-    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
     @Bindable
     @NotNull
@@ -65,16 +61,21 @@ public class Registry extends BaseObservable {
         this.individual_uuid = individual_uuid;
     }
 
+    @Bindable
     public String getInsertDate() {
-        if (insertDate == null) return null;
-        return f.format(insertDate);
+        return insertDate == null ? null : f.format(insertDate);
     }
 
     public void setInsertDate(String insertDate) {
         try {
-            this.insertDate = f.parse(insertDate);
+            if (insertDate == null || insertDate.isEmpty()) {
+                this.insertDate = null;
+            } else {
+                this.insertDate = f.parse(insertDate);
+            }
+            notifyPropertyChanged(BR.insertDate);
         } catch (ParseException e) {
-            System.out.println("Date Error " + e.getMessage());
+            System.out.println("Date parsing error: " + e.getMessage());
         }
     }
 

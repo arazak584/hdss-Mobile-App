@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,8 +118,8 @@ public class RegisterFragment extends Fragment {
                 Registry registry = registryViewModel.finds(socialgroup.getUuid());
                 if (registry != null) {
                     binding.setRegistry(registry);
-                    binding.getRegistry().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                     // Load associated individuals into the adapter
+                    //Log.d("Date", "InsertRegistry 1 : "+  registry.insertDate);
                     registryAdapter.filter();
                 } else {
                     Registry newRegistry = new Registry();
@@ -126,7 +127,6 @@ public class RegisterFragment extends Fragment {
 //                    newRegistry.setFw_uuid(fieldworkerData.getFw_uuid());
 //                    newRegistry.setSocialgroup_uuid(socialgroup.getUuid());
 //                    newRegistry.setLocation_uuid(ClusterFragment.selectedLocation.getUuid());
-                    newRegistry.setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 
                     registryAdapter.filter();
                     binding.setRegistry(newRegistry);
@@ -149,13 +149,17 @@ public class RegisterFragment extends Fragment {
                     registry.setSocialgroup_uuid(socialgroup.getUuid());
                     registry.setLocation_uuid(ClusterFragment.selectedLocation.getUuid());
                     registry.setFw_uuid(fieldworkerData.getFw_uuid());
-
+                    //registry.insertDate = new Date();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    String formattedDate = sdf.format(new Date());
+                    registry.setInsertDate(formattedDate);
+                    Log.d("Date", "InsertRegistry: "+  registry.insertDate);
+                    Log.d("Date", "Insert Date Format: "+  formattedDate);
                     // Retrieve the status from the adapter or set a default value
                     boolean isChecked = registryAdapter.isChecked(individual.getUuid());
                     registry.setStatus(isChecked ? 1 : 2);
 
                     // Set other required fields
-                    registry.setInsertDate(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date()));
                     registry.setComplete(1);
 
                     // Add the registry record to the ViewModel

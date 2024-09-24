@@ -50,7 +50,7 @@ public class AppJson {
     }
 
     public ApiDao getJsonApi() {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").setLenient().create();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setLenient().create();
         if (retrofit == null) {
             refreshRetrofit();
         }
@@ -83,7 +83,7 @@ public class AppJson {
     public void refreshRetrofit() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setDateFormat("yyyy-MM-dd").setLenient().create()))
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX").setLenient().create()))
                 .client(new OkHttpClient.Builder()
                         .cache(null)
                         .build())
