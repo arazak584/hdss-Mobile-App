@@ -475,6 +475,25 @@ public class DthFragment extends Fragment {
                 e.printStackTrace();
             }
 
+            //Update Residency
+            try {
+                Residency data = resModel.restore(individual.uuid);
+                if (data != null && binding.getDeath().edit != null && binding.getDeath().edit == 1) {
+                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+                    residencyAmendment.endType = 3;
+                    residencyAmendment.endDate = binding.getDeath().deathDate;
+                    residencyAmendment.uuid = binding.getDeath().residency_uuid;
+                    residencyAmendment.complete = 1;
+
+                    resModel.update(residencyAmendment);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             //Restore Residency In residency entity
             try {
                 Residency data = resModel.restore(individual.uuid);

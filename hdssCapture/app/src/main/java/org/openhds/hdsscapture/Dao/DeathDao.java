@@ -29,7 +29,7 @@ public interface DeathDao {
     @Query("SELECT * FROM death where individual_uuid=:id")
     Death find(String id);
 
-    @Query("SELECT * FROM death where individual_uuid=:id and edit IS NULL")
+    @Query("SELECT * FROM death where individual_uuid=:id")
     Death finds(String id);
 
     @Query("SELECT * FROM death where individual_uuid=:id")
