@@ -311,11 +311,17 @@ public class RelationshipFragment extends Fragment {
             try {
                 if (!binding.womanDob.getText().toString().trim().isEmpty() && !binding.relStartDate.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = new Date();
                     Date stdate = f.parse(binding.relStartDate.getText().toString().trim());
                     Date edate = f.parse(binding.womanDob.getText().toString().trim());
                     if (edate.after(stdate)) {
                         binding.relStartDate.setError("Start Date Cannot Be Less than Date of Birth");
                         Toast.makeText(getActivity(), "Start Date Cannot Be Less than Date of Birth", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (stdate.after(currentDate)) {
+                        binding.relStartDate.setError("Date Cannot Be a Future Date");
+                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
                     // clear error if validation passes

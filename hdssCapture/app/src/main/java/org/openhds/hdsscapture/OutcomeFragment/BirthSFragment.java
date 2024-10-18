@@ -220,7 +220,7 @@ public class BirthSFragment extends Fragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.uuid = uuidString;
+                data.uuid = "ST-"+ HouseMembersFragment.selectedIndividual.getExtId();
                 data.insertDate = new Date();
                 data.firstName = "Still";
                 data.lastName = "Birth";

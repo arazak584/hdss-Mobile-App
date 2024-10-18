@@ -35,6 +35,7 @@ import org.openhds.hdsscapture.entity.subqueries.Newloc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 
 public class ScheduleActivity extends AppCompatActivity {
 
@@ -102,12 +103,13 @@ public class ScheduleActivity extends AppCompatActivity {
         areaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                generateWorkingArea();
+                generateWorkingArea(); // Calls the method that now runs in the background
             }
         });
 
 
     }
+
 
     private void generateWorkingArea() {
         showProgressDialog();

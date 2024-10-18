@@ -105,31 +105,6 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.ViewHolder>{
         holder.id2.setText(hierarchy.subdist);
         holder.id3.setText(hierarchy.village);
 
-//        String cps = hierarchy.extId;//Visited Compounds
-//        String cp = hierarchy.town;//Total Compounds
-//        String hh = hierarchy.area;//Total Households
-//
-//        try {
-//            int cpsInt = Integer.parseInt(cps);
-//            int cpInt = Integer.parseInt(cp);
-//            int hhInt = Integer.parseInt(hh);
-//
-//            if (cpInt > 0 && cpInt < cpsInt && hhInt > 0) {
-//                holder.id4.setText(hierarchy.cluster + " (" + cp + ", " + hh + ") " + " IN PROGRESS");
-//                holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Blue));
-//            } else if (cpsInt == cpInt && hhInt <= 0) {
-//                holder.id4.setText(hierarchy.cluster + " (" + cp + ", " + hh + ") " + " DONE");
-//                holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.color_blackgreen_end));
-//            } else {
-//                holder.id4.setText(hierarchy.cluster + " (" + cp + ", " + hh + ") " + " NOT STARTED");
-//                holder.id4.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Red));
-//            }
-//        } catch (NumberFormatException e) {
-//            // Handle the exception if the string cannot be parsed to an integer
-//            e.printStackTrace();
-//            // Optionally, you can show an error message or handle it accordingly
-//        }
-
         try {
             // Assuming you have access to the necessary ViewModel instances
             long count = locationViewModel.done(hierarchy.uuid);
@@ -195,6 +170,8 @@ public class WorkAdapter extends RecyclerView.Adapter<WorkAdapter.ViewHolder>{
 
         notifyDataSetChanged();
     }
+
+
 
 
 }

@@ -98,6 +98,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
 
 import retrofit2.Call;
@@ -380,7 +382,7 @@ public class MainActivity extends AppCompatActivity {
         fw = fieldworkerDatas.getUsername();
         fws = fieldworkerDatas.getFw_uuid();
         status = (fieldworkerDatas != null) ? fieldworkerDatas.getStatus() : 0;  // Default to 0 or another appropriate value
-        calculatePercentage();
+        //calculatePercentage();
         //Toast.makeText(MainActivity.this, "Welcome " + fieldworkerDatas.firstName + " " + fieldworkerDatas.lastName, Toast.LENGTH_LONG).show();
         //Toast.makeText(MainActivity.this, "Welcome " + status, Toast.LENGTH_LONG).show();
 
@@ -611,199 +613,126 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        calculatePercentage();
-        countRejected();
-        //startDownloadProcess();
+        runInBackground(this::calculatePercentage);  // Run calculatePercentage in background
+        runInBackground(this::countRejected);  // Run countRejected in background
+
         if (!isLocationEnabled(this)) {
             showLocationSettingsPrompt();
         }
     }
 
+    private void runInBackground(Runnable task) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(task);
+    }
+
+
     private void calculatePercentage() {
-        LocationViewModel viewModels = new ViewModelProvider(this).get(LocationViewModel.class);
+        // Create a new thread to perform the calculation in the background
+        new Thread(() -> {
+            LocationViewModel viewModels = new ViewModelProvider(this).get(LocationViewModel.class);
 
-        try {
-            long totalLocations = viewModels.work(fw);
-            long editedLocations = viewModels.works(fw);
+            try {
+                long totalLocations = viewModels.work(fw);
+                long editedLocations = viewModels.works(fw);
 
-            if (totalLocations > 0) {
-                // Calculate the percentage of edited locations
-                double percentage = ((double) editedLocations / totalLocations) * 100;
+                if (totalLocations > 0) {
+                    double percentage = ((double) editedLocations / totalLocations) * 100;
+                    String formattedPercentage = String.format(Locale.getDefault(), "%.2f", percentage);
 
-                // Format the percentage to display two decimal places
-                String formattedPercentage = String.format(Locale.getDefault(), "%.2f", percentage);
+                    // Update the UI on the main thread
+                    runOnUiThread(() -> {
+                        ProgressBar circularProgressBar = findViewById(R.id.circularProgressBar);
+                        circularProgressBar.setMax((int) totalLocations);
+                        circularProgressBar.setProgress((int) Math.min(editedLocations, totalLocations));
+                        wks.setText(formattedPercentage + "% ");
+                        Log.d("Percentage", "Percentage of edited locations: " + percentage);
+                    });
+                }
 
-                ProgressBar circularProgressBar = findViewById(R.id.circularProgressBar);
-                circularProgressBar.setMax((int) totalLocations);
-                circularProgressBar.setProgress((int) Math.min(editedLocations, totalLocations));
-                wks.setText(formattedPercentage + "% ");
-
-                // Now you have the percentage value, and you can use it as needed
-                // For example, you can log it or display it in your app
-                Log.d("Percentage", "Percentage of edited locations: " + percentage);
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
             }
-
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        }).start(); // Start the thread
     }
 
     private void countRejected() {
+        // Create a new thread to perform the counting in the background
+        new Thread(() -> {
+            try {
+                long totalImg = inmigrationViewModel.rej(fws);
+                long totalOmg = outmigrationViewModel.rej(fws);
+                long totalPre = pregnancyViewModel.rej(fws);
+                long totalOut = pregnancyoutcomeViewModel.rej(fws);
+                long totalDem = demographicViewModel.rej(fws);
+                long totalDth = deathViewModel.rej(fws);
+                long totalRel = relationshipViewModel.rej(fws);
+                long totalses = hdssSociodemoViewModel.rej(fws);
+                long totalvac = vaccinationViewModel.rej(fws);
+                long totalmor = morbidityViewModel.rej(fws);
 
-        try {
-            long totalImg = inmigrationViewModel.rej(fws);
-            long totalOmg = outmigrationViewModel.rej(fws);
-            long totalPre = pregnancyViewModel.rej(fws);
-            long totalOut = pregnancyoutcomeViewModel.rej(fws);
-            long totalDem = demographicViewModel.rej(fws);
-            long totalDth = deathViewModel.rej(fws);
-            long totalRel = relationshipViewModel.rej(fws);
-            long totalses = hdssSociodemoViewModel.rej(fws);
-            long totalvac = vaccinationViewModel.rej(fws);
-            long totalmor = morbidityViewModel.rej(fws);
+                long totalRejected = totalImg + totalOmg + totalPre + totalOut + totalDem + totalDth + totalRel + totalses + totalvac + totalmor;
 
-            long totalRejected = totalImg + totalOmg + totalPre + totalOut + totalDem + totalDth + totalRel +totalses +totalvac +totalmor;
+                // Get the Intent and the Fieldworker data
+                final Intent f = getIntent();
+                final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
 
-            final Intent f = getIntent();
-            final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
+                // Update the UI on the main thread
+                runOnUiThread(() -> {
+                    reject = findViewById(R.id.btnReject);
+                    reject.setText("REJECTIONS " + "(" + totalRejected + ")");
+                    reject.setOnClickListener(v -> {
+                        Intent i = new Intent(getApplicationContext(), RejectionsActivity.class);
+                        i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
+                        startActivity(i);
+                    });
+                    Log.d("MainActivity", "Rejections " + totalRejected);
+                });
 
-            // Update the button text
-            reject = findViewById(R.id.btnReject);
-            reject.setText("REJECTIONS " + "(" +totalRejected + ")");
-
-            // Set the OnClickListener
-            reject.setOnClickListener(v -> {
-                Intent i = new Intent(getApplicationContext(), RejectionsActivity.class);
-                i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
-                startActivity(i);
-            });
-
-            //reject.setText("REJECTED " + totalRejected);
-            Log.d("MainActivity", "Rejections " + totalRejected);
-
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start(); // Start the thread
     }
 
 
-//    private void startDownloadProcess() {
+
+//    private void countRejected() {
+//        try {
+//            long totalImg = inmigrationViewModel.rej(fws);
+//            long totalOmg = outmigrationViewModel.rej(fws);
+//            long totalPre = pregnancyViewModel.rej(fws);
+//            long totalOut = pregnancyoutcomeViewModel.rej(fws);
+//            long totalDem = demographicViewModel.rej(fws);
+//            long totalDth = deathViewModel.rej(fws);
+//            long totalRel = relationshipViewModel.rej(fws);
+//            long totalses = hdssSociodemoViewModel.rej(fws);
+//            long totalvac = vaccinationViewModel.rej(fws);
+//            long totalmor = morbidityViewModel.rej(fws);
 //
-//        if (!isInternetAvailable()) {
-//            return;
-//        }
+//            long totalRejected = totalImg + totalOmg + totalPre + totalOut + totalDem + totalDth + totalRel + totalses + totalvac + totalmor;
 //
-//        final InmigrationViewModel inmigrationViewModel = new ViewModelProvider(MainActivity.this).get(InmigrationViewModel.class);
-//        Call<DataWrapper<Inmigration>> c_callable = dao.getImg(authorizationHeader);
-//        c_callable.enqueue(new Callback<DataWrapper<Inmigration>>() {
-//            @Override
-//            public void onResponse(Call<DataWrapper<Inmigration>> call, Response<DataWrapper<Inmigration>> response) {
-//                Inmigration[] img = response.body().getData().toArray(new Inmigration[0]);
-//                for (Inmigration item : img) {
-//                    item.complete = 1;
-//                }
-//                inmigrationViewModel.add(img);
+//            final Intent f = getIntent();
+//            final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
 //
-//                // Next Step: Outmigration
-//                final OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(MainActivity.this).get(OutmigrationViewModel.class);
-//                Call<DataWrapper<Outmigration>> c_callable = dao.getOmg(authorizationHeader);
-//                c_callable.enqueue(new Callback<DataWrapper<Outmigration>>() {
-//                    @Override
-//                    public void onResponse(Call<DataWrapper<Outmigration>> call, Response<DataWrapper<Outmigration>> response) {
-//                        Outmigration[] i = response.body().getData().toArray(new Outmigration[0]);
-//                        for (Outmigration item : i) {
-//                            item.complete = 1;
-//                        }
-//                        outmigrationViewModel.add(i);
-//
-//                        // Next Step: Death
-//                        final DeathViewModel deathViewModel = new ViewModelProvider(MainActivity.this).get(DeathViewModel.class);
-//                        Call<DataWrapper<Death>> c_callable = dao.getDth(authorizationHeader);
-//                        c_callable.enqueue(new Callback<DataWrapper<Death>>() {
-//                            @Override
-//                            public void onResponse(Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
-//                                Death[] co = response.body().getData().toArray(new Death[0]);
-//                                deathViewModel.add(co);
-//
-//                                // Next Step: Pregnancy
-//                                final PregnancyViewModel pregnancyViewModel = new ViewModelProvider(MainActivity.this).get(PregnancyViewModel.class);
-//                                Call<DataWrapper<Pregnancy>> c_callable = dao.getPreg(authorizationHeader);
-//                                c_callable.enqueue(new Callback<DataWrapper<Pregnancy>>() {
-//                                    @Override
-//                                    public void onResponse(Call<DataWrapper<Pregnancy>> call, Response<DataWrapper<Pregnancy>> response) {
-//                                        Pregnancy[] fw = response.body().getData().toArray(new Pregnancy[0]);
-//                                        pregnancyViewModel.add(fw);
-//
-//                                                // Next Step: Demographic
-//                                        final DemographicViewModel demographicViewModel = new ViewModelProvider(MainActivity.this).get(DemographicViewModel.class);
-//                                        Call<DataWrapper<Demographic>> c_callable = dao.getDemo(authorizationHeader);
-//                                        c_callable.enqueue(new Callback<DataWrapper<Demographic>>() {
-//                                            @Override
-//                                            public void onResponse(Call<DataWrapper<Demographic>> call, Response<DataWrapper<Demographic>> response) {
-//                                                Demographic[] dm = response.body().getData().toArray(new Demographic[0]);
-//                                                demographicViewModel.add(dm);
-//
-//                                                // Next Step: Relationship
-//                                                final RelationshipViewModel relationshipViewModel = new ViewModelProvider(MainActivity.this).get(RelationshipViewModel.class);
-//                                                Call<DataWrapper<Relationship>> c_callable = dao.getRel(authorizationHeader);
-//                                                c_callable.enqueue(new Callback<DataWrapper<Relationship>>() {
-//                                                    @Override
-//                                                    public void onResponse(Call<DataWrapper<Relationship>> call, Response<DataWrapper<Relationship>> response) {
-//                                                        Relationship[] rel = response.body().getData().toArray(new Relationship[0]);
-//                                                        relationshipViewModel.add(rel);
-//
-//                                                        // Final Step: Pregnancy Outcome
-//                                                        final PregnancyoutcomeViewModel pregout = new ViewModelProvider(MainActivity.this).get(PregnancyoutcomeViewModel.class);
-//                                                        Call<DataWrapper<Pregnancyoutcome>> c_callable = dao.getOut(authorizationHeader);
-//                                                        c_callable.enqueue(new Callback<DataWrapper<Pregnancyoutcome>>() {
-//                                                            @Override
-//                                                            public void onResponse(Call<DataWrapper<Pregnancyoutcome>> call, Response<DataWrapper<Pregnancyoutcome>> response) {
-//                                                                Pregnancyoutcome[] cng = response.body().getData().toArray(new Pregnancyoutcome[0]);
-//                                                                pregout.add(cng);
-//                                                            }
-//
-//                                                            @Override
-//                                                            public void onFailure(Call<DataWrapper<Pregnancyoutcome>> call, Throwable t) {
-//                                                            }
-//                                                        });
-//                                                    }
-//
-//                                                    @Override
-//                                                    public void onFailure(Call<DataWrapper<Relationship>> call, Throwable t) {
-//                                                    }
-//                                                });
-//                                            }
-//
-//                                            @Override
-//                                            public void onFailure(Call<DataWrapper<Demographic>> call, Throwable t) {
-//                                            }
-//                                        });
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(Call<DataWrapper<Pregnancy>> call, Throwable t) {
-//                                    }
-//                                });
-//                            }
-//
-//                            @Override
-//                            public void onFailure(Call<DataWrapper<Death>> call, Throwable t) {
-//                            }
-//                        });
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<DataWrapper<Outmigration>> call, Throwable t) {
-//                    }
+//            // Update the UI on the main thread
+//            runOnUiThread(() -> {
+//                reject = findViewById(R.id.btnReject);
+//                reject.setText("REJECTIONS " + "(" + totalRejected + ")");
+//                reject.setOnClickListener(v -> {
+//                    Intent i = new Intent(getApplicationContext(), RejectionsActivity.class);
+//                    i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
+//                    startActivity(i);
 //                });
-//            }
+//                Log.d("MainActivity", "Rejections " + totalRejected);
+//            });
 //
-//            @Override
-//            public void onFailure(Call<DataWrapper<Inmigration>> call, Throwable t) {
-//            }
-//        });
+//        } catch (ExecutionException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
 //    }
+
+
 
 
 }

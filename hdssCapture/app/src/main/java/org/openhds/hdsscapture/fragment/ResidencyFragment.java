@@ -142,7 +142,7 @@ public class ResidencyFragment extends Fragment {
                     public void run() {
                         progressDialog.dismiss();
                     }
-                }, 500);
+                }, 100);
 
                 // Show the dialog fragment
                 HouseholdDialogFragment.newInstance(individual, locations,socialgroup)

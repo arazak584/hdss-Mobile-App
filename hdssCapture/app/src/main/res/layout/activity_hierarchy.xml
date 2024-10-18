@@ -210,7 +210,7 @@
                 android:textSize="25dp"
                 android:text="@string/village" />
 
-            <Spinner
+            <org.openhds.hdsscapture.SearchableSpinner
                 android:id="@+id/spVillage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -243,7 +243,7 @@
                 android:textSize="25dp"
                 android:text="@string/cluster" />
 
-            <Spinner
+            <org.openhds.hdsscapture.SearchableSpinner
                 android:id="@+id/spCluster"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

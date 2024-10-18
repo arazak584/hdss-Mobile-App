@@ -18,11 +18,13 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Utilities.UniqueIDGen;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.databinding.FragmentBirthBBinding;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
@@ -292,6 +294,7 @@ public class Birth3BFragment extends Fragment {
                     }
                     outcomeViewModel.add(inf);
 
+                    DeathViewModel dth = new ViewModelProvider(this).get(DeathViewModel.class);
                     if (binding.getPregoutcome2().type==1){
                         Individual ind = new Individual();
                         Outcome prg = binding.getPregoutcome2();
@@ -309,8 +312,20 @@ public class Birth3BFragment extends Fragment {
                         ind.dobAspect = 1;
                         ind.hohID = socialgroup.extId;
                         ind.compno = ClusterFragment.selectedLocation.compno;
-                        ind.endType = 1;
+                        //ind.endType = 1;
                         ind.village = level6Data.getName();
+                        try {
+                            Death dta = dth.finds(prg.individual_uuid);
+                            if (dta != null){
+                                ind.endType = 3;
+                            }else{
+                                ind.endType = 1;
+                            }
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
 
                         individualViewModel.add(ind);
 
@@ -322,7 +337,7 @@ public class Birth3BFragment extends Fragment {
                         res.uuid= prg.residency_uuid;
                         res.individual_uuid = prg.individual_uuid;
                         res.startDate= binding.getPregoutcome().outcomeDate;
-                        res.endType= 1;
+                        //res.endType= 1;
                         res.startType= 2;
                         res.insertDate= prg.insertDate;
                         res.location_uuid= ClusterFragment.selectedLocation.uuid;
@@ -330,6 +345,19 @@ public class Birth3BFragment extends Fragment {
                         res.fw_uuid= binding.getPregoutcome().fw_uuid;
                         res.rltn_head = prg.rltn_head;
                         res.complete = 1;
+
+                        try {
+                            Death dta = dth.finds(prg.individual_uuid);
+                            if (dta != null){
+                                res.endType = 3;
+                            }else{
+                                res.endType = 1;
+                            }
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
 
                         residencyViewModel.add(res);
                     }

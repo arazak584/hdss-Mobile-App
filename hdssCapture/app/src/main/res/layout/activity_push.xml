@@ -45,6 +45,7 @@
             android:background="@color/Green" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendLocation"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -75,6 +76,7 @@
 <!--            android:textSize="20sp" />-->
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendList"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -97,6 +99,7 @@
 <!--            android:textSize="20sp" />-->
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendIndividual"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -119,6 +122,7 @@
 <!--            android:textSize="20sp" />-->
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendSocialgroup"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -134,6 +138,7 @@
             android:layout_gravity="center" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendVisit"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -156,6 +161,7 @@
 <!--            android:textSize="20sp" />-->
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendRelationship"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -178,6 +184,7 @@
 <!--            android:textSize="20sp" />-->
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendPregnancy"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -200,6 +207,7 @@
 <!--            android:textSize="20sp" />-->
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendOutcome"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -222,6 +230,7 @@
 <!--            android:textSize="20sp" />-->
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendOutcomes"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -244,6 +253,7 @@
 <!--            android:textSize="20sp" />-->
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendDemography"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -268,6 +278,7 @@
 
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttondth"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -283,6 +294,7 @@
             android:layout_gravity="center" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonvpm"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -305,6 +317,7 @@
 <!--            android:textSize="20sp" />-->
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendSocio"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -327,6 +340,7 @@
 <!--            android:textSize="20sp" />-->
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendResidency"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -349,6 +363,7 @@
 <!--            android:textSize="20sp" />-->
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendImg"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -371,6 +386,7 @@
 <!--            android:textSize="20sp" />-->
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendOmg"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -393,6 +409,7 @@
 <!--            android:textSize="20sp" />-->
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendAmend"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -415,6 +432,7 @@
 <!--            android:textSize="20sp" />-->
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendVac"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -430,6 +448,7 @@
             android:layout_gravity="center" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendMor"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -452,6 +471,7 @@
 <!--            android:textSize="20sp" />-->
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendDup"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -467,6 +487,7 @@
             android:layout_gravity="center" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendCom"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
@@ -482,6 +503,7 @@
             android:layout_gravity="center" />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:visibility="gone"
             android:id="@+id/buttonSendReg"
             android:layout_width="400dp"
             android:layout_height="wrap_content"
