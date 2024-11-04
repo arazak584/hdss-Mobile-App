@@ -1018,10 +1018,6 @@ public class Pregnancyoutcome extends BaseObservable implements Parcelable {
                 id1007 = null;
             }
 
-            if(id1008== null || id1008!=1){
-                id1009 = null;
-            }
-
             notifyPropertyChanged(BR._all);
         }
     }

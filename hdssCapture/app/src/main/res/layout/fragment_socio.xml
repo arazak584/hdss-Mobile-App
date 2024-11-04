@@ -497,7 +497,7 @@
                                     android:padding="15dp"/>
 
                                 <TextView
-                                    goneUnless="@{sociodemo.id0003==2}"
+                                    goneUnless="@{sociodemo.id0003==3 || sociodemo.id0003==2}"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="start"
@@ -506,7 +506,7 @@
                                     android:text="@string/id0005"/>
 
                                 <org.openhds.hdsscapture.SearchableSpinner
-                                    goneUnless="@{sociodemo.id0003==2}"
+                                    goneUnless="@{sociodemo.id0003==3 || sociodemo.id0003==2}"
                                     android:id="@+id/id0005"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"

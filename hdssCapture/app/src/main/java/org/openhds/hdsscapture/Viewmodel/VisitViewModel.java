@@ -34,6 +34,10 @@ public class VisitViewModel extends AndroidViewModel {
         return visitRepository.countVisits(startDate, endDate, username);
     }
 
+    public long count(String id) throws ExecutionException, InterruptedException {
+        return visitRepository.count(id);
+    }
+
 //    public long countLocs(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
 //        return visitRepository.countLocs(startDate, endDate, username);
 //    }

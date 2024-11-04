@@ -771,7 +771,6 @@
                             android:padding="15dp"/>
 
                         <TextView
-                            goneUnless="@{pregoutcome.id1008==1}"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="start"
@@ -780,7 +779,6 @@
                             android:text="@string/id1009"/>
 
                         <org.openhds.hdsscapture.SearchableSpinner
-                            goneUnless="@{pregoutcome.id1008==1}"
                             android:id="@+id/id1009"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

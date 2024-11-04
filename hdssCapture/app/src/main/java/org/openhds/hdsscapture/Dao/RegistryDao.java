@@ -42,4 +42,7 @@ public interface RegistryDao {
     @Query("SELECT * FROM registry where socialgroup_uuid=:id LIMIT 1")
     Registry finds(String id);
 
+    @Query("SELECT COUNT(*) FROM registry WHERE socialgroup_uuid = :id")
+    long count(String id);
+
 }

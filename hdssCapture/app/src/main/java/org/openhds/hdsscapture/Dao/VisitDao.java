@@ -35,6 +35,9 @@ public interface VisitDao {
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long countVisits(Date startDate, Date endDate, String username);
 
+    @Query("SELECT COUNT(*) FROM visit WHERE socialgroup_uuid = :id")
+    long count(String id);
+
 
 //    @Query("SELECT COUNT(*) FROM visit a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
 //            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username GROUP BY a.location_uuid")

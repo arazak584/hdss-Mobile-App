@@ -100,6 +100,9 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private DeathViewModel deathViewModel;
     private OutmigrationViewModel outmigrationViewModel;
     private SocialgroupViewModel viewModel;
+    private RegistryViewModel registryViewModel;
+    private VisitViewModel visitViewModel;
+    private IndividualViewModel individualViewModel;
     private  Pregnancy pregnancy;
     private Pregnancyoutcome pregnancyoutcome;
     public interface IndividualClickListener {
@@ -155,6 +158,9 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
         viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+        registryViewModel = new ViewModelProvider(this).get(RegistryViewModel.class);
+        visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
+        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
         //query();
 
         //final TextView hh = view.findViewById(R.id.textView_compextId);
@@ -168,7 +174,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
         final RecyclerView recyclerView = view.findViewById(R.id.recyclerView_household);
         final IndividualViewAdapter adapter = new IndividualViewAdapter(this, locations, socialgroup,this );
-        final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
+        //final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
         //recyclerView.setHasFixedSize(true);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),

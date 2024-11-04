@@ -55,6 +55,12 @@ public class RegistryRepository {
         return future.get();
     }
 
+    public long count(String id) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.count(id);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
     public List<Registry> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Registry>> callable = () -> dao.retrieveSync();

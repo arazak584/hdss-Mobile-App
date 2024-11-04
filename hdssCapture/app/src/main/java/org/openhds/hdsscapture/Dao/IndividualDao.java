@@ -275,6 +275,9 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual WHERE firstName!='FAKE' AND substr(extId, 1, 4) = 'null' ")
     List<Individual> nulls();
 
+    @Query("SELECT COUNT(hohID) FROM individual WHERE hohID = :id AND endType=1")
+    long count(String id);
+
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Individual> individuals);

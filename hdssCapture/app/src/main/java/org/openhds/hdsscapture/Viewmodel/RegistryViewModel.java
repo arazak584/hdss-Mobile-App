@@ -35,6 +35,9 @@ public class RegistryViewModel extends AndroidViewModel {
         return registryRepository.findToSync();
     }
 
+    public long count(String id) throws ExecutionException, InterruptedException {
+        return registryRepository.count(id);
+    }
 
     public void add(Registry data){
         registryRepository.create(data);
