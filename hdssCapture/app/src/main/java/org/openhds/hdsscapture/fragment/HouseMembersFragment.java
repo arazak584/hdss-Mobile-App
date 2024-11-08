@@ -2,6 +2,7 @@ package org.openhds.hdsscapture.fragment;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -105,9 +106,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private IndividualViewModel individualViewModel;
     private  Pregnancy pregnancy;
     private Pregnancyoutcome pregnancyoutcome;
-    public interface IndividualClickListener {
-        void onIndividualClick(Individual selectedIndividual);
-    }
+
 
     public HouseMembersFragment() {
         // Required empty public constructor
@@ -161,6 +160,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         registryViewModel = new ViewModelProvider(this).get(RegistryViewModel.class);
         visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
         individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+        countRegister();
         //query();
 
         //final TextView hh = view.findViewById(R.id.textView_compextId);
@@ -265,11 +265,11 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                     DupFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         });
 
-        final AppCompatButton finish = view.findViewById(R.id.button_cpvisit);
-        finish.setOnClickListener(view -> {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    ClusterFragment.newInstance(level6Data, locations, socialgroup)).commit();
-        });
+//        final AppCompatButton finish = view.findViewById(R.id.button_cpvisit);
+//        finish.setOnClickListener(view -> {
+//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                    ClusterFragment.newInstance(level6Data, locations, socialgroup)).commit();
+//        });
 
         final AppCompatButton demo = view.findViewById(R.id.demographic);
         demo.setOnClickListener(v -> {
@@ -1027,17 +1027,40 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     }
 
 
-    public void dismissLoadingDialog() {
-        if (progres != null) {
-            progres.dismiss();
+    private void countRegister() {
+        AppCompatButton finish = view.findViewById(R.id.button_cpvisit);
+
+        try {
+            long totalInd = individualViewModel.count(socialgroup.extId);
+            long totalRegistry = registryViewModel.count(socialgroup.uuid);
+            long totalVisit = visitViewModel.count(socialgroup.uuid);
+
+            if (totalInd > 0 && totalVisit > 0 && totalRegistry <= 0) {
+                // Simulate disabled appearance by changing background color or text color
+                finish.setBackgroundColor(getResources().getColor(R.color.DarkBlue)); // Replace with your disabled color
+                finish.setTextColor(getResources().getColor(R.color.color_border_lightgray)); // Replace with your disabled text color
+
+                // Set a click listener to show the message without disabling the button
+                finish.setOnClickListener(v -> {
+                    Toast.makeText(requireContext(), "Complete Household Registry Before Exit", Toast.LENGTH_SHORT).show();
+                });
+            } else {
+                // Reset to enabled appearance and functionality
+                finish.setBackgroundColor(getResources().getColor(R.color.DarkBlue)); // Original color
+                finish.setTextColor(getResources().getColor(R.color.color_border_lightgray)); // Original text color
+                finish.setEnabled(true);
+                finish.setOnClickListener(v -> {
+                    requireActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container_cluster, ClusterFragment.newInstance(level6Data, locations, socialgroup))
+                            .commit();
+                });
+            }
+
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
-    public void dismissLoadingDialogs() {
-        if (progress != null) {
-            progress.dismiss();
-        }
-    }
 
 
 //    private void query() {
