@@ -83,10 +83,10 @@ public class LocationActivity extends AppCompatActivity {
 
         loadFragment(ClusterFragment.newInstance(level6Data,locations,socialgroup));
 
-        final Button home = findViewById(R.id.home);
-        home.setOnClickListener(view -> {
-            loadFragment(ClusterFragment.newInstance(level6Data,locations,socialgroup));
-        });
+//        final Button home = findViewById(R.id.home);
+//        home.setOnClickListener(view -> {
+//            loadFragment(ClusterFragment.newInstance(level6Data,locations,socialgroup));
+//        });
 
     }
 

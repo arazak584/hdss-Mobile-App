@@ -48,6 +48,9 @@ public class CommunityReportFragment extends Fragment {
     private FragmentCommunityReportBinding binding;
     private CommunityAdapter adapter;
     private CommunityViewModel communityViewModel;
+    private Locations locations;
+    private Socialgroup socialgroup;
+    private Hierarchy level6Data;
 
     public CommunityReportFragment() {
         // Required empty public constructor
@@ -90,6 +93,11 @@ public class CommunityReportFragment extends Fragment {
         final TextView com = binding.getRoot().findViewById(R.id.community);
         com.setText(level5Data.name);
 
+        final Button home = binding.getRoot().findViewById(R.id.home);
+        home.setOnClickListener(view -> {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    ClusterFragment.newInstance(level6Data, locations, socialgroup)).commit();
+        });
 
         final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_com);
         adapter = new CommunityAdapter(this, level5Data);

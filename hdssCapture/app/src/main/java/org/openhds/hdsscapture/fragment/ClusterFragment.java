@@ -119,6 +119,12 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
         final Intent j = getActivity().getIntent();
         final Hierarchy level5Data = j.getParcelableExtra(HierarchyActivity.LEVEL5_DATA);
 
+        final Button home = view.findViewById(R.id.home);
+        home.setOnClickListener(view -> {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    ClusterFragment.newInstance(level6Data, locations, socialgroup)).commit();
+        });
+
         // Initialize ProgressBar
         progressBar = view.findViewById(R.id.progress_bar);
 

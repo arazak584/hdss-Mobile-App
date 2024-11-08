@@ -27,19 +27,19 @@
             android:background="@color/white"
             android:orientation="horizontal">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/home"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:contentDescription="@string/button_home"
-                android:focusable="true"
-                app:backgroundTint="@color/home"
-                android:text="@string/button_home"
-                android:textColor="@color/white"
-                app:fabSize="mini"
-                app:srcCompat="@android:drawable/ic_menu_sort_by_size"
-                tools:ignore="ImageContrastCheck" />
+<!--            <androidx.appcompat.widget.AppCompatButton-->
+<!--                android:id="@+id/home"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:clickable="true"-->
+<!--                android:contentDescription="@string/button_home"-->
+<!--                android:focusable="true"-->
+<!--                app:backgroundTint="@color/home"-->
+<!--                android:text="@string/button_home"-->
+<!--                android:textColor="@color/white"-->
+<!--                app:fabSize="mini"-->
+<!--                app:srcCompat="@android:drawable/ic_menu_sort_by_size"-->
+<!--                tools:ignore="ImageContrastCheck" />-->
 
 
 
