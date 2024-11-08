@@ -1027,8 +1027,47 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     }
 
 
+//    private void countRegister() {
+//        AppCompatButton finish = view.findViewById(R.id.button_cpvisit);
+//
+//        try {
+//            long totalInd = individualViewModel.count(socialgroup.extId);
+//            long totalRegistry = registryViewModel.count(socialgroup.uuid);
+//            long totalVisit = visitViewModel.count(socialgroup.uuid);
+//
+//            if (totalInd > 0 && totalVisit > 0 && totalRegistry <= 0) {
+//                // Simulate disabled appearance by changing background color or text color
+//                finish.setBackgroundColor(getResources().getColor(R.color.home)); // Replace with your disabled color
+//                finish.setTextColor(getResources().getColor(R.color.color_border_lightgray)); // Replace with your disabled text color
+//
+//                // Set a click listener to show the message without disabling the button
+//                finish.setOnClickListener(v -> {
+//                    Toast.makeText(requireContext(), "Complete Household Registry Before Exit", Toast.LENGTH_SHORT).show();
+//                });
+//            } else {
+//                // Reset to enabled appearance and functionality
+//                finish.setBackgroundColor(getResources().getColor(R.color.home)); // Original color
+//                finish.setTextColor(getResources().getColor(R.color.color_border_lightgray)); // Original text color
+//                finish.setEnabled(true);
+//                finish.setOnClickListener(v -> {
+//                    requireActivity().getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.container_cluster, ClusterFragment.newInstance(level6Data, locations, socialgroup))
+//                            .commit();
+//                });
+//            }
+//
+//        } catch (ExecutionException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
     private void countRegister() {
         AppCompatButton finish = view.findViewById(R.id.button_cpvisit);
+        LayoutInflater inflater = getLayoutInflater();
+
+        // Inflate the custom toast layout once
+        View customToastView = inflater.inflate(R.layout.custom_toast, null);
+        TextView toastMessage = customToastView.findViewById(R.id.toast_message);
 
         try {
             long totalInd = individualViewModel.count(socialgroup.extId);
@@ -1036,19 +1075,28 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             long totalVisit = visitViewModel.count(socialgroup.uuid);
 
             if (totalInd > 0 && totalVisit > 0 && totalRegistry <= 0) {
-                // Simulate disabled appearance by changing background color or text color
-                finish.setBackgroundColor(getResources().getColor(R.color.DarkBlue)); // Replace with your disabled color
-                finish.setTextColor(getResources().getColor(R.color.color_border_lightgray)); // Replace with your disabled text color
+                // Change button appearance to look "disabled"
+                finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home));
+                finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_border_lightgray));
 
-                // Set a click listener to show the message without disabling the button
+                // Show a custom toast message on button click
                 finish.setOnClickListener(v -> {
-                    Toast.makeText(requireContext(), "Complete Household Registry Before Exit", Toast.LENGTH_SHORT).show();
+                    // Set the toast message text
+                    toastMessage.setText("Complete Household Registry Before Exit");
+
+                    // Create and show the custom toast
+                    Toast customToast = new Toast(requireContext());
+                    customToast.setDuration(Toast.LENGTH_LONG);
+                    customToast.setView(customToastView);
+                    customToast.show();
                 });
             } else {
-                // Reset to enabled appearance and functionality
-                finish.setBackgroundColor(getResources().getColor(R.color.DarkBlue)); // Original color
-                finish.setTextColor(getResources().getColor(R.color.color_border_lightgray)); // Original text color
+                // Reset button appearance and enable functionality
+                finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home)); // Original color
+                finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.white)); // Original text color
                 finish.setEnabled(true);
+
+                // Restore the original button functionality
                 finish.setOnClickListener(v -> {
                     requireActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.container_cluster, ClusterFragment.newInstance(level6Data, locations, socialgroup))
@@ -1060,6 +1108,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             e.printStackTrace();
         }
     }
+
 
 
 

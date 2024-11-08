@@ -112,7 +112,7 @@
                 android:text="@string/compvisit"
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:background="@color/DarkBlue"
+                android:background="@color/home"
                 app:fabSize="normal"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
