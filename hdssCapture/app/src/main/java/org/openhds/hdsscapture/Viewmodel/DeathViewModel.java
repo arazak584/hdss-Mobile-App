@@ -58,6 +58,10 @@ public class DeathViewModel extends AndroidViewModel {
         return deathRepository.rej(uuid);
     }
 
+    public long err(String id,String ids) throws ExecutionException, InterruptedException {
+        return deathRepository.err(id,ids);
+    }
+
     public List<Death> repo() throws ExecutionException, InterruptedException {
         return deathRepository.repo();
     }

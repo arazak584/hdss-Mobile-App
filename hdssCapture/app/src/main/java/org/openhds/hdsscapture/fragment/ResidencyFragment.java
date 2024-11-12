@@ -207,6 +207,8 @@ public class ResidencyFragment extends Fragment {
                 return;
             }
             finalData.complete = 1;
+            finalData.socialgroup_uuid = binding.getResidency().socialgroup_uuid;
+            finalData.hohID = binding.getResidency().hohID;
             viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
             IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);

@@ -142,6 +142,14 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.count(id);
     }
 
+    public long err(String id,String ids) throws ExecutionException, InterruptedException {
+        return individualRepository.err(id,ids);
+    }
+
+    public long errs(String id,String ids) throws ExecutionException, InterruptedException {
+        return individualRepository.errs(id,ids);
+    }
+
     public List<Individual> error() throws ExecutionException, InterruptedException {
         return individualRepository.error();
     }

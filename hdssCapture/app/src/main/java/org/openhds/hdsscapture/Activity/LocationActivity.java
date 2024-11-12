@@ -22,6 +22,7 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.fragment.ClusterFragment;
+import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 
 public class LocationActivity extends AppCompatActivity {
 
@@ -88,6 +89,7 @@ public class LocationActivity extends AppCompatActivity {
 //            loadFragment(ClusterFragment.newInstance(level6Data,locations,socialgroup));
 //        });
 
+
     }
 
     private void loadFragment(Fragment fragment) {
@@ -102,19 +104,58 @@ public class LocationActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.exit_confirmation_title))
-                .setMessage(getString(R.string.exiting_lbl))
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        try{
+        // Check if the current fragment is HouseMembersFragment
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container_cluster);
+
+        if (currentFragment instanceof HouseMembersFragment) {
+            // Show a Toast message when the back button is pressed within HouseMembersFragment
+            Toast.makeText(this, "Back button is disabled on this screen", Toast.LENGTH_SHORT).show();
+        } else {
+            // Show a confirmation dialog when the user attempts to exit the activity
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.exit_confirmation_title))
+                    .setMessage(getString(R.string.exiting_lbl))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.yes), (dialog, id) -> {
+                        try {
                             LocationActivity.this.finish();
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        catch(Exception e){}
-                    }
-                })
-                .setNegativeButton(getString(R.string.no), null)
-                .show();
+                    })
+                    .setNegativeButton(getString(R.string.no), null)
+                    .show();
+        }
     }
+
+
+//    @Override
+//    public void onBackPressed() {
+//        // Check if the current fragment is HouseMembersFragment
+//        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container_cluster);
+//        if (currentFragment instanceof HouseMembersFragment) {
+//            // Do nothing or show a Toast
+//            Toast.makeText(this, "Back button is disabled on this screen", Toast.LENGTH_SHORT).show();
+//        } else {
+//            super.onBackPressed(); // Default behavior
+//        }
+//    }
+//
+//    @Override
+//    public void onBackPressed() {
+//        new AlertDialog.Builder(this)
+//                .setTitle(getString(R.string.exit_confirmation_title))
+//                .setMessage(getString(R.string.exiting_lbl))
+//                .setCancelable(false)
+//                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        try{
+//                            LocationActivity.this.finish();
+//                        }
+//                        catch(Exception e){}
+//                    }
+//                })
+//                .setNegativeButton(getString(R.string.no), null)
+//                .show();
+//    }
 }

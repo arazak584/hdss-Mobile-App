@@ -99,7 +99,7 @@ public class RegistryAdapter extends RecyclerView.Adapter<RegistryAdapter.ViewHo
         new Thread(() -> {
             registryViewModel.add(updatedRegistry);
             new Handler(Looper.getMainLooper()).post(() ->
-                    Toast.makeText(context, "Status Updated", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Registry Updated", Toast.LENGTH_SHORT).show()
             );
         }).start();
     }

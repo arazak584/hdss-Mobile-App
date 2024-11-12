@@ -320,6 +320,18 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public long err(String id,String ids) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.err(id,ids);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    public long errs(String id,String ids) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.errs(id,ids);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
     public List<Individual> error() throws ExecutionException, InterruptedException {
 
         Callable<List<Individual>> callable = () -> dao.error();

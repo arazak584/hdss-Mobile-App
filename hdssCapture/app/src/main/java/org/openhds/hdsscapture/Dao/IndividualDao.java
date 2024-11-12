@@ -278,6 +278,27 @@ public interface IndividualDao {
     @Query("SELECT COUNT(hohID) FROM individual WHERE hohID = :id AND endType=1")
     long count(String id);
 
+//    @Query("SELECT COUNT(hohID) FROM individual AS a WHERE a.firstName != 'FAKE' AND endType = 1 AND hohID= :id AND compno= :ids " +
+//            "AND hohID IN ( " +
+//            "    SELECT hohID FROM individual WHERE endType = 1 GROUP BY hohID " +
+//            "    HAVING MAX(STRFTIME('%Y', 'now') - STRFTIME('%Y', DATE(dob/1000, 'unixepoch'))) < (SELECT hoh_age from config)" +
+//            ") GROUP BY hohID ")
+//    long err(String id, String ids);
+
+    @Query("SELECT COUNT(hohID) FROM individual AS a WHERE a.firstName != 'FAKE' AND a.endType = 1 AND a.hohID = :id AND a.compno = :ids " +
+            "AND a.hohID IN ( " +
+            "    SELECT hohID FROM individual WHERE endType = 1 " +
+            "    GROUP BY hohID " +
+            "    HAVING MAX(STRFTIME('%Y', 'now') - STRFTIME('%Y', DATE(dob / 1000, 'unixepoch'))) < (SELECT hoh_age FROM config) " +
+            ")")
+    long err(String id, String ids);
+
+    @Query("SELECT COUNT(DISTINCT a.uuid) FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
+            " WHERE firstName!='FAKE' and endType=1 AND a.hohID = :id AND a.compno = :ids and " +
+            " strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) < (SELECT hoh_age from config) GROUP BY b.extId")
+    long errs(String id, String ids);
+
+
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Individual> individuals);

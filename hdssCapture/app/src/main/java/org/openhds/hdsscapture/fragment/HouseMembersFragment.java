@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.ContextCompat;
@@ -72,6 +75,8 @@ import org.openhds.hdsscapture.entity.subqueries.EndEvents;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -106,6 +111,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private IndividualViewModel individualViewModel;
     private  Pregnancy pregnancy;
     private Pregnancyoutcome pregnancyoutcome;
+    private AppCompatButton finish;
 
 
     public HouseMembersFragment() {
@@ -160,7 +166,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         registryViewModel = new ViewModelProvider(this).get(RegistryViewModel.class);
         visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
         individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-        countRegister();
+        finish = view.findViewById(R.id.button_cpvisit);
+        updateButtonState();
         //query();
 
         //final TextView hh = view.findViewById(R.id.textView_compextId);
@@ -462,6 +469,18 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 //            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
 //                    OdkFragment.newInstance(locations, socialgroup,individual )).commit();
 //        });
+
+//        // This callback will intercept the back button press
+//        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+//            @Override
+//            public void handleOnBackPressed() {
+//                // Disable back button functionality by doing nothing
+//                // Or show a Toast message if you want to inform the user
+//                Toast.makeText(requireContext(), "Back button is disabled on this screen", Toast.LENGTH_SHORT).show();
+//            }
+//        };
+//        // Add the callback to the activity's OnBackPressedDispatcher
+//        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
 
 
         return view;
@@ -1026,6 +1045,73 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 .show(getChildFragmentManager(), "PregnancyDialogFragment");
     }
 
+    private void updateButtonState() {
+        LayoutInflater inflater = getLayoutInflater();
+
+        // Inflate the custom toast layout once
+        View customToastView = inflater.inflate(R.layout.custom_toast, null);
+        TextView toastMessage = customToastView.findViewById(R.id.toast_message);
+
+        // ExecutorService and Handler for background thread and main thread communication
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        executor.execute(() -> {
+            try {
+                // Perform database operations in the background
+                long totalInd = individualViewModel.count(socialgroup.extId);
+                long totalRegistry = registryViewModel.count(socialgroup.uuid);
+                long totalVisit = visitViewModel.count(socialgroup.uuid);
+                long cnt = deathViewModel.err(socialgroup.extId, ClusterFragment.selectedLocation.compno);
+                long err = individualViewModel.err(socialgroup.extId, ClusterFragment.selectedLocation.compno);
+                long errs = individualViewModel.errs(socialgroup.extId, ClusterFragment.selectedLocation.compno);
+
+                // Switch back to the main thread for UI updates
+                handler.post(() -> {
+                    if (cnt > 0) {
+                        showToast("Change Head of Household [HOH is Dead]", customToastView, toastMessage);
+                    } else if (totalInd > 0 && totalVisit > 0 && totalRegistry <= 0) {
+                        showToast("Complete Household Registry Before Exit", customToastView, toastMessage);
+                    } else if (errs > 0) {
+                        showToast("Household Head is a Minor", customToastView, toastMessage);
+                    } else if (err > 0) {
+                        showToast("Only Minors Left in Household", customToastView, toastMessage);
+                    } else {
+                        enableFinishButton();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                // Shutdown the executor to avoid memory leaks
+                executor.shutdown();
+            }
+        });
+    }
+
+    // Helper method to show a custom toast message
+    private void showToast(String message, View customToastView, TextView toastMessage) {
+        finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home));
+        finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_border_lightgray));
+        finish.setOnClickListener(v -> {
+            toastMessage.setText(message);
+            Toast customToast = new Toast(requireContext());
+            customToast.setDuration(Toast.LENGTH_LONG);
+            customToast.setView(customToastView);
+            customToast.show();
+        });
+    }
+
+    // Helper method to enable the finish button with default functionality
+    private void enableFinishButton() {
+        finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home)); // Original color
+        finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.white)); // Original text color
+        finish.setEnabled(true);
+        finish.setOnClickListener(v -> requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_cluster, ClusterFragment.newInstance(level6Data, locations, socialgroup))
+                .commit());
+    }
+
 
 //    private void countRegister() {
 //        AppCompatButton finish = view.findViewById(R.id.button_cpvisit);
@@ -1061,54 +1147,98 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 //        }
 //    }
 
-    private void countRegister() {
-        AppCompatButton finish = view.findViewById(R.id.button_cpvisit);
-        LayoutInflater inflater = getLayoutInflater();
-
-        // Inflate the custom toast layout once
-        View customToastView = inflater.inflate(R.layout.custom_toast, null);
-        TextView toastMessage = customToastView.findViewById(R.id.toast_message);
-
-        try {
-            long totalInd = individualViewModel.count(socialgroup.extId);
-            long totalRegistry = registryViewModel.count(socialgroup.uuid);
-            long totalVisit = visitViewModel.count(socialgroup.uuid);
-
-            if (totalInd > 0 && totalVisit > 0 && totalRegistry <= 0) {
-                // Change button appearance to look "disabled"
-                finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home));
-                finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_border_lightgray));
-
-                // Show a custom toast message on button click
-                finish.setOnClickListener(v -> {
-                    // Set the toast message text
-                    toastMessage.setText("Complete Household Registry Before Exit");
-
-                    // Create and show the custom toast
-                    Toast customToast = new Toast(requireContext());
-                    customToast.setDuration(Toast.LENGTH_LONG);
-                    customToast.setView(customToastView);
-                    customToast.show();
-                });
-            } else {
-                // Reset button appearance and enable functionality
-                finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home)); // Original color
-                finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.white)); // Original text color
-                finish.setEnabled(true);
-
-                // Restore the original button functionality
-                finish.setOnClickListener(v -> {
-                    requireActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.container_cluster, ClusterFragment.newInstance(level6Data, locations, socialgroup))
-                            .commit();
-                });
-            }
-
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
+//    private void updateButtonState() {
+//
+//        LayoutInflater inflater = getLayoutInflater();
+//
+//        // Inflate the custom toast layout once
+//        View customToastView = inflater.inflate(R.layout.custom_toast, null);
+//        TextView toastMessage = customToastView.findViewById(R.id.toast_message);
+//
+//        try {
+//            // Fetch counts
+//            long totalInd = individualViewModel.count(socialgroup.extId);
+//            long totalRegistry = registryViewModel.count(socialgroup.uuid);
+//            long totalVisit = visitViewModel.count(socialgroup.uuid);
+//            long cnt = deathViewModel.err(socialgroup.extId, ClusterFragment.selectedLocation.compno);
+//            long err = individualViewModel.err(socialgroup.extId, ClusterFragment.selectedLocation.compno);
+//            long errs = individualViewModel.errs(socialgroup.extId, ClusterFragment.selectedLocation.compno);
+//
+//            // Condition 1: Check if HOH is dead
+//            if (cnt > 0) {
+//                // Change button appearance to look "disabled"
+//                finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home));
+//                finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_border_lightgray));
+//
+//                // Show a custom toast message on button click
+//                finish.setOnClickListener(v -> {
+//                    toastMessage.setText("Change Head of Household [HOH is Dead]");
+//                    Toast customToast = new Toast(requireContext());
+//                    customToast.setDuration(Toast.LENGTH_LONG);
+//                    customToast.setView(customToastView);
+//                    customToast.show();
+//                });
+//            }
+//            // Condition 2: Check for other conditions related to totalInd, totalVisit, and totalRegistry
+//            else if (totalInd > 0 && totalVisit > 0 && totalRegistry <= 0) {
+//                finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home));
+//                finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_border_lightgray));
+//
+//                // Show a different custom toast message on button click
+//                finish.setOnClickListener(v -> {
+//                    toastMessage.setText("Complete Household Registry Before Exit");
+//                    Toast customToast = new Toast(requireContext());
+//                    customToast.setDuration(Toast.LENGTH_LONG);
+//                    customToast.setView(customToastView);
+//                    customToast.show();
+//                });
+//            }
+//            // Condition 3: Check for Minor Household Heaad
+//            else if (errs > 0 ) {
+//                finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home));
+//                finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_border_lightgray));
+//
+//                // Show a different custom toast message on button click
+//                finish.setOnClickListener(v -> {
+//                    toastMessage.setText("Household Head is a Minor");
+//                    Toast customToast = new Toast(requireContext());
+//                    customToast.setDuration(Toast.LENGTH_LONG);
+//                    customToast.setView(customToastView);
+//                    customToast.show();
+//                });
+//            }
+//            // Condition 4: Check for Minor Members Only
+//            else if (err > 0 ) {
+//                finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home));
+//                finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_border_lightgray));
+//
+//                // Show a different custom toast message on button click
+//                finish.setOnClickListener(v -> {
+//                    toastMessage.setText("Only Minors Left in Household");
+//                    Toast customToast = new Toast(requireContext());
+//                    customToast.setDuration(Toast.LENGTH_LONG);
+//                    customToast.setView(customToastView);
+//                    customToast.show();
+//                });
+//            }else {
+//                // Reset button appearance and enable functionality
+//                finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home)); // Original color
+//                finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.white)); // Original text color
+//                finish.setEnabled(true);
+//
+//                // Restore the original button functionality
+//                finish.setOnClickListener(v -> {
+//                    requireActivity().getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.container_cluster, ClusterFragment.newInstance(level6Data, locations, socialgroup))
+//                            .commit();
+//                });
+//            }
+//
+//
+//        } catch (ExecutionException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 
