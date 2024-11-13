@@ -350,6 +350,38 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:text="@string/estimated_dod" />
+
+                    <RadioGroup
+                        android:id="@+id/estimate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onCheckedChanged="@{death::setEstimated_dod}"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/est_one"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{death.estimated_dod==1}"
+                            android:tag="1"
+                            android:text="@string/estimate_1" />
+
+                        <RadioButton
+                            android:id="@+id/est_two"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@{death.estimated_dod==2}"
+                            android:tag="2"
+                            android:text="@string/estimate_2" />
+
+
+                    </RadioGroup>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:gravity="start"
                         android:padding="5dp"
                         android:text="@string/causeofdeath"

@@ -129,6 +129,8 @@ public class Death extends BaseObservable implements Parcelable {
     public String supervisor;
     @Expose
     public Date approveDate;
+    @Expose
+    public Integer estimated_dod;
 
     public Death(){}
 
@@ -225,6 +227,16 @@ public class Death extends BaseObservable implements Parcelable {
             this.deathDate = f.parse(deathDate);
         } catch (ParseException e) {
             System.out.println("DOD Date Error " + e.getMessage());
+        }
+    }
+
+    public void setEstimated_dod(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            estimated_dod = Integer.parseInt(TAG);
         }
     }
 
