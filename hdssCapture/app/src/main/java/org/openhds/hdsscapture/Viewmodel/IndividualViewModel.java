@@ -138,8 +138,8 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.counts(id);
     }
 
-    public long count(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.count(id);
+    public long count(String id,String ids) throws ExecutionException, InterruptedException {
+        return individualRepository.count(id,ids);
     }
 
     public long err(String id,String ids) throws ExecutionException, InterruptedException {

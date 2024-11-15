@@ -314,8 +314,8 @@ public class IndividualRepository {
         return future.get();
     }
 
-    public long count(String id) throws ExecutionException, InterruptedException {
-        Callable<Long> callable = () -> dao.count(id);
+    public long count(String id,String ids) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.count(id,ids);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }

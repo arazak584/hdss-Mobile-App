@@ -1046,44 +1046,47 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     }
 
     private void updateButtonState() {
-        LayoutInflater inflater = getLayoutInflater();
+        if (getActivity() == null || !isAdded()) return; // Ensure fragment is still attached
 
-        // Inflate the custom toast layout once
+        LayoutInflater inflater = getLayoutInflater();
         View customToastView = inflater.inflate(R.layout.custom_toast, null);
         TextView toastMessage = customToastView.findViewById(R.id.toast_message);
 
-        // ExecutorService and Handler for background thread and main thread communication
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Handler handler = new Handler(Looper.getMainLooper());
 
         executor.execute(() -> {
             try {
                 // Perform database operations in the background
-                long totalInd = individualViewModel.count(socialgroup.extId);
-                long totalRegistry = registryViewModel.count(socialgroup.uuid);
-                long totalVisit = visitViewModel.count(socialgroup.uuid);
-                long cnt = deathViewModel.err(socialgroup.extId, ClusterFragment.selectedLocation.compno);
-                long err = individualViewModel.err(socialgroup.extId, ClusterFragment.selectedLocation.compno);
-                long errs = individualViewModel.errs(socialgroup.extId, ClusterFragment.selectedLocation.compno);
+                long totalInd = (individualViewModel != null) ? individualViewModel.count(socialgroup != null ? socialgroup.extId : "", ClusterFragment.selectedLocation != null ? ClusterFragment.selectedLocation.compno : "") : 0;
+                long totalRegistry = (registryViewModel != null) ? registryViewModel.count(socialgroup != null ? socialgroup.uuid : "") : 0;
+                long totalVisit = (visitViewModel != null) ? visitViewModel.count(socialgroup != null ? socialgroup.uuid : "") : 0;
+                long cnt = (deathViewModel != null) ? deathViewModel.err(socialgroup != null ? socialgroup.extId : "", ClusterFragment.selectedLocation != null ? ClusterFragment.selectedLocation.compno : "") : 0;
+                long err = (individualViewModel != null) ? individualViewModel.err(socialgroup != null ? socialgroup.extId : "", ClusterFragment.selectedLocation != null ? ClusterFragment.selectedLocation.compno : "") : 0;
+                long errs = (individualViewModel != null) ? individualViewModel.errs(socialgroup != null ? socialgroup.extId : "", ClusterFragment.selectedLocation != null ? ClusterFragment.selectedLocation.compno : "") : 0;
 
-                // Switch back to the main thread for UI updates
                 handler.post(() -> {
-                    if (cnt > 0) {
-                        showToast("Change Head of Household [HOH is Dead]", customToastView, toastMessage);
-                    } else if (totalInd > 0 && totalVisit > 0 && totalRegistry <= 0) {
-                        showToast("Complete Household Registry Before Exit", customToastView, toastMessage);
-                    } else if (errs > 0) {
-                        showToast("Household Head is a Minor", customToastView, toastMessage);
-                    } else if (err > 0) {
-                        showToast("Only Minors Left in Household", customToastView, toastMessage);
-                    } else {
-                        enableFinishButton();
+                    if (getActivity() == null || !isAdded()) return; // Ensure fragment is still attached
+
+                    try {
+                        if (cnt > 0) {
+                            showToast("Change Head of Household [HOH is Dead]", customToastView, toastMessage);
+                        } else if (totalInd > 0 && totalVisit > 0 && totalRegistry <= 0) {
+                            showToast("Complete Household Registry Before Exit", customToastView, toastMessage);
+                        } else if (errs > 0) {
+                            showToast("Household Head is a Minor", customToastView, toastMessage);
+                        } else if (err > 0) {
+                            showToast("Only Minors Left in Household", customToastView, toastMessage);
+                        } else {
+                            enableFinishButton();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 });
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                // Shutdown the executor to avoid memory leaks
                 executor.shutdown();
             }
         });
@@ -1091,6 +1094,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
     // Helper method to show a custom toast message
     private void showToast(String message, View customToastView, TextView toastMessage) {
+        if (getActivity() == null || !isAdded()) return; // Ensure fragment is still attached
+
         finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home));
         finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_border_lightgray));
         finish.setOnClickListener(v -> {
@@ -1104,13 +1109,18 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
     // Helper method to enable the finish button with default functionality
     private void enableFinishButton() {
+        if (getActivity() == null || !isAdded()) return; // Ensure fragment is still attached
+
         finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home)); // Original color
         finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.white)); // Original text color
         finish.setEnabled(true);
-        finish.setOnClickListener(v -> requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_cluster, ClusterFragment.newInstance(level6Data, locations, socialgroup))
-                .commit());
+        finish.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container_cluster, ClusterFragment.newInstance(level6Data, locations, socialgroup))
+                    .commit();
+        });
     }
+
 
 
 //    private void countRegister() {

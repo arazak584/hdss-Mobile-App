@@ -275,8 +275,8 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual WHERE firstName!='FAKE' AND substr(extId, 1, 4) = 'null' ")
     List<Individual> nulls();
 
-    @Query("SELECT COUNT(hohID) FROM individual WHERE hohID = :id AND endType=1")
-    long count(String id);
+    @Query("SELECT COUNT(hohID) FROM individual WHERE hohID = :id AND compno = :ids AND endType=1 AND firstName!='FAKE'")
+    long count(String id,String ids);
 
 //    @Query("SELECT COUNT(hohID) FROM individual AS a WHERE a.firstName != 'FAKE' AND endType = 1 AND hohID= :id AND compno= :ids " +
 //            "AND hohID IN ( " +
