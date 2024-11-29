@@ -61,13 +61,10 @@ public class LocationFragment extends DialogFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_CLUSTER_IDS = "ARG_CLUSTER_IDS";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
-    private final String TAG = "LOCATION.TAG";
 
     private Hierarchy cluster_id;
     private Locations locations;
     private Socialgroup socialgroup;
-    private Residency residency;
-    private Individual individual;
     private FragmentLocationBinding binding;
     private LocationManager locationManager;
     private Location currentLocation;

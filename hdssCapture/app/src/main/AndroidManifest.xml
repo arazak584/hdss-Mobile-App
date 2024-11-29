@@ -68,7 +68,8 @@
         <activity
             android:name=".Baseline.BaselineActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
         <activity
             android:name=".Activity.ReportActivity"
             android:exported="false" />

@@ -17,11 +17,13 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
+import org.openhds.hdsscapture.Activity.LocationActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 
 public class BaselineActivity extends AppCompatActivity {
 
@@ -75,10 +77,10 @@ public class BaselineActivity extends AppCompatActivity {
 
         loadFragment(BaseFragment.newInstance(level6Data,locations,socialgroup));
 
-        final AppCompatButton home = findViewById(R.id.home);
-        home.setOnClickListener(view -> {
-            loadFragment(BaseFragment.newInstance(level6Data,locations,socialgroup));
-        });
+//        final AppCompatButton home = findViewById(R.id.home);
+//        home.setOnClickListener(view -> {
+//            loadFragment(BaseFragment.newInstance(level6Data,locations,socialgroup));
+//        });
     }
 
 
@@ -94,19 +96,45 @@ public class BaselineActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.exit_confirmation_title))
-                .setMessage(getString(R.string.exiting_lbl))
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        try{
+        // Check if the current fragment is BaseFragment
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container_baseline);
+
+        if (currentFragment instanceof IndividualSummaryFragment) {
+            // Show a Toast message when the back button is pressed within HouseMembersFragment
+            Toast.makeText(this, "Back button is disabled on this screen", Toast.LENGTH_SHORT).show();
+        } else {
+            // Show a confirmation dialog when the user attempts to exit the activity
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.exit_confirmation_title))
+                    .setMessage(getString(R.string.exiting_lbl))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.yes), (dialog, id) -> {
+                        try {
                             BaselineActivity.this.finish();
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                        catch(Exception e){}
-                    }
-                })
-                .setNegativeButton(getString(R.string.no), null)
-                .show();
+                    })
+                    .setNegativeButton(getString(R.string.no), null)
+                    .show();
+        }
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        new AlertDialog.Builder(this)
+//                .setTitle(getString(R.string.exit_confirmation_title))
+//                .setMessage(getString(R.string.exiting_lbl))
+//                .setCancelable(false)
+//                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        try{
+//                            BaselineActivity.this.finish();
+//                        }
+//                        catch(Exception e){}
+//                    }
+//                })
+//                .setNegativeButton(getString(R.string.no), null)
+//                .show();
+//    }
 }

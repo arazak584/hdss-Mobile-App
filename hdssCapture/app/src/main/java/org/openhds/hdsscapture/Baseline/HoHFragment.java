@@ -1,4 +1,4 @@
-package org.openhds.hdsscapture.fragment;
+package org.openhds.hdsscapture.Baseline;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -24,10 +24,9 @@ import org.openhds.hdsscapture.databinding.FragmentSocialgroupBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
+import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +34,10 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SocialgroupFragment#newInstance} factory method to
+ * Use the {@link HoHFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SocialgroupFragment extends Fragment {
+public class HoHFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
@@ -52,7 +51,7 @@ public class SocialgroupFragment extends Fragment {
     private FragmentSocialgroupBinding binding;
     private ProgressDialog progressDialog;
 
-    public SocialgroupFragment() {
+    public HoHFragment() {
         // Required empty public constructor
     }
 
@@ -67,9 +66,9 @@ public class SocialgroupFragment extends Fragment {
      * @return A new instance of fragment HouseholdFragment.
      */
 
-    public static SocialgroupFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
+    public static HoHFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
 
-        SocialgroupFragment fragment = new SocialgroupFragment();
+        HoHFragment fragment = new HoHFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(SOCIAL_ID, socialgroup);
@@ -124,30 +123,10 @@ public class SocialgroupFragment extends Fragment {
                 }, 500);
 
                 // Show the dialog fragment
-                ChangeHohFragment.newInstance(individual, locations,socialgroup)
-                        .show(getChildFragmentManager(), "ChangeHohFragment");
+                ChangeHoHFragment.newInstance(individual, locations,socialgroup)
+                        .show(getChildFragmentManager(), "ChangeHoHFragment");
             }
         });
-
-//        SocialgroupViewModel viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-//            try {
-//            Socialgroup data = viewModel.findhse(socialgroup.uuid);
-//            if (data != null) {
-//
-//                binding.setSocialgroup(data);
-//
-//                if (HouseMembersFragment.selectedIndividual.firstName != null && "UNK".equals(data.groupName)){
-//
-//                    data.groupName = HouseMembersFragment.selectedIndividual.firstName +' '+ HouseMembersFragment.selectedIndividual.lastName;
-//                    data.individual_uuid = HouseMembersFragment.selectedIndividual.uuid;
-//                }
-//
-//            }
-//           } catch (ExecutionException | InterruptedException e) {
-//               e.printStackTrace();
-//           }
-
-
 
         //LOAD SPINNERS
         loadCodeData(binding.selectGroupType, "groupType");
@@ -181,8 +160,8 @@ public class SocialgroupFragment extends Fragment {
             viewModel.add(finalData);
         }
         if (close) {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseMembersFragment.newInstance(locations, socialgroup, individual)).commit();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
+                    IndividualSummaryFragment.newInstance(locations, socialgroup, individual)).commit();
         }
     }
 

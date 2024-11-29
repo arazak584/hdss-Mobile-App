@@ -3370,7 +3370,7 @@ public class HdssSociodemo extends BaseObservable {
             if (id0003 == null || id0003 != AppConstants.YES)
                 id0004 = null;
 
-            if (id0003 == null || id0003 != AppConstants.NO)
+            if (id0003 == null || (id0003 != AppConstants.NO && id0003 != 3))
                 id0005 = null;
 
             if(id0006 == null || id0006 != 1)

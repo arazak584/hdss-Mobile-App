@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -44,6 +45,7 @@ import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -59,16 +61,10 @@ public class Baslinelocation extends DialogFragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_CLUSTER_IDS = "ARG_CLUSTER_IDS";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
-    private static final String SOCIAL_ID = "SOCIAL_ID";
-    private static final String RESIDENCY_ID = "RESIDENCY_ID";
-    private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
-    private final String TAG = "LOCATION.TAG";
 
     private Hierarchy cluster_id;
     private Locations locations;
     private Socialgroup socialgroup;
-    private Residency residency;
-    private Individual individual;
     private FragmentBaslinelocationBinding binding;
 
     private LocationManager locationManager;
@@ -153,15 +149,26 @@ public class Baslinelocation extends DialogFragment {
                         public void onLocationChanged(@NonNull Location location) {
                             // Update the currentLocation variable with the new location
                             currentLocation = location;
+                            double latitude = currentLocation.getLatitude();
+                            double longitude = currentLocation.getLongitude();
 
-                            // Display the longitude, latitude, and accuracy values in the TextInputEditText views
-                            TextInputEditText longitudeEditText = requireView().findViewById(R.id.longitude);
-                            longitudeEditText.setText(String.valueOf(currentLocation.getLongitude()));
+                            // Define the number of decimal places you want to display (e.g., 6)
+                            int decimalPlaces = 6;
 
-                            TextInputEditText latitudeEditText = requireView().findViewById(R.id.latitude);
-                            latitudeEditText.setText(String.valueOf(currentLocation.getLatitude()));
+                            // Format the latitude and longitude to the specified number of decimal places
+                            String formattedLatitude = String.format("%.6f", latitude);
+                            String formattedLongitude = String.format("%.6f", longitude);
 
-                            TextInputEditText accuracyEditText = requireView().findViewById(R.id.accuracy);
+                            // Display the longitude, latitude, and accuracy values in the EditText views
+                            EditText longitudeEditText = requireView().findViewById(R.id.longitude);
+//                            longitudeEditText.setText(String.valueOf(currentLocation.getLongitude()));
+                            longitudeEditText.setText(formattedLongitude);
+
+                            EditText latitudeEditText = requireView().findViewById(R.id.latitude);
+                            latitudeEditText.setText(formattedLatitude);
+//                            latitudeEditText.setText(String.valueOf(currentLocation.getLatitude()));
+
+                            EditText accuracyEditText = requireView().findViewById(R.id.accuracy);
                             accuracyEditText.setText(String.valueOf(currentLocation.getAccuracy()));
 
                             // Check if the accuracy is less than or equal to 10 meters, dismiss the progress bar, and stop requesting location updates
@@ -170,11 +177,25 @@ public class Baslinelocation extends DialogFragment {
                                 locationManager.removeUpdates(this);
                             }
                         }
+
+                        @Override
+                        public void onProviderDisabled(String provider) {
+                            // Handle the case when the location provider is disabled
+                            // For example, you can display a message or prompt the user to enable the location provider
+                        }
+
+                        // Other methods of LocationListener
+                        @Override
+                        public void onStatusChanged(String provider, int status, Bundle extras) {
+                        }
+
+                        @Override
+                        public void onProviderEnabled(String provider) {
+                        }
                     });
                 }
             }
         });
-
 
 
         final Intent intent = getActivity().getIntent();
@@ -204,11 +225,25 @@ public class Baslinelocation extends DialogFragment {
 
         if(locations.insertDate==null){
             binding.getLocations().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
+            Date currentDate = new Date(); // Get the current date and time
+            // Create a Calendar instance and set it to the current date and time
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(currentDate);
+            // Extract the hour, minute, and second components
+            int hh = cal.get(Calendar.HOUR_OF_DAY);
+            int mm = cal.get(Calendar.MINUTE);
+            int ss = cal.get(Calendar.SECOND);
+            // Format the components into a string with leading zeros
+            String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
+            locations.sttime = timeString;
         }
 
         if(locations.compno!=null){
             binding.locationcompno.setEnabled(false);
             binding.locationtype.setEnabled(false);
+            binding.locationstatus.setEnabled(false);
+            binding.locationName.setEnabled(false);
         }
 
 
@@ -225,14 +260,6 @@ public class Baslinelocation extends DialogFragment {
         }
 
         if (binding.getLocations().site == null) {
-            // If site is null, set it to the default available option (in this case, 1).
-            binding.getLocations().site = 1;
-        } else if (binding.getLocations().site == 1 || binding.getLocations().site == 2 || binding.getLocations().site == 3) {
-            // If site is already set to 1, 2, or 3, do nothing as it's a valid option.
-            // No need to change the value.
-        } else {
-            // If site is not null and not one of the valid options (1, 2, or 3), you can handle the error or set it to another default value.
-            // For example, you can set it to 1 as the default:
             binding.getLocations().site = 1;
         }
 
@@ -272,6 +299,7 @@ public class Baslinelocation extends DialogFragment {
                 }
 
                 comp = comp.trim();
+                String villExtId = level6Data.getExtId();
 
                 if (binding.getLocations().site == 1 && comp.length() != 6) {
                     binding.locationcompno.setError("Must be 6 characters in length");
@@ -288,6 +316,37 @@ public class Baslinelocation extends DialogFragment {
                     Toast.makeText(getActivity(), "Must be 7 characters in length", Toast.LENGTH_LONG).show();
                     val = true;
                     return;
+                }
+
+                boolean khd = false;
+                String regex = "[A-Z]{2}\\d{4}"; // Two uppercase letters followed by four digits
+                String regnn = "[A-Z]{3}\\d{3}"; // Three uppercase letters followed by three digits
+                String regdd = "[A-Z]{4}\\d{3}"; // Four uppercase letters followed by three digits
+
+                if (!binding.locationcompno.getText().toString().trim().isEmpty() && binding.getLocations().site == 1) {
+                    String input = binding.locationcompno.getText().toString().trim();
+                    if (!input.matches(regex)) {
+                        khd = true;
+                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
+                        binding.locationcompno.setError("Compound Number format is incorrect");
+                        return;
+                    }
+                } else if (!binding.locationcompno.getText().toString().trim().isEmpty() && binding.getLocations().site == 2) {
+                    String input = binding.locationcompno.getText().toString().trim();
+                    if (!input.matches(regnn)) {
+                        khd = true;
+                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
+                        binding.locationcompno.setError("Compound Number format is incorrect");
+                        return;
+                    }
+                } else if (!binding.locationcompno.getText().toString().trim().isEmpty() && binding.getLocations().site == 3) {
+                    String input = binding.locationcompno.getText().toString().trim();
+                    if (!input.matches(regdd)) {
+                        khd = true;
+                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
+                        binding.locationcompno.setError("Compound Number format is incorrect");
+                        return;
+                    }
                 }
             }
 
@@ -345,6 +404,21 @@ public class Baslinelocation extends DialogFragment {
                     binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
                     return;
                 }
+            }
+
+            Date end = new Date(); // Get the current date and time
+            // Create a Calendar instance and set it to the current date and time
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(end);
+            // Extract the hour, minute, and second components
+            int hh = cal.get(Calendar.HOUR_OF_DAY);
+            int mm = cal.get(Calendar.MINUTE);
+            int ss = cal.get(Calendar.SECOND);
+            // Format the components into a string with leading zeros
+            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
+
+            if (locations.sttime !=null && locations.edtime==null){
+                locations.edtime = endtime;
             }
 
             locations.complete = 1;

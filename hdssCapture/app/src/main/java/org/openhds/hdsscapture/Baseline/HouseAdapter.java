@@ -2,6 +2,7 @@ package org.openhds.hdsscapture.Baseline;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,26 +111,50 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.ViewHolder>{
         return socialgroupList.size();
     }
 
-    public void setSelectedLocation(Locations selectedLocation) {
+//    public void setSelectedLocation(Locations selectedLocation) {
+//
+//        socialgroupList.clear();
+//        if (selectedLocation != null) {
+//            try {
+//                List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(selectedLocation.getCompno());
+//
+//                if (list != null) {
+//                    socialgroupList.addAll(list);
+//                }
+//                if (list.isEmpty()){
+//                    Toast.makeText(activity.getActivity(), "No Active Household In " + selectedLocation.getCompno(), Toast.LENGTH_LONG).show();
+//                }
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        notifyDataSetChanged();
+//    }
 
+    public void setSelectedLocation(Locations selectedLocation) {
         socialgroupList.clear();
         if (selectedLocation != null) {
-            try {
-                List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(selectedLocation.getCompno());
+            activity.showProgressBar(); // Show the ProgressBar
+            new Handler().postDelayed(() -> { // Simulate delay for loading
+                try {
+                    List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(selectedLocation.getCompno());
 
-                if (list != null) {
-                    socialgroupList.addAll(list);
+                    if (list != null) {
+                        socialgroupList.addAll(list);
+                    }
+                    if (list.isEmpty()){
+                        Toast.makeText(activity.getActivity(), "No Active Household In " + selectedLocation.getCompno(), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                } finally {
+                    activity.hideProgressBar(); // Hide the ProgressBar
                 }
-                if (list.isEmpty()){
-                    Toast.makeText(activity.getActivity(), "No Active Household In " + selectedLocation.getCompno(), Toast.LENGTH_LONG).show();
-                }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+                notifyDataSetChanged();
+            }, 100); // You can adjust the delay as needed
         }
-
-        notifyDataSetChanged();
     }
 }

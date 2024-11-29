@@ -5,12 +5,15 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -20,7 +23,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
+import org.openhds.hdsscapture.Viewmodel.RegistryViewModel;
+import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.databinding.FragmentIndividualSummaryBinding;
 import org.openhds.hdsscapture.entity.Hierarchy;
@@ -29,9 +36,10 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
-import org.openhds.hdsscapture.fragment.VisitFragment;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +49,7 @@ import java.util.concurrent.ExecutionException;
 public class IndividualSummaryFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_CLUSTER_IDS = "ARG_CLUSTER_IDS";
+
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private static final String RESIDENCY_ID = "RESIDENCY_ID";
@@ -55,6 +63,9 @@ public class IndividualSummaryFragment extends Fragment {
     private Individual individual;
     private FragmentIndividualSummaryBinding binding;
     private ProgressDialog progress;
+    private ExtendedFloatingActionButton finish;
+    private IndividualViewModel individualViewModel;
+    private boolean isAllFabsVisible;
 
     public IndividualSummaryFragment() {
         // Required empty public constructor
@@ -97,11 +108,48 @@ public class IndividualSummaryFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentIndividualSummaryBinding.inflate(inflater, container, false);
 
+        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+
         final TextView hh = binding.getRoot().findViewById(R.id.textView_compextId);
         final TextView name = binding.getRoot().findViewById(R.id.textView_compname);
+        finish = binding.getRoot().findViewById(R.id.add_back);
 
         hh.setText(socialgroup.getExtId());
         name.setText(socialgroup.getGroupName());
+        updateButtonState();
+
+        isAllFabsVisible = false;
+        binding.addAdhocFab.setOnClickListener(view -> {
+
+            if (!isAllFabsVisible) {
+
+                // when isAllFabsVisible becomes
+                // true make all the action name
+                // texts and FABs VISIBLE.
+                binding.buttonVisit.show();
+                binding.buttonChoh.show();
+                binding.buttonNewindividual.show();
+
+                // make the boolean variable true as
+                // we have set the sub FABs
+                // visibility to GONE
+                isAllFabsVisible = true;
+
+            } else {
+
+                // when isAllFabsVisible becomes
+                // true make all the action name
+                // texts and FABs GONE.
+                binding.buttonVisit.hide();
+                binding.buttonChoh.hide();
+                binding.buttonNewindividual.hide();
+
+                // make the boolean variable false
+                // as we have set the sub FABs
+                // visibility to GONE
+                isAllFabsVisible = false;
+            }
+        });
 
         final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_baseline);
         final IndividualAdaptor adapter = new IndividualAdaptor(this, residency, locations, socialgroup );
@@ -114,49 +162,25 @@ public class IndividualSummaryFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(binding.getRoot().getContext()));
         recyclerView.setAdapter(adapter);
 
-//        binding.buttonIndividuals.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showLoadingDialog();
-//
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        adapter.pull(individualViewModel);
-//                    }
-//                }, 500); // change delay time as needed
-//            }
-//
-//            public void showLoadingDialog() {
-//                if (progress == null) {
-//                    progress = new ProgressDialog(requireContext());
-//                    progress.setTitle("Loading Individuals...");
-//                    progress.setMessage(getString(R.string.please_wait_lbl));
-//                    progress.setCancelable(false);
-//                }
-//                progress.show();
-//            }
-//        });
-
         //initial loading of Individuals in locations
         adapter.filter("", individualViewModel);
 
-        final AppCompatButton addback = binding.getRoot().findViewById(R.id.add_back);
-        addback.setOnClickListener(v -> {
+
+        finish.setOnClickListener(v -> {
 
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
                     BaseFragment.newInstance(level6Data,locations,socialgroup)).commit();
         });
 
-        final AppCompatButton visit = binding.getRoot().findViewById(R.id.button_visit);
-        visit.setOnClickListener(v -> {
+        binding.buttonVisit.setOnClickListener(v -> {
             BasevisitFragment.newInstance(locations, socialgroup)
                     .show(getChildFragmentManager(), "BasevisitFragment");
         });
 
 
+        final AppCompatButton change_hoh = binding.getRoot().findViewById(R.id.button_choh);
         final AppCompatButton add_individual = binding.getRoot().findViewById(R.id.button_newindividual);
-        add_individual.setOnClickListener(v -> {
+        binding.buttonNewindividual.setOnClickListener(v -> {
 
             final Individual individual = new Individual();
 
@@ -164,14 +188,25 @@ public class IndividualSummaryFragment extends Fragment {
                     BaselineFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         });
 
+        binding.buttonChoh.setOnClickListener(v -> {
+
+            final Individual individual = new Individual();
+
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
+                    HoHFragment.newInstance(individual, locations, socialgroup)).commit();
+        });
+
         VisitViewModel vmodel = new ViewModelProvider(this).get(VisitViewModel.class);
         try {
             Visit data = vmodel.find(socialgroup.uuid);
             if (data != null) {
-                add_individual.setEnabled(true);
+                binding.buttonNewindividual.setEnabled(true);
+                binding.buttonChoh.setEnabled(true);
             }else{
-                add_individual.setEnabled(false);
-                add_individual.setText("Unvisited");
+                binding.buttonNewindividual.setEnabled(false);
+                binding.buttonChoh.setEnabled(false);
+                binding.buttonNewindividual.setText("Disabled");
+                binding.buttonChoh.setText("Disabled");
 
             }
 
@@ -185,10 +220,72 @@ public class IndividualSummaryFragment extends Fragment {
         return view;
     }
 
-    public void dismissLoadingDialog() {
-        if (progress != null) {
-            progress.dismiss();
-        }
+    private void updateButtonState() {
+        if (getActivity() == null || !isAdded()) return; // Ensure fragment is still attached
+
+        LayoutInflater inflater = getLayoutInflater();
+        View customToastView = inflater.inflate(R.layout.custom_toast, null);
+        TextView toastMessage = customToastView.findViewById(R.id.toast_message);
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        executor.execute(() -> {
+            try {
+                // Perform database operations in the background
+                long err = (individualViewModel != null) ? individualViewModel.err(socialgroup != null ? socialgroup.extId : "", BaseFragment.selectedLocation != null ? BaseFragment.selectedLocation.compno : "") : 0;
+                long errs = (individualViewModel != null) ? individualViewModel.errs(socialgroup != null ? socialgroup.extId : "", BaseFragment.selectedLocation != null ? BaseFragment.selectedLocation.compno : "") : 0;
+
+                handler.post(() -> {
+                    if (getActivity() == null || !isAdded()) return; // Ensure fragment is still attached
+
+                    try {
+                        if (errs > 0) {
+                            showToast("Household Head is a Minor", customToastView, toastMessage);
+                        } else if (err > 0) {
+                            showToast("Only Minors Left in Household", customToastView, toastMessage);
+                        } else {
+                            enableFinishButton();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                executor.shutdown();
+            }
+        });
+    }
+
+    // Helper method to show a custom toast message
+    private void showToast(String message, View customToastView, TextView toastMessage) {
+        if (getActivity() == null || !isAdded()) return; // Ensure fragment is still attached
+
+        finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home));
+        finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_border_lightgray));
+        finish.setOnClickListener(v -> {
+            toastMessage.setText(message);
+            Toast customToast = new Toast(requireContext());
+            customToast.setDuration(Toast.LENGTH_LONG);
+            customToast.setView(customToastView);
+            customToast.show();
+        });
+    }
+
+    // Helper method to enable the finish button with default functionality
+    private void enableFinishButton() {
+        if (getActivity() == null || !isAdded()) return; // Ensure fragment is still attached
+
+        finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home)); // Original color
+        finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.white)); // Original text color
+        finish.setEnabled(true);
+        finish.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container_baseline, BaseFragment.newInstance(level6Data, locations, socialgroup))
+                    .commit();
+        });
     }
 
     public void onBackPressed() {

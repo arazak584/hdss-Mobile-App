@@ -18,6 +18,7 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.databinding.FragmentBasevisitBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
@@ -27,11 +28,13 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -125,7 +128,23 @@ public class BasevisitFragment extends DialogFragment {
                 data.complete = 1;
                 data.houseExtId = socialgroup.extId;
                 data.socialgroup_uuid =socialgroup.uuid;
-                data.extId = data.houseExtId + "000";
+                //data.extId = data.houseExtId + "000";
+                if(roundData.roundNumber < 10) {
+                    data.extId = data.houseExtId + "00" + roundData.getRoundNumber();
+                }else {
+                    data.extId = data.houseExtId + "0" + roundData.getRoundNumber();
+                }
+                Date currentDate = new Date(); // Get the current date and time
+                // Create a Calendar instance and set it to the current date and time
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(currentDate);
+                // Extract the hour, minute, and second components
+                int hh = cal.get(Calendar.HOUR_OF_DAY);
+                int mm = cal.get(Calendar.MINUTE);
+                int ss = cal.get(Calendar.SECOND);
+                // Format the components into a string with leading zeros
+                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
+                data.sttime = timeString;
 
                 binding.setVisit(data);
                 binding.getVisit().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
@@ -161,7 +180,7 @@ public class BasevisitFragment extends DialogFragment {
 
         if (save) {
             final Visit finalData = binding.getVisit();
-
+            SocialgroupViewModel vmodel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new Handler().hasInvalidInput(binding.VISITLAYOUT, validateOnComplete, false);
@@ -170,9 +189,39 @@ public class BasevisitFragment extends DialogFragment {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
                 return;
             }
-                finalData.complete =1;
+            finalData.complete =1;
+
+            Date end = new Date(); // Get the current date and time
+            // Create a Calendar instance and set it to the current date and time
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(end);
+            // Extract the hour, minute, and second components
+            int hh = cal.get(Calendar.HOUR_OF_DAY);
+            int mm = cal.get(Calendar.MINUTE);
+            int ss = cal.get(Calendar.SECOND);
+            // Format the components into a string with leading zeros
+            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
+            if (finalData.sttime !=null && finalData.edtime==null){
+                finalData.edtime = endtime;
+            }
+
             viewModel.add(finalData);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+
+            try {
+                Socialgroup data = vmodel.visit(socialgroup.uuid);
+                if (data != null) {
+                    HvisitAmendment visit = new HvisitAmendment();
+                    visit.uuid = binding.getVisit().socialgroup_uuid;
+                    visit.complete = 2;
+                    vmodel.visited(visit);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
         }
         if (close) {

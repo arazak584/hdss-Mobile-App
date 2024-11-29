@@ -49,7 +49,7 @@ public class IndividualAdaptor extends RecyclerView.Adapter<IndividualAdaptor.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView firstname, lastname, nickname, permid, dob, compno, gender,status;
+        TextView firstname, lastname, nickname, permid, dob, compno, gender,status,hhid;
         LinearLayout linearLayout;
         CardView cardView;
 
@@ -61,8 +61,9 @@ public class IndividualAdaptor extends RecyclerView.Adapter<IndividualAdaptor.Vi
             this.nickname = view.findViewById(R.id.text_nickname);
             this.dob = view.findViewById(R.id.text_dob);
             this.gender = view.findViewById(R.id.text_gender);
-            //this.compno = view.findViewById(R.id.text_compno);
+            this.compno = view.findViewById(R.id.text_compno);
             this.status = view.findViewById(R.id.text_status);
+            this.hhid = view.findViewById(R.id.text_hhid);
             this.cardView = view.findViewById(R.id.searchedIindividual);
         }
     }
@@ -87,8 +88,15 @@ public class IndividualAdaptor extends RecyclerView.Adapter<IndividualAdaptor.Vi
         holder.firstname.setText(individual.getFirstName());
         holder.lastname.setText(individual.getLastName());
         holder.dob.setText(individual.getDob());
-        //holder.compno.setText(individual.compextId);
-        //holder.age.setText(String.valueOf(individual.getAge()));
+        holder.compno.setText(individual.getCompno());
+        String hh  = individual.getGhanacard();
+        if (hh == null || hh.isEmpty()){
+            holder.hhid.setText("No Ghana Card");
+            holder.hhid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+        }else{
+            holder.hhid.setText(individual.getGhanacard());
+        }
+
         String otherName = individual.getOtherName();
         if (otherName == null || otherName.isEmpty()) {
             holder.nickname.setText("");
@@ -101,12 +109,12 @@ public class IndividualAdaptor extends RecyclerView.Adapter<IndividualAdaptor.Vi
         }else{
             holder.gender.setText("Female");
         }
-        Integer status = individual.endType;
-        if (status == 1) {
-            holder.status.setText("(" + "Active" + ")");
+        String ph = individual.phone1;
+        if (ph != null && ph.length() == 10) {
+            holder.status.setText("(" + ph + ")");
             holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
         } else {
-            holder.status.setText("(" + "Outmigrated" + ")");
+            holder.status.setText("(" + "No Contact" + ")");
             holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
         }
         Integer st = individual.complete;

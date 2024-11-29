@@ -76,21 +76,20 @@
 
     </LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/add_back"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:contentDescription="@string/mainmenu"
-        android:src="@drawable/ic_baseline_add_24"
-        android:text="@string/mainmenu"
-        app:fabSize="normal"
-        android:background="@drawable/btnd_rone_btn"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/add_adhoc_fab"
-        tools:ignore="ImageContrastCheck" />
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/add_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/mainmenu"
+            android:src="@drawable/ic_baseline_add_24"
+            android:text="@string/compvisit"
+            app:fabSize="normal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/add_adhoc_fab"
+            tools:ignore="ImageContrastCheck" />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_adhoc_fab"
@@ -108,21 +107,31 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="ImageContrastCheck" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_newindividual"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
-        android:text="@string/baseline"
-        android:textSize="12sp"
-        android:background="@drawable/btnd_rone_btn"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/add_back"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="ImageContrastCheck,DuplicateSpeakableTextCheck" />
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/button_newindividual"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/baseline"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/add_adhoc_fab"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="ImageContrastCheck,DuplicateSpeakableTextCheck" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/button_choh"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/changehoh"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/button_newindividual"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="ImageContrastCheck" />
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/button_visit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -130,12 +139,10 @@
             android:layout_marginBottom="24dp"
             android:text="@string/visithousehold"
             android:textSize="12sp"
-            android:background="@drawable/btnd_rone_btn"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/button_newindividual"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/button_choh"
             app:layout_constraintEnd_toEndOf="parent"
             tools:ignore="ImageContrastCheck" />
-
 
 
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -48,11 +49,11 @@ public class BaseFragment extends Fragment implements BaseAdapter.LocationClickL
     private Socialgroup socialgroup;
     public static  Locations selectedLocation;
     private SocialgroupViewModel socialgroupViewModel;
-    private Individual individual;
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private HouseAdapter houseAdapter;
     private View view;
+    private ProgressBar progressBar;
 
     public interface LocationClickListener {
         void onLocationClick(Locations selectedLocation);
@@ -102,6 +103,18 @@ public class BaseFragment extends Fragment implements BaseAdapter.LocationClickL
 
         final Intent i = getActivity().getIntent();
         final Hierarchy level6Data = i.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
+
+        final Intent j = getActivity().getIntent();
+        final Hierarchy level5Data = j.getParcelableExtra(HierarchyActivity.LEVEL5_DATA);
+
+        final Button home = view.findViewById(R.id.home);
+        home.setOnClickListener(view -> {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
+                    BaseFragment.newInstance(level6Data, locations, socialgroup)).commit();
+        });
+
+        // Initialize ProgressBar
+        progressBar = view.findViewById(R.id.progress_bar);
 
         final RecyclerView recyclerViewHousehold = view.findViewById(R.id.recyclerView_householdids);
 
@@ -165,11 +178,12 @@ public class BaseFragment extends Fragment implements BaseAdapter.LocationClickL
                     .show(getChildFragmentManager(), "Baslinelocation");
         });
 
-//        final AppCompatButton add_listing = view.findViewById(R.id.button_listing);
-//        add_listing.setOnClickListener(v -> {
-//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-//                    ListingFragment.newInstance(locations)).commit();
-//        });
+
+        final AppCompatButton add_listing = view.findViewById(R.id.button_listing);
+        add_listing.setOnClickListener(v -> {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_baseline,
+                    BaseListingFragment.newInstance(locations)).commit();
+        });
 
         final AppCompatButton add_household = view.findViewById(R.id.button_newhousehold);
         add_household.setOnClickListener(v -> {
@@ -192,8 +206,8 @@ public class BaseFragment extends Fragment implements BaseAdapter.LocationClickL
         // Update the householdAdapter with the selected location
         if (houseAdapter != null) {
             houseAdapter.setSelectedLocation(BaseFragment.selectedLocation);
-            TextView compno = view.findViewById(R.id.textView_compounds);
-            compno.setText(selectedLocation.compno);
+//            TextView compno = view.findViewById(R.id.textView_compounds);
+//            compno.setText(selectedLocation.compno);
             AppCompatButton add_household = view.findViewById(R.id.button_newhousehold);
             final AppCompatButton add_listing = view.findViewById(R.id.button_listing);
             add_household.setVisibility(View.VISIBLE);
@@ -205,5 +219,18 @@ public class BaseFragment extends Fragment implements BaseAdapter.LocationClickL
             add_listing.setVisibility(View.GONE);
         }
 
+    }
+
+
+    public void showProgressBar() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hideProgressBar() {
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
     }
 }

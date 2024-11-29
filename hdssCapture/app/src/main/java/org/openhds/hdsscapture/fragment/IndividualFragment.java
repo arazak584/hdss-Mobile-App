@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
+import org.openhds.hdsscapture.Baseline.BaselineFragment;
 import org.openhds.hdsscapture.Dialog.FatherDialogFragment;
 import org.openhds.hdsscapture.Dialog.MotherDialogFragment;
 import org.openhds.hdsscapture.R;
@@ -31,6 +32,7 @@ import org.openhds.hdsscapture.Utilities.Handler;
 import org.openhds.hdsscapture.Utilities.UniqueIDGen;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
+import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
@@ -39,6 +41,7 @@ import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.databinding.FragmentIndividualBinding;
 import org.openhds.hdsscapture.entity.Configsettings;
+import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
@@ -197,6 +200,21 @@ public class IndividualFragment extends Fragment {
             }
         });
 
+        updateVisibilityBasedOnAge();
+        // Set up the FragmentResultListener
+//        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+//            if (bundle.containsKey((IndividualFragment.DATE_BUNDLES.DOB.getBundleKey()))) {
+//                final String result = bundle.getString(IndividualFragment.DATE_BUNDLES.DOB.getBundleKey());
+//                binding.dob.setText(result);
+//
+//                // Update individual DOB and visibility
+//                if (binding.getIndividual() != null) {
+//                    binding.getIndividual().setDob(result); // Assuming setDob exists
+//                    updateVisibilityBasedOnAge();
+//                }
+//            }
+//        });
+
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             // We use a String here, but any type that can be put in a Bundle is supported
@@ -206,19 +224,36 @@ public class IndividualFragment extends Fragment {
 
             }
 
-
             if (bundle.containsKey((IndividualFragment.DATE_BUNDLES.DOB.getBundleKey()))) {
                 final String result = bundle.getString(IndividualFragment.DATE_BUNDLES.DOB.getBundleKey());
                 binding.dob.setText(result);
 
-                if (binding.getIndividual().dob != null) {
-                    final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
-                        binding.individAge.setText(String.valueOf(estimatedAge));
-                        binding.individAge.setTextColor(Color.MAGENTA);
-
-                    binding.dob.setError(null);
+                // Update individual DOB and visibility
+                if (binding.getIndividual() != null) {
+                    binding.getIndividual().setDob(result); // Assuming setDob exists
+                    updateVisibilityBasedOnAge();
                 }
             }
+
+//            if (bundle.containsKey((IndividualFragment.DATE_BUNDLES.DOB.getBundleKey()))) {
+//                final String result = bundle.getString(IndividualFragment.DATE_BUNDLES.DOB.getBundleKey());
+//                binding.dob.setText(result);
+//
+//                if (binding.getIndividual().dob != null) {
+//                    final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
+//                        binding.individAge.setText(String.valueOf(estimatedAge));
+//                        binding.individAge.setTextColor(Color.MAGENTA);
+//
+//                    binding.demoPhone.setVisibility(estimatedAge > 11 ? View.VISIBLE : View.GONE);
+//                    binding.ynPhone.setVisibility(estimatedAge > 11 ? View.VISIBLE : View.GONE);
+//                    binding.occupation.setVisibility(estimatedAge > 11 ? View.VISIBLE : View.GONE);
+//                    binding.ynOccupation.setVisibility(estimatedAge > 11 ? View.VISIBLE : View.GONE);
+//                    binding.marital.setVisibility(estimatedAge > 11 ? View.VISIBLE : View.GONE);
+//                    binding.ynMarital.setVisibility(estimatedAge > 11 ? View.VISIBLE : View.GONE);
+//
+//                    binding.dob.setError(null);
+//                }
+//            }
 
             if (bundle.containsKey((IndividualFragment.DATE_BUNDLES.IMGDATE.getBundleKey()))) {
                 final String result = bundle.getString(IndividualFragment.DATE_BUNDLES.IMGDATE.getBundleKey());
@@ -610,6 +645,30 @@ public class IndividualFragment extends Fragment {
             e.printStackTrace();
         }
 
+        //Demographic
+        DemographicViewModel demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
+        try {
+            Demographic data = demographicViewModel.find(individual.uuid);
+
+            if (data != null) {
+                binding.setDemographic(data);
+
+            } else {
+                data = new Demographic();
+                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.complete = 1;
+                data.individual_uuid = binding.getIndividual().uuid;
+
+                binding.setDemographic(data);
+                binding.getDemographic().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         //LOAD SPINNERS
         loadCodeData(binding.dobAspect, "complete");
         loadCodeData(binding.gender, "gender");
@@ -628,15 +687,23 @@ public class IndividualFragment extends Fragment {
         loadCodeData(binding.livestockYn, "submit");
         loadCodeData(binding.cashYn, "submit");
         loadCodeData(binding.foodYn, "submit");
+        loadCodeData(binding.demoPhone, "complete");
+        loadCodeData(binding.tribe, "tribe");
+        loadCodeData(binding.religion,  "religion");
+        loadCodeData(binding.education, "education");
+        loadCodeData(binding.occupation, "occupation");
+        loadCodeData(binding.marital, "marital");
+        loadCodeData(binding.akan, "akan");
+        loadCodeData(binding.denomination, "denomination");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
-            save(true, true, viewModel, individualViewModel,inmigrationViewModel);
+            save(true, true, viewModel, individualViewModel,inmigrationViewModel,demographicViewModel);
         });
 
         binding.buttonClose.setOnClickListener(v -> {
 
-            save(false, true, viewModel, individualViewModel,inmigrationViewModel);
+            save(false, true, viewModel, individualViewModel,inmigrationViewModel,demographicViewModel);
         });
 
         binding.setEventname(AppConstants.EVENT_MIND00S);
@@ -646,12 +713,13 @@ public class IndividualFragment extends Fragment {
 
     }
 
-    private void save(boolean save, boolean close, ResidencyViewModel viewModel,  IndividualViewModel individualViewModel,InmigrationViewModel inmigrationViewModel) {
+    private void save(boolean save, boolean close, ResidencyViewModel viewModel,  IndividualViewModel individualViewModel,InmigrationViewModel inmigrationViewModel,DemographicViewModel demographicViewModel) {
 
         if (save) {
             Individual finalData = binding.getIndividual();
             Residency Data = binding.getResidency();
             Inmigration img = binding.getInmigration();
+            Demographic demo = binding.getDemographic();
             boolean sdate = false;
             boolean isOmg = false;
             boolean dthdate = false;
@@ -856,6 +924,30 @@ public class IndividualFragment extends Fragment {
                 e.printStackTrace();
             }
 
+            boolean compyrs = false;
+            if (!binding.compYrs.getText().toString().trim().isEmpty()) {
+                int yrs = Integer.parseInt(binding.compYrs.getText().toString().trim());
+                if (yrs < 0 || yrs > 6) {
+                    compyrs = true;
+                    binding.compYrs.setError("Cannot be less than 1 or More than 6");
+                    Toast.makeText(getActivity(), "Cannot be less than 1 or More than 6", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            boolean ph = false;
+            if (!binding.phone1.getText().toString().trim().isEmpty()) {
+                String input = binding.phone1.getText().toString().trim();
+                String regex = "[0-9]{10}";
+
+                if (!input.matches(regex)) {
+                    ph = true;
+                    Toast.makeText(getActivity(), "Phone Number is incorrect", Toast.LENGTH_LONG).show();
+                    binding.phone1.setError("Phone Number is incorrect");
+                    return;
+                }
+            }
+
             if (hasErrors) {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
                 return;
@@ -903,6 +995,7 @@ public class IndividualFragment extends Fragment {
                 e.printStackTrace();
             }
 
+            finalData.phone1 = binding.getDemographic().phone1;
             finalData.compno = ClusterFragment.selectedLocation.compno;
             finalData.endType = Data.endType;
             finalData.hohID = socialgroup.extId;
@@ -916,9 +1009,11 @@ public class IndividualFragment extends Fragment {
 
             finalData.complete=1;
             Data.complete=1;
+            demo.complete=1;
 
             viewModel.add(Data);
             individualViewModel.add(finalData);
+            demographicViewModel.add(demo);
 
             final Intent i = getActivity().getIntent();
             final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
@@ -1069,6 +1164,32 @@ public class IndividualFragment extends Fragment {
 
     }
 
+    private void updateVisibilityBasedOnAge() {
+        if (binding.getIndividual() != null && binding.getIndividual().dob != null) {
+            final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
+            binding.individAge.setText(String.valueOf(estimatedAge));
+            binding.individAge.setTextColor(Color.MAGENTA);
+
+            boolean isAbove11 = estimatedAge > 11;
+            binding.demoPhone.setVisibility(isAbove11 ? View.VISIBLE : View.GONE);
+            binding.ynPhone.setVisibility(isAbove11 ? View.VISIBLE : View.GONE);
+            binding.occupation.setVisibility(isAbove11 ? View.VISIBLE : View.GONE);
+            binding.ynOccupation.setVisibility(isAbove11 ? View.VISIBLE : View.GONE);
+            binding.marital.setVisibility(isAbove11 ? View.VISIBLE : View.GONE);
+            binding.ynMarital.setVisibility(isAbove11 ? View.VISIBLE : View.GONE);
+
+            binding.dob.setError(null);
+        } else {
+            // Handle cases where dob is null
+            binding.individAge.setText("");
+            binding.demoPhone.setVisibility(View.GONE);
+            binding.ynPhone.setVisibility(View.GONE);
+            binding.occupation.setVisibility(View.GONE);
+            binding.ynOccupation.setVisibility(View.GONE);
+            binding.marital.setVisibility(View.GONE);
+            binding.ynMarital.setVisibility(View.GONE);
+        }
+    }
 
     private enum DATE_BUNDLES {
         INSERTDATE ("INSERTDATE"),

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="true">HDSS CAPTURE</string>
-    <string name="versions">2024.11.14</string>
+    <string name="versions">2024.11.27</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>
@@ -581,7 +581,7 @@
     <string name="replghcard">Replace Ghana Card Number [GHA-XXXXXXXXX-X]</string>
     <string name="replgender">Replace Gender of Individual</string>
     <string name="send_amendment">Send Amendment</string>
-    <string name="baseline">Baseline</string>
+    <string name="baseline">Enumeration</string>
     <string name="updated">Successfully Updated</string>
     <string name="incomplete">Incomplete</string>
     <string name="compound">Compound Name</string>
