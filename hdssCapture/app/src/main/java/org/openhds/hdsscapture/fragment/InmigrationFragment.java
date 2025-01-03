@@ -303,11 +303,18 @@ public class InmigrationFragment extends Fragment {
             try {
                 if (!binding.endDate.getText().toString().trim().isEmpty() && !binding.imgDate.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    Date currentDate = f.parse(f.format(new Date()));
                     Date stdate = f.parse(binding.endDate.getText().toString().trim());
                     Date edate = f.parse(binding.imgDate.getText().toString().trim());
                     if (edate.before(stdate)) {
                         binding.imgDate.setError("Date of Inmigration Cannot Be Less than Last OMG Date");
                         Toast.makeText(getActivity(), "Date of Inmigration  Cannot Be Less than Last OMG Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (edate.equals(currentDate)) {
+                        String errorMessage = getString(R.string.startdateerr);
+                        binding.imgDate.setError(errorMessage);
+                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
                         return;
                     }
                     // clear error if validation passes

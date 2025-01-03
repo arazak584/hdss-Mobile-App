@@ -176,10 +176,18 @@ public class DeathFragment extends DialogFragment {
         }
 
         DeathViewModel viewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+        ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         try {
             Death data = viewModel.finds(HouseMembersFragment.selectedIndividual.uuid);
+            Residency dataRes = resModel.findRes(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
             if (data != null) {
+                if (dataRes != null){
+                    //data.dob = dataRes.startDate;
+                    binding.setRes(dataRes);
+                    data.residency_uuid = dataRes.uuid;
+                }
                 binding.setDeath(data);
+
             } else {
                 data = new Death();
 
@@ -189,8 +197,8 @@ public class DeathFragment extends DialogFragment {
                     data.visit_uuid = dts.uuid;
                 }
 
-                ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-                Residency dataRes = resModel.findRes(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
+
+
                 if (dataRes != null){
                     //data.dob = dataRes.startDate;
                     binding.setRes(dataRes);

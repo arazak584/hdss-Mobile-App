@@ -909,11 +909,18 @@ public class IndividualFragment extends Fragment {
             try {
                 if (!binding.editTextStartDate.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date currentDate = new Date();
+                    //Date currentDate = new Date();
+                    Date currentDate = f.parse(f.format(new Date()));
                     Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
                     if (stdate.after(currentDate)) {
                         binding.editTextStartDate.setError("Start Date Cannot Be a Future Date");
                         Toast.makeText(getActivity(), "Start Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (stdate.equals(currentDate)) {
+                        String errorMessage = getString(R.string.startdateerr);
+                        binding.editTextStartDate.setError(errorMessage);
+                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
                         return;
                     }
                     // clear error if validation passes

@@ -803,5 +803,9 @@
     <string name="estimate_1">Estimated Date of Death</string>
     <string name="estimate_2">Actual Date of Death</string>
 
+    <string name="deliv">Delivery Date Cannot Be Less than Conception Date</string>
+    <string name="startdateerr">Date Cannot be Today\'s Date</string>
+    <string name="select">Select Level</string>
+
 
 </resources>

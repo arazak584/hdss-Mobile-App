@@ -175,7 +175,7 @@ public class HierarchyActivity extends AppCompatActivity {
         level6Adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
         level6Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         level6Spinner.setAdapter(level6Adapter);
-
+        String textMessage = getString(R.string.select);
 
         int ccSize = loadRoundData(roundSpinner, roundViewModel);
         if(ccSize > 1) {
@@ -230,8 +230,9 @@ public class HierarchyActivity extends AppCompatActivity {
 
                 if (fieldworkerDatas.status==2) {
                     try {
+
                         List<Hierarchy> level2Data = hierarchyViewModel.retrieveLevel2(selectedLevel1.getUuid());
-                        level2Data.add(0, new Hierarchy("", "Select Region"));
+                        level2Data.add(0, new Hierarchy("", textMessage));
                         level2Adapter.clear();
                         level2Adapter.addAll(level2Data);
                     } catch (ExecutionException | InterruptedException e) {
@@ -241,7 +242,7 @@ public class HierarchyActivity extends AppCompatActivity {
                 }else{
                     try {
                         List<Hierarchy> level2Data = hierarchyViewModel.retrieveLevel2i(selectedLevel1.getUuid(),fieldworkerDatas.username);
-                        level2Data.add(0, new Hierarchy("", "Select Region"));
+                        level2Data.add(0, new Hierarchy("", textMessage));
                         level2Adapter.clear();
                         level2Adapter.addAll(level2Data);
                     } catch (ExecutionException | InterruptedException e) {
@@ -283,7 +284,7 @@ public class HierarchyActivity extends AppCompatActivity {
                 if (fieldworkerDatas.status==2) {
                     try {
                         List<Hierarchy> level3Data = hierarchyViewModel.retrieveLevel3(selectedLevel2.getUuid());
-                        level3Data.add(0, new Hierarchy("", "Select District"));
+                        level3Data.add(0, new Hierarchy("", textMessage));
                         level3Adapter.addAll(level3Data);
                     } catch (ExecutionException | InterruptedException e) {
                         e.printStackTrace();
@@ -292,7 +293,7 @@ public class HierarchyActivity extends AppCompatActivity {
                 }else{
                     try {
                         List<Hierarchy> level3Data = hierarchyViewModel.retrieveLevel3i(selectedLevel2.getUuid(),fieldworkerDatas.username);
-                        level3Data.add(0, new Hierarchy("", "Select District"));
+                        level3Data.add(0, new Hierarchy("", textMessage));
                         level3Adapter.addAll(level3Data);
                     } catch (ExecutionException | InterruptedException e) {
                         e.printStackTrace();
@@ -336,7 +337,7 @@ public class HierarchyActivity extends AppCompatActivity {
                 if (fieldworkerDatas.status==2) {
                     try {
                         List<Hierarchy> level4Data = hierarchyViewModel.retrieveLevel4(selectedLevel3.getUuid());
-                        level4Data.add(0, new Hierarchy("", "Select SubDistrict"));
+                        level4Data.add(0, new Hierarchy("", textMessage));
                         level4Adapter.clear();
                         level4Adapter.addAll(level4Data);
                     } catch (ExecutionException | InterruptedException e) {
@@ -346,7 +347,7 @@ public class HierarchyActivity extends AppCompatActivity {
                 }else{
                     try {
                         List<Hierarchy> level4Data = hierarchyViewModel.retrieveLevel4i(selectedLevel3.getUuid(),fieldworkerDatas.username);
-                        level4Data.add(0, new Hierarchy("", "Select SubDistrict"));
+                        level4Data.add(0, new Hierarchy("", textMessage));
                         level4Adapter.clear();
                         level4Adapter.addAll(level4Data);
                     } catch (ExecutionException | InterruptedException e) {
@@ -386,7 +387,7 @@ public class HierarchyActivity extends AppCompatActivity {
                     // Load level 5 data
                     try {
                         List<Hierarchy> level5Data = hierarchyViewModel.retrieveLevel5(selectedLevel4.getUuid());
-                        level5Data.add(0, new Hierarchy("", "Select Village"));
+                        level5Data.add(0, new Hierarchy("", textMessage));
                         level5Adapter.clear();
                         level5Adapter.addAll(level5Data);
                     } catch (ExecutionException | InterruptedException e) {
@@ -396,7 +397,7 @@ public class HierarchyActivity extends AppCompatActivity {
                 } else{
                     try {
                         List<Hierarchy> level5Data = hierarchyViewModel.retrieveLevel5i(selectedLevel4.getUuid(),fieldworkerDatas.username);
-                        level5Data.add(0, new Hierarchy("", "Select Village"));
+                        level5Data.add(0, new Hierarchy("", textMessage));
                         level5Adapter.clear();
                         level5Adapter.addAll(level5Data);
                     } catch (ExecutionException | InterruptedException e) {
@@ -439,7 +440,7 @@ public class HierarchyActivity extends AppCompatActivity {
                     // Check if status is a supervisor
                     if (status == 2) {
                         // If status is 2 which is supervisor, use level6Data directly
-                        level6Data.add(0, new Hierarchy("", "Select Sub Village"));
+                        level6Data.add(0, new Hierarchy("", textMessage));
                         level6Adapter.clear();
                         level6Adapter.addAll(level6Data);
                     } else {
@@ -453,7 +454,7 @@ public class HierarchyActivity extends AppCompatActivity {
                         }
 
                         // Add "Select Sub Village" as the first item to the filtered data
-                        filteredData.add(0, new Hierarchy("", "Select Sub Village"));
+                        filteredData.add(0, new Hierarchy("", textMessage));
 
                         // Clear and update the adapter with the filtered data
                         level6Adapter.clear();

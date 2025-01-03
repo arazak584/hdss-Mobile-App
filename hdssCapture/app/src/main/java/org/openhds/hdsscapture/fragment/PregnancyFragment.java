@@ -518,7 +518,7 @@ public class PregnancyFragment extends DialogFragment {
                         return;
                     }
                     if (edate.before(stdate) || edate.equals(stdate)) {
-                        binding.expectedDelivery.setError("Delivery Date Cannot Be Less than Conception Date");
+                        binding.expectedDelivery.setError(String.valueOf(R.string.deliv));
                         Toast.makeText(getActivity(), "Delivery Date Cannot Be Less than Conception Date", Toast.LENGTH_LONG).show();
                         return;
                     }
