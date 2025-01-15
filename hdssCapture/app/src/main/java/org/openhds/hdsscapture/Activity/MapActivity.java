@@ -142,7 +142,7 @@ public class MapActivity extends AppCompatActivity {
             map.getController().animateTo(marker.getPosition());
             marker.showInfoWindow();
         } else {
-            Toast.makeText(this, "Location not found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Location not found (Possibly not located in your working area)", Toast.LENGTH_SHORT).show();
         }
     }
 }

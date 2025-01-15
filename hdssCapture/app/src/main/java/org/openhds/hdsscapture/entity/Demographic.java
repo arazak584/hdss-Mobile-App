@@ -452,7 +452,7 @@ public class Demographic extends BaseObservable implements Parcelable {
             occupation = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
+            patternSkipper(view);
         }
 
     }
@@ -504,7 +504,7 @@ public class Demographic extends BaseObservable implements Parcelable {
             phone = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
+            patternSkipper(view);
         }
     }
 
@@ -520,7 +520,7 @@ public class Demographic extends BaseObservable implements Parcelable {
             akan_tribe = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
+            patternSkipper(view);
         }
     }
 
@@ -536,7 +536,7 @@ public class Demographic extends BaseObservable implements Parcelable {
             denomination = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
-            notifyPropertyChanged(BR._all);
+            patternSkipper(view);
         }
     }
 
@@ -544,14 +544,15 @@ public class Demographic extends BaseObservable implements Parcelable {
 
         if (view != null) {
 
-            if(tribe == null || tribe!=1)
-                setAkan_tribe(null);
+            if(tribe == null || tribe != AppConstants.YES)
+                akan_tribe = null;
 
-            if (religion == null || religion !=1)
-                setDenomination(null);
+            if (religion == null || religion != AppConstants.YES)
+                denomination = null;
 
-            if (occupation == null || occupation !=77)
+            if (occupation == null || occupation != AppConstants.OTHER_SPECIFY)
                 setOccupation_oth(null);
+
 
             notifyPropertyChanged(BR._all);
         }

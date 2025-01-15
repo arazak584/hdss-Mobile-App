@@ -2,8 +2,7 @@ package org.openhds.hdsscapture;
 
 public class AppConstants {
 
-    public static final int NO = 2, YES = 1, UK = 8, NA = 9, RUR = 1, URB = 2, LPG =3, non=10;
-    public static final int OTHER_SPECIFY = 77;
+    public static final int NO = 2, YES = 1, UK = 8, NA = 9, RUR = 1, URB = 2, LPG =3, non=10, OTHER_SPECIFY = 77;
 
     public static final String MARKED_COMPLETE="MARKED AS COMPLETED";
     public static final String MARKED_INCOMPLETE="INCOMPLETE";
@@ -78,5 +77,8 @@ public class AppConstants {
     public static final String DOWNLOAD_IND = "file:///android_asset/ind_download.html";
     public static final String DOWNLOAD_DEMO = "file:///android_asset/demo_download.html";
     public static final String DENO_INFO = "file:///android_asset/deno_views.html";
+    public static final String DATA_REJECT = "file:///android_asset/data_reject.html";
+    public static final String DATA_SCHEDULE = "file:///android_asset/data_schedule.html";
+    public static final String DATA_MAP = "file:///android_asset/data_map.html";
 
 }

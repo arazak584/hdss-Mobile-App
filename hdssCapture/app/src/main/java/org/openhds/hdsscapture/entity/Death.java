@@ -575,7 +575,7 @@ public class Death extends BaseObservable implements Parcelable {
 
         if (view != null) {
 
-            if(deathPlace == null || deathPlace!=77){
+            if(deathPlace == null || deathPlace!=AppConstants.OTHER_SPECIFY){
                 setDeathPlace_oth(null);
             }
 

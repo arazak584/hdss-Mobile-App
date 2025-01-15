@@ -2,8 +2,11 @@ package org.openhds.hdsscapture;
 
 import static org.openhds.hdsscapture.AppConstants.DATA_CAPTURE;
 import static org.openhds.hdsscapture.AppConstants.DATA_DOWNLOAD;
+import static org.openhds.hdsscapture.AppConstants.DATA_MAP;
 import static org.openhds.hdsscapture.AppConstants.DATA_QUERY;
+import static org.openhds.hdsscapture.AppConstants.DATA_REJECT;
 import static org.openhds.hdsscapture.AppConstants.DATA_REPORT;
+import static org.openhds.hdsscapture.AppConstants.DATA_SCHEDULE;
 import static org.openhds.hdsscapture.AppConstants.DATA_SYNC;
 import static org.openhds.hdsscapture.AppConstants.DATA_VIEWS;
 
@@ -531,7 +534,15 @@ public class MainActivity extends AppCompatActivity {
     public void startDownloadInfo(View view) {
         showDialogInfo(null, DATA_DOWNLOAD);
     }
-
+    public void startRejectInfo(View view) {
+        showDialogInfo(null, DATA_REJECT);
+    }
+    public void startScheduleInfo(View view) {
+        showDialogInfo(null, DATA_SCHEDULE);
+    }
+    public void startMapInfo(View view) {
+        showDialogInfo(null, DATA_MAP);
+    }
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)

@@ -805,6 +805,15 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/buttonSaveClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/Green"
+                android:textColor="@android:color/background_light"
+                android:text="@string/next" />
 
             <Button
                 android:id="@+id/buttonClose"
@@ -816,15 +825,7 @@
                 android:textColor="@android:color/background_light"
                 android:text="@string/close" />
 
-            <Button
-                android:id="@+id/buttonSaveClose"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/Green"
-                android:textColor="@android:color/background_light"
-                android:text="@string/next" />
+
 
         </LinearLayout>
 

@@ -65,30 +65,20 @@ public class IndividualDownloadSummary extends DialogFragment {
             }
         });
 
-        TextView cntloc = view.findViewById(R.id.syncLocSize);
         TextView cntres = view.findViewById(R.id.syncResSize);
-        TextView cntsoc = view.findViewById(R.id.syncSocSize);
         TextView cntind = view.findViewById(R.id.syncIndSize);
-        TextView loc = view.findViewById(R.id.syncTxtLoc);
         TextView res = view.findViewById(R.id.syncTxtRes);
-        TextView soc = view.findViewById(R.id.syncTxtSoc);
         TextView ind = view.findViewById(R.id.syncTxtInd);
         TextView syncDate = view.findViewById(R.id.syncDate);
 
-        loc.setText("Total Locations");
         res.setText("Total Residency");
-        soc.setText("Total Socialgroup");
         ind.setText("Total Individuals");
 
-        long locationCount = ((PullActivity) requireActivity()).getCountFromSharedPreferences("location");
         long individualCount = ((PullActivity) requireActivity()).getCountFromSharedPreferences("individual");
-        long socialgroupCount = ((PullActivity) requireActivity()).getCountFromSharedPreferences("socialgroup");
         long residencyCount = ((PullActivity) requireActivity()).getCountFromSharedPreferences("residency");
         String IndSyncDatetime = ((PullActivity) requireActivity()).getIndSyncDatetime();
 
-        cntloc.setText(String.valueOf(locationCount));
         cntind.setText(String.valueOf(individualCount));
-        cntsoc.setText(String.valueOf(socialgroupCount));
         cntres.setText(String.valueOf(residencyCount));
         syncDate.setText(IndSyncDatetime);
 

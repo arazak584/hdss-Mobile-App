@@ -42,7 +42,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/syncTxtInd"
+                android:id="@+id/syncTxtLoc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|left"
@@ -55,7 +55,7 @@
                 android:textColor="#444" />
 
             <TextView
-                android:id="@+id/syncIndSize"
+                android:id="@+id/syncLocSize"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
@@ -75,7 +75,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/syncTxtRes"
+                android:id="@+id/syncTxtSoc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|left"
@@ -88,7 +88,7 @@
                 android:textColor="#444" />
 
             <TextView
-                android:id="@+id/syncResSize"
+                android:id="@+id/syncSocSize"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"

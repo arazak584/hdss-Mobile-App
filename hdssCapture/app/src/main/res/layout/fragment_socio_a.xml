@@ -265,24 +265,24 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/buttonClose"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                android:background="@drawable/btnd_close"
-                android:textColor="@android:color/background_light"
-                android:text="@string/closedata" />
-
-            <Button
                 android:id="@+id/buttonSaveClose"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_save"
+                android:backgroundTint="@color/Green"
                 android:textColor="@android:color/background_light"
                 android:text="@string/next" />
+
+            <Button
+                android:id="@+id/buttonClose"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/Red"
+                android:textColor="@android:color/background_light"
+                android:text="@string/close" />
 
 
 

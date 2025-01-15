@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="true">HDSS CAPTURE</string>
-    <string name="versions">2024.11.27</string>
+    <string name="versions">2025.01.01</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>
@@ -224,7 +224,7 @@
     <string name="password">Password</string>
     <string name="text_location_extid">extId</string>
     <string name="individual">Individual Registration</string>
-    <string name="download">Download</string>
+    <string name="download">Extract and Save</string>
     <string name="outmigrationsec">SECTION C: OUTMIGRATION</string>
     <string name="inmigrationsec">SECTION B: INMIGRATION</string>
     <string name="relationship">RELATIONSHIP</string>
@@ -806,6 +806,7 @@
     <string name="deliv">Delivery Date Cannot Be Less than Conception Date</string>
     <string name="startdateerr">Date Cannot be Today\'s Date</string>
     <string name="select">Select Level</string>
+    <string name="downloadcomplete">Download Complete</string>
 
 
 </resources>
