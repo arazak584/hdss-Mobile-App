@@ -444,8 +444,7 @@ public class AmendmentFragment extends DialogFragment {
                 return;
             }
 
-            finalData.complete=1;
-            viewModel.add(finalData);
+
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
             IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
             try {
@@ -466,17 +465,13 @@ public class AmendmentFragment extends DialogFragment {
                     } else {
                         amend.lastName = finalData.orig_lastName;
                     }
-//                    if (!binding.replOtherName.getText().toString().trim().isEmpty()) {
-//                        amend.otherName = binding.getAmendment().repl_otherName;
-//                    } else {
-//                        amend.otherName = finalData.orig_otherName;
-//                    }
                     if (binding.getAmendment().yn_otherName!=null & binding.getAmendment().yn_otherName ==1){
                         amend.otherName = binding.getAmendment().repl_otherName;
                     }else {
                         amend.otherName = finalData.orig_otherName;
                     }
-                    if (!binding.replGhanacard.getText().toString().trim().isEmpty()) {
+                    if (binding.getAmendment().repl_ghanacard != null &&
+                            !binding.replGhanacard.getText().toString().trim().isEmpty()) {
                         amend.ghanacard = binding.getAmendment().repl_ghanacard;
                     } else {
                         amend.ghanacard = finalData.orig_ghanacard;
@@ -501,8 +496,6 @@ public class AmendmentFragment extends DialogFragment {
                 e.printStackTrace();
             }
 
-
-
             IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
             try {
                 Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
@@ -518,6 +511,9 @@ public class AmendmentFragment extends DialogFragment {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+            finalData.complete=1;
+            viewModel.add(finalData);
 
         }
         if (close) {

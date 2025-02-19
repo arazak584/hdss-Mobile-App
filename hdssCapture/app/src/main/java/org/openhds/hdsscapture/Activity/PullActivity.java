@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -51,7 +50,6 @@ import org.openhds.hdsscapture.Dialog.IndividualDownloadSummary;
 import org.openhds.hdsscapture.Dialog.LocationDownloadSummary;
 import org.openhds.hdsscapture.Dialog.OtherDownloadSummary;
 import org.openhds.hdsscapture.Dialog.ProgressDialogFragment;
-import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Repositories.IndividualRepository;
 import org.openhds.hdsscapture.Utilities.SimpleDialog;
@@ -61,6 +59,7 @@ import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyLevelViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
+import org.openhds.hdsscapture.Viewmodel.OdkViewModel;
 import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
 import org.openhds.hdsscapture.entity.CodeBook;
 import org.openhds.hdsscapture.entity.CommunityReport;
@@ -78,9 +77,9 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
+import org.openhds.hdsscapture.odk.OdkForm;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -88,14 +87,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
@@ -399,7 +395,7 @@ public class PullActivity extends AppCompatActivity {
 
                                 // Calculate progress as percentage
                                 int progress = (int) (((float) downloadedFiles / totalFiles) * 100);
-                                runOnUiThread(() -> statusTextView.setText("Status: Downloading... " + progress + "%"));
+                                runOnUiThread(() -> statusTextView.setText("Status: Downloading... " + fileName +" " + progress + "%"));
 
                             } else {
                                 isErrorOccurred = true;
@@ -523,9 +519,18 @@ public class PullActivity extends AppCompatActivity {
                                                     Call<DataWrapper<HierarchyLevel>> c_callable = dao.getHierarchyLevel(authorizationHeader);
                                                     c_callable.enqueue(new Callback<DataWrapper<HierarchyLevel>>() {
                                                         @Override
-                                                        public void onResponse(Call<DataWrapper<HierarchyLevel>> call, Response<DataWrapper<HierarchyLevel>> response) {
-                                                            HierarchyLevel[] hie = response.body().getData().toArray(new HierarchyLevel[0]);
-                                                            hieViewModel.add(hie);
+                                                    public void onResponse(Call<DataWrapper<HierarchyLevel>> call, Response<DataWrapper<HierarchyLevel>> response) {
+                                                    HierarchyLevel[] hie = response.body().getData().toArray(new HierarchyLevel[0]);
+                                                    hieViewModel.add(hie);
+
+                                                    //Sync ODK EXTRA
+                                                    final OdkViewModel odkViewModel = new ViewModelProvider(PullActivity.this).get(OdkViewModel.class);
+                                                    Call<DataWrapper<OdkForm>> c_callable = dao.getOdk(authorizationHeader);
+                                                    c_callable.enqueue(new Callback<DataWrapper<OdkForm>>() {
+                                                    @Override
+                                                    public void onResponse(Call<DataWrapper<OdkForm>> call, Response<DataWrapper<OdkForm>> response) {
+                                                    OdkForm[] odk = response.body().getData().toArray(new OdkForm[0]);
+                                                    odkViewModel.add(odk);
 
                                             //Sync Settings
                                             textView_SyncHierarchyData.setText("Updating Settings...");
@@ -567,10 +572,20 @@ public class PullActivity extends AppCompatActivity {
                                         }
 
                                                         @Override
-                                                        public void onFailure(Call<DataWrapper<HierarchyLevel>> call, Throwable t) {
+                                                        public void onFailure(Call<DataWrapper<OdkForm>> call, Throwable t) {
                                                             progres.dismiss();
                                                             progressBar.setProgress(0);
                                                             textView_SyncHierarchyData.setText("ODK Sync Error!");
+                                                            textView_SyncHierarchyData.setTextColor(Color.RED);
+                                                        }
+                                                    });
+                                                        }
+
+                                                        @Override
+                                                        public void onFailure(Call<DataWrapper<HierarchyLevel>> call, Throwable t) {
+                                                            progres.dismiss();
+                                                            progressBar.setProgress(0);
+                                                            textView_SyncHierarchyData.setText("Level Sync Error!");
                                                             textView_SyncHierarchyData.setTextColor(Color.RED);
                                                         }
                                                     });
@@ -1984,10 +1999,10 @@ public class PullActivity extends AppCompatActivity {
                             .addColumn("toilet_spfy_fcorres").addColumn("tractor_fcorres").addColumn("tractor_num_fcorres")
                             .addColumn("tricycles_fcorres").addColumn("tricycles_num_fcorres").addColumn("tv_fcorres")
                             .addColumn("tv_num_fcorres").addColumn("uuid").addColumn("wash_fcorres").addColumn("wash_num_fcorres")
-                            .addColumn("watch_fcorres").addColumn("watch_num_fcorres")
-                            .addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate")
+                            .addColumn("watch_fcorres").addColumn("watch_num_fcorres").addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate")
                             .addColumn("pets").addColumn("dogs").addColumn("guinea_pigs").addColumn("cats").addColumn("fish").addColumn("birds")
                             .addColumn("rabbits").addColumn("reptiles").addColumn("pet_other").addColumn("pet_other_spfy").addColumn("pet_vac")
+                            .addColumn("id0001").addColumn("id0002").addColumn("id0003").addColumn("id0004").addColumn("id0005")
                             .addColumn("id0006").addColumn("id0006_1").addColumn("id0007").addColumn("id0007_1").addColumn("id0008").addColumn("id0008_1").addColumn("id0009").addColumn("id0009_1").addColumn("id0010")
                             .addColumn("id0010_1").addColumn("id0011").addColumn("id0011_1").addColumn("id0012").addColumn("id0012_1").addColumn("id0014").addColumn("id0014_1").addColumn("id0015").addColumn("id0015_1").addColumn("id0016").addColumn("id0016_1").addColumn("id0017").addColumn("id0017_1").addColumn("id0018").addColumn("id0018_1").addColumn("id0019").addColumn("id0019_1").addColumn("id0013").addColumn("id0013_1").addColumn("id0021")
                             .build();

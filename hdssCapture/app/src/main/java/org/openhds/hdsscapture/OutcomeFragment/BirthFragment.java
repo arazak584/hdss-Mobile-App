@@ -3,6 +3,7 @@ package org.openhds.hdsscapture.OutcomeFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -203,6 +204,7 @@ public class BirthFragment extends Fragment {
                 }else{
                     cmt.setVisibility(View.GONE);
                 }
+                Log.d("Outcome", "Status Option "+ data.status);
 
                 Pregnancy dts = pregnancyViewModel.out(HouseMembersFragment.selectedIndividual.uuid);
                 if (dts != null){

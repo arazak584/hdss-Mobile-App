@@ -5,7 +5,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import org.openhds.hdsscapture.odk.Form;
+import org.openhds.hdsscapture.odk.OdkForm;
 
 import java.util.List;
 
@@ -13,15 +13,15 @@ import java.util.List;
 public interface OdkDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void create(Form... data);
+    void create(OdkForm... data);
 
     @Query("SELECT * FROM Form")
-    List<Form> retrieve();
+    List<OdkForm> retrieve();
 
     @Query("DELETE FROM Form")
     void deleteAll();
 
     @Query("SELECT * FROM Form where enabled = 1")
-    List<Form> find();
+    List<OdkForm> find();
 
 }

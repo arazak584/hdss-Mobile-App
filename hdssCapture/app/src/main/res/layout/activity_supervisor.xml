@@ -63,7 +63,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         >
 
-        <!-- login form -->
+        <!-- login odkForm -->
         <LinearLayout
             android:id="@+id/login_form"
             android:layout_width="match_parent"

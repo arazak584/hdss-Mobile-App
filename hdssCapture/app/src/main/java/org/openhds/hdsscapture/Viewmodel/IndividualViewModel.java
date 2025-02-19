@@ -73,6 +73,10 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.findToSync();
     }
 
+    public List<Individual> find() throws ExecutionException, InterruptedException {
+        return individualRepository.find();
+    }
+
     public List<Individual> retrieveBySearch(String id, String searchText) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveBySearch( "%" + id + "%", "%" + searchText + "%");
     }
@@ -168,6 +172,10 @@ public class IndividualViewModel extends AndroidViewModel {
 
     public List<Individual> repo() throws ExecutionException, InterruptedException {
         return individualRepository.repo();
+    }
+
+    public List<Individual> getIndividualsForCsv(int gender, int minAge, int maxAge, int status) {
+        return individualRepository.findIndividualsBatched(gender, minAge, maxAge, status);
     }
 
     public void add(Individual data){ individualRepository.create(data);}

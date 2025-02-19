@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,7 @@ public class OdkFormAdapter extends RecyclerView.Adapter<OdkFormAdapter.ViewHold
     private final Socialgroup socialgroup;
     private final FragmentActivity activity1;
     private Individual individual;
-    private List<Form> formsList;
+    private List<OdkForm> formsList;
     private final OdkViewModel viewModel;
     private Context context;
 
@@ -72,14 +71,14 @@ public class OdkFormAdapter extends RecyclerView.Adapter<OdkFormAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull OdkFormAdapter.ViewHolder holder, int position) {
-        final Form form = formsList.get(position);
+        final OdkForm odkForm = formsList.get(position);
 
         if (OdkFragment.selectedInd != null) {
-            holder.button.setText(form.getFormName());
+            holder.button.setText(odkForm.getFormName());
             holder.button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    openOdkFormWithPrefillData(form);
+                    openOdkFormWithPrefillData(odkForm);
                 }
             });
         }
@@ -95,7 +94,7 @@ public class OdkFormAdapter extends RecyclerView.Adapter<OdkFormAdapter.ViewHold
         if (selectedInd != null) {
 
             try {
-                List<Form> list = viewModel.find();
+                List<OdkForm> list = viewModel.find();
 
                 if (list != null) {
                     formsList.addAll(list);
@@ -112,10 +111,10 @@ public class OdkFormAdapter extends RecyclerView.Adapter<OdkFormAdapter.ViewHold
         notifyDataSetChanged();
     }
 
-    private void openOdkFormWithPrefillData(Form form) {
+    private void openOdkFormWithPrefillData(OdkForm odkForm) {
         if (OdkFragment.selectedInd != null) {
             // Get the form ID from the Form object
-            String formId = form.getFormID();
+            String formId = odkForm.getFormID();
 
             // Get the form URI using the form ID
             Uri formUri = getFormUriById(formId);

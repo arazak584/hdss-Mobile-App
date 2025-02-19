@@ -265,9 +265,9 @@ public class ListingFragment extends Fragment {
                 data.location_uuid = ClusterFragment.selectedLocation.getUuid();
                 data.vill_extId = level6Data.getExtId();
                 data.cluster_id = ClusterFragment.selectedLocation.getLocationLevel_uuid();
-                data.longitude = ClusterFragment.selectedLocation.getLongitude();
-                data.latitude = ClusterFragment.selectedLocation.getLatitude();
-                data.accuracy = ClusterFragment.selectedLocation.getAccuracy();
+                //data.longitude = ClusterFragment.selectedLocation.getLongitude();
+                //data.latitude = ClusterFragment.selectedLocation.getLatitude();
+                //data.accuracy = ClusterFragment.selectedLocation.getAccuracy();
                 data.compextId = ClusterFragment.selectedLocation.getCompextId();
 
                 String regex = "[A-Z]{2}\\d{4}";

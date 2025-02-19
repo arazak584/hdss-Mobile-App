@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -252,39 +253,28 @@ public class Birth3AFragment extends Fragment {
                         }
                     }
 
-                    if (finalData.outcomeDate!=null && finalData.conceptionDate!=null) {
-                        final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    if (finalData.outcomeDate != null && finalData.conceptionDate != null) {
                         Date outcomeDate = finalData.outcomeDate;
-                        Date recordedDate = finalData.conceptionDate;
+                        Date conceptionDate = finalData.conceptionDate;
 
-                        Calendar startCalendar = Calendar.getInstance();
-                        startCalendar.setTime(recordedDate);
+                        // Calculate the difference in milliseconds
+                        long diffInMillis = outcomeDate.getTime() - conceptionDate.getTime();
 
-                        Calendar endCalendar = Calendar.getInstance();
-                        endCalendar.setTime(outcomeDate);
+                        // Convert milliseconds to days
+                        long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMillis);
 
-                        int yearDiff = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
-                        int monthDiff = endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
-                        int dayDiff = endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH);
+                        // Convert days to weeks
+                        int totalWeeks = (int) (diffInDays / 7);
 
-                        if (dayDiff < 0) {
-                            monthDiff--;
-                        }
-
-                        // Calculate the total difference in months
-                        int totalDiffMonths = yearDiff * 12 + monthDiff;
-
-                        if (totalDiffMonths <= 5 && (inf.type == 1 || inf.type == 2)) {
+                        if (totalWeeks < 20 && (inf.type == 1 || inf.type == 2)) {
                             // Display message for Live Birth or Still Birth
-                            Toast.makeText(getActivity(), "Outcome cannot be Live Birth or Still Birth for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Outcome cannot be Live Birth or Still Birth for " + totalWeeks + " Weeks Pregnancy", Toast.LENGTH_LONG).show();
                             return;
-                        } else if (totalDiffMonths > 5 && inf.type == 3) {
+                        } else if (totalWeeks > 19 && inf.type == 3) {
                             // Display message for Miscarriage
-                            Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalWeeks + " Weeks Pregnancy", Toast.LENGTH_LONG).show();
                             return;
                         }
-
-
                     }
 
 

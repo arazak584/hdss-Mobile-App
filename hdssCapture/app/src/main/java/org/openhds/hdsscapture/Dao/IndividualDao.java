@@ -1,7 +1,6 @@
 package org.openhds.hdsscapture.Dao;
 
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -10,9 +9,8 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
-import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Residency;
+import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
 import org.openhds.hdsscapture.entity.subentity.IndividualPhone;
@@ -63,6 +61,16 @@ public interface IndividualDao {
 
     @Query("SELECT * FROM individual where extId=:id ")
     Individual retrieve(String id);
+
+    @Query("SELECT * FROM individual")
+    List<Individual> find();
+
+    @Query("SELECT * FROM individual WHERE " +
+            "(:gender = 3 OR gender = :gender) AND " +
+            "strftime('%Y', 'now') - strftime('%Y', dob) BETWEEN :minAge AND :maxAge AND " +
+            "endType = :status " +
+            "ORDER BY extId ASC LIMIT :limit OFFSET :offset")
+    List<Individual> getIndividualsBatch(int gender, int minAge, int maxAge, int status, int limit, int offset);
 
     @Query("SELECT a.* FROM individual a INNER JOIN registry b on a.uuid=b.individual_uuid where a.uuid=:id ")
     Individual mapregistry(String id);
@@ -293,9 +301,14 @@ public interface IndividualDao {
             ")")
     long err(String id, String ids);
 
-    @Query("SELECT COUNT(DISTINCT a.uuid) FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
-            " WHERE firstName!='FAKE' and endType=1 AND a.hohID = :id AND a.compno = :ids and " +
-            " strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) < (SELECT hoh_age from config) GROUP BY b.extId")
+//    @Query("SELECT COUNT(DISTINCT a.hohID) FROM individual as a INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
+//            "WHERE firstName != 'FAKE' AND endType = 1 AND a.hohID = :id AND a.compno = :ids " +
+//            "AND STRFTIME('%Y', 'now') - STRFTIME('%Y', DATE(a.dob / 1000, 'unixepoch')) < (SELECT hoh_age FROM config)")
+//    Long errs(String id, String ids);
+
+    @Query("SELECT COUNT(DISTINCT a.extId) FROM socialgroup as a INNER JOIN individual as b on a.individual_uuid=b.uuid " +
+            "where a.extId=:id AND b.compno = :ids and endType=1 and b.firstName!='FAKE' and " +
+            "strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) <(SELECT hoh_age from config)")
     long errs(String id, String ids);
 
 

@@ -37,10 +37,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
         android:orientation="vertical"
         android:background="@drawable/cardview_elevated">
 
@@ -60,7 +60,7 @@
                 android:id="@+id/btnupdate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:padding="5dp"
                 android:text="@string/datac"
                 android:textAllCaps="true"
                 android:textStyle="bold"
@@ -72,15 +72,15 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="10dp" />
+            android:layout_height="5dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
@@ -100,7 +100,7 @@
                     android:id="@+id/btnpush"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="@string/syncd"
                     android:textAllCaps="true"
                     android:textStyle="bold"
@@ -112,15 +112,15 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="10dp" />
+            android:layout_height="5dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
@@ -140,7 +140,7 @@
                     android:id="@+id/btnreport"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="@string/rp"
                     android:textAllCaps="true"
                     android:textStyle="bold"
@@ -152,15 +152,15 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="10dp" />
+            android:layout_height="5dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
@@ -180,7 +180,7 @@
                     android:id="@+id/btnquerry"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="@string/query"
                     android:textAllCaps="true"
                     android:textStyle="bold"
@@ -192,15 +192,15 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="10dp" />
+            android:layout_height="5dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
@@ -220,7 +220,7 @@
                     android:id="@+id/btnloc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="@string/view"
                     android:textAllCaps="true"
                     android:textStyle="bold"
@@ -232,15 +232,15 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="10dp" />
+            android:layout_height="5dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
@@ -260,7 +260,7 @@
                     android:id="@+id/btnReject"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="@string/reject"
                     android:textAllCaps="true"
                     android:textStyle="bold"
@@ -272,15 +272,15 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="10dp" />
+            android:layout_height="5dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
@@ -300,7 +300,7 @@
                     android:id="@+id/btnpull"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="@string/downlods"
                     android:textAllCaps="true"
                     android:textStyle="bold"
@@ -312,15 +312,15 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="10dp" />
+            android:layout_height="5dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
@@ -340,7 +340,7 @@
                     android:id="@+id/btnSchedule"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="@string/workshedule"
                     android:textAllCaps="true"
                     android:textStyle="bold"
@@ -352,15 +352,15 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="10dp" />
+            android:layout_height="5dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
@@ -380,7 +380,7 @@
                     android:id="@+id/btnMap"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:text="@string/sitemap"
                     android:textAllCaps="true"
                     android:textStyle="bold"
@@ -389,6 +389,46 @@
 
             </LinearLayout>
         </LinearLayout>
+
+<!--        <Space-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="5dp" />-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:paddingTop="5dp"-->
+<!--            android:paddingLeft="5dp"-->
+<!--            android:paddingRight="5dp"-->
+<!--            android:paddingBottom="5dp"-->
+<!--            android:orientation="vertical"-->
+<!--            android:background="@drawable/cardview_elevated">-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <ImageButton-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:src="@android:drawable/ic_dialog_info"-->
+<!--                    android:backgroundTint="@color/Green"-->
+<!--                    android:onClick="startOdkInfo" />-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/btnODK"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:padding="5dp"-->
+<!--                    android:text="@string/odkcsv"-->
+<!--                    android:textAllCaps="true"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textAlignment="textStart"-->
+<!--                    android:textSize="25sp" />-->
+
+<!--            </LinearLayout>-->
+<!--        </LinearLayout>-->
 
         <!-- Your layout XML file -->
         <FrameLayout

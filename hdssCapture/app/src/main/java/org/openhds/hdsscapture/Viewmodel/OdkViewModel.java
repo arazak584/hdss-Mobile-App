@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.OdkRepository;
-import org.openhds.hdsscapture.odk.Form;
+import org.openhds.hdsscapture.odk.OdkForm;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -21,12 +21,12 @@ public class OdkViewModel extends AndroidViewModel {
         repo = new OdkRepository(application);
     }
 
-    public List<Form> find() throws ExecutionException, InterruptedException {
+    public List<OdkForm> find() throws ExecutionException, InterruptedException {
         return repo.find();
     }
 
 
-    public void add(Form... data){
+    public void add(OdkForm... data){
         repo.create(data);
     }
 

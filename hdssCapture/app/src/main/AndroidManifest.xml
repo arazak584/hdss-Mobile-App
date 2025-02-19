@@ -19,8 +19,29 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="org.odk.collect.android.provider.odk.forms.permission.READ_FORMS" />
     <uses-permission android:name="org.odk.collect.android.provider.odk.forms.permission.WRITE_FORMS" />
+    <uses-permission android:name="org.odk.collect.android.permission.READ_FORMLIST"/>
+    <uses-permission android:name="org.odk.collect.android.permission.WRITE_RESULTS"/>
+    <uses-permission android:name="org.odk.collect.android.provider.forms.READ_ONLY"/>
+    <uses-permission android:name="org.odk.collect.android.provider.instances.READ_WRITE"/>
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission"/>
+
+    <queries>
+        <package android:name="org.odk.collect.android" />
+        <provider android:authorities="org.odk.collect.android.provider.odk.forms" />
+        <provider android:authorities="org.odk.collect.android.provider.odk.instances" />
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.EDIT" />
+            <data android:mimeType="vnd.android.cursor.item/vnd.odk.form" />
+        </intent>
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -35,11 +56,25 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+
+        <activity
+            android:name=".Activity.ODKCsvActivity"
+            android:exported="false" />
         <activity
             android:name=".Sync.SyncActivity"
             android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.Light.Dialog.FixedSize"/>
-        <!-- <meta-data -->
+            android:theme="@style/Theme.MaterialComponents.Light.Dialog.FixedSize" /> <!-- <meta-data -->
         <!-- android:name="com.google.android.geo.API_KEY" -->
         <!-- android:value="YOUR_API_KEY"/> -->
         <activity

@@ -4,7 +4,7 @@ import android.app.Application;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.OdkDao;
-import org.openhds.hdsscapture.odk.Form;
+import org.openhds.hdsscapture.odk.OdkForm;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -21,24 +21,24 @@ public class OdkRepository {
         dao = db.odkDao();
     }
 
-    public void create(Form... data) {
+    public void create(OdkForm... data) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             dao.create(data);
         });
     }
 
-    public void create(Form data) {
+    public void create(OdkForm data) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             dao.create(data);
         });
     }
 
 
-    public List<Form> find() throws ExecutionException, InterruptedException {
+    public List<OdkForm> find() throws ExecutionException, InterruptedException {
 
-        Callable<List<Form>> callable = () -> dao.find();
+        Callable<List<OdkForm>> callable = () -> dao.find();
 
-        Future<List<Form>> future = Executors.newSingleThreadExecutor().submit(callable);
+        Future<List<OdkForm>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }

@@ -14,6 +14,7 @@ import org.openhds.hdsscapture.entity.subentity.IndividualPhone;
 import org.openhds.hdsscapture.entity.subentity.IndividualResidency;
 import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -105,6 +106,15 @@ public class IndividualRepository {
     public List<Individual> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Individual>> callable = () -> dao.retrieveToSync();
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Individual> find() throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.find();
 
         Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
 
@@ -375,6 +385,21 @@ public class IndividualRepository {
         Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
+    }
+
+    public List<Individual> findIndividualsBatched(int gender, int minAge, int maxAge, int status) {
+        List<Individual> allIndividuals = new ArrayList<>();
+        int offset = 0;
+        int batchSize = 1000; // Prevent memory overflow
+
+        while (true) {
+            List<Individual> batch = dao.getIndividualsBatch(gender, minAge, maxAge, status, batchSize, offset);
+            if (batch.isEmpty()) break; // Stop when no more data
+
+            allIndividuals.addAll(batch);
+            offset += batchSize;
+        }
+        return allIndividuals;
     }
 
 

@@ -11,7 +11,6 @@ import static org.openhds.hdsscapture.AppConstants.DATA_SYNC;
 import static org.openhds.hdsscapture.AppConstants.DATA_VIEWS;
 
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,7 +22,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -34,10 +32,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.MapActivity;
+import org.openhds.hdsscapture.Activity.ODKCsvActivity;
 import org.openhds.hdsscapture.Activity.QueryActivity;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.Activity.LoginActivity;
@@ -48,7 +46,6 @@ import org.openhds.hdsscapture.Activity.RejectionsActivity;
 import org.openhds.hdsscapture.Activity.RemainderActivity;
 import org.openhds.hdsscapture.Activity.ReportActivity;
 import org.openhds.hdsscapture.Dao.ApiDao;
-import org.openhds.hdsscapture.Sync.SyncActivity;
 import org.openhds.hdsscapture.Utilities.SimpleDialog;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.CommunityViewModel;
@@ -59,51 +56,33 @@ import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyLevelViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
-import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
-import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
 import org.openhds.hdsscapture.Viewmodel.OdkViewModel;
-import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
 import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
-import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.entity.CodeBook;
 import org.openhds.hdsscapture.entity.CommunityReport;
 import org.openhds.hdsscapture.entity.Configsettings;
-import org.openhds.hdsscapture.entity.Death;
-import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.HierarchyLevel;
-import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Inmigration;
-import org.openhds.hdsscapture.entity.Listing;
-import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Outcome;
-import org.openhds.hdsscapture.entity.Outmigration;
-import org.openhds.hdsscapture.entity.Pregnancy;
-import org.openhds.hdsscapture.entity.Pregnancyoutcome;
-import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Round;
-import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.fragment.InfoFragment;
-import org.openhds.hdsscapture.odk.Form;
+import org.openhds.hdsscapture.odk.OdkForm;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicReference;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -272,13 +251,13 @@ public class MainActivity extends AppCompatActivity {
                                                         hieViewModel.add(hie);
 
                                                       //Sync ODK
-//                                                    final OdkViewModel odkViewModel = new ViewModelProvider(MainActivity.this).get(OdkViewModel.class);
-//                                                    Call<DataWrapper<Form>> c_callable = dao.getOdk(authorizationHeader);
-//                                                    c_callable.enqueue(new Callback<DataWrapper<Form>>() {
-//                                                        @Override
-//                                                        public void onResponse(Call<DataWrapper<Form>> call, Response<DataWrapper<Form>> response) {
-//                                                        Form[] odk = response.body().getData().toArray(new Form[0]);
-//                                                        odkViewModel.add(odk);
+                                                    final OdkViewModel odkViewModel = new ViewModelProvider(MainActivity.this).get(OdkViewModel.class);
+                                                    Call<DataWrapper<OdkForm>> c_callable = dao.getOdk(authorizationHeader);
+                                                    c_callable.enqueue(new Callback<DataWrapper<OdkForm>>() {
+                                                        @Override
+                                                        public void onResponse(Call<DataWrapper<OdkForm>> call, Response<DataWrapper<OdkForm>> response) {
+                                                        OdkForm[] odk = response.body().getData().toArray(new OdkForm[0]);
+                                                        odkViewModel.add(odk);
 
                                             //Sync Settings
                                             progress.setMessage("Updating Settings...");
@@ -306,15 +285,15 @@ public class MainActivity extends AppCompatActivity {
                                             });
                                         }
 
-//                                                        @Override
-//                                                        public void onFailure(Call<DataWrapper<Form>> call, Throwable t) {
-//                                                            progress.dismiss();
-//                                                            syncSettings.setText("ODK Sync Error!");
-//                                                            syncSettings.setTextColor(Color.RED);
-//                                                            Log.d("ODK ERROR", "Error" + t);
-//                                                        }
-//                                                    });
-//                                                  }
+                                                        @Override
+                                                        public void onFailure(Call<DataWrapper<OdkForm>> call, Throwable t) {
+                                                            progress.dismiss();
+                                                            syncSettings.setText("ODK Sync Error!");
+                                                            syncSettings.setTextColor(Color.RED);
+                                                            Log.d("ODK ERROR", "Error" + t);
+                                                        }
+                                                    });
+                                                  }
 
                                                         @Override
                                                         public void onFailure(Call<DataWrapper<HierarchyLevel>> call, Throwable t) {
@@ -405,6 +384,12 @@ public class MainActivity extends AppCompatActivity {
             i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
             startActivity(i);
         });
+
+//        final Button odk = findViewById(R.id.btnODK);
+//        odk.setOnClickListener(v -> {
+//            Intent i = new Intent(getApplicationContext(), ODKCsvActivity.class);
+//            startActivity(i);
+//        });
 
         send.setOnClickListener(v -> {
             if (fieldworkerDatas != null && fieldworkerDatas.status != null && fieldworkerDatas.status == 1) {

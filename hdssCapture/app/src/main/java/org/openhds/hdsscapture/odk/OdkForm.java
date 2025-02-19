@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity(tableName = "Form")
-public class Form extends BaseObservable {
+public class OdkForm extends BaseObservable {
 
     @SerializedName("id")
     @PrimaryKey
@@ -58,8 +58,14 @@ public class Form extends BaseObservable {
     @Expose
     public Integer maxAge;
 
+    @Expose
+    public String csv;
 
-    public Form(){}
+    @Expose
+    public Integer status;
+
+
+    public OdkForm(){}
 
 
     @Ignore
@@ -150,5 +156,21 @@ public class Form extends BaseObservable {
 
     public void setMaxAge(Integer maxAge) {
         this.maxAge = maxAge;
+    }
+
+    public String getCsv() {
+        return csv;
+    }
+
+    public void setCsv(String csv) {
+        this.csv = csv;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

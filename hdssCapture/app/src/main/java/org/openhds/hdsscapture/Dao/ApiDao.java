@@ -29,7 +29,7 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.Vpm;
-import org.openhds.hdsscapture.odk.Form;
+import org.openhds.hdsscapture.odk.OdkForm;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
 import okhttp3.ResponseBody;
@@ -58,7 +58,7 @@ public interface ApiDao {
     Call<DataWrapper<Configsettings>> getConfig(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/odk")
-    Call<DataWrapper<Form>> getOdk(@Header("Authorization") String authorizationHeader);
+    Call<DataWrapper<OdkForm>> getOdk(@Header("Authorization") String authorizationHeader);
 
     @GET("/api/fieldworker")
     Call<DataWrapper<Fieldworker>> getFw(@Header("Authorization") String credentials);

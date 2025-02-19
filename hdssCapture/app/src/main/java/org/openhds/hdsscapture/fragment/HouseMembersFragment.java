@@ -1,13 +1,22 @@
 package org.openhds.hdsscapture.fragment;
 
+
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,12 +37,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Adapter.EndEventsAdapter;
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
+import org.openhds.hdsscapture.Adapter.OdkFormAdapter;
 import org.openhds.hdsscapture.Dialog.PregnancyDialogFragment;
 import org.openhds.hdsscapture.Duplicate.DupFragment;
 import org.openhds.hdsscapture.OutcomeFragment.Birth3Fragment;
 import org.openhds.hdsscapture.OutcomeFragment.BirthExtraFragment;
 import org.openhds.hdsscapture.OutcomeFragment.BirthFragment;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Utilities.OdkUtils;
 import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
@@ -43,6 +54,7 @@ import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
+import org.openhds.hdsscapture.Viewmodel.OdkViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
@@ -72,6 +84,7 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subqueries.EndEvents;
+import org.openhds.hdsscapture.odk.OdkForm;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -112,7 +125,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private  Pregnancy pregnancy;
     private Pregnancyoutcome pregnancyoutcome;
     private AppCompatButton finish;
-
+    private OdkViewModel odkViewModel;
+    private RecyclerView recyclerViewOdk;
 
     public HouseMembersFragment() {
         // Required empty public constructor
@@ -166,8 +180,11 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         registryViewModel = new ViewModelProvider(this).get(RegistryViewModel.class);
         visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
         individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+        odkViewModel = new ViewModelProvider(this).get(OdkViewModel.class);
         finish = view.findViewById(R.id.button_cpvisit);
         updateButtonState();
+        recyclerViewOdk = view.findViewById(R.id.recyclerView_odk);
+        grantStoragePermission();
         //query();
 
         //final TextView hh = view.findViewById(R.id.textView_compextId);
@@ -192,7 +209,6 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
         //initial loading of Individuals in locations
         adapter.filter("", individualViewModel);
-
 
 
         final AppCompatButton sea = view.findViewById(R.id.search);
@@ -458,12 +474,12 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             }
         });
 
-        AppCompatButton odkButton = view.findViewById(R.id.odk);
-        odkButton.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setType("vnd.android.cursor.dir/vnd.odk.form");
-            startActivity(intent);
-        });
+//        AppCompatButton odkButton = view.findViewById(R.id.odk);
+//        odkButton.setOnClickListener(v -> {
+//            Intent intent = new Intent(Intent.ACTION_VIEW);
+//            intent.setType("vnd.android.cursor.dir/vnd.odk.form");
+//            startActivity(intent);
+//        });
 
 //        odkButton.setOnClickListener(v -> {
 //            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
@@ -495,6 +511,26 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         HouseMembersFragment.selectedIndividual = selectedIndividual; // Always update the selectedLocation variable
         // Update the householdAdapter with the selected location
         if (selectedIndividual != null) {
+
+
+                // Check permissions
+
+
+                // Handle ODK return flow
+                OdkUtils.returnToOdk(requireActivity(), selectedIndividual);
+
+                // Set up ODK forms list
+                try {
+                    List<OdkForm> odkForms = odkViewModel.find();
+                    if (odkForms != null && !odkForms.isEmpty()) {
+                        recyclerViewOdk.setLayoutManager(new LinearLayoutManager(requireContext()));
+                        recyclerViewOdk.setAdapter(new OdkFormAdapter(odkForms));
+                    }
+                } catch (ExecutionException | InterruptedException e) {
+                    Log.d("HouseMembersFragment", "Error retrieving ODK forms", e);
+                    Toast.makeText(requireContext(), "Error retrieving ODK forms", Toast.LENGTH_SHORT).show();
+                }
+
 
             ConfigViewModel viewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
             List<Configsettings> configsettings = null;
@@ -1157,99 +1193,6 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 //        }
 //    }
 
-//    private void updateButtonState() {
-//
-//        LayoutInflater inflater = getLayoutInflater();
-//
-//        // Inflate the custom toast layout once
-//        View customToastView = inflater.inflate(R.layout.custom_toast, null);
-//        TextView toastMessage = customToastView.findViewById(R.id.toast_message);
-//
-//        try {
-//            // Fetch counts
-//            long totalInd = individualViewModel.count(socialgroup.extId);
-//            long totalRegistry = registryViewModel.count(socialgroup.uuid);
-//            long totalVisit = visitViewModel.count(socialgroup.uuid);
-//            long cnt = deathViewModel.err(socialgroup.extId, ClusterFragment.selectedLocation.compno);
-//            long err = individualViewModel.err(socialgroup.extId, ClusterFragment.selectedLocation.compno);
-//            long errs = individualViewModel.errs(socialgroup.extId, ClusterFragment.selectedLocation.compno);
-//
-//            // Condition 1: Check if HOH is dead
-//            if (cnt > 0) {
-//                // Change button appearance to look "disabled"
-//                finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home));
-//                finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_border_lightgray));
-//
-//                // Show a custom toast message on button click
-//                finish.setOnClickListener(v -> {
-//                    toastMessage.setText("Change Head of Household [HOH is Dead]");
-//                    Toast customToast = new Toast(requireContext());
-//                    customToast.setDuration(Toast.LENGTH_LONG);
-//                    customToast.setView(customToastView);
-//                    customToast.show();
-//                });
-//            }
-//            // Condition 2: Check for other conditions related to totalInd, totalVisit, and totalRegistry
-//            else if (totalInd > 0 && totalVisit > 0 && totalRegistry <= 0) {
-//                finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home));
-//                finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_border_lightgray));
-//
-//                // Show a different custom toast message on button click
-//                finish.setOnClickListener(v -> {
-//                    toastMessage.setText("Complete Household Registry Before Exit");
-//                    Toast customToast = new Toast(requireContext());
-//                    customToast.setDuration(Toast.LENGTH_LONG);
-//                    customToast.setView(customToastView);
-//                    customToast.show();
-//                });
-//            }
-//            // Condition 3: Check for Minor Household Heaad
-//            else if (errs > 0 ) {
-//                finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home));
-//                finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_border_lightgray));
-//
-//                // Show a different custom toast message on button click
-//                finish.setOnClickListener(v -> {
-//                    toastMessage.setText("Household Head is a Minor");
-//                    Toast customToast = new Toast(requireContext());
-//                    customToast.setDuration(Toast.LENGTH_LONG);
-//                    customToast.setView(customToastView);
-//                    customToast.show();
-//                });
-//            }
-//            // Condition 4: Check for Minor Members Only
-//            else if (err > 0 ) {
-//                finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home));
-//                finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_border_lightgray));
-//
-//                // Show a different custom toast message on button click
-//                finish.setOnClickListener(v -> {
-//                    toastMessage.setText("Only Minors Left in Household");
-//                    Toast customToast = new Toast(requireContext());
-//                    customToast.setDuration(Toast.LENGTH_LONG);
-//                    customToast.setView(customToastView);
-//                    customToast.show();
-//                });
-//            }else {
-//                // Reset button appearance and enable functionality
-//                finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home)); // Original color
-//                finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.white)); // Original text color
-//                finish.setEnabled(true);
-//
-//                // Restore the original button functionality
-//                finish.setOnClickListener(v -> {
-//                    requireActivity().getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.container_cluster, ClusterFragment.newInstance(level6Data, locations, socialgroup))
-//                            .commit();
-//                });
-//            }
-//
-//
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
 
 
 //    private void query() {
@@ -1294,6 +1237,28 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 //        }
 //    }
 
+    private void grantStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (requireContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                try {
+                    if (requireContext().getPackageManager() != null) {
+                        String packageName = requireContext().getPackageName();
+                        String command = String.format(
+                                "pm grant %s android.permission.READ_EXTERNAL_STORAGE",
+                                packageName
+                        );
+                        Runtime.getRuntime().exec(new String[]{"su", "-c", command});
+
+                        // Small delay to allow permission to take effect
+                        Thread.sleep(100);
+                    }
+                } catch (Exception e) {
+                    Log.e("Permission", "Error granting permission: " + e.getMessage());
+                }
+            }
+        }
+    }
 
 
 
