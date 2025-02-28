@@ -2,6 +2,9 @@ package org.openhds.hdsscapture.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Utilities.SimpleDialog;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
@@ -31,6 +34,7 @@ import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
 import org.openhds.hdsscapture.entity.subentity.IndividualPhone;
 import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
@@ -40,6 +44,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -191,7 +197,7 @@ public class DemographicFragment extends DialogFragment {
             save(false, true, viewModel);
         });
 
-        Handler.colorLayouts(requireContext(), binding.DEMOGRAPHICLAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.DEMOGRAPHICLAYOUT);
         View view = binding.getRoot();
         return view;
     }
@@ -225,48 +231,85 @@ public class DemographicFragment extends DialogFragment {
                 }
             }
 
+            // Nullify fields for individuals younger than 11
+            if (!binding.age.getText().toString().trim().isEmpty() && binding.getIndividual() != null && binding.getIndividual().age < 12) {
+                Log.d("Demo", "Set Demographic to null");
+                finalData.phone1 = null;
+                finalData.occupation = null;
+                finalData.marital = null;
+            }
+
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.DEMOGRAPHICLAYOUT, validateOnComplete, false);
+            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.DEMOGRAPHICLAYOUT, validateOnComplete, false);
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
                 return;
             }
+
+            IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+
+                try {
+                    // Second block - visited update (with different variable name)
+                    Individual visitedData = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                    if (visitedData != null) {
+                        IndividualVisited visited = new IndividualVisited();
+                        visited.uuid = binding.getDemographic().individual_uuid;
+                        visited.complete = 2;
+
+                        iview.visited(visited, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("DemographicFragment", "Visit Update successful!");
+                                    } else {
+                                        Log.d("DemographicFragment", "Visit Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+                } catch (Exception e) {
+                    Log.e("DemographicFragment", "Error in visited update", e);
+                    e.printStackTrace();
+                }
+
+
+                //Update Phone Number for Individual
+                try {
+                    Individual data = iview.find(HouseMembersFragment.selectedIndividual.uuid);
+                    String phone1 = binding.getDemographic().phone1;
+                    if (data != null && phone1 != null && phone1.length() == 10) {
+                        IndividualPhone cnt = new IndividualPhone();
+                        cnt.uuid = finalData.individual_uuid;
+                        cnt.phone1 = binding.getDemographic().phone1;
+
+                        iview.contact(cnt, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("DemographicFragment", "Phone Update successful!");
+                                    } else {
+                                        Log.d("DemographicFragment", "Phone Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+
+                } catch (Exception e) {
+                    Log.e("DemographicFragment", "Error in update", e);
+                    e.printStackTrace();
+                }
+
+            });
+
+            executor.shutdown();
+
+
+
             finalData.complete=1;
             viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
-            IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
-            try {
-                Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
-                if (data != null) {
-                    IndividualVisited visited = new IndividualVisited();
-                    visited.uuid = finalData.individual_uuid;
-                    visited.complete = 2;
-                    iview.visited(visited);
-                }
 
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            //Update Phone Number for Individual
-            try {
-                Individual data = iview.find(HouseMembersFragment.selectedIndividual.uuid);
-                String phone1 = binding.getDemographic().phone1;
-                if (data != null && phone1 != null && phone1.length() == 10) {
-                    IndividualPhone cnt = new IndividualPhone();
-                    cnt.uuid = finalData.individual_uuid;
-                    cnt.phone1 = binding.getDemographic().phone1;
-                    iview.contact(cnt);
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
         }
         if (close) {

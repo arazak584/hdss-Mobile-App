@@ -16,7 +16,7 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Calculators;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
@@ -356,7 +356,7 @@ public class NewhouseholdFragment extends DialogFragment {
 
 
         binding.setEventname(AppConstants.EVENT_BASE);
-        Handler.colorLayouts(requireContext(), binding.BASELINELAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.BASELINELAYOUT);
         View view = binding.getRoot();
         return view;
     }

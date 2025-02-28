@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
@@ -257,7 +257,7 @@ public class Birth3SFragment extends Fragment {
             save(false, true, viewModel, vpmViewModel);
         });
 
-        Handler.colorLayouts(requireContext(), binding.OUTCOMELAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.OUTCOMELAYOUT);
         View view = binding.getRoot();
         return view;
     }
@@ -283,7 +283,7 @@ public class Birth3SFragment extends Fragment {
 
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.OUTCOMELAYOUT, validateOnComplete, false);
+            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.OUTCOMELAYOUT, validateOnComplete, false);
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), "All fields are Required", Toast.LENGTH_LONG).show();

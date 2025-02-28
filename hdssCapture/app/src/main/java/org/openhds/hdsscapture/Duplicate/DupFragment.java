@@ -3,6 +3,9 @@ package org.openhds.hdsscapture.Duplicate;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.DuplicateViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
@@ -30,11 +33,10 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
 import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
-import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
-import org.openhds.hdsscapture.fragment.EventsFragment;
 import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 
 import java.text.SimpleDateFormat;
@@ -42,6 +44,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -236,7 +240,7 @@ public class DupFragment extends DialogFragment {
             save(false, true, viewModel);
         });
 
-        Handler.colorLayouts(requireContext(), binding.MAINLAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.MAINLAYOUT);
         View view = binding.getRoot();
         return view;
     }
@@ -263,7 +267,7 @@ public class DupFragment extends DialogFragment {
             }
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
+            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
 
 
             if (hasErrors) {
@@ -331,36 +335,66 @@ public class DupFragment extends DialogFragment {
 
             }
 
-
-            //finalData.complete=1;
-            viewModel.add(finalData);
             IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
 
-            if (binding.getDup().numberofdup>=1 && finalData.complete ==1) {
-                IndividualEnd endInd = new IndividualEnd();
-                endInd.endType = 4;
-                endInd.uuid = binding.getDup().dup_uuid;
-                endInd.complete = 1;
-                individualViewModel.dthupdate(endInd);
-            }
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
 
-            if (binding.getDup().numberofdup>=2 && finalData.complete ==1) {
-                IndividualEnd endInd = new IndividualEnd();
-                endInd.endType = 4;
-                endInd.uuid = binding.getDup().dup1_uuid;
-                endInd.complete = 1;
-                individualViewModel.dthupdate(endInd);
-            }
+                if (binding.getDup().numberofdup>=1 && finalData.complete ==1) {
+                    IndividualEnd endInd = new IndividualEnd();
+                    endInd.endType = 4;
+                    endInd.uuid = binding.getDup().dup_uuid;
+                    endInd.complete = 1;
 
-            if (binding.getDup().numberofdup>=3 && finalData.complete ==1) {
-                IndividualEnd endInd = new IndividualEnd();
-                endInd.endType = 4;
-                endInd.uuid = binding.getDup().dup2_uuid;
-                endInd.complete = 1;
-                individualViewModel.dthupdate(endInd);
-            }
+                    individualViewModel.dthupdate(endInd, result ->
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                if (result > 0) {
+                                    Log.d("DuplicateFragment", "Dup Update successful!");
+                                } else {
+                                    Log.d("BaselineFragment", "Dup Update Failed!");
+                                }
+                            })
+                    );
+                }
+
+                if (binding.getDup().numberofdup>=2 && finalData.complete ==1) {
+                    IndividualEnd endInd = new IndividualEnd();
+                    endInd.endType = 4;
+                    endInd.uuid = binding.getDup().dup1_uuid;
+                    endInd.complete = 1;
+                    individualViewModel.dthupdate(endInd, result ->
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                if (result > 0) {
+                                    Log.d("DuplicateFragment", "Dup Update successful!");
+                                } else {
+                                    Log.d("BaselineFragment", "Dup Update Failed!");
+                                }
+                            })
+                    );
+                }
+
+                if (binding.getDup().numberofdup>=3 && finalData.complete ==1) {
+                    IndividualEnd endInd = new IndividualEnd();
+                    endInd.endType = 4;
+                    endInd.uuid = binding.getDup().dup2_uuid;
+                    endInd.complete = 1;
+                    individualViewModel.dthupdate(endInd, result ->
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                if (result > 0) {
+                                    Log.d("DuplicateFragment", "Dup Update successful!");
+                                } else {
+                                    Log.d("BaselineFragment", "Dup Update Failed!");
+                                }
+                            })
+                    );
+                }
 
 
+            });
+
+            executor.shutdown();
+
+            viewModel.add(finalData);
 
         }
         if (close) {

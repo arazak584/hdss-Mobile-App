@@ -1,8 +1,14 @@
 package org.openhds.hdsscapture.entity.subentity;
 
+import androidx.annotation.NonNull;
+import androidx.room.PrimaryKey;
+
 import java.util.Date;
 
 public class VpmUpdate {
+
+    @PrimaryKey
+    @NonNull
     public String uuid;
     public String individual_uuid;
     public Date deathDate;

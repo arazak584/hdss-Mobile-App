@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.PregnancyDialogFragment;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
@@ -143,7 +143,7 @@ public class HouseholdFragment extends Fragment {
         });
 
 
-        Handler.colorLayouts(requireContext(), binding.HOUSEHOLDLAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.HOUSEHOLDLAYOUT);
         View v = binding.getRoot();
         return v;
     }

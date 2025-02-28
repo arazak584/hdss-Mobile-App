@@ -1,65 +1,47 @@
 package org.openhds.hdsscapture.OutcomeFragment;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
-import org.openhds.hdsscapture.Dialog.FatherOutcomeDialogFragment;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
-import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
-import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
-import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
-import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.Viewmodel.VpmViewModel;
 import org.openhds.hdsscapture.databinding.FragmentBirthSBinding;
-import org.openhds.hdsscapture.databinding.FragmentOutcomeBinding;
-import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outcome;
-import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
-import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.Vpm;
-import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import org.openhds.hdsscapture.fragment.ClusterFragment;
-import org.openhds.hdsscapture.fragment.DatePickerFragment;
 import org.openhds.hdsscapture.fragment.HouseMembersFragment;
-import org.openhds.hdsscapture.fragment.SocioFFragment;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -264,7 +246,7 @@ public class BirthSFragment extends Fragment {
             save(false, true, viewModel, vpmViewModel);
         });
 
-        Handler.colorLayouts(requireContext(), binding.OUTCOMELAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.OUTCOMELAYOUT);
         View view = binding.getRoot();
         return view;
     }
@@ -290,7 +272,7 @@ public class BirthSFragment extends Fragment {
 
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.OUTCOMELAYOUT, validateOnComplete, false);
+            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.OUTCOMELAYOUT, validateOnComplete, false);
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), "All fields are Required", Toast.LENGTH_LONG).show();

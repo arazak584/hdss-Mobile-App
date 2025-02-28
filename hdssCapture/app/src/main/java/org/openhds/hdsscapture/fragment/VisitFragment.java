@@ -2,15 +2,20 @@ package org.openhds.hdsscapture.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,7 +23,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Utilities.UniqueIDGen;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
@@ -26,6 +31,7 @@ import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.databinding.FragmentVisitBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
+import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
@@ -35,7 +41,6 @@ import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subentity.HouseholdAmendment;
 import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
 import org.openhds.hdsscapture.entity.subentity.IndividualResidency;
-import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
@@ -46,6 +51,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,13 +61,11 @@ import java.util.concurrent.ExecutionException;
  */
 public class VisitFragment extends DialogFragment {
 
-    private Visit visit;
+
     private FragmentVisitBinding binding;
     private Locations locations;
-    private Residency residency;
     private Socialgroup socialgroup;
     private Individual individual;
-    private EventForm eventForm;
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
@@ -123,10 +128,54 @@ public class VisitFragment extends DialogFragment {
         final Intent intent = getActivity().getIntent();
         final Round roundData = intent.getParcelableExtra(HierarchyActivity.ROUND_DATA);
 
+        //Search Respondent
+        IndividualViewModel vmodel = new ViewModelProvider(this).get(IndividualViewModel.class);
+        AutoCompleteTextView search_respondent = binding.getRoot().findViewById(R.id.visit_respondent);
+        // Initialize adapter AFTER fetching data
+        List<String> respondentNames = new ArrayList<>();
+
+        try {
+            List<Individual> individualsData = vmodel.retrieveByLocationId(socialgroup.getExtId());
+
+            for (Individual individual : individualsData) {
+                respondentNames.add(individual.getFirstName() + " " + individual.getLastName()); // Ensure Individual has a getName() method
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Create adapter with correct data
+        ArrayAdapter<String> activeIndividuals = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, respondentNames);
+        activeIndividuals.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        activeIndividuals.setNotifyOnChange(true); // Ensure updates reflect in UI
+
+        // Set adapter
+        search_respondent.setAdapter(activeIndividuals);
+
+        // Handle item selection
+        search_respondent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Store the selected name
+                String selectedName = activeIndividuals.getItem(position);
+                search_respondent.setText(selectedName); // Ensure the selected name stays
+            }
+        });
+
+        // Preserve entered text if no item is selected
+        search_respondent.setOnDismissListener(() -> {
+            String enteredText = search_respondent.getText().toString();
+            if (!respondentNames.contains(enteredText)) {
+                search_respondent.setText(enteredText); // Keep what the user typed
+            }
+        });
+        //End Search Respondent
+
+
+
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
-        SocialgroupViewModel vmodel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
         VisitViewModel viewModel = new ViewModelProvider(this).get(VisitViewModel.class);
         try {
             Visit data = viewModel.find(socialgroup.uuid);
@@ -198,7 +247,7 @@ public class VisitFragment extends DialogFragment {
         });
 
 
-        Handler.colorLayouts(requireContext(), binding.VISITLAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.VISITLAYOUT);
         View view = binding.getRoot();
         return view;
     }
@@ -213,7 +262,7 @@ public class VisitFragment extends DialogFragment {
             String originalHouseExtId = finalData.houseExtId;
 
                 final boolean validateOnComplete = true;//finalData.complete == 1;
-                boolean hasErrors = new Handler().hasInvalidInput(binding.VISITLAYOUT, validateOnComplete, false);
+                boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.VISITLAYOUT, validateOnComplete, false);
 
                 if (hasErrors) {
                     Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
@@ -232,26 +281,26 @@ public class VisitFragment extends DialogFragment {
             // Format the components into a string with leading zeros
             String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
 
-            //Update hohid in individual if hohid length!=11
-            try {
-                List<Individual> individuals = imodel.hoh(ClusterFragment.selectedLocation.compno, originalHouseExtId);
-                Log.d("Individual", "HOHID LENGTH 2: " + originalHouseExtId + " " + ClusterFragment.selectedLocation.compno);
-                Log.d("Individual", "Individuals List Size: " + (individuals != null ? individuals.size() : "null"));
-                // Iterate over each Individual record
-                for (Individual data : individuals) {
-                    Log.d("Individual", "HOHID LENGTH 3: " + originalHouseExtId);
-
-                    if (data != null && originalHouseExtId != null && originalHouseExtId.length() != 11) {
-                        IndividualResidency items = new IndividualResidency();
-                        items.uuid = data.uuid;
-                        items.hohID = id;
-                        imodel.updateres(items);
-                        Log.d("IndividualResidency", "Updated Individual UUID: " + data.uuid + " with new HOHID: " + id);
-                    }
-                }
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
+//            //Update hohid in individual if hohid length!=11
+//            try {
+//                List<Individual> individuals = imodel.hoh(ClusterFragment.selectedLocation.compno, originalHouseExtId);
+//                Log.d("Individual", "HOHID LENGTH 2: " + originalHouseExtId + " " + ClusterFragment.selectedLocation.compno);
+//                Log.d("Individual", "Individuals List Size: " + (individuals != null ? individuals.size() : "null"));
+//                // Iterate over each Individual record
+//                for (Individual data : individuals) {
+//                    Log.d("Individual", "HOHID LENGTH 3: " + originalHouseExtId);
+//
+//                    if (data != null && originalHouseExtId != null && originalHouseExtId.length() != 11) {
+//                        IndividualResidency items = new IndividualResidency();
+//                        items.uuid = data.uuid;
+//                        items.hohID = id;
+//                        imodel.updateres(items);
+//                        Log.d("IndividualResidency", "Updated Individual UUID: " + data.uuid + " with new HOHID: " + id);
+//                    }
+//                }
+//            } catch (ExecutionException | InterruptedException e) {
+//                e.printStackTrace();
+//            }
 
 
 
@@ -270,41 +319,65 @@ public class VisitFragment extends DialogFragment {
                 finalData.edtime = endtime;
             }
 
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+
+                try {
+                    Socialgroup data = vmodel.visit(socialgroup.uuid);
+                    if (data != null) {
+                        HvisitAmendment visit = new HvisitAmendment();
+                        visit.uuid = binding.getVisit().socialgroup_uuid;
+                        visit.complete = 2;
+
+                        vmodel.visited(visit, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("VisitFragment", "visit Update successful!");
+                                    } else {
+                                        Log.d("VisitFragment", "visit Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+
+                } catch (Exception e) {
+                    Log.e("VisitFragment", "Error in update", e);
+                    e.printStackTrace();
+                }
+
+                try {
+                    Socialgroup data = vmodel.find(socialgroup.uuid);
+                    if (data != null && originalHouseExtId.length() !=11) {
+                        HouseholdAmendment item = new HouseholdAmendment();
+                        item.complete = 1;
+                        item.uuid = data.uuid;
+                        item.extId = id;
+
+                        vmodel.update(item, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("VisitFragment", "visit Update successful!");
+                                    } else {
+                                        Log.d("VisitFragment", "visit Update Failed!");
+                                    }
+                                })
+                        );
+
+                    }
+
+                } catch (Exception e) {
+                    Log.e("VisitFragment", "Error in update", e);
+                    e.printStackTrace();
+                }
+
+            });
+
+            executor.shutdown();
+
             viewModel.add(finalData);
 
 
-            try {
-                Socialgroup data = vmodel.find(socialgroup.uuid);
-                if (data != null && originalHouseExtId.length() !=11) {
-                    HouseholdAmendment item = new HouseholdAmendment();
-                    item.complete = 1;
-                    item.uuid = data.uuid;
-                    item.extId = id;
-                    vmodel.update(item);
 
-                    Log.d("Print", "New HOHID: " + finalData.houseExtId + " " + item.extId);
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                Socialgroup data = vmodel.visit(socialgroup.uuid);
-                if (data != null) {
-                    HvisitAmendment visit = new HvisitAmendment();
-                    visit.uuid = binding.getVisit().socialgroup_uuid;
-                    visit.complete = 2;
-                    vmodel.visited(visit);
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
         }

@@ -237,6 +237,7 @@ public class Listing extends BaseObservable {
             status = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.rgb(255, 0, 255));
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            notifyPropertyChanged(BR._all);
         }
 
     }

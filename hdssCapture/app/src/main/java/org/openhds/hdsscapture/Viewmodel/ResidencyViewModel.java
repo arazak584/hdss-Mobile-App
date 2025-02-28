@@ -3,11 +3,13 @@ package org.openhds.hdsscapture.Viewmodel;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Consumer;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.ResidencyRepository;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Residency;
+import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subentity.ResidencyUpdate;
 
@@ -95,8 +97,12 @@ public class ResidencyViewModel extends AndroidViewModel {
         residencyRepository.create(data);
     }
 
-    public int update(ResidencyAmendment s){
-        return residencyRepository.update(s);
+//    public int update(ResidencyAmendment s){
+//        return residencyRepository.update(s);
+//    }
+
+    public void update(ResidencyAmendment s, Consumer<Integer> callback) {
+        residencyRepository.update(s, callback);
     }
 
     public int update(ResidencyUpdate s){

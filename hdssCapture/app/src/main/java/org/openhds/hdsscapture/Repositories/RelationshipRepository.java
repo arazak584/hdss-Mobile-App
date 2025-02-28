@@ -1,11 +1,16 @@
 package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
+
+import androidx.core.util.Consumer;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.RelationshipDao;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Relationship;
+import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 
 import java.util.Date;
@@ -37,10 +42,11 @@ public class RelationshipRepository {
         });
     }
 
-    public int update(RelationshipUpdate s) {
-        AtomicInteger row = new AtomicInteger();
-        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
-        return row.intValue();
+    public void update(RelationshipUpdate s, Consumer<Integer> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int result = dao.update(s);
+            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
     }
 
     public List<Relationship> findToSync() throws ExecutionException, InterruptedException {

@@ -28,6 +28,7 @@ public class OdkFormAdapter extends RecyclerView.Adapter<OdkFormAdapter.OdkFormV
     private static final String ODK_PACKAGE = "org.odk.collect.android";
     private static final String ODK_FORMS_PROVIDER = "content://org.odk.collect.android.provider.odk.forms/forms";
     private static final String[] PROJECTION = {"_id", "jrFormId"};
+    private static final String TAG = "OdkFormAdapter";
 
     public OdkFormAdapter(List<OdkForm> odkForms) {
         this.odkForms = odkForms;
@@ -91,7 +92,7 @@ public class OdkFormAdapter extends RecyclerView.Adapter<OdkFormAdapter.OdkFormV
                 return;
             }
 
-            int formId = getOdkFormId(currentForm.getFormID());
+            int formId = getOdkFormId(context, currentForm.getFormID());
             if (formId == -1) {
                 Toast.makeText(context, "Form not found in ODK Collect", Toast.LENGTH_LONG).show();
                 return;
@@ -103,11 +104,11 @@ public class OdkFormAdapter extends RecyclerView.Adapter<OdkFormAdapter.OdkFormV
                 context.startActivity(intent);
             } catch (Exception e) {
                 Toast.makeText(context, "Error launching ODK form: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
+                Log.e(TAG, "Error launching ODK form", e);
             }
         }
 
-        private int getOdkFormId(String jrFormId) {
+        private int getOdkFormId(Context context, String jrFormId) {
             if (jrFormId == null) return -1;
 
             Uri formUri = Uri.parse(ODK_FORMS_PROVIDER);
@@ -125,7 +126,7 @@ public class OdkFormAdapter extends RecyclerView.Adapter<OdkFormAdapter.OdkFormV
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(TAG, "Error querying ODK forms", e);
             } finally {
                 if (cursor != null) {
                     cursor.close();

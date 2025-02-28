@@ -26,7 +26,7 @@ import androidx.databinding.InverseBindingAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
-public class Handler {
+public class HandlerSelect {
 
 
     @BindingAdapter("goneUnless")

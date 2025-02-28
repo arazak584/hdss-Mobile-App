@@ -4,6 +4,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +22,9 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
-import org.openhds.hdsscapture.Dialog.FatherDialogFragment;
-import org.openhds.hdsscapture.Dialog.HouseholdDialogFragment;
-import org.openhds.hdsscapture.Dialog.MotherDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Calculators;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Utilities.UniqueIDGen;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
@@ -36,13 +36,15 @@ import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
-import org.openhds.hdsscapture.fragment.ClusterFragment;
 import org.openhds.hdsscapture.fragment.DatePickerFragment;
+import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,6 +56,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -440,7 +444,7 @@ public class BaselineFragment extends Fragment {
         });
 
         binding.setEventname(AppConstants.EVENT_BASE);
-        Handler.colorLayouts(requireContext(), binding.BASELINELAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.BASELINELAYOUT);
         View view = binding.getRoot();
         return view;
 
@@ -455,7 +459,7 @@ public class BaselineFragment extends Fragment {
 
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.BASELINELAYOUT, validateOnComplete, false);
+            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.BASELINELAYOUT, validateOnComplete, false);
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), "All fields are Required", Toast.LENGTH_LONG).show();
@@ -573,67 +577,80 @@ public class BaselineFragment extends Fragment {
             finalData.complete=1;
             Data.complete=1;
             demo.complete=1;
-            viewModel.add(finalData);
             individualViewModel.add(Data);
             demographicViewModel.add(demo);
-            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
-//            SocialgroupAmendment socialgroupA = new SocialgroupAmendment();
-//
-//            if (socialgroup.groupName!= null && "UNK".equals(socialgroup.groupName)) {
-//                socialgroupA.individual_uuid = binding.getIndividual().getUuid();
-//                socialgroupA.groupName = binding.getIndividual().firstName +' '+ binding.getIndividual().lastName;
-//                socialgroupA.uuid = socialgroup.uuid;
-//            }
-//
-//            SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-//            socialgroupViewModel.update(socialgroupA);
-//
-//            Toast.makeText(requireActivity(), R.string.updated, Toast.LENGTH_LONG).show();
 
             SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-            //Update The Househead for the new household
-            try {
-                Socialgroup data = socialgroupViewModel.find(socialgroup.uuid);
-                if (data !=null && "UNK".equals(data.groupName)) {
-
-                    SocialgroupAmendment socialgroupAmendment = new SocialgroupAmendment();
-                    socialgroupAmendment.individual_uuid = finalData.uuid;
-                    socialgroupAmendment.groupName = Data.getFirstName() + ' ' + Data.getLastName();
-                    socialgroupAmendment.uuid = socialgroup.uuid;
-                    socialgroupAmendment.complete =1;
-                    socialgroupViewModel.update(socialgroupAmendment);
-                    //Toast.makeText(requireContext(), "Successfully Amended Household Head", Toast.LENGTH_LONG).show();
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             ResidencyViewModel unks = new ViewModelProvider(this).get(ResidencyViewModel.class);
-            try {
-                Residency datas = unks.unk(socialgroup.uuid);
-//                if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim()))
-                if (datas != null) {
 
-                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
 
-                    residencyAmendment.endType = 2;
-                    residencyAmendment.endDate = new Date();
-                    residencyAmendment.uuid = datas.uuid;
-                    residencyAmendment.complete = 2;
+                //Update The Househead for the new household
+                try {
+                    // Second block - visited update (with different variable name)
+                    Socialgroup data = socialgroupViewModel.find(socialgroup.uuid);
+                    if (data !=null && "UNK".equals(data.groupName)) {
 
-                    unks.update(residencyAmendment);
+                        SocialgroupAmendment socialgroupAmendment = new SocialgroupAmendment();
+                        socialgroupAmendment.individual_uuid = finalData.uuid;
+                        socialgroupAmendment.groupName = Data.getFirstName() + ' ' + Data.getLastName();
+                        socialgroupAmendment.uuid = socialgroup.uuid;
+                        socialgroupAmendment.complete =1;
+
+                        socialgroupViewModel.update(socialgroupAmendment, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("BaselineFragment", "Household Update successful!");
+                                    } else {
+                                        Log.d("BaselineFragment", "Household Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+                } catch (Exception e) {
+                    Log.e("BaselineFragment", "Error in update", e);
+                    e.printStackTrace();
                 }
 
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+                //set fake individual to unknown
+                try {
+                    Residency datas = unks.unk(socialgroup.uuid);
+                    if (datas != null) {
+                        ResidencyAmendment residencyAmendment = new ResidencyAmendment();
 
+                        residencyAmendment.endType = 2;
+                        residencyAmendment.endDate = new Date();
+                        residencyAmendment.uuid = datas.uuid;
+                        residencyAmendment.complete = 2;
+
+                        unks.update(residencyAmendment, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("BaselineFragment", "Individual Update successful!");
+                                    } else {
+                                        Log.d("BaselineFragment", "Individual Update Failed!");
+                                    }
+                                })
+                        );
+
+                    }
+
+                } catch (Exception e) {
+                    Log.e("BaselineFragment", "Error in update", e);
+                    e.printStackTrace();
+                }
+
+
+            });
+
+            executor.shutdown();
+
+
+
+            viewModel.add(finalData);
+            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
 
         }

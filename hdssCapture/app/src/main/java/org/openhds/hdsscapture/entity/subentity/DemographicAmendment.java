@@ -1,7 +1,12 @@
 package org.openhds.hdsscapture.entity.subentity;
 
+import androidx.annotation.NonNull;
+import androidx.room.PrimaryKey;
+
 public class DemographicAmendment {
 
+    @PrimaryKey
+    @NonNull
     public String individual_uuid;
     public Integer religion;
     public Integer tribe;

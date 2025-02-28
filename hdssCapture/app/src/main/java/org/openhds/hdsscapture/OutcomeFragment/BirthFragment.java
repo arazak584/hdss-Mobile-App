@@ -3,13 +3,14 @@ package org.openhds.hdsscapture.OutcomeFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +23,7 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.FatherOutcomeDialogFragment;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
@@ -45,7 +46,6 @@ import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import org.openhds.hdsscapture.fragment.ClusterFragment;
 import org.openhds.hdsscapture.fragment.DatePickerFragment;
 import org.openhds.hdsscapture.fragment.HouseMembersFragment;
-import org.openhds.hdsscapture.fragment.SocioBFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -56,6 +56,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -315,7 +317,7 @@ public class BirthFragment extends Fragment {
             save(false, true, viewModel);
         });
 
-        Handler.colorLayouts(requireContext(), binding.OUTCOMELAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.OUTCOMELAYOUT);
         View view = binding.getRoot();
         return view;
 
@@ -435,7 +437,7 @@ public class BirthFragment extends Fragment {
 
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.OUTCOMELAYOUT, validateOnComplete, false);
+            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.OUTCOMELAYOUT, validateOnComplete, false);
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), "All fields are Required", Toast.LENGTH_LONG).show();
@@ -491,23 +493,40 @@ public class BirthFragment extends Fragment {
             finalData.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
             finalData.visit_uuid = binding.getPregoutcome().visit_uuid;
             finalData.uuid = binding.getPregoutcome().uuid;
-            //finalData.complete=1;
-            viewModel.add(finalData);
+
+
             IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
-            try {
-                Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
-                if (data != null) {
-                    IndividualVisited visited = new IndividualVisited();
-                    visited.uuid = binding.getPregoutcome().mother_uuid;
-                    visited.complete = 2;
-                    iview.visited(visited);
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+
+                try {
+                    Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                    if (data != null) {
+                        IndividualVisited visited = new IndividualVisited();
+                        visited.uuid = binding.getPregoutcome().mother_uuid;
+                        visited.complete = 2;
+
+                        iview.visited(visited, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("pregnancyFragment", "visit Update successful!");
+                                    } else {
+                                        Log.d("pregnancyFragment", "visit Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+
+                } catch (Exception e) {
+                    Log.e("pregnancyFragment", "Error in update", e);
+                    e.printStackTrace();
                 }
 
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            });
+
+            executor.shutdown();
+
+            viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_SHORT).show();
 
         }

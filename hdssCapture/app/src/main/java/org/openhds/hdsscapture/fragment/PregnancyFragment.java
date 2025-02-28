@@ -2,7 +2,10 @@ package org.openhds.hdsscapture.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +24,7 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.OutcomeFragment.BirthFragment;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
@@ -33,11 +36,9 @@ import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Pregnancy;
-import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
-import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -49,6 +50,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -361,7 +364,7 @@ public class PregnancyFragment extends DialogFragment {
             save(false, true, viewModel);
         });
 
-        Handler.colorLayouts(requireContext(), binding.PREGNANCYLAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.PREGNANCYLAYOUT);
         View view = binding.getRoot();
         return view;
     }
@@ -603,7 +606,7 @@ public class PregnancyFragment extends DialogFragment {
 
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.PREGNANCYLAYOUT, validateOnComplete, false);
+            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.PREGNANCYLAYOUT, validateOnComplete, false);
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
@@ -624,22 +627,39 @@ public class PregnancyFragment extends DialogFragment {
                 finalData.edtime = endtime;
             }
             finalData.complete=1;
-            viewModel.add(finalData);
+
             IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
-            try {
-                Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
-                if (data != null) {
-                    IndividualVisited visited = new IndividualVisited();
-                    visited.uuid = finalData.individual_uuid;
-                    visited.complete = 2;
-                    iview.visited(visited);
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+
+                try {
+                    Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                    if (data != null) {
+                        IndividualVisited visited = new IndividualVisited();
+                        visited.uuid = finalData.individual_uuid;
+                        visited.complete = 2;
+
+                        iview.visited(visited, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("pregnancyFragment", "visit Update successful!");
+                                    } else {
+                                        Log.d("pregnancyFragment", "visit Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+
+                } catch (Exception e) {
+                    Log.e("pregnancyFragment", "Error in update", e);
+                    e.printStackTrace();
                 }
 
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            });
+
+            executor.shutdown();
+
+            viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
         }
         if (save && binding.getPregnancy().outcome==1) {

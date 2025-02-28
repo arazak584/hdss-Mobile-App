@@ -3,12 +3,14 @@ package org.openhds.hdsscapture.Viewmodel;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Consumer;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.SocialgroupRepository;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.HouseholdAmendment;
 import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
+import org.openhds.hdsscapture.entity.subentity.IndividualResidency;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 
 import java.util.Date;
@@ -89,16 +91,21 @@ public class SocialgroupViewModel extends AndroidViewModel {
         socialgroupRepository.create(data);
     }
 
-    public int update(SocialgroupAmendment s){
-        return socialgroupRepository.update(s);
+//    public int update(SocialgroupAmendment s){
+//        return socialgroupRepository.update(s);
+//    }
+
+    public void update(SocialgroupAmendment s, Consumer<Integer> callback) {
+        socialgroupRepository.update(s, callback);
     }
 
-    public int update(HouseholdAmendment s){
-        return socialgroupRepository.update(s);
+    public void update(HouseholdAmendment s, Consumer<Integer> callback) {
+        socialgroupRepository.update(s, callback);
     }
 
-    public int visited(HvisitAmendment s){
-        return socialgroupRepository.visited(s);
+    public void visited(HvisitAmendment s, Consumer<Integer> callback) {
+        socialgroupRepository.visited(s, callback);
     }
+
 
 }

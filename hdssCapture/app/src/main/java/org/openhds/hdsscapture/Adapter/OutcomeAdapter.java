@@ -13,17 +13,12 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.fragment.OutcomeAdapterFragment;
-import org.openhds.hdsscapture.fragment.OutcomeFragment;
-import org.openhds.hdsscapture.fragment.PregAdapterFragment;
-import org.openhds.hdsscapture.fragment.PregFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -88,15 +83,15 @@ public class OutcomeAdapter extends RecyclerView.Adapter<OutcomeAdapter.ViewHold
         holder.insertDate.setText(formattedInsertDate);
         //holder.insertDate.setText(individual.insertDate);
 
-        holder.cardView.setOnClickListener(v -> {
-            if (outcome != null) {
-                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                        OutcomeFragment.newInstance(individual,locations, socialgroup,outcome)).commit();
-                Log.d("Outcome", "outcome ID" + outcome.uuid);
-            }else {
-                Toast.makeText(activity.getActivity(), "Error: Some data is null", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        holder.cardView.setOnClickListener(v -> {
+//            if (outcome != null) {
+//                activity.requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                        OutcomeFragment.newInstance(individual,locations, socialgroup,outcome)).commit();
+//                Log.d("Outcome", "outcome ID" + outcome.uuid);
+//            }else {
+//                Toast.makeText(activity.getActivity(), "Error: Some data is null", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     @Override

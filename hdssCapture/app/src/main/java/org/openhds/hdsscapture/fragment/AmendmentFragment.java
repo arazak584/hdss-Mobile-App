@@ -1,16 +1,15 @@
 package org.openhds.hdsscapture.fragment;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,21 +17,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
-import org.openhds.hdsscapture.Activity.LocationActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.FatherDialogFragment;
 import org.openhds.hdsscapture.Dialog.MotherDialogFragment;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Calculators;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
@@ -45,7 +40,6 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
-import org.openhds.hdsscapture.entity.subentity.IndividualResidency;
 import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
@@ -59,6 +53,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -83,6 +79,7 @@ public class AmendmentFragment extends DialogFragment {
     private FragmentAmendmentBinding binding;
     private EventForm eventForm;
     private ProgressDialog progressDialog;
+    private IndividualViewModel individualViewModel;
 
     public AmendmentFragment() {
         // Required empty public constructor
@@ -220,7 +217,7 @@ public class AmendmentFragment extends DialogFragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
-        IndividualViewModel inds = new ViewModelProvider(this).get(IndividualViewModel.class);
+        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
         AmendmentViewModel viewModel = new ViewModelProvider(this).get(AmendmentViewModel.class);
         ResidencyViewModel resViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         try {
@@ -251,12 +248,12 @@ public class AmendmentFragment extends DialogFragment {
                 data.orig_gender = HouseMembersFragment.selectedIndividual.getGender();
                 data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
 
-                Individual datae = inds.mother(HouseMembersFragment.selectedIndividual.uuid);
+                Individual datae = individualViewModel.mother(HouseMembersFragment.selectedIndividual.uuid);
                 if (datae!=null){
                     data.mother_uuid=datae.uuid;
                 }
 
-                Individual dataf = inds.father(HouseMembersFragment.selectedIndividual.uuid);
+                Individual dataf = individualViewModel.father(HouseMembersFragment.selectedIndividual.uuid);
                 if (dataf!=null){
                     data.father_uuid=dataf.uuid;
                 }
@@ -286,7 +283,7 @@ public class AmendmentFragment extends DialogFragment {
 
 
         try {
-            Individual datae = inds.mother(HouseMembersFragment.selectedIndividual.uuid);
+            Individual datae = individualViewModel.mother(HouseMembersFragment.selectedIndividual.uuid);
             if (datae != null) {
                 binding.setMother(datae);
                 AppCompatEditText name = binding.getRoot().findViewById(R.id.mother_name);
@@ -301,7 +298,7 @@ public class AmendmentFragment extends DialogFragment {
         }
 
         try {
-            Individual data = inds.father(HouseMembersFragment.selectedIndividual.uuid);
+            Individual data = individualViewModel.father(HouseMembersFragment.selectedIndividual.uuid);
             if (data != null) {
                 binding.setFather(data);
                 AppCompatEditText name = binding.getRoot().findViewById(R.id.father_name);
@@ -315,9 +312,8 @@ public class AmendmentFragment extends DialogFragment {
             e.printStackTrace();
         }
 
-        IndividualViewModel indage = new ViewModelProvider(this).get(IndividualViewModel.class);
         try {
-            Individual datae = indage.find(HouseMembersFragment.selectedIndividual.uuid);
+            Individual datae = individualViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
             if (datae != null) {
                 binding.setIndividual(datae);
 
@@ -343,7 +339,7 @@ public class AmendmentFragment extends DialogFragment {
             save(false, true, viewModel);
         });
 
-        Handler.colorLayouts(requireContext(), binding.AMENDLAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.AMENDLAYOUT);
         View view = binding.getRoot();
         return view;
     }
@@ -372,7 +368,7 @@ public class AmendmentFragment extends DialogFragment {
             }
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.AMENDLAYOUTS, validateOnComplete, false);
+            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.AMENDLAYOUTS, validateOnComplete, false);
 
             boolean agedif = false;
             boolean modif = false;
@@ -444,73 +440,96 @@ public class AmendmentFragment extends DialogFragment {
                 return;
             }
 
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+                try {
+                    // First block - amendment update
+                    Individual amendData = individualViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+                    if (amendData != null) {
+                        IndividualAmendment amend = new IndividualAmendment();
+                        amend.uuid = finalData.individual_uuid;
+                        amend.father_uuid = binding.getAmendment().father_uuid;
+                        amend.mother_uuid = binding.getAmendment().mother_uuid;
+                        amend.complete = 1;
 
-            //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
-            IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-            try {
-                Individual data = individualViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
-                if (data != null) {
-                    IndividualAmendment amend = new IndividualAmendment();
-                    amend.uuid = finalData.individual_uuid;
-                    amend.father_uuid = binding.getAmendment().father_uuid;
-                    amend.mother_uuid = binding.getAmendment().mother_uuid;
-                    amend.complete = 1;
-                    if (!binding.replFirstName.getText().toString().trim().isEmpty()) {
-                        amend.firstName = binding.getAmendment().repl_firstName;
-                    } else {
-                        amend.firstName = finalData.orig_firstName;
-                    }
-                    if (!binding.replLastName.getText().toString().trim().isEmpty()) {
-                        amend.lastName = binding.getAmendment().repl_lastName;
-                    } else {
-                        amend.lastName = finalData.orig_lastName;
-                    }
-                    if (binding.getAmendment().yn_otherName!=null & binding.getAmendment().yn_otherName ==1){
-                        amend.otherName = binding.getAmendment().repl_otherName;
-                    }else {
-                        amend.otherName = finalData.orig_otherName;
-                    }
-                    if (binding.getAmendment().repl_ghanacard != null &&
-                            !binding.replGhanacard.getText().toString().trim().isEmpty()) {
-                        amend.ghanacard = binding.getAmendment().repl_ghanacard;
-                    } else {
-                        amend.ghanacard = finalData.orig_ghanacard;
-                    }
+                        // First name
+                        amend.firstName = (binding.replFirstName != null && !binding.replFirstName.getText().toString().trim().isEmpty())
+                                ? binding.getAmendment().repl_firstName
+                                : finalData.orig_firstName;
 
-                    if (binding.replGender.getSelectedItemPosition() != 0) {
-                        amend.gender = binding.getAmendment().repl_gender;
-                    } else {
-                        amend.gender = finalData.orig_gender;
-                    }
+                        // Last name
+                        amend.lastName = (binding.replLastName != null && !binding.replLastName.getText().toString().trim().isEmpty())
+                                ? binding.getAmendment().repl_lastName
+                                : finalData.orig_lastName;
 
-                    if (!binding.replDob.getText().toString().trim().isEmpty()) {
-                        amend.dob = binding.getAmendment().repl_dob;
-                    } else {
-                        amend.dob = finalData.orig_dob;
-                    }
-                    individualViewModel.update(amend);
-                }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+                        // Other name
+                        amend.otherName = (binding.getAmendment().yn_otherName != null && binding.getAmendment().yn_otherName == 1)
+                                ? binding.getAmendment().repl_otherName
+                                : finalData.orig_otherName;
 
-            IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
-            try {
-                Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
-                if (data != null) {
-                    IndividualVisited visited = new IndividualVisited();
-                    visited.uuid = binding.getAmendment().individual_uuid;
-                    visited.complete = 2;
-                    iview.visited(visited);
+                        // Ghana card
+                        amend.ghanacard = (binding.getAmendment().repl_ghanacard != null && binding.replGhanacard != null &&
+                                !binding.replGhanacard.getText().toString().trim().isEmpty())
+                                ? binding.getAmendment().repl_ghanacard
+                                : finalData.orig_ghanacard;
+
+                        // Gender
+                        amend.gender = (binding.replGender != null && binding.replGender.getSelectedItemPosition() != 0)
+                                ? binding.getAmendment().repl_gender
+                                : finalData.orig_gender;
+
+                        // Date of birth
+                        amend.dob = (binding.replDob != null && !binding.replDob.getText().toString().trim().isEmpty())
+                                ? binding.getAmendment().repl_dob
+                                : finalData.orig_dob;
+
+                        individualViewModel.update(amend, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("AmendmentFragment", "Amend Update successful!");
+                                    } else {
+                                        Log.d("AmendmentFragment", "Amend Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+                } catch (Exception e) {
+                    Log.e("AmendmentFragment", "Error in amendment update", e);
+                    e.printStackTrace();
                 }
 
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//                // Add a small delay between operations to ensure the first one completes
+//                try {
+//                    Thread.sleep(100);
+//                } catch (InterruptedException e) {
+//                    Thread.currentThread().interrupt();
+//                }
+
+                try {
+                    // Second block - visited update (with different variable name)
+                    Individual visitedData = individualViewModel.visited(HouseMembersFragment.selectedIndividual.uuid);
+                    if (visitedData != null) {
+                        IndividualVisited visited = new IndividualVisited();
+                        visited.uuid = binding.getAmendment().individual_uuid;
+                        visited.complete = 2;
+
+                        individualViewModel.visited(visited, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("AmendmentFragment", "Visit Update successful!");
+                                    } else {
+                                        Log.d("AmendmentFragment", "Visit Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+                } catch (Exception e) {
+                    Log.e("AmendmentFragment", "Error in visited update", e);
+                    e.printStackTrace();
+                }
+            });
+
+            executor.shutdown();
 
             finalData.complete=1;
             viewModel.add(finalData);

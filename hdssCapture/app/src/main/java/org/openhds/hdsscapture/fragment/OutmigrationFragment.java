@@ -8,7 +8,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,18 +23,15 @@ import android.widget.Toast;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
-import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
-import org.openhds.hdsscapture.databinding.FragmentDeathBinding;
 import org.openhds.hdsscapture.databinding.FragmentOutmigrationBinding;
 import org.openhds.hdsscapture.entity.Configsettings;
-import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
@@ -52,6 +52,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -226,7 +228,7 @@ public class OutmigrationFragment extends DialogFragment {
         });
 
 
-        Handler.colorLayouts(requireContext(), binding.MAINLAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.MAINLAYOUT);
         View view = binding.getRoot();
         return view;
     }
@@ -237,7 +239,7 @@ public class OutmigrationFragment extends DialogFragment {
             Outmigration finalData = binding.getOutmigration();
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
+            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
             if (hasErrors) {
                 Toast.makeText(requireContext(), "All fields are Required", Toast.LENGTH_LONG).show();
                 return;
@@ -292,47 +294,73 @@ public class OutmigrationFragment extends DialogFragment {
                 finalData.edtime = endtime;
             }
             finalData.complete = 1;
-            viewModel.add(finalData);
 
-            //End Residency In residency entity
             ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-            try {
-                Residency data = resModel.dth(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
-                if (data != null) {
-                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
-                    residencyAmendment.endType = 2;
-                    residencyAmendment.endDate = binding.getOutmigration().recordedDate;
-                    residencyAmendment.uuid = binding.getOutmigration().residency_uuid;
-                    residencyAmendment.complete = 1;
-
-                    resModel.update(residencyAmendment);
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            //End Residency In individual entity
             IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-            try {
-                Individual data = individualViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
-                if (data != null) {
-                    IndividualEnd endInd = new IndividualEnd();
-                    endInd.endType = 2;
-                    endInd.uuid = binding.getOutmigration().individual_uuid;
-                    endInd.complete = 1;
 
-                    individualViewModel.dthupdate(endInd);
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+
+                //1==No
+                //End Residency In residency entity
+                try {
+                    Residency data = resModel.dth(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
+                    if (data != null) {
+                        ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+                        residencyAmendment.endType = 2;
+                        residencyAmendment.endDate = binding.getOutmigration().recordedDate;
+                        residencyAmendment.uuid = binding.getOutmigration().residency_uuid;
+                        residencyAmendment.complete = 1;
+
+                        resModel.update(residencyAmendment, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("OmgFragment", "Residency Update successful!");
+                                    } else {
+                                        Log.d("OmgFragment", "Residency Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+
+                } catch (Exception e) {
+                    Log.e("OmgFragment", "Error in update", e);
+                    e.printStackTrace();
                 }
 
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+                //End Residency In individual entity
+                try {
+                    Individual data = individualViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+                    if (data != null) {
+                        IndividualEnd endInd = new IndividualEnd();
+                        endInd.endType = 2;
+                        endInd.uuid = binding.getOutmigration().individual_uuid;
+                        endInd.complete = 1;
 
+                        individualViewModel.dthupdate(endInd, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("OmgFragment", "Death Update successful!");
+                                    } else {
+                                        Log.d("OmgFragment", "Death Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+
+                } catch (Exception e) {
+                    Log.e("OmgFragment", "Error in update", e);
+                    e.printStackTrace();
+                }
+
+
+
+
+            });
+
+            executor.shutdown();
+
+            viewModel.add(finalData);
         }
         if (close) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,

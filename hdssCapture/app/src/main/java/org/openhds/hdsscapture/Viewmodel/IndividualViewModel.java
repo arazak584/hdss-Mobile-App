@@ -3,6 +3,7 @@ package org.openhds.hdsscapture.Viewmodel;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Consumer;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
@@ -184,22 +185,31 @@ public class IndividualViewModel extends AndroidViewModel {
         individualRepository.create(data);
     }
 
-    public int update(IndividualAmendment s){
-        return individualRepository.update(s);
+    public void update(IndividualAmendment s, Consumer<Integer> callback) {
+        individualRepository.update(s, callback);
     }
 
-    public int dthupdate(IndividualEnd e){
-        return individualRepository.dthupdate(e);
+//    public int dthupdate(IndividualEnd e){
+//        return individualRepository.dthupdate(e);
+//    }
+    public void visited(IndividualVisited e, Consumer<Integer> callback) {
+        individualRepository.visited(e, callback);
     }
 
-    public int visited(IndividualVisited e){
-        return individualRepository.visited(e);
+    public void dthupdate(IndividualEnd e, Consumer<Integer> callback) {
+        individualRepository.dthupdate(e, callback);
     }
-    public int contact(IndividualPhone e){
-        return individualRepository.contact(e);
+
+//    public int visited(IndividualVisited e){
+//        return individualRepository.visited(e);
+//    }
+
+    public void updateres(IndividualResidency e, Consumer<Integer> callback) {
+        individualRepository.updateres(e, callback);
     }
-    public int updateres(IndividualResidency e){
-        return individualRepository.updateres(e);
+
+    public void contact(IndividualPhone e, Consumer<Integer> callback) {
+        individualRepository.contact(e, callback);
     }
 
 }

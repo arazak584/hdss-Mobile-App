@@ -23,17 +23,13 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
-import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
-import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
-import org.openhds.hdsscapture.databinding.FragmentIndividualBinding;
 import org.openhds.hdsscapture.databinding.FragmentInmigrationBinding;
-import org.openhds.hdsscapture.databinding.FragmentOutmigrationBinding;
 import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
@@ -42,12 +38,8 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.Visit;
-import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
 import org.openhds.hdsscapture.entity.subentity.OmgUpdate;
-import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subentity.ResidencyUpdate;
-import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -57,7 +49,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -248,7 +239,7 @@ public class InmigrationFragment extends Fragment {
         });
 
         binding.setEventname(AppConstants.EVENT_MIND00S);
-        Handler.colorLayouts(requireContext(), binding.INMIGRATIONLAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.INMIGRATIONLAYOUT);
         View view = binding.getRoot();
         return view;
 
@@ -260,7 +251,7 @@ public class InmigrationFragment extends Fragment {
             Inmigration finalData = binding.getInmigration();
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.INMIGRATIONLAYOUT, validateOnComplete, false);
+            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.INMIGRATIONLAYOUT, validateOnComplete, false);
             if (hasErrors) {
                 Toast.makeText(requireContext(), "All fields are Required", Toast.LENGTH_LONG).show();
                 return;

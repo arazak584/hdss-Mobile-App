@@ -29,9 +29,8 @@ import com.google.android.gms.location.LocationRequest;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
-import org.openhds.hdsscapture.Dialog.ClusterDialogFragment;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
@@ -43,7 +42,6 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.LocationAmendment;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
-import org.openhds.hdsscapture.fragment.ClusterFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -274,7 +272,7 @@ public class BaseListingFragment extends Fragment {
             save(false, true, viewModel);
         });
 
-        Handler.colorLayouts(requireContext(), binding.MAINLAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.MAINLAYOUT);
         View view = binding.getRoot();
         return view;
     }
@@ -286,7 +284,7 @@ public class BaseListingFragment extends Fragment {
 
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
+            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();

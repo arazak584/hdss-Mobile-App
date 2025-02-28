@@ -8,7 +8,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,40 +20,34 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.annotations.Expose;
-
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
-import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
-import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.Viewmodel.VpmViewModel;
 import org.openhds.hdsscapture.databinding.FragmentDeathBinding;
-import org.openhds.hdsscapture.databinding.FragmentMembershipBinding;
 import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.Vpm;
 import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
+import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
-import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -62,6 +59,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -258,7 +257,7 @@ public class DeathFragment extends DialogFragment {
             save(false, true, viewModel);
         });
 
-        Handler.colorLayouts(requireContext(), binding.MAINLAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.MAINLAYOUT);
         View view = binding.getRoot();
         return view;
     }
@@ -269,7 +268,7 @@ public class DeathFragment extends DialogFragment {
             Death finalData = binding.getDeath();
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
+            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
             if (hasErrors) {
                 Toast.makeText(requireContext(), "All fields are Required", Toast.LENGTH_LONG).show();
                 return;
@@ -350,86 +349,128 @@ public class DeathFragment extends DialogFragment {
             v.villcode = binding.getDeath().villcode;
             vpmViewModel.add(v);
 
+            RelationshipViewModel relModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
+            ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+            IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+
+                //Set Relationship to Widowed
+                try {
+                    // Second block - visited update (with different variable name)
+                    Relationship reldata = relModel.finds(HouseMembersFragment.selectedIndividual.uuid);
+                    if (reldata != null) {
+                        RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
+                        relationshipUpdate.endType = 2;
+                        relationshipUpdate.endDate = binding.getDeath().deathDate;
+                        relationshipUpdate.individualA_uuid = HouseMembersFragment.selectedIndividual.uuid;
+                        relationshipUpdate.complete = 1;
+
+                        relModel.update(relationshipUpdate, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("DeathFragment", "Relationship Update successful (widowed)!");
+                                    } else {
+                                        Log.d("DeathFragment", "Relationship Update Failed (widowed)!");
+                                    }
+                                })
+                        );
+                    }
+                } catch (Exception e) {
+                    Log.e("DeathFragment", "Error in update", e);
+                    e.printStackTrace();
+                }
+
+                //Set Relationship to Dead
+                try {
+                    Relationship dthdata = relModel.find(HouseMembersFragment.selectedIndividual.uuid);
+                    if (dthdata != null && !binding.dthDeathDate.getText().toString().trim().isEmpty()) {
+
+                        RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
+                        relationshipUpdate.endType = 4;
+                        relationshipUpdate.endDate = binding.getDeath().deathDate;
+                        relationshipUpdate.individualA_uuid = HouseMembersFragment.selectedIndividual.uuid;
+                        relationshipUpdate.complete = 1;
+
+                        relModel.update(relationshipUpdate, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("DeathFragment", "Relationship Update successful (dead)!");
+                                    } else {
+                                        Log.d("DeathFragment", "Relationship Update Failed (dead)!");
+                                    }
+                                })
+                        );
+                    }
+
+                } catch (Exception e) {
+                    Log.e("DeathFragment", "Error in update", e);
+                    e.printStackTrace();
+                }
+
+                //End Residency In residency entity
+                try {
+                    Residency resdata = resModel.dth(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
+                    if (resdata != null) {
+                        ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+                        residencyAmendment.endType = 3;
+                        residencyAmendment.endDate = binding.getDeath().deathDate;
+                        residencyAmendment.uuid = binding.getDeath().residency_uuid;
+                        residencyAmendment.complete = 1;
+
+                        resModel.update(residencyAmendment, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("DeathFragment", "Residency Update successful (dead)!");
+                                    } else {
+                                        Log.d("DeathFragment", "Residency Update Failed (dead)!");
+                                    }
+                                })
+                        );
+
+                    }
+
+                } catch (Exception e) {
+                    Log.e("DeathFragment", "Error in update", e);
+                    e.printStackTrace();
+                }
+
+
+                //End Residency In individual entity
+                try {
+                    Individual inddata = individualViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+                    if (inddata != null) {
+                        IndividualEnd endInd = new IndividualEnd();
+                        endInd.endType = 3;
+                        endInd.uuid = binding.getDeath().individual_uuid;
+                        endInd.complete = 1;
+
+                        individualViewModel.dthupdate(endInd, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("DeathFragment", "Individual Update successful (dead)!");
+                                    } else {
+                                        Log.d("DeathFragment", "Individual Update Failed (dead)!");
+                                    }
+                                })
+                        );
+
+                    }
+
+                } catch (Exception e) {
+                    Log.e("DeathFragment", "Error in update", e);
+                    e.printStackTrace();
+                }
+
+
+            });
+
+            executor.shutdown();
+
+
             finalData.complete = 1;
             viewModel.add(finalData);
-
-            //Set Relationship to Widowed
-            RelationshipViewModel relbModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
-            try {
-                Relationship data = relbModel.finds(HouseMembersFragment.selectedIndividual.uuid);
-                if (data != null && !binding.dthDeathDate.getText().toString().trim().isEmpty()) {
-
-                    RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
-                    relationshipUpdate.endType = 2;
-                    relationshipUpdate.endDate = binding.getDeath().deathDate;
-                    relationshipUpdate.individualA_uuid = HouseMembersFragment.selectedIndividual.uuid;
-                    relationshipUpdate.complete = 1;
-                    relbModel.update(relationshipUpdate);
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            //Set Relationship to Dead
-            RelationshipViewModel relModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
-            try {
-                Relationship data = relModel.find(HouseMembersFragment.selectedIndividual.uuid);
-                if (data != null && !binding.dthDeathDate.getText().toString().trim().isEmpty()) {
-
-                    RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
-                    relationshipUpdate.endType = 4;
-                    relationshipUpdate.endDate = binding.getDeath().deathDate;
-                    relationshipUpdate.individualA_uuid = HouseMembersFragment.selectedIndividual.uuid;
-                    relationshipUpdate.complete = 1;
-                    relModel.update(relationshipUpdate);
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            //End Residency In residency entity
-            ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-            try {
-                Residency data = resModel.dth(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
-                if (data != null) {
-                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
-                    residencyAmendment.endType = 3;
-                    residencyAmendment.endDate = binding.getDeath().deathDate;
-                    residencyAmendment.uuid = binding.getDeath().residency_uuid;
-                    residencyAmendment.complete = 1;
-
-                    resModel.update(residencyAmendment);
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            //End Residency In individual entity
-            IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-            try {
-                Individual data = individualViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
-                if (data != null) {
-                    IndividualEnd endInd = new IndividualEnd();
-                    endInd.endType = 3;
-                    endInd.uuid = binding.getDeath().individual_uuid;
-                    endInd.complete = 1;
-
-                    individualViewModel.dthupdate(endInd);
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
         }
         if (close) {

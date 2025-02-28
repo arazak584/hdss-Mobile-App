@@ -2,6 +2,9 @@ package org.openhds.hdsscapture.Baseline;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +19,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
@@ -39,6 +42,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -171,7 +176,7 @@ public class BasevisitFragment extends DialogFragment {
         });
 
 
-        Handler.colorLayouts(requireContext(), binding.VISITLAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.VISITLAYOUT);
         View view = binding.getRoot();
         return view;
     }
@@ -183,7 +188,7 @@ public class BasevisitFragment extends DialogFragment {
             SocialgroupViewModel vmodel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.VISITLAYOUT, validateOnComplete, false);
+            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.VISITLAYOUT, validateOnComplete, false);
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
@@ -205,23 +210,38 @@ public class BasevisitFragment extends DialogFragment {
                 finalData.edtime = endtime;
             }
 
-            viewModel.add(finalData);
-            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
 
-            try {
-                Socialgroup data = vmodel.visit(socialgroup.uuid);
-                if (data != null) {
-                    HvisitAmendment visit = new HvisitAmendment();
-                    visit.uuid = binding.getVisit().socialgroup_uuid;
-                    visit.complete = 2;
-                    vmodel.visited(visit);
+                try {
+                    Socialgroup data = vmodel.visit(socialgroup.uuid);
+                    if (data != null) {
+                        HvisitAmendment visit = new HvisitAmendment();
+                        visit.uuid = binding.getVisit().socialgroup_uuid;
+                        visit.complete = 2;
+
+                        vmodel.visited(visit, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("BaselineFragment", "visit Update successful!");
+                                    } else {
+                                        Log.d("BaselineFragment", "visit Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+
+                } catch (Exception e) {
+                    Log.e("BaselinevisitFragment", "Error in update", e);
+                    e.printStackTrace();
                 }
 
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            });
+
+            executor.shutdown();
+
+            viewModel.add(finalData);
+            Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
         }
         if (close) {

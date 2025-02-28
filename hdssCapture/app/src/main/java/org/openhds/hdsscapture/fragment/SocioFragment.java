@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.databinding.FragmentSocioBinding;
@@ -25,9 +25,7 @@ import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.SimpleDateFormat;
@@ -210,7 +208,7 @@ public class SocioFragment extends Fragment {
             save(false, true, viewModel);
         });
 
-        Handler.colorLayouts(requireContext(), binding.MAINLAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.MAINLAYOUT);
         View view = binding.getRoot();
         return view;
     }
@@ -224,7 +222,7 @@ public class SocioFragment extends Fragment {
             final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
                 final boolean validateOnComplete = true;//finaldata.mnh01_form_complete == 1;
-                boolean hasErrors = new Handler().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
+                boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
 //                hasErrors = hasErrors || new Handler().hasInvalidInput(binding.sociob.MAINLAYOUT, validateOnComplete, false);
 //                hasErrors = hasErrors || new Handler().hasInvalidInput(binding.socioc.MAINLAYOUT, validateOnComplete, false);
 //                hasErrors = hasErrors || new Handler().hasInvalidInput(binding.sociod.MAINLAYOUT, validateOnComplete, false);

@@ -165,21 +165,16 @@
                 android:inputType="textCapCharacters"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
+        <AutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
             android:hint="@string/respondent"
-            android:text="@string/respondent">
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/visit_respondent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@={visit.respondent}"
-                android:inputType="textCapCharacters"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            android:id="@+id/visit_respondent"
+            android:textSize="22sp"
+            android:text="@={visit.respondent}"
+            android:inputType="textCapCharacters"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"

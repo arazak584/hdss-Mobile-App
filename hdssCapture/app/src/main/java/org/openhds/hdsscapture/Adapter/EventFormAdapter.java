@@ -1,18 +1,7 @@
 package org.openhds.hdsscapture.Adapter;
 
 import static org.openhds.hdsscapture.AppConstants.COMPLETE;
-import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS1;
-import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS10;
-import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS11;
-import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS12;
-import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS13;
-import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS14;
-import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS15;
 import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS16;
-import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS3;
-import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS4;
-import static org.openhds.hdsscapture.AppConstants.EVENT_HDSS7;
-import static org.openhds.hdsscapture.AppConstants.EVENT_SOCIO;
 import static org.openhds.hdsscapture.AppConstants.MARKED_COMPLETE;
 import static org.openhds.hdsscapture.AppConstants.NOT_DONE;
 import static org.openhds.hdsscapture.AppConstants.SUBMITTED;
@@ -36,19 +25,8 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
-import org.openhds.hdsscapture.fragment.AmendmentFragment;
-import org.openhds.hdsscapture.fragment.DemographicFragment;
 import org.openhds.hdsscapture.Duplicate.DupFragment;
 import org.openhds.hdsscapture.fragment.EventsFragment;
-import org.openhds.hdsscapture.fragment.PregnancyExtraFragment;
-import org.openhds.hdsscapture.fragment.PregnancyFragment;
-import org.openhds.hdsscapture.fragment.Pregnancyoutcome1Fragment;
-import org.openhds.hdsscapture.fragment.PregnancyoutcomeFragment;
-import org.openhds.hdsscapture.fragment.RelationshipFragment;
-import org.openhds.hdsscapture.fragment.ResidencyFragment;
-import org.openhds.hdsscapture.fragment.SocialgroupFragment;
-import org.openhds.hdsscapture.fragment.SocioFragment;
-import org.openhds.hdsscapture.fragment.VaccinationFragment;
 
 import java.util.List;
 

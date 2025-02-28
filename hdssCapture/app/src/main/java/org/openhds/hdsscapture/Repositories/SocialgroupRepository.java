@@ -1,12 +1,17 @@
 package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
+
+import androidx.core.util.Consumer;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.SocialgroupDao;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.HouseholdAmendment;
 import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
+import org.openhds.hdsscapture.entity.subentity.IndividualResidency;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 
 import java.util.Date;
@@ -39,22 +44,31 @@ public class SocialgroupRepository {
         });
     }
 
-    public int update(SocialgroupAmendment s) {
-        AtomicInteger row = new AtomicInteger();
-        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
-        return row.intValue();
+//    public int update(SocialgroupAmendment s) {
+//        AtomicInteger row = new AtomicInteger();
+//        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
+//        return row.intValue();
+//    }
+
+    public void update(SocialgroupAmendment s, Consumer<Integer> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int result = dao.update(s);
+            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
     }
 
-    public int update(HouseholdAmendment s) {
-        AtomicInteger row = new AtomicInteger();
-        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
-        return row.intValue();
+    public void update(HouseholdAmendment s, Consumer<Integer> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int result = dao.update(s);
+            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
     }
 
-    public int visited(HvisitAmendment s) {
-        AtomicInteger row = new AtomicInteger();
-        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.visited(s)));
-        return row.intValue();
+    public void visited(HvisitAmendment s, Consumer<Integer> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int result = dao.visited(s);
+            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
     }
 
 

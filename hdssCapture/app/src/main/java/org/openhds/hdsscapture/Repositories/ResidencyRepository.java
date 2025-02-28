@@ -1,11 +1,16 @@
 package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
+
+import androidx.core.util.Consumer;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.ResidencyDao;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Residency;
+import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subentity.ResidencyUpdate;
 
@@ -38,10 +43,17 @@ public class ResidencyRepository {
         });
     }
 
-    public int update(ResidencyAmendment s) {
-        AtomicInteger row = new AtomicInteger();
-        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
-        return row.intValue();
+//    public int update(ResidencyAmendment s) {
+//        AtomicInteger row = new AtomicInteger();
+//        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
+//        return row.intValue();
+//    }
+
+    public void update(ResidencyAmendment s, Consumer<Integer> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int result = dao.update(s);
+            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
     }
 
     public int update(ResidencyUpdate s) {

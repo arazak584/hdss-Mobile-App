@@ -17,28 +17,20 @@ import android.widget.Toast;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.Adapter.RegistryAdapter;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Handler;
-import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.RegistryViewModel;
-import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.databinding.FragmentRegisterBinding;
-import org.openhds.hdsscapture.databinding.FragmentSocioBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Registry;
-import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -108,7 +100,7 @@ public class RegisterFragment extends Fragment {
         binding.buttonSave.setOnClickListener(v -> save(true, true));
         binding.buttonClose.setOnClickListener(v -> save(false, true));
 
-        Handler.colorLayouts(requireContext(), binding.REGISTERLAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.REGISTERLAYOUT);
         return binding.getRoot();
     }
 

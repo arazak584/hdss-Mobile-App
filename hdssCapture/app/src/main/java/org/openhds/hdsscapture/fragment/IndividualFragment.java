@@ -4,12 +4,16 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,12 +27,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
-import org.openhds.hdsscapture.Baseline.BaselineFragment;
 import org.openhds.hdsscapture.Dialog.FatherDialogFragment;
 import org.openhds.hdsscapture.Dialog.MotherDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Calculators;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Utilities.SimpleDialog;
 import org.openhds.hdsscapture.Utilities.UniqueIDGen;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
@@ -51,6 +55,7 @@ import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
 import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
@@ -66,6 +71,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -83,6 +90,7 @@ public class IndividualFragment extends Fragment {
     private static final String RESIDENCY_ID = "RESIDENCY_ID";
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private final String TAG = "INDIVIDUAL.TAG";
+    public static final String DENO_INFO = "file:///android_asset/deno_views.html";
 
     private Locations locations;
     private Residency residency;
@@ -90,6 +98,11 @@ public class IndividualFragment extends Fragment {
     private Individual individual;
     private FragmentIndividualBinding binding;
     private ProgressDialog progressDialog;
+
+    private void showDialogInfo(String message, String codeFragment) {
+        SimpleDialog simpleDialog = SimpleDialog.newInstance(message, codeFragment);
+        simpleDialog.show(getChildFragmentManager(), SimpleDialog.INFO_DIALOG_TAG);
+    }
 
 
     public IndividualFragment() {
@@ -146,6 +159,14 @@ public class IndividualFragment extends Fragment {
 
         final Intent j = getActivity().getIntent();
         final Hierarchy level6Data = j.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
+
+        ImageButton appInfoButton = binding.getRoot().findViewById(R.id.deno_button);
+        appInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                denoInfo(v);
+            }
+        });
 
         // Find the button view
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_individual_mother);
@@ -707,7 +728,7 @@ public class IndividualFragment extends Fragment {
         });
 
         binding.setEventname(AppConstants.EVENT_MIND00S);
-        Handler.colorLayouts(requireContext(), binding.INDIVIDUALLAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.INDIVIDUALLAYOUT);
         View view = binding.getRoot();
         return view;
 
@@ -727,7 +748,7 @@ public class IndividualFragment extends Fragment {
             boolean omgdate = false;
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.INDIVIDUALLAYOUT, validateOnComplete, false);
+            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.INDIVIDUALLAYOUT, validateOnComplete, false);
 
             boolean missedout = false;
 
@@ -981,27 +1002,6 @@ public class IndividualFragment extends Fragment {
                 img.edtime = endtime;
             }
 
-            //Update The Househead for the new household
-            SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-            try {
-                Socialgroup data = socialgroupViewModel.find(socialgroup.uuid);
-                if (data !=null && "UNK".equals(data.groupName)) {
-
-                    SocialgroupAmendment socialgroupAmendment = new SocialgroupAmendment();
-                    socialgroupAmendment.individual_uuid = finalData.uuid;
-                    socialgroupAmendment.groupName = finalData.getFirstName() + ' ' + finalData.getLastName();
-                    socialgroupAmendment.uuid = socialgroup.uuid;
-                    socialgroupAmendment.complete =1;
-                    socialgroupViewModel.update(socialgroupAmendment);
-                    //Toast.makeText(requireContext(), "Successfully Amended Household Head", Toast.LENGTH_LONG).show();
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             finalData.phone1 = binding.getDemographic().phone1;
             finalData.compno = ClusterFragment.selectedLocation.compno;
             finalData.endType = Data.endType;
@@ -1018,9 +1018,7 @@ public class IndividualFragment extends Fragment {
             Data.complete=1;
             demo.complete=1;
 
-            viewModel.add(Data);
-            individualViewModel.add(finalData);
-            demographicViewModel.add(demo);
+
 
             final Intent i = getActivity().getIntent();
             final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
@@ -1065,65 +1063,128 @@ public class IndividualFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            //Update Previous Residency if It is Active
-            ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-            try {
-                Residency data = resModel.fetchs(individual.uuid, ClusterFragment.selectedLocation.uuid);
-                if (data != null) {
-                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
-                    Date recordedDate = binding.getInmigration().recordedDate;
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(recordedDate);
-                    calendar.add(Calendar.DAY_OF_MONTH, -1);
-                    residencyAmendment.endType = 2;
-                    residencyAmendment.endDate = calendar.getTime();
-                    residencyAmendment.uuid = binding.getOmgg().old_residency;
-                    residencyAmendment.complete = 1;
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
 
-                    resModel.update(residencyAmendment);
+                //Update The Househead for the new household
+                SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+                try {
+                    Socialgroup data = socialgroupViewModel.find(socialgroup.uuid);
+                    if (data !=null && "UNK".equals(data.groupName)) {
+
+                        SocialgroupAmendment socialgroupAmendment = new SocialgroupAmendment();
+                        socialgroupAmendment.individual_uuid = finalData.uuid;
+                        socialgroupAmendment.groupName = finalData.getFirstName() + ' ' + finalData.getLastName();
+                        socialgroupAmendment.uuid = socialgroup.uuid;
+                        socialgroupAmendment.complete =1;
+                        //Toast.makeText(requireContext(), "Successfully Amended Household Head", Toast.LENGTH_LONG).show();
+
+                        socialgroupViewModel.update(socialgroupAmendment, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("IndividualFragment", "Socialgroup Update successful!");
+                                    } else {
+                                        Log.d("IndividualFragment", "Socialgroup Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+
+                } catch (Exception e) {
+                    Log.e("IndividualFragment", "Error in update", e);
+                    e.printStackTrace();
                 }
 
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+                //Update Previous Residency if It is Active
+                try {
+                    Residency data = viewModel.fetchs(individual.uuid, ClusterFragment.selectedLocation.uuid);
+                    if (data != null) {
+                        ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+                        Date recordedDate = binding.getInmigration().recordedDate;
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(recordedDate);
+                        calendar.add(Calendar.DAY_OF_MONTH, -1);
+                        residencyAmendment.endType = 2;
+                        residencyAmendment.endDate = calendar.getTime();
+                        residencyAmendment.uuid = binding.getOmgg().old_residency;
+                        residencyAmendment.complete = 1;
 
-            //Update Fake Individual's Residency that was used to create the socialgroup
-            ResidencyViewModel unks = new ViewModelProvider(this).get(ResidencyViewModel.class);
-            try {
-                Residency datas = unks.unk(socialgroup.uuid);
-                if (datas != null) {
-                    ResidencyAmendment residencyAmendment = new ResidencyAmendment();
-                    residencyAmendment.endType = 2;
-                    residencyAmendment.endDate = new Date();
-                    residencyAmendment.uuid = datas.uuid;
-                    residencyAmendment.complete = 2;
-                    unks.update(residencyAmendment);
+                        viewModel.update(residencyAmendment, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("IndividualFragment", "Omg Update successful!");
+                                    } else {
+                                        Log.d("IndividualFragment", "Omg Update Failed!");
+                                    }
+                                })
+                        );
+
+                    }
+
+                } catch (Exception e) {
+                    Log.e("IndividualFragment", "Error in update", e);
+                    e.printStackTrace();
                 }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
-            //Update Fake Individual's Residency that was used to create the socialgroup
-            IndividualViewModel unkss = new ViewModelProvider(this).get(IndividualViewModel.class);
-            try {
-                Individual datas = unkss.unk(socialgroup.extId);
-                if (datas != null) {
-                    IndividualEnd endInd = new IndividualEnd();
-                    endInd.endType = 2;
-                    endInd.uuid = datas.uuid;
-                    endInd.complete = 2;
-                    individualViewModel.dthupdate(endInd);
+                //Update Fake Individual's Residency that was used to create the socialgroup
+                try {
+                    Residency datas = viewModel.unk(socialgroup.uuid);
+                    if (datas != null) {
+                        ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+                        residencyAmendment.endType = 2;
+                        residencyAmendment.endDate = new Date();
+                        residencyAmendment.uuid = datas.uuid;
+                        residencyAmendment.complete = 2;
+
+                        viewModel.update(residencyAmendment, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("IndividualFragment", "Fake Update successful!");
+                                    } else {
+                                        Log.d("IndividualFragment", "Fake Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+                } catch (Exception e) {
+                    Log.e("IndividualFragment", "Error in update", e);
+                    e.printStackTrace();
                 }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
+                //Update Fake Individual's Residency that was used to create the socialgroup
+                try {
+                    Individual datas = individualViewModel.unk(socialgroup.extId);
+                    if (datas != null) {
+                        IndividualEnd endInd = new IndividualEnd();
+                        endInd.endType = 2;
+                        endInd.uuid = datas.uuid;
+                        endInd.complete = 2;
+
+                        individualViewModel.dthupdate(endInd, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("IndividualFragment", "Res Update successful!");
+                                    } else {
+                                        Log.d("IndividualFragment", "Res Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+
+            });
+
+            executor.shutdown();
+
+            viewModel.add(Data);
+            individualViewModel.add(finalData);
+            demographicViewModel.add(demo);
 
             }
         if (close)  {
@@ -1219,5 +1280,9 @@ public class IndividualFragment extends Fragment {
         public String toString() {
             return bundleKey;
         }
+    }
+
+    public void denoInfo(View view) {
+        showDialogInfo(null, DENO_INFO);
     }
 }

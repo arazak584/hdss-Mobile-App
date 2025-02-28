@@ -3,11 +3,13 @@ package org.openhds.hdsscapture.Viewmodel;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Consumer;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.RelationshipRepository;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Relationship;
+import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
 
 import java.util.Date;
@@ -54,8 +56,8 @@ public class RelationshipViewModel extends AndroidViewModel {
         relationshipRepository.create(data);
     }
 
-    public int update(RelationshipUpdate s){
-        return relationshipRepository.update(s);
+    public void update(RelationshipUpdate s, Consumer<Integer> callback) {
+        relationshipRepository.update(s, callback);
     }
 
 }

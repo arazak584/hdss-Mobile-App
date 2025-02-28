@@ -2,6 +2,9 @@ package org.openhds.hdsscapture.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Utilities.Handler;
+import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
@@ -26,11 +29,9 @@ import org.openhds.hdsscapture.databinding.FragmentVaccinationBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
-import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -42,6 +43,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -946,7 +949,7 @@ public class VaccinationFragment extends Fragment {
         });
 
         binding.setEventname(AppConstants.EVENT_VAC);
-        Handler.colorLayouts(requireContext(), binding.VACLAYOUT);
+        HandlerSelect.colorLayouts(requireContext(), binding.VACLAYOUT);
         View view = binding.getRoot();
         return view;
     }
@@ -1364,7 +1367,7 @@ public class VaccinationFragment extends Fragment {
             }
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
-            boolean hasErrors = new Handler().hasInvalidInput(binding.VACLAYOUT, validateOnComplete, false);
+            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.VACLAYOUT, validateOnComplete, false);
 
 
             if (hasErrors) {
@@ -1387,22 +1390,40 @@ public class VaccinationFragment extends Fragment {
             }
             finalData.editDate = new Date();
             finalData.complete=1;
-            viewModel.add(finalData);
+
             IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
-            try {
-                Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
-                if (data != null) {
-                    IndividualVisited visited = new IndividualVisited();
-                    visited.uuid = finalData.individual_uuid;
-                    visited.complete = 2;
-                    iview.visited(visited);
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+
+                try {
+                    Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                    if (data != null) {
+                        IndividualVisited visited = new IndividualVisited();
+                        visited.uuid = finalData.individual_uuid;
+                        visited.complete = 2;
+
+                        iview.visited(visited, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("RelationshipFragment", "visit Update successful!");
+                                    } else {
+                                        Log.d("RelationshipFragment", "visit Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+
+                } catch (Exception e) {
+                    Log.e("RelationshipFragment", "Error in update", e);
+                    e.printStackTrace();
                 }
 
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            });
+
+            executor.shutdown();
+
+            viewModel.add(finalData);
+
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
         }

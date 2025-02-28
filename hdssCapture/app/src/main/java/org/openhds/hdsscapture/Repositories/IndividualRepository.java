@@ -1,7 +1,11 @@
 package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 
+import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.AppDatabase;
@@ -44,35 +48,66 @@ public class IndividualRepository {
         });
     }
 
+//    public int update(IndividualAmendment s) {
+//        AtomicInteger row = new AtomicInteger();
+//        AppDatabase.databaseWriteExecutor.execute(() -> {
+//            int result = dao.update(s);
+//            row.set(result);
+//            Log.d("UpdateResult", "Rows updated: " + result);
+//        });
+//        return row.intValue();
+//    }
 
-    public int update(IndividualAmendment s) {
-        AtomicInteger row = new AtomicInteger();
-        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
-        return row.intValue();
+//    public int update(IndividualAmendment s) {
+//        Future<Integer> future = AppDatabase.databaseWriteExecutor.submit(() -> dao.update(s));
+//        try {
+//            return future.get(); // Waits for the update operation to complete
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return -1; // Handle the error appropriately
+//        }
+//    }
+
+    public void update(IndividualAmendment s, Consumer<Integer> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int result = dao.update(s);
+            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
     }
 
-    public int dthupdate(IndividualEnd e) {
-        AtomicInteger row = new AtomicInteger();
-        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.dthupdate(e)));
-        return row.intValue();
+    public void visited(IndividualVisited e, Consumer<Integer> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int result = dao.visited(e);
+            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
     }
 
-    public int visited(IndividualVisited e) {
-        AtomicInteger row = new AtomicInteger();
-        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.visited(e)));
-        return row.intValue();
+    public void dthupdate(IndividualEnd e, Consumer<Integer> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int result = dao.dthupdate(e);
+            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
     }
 
-    public int contact(IndividualPhone e) {
-        AtomicInteger row = new AtomicInteger();
-        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.contact(e)));
-        return row.intValue();
+
+//    public int dthupdate(IndividualEnd e) {
+//        AtomicInteger row = new AtomicInteger();
+//        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.dthupdate(e)));
+//        return row.intValue();
+//    }
+
+    public void contact(IndividualPhone e, Consumer<Integer> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int result = dao.contact(e);
+            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
     }
 
-    public int updateres(IndividualResidency e) {
-        AtomicInteger row = new AtomicInteger();
-        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.updateres(e)));
-        return row.intValue();
+    public void updateres(IndividualResidency e, Consumer<Integer> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int result = dao.updateres(e);
+            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
     }
 
     public Individual findAll(String id) throws ExecutionException, InterruptedException {

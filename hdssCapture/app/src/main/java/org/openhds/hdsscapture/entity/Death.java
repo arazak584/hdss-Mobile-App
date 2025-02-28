@@ -567,6 +567,7 @@ public class Death extends BaseObservable implements Parcelable {
             deathCause = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            patternSkipper(view);
         }
 
     }
