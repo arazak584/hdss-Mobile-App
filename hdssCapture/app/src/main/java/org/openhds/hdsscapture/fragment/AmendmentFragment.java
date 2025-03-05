@@ -505,28 +505,28 @@ public class AmendmentFragment extends DialogFragment {
 //                    Thread.currentThread().interrupt();
 //                }
 
-                try {
-                    // Second block - visited update (with different variable name)
-                    Individual visitedData = individualViewModel.visited(HouseMembersFragment.selectedIndividual.uuid);
-                    if (visitedData != null) {
-                        IndividualVisited visited = new IndividualVisited();
-                        visited.uuid = binding.getAmendment().individual_uuid;
-                        visited.complete = 2;
-
-                        individualViewModel.visited(visited, result ->
-                                new Handler(Looper.getMainLooper()).post(() -> {
-                                    if (result > 0) {
-                                        Log.d("AmendmentFragment", "Visit Update successful!");
-                                    } else {
-                                        Log.d("AmendmentFragment", "Visit Update Failed!");
-                                    }
-                                })
-                        );
-                    }
-                } catch (Exception e) {
-                    Log.e("AmendmentFragment", "Error in visited update", e);
-                    e.printStackTrace();
-                }
+//                try {
+//                    // Second block - visited update (with different variable name)
+//                    Individual visitedData = individualViewModel.visited(HouseMembersFragment.selectedIndividual.uuid);
+//                    if (visitedData != null) {
+//                        IndividualVisited visited = new IndividualVisited();
+//                        visited.uuid = binding.getAmendment().individual_uuid;
+//                        visited.complete = 1;
+//
+//                        individualViewModel.visited(visited, result ->
+//                                new Handler(Looper.getMainLooper()).post(() -> {
+//                                    if (result > 0) {
+//                                        Log.d("AmendmentFragment", "Visit Update successful!");
+//                                    } else {
+//                                        Log.d("AmendmentFragment", "Visit Update Failed!");
+//                                    }
+//                                })
+//                        );
+//                    }
+//                } catch (Exception e) {
+//                    Log.e("AmendmentFragment", "Error in visited update", e);
+//                    e.printStackTrace();
+//                }
             });
 
             executor.shutdown();

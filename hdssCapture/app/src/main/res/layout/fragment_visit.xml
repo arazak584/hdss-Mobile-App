@@ -168,11 +168,9 @@
         <AutoCompleteTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="start"
             android:padding="5dp"
             android:hint="@string/respondent"
             android:id="@+id/visit_respondent"
-            android:textSize="22sp"
             android:text="@={visit.respondent}"
             android:inputType="textCapCharacters"/>
 

@@ -385,7 +385,7 @@ public class RelationshipFragment extends Fragment {
                     if (data != null) {
                         IndividualVisited visited = new IndividualVisited();
                         visited.uuid = finalData.individualA_uuid;
-                        visited.complete = 2;
+                        visited.complete = 1;
 
                         iview.visited(visited, result ->
                                 new Handler(Looper.getMainLooper()).post(() -> {

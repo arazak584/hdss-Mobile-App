@@ -413,25 +413,34 @@ public class ListingFragment extends Fragment {
 
         if (isInternetAvailable()) {
             // Use faster network-based location first
-            fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY, null)
+            fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, null)
                     .addOnSuccessListener(requireActivity(), location -> {
                         if (location != null) {
                             updateLocationUI(location);
-                            progressBar.setVisibility(View.GONE);
-                            return;
+                            if (location.getAccuracy() <= 10.0f) {
+                                progressBar.setVisibility(View.GONE);
+                                statusText.setText("Target accuracy reached: " + location.getAccuracy() + "m");
+                            } else {
+                                requestNewLocation();
+                            }
+                        } else {
+                            requestNewLocation();
                         }
-                        // If no network-based location, use GPS
-                        requestNewLocation();
                     });
         } else {
             // If no internet, use GPS directly
             fusedLocationClient.getLastLocation().addOnSuccessListener(requireActivity(), location -> {
                 if (location != null && System.currentTimeMillis() - location.getTime() < 60000) {
                     updateLocationUI(location);
-                    progressBar.setVisibility(View.GONE);
-                    return;
+                    if (location.getAccuracy() <= 10.0f) {
+                        progressBar.setVisibility(View.GONE);
+                        statusText.setText("Target accuracy reached: " + location.getAccuracy() + "m");
+                    } else {
+                        requestNewLocation();
+                    }
+                } else {
+                    requestNewLocation();
                 }
-                requestNewLocation();
             });
         }
     }
@@ -447,9 +456,9 @@ public class ListingFragment extends Fragment {
     private void requestNewLocation() {
         LocationRequest locationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY) // Use GPS when needed
-                .setInterval(500)
-                .setFastestInterval(500)
-                .setNumUpdates(30);
+                .setInterval(1000) // Increased interval to 1 second
+                .setFastestInterval(1000)
+                .setNumUpdates(10); // Reduced number of updates
 
         locationCallback = new LocationCallback() {
             private Location bestLocation;
@@ -473,7 +482,6 @@ public class ListingFragment extends Fragment {
 
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
     }
-
 
     private void updateLocationUI(Location location) {
         latitudeEditText.setText(String.format("%.6f", location.getLatitude()));

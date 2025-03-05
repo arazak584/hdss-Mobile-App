@@ -370,6 +370,8 @@ public class IndividualFragment extends Fragment {
                 binding.setIndividual(data);
                 binding.individualExtid.setEnabled(false);
 
+                Log.d("Individual", "Individual Complete Status: " + data.complete);
+
                 String indid = data.getExtId();
                 if (indid.length() != 12) {
                     String id = UniqueIDGen.generateUniqueId(individualViewModel, ClusterFragment.selectedLocation.compextId);
