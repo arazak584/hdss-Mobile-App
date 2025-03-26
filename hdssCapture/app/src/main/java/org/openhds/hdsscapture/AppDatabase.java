@@ -221,7 +221,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     "complete INTEGER, " +
                     "fw_uuid TEXT)");
             // Create indices
-            database.execSQL("CREATE INDEX index_registry_individual_uuid_fw_uuid_complete_socialgroup_uuid ON registry(individual_uuid, fw_uuid, complete, socialgroup_uuid)");
+            database.execSQL("CREATE INDEX IF NOT EXISTS index_registry_individual_uuid_fw_uuid_complete_socialgroup_uuid ON registry(individual_uuid, fw_uuid, complete, socialgroup_uuid)");
         }
     };
 
@@ -270,7 +270,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     "compno TEXT)");
 
             // Create indices
-            database.execSQL("CREATE INDEX index_morbidity_individual_uuid_fw_uuid_complete_socialgroup_uuid ON morbidity(individual_uuid, fw_uuid, complete, socialgroup_uuid)");
+            database.execSQL("CREATE INDEX IF NOT EXISTS index_morbidity_individual_uuid_fw_uuid_complete_socialgroup_uuid ON morbidity(individual_uuid, fw_uuid, complete, socialgroup_uuid)");
         }
     };
 

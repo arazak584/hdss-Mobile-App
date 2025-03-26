@@ -47,6 +47,14 @@ public class MorbidityRepository {
 
         return future.get();
     }
+    public Morbidity ins(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Morbidity> callable = () -> dao.ins(id);
+
+        Future<Morbidity> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
 
 
     public List<Morbidity> retrieveToSync() throws ExecutionException, InterruptedException {

@@ -44,6 +44,15 @@ public class InmigrationRepository {
         return future.get();
     }
 
+    public Inmigration ins(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Inmigration> callable = () -> dao.ins(id);
+
+        Future<Inmigration> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Inmigration> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Inmigration>> callable = () -> dao.retrieveimgToSync();

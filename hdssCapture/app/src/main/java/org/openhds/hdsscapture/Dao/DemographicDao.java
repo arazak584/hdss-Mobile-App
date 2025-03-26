@@ -9,6 +9,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
@@ -52,6 +53,9 @@ public interface DemographicDao {
 
     @Query("SELECT * FROM demographic where individual_uuid=:id")
     Demographic find(String id);
+
+    @Query("SELECT * FROM demographic where individual_uuid=:id ")
+    Demographic ins(String id);
 
     @Query("SELECT COUNT(*) FROM demographic a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE a.insertDate BETWEEN :startDate AND :endDate AND b.username = :username")

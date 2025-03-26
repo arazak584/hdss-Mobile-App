@@ -26,6 +26,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
 import org.openhds.hdsscapture.Adapter.RemainderAdapter;
 import org.openhds.hdsscapture.Adapter.ReportAdapter;
+import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
@@ -156,22 +157,24 @@ public class RemainderActivity extends AppCompatActivity {
         }
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        new AlertDialog.Builder(this)
-//                .setTitle(getString(R.string.exit_confirmation_title))
-//                .setMessage(getString(R.string.exiting_lbl))
-//                .setCancelable(false)
-//                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        try{
-//                            RemainderActivity.this.finish();
-//                        }
-//                        catch(Exception e){}
-//                    }
-//                })
-//                .setNegativeButton(getString(R.string.no), null)
-//                .show();
-//    }
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.exit_confirmation_title))
+                .setMessage(getString(R.string.exiting_lbl))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Start MainActivity
+                        Intent intent = new Intent(RemainderActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                        // Finish the current activity
+                        RemainderActivity.this.finish();
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), null)
+                .show();
+    }
 
 }

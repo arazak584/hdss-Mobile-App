@@ -26,6 +26,10 @@ public class VaccinationViewModel extends AndroidViewModel {
         return vaccinationRepository.find(id);
     }
 
+    public Vaccination ins(String id) throws ExecutionException, InterruptedException {
+        return vaccinationRepository.ins(id);
+    }
+
     public List<Vaccination> findToSync() throws ExecutionException, InterruptedException {
         return vaccinationRepository.findToSync();
     }

@@ -52,6 +52,12 @@ public class OutcomeRepository {
         return future.get();
     }
 
+    public long cnt(String id) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.cnt(id);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
     public Outcome find(String id,String locid) throws ExecutionException, InterruptedException {
         Callable<Outcome> callable = () -> dao.find(id,locid);
         Future<Outcome> future = Executors.newSingleThreadExecutor().submit(callable);

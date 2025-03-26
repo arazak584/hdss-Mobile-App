@@ -136,6 +136,12 @@ public class PregnancyoutcomeRepository {
         return future.get();
     }
 
+    public long cnt(String id) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.cnt(id);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
     public List<Pregnancyoutcome> reject(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Pregnancyoutcome>> callable = () -> dao.reject(id);

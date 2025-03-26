@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import org.openhds.hdsscapture.entity.Inmigration;
+import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
 import java.util.Date;
@@ -38,4 +39,7 @@ public interface InmigrationDao {
 
     @Query("SELECT COUNT(*) FROM inmigration WHERE status=2 AND fw_uuid = :uuid ")
     long rej(String uuid);
+
+    @Query("SELECT * FROM inmigration where uuid=:id")
+    Inmigration ins(String id);
 }

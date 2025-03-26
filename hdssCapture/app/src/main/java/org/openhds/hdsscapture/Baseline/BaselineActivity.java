@@ -2,8 +2,10 @@ package org.openhds.hdsscapture.Baseline;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +20,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.Activity.LocationActivity;
+import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
@@ -30,6 +33,7 @@ public class BaselineActivity extends AppCompatActivity {
     public static Locations TOP_LOCATION = new Locations();
     private Locations locations;
     private Socialgroup socialgroup;
+    private String fwname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,10 @@ public class BaselineActivity extends AppCompatActivity {
 
         final Intent f = getIntent();
         final Fieldworker fieldworkerData = f.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
+        // Retrieve fw_uuid from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        fwname = sharedPreferences.getString(LoginActivity.FW_NAME, null);
 
         //Toast.makeText(BaselineActivity.this, "Welcome " + fieldworkerData.firstName + " " + fieldworkerData.lastName, Toast.LENGTH_LONG).show();
 
@@ -67,7 +75,7 @@ public class BaselineActivity extends AppCompatActivity {
         }
 
         if (fw != null) {
-            fw.setText(fieldworkerData.firstName + " " + fieldworkerData.lastName);
+            fw.setText(fwname);
         } else {
             // Handle the case where location is null
             fw.setText("Error loading Fieldworker data");

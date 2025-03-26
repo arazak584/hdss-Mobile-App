@@ -30,6 +30,9 @@ public class HdssSociodemoViewModel extends AndroidViewModel {
     public HdssSociodemo findses(String id) throws ExecutionException, InterruptedException {
         return hdssSociodemoRepository.findses(id);
     }
+    public HdssSociodemo ins(String id) throws ExecutionException, InterruptedException {
+        return hdssSociodemoRepository.ins(id);
+    }
 
     public List<HdssSociodemo> findToSync() throws ExecutionException, InterruptedException {
         return hdssSociodemoRepository.findToSync();
@@ -49,6 +52,10 @@ public class HdssSociodemoViewModel extends AndroidViewModel {
 
     public long rej(String uuid) throws ExecutionException, InterruptedException {
         return hdssSociodemoRepository.rej(uuid);
+    }
+
+    public long cnt() throws ExecutionException, InterruptedException {
+        return hdssSociodemoRepository.cnt();
     }
 
     public List<HdssSociodemo> error() throws ExecutionException, InterruptedException {

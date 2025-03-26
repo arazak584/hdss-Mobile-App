@@ -37,6 +37,11 @@ OutcomeDao {
             "WHERE b.uuid is NULL and endType=1 AND d.fw_uuid= :id ")
     List<Outcome> error(String id);
 
+    @Query("SELECT COUNT(*) FROM outcome as a left join pregnancyoutcome as b on a.preg_uuid=b.uuid " +
+            " INNER JOIN individual as c on a.mother_uuid=c.uuid INNER JOIN visit d on a.location=d.location_uuid " +
+            "WHERE b.uuid is NULL and endType=1 AND d.fw_uuid= :id ")
+    long cnt(String id);
+
     @Query("SELECT * FROM outcome where uuid=:id AND location=:locid")
     Outcome find(String id,String locid);
 }

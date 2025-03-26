@@ -19,7 +19,7 @@ import org.openhds.hdsscapture.entity.subqueries.Queries;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ErrorAdapter extends RecyclerView.Adapter<ErrorAdapter.ViewHolder>{
+public class QueryAdapter extends RecyclerView.Adapter<QueryAdapter.ViewHolder>{
 
     QueryActivity activity;
     LayoutInflater inflater;
@@ -29,13 +29,13 @@ public class ErrorAdapter extends RecyclerView.Adapter<ErrorAdapter.ViewHolder>{
 
     private final Context context;
 
-    public ErrorAdapter(Context context) {
+    public QueryAdapter(Context context) {
         this.context = context;
         this.queries = new ArrayList<>();
     }
 
 
-    public ErrorAdapter(QueryActivity activity) {
+    public QueryAdapter(QueryActivity activity) {
         this.activity = activity;
         this.queries = new ArrayList<>();
         inflater = LayoutInflater.from(activity);
@@ -80,14 +80,14 @@ public class ErrorAdapter extends RecyclerView.Adapter<ErrorAdapter.ViewHolder>{
 
     @NonNull
     @Override
-    public ErrorAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public QueryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View listItem = inflater.inflate(R.layout.query_item, parent, false);
-        ErrorAdapter.ViewHolder viewHolder = new ErrorAdapter.ViewHolder(listItem);
+        QueryAdapter.ViewHolder viewHolder = new QueryAdapter.ViewHolder(listItem);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ErrorAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull QueryAdapter.ViewHolder holder, int position) {
         final Queries item = queries.get(position);
         holder.title.setText(item.name);
         holder.edate.setText(item.date);

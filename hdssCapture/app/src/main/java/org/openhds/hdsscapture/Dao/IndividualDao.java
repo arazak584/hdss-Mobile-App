@@ -311,6 +311,23 @@ public interface IndividualDao {
             "strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) <(SELECT hoh_age from config)")
     long errs(String id, String ids);
 
+    @Query("SELECT COUNT(*) FROM individual as a INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
+            " WHERE firstName!='FAKE' and endType=1 and " +
+            " strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) < (SELECT hoh_age from config) GROUP BY b.extId order by dob")
+    long cnt();
+
+    @Query("SELECT COUNT(*) FROM individual as a INNER JOIN socialgroup b on a.hohID=b.extId " +
+            " WHERE firstName!='FAKE' and groupName='UNK' and endType=1 " +
+            " GROUP BY b.extId")
+    long cnts();
+
+    @Query("SELECT a.* FROM individual AS a WHERE a.firstName != 'FAKE' AND endType = 1 " +
+            "AND hohID IN ( " +
+            "    SELECT hohID FROM individual WHERE endType = 1 GROUP BY hohID " +
+            "    HAVING MAX(STRFTIME('%Y', 'now') - STRFTIME('%Y', DATE(dob/1000, 'unixepoch'))) < (SELECT hoh_age from config)" +
+            ") GROUP BY hohID " +
+            "ORDER BY compno")
+    long cntss();
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)

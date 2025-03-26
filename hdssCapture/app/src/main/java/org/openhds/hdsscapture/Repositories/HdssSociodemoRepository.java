@@ -48,6 +48,14 @@ public class HdssSociodemoRepository {
 
         return future.get();
     }
+    public HdssSociodemo ins(String id) throws ExecutionException, InterruptedException {
+
+        Callable<HdssSociodemo> callable = () -> dao.ins(id);
+
+        Future<HdssSociodemo> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
 
 
     public List<HdssSociodemo> findToSync() throws ExecutionException, InterruptedException {
@@ -82,6 +90,12 @@ public class HdssSociodemoRepository {
 
     public long rej(String uuid) throws ExecutionException, InterruptedException {
         Callable<Long> callable = () -> dao.rej(uuid);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    public long cnt() throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.cnt();
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }

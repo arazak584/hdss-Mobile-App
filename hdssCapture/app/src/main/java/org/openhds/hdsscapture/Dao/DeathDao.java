@@ -65,10 +65,19 @@ public interface DeathDao {
     @Query("SELECT COUNT(*) FROM death WHERE status=2 AND fw_uuid = :uuid ")
     long rej(String uuid);
 
+    @Query("SELECT COUNT(*) FROM death as a INNER JOIN socialgroup as b ON a.individual_uuid=b.individual_uuid " +
+            " INNER JOIN residency as c on b.uuid=c.socialgroup_uuid " +
+            " INNER JOIN individual as d on c.individual_uuid=d.uuid " +
+            "where c.endType=1 and a.firstName!='Still' AND d.firstName!='FAKE' AND a.edit!=2 GROUP BY a.individual_uuid")
+    long cnt();
+
     @Query("SELECT COUNT(DISTINCT d.uuid) FROM death as a INNER JOIN socialgroup as b ON a.individual_uuid=b.individual_uuid " +
             " INNER JOIN residency as c on b.uuid=c.socialgroup_uuid " +
             " INNER JOIN individual as d on c.individual_uuid=d.uuid " +
             "where c.endType=1 and a.firstName!='Still' AND d.firstName!='FAKE' AND a.edit!=2 AND d.hohID = :id AND d.compno = :ids ")
     long err(String id, String ids);
+
+    @Query("SELECT * FROM death where uuid=:id")
+    Death ins(String id);
 
 }

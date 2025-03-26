@@ -66,6 +66,14 @@ public class RelationshipRepository {
 
         return future.get();
     }
+    public Relationship ins(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Relationship> callable = () -> dao.ins(id);
+
+        Future<Relationship> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
 
     public Relationship finds(String id) throws ExecutionException, InterruptedException {
 

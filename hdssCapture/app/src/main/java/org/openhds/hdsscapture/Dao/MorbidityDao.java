@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Locations;
 
@@ -43,7 +44,10 @@ public interface MorbidityDao {
     List<Morbidity> retrieve(String id);
 
     @Query("SELECT * FROM morbidity WHERE individual_uuid=:id")
-   Morbidity find(String id);
+    Morbidity find(String id);
+
+    @Query("SELECT * FROM morbidity where uuid=:id ")
+    Morbidity ins(String id);
 
     @Query("SELECT * FROM morbidity WHERE complete=1")
     List<Morbidity> retrieveToSync();

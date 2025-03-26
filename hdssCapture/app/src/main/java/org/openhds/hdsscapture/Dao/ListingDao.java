@@ -47,4 +47,9 @@ public interface ListingDao {
     @Query("SELECT COUNT(*) FROM listing WHERE village=:id")
     long done(String id);
 
+    @Query("SELECT COUNT(*) FROM visit as a INNER JOIN locations c on a.location_uuid=c.uuid" +
+            " LEFT JOIN listing as b ON a.location_uuid=b.location_uuid" +
+            " where b.location_uuid IS NULL GROUP BY a.location_uuid")
+    long cnt();
+
 }

@@ -1,7 +1,11 @@
 package org.openhds.hdsscapture.Activity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -14,7 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.openhds.hdsscapture.Adapter.ErrorAdapter;
+import org.openhds.hdsscapture.Adapter.QueryAdapter;
+import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
@@ -54,7 +59,7 @@ public class QueryActivity extends AppCompatActivity {
     private ProgressDialog progress;
     private RecyclerView recyclerView;
 
-    private ErrorAdapter errorAdapter;
+    private QueryAdapter errorAdapter;
     private List<Queries> filterAll;
     private SearchView searchView;
     private String username;
@@ -70,7 +75,10 @@ public class QueryActivity extends AppCompatActivity {
 
         final Intent z = getIntent();
         final Fieldworker fieldworkerDatas = z.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
-        username = fieldworkerDatas.getFw_uuid();
+
+        // Retrieve fw_uuid from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        username = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
 
         // Set a query hint
         searchView.setQueryHint(getString(R.string.search));
@@ -86,6 +94,7 @@ public class QueryActivity extends AppCompatActivity {
         pregnancyoutcomeViewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
 
         Button generateQueryButton = findViewById(R.id.btn_query);
+        query();
 
         generateQueryButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -264,7 +273,7 @@ public class QueryActivity extends AppCompatActivity {
 
             filterAll = new ArrayList<>(list);
 
-            errorAdapter = new ErrorAdapter(this);
+            errorAdapter = new QueryAdapter(this);
             errorAdapter.setQueries(list);
             RecyclerView recyclerView = findViewById(R.id.my_recycler_view_query);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -307,6 +316,25 @@ public class QueryActivity extends AppCompatActivity {
         errorAdapter.setQueries(filterNames); // Update the adapter with filtered data
     }
 
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.exit_confirmation_title))
+                .setMessage(getString(R.string.exiting_lbl))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Start MainActivity
+                        Intent intent = new Intent(QueryActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                        // Finish the current activity
+                        QueryActivity.this.finish();
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), null)
+                .show();
+    }
 
 
 }

@@ -376,6 +376,21 @@ public class IndividualRepository {
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }
+    public long cnt() throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.cnt();
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+    public long cnts() throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.cnts();
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+    public long cntss() throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.cntss();
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
 
     public List<Individual> error() throws ExecutionException, InterruptedException {
 

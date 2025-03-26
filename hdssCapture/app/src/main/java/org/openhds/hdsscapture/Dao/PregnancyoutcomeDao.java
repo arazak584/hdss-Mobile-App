@@ -5,6 +5,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
@@ -91,4 +92,8 @@ PregnancyoutcomeDao {
     @Query("SELECT a.uuid,b.extId as pregnancy_uuid,b.compno as location,b.firstName as mother_uuid,b.lastName as father_uuid FROM pregnancyoutcome a " +
             " INNER JOIN individual as b on a.mother_uuid=b.uuid WHERE a.complete IS NULL AND a.fw_uuid = :id ")
     List<Pregnancyoutcome> error(String id);
+
+    @Query("SELECT COUNT(*) FROM pregnancyoutcome a " +
+            " INNER JOIN individual as b on a.mother_uuid=b.uuid WHERE a.complete IS NULL AND a.fw_uuid = :id ")
+    long cnt(String id);
 }

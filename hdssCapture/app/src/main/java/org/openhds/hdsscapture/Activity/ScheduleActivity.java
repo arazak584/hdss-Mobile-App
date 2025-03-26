@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -22,6 +25,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import org.openhds.hdsscapture.Adapter.RemainderAdapter;
 import org.openhds.hdsscapture.Adapter.ViewsAdapter;
 import org.openhds.hdsscapture.Adapter.WorkAdapter;
+import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
@@ -146,6 +150,26 @@ public class ScheduleActivity extends AppCompatActivity {
         if (progress != null && progress.isShowing()) {
             progress.dismiss();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.exit_confirmation_title))
+                .setMessage(getString(R.string.exiting_lbl))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Start MainActivity
+                        Intent intent = new Intent(ScheduleActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                        // Finish the current activity
+                        ScheduleActivity.this.finish();
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), null)
+                .show();
     }
 
 }

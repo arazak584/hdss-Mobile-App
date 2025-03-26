@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -40,6 +41,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
+import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.ClusterDialogFragment;
 import org.openhds.hdsscapture.R;
@@ -84,6 +86,8 @@ public class ListingFragment extends Fragment {
     private LocationCallback locationCallback;
     private ProgressBar progressBar;
     private TextView statusText;
+    private String fw;
+    private String fwname;
     private EditText latitudeEditText, longitudeEditText, accuracyEditText;
 
     public ListingFragment() {
@@ -213,6 +217,11 @@ public class ListingFragment extends Fragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
+        // Retrieve fw_uuid from SharedPreferences
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        fw = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
+        fwname = sharedPreferences.getString(LoginActivity.FW_NAME, null);
+
         final Intent intent = getActivity().getIntent();
         final Hierarchy level5Data = intent.getParcelableExtra(HierarchyActivity.LEVEL5_DATA);
 
@@ -240,12 +249,12 @@ public class ListingFragment extends Fragment {
             } else {
                 data = new Listing();
 
-                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.fw_uuid = fw;
                 //data.compextId = ClusterFragment.selectedLocation.getCompextId();
                 data.compno = ClusterFragment.selectedLocation.getCompno();
                 data.status = ClusterFragment.selectedLocation.getStatus();
                 data.village = level6Data.getName();
-                data.fw_name = fieldworkerData.getFirstName() + ' ' + fieldworkerData.lastName ;
+                data.fw_name = fwname;
                 data.locationName = ClusterFragment.selectedLocation.getLocationName();
                 data.location_uuid = ClusterFragment.selectedLocation.getUuid();
                 data.vill_extId = level6Data.getExtId();

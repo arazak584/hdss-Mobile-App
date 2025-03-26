@@ -48,6 +48,9 @@ public interface HdssSociodemoDao {
     @Query("SELECT * FROM sociodemo WHERE socialgroup_uuid=:id")
    HdssSociodemo findses(String id);
 
+    @Query("SELECT * FROM sociodemo where uuid=:id ")
+    HdssSociodemo ins(String id);
+
     @Query("SELECT * FROM sociodemo WHERE complete=1")
     List<HdssSociodemo> retrieveToSync();
 
@@ -73,4 +76,9 @@ public interface HdssSociodemoDao {
             " INNER JOIN locations as c on a.location_uuid=c.uuid " +
             " where a.form_comments_yn IS NULL GROUP BY a.socialgroup_uuid")
     List<HdssSociodemo> error();
+
+    @Query("SELECT COUNT(*) FROM sociodemo as a INNER JOIN socialgroup as b ON a.socialgroup_uuid=b.uuid " +
+            " INNER JOIN locations as c on a.location_uuid=c.uuid " +
+            " where a.form_comments_yn IS NULL GROUP BY a.socialgroup_uuid")
+    long cnt();
 }

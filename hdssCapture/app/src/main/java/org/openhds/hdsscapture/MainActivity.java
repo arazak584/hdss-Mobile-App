@@ -361,9 +361,14 @@ public class MainActivity extends AppCompatActivity {
 
         final Intent f = getIntent();
         final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
-        fw = fieldworkerDatas.getUsername();
-        fws = fieldworkerDatas.getFw_uuid();
-        status = (fieldworkerDatas != null) ? fieldworkerDatas.getStatus() : 0;  // Default to 0 or another appropriate value
+
+        // Retrieve login details from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        fw = sharedPreferences.getString(LoginActivity.FW_USERNAME_KEY, null);
+        fws = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
+        status = sharedPreferences.getInt(LoginActivity.FW_STATUS, 0);
+
+        //status = (fieldworkerDatas != null) ? fieldworkerDatas.getStatus() : 0;  // Default to 0 or another appropriate value
         //calculatePercentage();
         //Toast.makeText(MainActivity.this, "Welcome " + fieldworkerDatas.firstName + " " + fieldworkerDatas.lastName, Toast.LENGTH_LONG).show();
         //Toast.makeText(MainActivity.this, "Welcome " + status, Toast.LENGTH_LONG).show();
@@ -392,7 +397,7 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
         send.setOnClickListener(v -> {
-            if (fieldworkerDatas != null && fieldworkerDatas.status != null && fieldworkerDatas.status == 1) {
+            if (status == 1) {
                 Intent i = new Intent(getApplicationContext(), PushActivity.class);
                 startActivity(i);
             } else {
@@ -403,7 +408,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Button pull = findViewById(R.id.btnpull);
         pull.setOnClickListener(v -> {
-            if (fieldworkerDatas != null && fieldworkerDatas.status != null && fieldworkerDatas.status == 2) {
+            if (status == 2) {
                 Intent i = new Intent(getApplicationContext(), PullActivity.class);
                 startActivity(i);
             } else {
@@ -439,19 +444,12 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         });
 
-//        reject = findViewById(R.id.btnReject);
-//        reject.setText("REJECTIONS");
-//        reject.setOnClickListener(v -> {
-//            Intent i = new Intent(getApplicationContext(), RejectionsActivity.class);
-//            i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
-//            startActivity(i);
-//        });
 
         final Button info = findViewById(R.id.btninfo);
         info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (fieldworkerDatas != null && fieldworkerDatas.status != null && fieldworkerDatas.status == 1) {
+                if (status == 1) {
                     InfoFragment dialogFragment = new InfoFragment();
                     dialogFragment.show(getSupportFragmentManager(), "InfoFragment");
                 } else {
@@ -474,7 +472,7 @@ public class MainActivity extends AppCompatActivity {
         buttonReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (fieldworkerDatas != null && fieldworkerDatas.status != null && fieldworkerDatas.status == 2) {
+                if (status == 2) {
                     androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(MainActivity.this);
                     builder.setMessage("Are you sure you want to reset the database?")
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -536,10 +534,12 @@ public class MainActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        try{
-                            MainActivity.this.finish();
-                        }
-                        catch(Exception e){}
+                        // Start MainActivity
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                        // Finish the current activity
+                        MainActivity.this.finish();
                     }
                 })
                 .setNegativeButton(getString(R.string.no), null)

@@ -38,6 +38,9 @@ public class ListingViewModel extends AndroidViewModel {
     public long done(String id) throws ExecutionException, InterruptedException {
         return listingRepository.done(id);
     }
+    public long cnt() throws ExecutionException, InterruptedException {
+        return listingRepository.cnt();
+    }
 
     public List<Listing> error() throws ExecutionException, InterruptedException {
         return listingRepository.error();

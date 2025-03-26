@@ -53,6 +53,14 @@ public class DemographicRepository {
 
         return future.get();
     }
+    public Demographic ins(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Demographic> callable = () -> dao.ins(id);
+
+        Future<Demographic> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
 
     public List<Demographic> error() throws ExecutionException, InterruptedException {
 

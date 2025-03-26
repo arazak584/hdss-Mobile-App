@@ -9,6 +9,7 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Death;
+import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
@@ -51,6 +52,9 @@ public interface RelationshipDao {
 
     @Query("SELECT * FROM relationship where individualA_uuid=:id")
     Relationship find(String id);
+
+    @Query("SELECT * FROM relationship where uuid=:id")
+    Relationship ins(String id);
 
     @Query("SELECT * FROM relationship where individualB_uuid=:id")
     Relationship finds(String id);

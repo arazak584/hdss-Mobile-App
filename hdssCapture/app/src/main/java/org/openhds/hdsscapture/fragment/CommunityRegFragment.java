@@ -177,9 +177,6 @@ public class CommunityRegFragment extends DialogFragment {
         });
 
 
-        final Intent i = getActivity().getIntent();
-        final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
-
         CommunityViewModel viewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
         try {
             CommunityReport data = viewModel.find(communityUuid.toString());

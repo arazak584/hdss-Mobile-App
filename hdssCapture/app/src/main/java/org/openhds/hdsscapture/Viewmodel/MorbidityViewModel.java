@@ -29,6 +29,9 @@ public class MorbidityViewModel extends AndroidViewModel {
     public Morbidity finds(String id) throws ExecutionException, InterruptedException {
         return morbidityRepository.finds(id);
     }
+    public Morbidity ins(String id) throws ExecutionException, InterruptedException {
+        return morbidityRepository.ins(id);
+    }
 
     public List<Morbidity> retrieveToSync() throws ExecutionException, InterruptedException {
         return morbidityRepository.retrieveToSync();

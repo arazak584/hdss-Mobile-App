@@ -44,6 +44,14 @@ public class VaccinationRepository {
 
         return future.get();
     }
+    public Vaccination ins(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Vaccination> callable = () -> dao.ins(id);
+
+        Future<Vaccination> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
 
     public List<Vaccination> findToSync() throws ExecutionException, InterruptedException {
 

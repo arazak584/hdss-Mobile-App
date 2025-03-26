@@ -89,6 +89,10 @@ public class PregnancyoutcomeViewModel extends AndroidViewModel {
         return pregnancyoutcomeRepository.rej(uuid);
     }
 
+    public long cnt(String id) throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.cnt(id);
+    }
+
     public List<Pregnancyoutcome> reject(String id) throws ExecutionException, InterruptedException {
         return pregnancyoutcomeRepository.reject(id);
     }

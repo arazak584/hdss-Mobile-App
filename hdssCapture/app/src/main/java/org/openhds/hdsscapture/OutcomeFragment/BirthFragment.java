@@ -1,7 +1,9 @@
 package org.openhds.hdsscapture.OutcomeFragment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
+import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.FatherOutcomeDialogFragment;
 import org.openhds.hdsscapture.R;
@@ -70,6 +73,7 @@ public class BirthFragment extends Fragment {
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private final String TAG = "OUTCOME.TAG";
+    private String fw;
 
     private Locations locations;
     private Socialgroup socialgroup;
@@ -178,8 +182,9 @@ public class BirthFragment extends Fragment {
             newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
         });
 
-        final Intent i = getActivity().getIntent();
-        final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+        // Retrieve fw_uuid from SharedPreferences
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        fw = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
 
         final Intent j = getActivity().getIntent();
         final Hierarchy level6Data = j.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
@@ -249,7 +254,7 @@ public class BirthFragment extends Fragment {
                 final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
-                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.fw_uuid = fw;
                 data.uuid = uuidString;
                 data.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 //data.complete = 1;

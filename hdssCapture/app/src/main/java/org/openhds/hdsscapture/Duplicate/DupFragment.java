@@ -1,7 +1,9 @@
 package org.openhds.hdsscapture.Duplicate;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
+import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
@@ -62,6 +65,7 @@ public class DupFragment extends DialogFragment {
     private static final String CASE_ID = "CASE_ID";
     private static final String EVENT_ID = "EVENT_ID";
     private final String TAG = "DUP.TAG";
+    private String fw;
 
     private Locations locations;
     private Residency residency;
@@ -116,6 +120,10 @@ public class DupFragment extends DialogFragment {
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
+        // Retrieve fw_uuid from SharedPreferences
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        fw = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_dup);
         Button showDialogButton1 = binding.getRoot().findViewById(R.id.button1_dup);
@@ -208,7 +216,7 @@ public class DupFragment extends DialogFragment {
             } else {
                 data = new Duplicate();
 
-                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.fw_uuid = fw;
                 data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.fname = HouseMembersFragment.selectedIndividual.getFirstName();
                 data.lname = HouseMembersFragment.selectedIndividual.getLastName();
@@ -255,9 +263,6 @@ public class DupFragment extends DialogFragment {
             boolean dup1 = false;
             boolean dup2 = false;
             boolean dup3 = false;
-
-            final Intent i = getActivity().getIntent();
-            final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
             if (binding.uuid.getText().toString().trim().equals(binding.dupUuid.getText().toString().trim())) {
                 sameID = true;

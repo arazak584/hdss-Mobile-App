@@ -2,8 +2,10 @@ package org.openhds.hdsscapture.Activity;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +27,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 
 import org.openhds.hdsscapture.Baseline.BaselineActivity;
 import org.openhds.hdsscapture.Duplicate.DuplicateActivity;
+import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
@@ -48,6 +51,7 @@ public class HierarchyActivity extends AppCompatActivity {
     private Hierarchy level6Data;
     private Hierarchy level5Data;
     private Fieldworker fieldworkerData;
+    private int status;
     private ArrayAdapter<Hierarchy> level1Adapter;
     private ArrayAdapter<Hierarchy> level2Adapter;
     private ArrayAdapter<Hierarchy> level3Adapter;
@@ -61,7 +65,7 @@ public class HierarchyActivity extends AppCompatActivity {
     private final List<Hierarchy> level4List = new ArrayList<>();
     private final List<Hierarchy> level5List = new ArrayList<>();
     private final List<Hierarchy> level6List = new ArrayList<>();
-
+    private String username;
 
 
     public static final String ROUND_DATA = "org.openhds.hdsscapture.activity.HierarchyActivity.ROUND_DATA";
@@ -124,6 +128,11 @@ public class HierarchyActivity extends AppCompatActivity {
         final Intent f = getIntent();
         final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
 
+        // Retrieve login details from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        status = sharedPreferences.getInt(LoginActivity.FW_STATUS, 0);
+        username = sharedPreferences.getString(LoginActivity.FW_USERNAME_KEY, null);
+
         final FieldworkerViewModel fieldworkerViewModel = new ViewModelProvider(this).get(FieldworkerViewModel.class);
         final RoundViewModel roundViewModel = new ViewModelProvider(this).get(RoundViewModel.class);
         final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(this).get(HierarchyViewModel.class);
@@ -136,11 +145,11 @@ public class HierarchyActivity extends AppCompatActivity {
         final Spinner level6Spinner = findViewById(R.id.spCluster);
         //final Spinner level7Spinner = findViewById(R.id.spCluster);
         final Spinner roundSpinner = findViewById(R.id.spRound);
-        final EditText username = findViewById(R.id.login_username);
+        final EditText usrname = findViewById(R.id.login_username);
 
-        if (fieldworkerDatas != null) {
+        if (username != null) {
 
-            username.setText(fieldworkerDatas.username);
+            usrname.setText(username);
         }
 
         // set adapters to spinners
@@ -228,7 +237,7 @@ public class HierarchyActivity extends AppCompatActivity {
                 level5Adapter.clear();
                 level6Adapter.clear();
 
-                if (fieldworkerDatas.status==2) {
+                if (status==2) {
                     try {
 
                         List<Hierarchy> level2Data = hierarchyViewModel.retrieveLevel2(selectedLevel1.getUuid());
@@ -241,7 +250,7 @@ public class HierarchyActivity extends AppCompatActivity {
                     }
                 }else{
                     try {
-                        List<Hierarchy> level2Data = hierarchyViewModel.retrieveLevel2i(selectedLevel1.getUuid(),fieldworkerDatas.username);
+                        List<Hierarchy> level2Data = hierarchyViewModel.retrieveLevel2i(selectedLevel1.getUuid(),username);
                         level2Data.add(0, new Hierarchy("", textMessage));
                         level2Adapter.clear();
                         level2Adapter.addAll(level2Data);
@@ -281,7 +290,7 @@ public class HierarchyActivity extends AppCompatActivity {
                 }
 
                 // Load level 3 data
-                if (fieldworkerDatas.status==2) {
+                if (status==2) {
                     try {
                         List<Hierarchy> level3Data = hierarchyViewModel.retrieveLevel3(selectedLevel2.getUuid());
                         level3Data.add(0, new Hierarchy("", textMessage));
@@ -292,7 +301,7 @@ public class HierarchyActivity extends AppCompatActivity {
                     }
                 }else{
                     try {
-                        List<Hierarchy> level3Data = hierarchyViewModel.retrieveLevel3i(selectedLevel2.getUuid(),fieldworkerDatas.username);
+                        List<Hierarchy> level3Data = hierarchyViewModel.retrieveLevel3i(selectedLevel2.getUuid(),username);
                         level3Data.add(0, new Hierarchy("", textMessage));
                         level3Adapter.addAll(level3Data);
                     } catch (ExecutionException | InterruptedException e) {
@@ -334,7 +343,7 @@ public class HierarchyActivity extends AppCompatActivity {
                 }
 
                 // Load level 4 data
-                if (fieldworkerDatas.status==2) {
+                if (status==2) {
                     try {
                         List<Hierarchy> level4Data = hierarchyViewModel.retrieveLevel4(selectedLevel3.getUuid());
                         level4Data.add(0, new Hierarchy("", textMessage));
@@ -346,7 +355,7 @@ public class HierarchyActivity extends AppCompatActivity {
                     }
                 }else{
                     try {
-                        List<Hierarchy> level4Data = hierarchyViewModel.retrieveLevel4i(selectedLevel3.getUuid(),fieldworkerDatas.username);
+                        List<Hierarchy> level4Data = hierarchyViewModel.retrieveLevel4i(selectedLevel3.getUuid(),username);
                         level4Data.add(0, new Hierarchy("", textMessage));
                         level4Adapter.clear();
                         level4Adapter.addAll(level4Data);
@@ -383,7 +392,7 @@ public class HierarchyActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (fieldworkerDatas.status==2) {
+                if (status==2) {
                     // Load level 5 data
                     try {
                         List<Hierarchy> level5Data = hierarchyViewModel.retrieveLevel5(selectedLevel4.getUuid());
@@ -396,7 +405,7 @@ public class HierarchyActivity extends AppCompatActivity {
                     }
                 } else{
                     try {
-                        List<Hierarchy> level5Data = hierarchyViewModel.retrieveLevel5i(selectedLevel4.getUuid(),fieldworkerDatas.username);
+                        List<Hierarchy> level5Data = hierarchyViewModel.retrieveLevel5i(selectedLevel4.getUuid(),username);
                         level5Data.add(0, new Hierarchy("", textMessage));
                         level5Adapter.clear();
                         level5Adapter.addAll(level5Data);
@@ -421,8 +430,8 @@ public class HierarchyActivity extends AppCompatActivity {
                 // Get the username and status from the Intent
                 final Intent f = getIntent();
                 final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
-                String username = fieldworkerDatas.getUsername();
-                Integer status = fieldworkerDatas.getStatus();
+//                String username = fieldworkerDatas.getUsername();
+//                Integer status = fieldworkerDatas.getStatus();
 
                 // Reset level 6 spinner to position 0
                 level6Spinner.setSelection(0);
@@ -497,13 +506,13 @@ public class HierarchyActivity extends AppCompatActivity {
                 return;
             }
 
-            if(username.getText().toString()==null || username.getText().toString().trim().isEmpty()){
-                username.setError("Invalid Username");
+            if(usrname.getText().toString()==null || usrname.getText().toString().trim().isEmpty()){
+                usrname.setError("Invalid Username");
                 Toast.makeText(this,"Please provide a valid Username", Toast.LENGTH_LONG).show();
                 return;
             }
 
-            final String myuser = username.getText().toString();
+            final String myuser = usrname.getText().toString();
 
             try {
                 fieldworkerData = fieldworkerViewModel.finds(myuser);
@@ -519,7 +528,7 @@ public class HierarchyActivity extends AppCompatActivity {
             }
 
             if(fieldworkerData == null){
-                username.setError("Invalid Username");
+                usrname.setError("Invalid Username");
                 Toast.makeText(this,"Please provide a valid Username", Toast.LENGTH_LONG).show();
                 return;
             }
@@ -547,13 +556,13 @@ public class HierarchyActivity extends AppCompatActivity {
                 return;
             }
 
-            if(username.getText().toString()==null || username.getText().toString().trim().isEmpty()){
-                username.setError("Invalid Username");
+            if(usrname.getText().toString()==null || usrname.getText().toString().trim().isEmpty()){
+                usrname.setError("Invalid Username");
                 Toast.makeText(this,"Please provide a valid Username", Toast.LENGTH_LONG).show();
                 return;
             }
 
-            final String myuser = username.getText().toString();
+            final String myuser = usrname.getText().toString();
 
             try {
                 fieldworkerData = fieldworkerViewModel.finds(myuser);
@@ -569,7 +578,7 @@ public class HierarchyActivity extends AppCompatActivity {
             }
 
             if(fieldworkerData == null){
-                username.setError("Invalid Username");
+                usrname.setError("Invalid Username");
                 Toast.makeText(this,"Please provide a valid Username", Toast.LENGTH_LONG).show();
                 return;
             }
@@ -690,10 +699,12 @@ public class HierarchyActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        try{
-                            HierarchyActivity.this.finish();
-                        }
-                        catch(Exception e){}
+                        // Start MainActivity
+                        Intent intent = new Intent(HierarchyActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                        // Finish the current activity
+                        HierarchyActivity.this.finish();
                     }
                 })
                 .setNegativeButton(getString(R.string.no), null)

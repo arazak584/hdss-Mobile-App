@@ -31,6 +31,10 @@ public class InmigrationViewModel extends AndroidViewModel {
         return inmigrationRepository.find(id,locid);
     }
 
+    public Inmigration ins(String id) throws ExecutionException, InterruptedException {
+        return inmigrationRepository.ins(id);
+    }
+
     public List<Inmigration> reject(String id) throws ExecutionException, InterruptedException {
         return inmigrationRepository.reject(id);
     }

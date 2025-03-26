@@ -108,6 +108,15 @@ public class OutmigrationRepository {
         return future.get();
     }
 
+    public Outmigration ins(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Outmigration> callable = () -> dao.ins(id);
+
+        Future<Outmigration> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         Callable<Long> callable = () -> dao.count(startDate, endDate, username);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);

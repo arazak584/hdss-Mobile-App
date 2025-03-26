@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="true">HDSS CAPTURE</string>
-    <string name="versions">2025.02.05</string>
+    <string name="versions">2025.02.06</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>
@@ -16,6 +16,49 @@
     <string name="urban">Urban</string>
     <string name="see_list">See List</string>
     <string name="location_hint_lbl">Locations External Id</string>
+
+    <!--    TODO: VISIT TEXT START-->
+    <string name="round_select">Select Round</string>
+    <string name="housepresent">Is There Any Household Member Present?</string>
+    <!--    TODO: VISIT TEXT END-->
+
+    <!--    TODO: VACCINATION TEXT START-->
+    <string name="hcard">Do you have Health card or Vaccination Document/Booklet</string>
+    <string name="vareason">Reason not vaccinated for BCG, Polio, Penta, and MV</string>
+    <string name="onet">How often does the baby sleep under a bednet?</string>
+    <string name="lastpreg">Last Pregnancy Date</string>
+    <string name="rea">Reason for Admission?</string>
+    <string name="hl">How long after birth did you start Breastfeeding?</string>
+    <string name="hod">How old (in days) was the baby when you started giving the baby food or drinks?</string>
+    <string name="hom">How old (in months) was the baby when you started giving the baby food or drinks?</string>
+    <string name="stm">How old (in months) was the baby when you stopped breastfeeding?</string>
+    <string name="sty">How old (in years) was the baby when you stopped breastfeeding?</string>
+    <string name="nhis">National Health Insurance Scheme</string>
+    <string name="sbf">Are you still breastfeeding?</string>
+    <string name="admission">Has the baby been admitted at a health facility in the last six months?</string>
+    <string name="bednett">Does your household have a bednet?</string>
+    <string name="slpbednet">Did the baby sleep under bednet last Night?</string>
+    <string name="chlbednet">How many children sleep under the bednet?</string>
+    <string name="weight">Weight of child at birth in Kg?</string>
+    <string name="scar">Does the child have the BCG scar? (Observe)</string>
+    <string name="fever">In the last two weeks did the child report Fever</string>
+    <string name="treat">Did you seek for treatment?</string>
+    <string name="diarrhoea">In the last two weeks did the child report diarrhoea?</string>
+    <string name="arti">In the last two weeks did the child report acute respiratory tract infection?</string>
+    <string name="muac">Mid-Upper Arm circumference (MUAC)</string>
+    <string name="bcg">Bacille Calmette-Guerin Vaccine (BCG)</string>
+    <string name="opv0">Oral Polio Vaccine (OPV0)</string>
+    <string name="opv1">Oral Polio Vaccine (OPV1)</string>
+    <string name="opv2">Oral Polio Vaccine (OPV2)</string>
+    <string name="opv3">Oral Polio Vaccine (OPV3)</string>
+    <string name="month">Age in Months</string>
+    <string name="week">Age in Weeks</string>
+    <string name="ipv">Inactivated Polio Vaccine (IPV)</string>
+    <string name="mena">Meningococcal Vaccine (MenA)</string>
+    <string name="itn">Insecticide treated net (ITN)</string>
+    <string name="send_vaccination">Send Vaccination</string>
+    <!--    TODO: VACCINATION TEXT END-->
+
 
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -118,7 +161,7 @@
     <string name="location_select">Select Locations</string>
     <string name="visitid">Visit ID</string>
     <string name="visit_outcome">Visit Outcome</string>
-    <string name="round_select">Select Round</string>
+
     <string name="socialgroupname">Enter Name of Household Head</string>
     <string name="socialgroupid">Household ID</string>
     <string name="socialgroup">Household</string>
@@ -140,15 +183,15 @@
     <string name="outcome_number">Number of Outcomes</string>
     <string name="child_extid">Child Permid</string>
     <string name="outcometype">Type of Outcome</string>
-    <string name="id1001">Did you ever breastfeed the child?</string>
-    <string name="id1002">How long after delivery did you first put child to the breast?</string>
-    <string name="id1003">In the first 2 days after birth was the child given anything other than breastmilk to drink (water, infant formula)</string>
-    <string name="id1004">Are you still breastfeeding the child?</string>
-    <string name="id1005">What did you feed the child with in the first 6 months of birth?</string>
-    <string name="id1006">Do you have plans to have more children?</string>
-    <string name="id1007">If YES, how long will you want to wait before becoming pregnant again?</string>
-    <string name="id1008">Are you currently using any family planning method to delay or prevent pregnancy?</string>
-    <string name="id1009">If Yes/NO, what will be your specific family planning method of preference when finally you decide to use one?</string>
+    <string name="id1001">Q22.0 Did you ever breastfeed the child?</string>
+    <string name="id1002">Q23.0 How long after delivery did you first put child to the breast?</string>
+    <string name="id1003">Q24.0 In the first 2 days after birth was the child given anything other than breastmilk to drink (water, infant formula)</string>
+    <string name="id1004">Q25.0 Are you still breastfeeding the child?</string>
+    <string name="id1005">Q26.0 What did you feed the child with in the first 6 months of birth?</string>
+    <string name="id1006">Q14.0 Do you have plans to have more children?</string>
+    <string name="id1007">Q14.1 If YES, how long will you want to wait before becoming pregnant again?</string>
+    <string name="id1008">Q15.0 Are you currently using any family planning method to delay or prevent pregnancy?</string>
+    <string name="id1009">Q15.1 If Yes/NO, what will be your specific family planning method of preference when finally you decide to use one?</string>
 
 
     <string name="demographics">Demographics</string>
@@ -159,7 +202,7 @@
     <string name="migtype">Type of Inmigration</string>
     <string name="origin">Where is the Individual Migrating from</string>
     <string name="reason">Reason for Inmigration</string>
-    <string name="birthplace">Place of Birth</string>
+    <string name="birthplace">Q2.0 Place of Birth</string>
     <string name="outmigration">Outmigration</string>
     <string name="destination">Where did the Individual move to</string>
     <string name="outdate">Date of Outmigration</string>
@@ -231,7 +274,7 @@
     <string name="expectedDelivery">Expected Delivery Date</string>
     <string name="childextid">Child UUID</string>
     <string name="type">Outcome Type</string>
-    <string name="childeverborn">Number of Outcomes</string>
+    <string name="childeverborn">Q1.0 Number of Outcomes</string>
     <string name="livebirth">Number of Live Birth</string>
     <string name="text_send_to_server">SYNC DATA</string>
     <string name="init_syncing">Initialize sync process…</string>
@@ -289,27 +332,27 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="remainder">Select Village to View Remaining Compounds</string>
-    <string name="not_del">Why was child not delivered at health facility</string>
-    <string name="ass_del">Who assisted you during deivery?</string>
-    <string name="how_del">How was the child delivered?</string>
-    <string name="first_nb">Is this your first live birth?</string>
-    <string name="l_birth">How many previous live births have you had?</string>
-    <string name="rec_anc">During the time that you were pregnant, did you receive any Antenatal Care?</string>
-    <string name="why_no_anc">Why, No?</string>
-    <string name="where_anc">Where did you receive the ANC?</string>
+    <string name="not_del">Q3.0 Why was child not delivered at health facility</string>
+    <string name="ass_del">Q4.0 Who assisted you during deivery?</string>
+    <string name="how_del">Q5.0 How was the child delivered?</string>
+    <string name="first_nb">Q20.0 Is this your first live birth?</string>
+    <string name="l_birth">Q21.0 How many previous live births have you had?</string>
+    <string name="rec_anc">Q6.0 During the time that you were pregnant, did you receive any Antenatal Care?</string>
+    <string name="why_no_anc">Q6.1 Why, No?</string>
+    <string name="where_anc">Q7.0 Where did you receive the ANC?</string>
     <string name="whlth_fac">Which health facility?</string>
-    <string name="who_anc">Who attended to you?</string>
-    <string name="month_pg">How many months pregnant were you when you first received Antenatal Care?</string>
-    <string name="num_anc">How many ANC visits did you make before you delivered?</string>
-    <string name="rec_ipt">During the time that you were pregnant, did you receive IPT infront of a nurse?</string>
-    <string name="first_recs">How many months pregnant were you when you first received IPT?</string>
-    <string name="many_ipt">How many times did you take IPT in front of a nurse during the pregnancy?</string>
-    <string name="chd_weight">Was the child weighed at birth?</string>
-    <string name="chd_size">How much did the child weigh (estimated baby size)</string>
-    <string name="weig_hcard">Record weight in kilograms from Health Card</string>
+    <string name="who_anc">Q8.0 Who attended to you?</string>
+    <string name="month_pg">Q9.0 How many months pregnant were you when you first received Antenatal Care?</string>
+    <string name="num_anc">Q10.0 How many ANC visits did you make before you delivered?</string>
+    <string name="rec_ipt">Q11.0 During the time that you were pregnant, did you receive IPT infront of a nurse?</string>
+    <string name="first_recs">Q12.0 How many months pregnant were you when you first received IPT?</string>
+    <string name="many_ipt">Q13.0 How many times did you take IPT in front of a nurse during the pregnancy?</string>
+    <string name="chd_weight">Q18.0 Was the child weighed at birth?</string>
+    <string name="chd_size">Q20.0 How much did the child weigh (estimated baby size)</string>
+    <string name="weig_hcard">Q19.0 Record weight in kilograms from Health Card</string>
     <string name="obs">Pregnancy Without Outcome</string>
     <string name="close">Close</string>
-    <string name="housepresent">Is There Any Household Member Present?</string>
+
     <string name="savecontinuedata"><![CDATA[Save & Continue]]></string>
     <string name="respondent">Respondent</string>
     <string name="title_activity_test">TestActivity</string>
@@ -588,34 +631,12 @@
     <string name="correctcompname">Is the Compound Name Correct?</string>
     <string name="compoundcorrect">Enter the Correct Compound Name</string>
     <string name="changecluster">Change Cluster</string>
-    <string name="bcg">Bacille Calmette-Guerin Vaccine (BCG)</string>
-    <string name="opv0">Oral Polio Vaccine (OPV0)</string>
-    <string name="opv1">Oral Polio Vaccine (OPV1)</string>
-    <string name="opv2">Oral Polio Vaccine (OPV2)</string>
-    <string name="opv3">Oral Polio Vaccine (OPV3)</string>
-    <string name="month">Age in Months</string>
-    <string name="week">Age in Weeks</string>
-    <string name="ipv">Inactivated Polio Vaccine (IPV)</string>
-    <string name="mena">Meningococcal Vaccine (MenA)</string>
-    <string name="itn">Insecticide treated net (ITN)</string>
-    <string name="send_vaccination">Send Vaccination</string>
+
     <string name="surname">Surname</string>
     <string name="genders">Gender</string>
     <string name="card">Ghana card</string>
     <string name="get_vac">Get Vaccination</string>
-    <string name="hcard">Do you have Health card or Vaccination Document/Booklet</string>
-    <string name="vareason">Reason not vaccinated for BCG, Polio, Penta, and MV</string>
-    <string name="onet">How often does the baby sleep under a bednet?</string>
-    <string name="lastpreg">Last Pregnancy Date</string>
-    <string name="rea">Reason for Admission?</string>
-    <string name="hl">How long after birth did you start Breastfeeding?</string>
-    <string name="hod">How old (in days) was the baby when you started giving the baby food or drinks?</string>
-    <string name="hom">How old (in months) was the baby when you started giving the baby food or drinks?</string>
-    <string name="stm">How old (in months) was the baby when you stopped breastfeeding?</string>
-    <string name="sty">How old (in years) was the baby when you stopped breastfeeding?</string>
-    <string name="nhis">National Health Insurance Scheme</string>
-    <string name="sbf">Are you still breastfeeding?</string>
-    <string name="admission">Has the baby been admitted at a health facility in the last six months?</string>
+
     <string name="query">QUERIES</string>
     <string name="reserror">Resolve these errors before you Sync</string>
     <string name="dup">Select Duplicate Name</string>
@@ -626,16 +647,7 @@
     <string name="queries">Generate Queries</string>
     <string name="exit">Exit</string>
     <string name="numberOfLiveBirths">Number of Live Births</string>
-    <string name="bednett">Does your household have a bednet?</string>
-    <string name="slpbednet">Did the baby sleep under bednet last Night?</string>
-    <string name="chlbednet">How many children sleep under the bednet?</string>
-    <string name="weight">Weight of child at birth in Kg?</string>
-    <string name="scar">Does the child have the BCG scar? (Observe)</string>
-    <string name="fever">In the last two weeks did the child report Fever</string>
-    <string name="treat">Did you seek for treatment?</string>
-    <string name="diarrhoea">In the last two weeks did the child report diarrhoea?</string>
-    <string name="arti">In the last two weeks did the child report acute respiratory tract infection?</string>
-    <string name="muac">Mid-Upper Arm circumference (MUAC)</string>
+
     <string name="filter">FILTER</string>
     <string name="extid">Cluster</string>
     <string name="other_specify">Other, Specify</string>

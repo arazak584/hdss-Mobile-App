@@ -107,6 +107,12 @@ public class DeathRepository {
         return future.get();
     }
 
+    public long cnt() throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.cnt();
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
     public long err(String id,String ids) throws ExecutionException, InterruptedException {
         Callable<Long> callable = () -> dao.err(id,ids);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
@@ -127,6 +133,15 @@ public class DeathRepository {
         Callable<List<Death>> callable = () -> dao.reject(id);
 
         Future<List<Death>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Death ins(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Death> callable = () -> dao.ins(id);
+
+        Future<Death> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }

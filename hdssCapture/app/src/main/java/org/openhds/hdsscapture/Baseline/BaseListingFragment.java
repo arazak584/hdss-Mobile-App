@@ -3,6 +3,7 @@ package org.openhds.hdsscapture.Baseline;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -28,6 +29,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.gms.location.LocationRequest;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
+import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
@@ -67,6 +69,8 @@ public class BaseListingFragment extends Fragment {
     private LocationManager locationManager;
     private Location currentLocation;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
+    private String fw;
+    private String fwname;
 
     public BaseListingFragment() {
         // Required empty public constructor
@@ -101,6 +105,11 @@ public class BaseListingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentListingBinding.inflate(inflater, container, false);
+
+        // Retrieve fw_uuid from SharedPreferences
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        fw = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
+        fwname = sharedPreferences.getString(LoginActivity.FW_NAME, null);
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_change_cluster);
         // Set a click listener on the button for mother
@@ -223,11 +232,11 @@ public class BaseListingFragment extends Fragment {
             } else {
                 data = new Listing();
 
-                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.fw_uuid = fw;
                 data.compno = BaseFragment.selectedLocation.getCompno();
                 data.status = BaseFragment.selectedLocation.getStatus();
                 data.village = level6Data.getName();
-                data.fw_name = fieldworkerData.getFirstName() + ' ' + fieldworkerData.lastName ;
+                data.fw_name = fwname ;
                 data.locationName = BaseFragment.selectedLocation.getLocationName();
                 data.location_uuid = BaseFragment.selectedLocation.getUuid();
                 data.vill_extId = level6Data.getExtId();

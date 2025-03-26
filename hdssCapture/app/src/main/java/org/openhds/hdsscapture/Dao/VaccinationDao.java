@@ -7,6 +7,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Vaccination;
 
 import java.util.Date;
@@ -38,6 +39,9 @@ public interface VaccinationDao {
 
     @Query("SELECT * FROM vaccination where individual_uuid=:id")
     Vaccination find(String id);
+
+    @Query("SELECT * FROM vaccination where uuid=:id ")
+    Vaccination ins(String id);
 
     @Query("SELECT COUNT(*) FROM vaccination a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")

@@ -58,6 +58,10 @@ public class OutmigrationViewModel extends AndroidViewModel {
         return outmigrationRepository.createOmg(id, locid);
     }
 
+    public Outmigration ins(String id) throws ExecutionException, InterruptedException {
+        return outmigrationRepository.ins(id);
+    }
+
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         return outmigrationRepository.count(startDate, endDate, username);
     }

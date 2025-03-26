@@ -1,6 +1,10 @@
 package org.openhds.hdsscapture.Activity;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -10,6 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.entity.Fieldworker;
@@ -39,6 +44,7 @@ public class MapActivity extends AppCompatActivity {
     private static final double MAX_LATITUDE = 11.0;
     private static final double MIN_LONGITUDE = -3.5;
     private static final double MAX_LONGITUDE = 1.5;
+    private String fw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,10 @@ public class MapActivity extends AppCompatActivity {
 
         final Intent f = getIntent();
         fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
+
+        // Retrieve fw_uuid from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        fw = sharedPreferences.getString(LoginActivity.FW_USERNAME_KEY, null);
 
         // Initialize the map
         map = findViewById(R.id.map);
@@ -77,7 +87,7 @@ public class MapActivity extends AppCompatActivity {
     private void loadLocations() {
         executor.submit(() -> {
             try {
-                List<Locations> locations = locationViewModel.retrieveAll(fieldworkerDatas.getUsername());
+                List<Locations> locations = locationViewModel.retrieveAll(fw);
                 runOnUiThread(() -> displayLocationsOnMap(locations));
             } catch (Exception e) {
                 e.printStackTrace();
@@ -145,4 +155,26 @@ public class MapActivity extends AppCompatActivity {
             Toast.makeText(this, "Location not found (Possibly not located in your working area)", Toast.LENGTH_SHORT).show();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.exit_confirmation_title))
+                .setMessage(getString(R.string.exiting_lbl))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Start MainActivity
+                        Intent intent = new Intent(MapActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                        // Finish the current activity
+                        MapActivity.this.finish();
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), null)
+                .show();
+    }
+
+
 }

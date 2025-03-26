@@ -35,6 +35,10 @@ public class OutcomeViewModel extends AndroidViewModel {
         return outcomeRepository.error(id);
     }
 
+    public long cnt(String id) throws ExecutionException, InterruptedException {
+        return outcomeRepository.cnt(id);
+    }
+
     public void add(Outcome data){ outcomeRepository.create(data);}
 
     public void add(Outcome... data){ outcomeRepository.create(data);  }

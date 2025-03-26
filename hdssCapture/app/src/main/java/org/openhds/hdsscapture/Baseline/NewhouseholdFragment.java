@@ -1,6 +1,8 @@
 package org.openhds.hdsscapture.Baseline;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
+import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Calculators;
@@ -62,6 +65,7 @@ public class NewhouseholdFragment extends DialogFragment {
     private FragmentNewhouseholdBinding binding;
     private Socialgroup socialgroup;
     private Hierarchy level6Data;
+    private String fw;
 
     public NewhouseholdFragment() {
         // Required empty public constructor
@@ -112,6 +116,9 @@ public class NewhouseholdFragment extends DialogFragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
+        // Retrieve fw_uuid from SharedPreferences
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        fw = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
 
         // Generate a UUID
         if(individual.uuid == null) {
@@ -139,15 +146,15 @@ public class NewhouseholdFragment extends DialogFragment {
         }
 
         if(individual.fw_uuid==null){
-            binding.getIndividual().fw_uuid = fieldworkerData.getFw_uuid();
+            binding.getIndividual().fw_uuid = fw;
         }
 
         if(residency.fw_uuid==null){
-            binding.getResidency().fw_uuid = fieldworkerData.getFw_uuid();
+            binding.getResidency().fw_uuid = fw;
         }
 
         if(socialgroup.fw_uuid==null){
-            binding.getSocialgroup().fw_uuid = fieldworkerData.getFw_uuid();
+            binding.getSocialgroup().fw_uuid = fw;
         }
 
         if(residency.location_uuid==null){

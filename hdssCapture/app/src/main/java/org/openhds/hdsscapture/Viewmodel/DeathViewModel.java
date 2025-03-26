@@ -57,6 +57,9 @@ public class DeathViewModel extends AndroidViewModel {
     public long rej(String uuid) throws ExecutionException, InterruptedException {
         return deathRepository.rej(uuid);
     }
+    public long cnt() throws ExecutionException, InterruptedException {
+        return deathRepository.cnt();
+    }
 
     public long err(String id,String ids) throws ExecutionException, InterruptedException {
         return deathRepository.err(id,ids);
@@ -68,6 +71,9 @@ public class DeathViewModel extends AndroidViewModel {
 
     public List<Death> reject(String id) throws ExecutionException, InterruptedException {
         return deathRepository.reject(id);
+    }
+    public Death ins(String id) throws ExecutionException, InterruptedException {
+        return deathRepository.ins(id);
     }
 
     public void add(Death data){ deathRepository.create(data);}

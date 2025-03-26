@@ -1,7 +1,9 @@
 package org.openhds.hdsscapture.Baseline;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
+import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Calculators;
@@ -79,6 +82,7 @@ public class BaselineFragment extends Fragment {
     private Individual individual;
     private FragmentBaselineBinding binding;
     private ProgressDialog progressDialog;
+    private String fw;
 
     public BaselineFragment() {
         // Required empty public constructor
@@ -126,6 +130,10 @@ public class BaselineFragment extends Fragment {
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
+        // Retrieve fw_uuid from SharedPreferences
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        fw = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
 
         Button hhse = binding.getRoot().findViewById(R.id.button_change_hh);
 
@@ -290,7 +298,7 @@ public class BaselineFragment extends Fragment {
                 data = new Individual();
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
-                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.fw_uuid = fw;
                 data.uuid = uuidString;
                 data.hohID = socialgroup.extId;
                 data.compno = BaseFragment.selectedLocation.getCompno();
@@ -361,7 +369,7 @@ public class BaselineFragment extends Fragment {
                 data = new Residency();
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
-                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.fw_uuid = fw;
                 data.uuid = uuidString;
                 data.startType = 3;
                 data.endType = 1;
@@ -400,7 +408,7 @@ public class BaselineFragment extends Fragment {
 
             } else {
                 data = new Demographic();
-                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.fw_uuid = fw;
                 data.complete = 1;
                 data.individual_uuid = binding.getIndividual().uuid;
 

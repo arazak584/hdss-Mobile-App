@@ -31,6 +31,9 @@ public class DemographicViewModel extends AndroidViewModel {
     public Demographic find(String id) throws ExecutionException, InterruptedException {
         return demographicRepository.find(id);
     }
+    public Demographic ins(String id) throws ExecutionException, InterruptedException {
+        return demographicRepository.ins(id);
+    }
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         return demographicRepository.count(startDate, endDate, username);

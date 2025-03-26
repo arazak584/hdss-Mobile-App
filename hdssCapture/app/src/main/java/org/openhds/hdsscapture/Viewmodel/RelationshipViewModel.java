@@ -33,6 +33,9 @@ public class RelationshipViewModel extends AndroidViewModel {
     public Relationship find(String id) throws ExecutionException, InterruptedException {
         return relationshipRepository.find(id);
     }
+    public Relationship ins(String id) throws ExecutionException, InterruptedException {
+        return relationshipRepository.ins(id);
+    }
 
     public Relationship finds(String id) throws ExecutionException, InterruptedException {
         return relationshipRepository.finds(id);

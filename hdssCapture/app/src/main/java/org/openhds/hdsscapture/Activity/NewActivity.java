@@ -5,14 +5,19 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.SearchView;
 
 import org.openhds.hdsscapture.Adapter.ViewsAdapter;
+import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Sync.SyncActivity;
 import org.openhds.hdsscapture.entity.Fieldworker;
@@ -40,6 +45,7 @@ public class NewActivity extends AppCompatActivity {
     private ViewsAdapter viewsAdapter;
     private List<Newloc> filterAll;
     private SearchView searchView;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +56,11 @@ public class NewActivity extends AppCompatActivity {
 
         final Intent f = getIntent();
         final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
-        String username = fieldworkerDatas.getFw_uuid();
         //Toast.makeText(MainActivity.this, "Welcome " + status, Toast.LENGTH_LONG).show();
+
+        // Retrieve fw_uuid from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        username = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
 
         searchView = findViewById(R.id.searchloc);
 
@@ -75,9 +84,9 @@ public class NewActivity extends AppCompatActivity {
     private void query() {
         List<Newloc> list = new ArrayList<>();
 
-        final Intent i = getIntent();
-        final Fieldworker fieldworkerDatas = i.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
-        String username = fieldworkerDatas.getFw_uuid();
+//        final Intent i = getIntent();
+//        final Fieldworker fieldworkerDatas = i.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
+//        String username = fieldworkerDatas.getFw_uuid();
 
         try {
 
@@ -187,5 +196,25 @@ public class NewActivity extends AppCompatActivity {
             }
         }
         viewsAdapter.setNewlocs(filterNames); // Update the adapter with filtered data
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.exit_confirmation_title))
+                .setMessage(getString(R.string.exiting_lbl))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Start MainActivity
+                        Intent intent = new Intent(NewActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                        // Finish the current activity
+                        NewActivity.this.finish();
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), null)
+                .show();
     }
 }

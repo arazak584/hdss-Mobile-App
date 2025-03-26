@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -24,6 +26,7 @@ import org.openhds.hdsscapture.Adapter.RejectAdapter;
 import org.openhds.hdsscapture.Adapter.ViewsAdapter;
 import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.Dao.ApiDao;
+import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Repositories.HdssSociodemoRepository;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
@@ -90,6 +93,7 @@ public class RejectionsActivity extends AppCompatActivity {
 
     private  SharedPreferences preferences;
     private String authorizationHeader;
+    private String fw;
 
     public boolean isInternetAvailable() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -105,7 +109,7 @@ public class RejectionsActivity extends AppCompatActivity {
 
         final Intent f = getIntent();
         final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
-        String fw = fieldworkerDatas.getFw_uuid();
+        //String fw = fieldworkerDatas.getFw_uuid();
 
         progres = new ProgressDialog(RejectionsActivity.this);
         progres.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -116,6 +120,18 @@ public class RejectionsActivity extends AppCompatActivity {
 
         preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
         authorizationHeader = preferences.getString("authorizationHeader", null);
+
+        // Retrieve fw_uuid from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        fw = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
+
+        if (fw != null) {
+            // Use the fwUuid as needed
+            Log.d("SomeFragment", "Retrieved fw_uuid: " + fw);
+        } else {
+            // Handle the case where fwUuid is not found
+            Log.e("SomeFragment", "fw_uuid not found in SharedPreferences");
+        }
 
         searchView = findViewById(R.id.searchloc);
 
@@ -146,16 +162,16 @@ public class RejectionsActivity extends AppCompatActivity {
     private void query() {
         List<RejectEvent> list = new ArrayList<>();
 
-        final Intent i = getIntent();
-        final Fieldworker fieldworkerDatas = i.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
-        String username = fieldworkerDatas.getFw_uuid();
+//        final Intent i = getIntent();
+//        final Fieldworker fieldworkerDatas = i.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
+//        String username = fieldworkerDatas.getFw_uuid();
 
         try {
 
             final SimpleDateFormat f = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
 
             int c = 1;
-            for (Inmigration e : inmigrationViewModel.reject(username)) {
+            for (Inmigration e : inmigrationViewModel.reject(fw)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
                 r1.id1 = c + ". Inmigration" + " (" + e.supervisor + ")";
@@ -173,7 +189,7 @@ public class RejectionsActivity extends AppCompatActivity {
 
 
             int d=1;
-            for (Outmigration e : outmigrationViewModel.reject(username)) {
+            for (Outmigration e : outmigrationViewModel.reject(fw)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
                 r1.id1 = d + ". Outmigration" + " (" + e.supervisor + ")";
@@ -188,7 +204,7 @@ public class RejectionsActivity extends AppCompatActivity {
             }
 
             int g=1;
-            for (Death e : deathViewModel.reject(username)) {
+            for (Death e : deathViewModel.reject(fw)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
                 r1.id1 = g + ". Death" + " (" + e.supervisor + ")";
@@ -203,7 +219,7 @@ public class RejectionsActivity extends AppCompatActivity {
             }
 
             int h=1;
-            for (Relationship e : relationshipViewModel.reject(username)) {
+            for (Relationship e : relationshipViewModel.reject(fw)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
                 r1.id1 = h + ". Relationship" + " (" + e.supervisor + ")";
@@ -218,7 +234,7 @@ public class RejectionsActivity extends AppCompatActivity {
             }
 
             int j=1;
-            for (Pregnancy e : pregnancyViewModel.reject(username)) {
+            for (Pregnancy e : pregnancyViewModel.reject(fw)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
                 r1.id1 = j + ". Pregnancy" + " (" + e.supervisor + ")";
@@ -233,7 +249,7 @@ public class RejectionsActivity extends AppCompatActivity {
             }
 
             int k=1;
-            for (Pregnancyoutcome e : pregnancyoutcomeViewModel.reject(username)) {
+            for (Pregnancyoutcome e : pregnancyoutcomeViewModel.reject(fw)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
                 r1.id1 = k + ". Outcome" + " (" + e.supervisor + ")";
@@ -248,7 +264,7 @@ public class RejectionsActivity extends AppCompatActivity {
             }
 
             int l=1;
-            for (Demographic e : demographicViewModel.reject(username)) {
+            for (Demographic e : demographicViewModel.reject(fw)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
                 r1.id1 = l + ". Demographic" + " (" + e.supervisor + ")";
@@ -263,7 +279,7 @@ public class RejectionsActivity extends AppCompatActivity {
             }
 
             int m=1;
-            for (Vaccination e : vaccinationViewModel.reject(username)) {
+            for (Vaccination e : vaccinationViewModel.reject(fw)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
                 r1.id1 = m + ". Vaccination" + " (" + e.supervisor + ")";
@@ -278,7 +294,7 @@ public class RejectionsActivity extends AppCompatActivity {
             }
 
             int n=1;
-            for (HdssSociodemo e : hdssSociodemoViewModel.reject(username)) {
+            for (HdssSociodemo e : hdssSociodemoViewModel.reject(fw)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
                 r1.id1 = n + ". SES - Profile" + " (" + e.supervisor + ")";
@@ -293,7 +309,7 @@ public class RejectionsActivity extends AppCompatActivity {
             }
 
             int p=1;
-            for (Morbidity e : morbidityViewModel.reject(username)) {
+            for (Morbidity e : morbidityViewModel.reject(fw)) {
                 String formattedDate = f.format(e.insertDate);
                 RejectEvent r1 = new RejectEvent();
                 r1.id1 = p + ". Morbidity" + " (" + e.supervisor + ")";
@@ -371,9 +387,9 @@ public class RejectionsActivity extends AppCompatActivity {
         progres.setMessage("Downloading...");
         progres.show();
 
-        final Intent f = getIntent();
-        final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
-        String fw = fieldworkerDatas.getFw_uuid();
+//        final Intent f = getIntent();
+//        final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
+//        String fw = fieldworkerDatas.getFw_uuid();
 
         final InmigrationViewModel inmigrationViewModel = new ViewModelProvider(RejectionsActivity.this).get(InmigrationViewModel.class);
         Call<DataWrapper<Inmigration>> c_callable = dao.getImg(authorizationHeader, fw);
@@ -619,6 +635,26 @@ public class RejectionsActivity extends AppCompatActivity {
     private void refreshActivity() {
         finish(); // Finish the current activity
         startActivity(getIntent()); // Restart the activity
+    }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.exit_confirmation_title))
+                .setMessage(getString(R.string.exiting_lbl))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Start MainActivity
+                        Intent intent = new Intent(RejectionsActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                        // Finish the current activity
+                        RejectionsActivity.this.finish();
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), null)
+                .show();
     }
 
 

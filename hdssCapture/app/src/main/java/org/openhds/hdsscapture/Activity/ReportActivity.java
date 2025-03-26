@@ -1,8 +1,12 @@
 package org.openhds.hdsscapture.Activity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -19,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Adapter.ReportAdapter;
+import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.ReportCounter;
 import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
@@ -73,6 +78,7 @@ public class ReportActivity extends AppCompatActivity {
 
     private EditText startDateEditText, endDateEditText, usernameEditText;
     private ProgressDialog progress;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,14 +89,14 @@ public class ReportActivity extends AppCompatActivity {
         final Intent f = getIntent();
         final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
 
+        // Retrieve fw_uuid from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        username = sharedPreferences.getString(LoginActivity.FW_USERNAME_KEY, null);
+
         startDateEditText = findViewById(R.id.startDate);
         endDateEditText = findViewById(R.id.endDate);
         usernameEditText = findViewById(R.id.Fusername);
-
-
-        if (fieldworkerDatas != null) {
-            usernameEditText.setText(fieldworkerDatas.username);
-        }
+        usernameEditText.setText(username);
 
         Button startDateButton = findViewById(R.id.btStart);
         startDateButton.setOnClickListener(new View.OnClickListener() {
@@ -360,23 +366,23 @@ public class ReportActivity extends AppCompatActivity {
 
     }
 
-
-
-//    @Override
-//    public void onBackPressed() {
-//        new AlertDialog.Builder(this)
-//                .setTitle(getString(R.string.exit_confirmation_title))
-//                .setMessage(getString(R.string.exiting_lbl))
-//                .setCancelable(false)
-//                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        try{
-//                            ReportActivity.this.finish();
-//                        }
-//                        catch(Exception e){}
-//                    }
-//                })
-//                .setNegativeButton(getString(R.string.no), null)
-//                .show();
-//    }
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.exit_confirmation_title))
+                .setMessage(getString(R.string.exiting_lbl))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Start MainActivity
+                        Intent intent = new Intent(ReportActivity.this, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                        // Finish the current activity
+                        ReportActivity.this.finish();
+                    }
+                })
+                .setNegativeButton(getString(R.string.no), null)
+                .show();
+    }
 }

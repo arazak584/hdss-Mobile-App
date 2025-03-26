@@ -131,18 +131,6 @@ public class LocationActivity extends AppCompatActivity {
 
 //    @Override
 //    public void onBackPressed() {
-//        // Check if the current fragment is HouseMembersFragment
-//        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.container_cluster);
-//        if (currentFragment instanceof HouseMembersFragment) {
-//            // Do nothing or show a Toast
-//            Toast.makeText(this, "Back button is disabled on this screen", Toast.LENGTH_SHORT).show();
-//        } else {
-//            super.onBackPressed(); // Default behavior
-//        }
-//    }
-//
-//    @Override
-//    public void onBackPressed() {
 //        new AlertDialog.Builder(this)
 //                .setTitle(getString(R.string.exit_confirmation_title))
 //                .setMessage(getString(R.string.exiting_lbl))
