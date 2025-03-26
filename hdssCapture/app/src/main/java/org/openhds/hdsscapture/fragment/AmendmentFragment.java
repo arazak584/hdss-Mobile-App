@@ -369,6 +369,10 @@ public class AmendmentFragment extends DialogFragment {
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.AMENDLAYOUTS, validateOnComplete, false);
+            if (hasErrors) {
+                Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
+                return;
+            }
 
             boolean agedif = false;
             boolean modif = false;
@@ -409,36 +413,70 @@ public class AmendmentFragment extends DialogFragment {
                 }
             }
 
-            boolean val = false;
-            if (!binding.replFirstName.getText().toString().trim().isEmpty()) {
-                String firstName = binding.replFirstName.getText().toString();
-                if (firstName.charAt(0) == ' ' || firstName.charAt(firstName.length() - 1) == ' ') {
+            // Individual Name Validation
+            boolean hasError = false;
+            String firstName = binding.replFirstName.getText().toString();
+            String lastName = binding.replLastName.getText().toString();
+            // Validate First Name
+            if (!firstName.isEmpty()) {
+                if (firstName.startsWith(" ") || firstName.endsWith(" ")) {
                     binding.replFirstName.setError("Spaces are not allowed before or after the Name");
                     Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
-                    val = true;
-                    return;
+                    hasError = true;
+                } else if (!firstName.matches("[a-zA-Z ]+")) {
+                    binding.replFirstName.setError("Numbers are not allowed in the Name");
+                    Toast.makeText(getContext(), "Numbers are not allowed in the Name", Toast.LENGTH_LONG).show();
+                    hasError = true;
                 } else {
-                    binding.replFirstName.setError(null); // Clear the error if the input is valid
+                    binding.replFirstName.setError(null);
                 }
             }
 
-            boolean vals = false;
-            if (!binding.replLastName.getText().toString().trim().isEmpty()) {
-                String lastName = binding.replLastName.getText().toString();
-                if (lastName.charAt(0) == ' ' || lastName.charAt(lastName.length() - 1) == ' ') {
-                    binding.replLastName.setError("Spaces are not allowed before or after the Name");
-                    Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
-                    vals = true;
-                    return;
+            // Validate Last Name
+            if (!lastName.isEmpty()) {
+                if (lastName.startsWith(" ") || lastName.endsWith(" ")) {
+                    binding.replLastName.setError("Spaces are not allowed before or after the Last Name");
+                    Toast.makeText(getContext(), "Spaces are not allowed before or after the Last Name", Toast.LENGTH_LONG).show();
+                    hasError = true;
+                } else if (!lastName.matches("[a-zA-Z ]+")) {
+                    binding.replLastName.setError("Numbers are not allowed in the Last Name");
+                    Toast.makeText(getContext(), "Numbers are not allowed in the Last Name", Toast.LENGTH_LONG).show();
+                    hasError = true;
                 } else {
-                    binding.replLastName.setError(null); // Clear the error if the input is valid
+                    binding.replLastName.setError(null);
                 }
             }
 
-            if (hasErrors) {
-                Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
+            // Stop execution if any errors exist
+            if (hasError) {
                 return;
             }
+
+//            boolean val = false;
+//            if (!binding.replFirstName.getText().toString().trim().isEmpty()) {
+//                if (firstName.charAt(0) == ' ' || firstName.charAt(firstName.length() - 1) == ' ') {
+//                    binding.replFirstName.setError("Spaces are not allowed before or after the Name");
+//                    Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
+//                    val = true;
+//                    return;
+//                } else {
+//                    binding.replFirstName.setError(null); // Clear the error if the input is valid
+//                }
+//            }
+//
+//            boolean vals = false;
+//            if (!binding.replLastName.getText().toString().trim().isEmpty()) {
+//                if (lastName.charAt(0) == ' ' || lastName.charAt(lastName.length() - 1) == ' ') {
+//                    binding.replLastName.setError("Spaces are not allowed before or after the Name");
+//                    Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
+//                    vals = true;
+//                    return;
+//                } else {
+//                    binding.replLastName.setError(null); // Clear the error if the input is valid
+//                }
+//            }
+
+
 
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute(() -> {

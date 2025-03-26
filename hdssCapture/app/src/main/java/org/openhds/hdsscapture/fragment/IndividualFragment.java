@@ -820,27 +820,46 @@ public class IndividualFragment extends Fragment {
                 }
             }
 
-            boolean val = false;
+            // Individual Name Validation
+            boolean hasError = false;
             String firstName = binding.individualFirstName.getText().toString();
-            if (firstName.charAt(0) == ' ' || firstName.charAt(firstName.length() - 1) == ' ') {
+            String lastName = binding.individualLastName.getText().toString();
+            // Validate First Name
+            if (firstName.startsWith(" ") || firstName.endsWith(" ")) {
                 binding.individualFirstName.setError("Spaces are not allowed before or after the Name");
                 Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
-                val = true;
-                return;
-            } else {
-                binding.individualFirstName.setError(null); // Clear the error if the input is valid
+                hasError = true;
+            }
+            else if (!firstName.matches("[a-zA-Z ]+")) {
+                binding.individualFirstName.setError("Numbers are not allowed in the Name");
+                Toast.makeText(getContext(), "Numbers are not allowed in the Name", Toast.LENGTH_LONG).show();
+                hasError = true;
+            }
+            else {
+                binding.individualFirstName.setError(null);
             }
 
-            boolean vals = false;
-            String lastName = binding.individualLastName.getText().toString();
-            if (lastName.charAt(0) == ' ' || lastName.charAt(lastName.length() - 1) == ' ') {
+            // Validate Last Name
+            if (lastName.startsWith(" ") || lastName.endsWith(" ")) {
                 binding.individualLastName.setError("Spaces are not allowed before or after the Name");
                 Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
-                vals = true;
-                return;
-            } else {
-                binding.individualLastName.setError(null); // Clear the error if the input is valid
+                hasError = true;
             }
+            else if (!lastName.matches("[a-zA-Z ]+")) {
+                binding.individualLastName.setError("Numbers are not allowed in the Last Name");
+                Toast.makeText(getContext(), "Numbers are not allowed in the Last Name", Toast.LENGTH_LONG).show();
+                hasError = true;
+            }
+            else {
+                binding.individualLastName.setError(null);
+            }
+
+            // Stop execution if any errors exist
+            if (hasError) {
+                return;
+            }
+
+
 
             //Date Validations
             try {
