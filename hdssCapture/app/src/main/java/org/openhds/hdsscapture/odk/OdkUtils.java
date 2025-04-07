@@ -1,4 +1,4 @@
-package org.openhds.hdsscapture.Utilities;
+package org.openhds.hdsscapture.odk;
 
 import android.app.Activity;
 import android.content.Context;
@@ -25,25 +25,15 @@ public class OdkUtils {
         intent.setPackage(ODK_PACKAGE);
         intent.setData(Uri.parse(formUri));
 
-        // Create a JSON object with the data you want to pass
-        JSONObject data = new JSONObject();
-        try {
-            data.put("lastname", individual.getLastName());
-            data.put("firstname", individual.getFirstName());
-            data.put("permid", individual.getExtId());
-            data.put("gender", individual.getGender());
-            data.put("dob", individual.getDob());
-            data.put("village", individual.getVillage());
-            data.put("hhid", individual.getHohID());
-            data.put("compno", individual.getCompno());
-            // Add more fields as needed
-        } catch (Exception e) {
-            Log.e(TAG, "Error creating JSON data", e);
-        }
-
-        // Add the JSON data to the intent
-        intent.putExtra("form_data", data.toString());
-        Log.d(TAG, "Intent data: " + intent.getStringExtra("form_data"));
+        // Add individual data directly to the intent extras
+        intent.putExtra("firstname", individual.getFirstName());
+        intent.putExtra("lastname", individual.getLastName());
+        intent.putExtra("permid", individual.getExtId());
+        intent.putExtra("gender", individual.getGender());
+        intent.putExtra("dob", individual.getDob());
+        intent.putExtra("village", individual.getVillage());
+        intent.putExtra("hhid", individual.getHohID());
+        intent.putExtra("compno", individual.getCompno());
 
         // Add individual extras for debugging and additional data
         addIndividualExtras(intent, individual, true);
@@ -61,15 +51,6 @@ public class OdkUtils {
         intent.putExtra("hhid", individual.getHohID());
         intent.putExtra("compno", individual.getCompno());
 
-        if (includeDebugInfo) {
-            String debugInfo = String.format("Sending to ODK:\nFirst Name: %s\nLast Name: %s\nID: %s\nGender: %s",
-                    individual.getFirstName(),
-                    individual.getLastName(),
-                    individual.getExtId(),
-                    individual.getGender());
-            intent.putExtra(Intent.EXTRA_TEXT, debugInfo);
-            Log.d(TAG, "Passing extras: " + intent.getExtras());
-        }
     }
 
     public static void returnToOdk(@NonNull Activity activity, @NonNull Individual individual) {

@@ -1,183 +1,149 @@
 package org.openhds.hdsscapture.odk;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Viewmodel.OdkViewModel;
 import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
-public class OdkFormAdapter extends RecyclerView.Adapter<OdkFormAdapter.ViewHolder>{
+public class OdkFormAdapter extends RecyclerView.Adapter<OdkFormAdapter.OdkFormViewHolder> {
+    private List<OdkForm> odkForms;
+    private static final String ODK_PACKAGE = "org.odk.collect.android";
+    private static final String ODK_FORMS_PROVIDER = "content://org.odk.collect.android.provider.odk.forms/forms";
+    private static final String[] PROJECTION = {"_id", "jrFormId"};
+    private static final String TAG = "OdkFormAdapter";
 
-    private final OdkFragment activity;
-    private final LayoutInflater inflater;
-    private static Individual selectedInd;
-    private final Socialgroup socialgroup;
-    private final FragmentActivity activity1;
-    private Individual individual;
-    private List<OdkForm> formsList;
-    private final OdkViewModel viewModel;
-    private Context context;
-
-    public OdkFormAdapter(Context context, OdkFragment activity, Individual selectedInd, Socialgroup socialgroup,OdkViewModel viewModel) {
-        this.context = context;
-        this.activity1 = activity.requireActivity();
-        this.activity = activity;
-        this.selectedInd = selectedInd;
-        this.socialgroup = socialgroup;
-        this.viewModel = viewModel;
-        formsList = new ArrayList<>();
-        inflater = LayoutInflater.from(activity.requireContext());
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        Button button, hhid;
-        LinearLayout linearLayout;
-        public ViewHolder(View view) {
-            super(view);
-            this.button = view.findViewById(R.id.button);
-            this.linearLayout = view.findViewById(R.id.odkForm);
-        }
+    public OdkFormAdapter(List<OdkForm> odkForms) {
+        this.odkForms = odkForms;
     }
 
     @NonNull
     @Override
-    public OdkFormAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View listItem = layoutInflater.inflate(R.layout.item_form, parent, false);
-        OdkFormAdapter.ViewHolder viewHolder = new OdkFormAdapter.ViewHolder(listItem);
-
-
-        return viewHolder;
+    public OdkFormViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_odk_form, parent, false);
+        return new OdkFormViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OdkFormAdapter.ViewHolder holder, int position) {
-        final OdkForm odkForm = formsList.get(position);
-
-        if (OdkFragment.selectedInd != null) {
-            holder.button.setText(odkForm.getFormName());
-            holder.button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openOdkFormWithPrefillData(odkForm);
-                }
-            });
-        }
+    public void onBindViewHolder(@NonNull OdkFormViewHolder holder, int position) {
+        OdkForm form = odkForms.get(position);
+        holder.bind(form);
     }
 
     @Override
     public int getItemCount() {
-        return formsList.size();
+        return odkForms == null ? 0 : odkForms.size();
     }
 
-    public void setSelectedInd(Individual selectedInd) {
-        formsList.clear();
-        if (selectedInd != null) {
-
-            try {
-                List<OdkForm> list = viewModel.find();
-
-                if (list != null) {
-                    formsList.addAll(list);
-                }
-                if (list.isEmpty()){
-                    Toast.makeText(activity.getActivity(), "No Extra Forms ", Toast.LENGTH_SHORT).show();
-                }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+    public void setOdkForms(List<OdkForm> odkForms) {
+        this.odkForms = odkForms;
         notifyDataSetChanged();
     }
 
-    private void openOdkFormWithPrefillData(OdkForm odkForm) {
-        if (OdkFragment.selectedInd != null) {
-            // Get the form ID from the Form object
-            String formId = odkForm.getFormID();
+    static class OdkFormViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView formIdTextView;
+        OdkForm currentForm;
+        Context context;
 
-            // Get the form URI using the form ID
-            Uri formUri = getFormUriById(formId);
-
-            if (formUri != null) {
-                Intent odkIntent = new Intent(Intent.ACTION_EDIT, formUri);
-
-                // Add extra data to the intent
-                odkIntent.putExtra("first_name", OdkFragment.selectedInd.getFirstName());
-                odkIntent.putExtra("last_name", OdkFragment.selectedInd.getLastName());
-                odkIntent.putExtra("ext_id", OdkFragment.selectedInd.getExtId());
-                odkIntent.putExtra("dob", OdkFragment.selectedInd.getDob() != null ? OdkFragment.selectedInd.getDob().toString() : "");
-                odkIntent.putExtra("hhid", OdkFragment.selectedInd.getHohID());
-                odkIntent.putExtra("compno", OdkFragment.selectedInd.getCompno());
-                odkIntent.putExtra("village", OdkFragment.selectedInd.getVillage());
-
-                // Check if an activity is available to handle the intent
-                if (odkIntent.resolveActivity(activity.getActivity().getPackageManager()) != null) {
-                    activity.startActivityForResult(odkIntent, OdkFragment.ODK_REQUEST_CODE);
-                } else {
-                    Toast.makeText(activity.getContext(), "ODK Collect not installed or incorrect URI", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(activity.getContext(), "Form not found", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(activity.getContext(), "No individual selected", Toast.LENGTH_SHORT).show();
+        public OdkFormViewHolder(@NonNull View itemView) {
+            super(itemView);
+            formIdTextView = itemView.findViewById(R.id.text_odk_form_id);
+            itemView.setOnClickListener(this);
+            context = itemView.getContext();
         }
-    }
 
+        public void bind(OdkForm form) {
+            currentForm = form;
+            formIdTextView.setText(form.getFormID());
+        }
 
-    private Uri getFormUriById(String formId) {
-        Uri formsUri = Uri.parse("content://org.odk.collect.android.provider.odk.forms/forms");
-        Cursor cursor = null;
-        Uri formUri = null;
-
-        try {
-            cursor = context.getContentResolver().query(
-                    formsUri,
-                    null,
-                    "jrFormId=?",
-                    new String[]{formId},
-                    null
-            );
-
-            if (cursor != null && cursor.moveToFirst()) {
-                int idIndex = cursor.getColumnIndex("_id");
-                if (idIndex != -1) {
-                    String id = cursor.getString(idIndex);
-                    formUri = Uri.withAppendedPath(formsUri, id);
-                }
+        @Override
+        public void onClick(View view) {
+            Individual selectedIndividual = HouseMembersFragment.selectedIndividual;
+            if (selectedIndividual == null) {
+                Toast.makeText(context, "No individual selected", Toast.LENGTH_SHORT).show();
+                return;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (cursor != null) {
-                cursor.close();
+
+            launchOdkForm(selectedIndividual);
+        }
+
+        private void launchOdkForm(Individual selectedIndividual) {
+            if (selectedIndividual == null) {
+                Toast.makeText(context, "No individual selected", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int formId = getOdkFormId(context, currentForm.getFormID());
+            if (formId == -1) {
+                Toast.makeText(context, "Form not found in ODK Collect", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            String formUri = ODK_FORMS_PROVIDER + "/" + formId;
+            try {
+                Intent intent = OdkUtils.createOdkFormIntent(formUri, selectedIndividual);
+                context.startActivity(intent);
+            } catch (Exception e) {
+                Toast.makeText(context, "Error launching ODK form: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e(TAG, "Error launching ODK form", e);
             }
         }
 
-        return formUri;
+        private int getOdkFormId(Context context, String jrFormId) {
+            if (jrFormId == null) {
+                Log.e(TAG, "jrFormId is null");
+                return -1;
+            }
+
+            Uri formUri = Uri.parse(ODK_FORMS_PROVIDER);
+            Cursor cursor = null;
+            try {
+                cursor = context.getContentResolver().query(formUri, PROJECTION, null, null, null);
+                if (cursor == null) {
+                    Log.e(TAG, "Cursor is null");
+                    return -1;
+                }
+
+                if (!cursor.moveToFirst()) {
+                    Log.e(TAG, "No forms found in cursor");
+                    return -1;
+                }
+
+                do {
+                    String retrievedFormId = cursor.getString(cursor.getColumnIndexOrThrow("jrFormId"));
+                    int id = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
+                    Log.d(TAG, "Found form with jrFormId: " + retrievedFormId + " and id: " + id);
+
+                    if (jrFormId.equals(retrievedFormId)) {
+                        Log.d(TAG, "Matching form found with id: " + id);
+                        return id;
+                    }
+                } while (cursor.moveToNext());
+            } catch (Exception e) {
+                Log.e(TAG, "Error querying ODK forms", e);
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+            Log.e(TAG, "Form not found");
+            return -1;
+        }
     }
-
-
-
 }

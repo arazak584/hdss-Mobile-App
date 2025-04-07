@@ -825,17 +825,18 @@ public class IndividualFragment extends Fragment {
             String firstName = binding.individualFirstName.getText().toString();
             String lastName = binding.individualLastName.getText().toString();
             // Validate First Name
-            if (firstName.startsWith(" ") || firstName.endsWith(" ")) {
+            if (firstName.trim().length() != firstName.length()) {
+                // Leading or trailing spaces not allowed
                 binding.individualFirstName.setError("Spaces are not allowed before or after the Name");
                 Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
                 hasError = true;
-            }
-            else if (!firstName.matches("[a-zA-Z ]+")) {
-                binding.individualFirstName.setError("Numbers are not allowed in the Name");
-                Toast.makeText(getContext(), "Numbers are not allowed in the Name", Toast.LENGTH_LONG).show();
+            } else if (!firstName.matches("^[a-zA-Z]+([ '-][a-zA-Z]+)*$")) {
+                // Only letters, hyphens, and single spaces allowed
+                binding.individualFirstName.setError("Only letters, hyphens, and single spaces are allowed in the Name");
+                Toast.makeText(getContext(), "Only letters, hyphens, and single spaces are allowed in the Name", Toast.LENGTH_LONG).show();
                 hasError = true;
-            }
-            else {
+            } else {
+                // Valid name
                 binding.individualFirstName.setError(null);
             }
 
@@ -845,9 +846,9 @@ public class IndividualFragment extends Fragment {
                 Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
                 hasError = true;
             }
-            else if (!lastName.matches("[a-zA-Z ]+")) {
-                binding.individualLastName.setError("Numbers are not allowed in the Last Name");
-                Toast.makeText(getContext(), "Numbers are not allowed in the Last Name", Toast.LENGTH_LONG).show();
+            else if (!lastName.matches("^[a-zA-Z]+([ '-][a-zA-Z]+)*$")) {
+                binding.individualLastName.setError("Only letters, hyphens, and single spaces are allowed in the Name");
+                Toast.makeText(getContext(), "Only letters, hyphens, and single spaces are allowed in the Name", Toast.LENGTH_LONG).show();
                 hasError = true;
             }
             else {

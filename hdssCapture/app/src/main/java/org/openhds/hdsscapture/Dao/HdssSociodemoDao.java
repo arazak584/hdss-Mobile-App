@@ -55,7 +55,7 @@ public interface HdssSociodemoDao {
     List<HdssSociodemo> retrieveToSync();
 
     @Query("SELECT a.socialgroup_uuid,b.extId as sttime,b.groupName as edtime,c.compno as visit_uuid" +
-            ",a.insertDate,a.comment,a.fw_uuid,a.supervisor FROM sociodemo a INNER JOIN socialgroup b on a.socialgroup_uuid=b.uuid " +
+            ",a.approveDate,a.comment,a.fw_uuid,a.supervisor FROM sociodemo a INNER JOIN socialgroup b on a.socialgroup_uuid=b.uuid " +
             "INNER JOIN locations c on a.location_uuid=c.uuid " +
             "WHERE a.fw_uuid=:id AND a.status=2 order by a.insertDate DESC")
     List<HdssSociodemo> reject(String id);

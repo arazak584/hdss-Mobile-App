@@ -246,6 +246,7 @@ public class DownloadManager extends Worker {
 
                                     // Ensure existingDeath is NOT NULL and complete is NOT 1
                                     if ((existingDeath != null && !(existingDeath.complete != null && existingDeath.complete == 1))) {
+                                        newDeath.complete = 0;
                                         deathDao.create(newDeath);
                                         Log.d(TAG, "Updated existing Death record with UUID: " + newDeath.uuid);
                                     } else {
@@ -296,6 +297,7 @@ public class DownloadManager extends Worker {
                                     // Save the updated pregnancy data
                                     pregnancyDao.create(newPregnancy);
                                     Log.d(TAG, "Updated and saved Pregnancy record with UUID: " + newPregnancy.uuid);
+                                    //Log.d(TAG, "Pregnancy Approved Date: " + newPregnancy.approveDate + " : "  + existingPregnancy.approveDate);
                                 } else {
                                     Log.d(TAG, "Skipping Pregnancy record with UUID: " + newPregnancy.uuid);
                                 }

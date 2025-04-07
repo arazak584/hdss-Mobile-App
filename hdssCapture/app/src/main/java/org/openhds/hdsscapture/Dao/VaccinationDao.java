@@ -47,7 +47,7 @@ public interface VaccinationDao {
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
-    @Query("SELECT a.individual_uuid,b.firstName as sttime,b.lastName as edtime,b.extId as socialgroup_uuid,b.compno as visit_uuid,a.insertDate,a.comment,a.fw_uuid,a.supervisor FROM vaccination a INNER JOIN individual b on a.individual_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 order by a.insertDate DESC")
+    @Query("SELECT a.individual_uuid,b.firstName as sttime,b.lastName as edtime,b.extId as socialgroup_uuid,b.compno as visit_uuid,a.approveDate,a.comment,a.fw_uuid,a.supervisor FROM vaccination a INNER JOIN individual b on a.individual_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 order by a.insertDate DESC")
     List<Vaccination> reject(String id);
 
     @Query("SELECT COUNT(*) FROM vaccination WHERE status=2 AND fw_uuid = :uuid ")

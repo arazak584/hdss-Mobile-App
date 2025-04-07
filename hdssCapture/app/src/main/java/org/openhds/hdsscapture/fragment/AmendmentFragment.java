@@ -423,7 +423,7 @@ public class AmendmentFragment extends DialogFragment {
                     binding.replFirstName.setError("Spaces are not allowed before or after the Name");
                     Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
                     hasError = true;
-                } else if (!firstName.matches("[a-zA-Z ]+")) {
+                } else if (!firstName.matches("^[a-zA-Z]+([ '-][a-zA-Z]+)*$")) {
                     binding.replFirstName.setError("Numbers are not allowed in the Name");
                     Toast.makeText(getContext(), "Numbers are not allowed in the Name", Toast.LENGTH_LONG).show();
                     hasError = true;
@@ -434,13 +434,13 @@ public class AmendmentFragment extends DialogFragment {
 
             // Validate Last Name
             if (!lastName.isEmpty()) {
-                if (lastName.startsWith(" ") || lastName.endsWith(" ")) {
+                if (lastName.trim().length() != lastName.length()) {
                     binding.replLastName.setError("Spaces are not allowed before or after the Last Name");
                     Toast.makeText(getContext(), "Spaces are not allowed before or after the Last Name", Toast.LENGTH_LONG).show();
                     hasError = true;
-                } else if (!lastName.matches("[a-zA-Z ]+")) {
-                    binding.replLastName.setError("Numbers are not allowed in the Last Name");
-                    Toast.makeText(getContext(), "Numbers are not allowed in the Last Name", Toast.LENGTH_LONG).show();
+                } else if (!lastName.matches("^[a-zA-Z]+([ '-][a-zA-Z]+)*$")) {
+                    binding.replLastName.setError("Only letters, hyphens, and single spaces are allowed in the Name");
+                    Toast.makeText(getContext(), "Only letters, hyphens, and single spaces are allowed in the Name", Toast.LENGTH_LONG).show();
                     hasError = true;
                 } else {
                     binding.replLastName.setError(null);

@@ -53,7 +53,7 @@ public interface MorbidityDao {
     List<Morbidity> retrieveToSync();
 
     @Query("SELECT a.individual_uuid,b.extId as fw_name,ind_name,a.compno" +
-            ",a.insertDate,a.comment,a.fw_uuid,a.supervisor FROM morbidity a INNER JOIN individual b on a.individual_uuid=b.uuid " +
+            ",a.approveDate,a.comment,a.fw_uuid,a.supervisor FROM morbidity a INNER JOIN individual b on a.individual_uuid=b.uuid " +
             "WHERE a.fw_uuid=:id AND a.status=2 order by a.insertDate DESC")
     List<Morbidity> reject(String id);
 
