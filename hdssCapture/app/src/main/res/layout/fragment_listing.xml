@@ -199,9 +199,8 @@
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/btnd_save"
                     android:text="@string/gps"
-                    android:textColor="@android:color/background_light"
+                    style="@style/SupervisorButton"
                     app:icon="@drawable/ic_baseline_my_location_24"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
@@ -439,8 +438,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_save"
-                android:textColor="@android:color/background_light"
+                style="@style/SupervisorButton"
                 android:text="@string/saveclosedata" />
 
             <Button
@@ -449,8 +447,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_close"
-                android:textColor="@android:color/background_light"
+                style="@style/CloseButton"
                 android:text="@string/closedata" />
 
         </LinearLayout>

@@ -166,11 +166,11 @@
 
                 <Button
                     android:id="@+id/button_partner"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="@string/partner"
-                    android:background="@drawable/btnd_save"
-                    android:textColor="@android:color/background_light"
+                    style="@style/SupervisorButton"
+                    android:layout_gravity="center"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -212,12 +212,12 @@
 
                 <Button
                     android:id="@+id/button_rel_startDate"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="@string/startdate"
                     tools:ignore="DuplicateSpeakableTextCheck"
-                    android:background="@drawable/btnd_save"
-                    android:textColor="@android:color/background_light"
+                    style="@style/SupervisorButton"
+                    android:layout_gravity="center"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
@@ -253,12 +253,12 @@
                 <Button
                     goneUnless="@{relationship.endType!=1}"
                     android:id="@+id/button_rel_endDate"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="@string/enddate"
                     tools:ignore="DuplicateSpeakableTextCheck"
-                    android:background="@drawable/btnd_save"
-                    android:textColor="@android:color/background_light"
+                    style="@style/SupervisorButton"
+                    android:layout_gravity="center"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
@@ -273,15 +273,6 @@
                     android:textSize="20sp"
                     tools:ignore="TextContrastCheck" />
 
-                <TextView
-                    goneUnless="@{relationship.aIsToB==2}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/mar"/>
-
                 <org.openhds.hdsscapture.SearchableSpinner
                     goneUnless="@{relationship.aIsToB==2}"
                     android:id="@+id/mar"
@@ -292,6 +283,15 @@
                     android:gravity="left"
                     android:spinnerMode="dialog"
                     android:padding="10dp"/>
+
+                <TextView
+                    goneUnless="@{relationship.aIsToB==2}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:text="@string/mar"
+                    android:textColor="@color/black" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -471,8 +471,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_save"
-                android:textColor="@android:color/background_light"
+                style="@style/SupervisorButton"
                 android:text="@string/saveclosedata" />
 
             <Button
@@ -481,8 +480,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_close"
-                android:textColor="@android:color/background_light"
+                style="@style/CloseButton"
                 android:text="@string/closedata" />
 
         </LinearLayout>

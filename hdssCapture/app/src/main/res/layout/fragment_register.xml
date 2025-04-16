@@ -102,8 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@drawable/btnd_save"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:text="@string/savecontinuedata" />
 
         <Button
@@ -112,8 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:background="@drawable/btnd_close"
-            android:textColor="@android:color/background_light"
+            style="@style/CloseButton"
             android:text="@string/closedata" />
 
     </LinearLayout>

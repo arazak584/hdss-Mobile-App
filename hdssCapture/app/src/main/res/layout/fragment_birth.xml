@@ -216,12 +216,12 @@
 
                     <Button
                         android:id="@+id/button_outcome_father"
-                        android:layout_width="match_parent"
+                        android:layout_width="300dp"
                         android:layout_height="wrap_content"
                         android:text="@string/father_extid"
                         tools:ignore="DuplicateSpeakableTextCheck"
-                        android:background="@drawable/btnd_save"
-                        android:textColor="@android:color/background_light"
+                        style="@style/SupervisorButton"
+                        android:layout_gravity="center"
                         app:icon="@drawable/ic_baseline_person_24" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -655,12 +655,12 @@
 
                     <Button
                         android:id="@+id/button_outcome_conception"
-                        android:layout_width="match_parent"
+                        android:layout_width="350dp"
                         android:layout_height="wrap_content"
                         android:text="@string/conception"
                         tools:ignore="DuplicateSpeakableTextCheck"
-                        android:background="@drawable/btnd_save"
-                        android:textColor="@android:color/background_light"
+                        style="@style/SupervisorButton"
+                        android:layout_gravity="center"
                         app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                     <TextView
@@ -677,12 +677,12 @@
 
                     <Button
                         android:id="@+id/button_outcome_startDate"
-                        android:layout_width="match_parent"
+                        android:layout_width="300dp"
                         android:layout_height="wrap_content"
                         android:text="@string/outcomeDate"
                         tools:ignore="DuplicateSpeakableTextCheck"
-                        android:background="@drawable/btnd_save"
-                        android:textColor="@android:color/background_light"
+                        style="@style/SupervisorButton"
+                        android:layout_gravity="center"
                         app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -811,8 +811,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/Green"
-                android:textColor="@android:color/background_light"
+                style="@style/SupervisorButton"
                 android:text="@string/next" />
 
             <Button
@@ -821,8 +820,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/Red"
-                android:textColor="@android:color/background_light"
+                style="@style/CloseButton"
                 android:text="@string/close" />
 
 

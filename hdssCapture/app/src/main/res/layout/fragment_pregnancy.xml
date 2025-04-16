@@ -230,12 +230,12 @@
 
                 <Button
                     android:id="@+id/button_preg_startDate"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="@string/conception"
                     tools:ignore="DuplicateSpeakableTextCheck"
-                    android:background="@drawable/btnd_save"
-                    android:textColor="@android:color/background_light"
+                    style="@style/SupervisorButton"
+                    android:layout_gravity="center"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -397,12 +397,12 @@
 
                  <Button
                      android:id="@+id/button_lastClinicVisitDate"
-                     android:layout_width="match_parent"
+                     android:layout_width="300dp"
                      android:layout_height="wrap_content"
                      android:text="@string/lastClinicVisitDate"
                      tools:ignore="DuplicateSpeakableTextCheck"
-                     android:background="@drawable/btnd_save"
-                     android:textColor="@android:color/background_light"
+                     style="@style/SupervisorButton"
+                     android:layout_gravity="center"
                      app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                  <EditText
@@ -851,12 +851,12 @@
                 <Button
                     goneUnless="@{pregnancy.outcome==1}"
                     android:id="@+id/button_pregnancy_outcome"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="@string/outcomeDate"
                     tools:ignore="DuplicateSpeakableTextCheck"
-                    android:background="@drawable/btnd_save"
-                    android:textColor="@android:color/background_light"
+                    style="@style/SupervisorButton"
+                    android:layout_gravity="center"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
@@ -970,8 +970,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_save"
-                android:textColor="@android:color/background_light"
+                style="@style/SupervisorButton"
                 android:text="@string/saveclosedata" />
 
             <Button
@@ -980,8 +979,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_close"
-                android:textColor="@android:color/background_light"
+                style="@style/CloseButton"
                 android:text="@string/closedata" />
 
         </LinearLayout>

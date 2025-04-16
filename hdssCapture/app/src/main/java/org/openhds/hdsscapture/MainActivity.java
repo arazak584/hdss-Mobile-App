@@ -35,11 +35,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.MapActivity;
-import org.openhds.hdsscapture.Activity.ODKCsvActivity;
 import org.openhds.hdsscapture.Activity.QueryActivity;
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.Activity.LoginActivity;
-import org.openhds.hdsscapture.Activity.NewActivity;
+import org.openhds.hdsscapture.Activity.ViewActivity;
 import org.openhds.hdsscapture.Activity.PullActivity;
 import org.openhds.hdsscapture.Activity.PushActivity;
 import org.openhds.hdsscapture.Activity.RejectionsActivity;
@@ -433,7 +432,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Button views = findViewById(R.id.btnloc);
         views.setOnClickListener(v -> {
-            Intent i = new Intent(getApplicationContext(), NewActivity.class);
+            Intent i = new Intent(getApplicationContext(), ViewActivity.class);
             i.putExtra(LoginActivity.FIELDWORKER_DATAS, fieldworkerDatas);
             startActivity(i);
         });

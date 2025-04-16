@@ -12,10 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.openhds.hdsscapture.Activity.NewActivity;
 import org.openhds.hdsscapture.Activity.RejectionsActivity;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.entity.subqueries.Newloc;
 import org.openhds.hdsscapture.entity.subqueries.RejectEvent;
 
 import java.util.ArrayList;

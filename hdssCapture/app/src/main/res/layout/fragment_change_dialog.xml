@@ -9,14 +9,13 @@
 
     <Button
         android:id="@+id/button_hhclose"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text="@string/close"
         android:layout_gravity="center|top"
         android:textSize="10sp"
-        android:background="@drawable/btnd_close"
-        android:textColor="@android:color/background_light"
+        style="@style/CloseButton"
         app:icon="@drawable/ic_close" />
 
     <LinearLayout

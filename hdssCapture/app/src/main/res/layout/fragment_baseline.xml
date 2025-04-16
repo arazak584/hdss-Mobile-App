@@ -100,11 +100,13 @@
 
                 <Button
                     android:id="@+id/button_individual_insertDate"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="@string/visitDate"
                     tools:ignore="DuplicateSpeakableTextCheck"
-                    app:icon="@drawable/ic_baseline_calendar_month_24" />
+                    app:icon="@drawable/ic_baseline_calendar_month_24"
+                    android:layout_gravity="center"
+                    style="@style/SupervisorButton"/>
 
                 <TextView
                     android:id="@+id/individual_insertDate"
@@ -255,12 +257,12 @@
 
                 <Button
                     android:id="@+id/button_individual_Dob"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="@string/actual_dob"
                     tools:ignore="DuplicateSpeakableTextCheck"
-                    android:background="@drawable/btnd_save"
-                    android:textColor="@android:color/background_light"
+                    style="@style/SupervisorButton"
+                    android:layout_gravity="center"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
@@ -333,12 +335,12 @@
 
                 <Button
                     android:id="@+id/button_individual_mother"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="@string/mother_extid"
                     tools:ignore="DuplicateSpeakableTextCheck"
-                    android:background="@drawable/btnd_save"
-                    android:textColor="@android:color/background_light"
+                    style="@style/SupervisorButton"
+                    android:layout_gravity="center"
                     app:icon="@drawable/ic_baseline_pregnant_woman_24" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -379,11 +381,11 @@
 
                 <Button
                     android:id="@+id/button_individual_father"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="@string/father_extid"
-                    android:background="@drawable/btnd_save"
-                    android:textColor="@android:color/background_light"
+                    style="@style/SupervisorButton"
+                    android:layout_gravity="center"
                     tools:ignore="DuplicateSpeakableTextCheck"
                     app:icon="@drawable/ic_baseline_person_24" />
 
@@ -477,12 +479,12 @@
 
                 <Button
                     android:id="@+id/button_change_hh"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="@string/changehh"
                     app:icon="@drawable/baseline_people_24"
-                    android:background="@drawable/btnd_save"
-                    android:textColor="@android:color/background_light"
+                    style="@style/SupervisorButton"
+                    android:layout_gravity="center"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -539,12 +541,12 @@
 
                 <Button
                     android:id="@+id/button_residency_startDate"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="@string/startdate"
                     tools:ignore="DuplicateSpeakableTextCheck"
-                    android:background="@drawable/btnd_save"
-                    android:textColor="@android:color/background_light"
+                    style="@style/SupervisorButton"
+                    android:layout_gravity="center"
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
@@ -888,8 +890,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_save"
-                android:textColor="@android:color/background_light"
+                style="@style/SupervisorButton"
                 android:text="@string/savecontinuedata" />
 
             <Button
@@ -898,8 +899,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_close"
-                android:textColor="@android:color/background_light"
+                style="@style/CloseButton"
                 android:text="@string/closedata" />
 
 

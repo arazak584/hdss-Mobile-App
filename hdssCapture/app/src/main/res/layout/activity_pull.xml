@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Download All" />
+                android:text="Download Zip Data" />
 
             <TextView
                 android:id="@+id/statusTextView"
@@ -86,21 +86,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="10dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:paddingTop="2dp"
                 android:paddingBottom="3dp"
                 android:orientation="horizontal">
@@ -111,27 +111,23 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:layout_marginEnd="3dp"
-                    android:background="@color/DarkBlue"
                     android:drawableLeft="@drawable/download"
-                    android:text="@string/download"
-                    android:textSize="15sp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:elevation="5dp"/>
+                    android:text="@string/codebook"
+                    style="@style/SupervisorButton"/>
 
-                <TextView
-                    android:id="@+id/syncCodebook"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|right"
-                    android:layout_marginStart="3dp"
-                    android:layout_weight="1"
-                    android:gravity="right|center_horizontal"
-                    android:text="Settings | Codebook"
-                    android:singleLine="true"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#444"/>
+<!--                <TextView-->
+<!--                    android:id="@+id/syncCodebook"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center|right"-->
+<!--                    android:layout_marginStart="3dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:gravity="right|center_horizontal"-->
+<!--                    android:text="Settings | Codebook"-->
+<!--                    android:singleLine="true"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textColor="#444"/>-->
 
 
             </LinearLayout>
@@ -198,16 +194,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:paddingTop="2dp"
                 android:paddingBottom="3dp"
                 android:orientation="horizontal">
@@ -218,26 +214,22 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:layout_marginEnd="3dp"
-                    android:background="@color/DarkBlue"
                     android:drawableLeft="@drawable/download"
-                    android:text="@string/download"
-                    android:textSize="15sp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:elevation="5dp"/>
+                    android:text="@string/downloadloc"
+                    style="@style/SupervisorButton"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|right"
-                    android:layout_marginStart="3dp"
-                    android:text="Location | Socialgroup"
-                    android:layout_weight="3"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:gravity="right|center_horizontal"
-                    android:padding="10dp"
-                    />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center|right"-->
+<!--                    android:layout_marginStart="3dp"-->
+<!--                    android:text="Location | Socialgroup"-->
+<!--                    android:layout_weight="3"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:gravity="right|center_horizontal"-->
+<!--                    android:padding="10dp"-->
+<!--                    />-->
 
 
 
@@ -246,6 +238,7 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:backgroundTint="@color/black"
+                    android:layout_gravity="center"
                     android:background="@android:drawable/ic_dialog_info" />
 
 
@@ -314,16 +307,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:paddingTop="2dp"
                 android:paddingBottom="3dp"
                 android:orientation="horizontal">
@@ -334,26 +327,22 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:layout_marginEnd="3dp"
-                    android:background="@color/DarkBlue"
                     android:drawableLeft="@drawable/download"
-                    android:text="@string/download"
-                    android:textSize="15sp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:elevation="5dp"/>
+                    android:text="@string/downloadind"
+                    style="@style/SupervisorButton"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|right"
-                    android:layout_marginStart="3dp"
-                    android:text="Individual | Residency"
-                    android:layout_weight="3"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:gravity="right|center_horizontal"
-                    android:padding="10dp"
-                    />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center|right"-->
+<!--                    android:layout_marginStart="3dp"-->
+<!--                    android:text="Individual | Residency"-->
+<!--                    android:layout_weight="3"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:gravity="right|center_horizontal"-->
+<!--                    android:padding="10dp"-->
+<!--                    />-->
 
 
 
@@ -361,6 +350,7 @@
                     android:id="@+id/indsummary"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_gravity="center"
                     android:backgroundTint="@color/black"
                     android:background="@android:drawable/ic_dialog_info" />
 
@@ -451,16 +441,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:paddingTop="2dp"
                 android:paddingBottom="3dp"
                 android:orientation="horizontal">
@@ -471,26 +461,22 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:layout_marginEnd="3dp"
-                    android:background="@color/DarkBlue"
                     android:drawableLeft="@drawable/download"
-                    android:text="@string/download"
-                    android:textSize="15sp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:elevation="5dp"/>
+                    android:text="@string/downloaddem"
+                    style="@style/SupervisorButton"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|right"
-                    android:layout_marginStart="3dp"
-                    android:text="Demographics"
-                    android:layout_weight="3"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:gravity="right|center_horizontal"
-                    android:padding="10dp"
-                    />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center|right"-->
+<!--                    android:layout_marginStart="3dp"-->
+<!--                    android:text="Demographics"-->
+<!--                    android:layout_weight="3"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:gravity="right|center_horizontal"-->
+<!--                    android:padding="10dp"-->
+<!--                    />-->
 
 
 
@@ -500,6 +486,7 @@
                     android:layout_height="40dp"
                     android:backgroundTint="@color/black"
                     android:onClick="AppOthInfo"
+                    android:layout_gravity="center"
                     android:background="@android:drawable/ic_dialog_info" />
 
 
@@ -568,16 +555,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:paddingTop="2dp"
                 android:paddingBottom="3dp"
                 android:orientation="horizontal">
@@ -588,26 +575,22 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:layout_marginEnd="3dp"
-                    android:background="@color/DarkBlue"
                     android:drawableLeft="@drawable/download"
-                    android:text="@string/download"
-                    android:textSize="15sp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:elevation="5dp"/>
+                    android:text="@string/downloadpreg"
+                    style="@style/SupervisorButton"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|right"
-                    android:layout_marginStart="3dp"
-                    android:text="Pregnancy | Relationship"
-                    android:layout_weight="3"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:gravity="right|center_horizontal"
-                    android:padding="10dp"
-                    />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center|right"-->
+<!--                    android:layout_marginStart="3dp"-->
+<!--                    android:text="Pregnancy | Relationship"-->
+<!--                    android:layout_weight="3"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:gravity="right|center_horizontal"-->
+<!--                    android:padding="10dp"-->
+<!--                    />-->
 
 
 
@@ -617,6 +600,7 @@
                     android:layout_height="40dp"
                     android:backgroundTint="@color/black"
                     android:onClick="AppOthInfo"
+                    android:layout_gravity="center"
                     android:background="@android:drawable/ic_dialog_info" />
 
 
@@ -705,16 +689,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:paddingBottom="15dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
             android:orientation="vertical"
             android:background="@drawable/cardview_elevated">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:paddingTop="2dp"
                 android:paddingBottom="3dp"
                 android:orientation="horizontal">
@@ -725,26 +709,22 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:layout_marginEnd="3dp"
-                    android:background="@color/DarkBlue"
                     android:drawableLeft="@drawable/download"
-                    android:text="@string/download"
-                    android:textSize="15sp"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:elevation="5dp"/>
+                    android:text="@string/downloadses"
+                    style="@style/SupervisorButton"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|right"
-                    android:layout_marginStart="3dp"
-                    android:text="SES | Vaccination"
-                    android:layout_weight="3"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:gravity="right|center_horizontal"
-                    android:padding="10dp"
-                    />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center|right"-->
+<!--                    android:layout_marginStart="3dp"-->
+<!--                    android:text="SES | Vaccination"-->
+<!--                    android:layout_weight="3"-->
+<!--                    android:textSize="18sp"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:gravity="right|center_horizontal"-->
+<!--                    android:padding="10dp"-->
+<!--                    />-->
 
 
 
@@ -754,6 +734,7 @@
                     android:layout_height="40dp"
                     android:backgroundTint="@color/black"
                     android:onClick="AppInfo"
+                    android:layout_gravity="center"
                     android:background="@android:drawable/ic_dialog_info" />
 
 

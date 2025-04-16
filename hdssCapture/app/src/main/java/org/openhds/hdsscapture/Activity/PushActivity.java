@@ -1813,7 +1813,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update the UI after fetching the data
                 runOnUiThread(() -> {
                     buttonSendLocationdata.setText("Locations(" + locationsList.size() + ") to send");
-                    buttonSendLocationdata.setTextColor(Color.WHITE);
+                    //buttonSendLocationdata.setTextColor(Color.WHITE);
 
                     if (locationsList.isEmpty()) {
                         buttonSendLocationdata.setVisibility(View.GONE);
@@ -1973,7 +1973,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update the UI after fetching the data
                 runOnUiThread(() -> {
                     buttonSendVisit.setText("Visit(" + visitList.size() + ") to send");
-                    buttonSendVisit.setTextColor(Color.WHITE);
+                    //buttonSendVisit.setTextColor(Color.WHITE);
 
                     if (visitList.isEmpty()) {
                         buttonSendVisit.setVisibility(View.GONE);
@@ -2063,7 +2063,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update the UI after fetching the data
                 runOnUiThread(() -> {
                     buttonSendList.setText("Listing(" + listingList.size() + ") to send");
-                    buttonSendList.setTextColor(Color.WHITE);
+                    //buttonSendList.setTextColor(Color.WHITE);
 
                     if (listingList.isEmpty()) {
                         buttonSendList.setVisibility(View.GONE);
@@ -2151,7 +2151,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update the UI after fetching the data
                 runOnUiThread(() -> {
                     buttonSendIndividualdata.setText("Individuals(" + individualList.size() + ") to send");
-                    buttonSendIndividualdata.setTextColor(Color.WHITE);
+                    //buttonSendIndividualdata.setTextColor(Color.WHITE);
 
                     if (individualList.isEmpty()) {
                         buttonSendIndividualdata.setVisibility(View.GONE);
@@ -2239,7 +2239,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update UI after fetching data
                 runOnUiThread(() -> {
                     buttonSendSocialgroupdata.setText("Socialgroups(" + socialgroupList.size() + ") to send");
-                    buttonSendSocialgroupdata.setTextColor(Color.WHITE);
+                    //buttonSendSocialgroupdata.setTextColor(Color.WHITE);
 
                     if (socialgroupList.isEmpty()) {
                         buttonSendSocialgroupdata.setVisibility(View.GONE);
@@ -2328,7 +2328,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update the UI based on data fetched
                 runOnUiThread(() -> {
                     buttonSendRelationshipdata.setText("Relationship (" + relationshipList.size() + ") to send");
-                    buttonSendRelationshipdata.setTextColor(Color.WHITE);
+                    //buttonSendRelationshipdata.setTextColor(Color.WHITE);
 
                     if (relationshipList.isEmpty()) {
                         buttonSendRelationshipdata.setVisibility(View.GONE);
@@ -2418,7 +2418,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update the UI based on data fetched
                 runOnUiThread(() -> {
                     buttonSendPregnancydata.setText("Pregnancy (" + pregnancyList.size() + ") to send");
-                    buttonSendPregnancydata.setTextColor(Color.WHITE);
+                    //buttonSendPregnancydata.setTextColor(Color.WHITE);
 
                     if (pregnancyList.isEmpty()) {
                         buttonSendPregnancydata.setVisibility(View.GONE);
@@ -2509,7 +2509,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update the UI based on data fetched
                 runOnUiThread(() -> {
                     buttonSendOutcomedata.setText("Pregnancy Outcome (" + pregnancyoutcomeList.size() + ") to send");
-                    buttonSendOutcomedata.setTextColor(Color.WHITE);
+                    //buttonSendOutcomedata.setTextColor(Color.WHITE);
 
                     if (pregnancyoutcomeList.isEmpty()) {
                         buttonSendOutcomedata.setVisibility(View.GONE);
@@ -2601,7 +2601,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update the UI based on data fetched
                 runOnUiThread(() -> {
                     buttonSendOutcomesdata.setText("Outcome (" + outcomeList.size() + ") to send");
-                    buttonSendOutcomesdata.setTextColor(Color.WHITE);
+                    //buttonSendOutcomesdata.setTextColor(Color.WHITE);
 
                     // Handle button visibility
                     if (outcomeList.isEmpty()) {
@@ -2693,7 +2693,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update the UI based on data fetched
                 runOnUiThread(() -> {
                     buttonSendDemographicdata.setText("Demographic (" + demographicList.size() + ") to send");
-                    buttonSendDemographicdata.setTextColor(Color.WHITE);
+                    //buttonSendDemographicdata.setTextColor(Color.WHITE);
 
                     // Handle button visibility
                     if (demographicList.isEmpty()) {
@@ -2785,7 +2785,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update UI on the main thread
                 runOnUiThread(() -> {
                     buttondth.setText("Death (" + deathList.size() + ") to send");
-                    buttondth.setTextColor(Color.WHITE);
+                    //buttondth.setTextColor(Color.WHITE);
 
                     // Handle button visibility
                     if (deathList.isEmpty()) {
@@ -2877,7 +2877,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update UI on the main thread
                 runOnUiThread(() -> {
                     buttonvpm.setText("Vpm(" + vpmList.size() + ") to send");
-                    buttonvpm.setTextColor(Color.WHITE);
+                    //buttonvpm.setTextColor(Color.WHITE);
 
                     // Handle button visibility
                     if (vpmList.isEmpty()) {
@@ -2969,7 +2969,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update UI on the main thread
                 runOnUiThread(() -> {
                     buttonSendSocio.setText("Profiles[SES](" + hdssSociodemoList.size() + ") to send");
-                    buttonSendSocio.setTextColor(Color.WHITE);
+                    //buttonSendSocio.setTextColor(Color.WHITE);
 
                     // Handle button visibility
                     if (hdssSociodemoList.isEmpty()) {
@@ -3060,7 +3060,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update UI on the main thread
                 runOnUiThread(() -> {
                     buttonSendRes.setText("Residency (" + residencyList.size() + ") to send");
-                    buttonSendRes.setTextColor(Color.WHITE);
+                    //buttonSendRes.setTextColor(Color.WHITE);
 
                     // Handle button visibility
                     if (residencyList.isEmpty()) {
@@ -3152,7 +3152,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update UI on the main thread
                 runOnUiThread(() -> {
                     buttonSendImg.setText("Inmigration (" + inmigrationList.size() + ") to send");
-                    buttonSendImg.setTextColor(Color.WHITE);
+                    //buttonSendImg.setTextColor(Color.WHITE);
 
                     // Handle button visibility
                     if (inmigrationList.isEmpty()) {
@@ -3244,7 +3244,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update UI on the main thread
                 runOnUiThread(() -> {
                     buttonSendOmg.setText("Outmigration (" + outmigrationList.size() + ") to send");
-                    buttonSendOmg.setTextColor(Color.WHITE);
+                    //buttonSendOmg.setTextColor(Color.WHITE);
 
                     // Handle button visibility
                     if (outmigrationList.isEmpty()) {
@@ -3335,7 +3335,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update UI on the main thread
                 runOnUiThread(() -> {
                     buttonSendAmend.setText("Amendment (" + amendmentList.size() + ") to send");
-                    buttonSendAmend.setTextColor(Color.WHITE);
+                    //buttonSendAmend.setTextColor(Color.WHITE);
 
                     // Handle button visibility
                     buttonSendAmend.setVisibility(amendmentList.isEmpty() ? View.GONE : View.VISIBLE);
@@ -3423,7 +3423,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update UI on the main thread
                 runOnUiThread(() -> {
                     buttonSendVac.setText("Vaccination (" + vaccinationList.size() + ") to send");
-                    buttonSendVac.setTextColor(Color.WHITE);
+                    //buttonSendVac.setTextColor(Color.WHITE);
 
                     // Handle button visibility
                     buttonSendVac.setVisibility(vaccinationList.isEmpty() ? View.GONE : View.VISIBLE);
@@ -3511,7 +3511,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update UI on the main thread
                 runOnUiThread(() -> {
                     buttonSendDup.setText("Duplicate (" + duplicateList.size() + ") to send");
-                    buttonSendDup.setTextColor(Color.WHITE);
+                    //buttonSendDup.setTextColor(Color.WHITE);
 
                     // Manage button visibility
                     buttonSendDup.setVisibility(duplicateList.isEmpty() ? View.GONE : View.VISIBLE);
@@ -3606,7 +3606,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update UI on the main thread
                 runOnUiThread(() -> {
                     buttonSendcom.setText("Community Report (" + communityReportList.size() + ") to send");
-                    buttonSendcom.setTextColor(Color.WHITE);
+                    //buttonSendcom.setTextColor(Color.WHITE);
 
                     // Manage button visibility
                     buttonSendcom.setVisibility(communityReportList.isEmpty() ? View.GONE : View.VISIBLE);
@@ -3694,7 +3694,7 @@ public class PushActivity extends AppCompatActivity {
                 // Update UI on the main thread
                 runOnUiThread(() -> {
                     buttonSendreg.setText("Registry (" + registryList.size() + ") to send");
-                    buttonSendreg.setTextColor(Color.WHITE);
+                    //buttonSendreg.setTextColor(Color.WHITE);
 
                     // Manage button visibility
                     buttonSendreg.setVisibility(registryList.isEmpty() ? View.GONE : View.VISIBLE);
@@ -3795,7 +3795,7 @@ public class PushActivity extends AppCompatActivity {
 
     private void updateUIForMorbidity(List<Morbidity> morbidityList) {
         buttonSendmor.setText("Morbidity Report (" + morbidityList.size() + ") to send");
-        buttonSendmor.setTextColor(Color.WHITE);
+        //buttonSendmor.setTextColor(Color.WHITE);
         buttonSendmor.setVisibility(morbidityList.isEmpty() ? View.GONE : View.VISIBLE);
     }
 

@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.openhds.hdsscapture.Activity.NewActivity;
+import org.openhds.hdsscapture.Activity.ViewActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.entity.subqueries.Newloc;
 
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class ViewsAdapter extends RecyclerView.Adapter<ViewsAdapter.ViewHolder>{
 
-    NewActivity activity;
+    ViewActivity activity;
     LayoutInflater inflater;
     CardView cardView;
     private List<Newloc> newlocs;
@@ -31,7 +31,7 @@ public class ViewsAdapter extends RecyclerView.Adapter<ViewsAdapter.ViewHolder>{
 
     private final Context context;
 
-    public ViewsAdapter(NewActivity activity) {
+    public ViewsAdapter(ViewActivity activity) {
         this.activity = activity;
         this.newlocs = new ArrayList<>();
         inflater = LayoutInflater.from(activity);

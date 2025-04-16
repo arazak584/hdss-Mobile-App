@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="true">HDSS CAPTURE</string>
-    <string name="versions">2025.03.01</string>
+    <string name="versions">2025.04.01</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>
@@ -120,7 +120,7 @@
     <string name="ind_q1">BACKGROUND</string>
     <string name="ind_q1p1">START TIME</string>
     <string name="fw">FIELD WORKERS CODE</string>
-    <string name="visitDate">DATE OF INTERVIEW (YYYY-MM-DD)</string>
+    <string name="visitDate">DATE OF INTERVIEW</string>
     <string name="modifDate">LAST UPDATE DATE(YYYY-MM-DD)</string>
     <string name="ind_q2">INDIVIDUAL CHARACTERISTICS</string>
     <string name="ind_extid">Individual ID</string>
@@ -251,7 +251,7 @@
     <string name="login_form_username">username</string>
     <string name="login_form_title">"Fieldworker Login "</string>
     <string name="login_form">User Login</string>
-    <string name="syncFieldworker">Sync Fieldworker</string>
+    <string name="syncFieldworker">Download Users</string>
     <string name="staffcode">Staff Code</string>
     <string name="text_household">Select Household to Continue Interview</string>
     <string name="text_newhousehold">New Household</string>
@@ -736,7 +736,7 @@
     <string name="fws">FIELDWORKER</string>
     <string name="supervisor">SUPERVISOR</string>
     <string name="dataco">Download Data Collectors</string>
-    <string name="dac">DOWNLOAD USERS</string>
+    <string name="dac">DOWNLOAD Data Collectors</string>
     <string name="setting">Download Assignment</string>
     <string name="reject">Rejections</string>
     <string name="rejections">Rejections to Resolve</string>
@@ -822,6 +822,33 @@
     <string name="genodk">Generate ODK Files</string>
     <string name="odkcsv">ODK Forms</string>
     <string name="generate">Generate</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="codebook"><![CDATA[Save Settings & Codebook]]></string>
+    <string name="downloadloc"><![CDATA[Save Location & Socialgroup]]></string>
+    <string name="downloadind"><![CDATA[Save Individual & Residency]]></string>
+    <string name="downloaddem">Save Demographic</string>
+    <string name="downloadpreg"><![CDATA[Save Pregnancy & Relationship]]></string>
+    <string name="downloadses"><![CDATA[Save Ses & Vaccination]]></string>
+    <string name="doa">Date of Admission</string>
+    <string name="dpt">DPT-HepB-Hib 1</string>
+    <string name="dpt2">DPT-HepB-Hib 2</string>
+    <string name="dpt3">DPT-HepB-Hib 3</string>
+    <string name="pneu">Pneumococcal 1</string>
+    <string name="pneu2">Pneumococcal 2</string>
+    <string name="pneu3">Pneumococcal 3</string>
+    <string name="rota">ROTA 1</string>
+    <string name="rota2">ROTA 2</string>
+    <string name="rota3">ROTA 3</string>
+    <string name="vitamin6">VITAMIN A [6 Months]</string>
+    <string name="vitamin12">VITAMIN A [12 Months]</string>
+    <string name="vitamin18">VITAMIN A [18 Months]</string>
+    <string name="rtss6">MAlARIA RTSS [6 Months]</string>
+    <string name="rtss7">MAlARIA RTSS [7 Months]</string>
+    <string name="rtss9">MAlARIA RTSS [9 Months]</string>
+    <string name="rtss18">MAlARIA RTSS [18 Months]</string>
+    <string name="measles">MEASLES RUBELLA 1</string>
+    <string name="measles2">MEASLES RUBELLA 2</string>
+    <string name="yf">YELLOW FEVER</string>
 
 
 </resources>

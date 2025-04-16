@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
-public class NewActivity extends AppCompatActivity {
+public class ViewActivity extends AppCompatActivity {
 
     private SocialgroupViewModel socialgroupViewModel;
     private LocationViewModel locationViewModel;
@@ -50,7 +50,7 @@ public class NewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new);
+        setContentView(R.layout.activity_view);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -207,11 +207,11 @@ public class NewActivity extends AppCompatActivity {
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Start MainActivity
-                        Intent intent = new Intent(NewActivity.this, MainActivity.class);
+                        Intent intent = new Intent(ViewActivity.this, MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
                         // Finish the current activity
-                        NewActivity.this.finish();
+                        ViewActivity.this.finish();
                     }
                 })
                 .setNegativeButton(getString(R.string.no), null)

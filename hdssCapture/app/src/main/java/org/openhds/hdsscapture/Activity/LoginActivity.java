@@ -28,6 +28,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.button.MaterialButton;
+
 import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.Dao.ApiDao;
 import org.openhds.hdsscapture.Dialog.FilterDialogFragment;
@@ -92,13 +94,13 @@ public class LoginActivity extends AppCompatActivity {
         txtAppName = findViewById(R.id.txtAppName);
         txtAppName.setText(getString(R.string.app_name) + " v" + getString(R.string.versions));
 
-        final Button superv = findViewById(R.id.button_Supervisor);
+        final MaterialButton superv = findViewById(R.id.button_Supervisor);
         superv.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(), SupervisorActivity.class);
             startActivity(i);
         });
 
-        final Button start = findViewById(R.id.btnLogin);
+        final MaterialButton start = findViewById(R.id.btnLogin);
         start.setOnClickListener(v -> {
             if (TextUtils.isEmpty(username.getText().toString().trim())) {
                 username.setError("Invalid user or PIN");
@@ -149,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        final Button send = findViewById(R.id.apiSettings);
+        final MaterialButton send = findViewById(R.id.apiSettings);
         send.setOnClickListener(v -> {
             UrlFragment dialogFragment = new UrlFragment();
             dialogFragment.show(getSupportFragmentManager(), "UrlFragment");

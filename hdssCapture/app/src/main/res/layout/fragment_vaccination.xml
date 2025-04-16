@@ -566,11 +566,11 @@
             <Button
                 goneUnless="@{vaccination.admission==1}"
                 android:id="@+id/btn_admitDate"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:text="Date of Admission"
-                android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+                android:text="@string/doa"
+                style="@style/SupervisorButton"
+                android:layout_gravity="center"
                 app:icon="@drawable/ic_baseline_calendar_month_24" />
 
             <TextView
@@ -699,11 +699,11 @@
 
         <Button
             android:id="@+id/btn_bcg"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="@string/bcg"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -718,11 +718,11 @@
 
         <Button
             android:id="@+id/btn_opv0"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="@string/opv0"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -737,11 +737,11 @@
 
         <Button
             android:id="@+id/btn_opv1"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="@string/opv1"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -756,11 +756,11 @@
 
         <Button
             android:id="@+id/btn_opv2"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="@string/opv2"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -775,11 +775,11 @@
 
         <Button
             android:id="@+id/btn_opv3"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="@string/opv3"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -794,11 +794,11 @@
 
         <Button
             android:id="@+id/btn_DPT_HepB_Hib1"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="DPT-HepB-Hib 1"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/dpt"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -813,11 +813,11 @@
 
         <Button
             android:id="@+id/btn_DPT_HepB_Hib2"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="DPT-HepB-Hib 2"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/dpt2"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -832,11 +832,11 @@
 
         <Button
             android:id="@+id/btn_DPT_HepB_Hib3"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="DPT-HepB-Hib 3"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/dpt3"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -851,11 +851,11 @@
 
         <Button
             android:id="@+id/btn_pneumo1"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="Pneumococcal 1"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/pneu"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -870,11 +870,11 @@
 
         <Button
             android:id="@+id/btn_pneumo2"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="Pneumococcal 2"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/pneu2"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -889,11 +889,11 @@
 
         <Button
             android:id="@+id/btn_pneumo3"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="Pneumococcal 3"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/pneu3"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -908,11 +908,11 @@
 
         <Button
             android:id="@+id/btn_rota1"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="ROTA 1"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/rota"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -927,11 +927,11 @@
 
         <Button
             android:id="@+id/btn_rota2"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="ROTA 2"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/rota2"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -946,11 +946,11 @@
 
         <Button
             android:id="@+id/btn_rota3"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="ROTA 3"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/rota3"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -965,11 +965,11 @@
 
         <Button
             android:id="@+id/btn_ipv"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="@string/ipv"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -984,11 +984,11 @@
 
         <Button
             android:id="@+id/btn_vitaminA6"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="VITAMIN A [6 Months]"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/vitamin6"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1003,11 +1003,11 @@
 
         <Button
             android:id="@+id/btn_vitaminA12"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="VITAMIN A [12 Months]"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/vitamin12"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1022,11 +1022,11 @@
 
         <Button
             android:id="@+id/btn_vitaminA18"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="VITAMIN A [18 Months]"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/vitamin18"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1041,11 +1041,11 @@
 
         <Button
             android:id="@+id/btn_rtss6"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="MAlARIA RTSS [6 Months]"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/rtss6"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1060,11 +1060,11 @@
 
         <Button
             android:id="@+id/btn_rtss7"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="MAlARIA RTSS [7 Months]"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/rtss7"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1079,11 +1079,11 @@
 
         <Button
             android:id="@+id/btn_rtss9"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="MAlARIA RTSS [9 Months]"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/rtss9"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1098,11 +1098,11 @@
 
         <Button
             android:id="@+id/btn_rtss18"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="MAlARIA RTSS [18 Months]"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/rtss18"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1117,11 +1117,11 @@
 
         <Button
             android:id="@+id/btn_measles1"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="MEASLES RUBELLA 1"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/measles"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1136,11 +1136,11 @@
 
         <Button
             android:id="@+id/btn_measles2"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="MEASLES RUBELLA 2"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/measles2"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1155,11 +1155,11 @@
 
         <Button
             android:id="@+id/btn_yellow"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="YELLOW FEVER"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            android:text="@string/yf"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1174,11 +1174,11 @@
 
         <Button
             android:id="@+id/btn_menA"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="@string/mena"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1193,11 +1193,11 @@
 
         <Button
             android:id="@+id/btn_itn"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:text="@string/itn"
-            android:background="@drawable/btnd_rone_dgbevel"
-                android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
+            android:layout_gravity="center"
             app:icon="@drawable/ic_baseline_calendar_month_24" />
 
         <TextView
@@ -1290,8 +1290,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_save"
-                android:textColor="@android:color/background_light"
+                style="@style/SupervisorButton"
                 android:text="@string/saveclosedata" />
 
             <Button
@@ -1300,8 +1299,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_close"
-                android:textColor="@android:color/background_light"
+                style="@style/CloseButton"
                 android:text="@string/closedata" />
 
         </LinearLayout>

@@ -142,17 +142,16 @@
         app:layout_constraintBottom_toTopOf="@id/copyright_layout">
 
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLogin"
             android:layout_width="300dip"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="6dip"
-            android:background="@drawable/btnd_rone_dgbevel"
             android:elevation="10sp"
             android:text="@string/login_form_login"
-            android:textColor="@android:color/background_light"
             android:textSize="18sp"
+            style="@style/SecondaryButton"
             android:translationZ="10dip" />
 
         </LinearLayout>
@@ -171,27 +170,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginButtonsLayout">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/apiSettings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@android:color/transparent"
             android:drawableStart="@drawable/btn_setting"
             android:drawablePadding="5dip"
             android:text="@string/login_settings_lbl"
+            android:elevation="10sp"
             android:textColor="@color/color_text_darkgray" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/button_Supervisor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="@android:color/transparent"
             android:drawableStart="@drawable/d_user"
             android:drawablePadding="5dip"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
+            android:elevation="10sp"
+            style="@style/SupervisorButton"
             android:text="@string/dac"/>
 
 

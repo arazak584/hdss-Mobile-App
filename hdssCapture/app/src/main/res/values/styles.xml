@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/gray</item>
@@ -127,6 +127,59 @@
         <item name="android:padding">8dp</item>
         <item name="android:textColor">#000000</item>
         <item name="android:backgroundTint">#0077B6</item>
+    </style>
+
+    <style name="SecondaryButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="textAllCaps">true</item>
+        <item name="fontFamily">@font/open_sans_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/blue_500</item>
+        <item name="strokeColor">@color/blue_500</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="SupervisorButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="textAllCaps">true</item>
+        <item name="fontFamily">@font/open_sans_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/Green</item>
+        <item name="strokeColor">@color/Green</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <style name="PrimaryButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="textAllCaps">true</item>
+        <item name="fontFamily">@font/open_sans_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="strokeColor">@color/black</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+    <!-- Custom Outlined Button Style with Underline -->
+    <style name="OutlinedUnderlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">@color/material_primary</item>
+        <item name="android:backgroundTint">@android:color/transparent</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="strokeColor">@color/material_primary</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="android:elevation">2dp</item>
+        <item name="rippleColor">@color/material_ripple</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="CloseButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="textAllCaps">true</item>
+        <item name="fontFamily">@font/open_sans_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/Red</item>
+        <item name="strokeColor">@color/Red</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="android:padding">10dp</item>
     </style>
 
 

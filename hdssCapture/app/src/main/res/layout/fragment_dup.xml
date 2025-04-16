@@ -227,11 +227,11 @@
 
                 <Button
                     android:id="@+id/button_dup"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="@string/dup"
-                    android:background="@drawable/btnd_save"
-                    android:textColor="@android:color/background_light"
+                    style="@style/SupervisorButton"
+                    android:layout_gravity="center"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -322,11 +322,11 @@
 
                     <Button
                         android:id="@+id/button1_dup"
-                        android:layout_width="match_parent"
+                        android:layout_width="300dp"
                         android:layout_height="wrap_content"
                         android:text="@string/dup"
-                        android:background="@drawable/btnd_save"
-                        android:textColor="@android:color/background_light"
+                        style="@style/SupervisorButton"
+                        android:layout_gravity="center"
                         tools:ignore="DuplicateSpeakableTextCheck" />
 
 
@@ -423,11 +423,11 @@
 
                     <Button
                         android:id="@+id/button2_dup"
-                        android:layout_width="match_parent"
+                        android:layout_width="300dp"
                         android:layout_height="wrap_content"
                         android:text="@string/dup"
-                        android:background="@drawable/btnd_save"
-                        android:textColor="@android:color/background_light"
+                        style="@style/SupervisorButton"
+                        android:layout_gravity="center"
                         tools:ignore="DuplicateSpeakableTextCheck" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -541,8 +541,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_save"
-                android:textColor="@android:color/background_light"
+                style="@style/SupervisorButton"
                 android:text="@string/saveclosedata" />
 
             <Button
@@ -551,8 +550,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_close"
-                android:textColor="@android:color/background_light"
+                style="@style/CloseButton"
                 android:text="@string/closedata" />
 
         </LinearLayout>

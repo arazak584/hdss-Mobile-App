@@ -1,7 +1,6 @@
 package org.openhds.hdsscapture.Duplicate;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +13,8 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.openhds.hdsscapture.Activity.NewActivity;
-import org.openhds.hdsscapture.Adapter.ViewsAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.entity.subqueries.DupList;
-import org.openhds.hdsscapture.entity.subqueries.Newloc;
 
 import java.util.ArrayList;
 import java.util.List;

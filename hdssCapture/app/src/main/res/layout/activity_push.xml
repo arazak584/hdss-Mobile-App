@@ -44,20 +44,17 @@
             android:layout_margin="5dp"
             android:background="@color/Green" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendLocation"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_location"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 
@@ -75,20 +72,17 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendList"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_list"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 <!--        <TextView-->
@@ -98,20 +92,17 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendIndividual"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_individual"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 <!--        <TextView-->
@@ -121,36 +112,30 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendSocialgroup"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_socialgroup"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendVisit"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_visit"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 <!--        <TextView-->
@@ -160,20 +145,17 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendRelationship"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_relationship"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 <!--        <TextView-->
@@ -183,20 +165,17 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendPregnancy"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_pregnancy"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 <!--        <TextView-->
@@ -206,20 +185,17 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendOutcome"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_pregoutcome"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 <!--        <TextView-->
@@ -229,20 +205,17 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendOutcomes"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_outcome"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 <!--        <TextView-->
@@ -252,20 +225,17 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendDemography"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_demography"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 
@@ -277,36 +247,29 @@
 <!--            android:textSize="20sp" />-->
 
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttondth"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_death"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
             android:layout_gravity="center" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonvpm"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_vpm"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 <!--        <TextView-->
@@ -316,20 +279,17 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendSocio"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_profile"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 <!--        <TextView-->
@@ -339,20 +299,17 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendResidency"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_residency"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 <!--        <TextView-->
@@ -362,20 +319,17 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendImg"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_inmigration"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 <!--        <TextView-->
@@ -385,20 +339,17 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendOmg"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_outmigration"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 <!--        <TextView-->
@@ -408,20 +359,17 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendAmend"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_amendment"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 <!--        <TextView-->
@@ -431,36 +379,30 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendVac"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_vaccination"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendMor"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_morbidity"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 <!--        <TextView-->
@@ -470,52 +412,43 @@
 <!--            android:textAlignment="center"-->
 <!--            android:textSize="20sp" />-->
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendDup"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_duplicate"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendCom"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_community"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:visibility="gone"
             android:id="@+id/buttonSendReg"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
+            android:layout_width="500dp"
+            android:layout_height="60dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_registry"
             android:drawableRight="@drawable/send"
-            android:background="@drawable/btnd_rone_white"
-            android:textColor="@android:color/background_light"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
 

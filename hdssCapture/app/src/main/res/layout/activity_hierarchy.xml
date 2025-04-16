@@ -325,8 +325,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="Update"
-                android:background="@drawable/btnd_rone"
-                android:textColor="@android:color/background_light"
+                style="@style/SecondaryButton"
                 android:textSize="18sp" />
 
             <Button
@@ -340,8 +339,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="Enumeration"
-                android:background="@drawable/btnd_rone"
-                android:textColor="@android:color/background_light"
+                style="@style/SecondaryButton"
                 android:textSize="18sp" />
 
 
@@ -355,7 +353,7 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_dup"
                 android:layout_width="180dip"
                 android:layout_height="wrap_content"
@@ -364,10 +362,11 @@
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:background="@color/DarkBlue"
                 android:text="@string/duplicates"
-                android:textColor="@android:color/background_light"
-                android:textSize="18sp" />
+                style="@style/SupervisorButton"/>
+
+
+
         </LinearLayout>
 
         </LinearLayout>

@@ -232,12 +232,12 @@
 
                 <Button
                     android:id="@+id/button_change_hh"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:text="@string/changehh"
                     app:icon="@drawable/baseline_people_24"
-                    android:background="@drawable/btnd_save"
-                    android:textColor="@android:color/background_light"
+                    style="@style/SupervisorButton"
+                    android:layout_gravity="center"
                     tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -513,8 +513,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_save"
-                android:textColor="@android:color/background_light"
+                style="@style/SupervisorButton"
                 android:text="@string/savecontinuedata" />
 
             <Button
@@ -523,8 +522,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                android:background="@drawable/btnd_close"
-                android:textColor="@android:color/background_light"
+                style="@style/CloseButton"
                 android:text="@string/closedata" />
 
         </LinearLayout>
