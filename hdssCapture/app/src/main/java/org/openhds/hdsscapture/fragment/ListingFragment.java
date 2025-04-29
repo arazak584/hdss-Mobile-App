@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -88,7 +89,8 @@ public class ListingFragment extends Fragment {
     private TextView statusText;
     private String fw;
     private String fwname;
-    private EditText latitudeEditText, longitudeEditText, accuracyEditText;
+    private EditText latitudeEditText, longitudeEditText, accuracyEditText, altitudeEditText;
+    private AppCompatEditText comp;
 
     public ListingFragment() {
         // Required empty public constructor
@@ -145,6 +147,8 @@ public class ListingFragment extends Fragment {
         latitudeEditText = binding.getRoot().findViewById(R.id.latitude);
         longitudeEditText = binding.getRoot().findViewById(R.id.longitude);
         accuracyEditText = binding.getRoot().findViewById(R.id.accuracy);
+        altitudeEditText = binding.getRoot().findViewById(R.id.altitude);
+        comp = binding.getRoot().findViewById(R.id.locationcompno);
 
         binding.getRoot().findViewById(R.id.button_gps).setOnClickListener(v -> getLocation());
 
@@ -245,6 +249,12 @@ public class ListingFragment extends Fragment {
                     binding.buttonChangeCluster.setEnabled(true);
                 }
 
+                if (data.edit_compno ==1){
+                    binding.locationcompno.setEnabled(true);
+                }else{
+                    binding.locationcompno.setEnabled(false);
+                }
+
 
             } else {
                 data = new Listing();
@@ -331,6 +341,7 @@ public class ListingFragment extends Fragment {
 
                     LocationAmendment locationz = new LocationAmendment();
                     locationz.uuid = finalData.location_uuid;
+                    locationz.compno = finalData.compno;
 
                     if (!binding.repllocationName.getText().toString().trim().isEmpty()) {
                         locationz.locationName = binding.getListing().repl_locationName;
@@ -347,11 +358,13 @@ public class ListingFragment extends Fragment {
                         locationz.longitude = data.longitude;
                         locationz.latitude = data.latitude;
                         locationz.accuracy = data.accuracy;
+                        locationz.altitude = data.altitude;
 
                     }else{
                         locationz.longitude = binding.getListing().longitude;
                         locationz.latitude = binding.getListing().latitude;
                         locationz.accuracy = binding.getListing().accuracy;
+                        locationz.altitude = binding.getListing().altitude;
                     }
 
                     // Assuming vill_extId is a String
@@ -496,6 +509,7 @@ public class ListingFragment extends Fragment {
         latitudeEditText.setText(String.format("%.6f", location.getLatitude()));
         longitudeEditText.setText(String.format("%.6f", location.getLongitude()));
         accuracyEditText.setText(String.valueOf(location.getAccuracy()));
+        altitudeEditText.setText(String.format("%.4f", location.getAltitude()));
     }
 
 

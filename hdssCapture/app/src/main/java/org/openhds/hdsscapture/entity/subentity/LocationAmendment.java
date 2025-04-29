@@ -17,4 +17,6 @@ public class LocationAmendment {
     public String longitude;
     public String latitude;
     public String accuracy;
+    public String compno;
+    public String altitude;
 }

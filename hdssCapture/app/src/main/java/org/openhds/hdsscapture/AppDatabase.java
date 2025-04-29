@@ -80,7 +80,7 @@ import java.util.concurrent.Executors;
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
         Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class, Duplicate.class,
         ApiUrl.class, Configsettings.class, OdkForm.class, Vpm.class, CommunityReport.class, Morbidity.class, HierarchyLevel.class, Registry.class
-        }, version = 7 , exportSchema = true)
+        }, version = 8 , exportSchema = true)
 
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -283,6 +283,17 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_7_8 = new Migration(7, 8) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE listing ADD COLUMN edit_compno INTEGER");
+            database.execSQL("ALTER TABLE locations ADD COLUMN altitude TEXT");
+            database.execSQL("ALTER TABLE listing ADD COLUMN altitude TEXT");
+            database.execSQL("ALTER TABLE config ADD COLUMN compno TEXT");
+
+        }
+    };
+
     private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
@@ -293,7 +304,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                 AppDatabase.class, "hdss")
                                 .addCallback(sRoomDatabaseCallback)
-                                .addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_3_4,MIGRATION_4_5,MIGRATION_5_6,MIGRATION_6_7)
+                                .addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_3_4,MIGRATION_4_5,MIGRATION_5_6,MIGRATION_6_7,MIGRATION_7_8)
                                 .fallbackToDestructiveMigrationOnDowngrade()
                                 .build();
             }

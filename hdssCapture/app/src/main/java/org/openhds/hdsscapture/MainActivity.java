@@ -56,6 +56,7 @@ import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyLevelViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
+import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
 import org.openhds.hdsscapture.Viewmodel.OdkViewModel;
@@ -71,6 +72,8 @@ import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.HierarchyLevel;
+import org.openhds.hdsscapture.entity.Listing;
+import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.fragment.InfoFragment;
 import org.openhds.hdsscapture.odk.OdkForm;
@@ -258,31 +261,90 @@ public class MainActivity extends AppCompatActivity {
                                                         OdkForm[] odk = response.body().getData().toArray(new OdkForm[0]);
                                                         odkViewModel.add(odk);
 
-                                            //Sync Settings
-                                            progress.setMessage("Updating Settings...");
-                                            final ConfigViewModel configViewModel = new ViewModelProvider(MainActivity.this).get(ConfigViewModel.class);
-                                            Call<DataWrapper<Configsettings>> c_callable = dao.getConfig(authorizationHeader);
-                                            c_callable.enqueue(new Callback<DataWrapper<Configsettings>>() {
-                                                @Override
-                                                public void onResponse(Call<DataWrapper<Configsettings>> call, Response<DataWrapper<Configsettings>> response) {
-                                                    Configsettings[] cng = response.body().getData().toArray(new Configsettings[0]);
-                                                    configViewModel.add(cng);
-
-                                                    progress.dismiss();
-                                                    syncSettings.setText("Sync Successful");
-                                                    syncSettings.setTextColor(Color.parseColor("#32CD32"));
-
-                                                }
+                                                        //Sync Settings
+                                                        progress.setMessage("Updating Settings...");
+                                                        final ConfigViewModel configViewModel = new ViewModelProvider(MainActivity.this).get(ConfigViewModel.class);
+                                                        Call<DataWrapper<Configsettings>> c_callable = dao.getConfig(authorizationHeader);
+                                                        c_callable.enqueue(new Callback<DataWrapper<Configsettings>>() {
+                                                            @Override
+                                                            public void onResponse(Call<DataWrapper<Configsettings>> call, Response<DataWrapper<Configsettings>> response) {
+                                                                Configsettings[] cng = response.body().getData().toArray(new Configsettings[0]);
+                                                                configViewModel.add(cng);
 
 
-                                                @Override
-                                                public void onFailure(Call<DataWrapper<Configsettings>> call, Throwable t) {
-                                                    progress.dismiss();
-                                                    syncSettings.setText("Settings Sync Error!");
-                                                    syncSettings.setTextColor(Color.RED);
-                                                }
-                                            });
-                                        }
+                                                                //Sync Listing
+                                                                progress.setMessage("Updating Listing...");
+                                                                final ListingViewModel listingViewModel = new ViewModelProvider(MainActivity.this).get(ListingViewModel.class);
+                                                                Call<DataWrapper<Listing>> c_callable = dao.getListing(authorizationHeader);
+                                                                c_callable.enqueue(new Callback<DataWrapper<Listing>>() {
+                                                                    @Override
+                                                                    public void onResponse(Call<DataWrapper<Listing>> call, Response<DataWrapper<Listing>> response) {
+                                                                        try {
+                                                                            if (response.body() != null && response.body().getData() != null) {
+                                                                            Listing[] list = response.body().getData().toArray(new Listing[0]);
+                                                                                for (Listing newList : list) {
+                                                                                    // Fetch the existing pregnancy record by UUID
+                                                                                    Listing existingListing = listingViewModel.find(newList.compno);
+                                                                                    if (existingListing != null) {
+                                                                                        // Preserve location and id fields from the existing record
+                                                                                        newList.longitude = existingListing.longitude;
+                                                                                        newList.latitude = existingListing.latitude;
+                                                                                        newList.accuracy = existingListing.accuracy;
+                                                                                        newList.altitude = existingListing.altitude;
+                                                                                        newList.vill_extId = existingListing.vill_extId;
+                                                                                        newList.cluster_id = existingListing.cluster_id;
+                                                                                        newList.locationName = existingListing.locationName;
+                                                                                        newList.correct_yn = existingListing.correct_yn;
+                                                                                        newList.repl_locationName = existingListing.repl_locationName;
+                                                                                        newList.edit_compno = 1;
+                                                                                        newList.complete = 0;
+
+                                                                                        Log.d("Insertion", "Listing insert: " + existingListing.compno);
+                                                                                    }
+                                                                                }
+                                                                            listingViewModel.add(list);
+
+
+                                                                            } else {
+                                                                                Log.e("Error", "Response body or data is null");
+                                                                            }
+
+                                                                        } catch (ExecutionException e) {
+                                                                            Log.e("Error", "ExecutionException occurred while fetching existing pregnancy: " + e.getMessage());
+                                                                            e.printStackTrace();
+                                                                        } catch (InterruptedException e) {
+                                                                            Log.e("Error", "InterruptedException occurred while fetching existing pregnancy: " + e.getMessage());
+                                                                            e.printStackTrace();
+                                                                            Thread.currentThread().interrupt(); // Restore interrupted status
+                                                                        } catch (Exception e) {
+                                                                            Log.e("Error", "An unexpected error occurred: " + e.getMessage());
+                                                                            e.printStackTrace();
+                                                                        }
+
+
+                                                                progress.dismiss();
+                                                                syncSettings.setText("Sync Successful");
+                                                                syncSettings.setTextColor(Color.parseColor("#32CD32"));
+
+                                                            }
+
+                                                                    @Override
+                                                                    public void onFailure(Call<DataWrapper<Listing>> call, Throwable t) {
+                                                                        progress.dismiss();
+                                                                        syncSettings.setText("Listing Sync Error!");
+                                                                        syncSettings.setTextColor(Color.RED);
+                                                                    }
+                                                                });
+                                                            }
+
+                                                                @Override
+                                                                public void onFailure(Call<DataWrapper<Configsettings>> call, Throwable t) {
+                                                                    progress.dismiss();
+                                                                    syncSettings.setText("Settings Sync Error!");
+                                                                    syncSettings.setTextColor(Color.RED);
+                                                                }
+                                                            });
+                                                        }
 
                                                         @Override
                                                         public void onFailure(Call<DataWrapper<OdkForm>> call, Throwable t) {

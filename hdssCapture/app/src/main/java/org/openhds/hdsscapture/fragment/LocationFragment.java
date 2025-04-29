@@ -41,8 +41,10 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.databinding.FragmentLocationBinding;
+import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Locations;
@@ -79,8 +81,8 @@ public class LocationFragment extends DialogFragment {
     private TextView statusText;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
-    private EditText latitudeEditText, longitudeEditText, accuracyEditText;
-
+    private EditText latitudeEditText, longitudeEditText, accuracyEditText, altitudeEditText;
+    List<Configsettings> configsettings;
 
     public LocationFragment() {
         // Required empty public constructor
@@ -137,6 +139,7 @@ public class LocationFragment extends DialogFragment {
         latitudeEditText = binding.getRoot().findViewById(R.id.latitude);
         longitudeEditText = binding.getRoot().findViewById(R.id.longitude);
         accuracyEditText = binding.getRoot().findViewById(R.id.accuracy);
+        altitudeEditText = binding.getRoot().findViewById(R.id.altitude);
 
         binding.getRoot().findViewById(R.id.button_gps).setOnClickListener(v -> getLocation());
 
@@ -173,6 +176,14 @@ public class LocationFragment extends DialogFragment {
             binding.getLocations().edit = 1;
         }else{
             binding.getLocations().edit = 2;
+        }
+
+        ConfigViewModel viewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
+        configsettings = null;
+        try {
+            configsettings = viewModel.findAll();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
         }
 
         if(locations.insertDate==null){
@@ -256,55 +267,77 @@ public class LocationFragment extends DialogFragment {
                 }
 
                 comp = comp.trim();
+                String cmp = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).compno : null;
+                //cmp = cmp.trim();
+                cmp = (cmp != null) ? cmp.trim() : null;
+                int cmplength = (cmp != null) ? cmp.trim().length() : 0;
+
                 String villExtId = level6Data.getExtId();
 
-                if (binding.getLocations().site == 1 && comp.length() != 6) {
-                    binding.locationcompno.setError("Must be 6 characters in length");
-                    Toast.makeText(getActivity(), "Must be 6 characters in length", Toast.LENGTH_LONG).show();
-                    val = true;
-                    return;
-                } else if (binding.getLocations().site == 2 && comp.length() != 6) {
-                    binding.locationcompno.setError("Must be 6 characters in length");
-                    Toast.makeText(getActivity(), "Must be 6 characters in length", Toast.LENGTH_LONG).show();
-                    val = true;
-                    return;
-                } else if (binding.getLocations().site == 3 && comp.length() != 7) {
-                    binding.locationcompno.setError("Must be 7 characters in length");
-                    Toast.makeText(getActivity(), "Must be 7 characters in length", Toast.LENGTH_LONG).show();
+                if (cmplength != comp.length()){
+                    binding.locationcompno.setError("Must be " + cmplength + " characters in length");
+                    Toast.makeText(getActivity(), "Must be " + cmplength + " characters in length", Toast.LENGTH_LONG).show();
                     val = true;
                     return;
                 }
 
-                boolean khd = false;
-                String regex = "[A-Z]{2}\\d{4}"; // Two uppercase letters followed by four digits
-                String regnn = "[A-Z]{3}\\d{3}"; // Three uppercase letters followed by three digits
-                String regdd = "[A-Z]{4}\\d{3}"; // Four uppercase letters followed by three digits
-
-                if (!binding.locationcompno.getText().toString().trim().isEmpty() && binding.getLocations().site == 1) {
-                    String input = binding.locationcompno.getText().toString().trim();
-                    if (!input.matches(regex)) {
-                        khd = true;
-                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
-                        binding.locationcompno.setError("Compound Number format is incorrect");
-                        return;
-                    }
-                } else if (!binding.locationcompno.getText().toString().trim().isEmpty() && binding.getLocations().site == 2) {
-                    String input = binding.locationcompno.getText().toString().trim();
-                    if (!input.matches(regnn)) {
-                        khd = true;
-                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
-                        binding.locationcompno.setError("Compound Number format is incorrect");
-                        return;
-                    }
-                } else if (!binding.locationcompno.getText().toString().trim().isEmpty() && binding.getLocations().site == 3) {
-                    String input = binding.locationcompno.getText().toString().trim();
-                    if (!input.matches(regdd)) {
-                        khd = true;
-                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
-                        binding.locationcompno.setError("Compound Number format is incorrect");
-                        return;
-                    }
+                boolean fmat = false;
+                if (cmp != null && !comp.matches(cmp)){
+                    fmat = true;
+                    Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
+                    binding.locationcompno.setError("Compound Number format is incorrect");
+                    return;
                 }
+
+//                if (binding.getLocations().site == 1 && comp.length() != 6) {
+//                    binding.locationcompno.setError("Must be 6 characters in length");
+//                    Toast.makeText(getActivity(), "Must be 6 characters in length", Toast.LENGTH_LONG).show();
+//                    val = true;
+//                    return;
+//                } else if (binding.getLocations().site == 2 && comp.length() != 6) {
+//                    binding.locationcompno.setError("Must be 6 characters in length");
+//                    Toast.makeText(getActivity(), "Must be 6 characters in length", Toast.LENGTH_LONG).show();
+//                    val = true;
+//                    return;
+//                } else if (binding.getLocations().site == 3 && comp.length() != 7) {
+//                    binding.locationcompno.setError("Must be 7 characters in length");
+//                    Toast.makeText(getActivity(), "Must be 7 characters in length", Toast.LENGTH_LONG).show();
+//                    val = true;
+//                    return;
+//                }
+
+
+//                boolean khd = false;
+//                //String regex = "[A-Z]{2}\\d{4}"; // Two uppercase letters followed by four digits
+//                String regnn = "[A-Z]{3}\\d{3}"; // Three uppercase letters followed by three digits
+//                String regdd = "[A-Z]{4}\\d{3}"; // Four uppercase letters followed by three digits
+//
+//                String regex = "[A-Z]{2}\\d{4}";
+//                if (!binding.locationcompno.getText().toString().trim().isEmpty() && binding.getLocations().site == 1) {
+//                    String input = binding.locationcompno.getText().toString().trim();
+//                    if (!input.matches(regex)) {
+//                        khd = true;
+//                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
+//                        binding.locationcompno.setError("Compound Number format is incorrect");
+//                        return;
+//                    }
+//                } else if (!binding.locationcompno.getText().toString().trim().isEmpty() && binding.getLocations().site == 2) {
+//                    String input = binding.locationcompno.getText().toString().trim();
+//                    if (!input.matches(regnn)) {
+//                        khd = true;
+//                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
+//                        binding.locationcompno.setError("Compound Number format is incorrect");
+//                        return;
+//                    }
+//                } else if (!binding.locationcompno.getText().toString().trim().isEmpty() && binding.getLocations().site == 3) {
+//                    String input = binding.locationcompno.getText().toString().trim();
+//                    if (!input.matches(regdd)) {
+//                        khd = true;
+//                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
+//                        binding.locationcompno.setError("Compound Number format is incorrect");
+//                        return;
+//                    }
+//                }
             }
 
 
@@ -339,58 +372,73 @@ public class LocationFragment extends DialogFragment {
             }
 
             boolean loc = false;
-            boolean nhrc = false;
-            boolean dhrc = false;
-
             if (!binding.locationcluster.getText().toString().trim().isEmpty() &&
-                    !binding.locationcompno.getText().toString().trim().isEmpty() &&
-                    binding.site.getSelectedItem() != null) {
+                    !binding.locationextid.getText().toString().trim().isEmpty()) {
 
                 String vill = binding.locationcluster.getText().toString().trim();
-                String locs = binding.locationcompno.getText().toString().trim();
-                String site = binding.site.getSelectedItem().toString();
+                String locs = binding.locationextid.getText().toString().trim();
+                // Extract only letters from locs
+                String locsLetters = locs.replaceAll("[^A-Za-z]", "");
 
-                Log.d("Site", "Selected Site: " + site);
-
-                // Determine the number of characters to match based on the selected site
-                int matchLength = 0;
-                switch (site) {
-                    case "KHDSS":
-                        matchLength = 2;
-                        break;
-                    case "NHDSS":
-                        matchLength = 3;
-                        break;
-                    case "DHDSS":
-                        matchLength = 4;
-                        break;
-                    default:
-                        // Handle unexpected site values
-                        Toast.makeText(getActivity(), "Invalid Site Selection", Toast.LENGTH_LONG).show();
-                        return;
-                }
-
-                // Check if the vill string starts with the required substring from locs
-                if (!vill.startsWith(locs.substring(0, matchLength))) {
-                    // Set the appropriate boolean flag based on the site
-                    switch (site) {
-                        case "KHDSS":
-                            loc = true;
-                            break;
-                        case "NHDSS":
-                            nhrc = true;
-                            break;
-                        case "DHDSS":
-                            dhrc = true;
-                            break;
-                    }
-
-                    // Display an error message to the user
-                    Toast.makeText(getActivity(), "Location Creation in Wrong Village " + vill, Toast.LENGTH_LONG).show();
-                    binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
+                // Compare village code with extracted letters
+                if (!vill.equals(locsLetters)) {
+                    Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
+                    binding.locationcompno.setError("Location Creation in Wrong Village: Expected " + vill);
+                    loc = true;
                     return;
                 }
             }
+
+
+//            if (!binding.locationcluster.getText().toString().trim().isEmpty() &&
+//                    !binding.locationcompno.getText().toString().trim().isEmpty() &&
+//                    binding.site.getSelectedItem() != null) {
+//
+//                String vill = binding.locationcluster.getText().toString().trim();
+//                String locs = binding.locationcompno.getText().toString().trim();
+//                String site = binding.site.getSelectedItem().toString();
+//
+//                Log.d("Site", "Selected Site: " + site);
+//
+//                // Determine the number of characters to match based on the selected site
+//                int matchLength = 0;
+//                switch (site) {
+//                    case "KHDSS":
+//                        matchLength = 2;
+//                        break;
+//                    case "NHDSS":
+//                        matchLength = 3;
+//                        break;
+//                    case "DHDSS":
+//                        matchLength = 4;
+//                        break;
+//                    default:
+//                        // Handle unexpected site values
+//                        Toast.makeText(getActivity(), "Invalid Site Selection", Toast.LENGTH_LONG).show();
+//                        return;
+//                }
+//
+//                // Check if the vill string starts with the required substring from locs
+//                if (!vill.startsWith(locs.substring(0, matchLength))) {
+//                    // Set the appropriate boolean flag based on the site
+//                    switch (site) {
+//                        case "KHDSS":
+//                            loc = true;
+//                            break;
+//                        case "NHDSS":
+//                            nhrc = true;
+//                            break;
+//                        case "DHDSS":
+//                            dhrc = true;
+//                            break;
+//                    }
+//
+//                    // Display an error message to the user
+//                    Toast.makeText(getActivity(), "Location Creation in Wrong Village " + vill, Toast.LENGTH_LONG).show();
+//                    binding.locationcompno.setError("Location Creation in Wrong Village " + vill);
+//                    return;
+//                }
+//            }
 
 //            boolean loc = false;
 //            boolean nhrc = false;
@@ -544,6 +592,9 @@ public class LocationFragment extends DialogFragment {
         latitudeEditText.setText(String.format("%.6f", location.getLatitude()));
         longitudeEditText.setText(String.format("%.6f", location.getLongitude()));
         accuracyEditText.setText(String.valueOf(location.getAccuracy()));
+        //altitudeEditText.setText(String.valueOf(location.getAltitude()));
+        altitudeEditText.setText(String.format("%.4f", location.getAltitude()));
+
     }
 
     private <T> void callable(Spinner spinner, T[] array) {

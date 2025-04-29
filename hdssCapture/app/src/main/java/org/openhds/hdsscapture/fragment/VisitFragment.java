@@ -304,16 +304,16 @@ public class VisitFragment extends DialogFragment {
 
 
 
-            if(finalData.houseExtId.length() !=11){
-                Log.d("Individual", "HOHID LENGTH 1: " + finalData.houseExtId);
-
-                finalData.houseExtId = id;
-                if(finalData.roundNumber < 10) {
-                    finalData.extId = id + "00" + finalData.getRoundNumber();
-                }else {
-                    finalData.extId = id + "0" + finalData.getRoundNumber();
-                }
-            }
+//            if(finalData.houseExtId.length() !=11){
+//                Log.d("Individual", "HOHID LENGTH 1: " + finalData.houseExtId);
+//
+//                finalData.houseExtId = id;
+//                if(finalData.roundNumber < 10) {
+//                    finalData.extId = id + "00" + finalData.getRoundNumber();
+//                }else {
+//                    finalData.extId = id + "0" + finalData.getRoundNumber();
+//                }
+//            }
 
             if (finalData.sttime !=null && finalData.edtime==null){
                 finalData.edtime = endtime;

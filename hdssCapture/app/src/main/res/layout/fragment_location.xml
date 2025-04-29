@@ -100,6 +100,7 @@
                     app:backgroundTint="#FF0000" />
 
                 <TextView
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -108,6 +109,7 @@
                     android:text="@string/site"/>
 
                 <org.openhds.hdsscapture.SearchableSpinner
+                    android:visibility="gone"
                     android:id="@+id/site"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -138,21 +140,6 @@
                     android:hint="@string/compoundnumber"
                     style="@style/AppCompatEditTextStyle"
                     android:text="@={locations.compno}"
-                    android:inputType="textPersonName|textCapCharacters"/>
-
-
-
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:visibility="gone"
-                    android:id="@+id/locationextid"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:hint="@string/compno"
-                    style="@style/AppCompatEditTextStyle"
-                    android:text="@={locations.compextId}"
-                    android:focusableInTouchMode="false"
-                    android:focusable="false"
                     android:inputType="textPersonName|textCapCharacters"/>
 
 
@@ -248,6 +235,36 @@
                 <Space
                     android:layout_width="match_parent"
                     android:layout_height="16dp" />
+
+
+                <EditText
+                    android:id="@+id/altitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textColor="@color/black"
+                    android:paddingStart="20dp"
+                    android:focusable="false"
+                    android:hint="@string/altitude"
+                    android:text="@={locations.altitude}"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName|textCapCharacters"
+                    android:background="@drawable/txtbox_rone_wbevel"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:visibility="visible"
+                    android:id="@+id/locationextid"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="@string/compno"
+                    style="@style/AppCompatEditTextStyle"
+                    android:text="@={locations.compextId}"
+                    android:focusableInTouchMode="false"
+                    android:focusable="false"
+                    android:inputType="textPersonName|textCapCharacters"/>
 
 
                 <TextView

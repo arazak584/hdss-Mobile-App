@@ -51,6 +51,9 @@ public interface ApiDao {
     @GET("/api/community")
     Call<DataWrapper<CommunityReport>> getCommunity(@Header("Authorization") String authorizationHeader);
 
+    @GET("/api/listing/edit")
+    Call<DataWrapper<Listing>> getListing(@Header("Authorization") String authorizationHeader);
+
     @GET("/api/visit")
     Call<DataWrapper<Visit>> getVisit(@Header("Authorization") String authorizationHeader);
 

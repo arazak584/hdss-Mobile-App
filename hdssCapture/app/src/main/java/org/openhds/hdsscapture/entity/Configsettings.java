@@ -53,6 +53,8 @@ public class Configsettings extends BaseObservable implements Parcelable {
     public boolean enumeration;
     @Expose
     public String site;
+    @Expose
+    public String compno;
 
 
     public Configsettings() {
@@ -126,6 +128,14 @@ public class Configsettings extends BaseObservable implements Parcelable {
 
     public void setEnumeration(boolean enumeration) {
         this.enumeration = enumeration;
+    }
+
+    public String getCompno() {
+        return compno;
+    }
+
+    public void setCompno(String compno) {
+        this.compno = compno;
     }
 
     public String getEarliestDate() {

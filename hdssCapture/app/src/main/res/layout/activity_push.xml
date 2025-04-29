@@ -257,6 +257,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/send_death"
             android:drawableRight="@drawable/send"
+            style="@style/SupervisorButton"
             android:layout_gravity="center" />
 
         <Button

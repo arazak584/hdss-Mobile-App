@@ -849,6 +849,7 @@
     <string name="measles">MEASLES RUBELLA 1</string>
     <string name="measles2">MEASLES RUBELLA 2</string>
     <string name="yf">YELLOW FEVER</string>
+    <string name="altitude">Altitude</string>
 
 
 </resources>

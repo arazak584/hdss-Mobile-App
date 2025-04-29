@@ -110,8 +110,8 @@
                         android:id="@+id/locationcompno"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:inputType="textPersonName|textCapCharacters"
                         android:text="@={listing.compno}" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -274,6 +274,26 @@
                     android:inputType="textPersonName|textCapCharacters"
                     android:paddingStart="20dp"
                     android:text="@={listing.accuracy}"
+                    android:textColor="@color/black" />
+
+                <Space
+                    goneUnless="@{listing.status!=3}"
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
+
+
+                <EditText
+                    goneUnless="@{listing.status!=3}"
+                    android:id="@+id/altitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/txtbox_rone_wbevel"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="@string/altitude"
+                    android:inputType="textPersonName|textCapCharacters"
+                    android:paddingStart="20dp"
+                    android:text="@={listing.altitude}"
                     android:textColor="@color/black" />
 
                 <Space

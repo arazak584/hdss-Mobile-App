@@ -74,6 +74,11 @@ public class Listing extends BaseObservable {
     @ColumnInfo(name = "accuracy")
     public String accuracy;
 
+    @SerializedName("altitude")
+    @Expose
+    @ColumnInfo(name = "altitude")
+    public String altitude;
+
     @SerializedName("complete")
     @Expose
     public Integer complete;
@@ -101,6 +106,10 @@ public class Listing extends BaseObservable {
 
     @Expose
     public String repl_locationName;
+
+    @SerializedName("correct_yn")
+    @Expose
+    public Integer edit_compno;
 
     public Listing(){}
 
@@ -222,6 +231,22 @@ public class Listing extends BaseObservable {
 
     public void setVill_extId(String vill_extId) {
         this.vill_extId = vill_extId;
+    }
+
+    public String getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(String altitude) {
+        this.altitude = altitude;
+    }
+
+    public Integer getEdit_compno() {
+        return edit_compno;
+    }
+
+    public void setEdit_compno(Integer edit_compno) {
+        this.edit_compno = edit_compno;
     }
 
     //SPINNERS ENTITY COMPOUND STATUS

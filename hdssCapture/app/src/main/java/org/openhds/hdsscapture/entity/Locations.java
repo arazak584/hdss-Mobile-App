@@ -38,6 +38,7 @@ public class Locations extends BaseObservable implements Parcelable {
     @PrimaryKey
     public String uuid;
 
+    @SerializedName("compextId")
     @Expose
     @ColumnInfo(name = "compextId")
     public String compextId;//=AppConstants.Location;
@@ -76,6 +77,11 @@ public class Locations extends BaseObservable implements Parcelable {
     @Expose
     @ColumnInfo(name = "accuracy")
     public String accuracy;
+
+    @SerializedName("altitude")
+    @Expose
+    @ColumnInfo(name = "altitude")
+    public String altitude;
 
 
     @SerializedName("locationName")
@@ -181,6 +187,8 @@ public class Locations extends BaseObservable implements Parcelable {
     public void setEdtime(String edtime) {
         this.edtime = edtime;
     }
+
+    @Bindable
     public String getCompextId() {
         return compextId;
     }
@@ -214,10 +222,32 @@ public class Locations extends BaseObservable implements Parcelable {
         return compno;
     }
 
-    public void setCompno(String compno) {
-        this.compno = compno;
+//    public void setCompno(String compno) {
+//        this.compextId = null;
+//        //this.compno = compno;
+//        if (compno != null && extId != null) {
+//            try {
+//                // When Village == 3
+//                if (extId.length() == 3) {
+//                    this.compextId = extId + "00" + compno.substring(2, 6);
+//                }
+//                // When Village == 4
+//                else if (extId.length() == 4) {
+//                    this.compextId = extId + "00" + compno.substring(4, 7);
+//                }
+//            } catch (StringIndexOutOfBoundsException e) {
+//                // Handle cases where substring indices are invalid
+//                e.printStackTrace();
+//            }
+//        }
+//        notifyPropertyChanged(BR.compextId);
+//    }
 
-        if (compno != null && extId != null) {
+    public void setCompno(String compno) {
+        this.compextId = null;
+        //this.compno = compno;
+        if (compno == null && extId == null) this.compno = null;
+        else
             try {
                 // When Village == 3
                 if (extId.length() == 3) {
@@ -231,10 +261,9 @@ public class Locations extends BaseObservable implements Parcelable {
                 // Handle cases where substring indices are invalid
                 e.printStackTrace();
             }
-        }
-        notifyPropertyChanged(BR._all);
-    }
 
+        notifyPropertyChanged(BR.compextId);
+    }
 
     @Bindable
     public String getLocationName() {
@@ -270,6 +299,14 @@ public class Locations extends BaseObservable implements Parcelable {
 
     public void setAccuracy(String accuracy) {
         this.accuracy = accuracy;
+    }
+
+    public String getAltitude() {
+        return altitude;
+    }
+
+    public void setAltitude(String altitude) {
+        this.altitude = altitude;
     }
 
     @Bindable
@@ -459,6 +496,16 @@ public class Locations extends BaseObservable implements Parcelable {
             ((TextView) parent.getChildAt(0)).setTextSize(20);
         }
 
+    }
+
+    private void patternSkipper(View view) {
+
+        if (view != null) {
+
+
+
+            notifyPropertyChanged(BR._all);
+        }
     }
 
 
