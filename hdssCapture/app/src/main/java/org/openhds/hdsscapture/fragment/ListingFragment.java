@@ -48,9 +48,11 @@ import org.openhds.hdsscapture.Dialog.ClusterDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.databinding.FragmentListingBinding;
+import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Listing;
@@ -64,6 +66,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -91,6 +95,7 @@ public class ListingFragment extends Fragment {
     private String fwname;
     private EditText latitudeEditText, longitudeEditText, accuracyEditText, altitudeEditText;
     private AppCompatEditText comp;
+    List<Configsettings> configsettings;
 
     public ListingFragment() {
         // Required empty public constructor
@@ -232,6 +237,14 @@ public class ListingFragment extends Fragment {
         final Intent j = getActivity().getIntent();
         final Hierarchy level6Data = j.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
 
+        ConfigViewModel cviewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
+        configsettings = null;
+        try {
+            configsettings = cviewModel.findAll();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
         ListingViewModel viewModel = new ViewModelProvider(this).get(ListingViewModel.class);
         try {
             Listing data = viewModel.find(ClusterFragment.selectedLocation.compno);
@@ -249,7 +262,7 @@ public class ListingFragment extends Fragment {
                     binding.buttonChangeCluster.setEnabled(true);
                 }
 
-                if (data.edit_compno ==1){
+                if (data.edit_compno != null && data.edit_compno ==1){
                     binding.locationcompno.setEnabled(true);
                 }else{
                     binding.locationcompno.setEnabled(false);
@@ -280,6 +293,12 @@ public class ListingFragment extends Fragment {
                     binding.buttonChangeCluster.setEnabled(false);
                 }else{
                     binding.buttonChangeCluster.setEnabled(true);
+                }
+
+                if (data.edit_compno != null && data.edit_compno ==1){
+                    binding.locationcompno.setEnabled(true);
+                }else{
+                    binding.locationcompno.setEnabled(false);
                 }
 
                 binding.locationName.setEnabled(false);
@@ -328,8 +347,82 @@ public class ListingFragment extends Fragment {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
                 return;
             }
-            finalData.complete=1;
 
+            boolean val = false;
+            boolean fmt = false;
+            String comp = binding.locationcompno.getText().toString();
+
+            if (comp.contains(" ")) {
+                binding.locationcompno.setError("Spaces are not allowed");
+                Toast.makeText(getActivity(), "Spaces are not allowed in Compound Number", Toast.LENGTH_LONG).show();
+                val = true;
+                return;
+            }
+
+            comp = comp.trim();
+            String cmp = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).compno : null;
+            //cmp = cmp.trim();
+            cmp = (cmp != null) ? cmp.trim() : null;
+            Log.d("ComActivity", "Compno Format: "+ cmp);
+            int cmplength = (cmp != null) ? cmp.trim().length() : 0;
+
+           // String villExtId = level6Data.getExtId();
+
+            if (cmplength != comp.length()){
+                binding.locationcompno.setError("Must be " + cmplength + " characters in length");
+                Toast.makeText(getActivity(), "Must be " + cmplength + " characters in length", Toast.LENGTH_LONG).show();
+                val = true;
+                return;
+            }
+
+            // Step 1: Separate letters and digits in cmp
+            Pattern pattern = Pattern.compile("^([A-Za-z]+)([0-9]+)$");
+            Matcher matcher = pattern.matcher(cmp);
+
+            if (matcher.find()) {
+                int letterCount = matcher.group(1).length();
+                int digitCount = matcher.group(2).length();
+
+                // Build regex pattern like ^[A-Za-z]{4}[0-9]{3}$
+                String formatPattern = "^[A-Za-z]{" + letterCount + "}[0-9]{" + digitCount + "}$";
+
+                if (!comp.matches(formatPattern)) {
+                    binding.locationcompno.setError("Compound Number format must match " + letterCount + " letters and " + digitCount + " digits");
+                    Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
+                    val = true;
+                    return;
+                }
+            } else {
+                // cmp is not in expected letter+digit format
+                binding.locationcompno.setError("Reference compound number format is invalid");
+                val = true;
+                return;
+            }
+
+            boolean loc = false;
+            String compno = binding.locationcompno.getText().toString().trim();
+            String extid = binding.locationextid.getText().toString().trim();
+
+            if (!compno.isEmpty() && !extid.isEmpty()) {
+                // Extract leading letters from compno (e.g. XA from XA0001)
+                String compnoLetters = compno.replaceAll("[^A-Za-z]", "");
+                int letterCount = compnoLetters.length();
+
+                // Extract first N letters from extid
+                String extidLetters = extid.replaceAll("[^A-Za-z]", "");
+                String extidPrefix = extidLetters.length() >= letterCount
+                        ? extidLetters.substring(0, letterCount)
+                        : extidLetters; // in case extid is too short
+
+                if (!compnoLetters.equals(extidPrefix)) {
+                    Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
+                    binding.locationcompno.setError("Expected to start with: " + extidPrefix);
+                    loc = true;
+                    return;
+                }
+            }
+
+            finalData.complete=1;
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
             LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
@@ -342,6 +435,7 @@ public class ListingFragment extends Fragment {
                     LocationAmendment locationz = new LocationAmendment();
                     locationz.uuid = finalData.location_uuid;
                     locationz.compno = finalData.compno;
+                    locationz.compextId = finalData.compextId;
 
                     if (!binding.repllocationName.getText().toString().trim().isEmpty()) {
                         locationz.locationName = binding.getListing().repl_locationName;
@@ -367,29 +461,29 @@ public class ListingFragment extends Fragment {
                         locationz.altitude = binding.getListing().altitude;
                     }
 
-                    // Assuming vill_extId is a String
-                    String villExtId = binding.getListing().vill_extId;
-                    String compExtId = finalData.compextId;
-                    Log.d("Listing", "Generated Villcode: " + villExtId);
-
-                    // Determine the desired format for compExtId based on the length of villExtId
-                    if (villExtId.length() == 3) {
-                        // If vill_extId has 3 characters, pick the last 4 numbers from finalData.compno
-                        int startIndex = Math.max(finalData.compno.length() - 4, 0);
-                        compExtId = villExtId + "00" + finalData.compno.substring(startIndex);
-                        Log.d("Listing", "Generated Compno: " + compExtId);
-                    } else if (villExtId.length() == 4) {
-                        // If vill_extId has 4 characters, pick the last 3 numbers from finalData.compno
-                        int startIndex = Math.max(finalData.compno.length() - 3, 0);
-                        compExtId = villExtId + "00" + finalData.compno.substring(startIndex);
-                        Log.d("Listing", "Generated Compno: " + compExtId);
-
-                    } else {
-                        // Handle other cases or validation as needed
-                        compExtId = finalData.compextId; // Keep the original value
-                    }
-
-                    locationz.compextId = compExtId;
+//                    // Assuming vill_extId is a String
+//                    String villExtId = binding.getListing().vill_extId;
+//                    String compExtId = finalData.compextId;
+//                    Log.d("Listing", "Generated Villcode: " + villExtId);
+//
+//                    // Determine the desired format for compExtId based on the length of villExtId
+//                    if (villExtId.length() == 3) {
+//                        // If vill_extId has 3 characters, pick the last 4 numbers from finalData.compno
+//                        int startIndex = Math.max(finalData.compno.length() - 4, 0);
+//                        compExtId = villExtId + "00" + finalData.compno.substring(startIndex);
+//                        Log.d("Listing", "Generated Compno: " + compExtId);
+//                    } else if (villExtId.length() == 4) {
+//                        // If vill_extId has 4 characters, pick the last 3 numbers from finalData.compno
+//                        int startIndex = Math.max(finalData.compno.length() - 3, 0);
+//                        compExtId = villExtId + "00" + finalData.compno.substring(startIndex);
+//                        Log.d("Listing", "Generated Compno: " + compExtId);
+//
+//                    } else {
+//                        // Handle other cases or validation as needed
+//                        compExtId = finalData.compextId; // Keep the original value
+//                    }
+//
+//                    locationz.compextId = compExtId;
                     locationz.complete = 1;
 
                     locationViewModel.update(locationz);

@@ -58,6 +58,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -270,6 +272,7 @@ public class LocationFragment extends DialogFragment {
                 String cmp = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).compno : null;
                 //cmp = cmp.trim();
                 cmp = (cmp != null) ? cmp.trim() : null;
+                Log.d("ComActivity", "Compno Format: "+ cmp);
                 int cmplength = (cmp != null) ? cmp.trim().length() : 0;
 
                 String villExtId = level6Data.getExtId();
@@ -281,13 +284,38 @@ public class LocationFragment extends DialogFragment {
                     return;
                 }
 
-                boolean fmat = false;
-                if (cmp != null && !comp.matches(cmp)){
-                    fmat = true;
-                    Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
-                    binding.locationcompno.setError("Compound Number format is incorrect");
+                // Step 1: Separate letters and digits in cmp
+                Pattern pattern = Pattern.compile("^([A-Za-z]+)([0-9]+)$");
+                Matcher matcher = pattern.matcher(cmp);
+
+                if (matcher.find()) {
+                    int letterCount = matcher.group(1).length();
+                    int digitCount = matcher.group(2).length();
+
+                    // Build regex pattern like ^[A-Za-z]{4}[0-9]{3}$
+                    String formatPattern = "^[A-Za-z]{" + letterCount + "}[0-9]{" + digitCount + "}$";
+
+                    if (!comp.matches(formatPattern)) {
+                        binding.locationcompno.setError("Compound Number format must match " + letterCount + " letters and " + digitCount + " digits");
+                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
+                        val = true;
+                        return;
+                    }
+                } else {
+                    // cmp is not in expected letter+digit format
+                    binding.locationcompno.setError("Reference compound number format is invalid");
+                    val = true;
                     return;
                 }
+
+
+//                boolean fmat = false;
+//                if (cmp != null && !comp.matches(cmp)){
+//                    fmat = true;
+//                    Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
+//                    binding.locationcompno.setError("Compound Number format is incorrect");
+//                    return;
+//                }
 
 //                if (binding.getLocations().site == 1 && comp.length() != 6) {
 //                    binding.locationcompno.setError("Must be 6 characters in length");
@@ -372,22 +400,46 @@ public class LocationFragment extends DialogFragment {
             }
 
             boolean loc = false;
-            if (!binding.locationcluster.getText().toString().trim().isEmpty() &&
-                    !binding.locationextid.getText().toString().trim().isEmpty()) {
+            String compno = binding.locationcompno.getText().toString().trim();
+            String extid = binding.locationextid.getText().toString().trim();
 
-                String vill = binding.locationcluster.getText().toString().trim();
-                String locs = binding.locationextid.getText().toString().trim();
-                // Extract only letters from locs
-                String locsLetters = locs.replaceAll("[^A-Za-z]", "");
+            if (!compno.isEmpty() && !extid.isEmpty()) {
+                // Extract leading letters from compno (e.g. XA from XA0001)
+                String compnoLetters = compno.replaceAll("[^A-Za-z]", "");
+                int letterCount = compnoLetters.length();
 
-                // Compare village code with extracted letters
-                if (!vill.equals(locsLetters)) {
+                // Extract first N letters from extid
+                String extidLetters = extid.replaceAll("[^A-Za-z]", "");
+                String extidPrefix = extidLetters.length() >= letterCount
+                        ? extidLetters.substring(0, letterCount)
+                        : extidLetters; // in case extid is too short
+
+                if (!compnoLetters.equals(extidPrefix)) {
                     Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
-                    binding.locationcompno.setError("Location Creation in Wrong Village: Expected " + vill);
+                    binding.locationcompno.setError("Expected to start with: " + extidPrefix);
                     loc = true;
                     return;
                 }
             }
+
+
+//            boolean loc = false;
+//            if (!binding.locationcluster.getText().toString().trim().isEmpty() &&
+//                    !binding.locationextid.getText().toString().trim().isEmpty()) {
+//
+//                String vill = binding.locationcluster.getText().toString().trim();
+//                String locs = binding.locationextid.getText().toString().trim();
+//                // Extract only letters from locs
+//                String locsLetters = locs.replaceAll("[^A-Za-z]", "");
+//
+//                // Compare village code with extracted letters
+//                if (!vill.equals(locsLetters)) {
+//                    Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
+//                    binding.locationcompno.setError("Location Creation in Wrong Village: Expected " + vill);
+//                    loc = true;
+//                    return;
+//                }
+//            }
 
 
 //            if (!binding.locationcluster.getText().toString().trim().isEmpty() &&

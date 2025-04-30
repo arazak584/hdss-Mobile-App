@@ -244,25 +244,23 @@ public class Locations extends BaseObservable implements Parcelable {
 //    }
 
     public void setCompno(String compno) {
-        this.compextId = null;
-        //this.compno = compno;
-        if (compno == null && extId == null) this.compno = null;
-        else
+        this.compno = compno;
+
+        // Only update compextId if both compno and extId are non-null
+        if (compno != null && extId != null) {
             try {
-                // When Village == 3
                 if (extId.length() == 3) {
                     this.compextId = extId + "00" + compno.substring(2, 6);
-                }
-                // When Village == 4
-                else if (extId.length() == 4) {
+                } else if (extId.length() == 4) {
                     this.compextId = extId + "00" + compno.substring(4, 7);
                 }
             } catch (StringIndexOutOfBoundsException e) {
-                // Handle cases where substring indices are invalid
-                e.printStackTrace();
+                e.printStackTrace(); // You can replace this with proper logging
             }
 
-        notifyPropertyChanged(BR.compextId);
+            notifyPropertyChanged(BR.compextId);
+        }
+        // else: leave compextId untouched
     }
 
     @Bindable
@@ -299,6 +297,7 @@ public class Locations extends BaseObservable implements Parcelable {
 
     public void setAccuracy(String accuracy) {
         this.accuracy = accuracy;
+        notifyPropertyChanged(BR._all);
     }
 
     public String getAltitude() {

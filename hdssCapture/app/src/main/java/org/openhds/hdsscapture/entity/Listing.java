@@ -107,7 +107,7 @@ public class Listing extends BaseObservable {
     @Expose
     public String repl_locationName;
 
-    @SerializedName("correct_yn")
+    @SerializedName("edit_compno")
     @Expose
     public Integer edit_compno;
 
@@ -174,6 +174,21 @@ public class Listing extends BaseObservable {
     public void setCompno(String compno) {
         this.compno = compno;
 
+        // Only update compextId if both compno and extId are non-null
+        if (compno != null && vill_extId != null) {
+            try {
+                if (vill_extId.length() == 3) {
+                    this.compextId = vill_extId + "00" + compno.substring(2, 6);
+                } else if (vill_extId.length() == 4) {
+                    this.compextId = vill_extId + "00" + compno.substring(4, 7);
+                }
+            } catch (StringIndexOutOfBoundsException e) {
+                e.printStackTrace(); // You can replace this with proper logging
+            }
+
+            notifyPropertyChanged(BR.compextId);
+        }
+        // else: leave compextId untouched
     }
 
 
@@ -223,6 +238,7 @@ public class Listing extends BaseObservable {
 
     public void setAccuracy(String accuracy) {
         this.accuracy = accuracy;
+        notifyPropertyChanged(BR._all);
     }
 
     public String getVill_extId() {

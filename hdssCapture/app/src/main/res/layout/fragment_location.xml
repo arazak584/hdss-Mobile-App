@@ -356,6 +356,7 @@
             android:orientation="vertical">
 
             <Button
+                goneUnless="@{locations.accuracy != null &amp;&amp; !locations.accuracy.isEmpty() &amp;&amp; Float.parseFloat(locations.accuracy) &lt; 11}"
                 android:id="@+id/button_submit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
