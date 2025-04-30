@@ -10,10 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,6 +27,7 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.databinding.FragmentBasevisitBinding;
@@ -114,6 +118,49 @@ public class BasevisitFragment extends DialogFragment {
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
+        //Search Respondent
+        IndividualViewModel vmodel = new ViewModelProvider(this).get(IndividualViewModel.class);
+        AppCompatAutoCompleteTextView search_respondent = binding.getRoot().findViewById(R.id.visit_respondent);
+        // Initialize adapter AFTER fetching data
+        List<String> respondentNames = new ArrayList<>();
+
+        try {
+            List<Individual> individualsData = vmodel.retrieveByLocationId(socialgroup.getExtId());
+
+            for (Individual individual : individualsData) {
+                respondentNames.add(individual.getFirstName() + " " + individual.getLastName()); // Ensure Individual has a getName() method
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Create adapter with correct data
+        ArrayAdapter<String> activeIndividuals = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, respondentNames);
+        activeIndividuals.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        activeIndividuals.setNotifyOnChange(true); // Ensure updates reflect in UI
+
+        // Set adapter
+        search_respondent.setAdapter(activeIndividuals);
+
+        // Handle item selection
+        search_respondent.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Store the selected name
+                String selectedName = activeIndividuals.getItem(position);
+                search_respondent.setText(selectedName); // Ensure the selected name stays
+            }
+        });
+
+        // Preserve entered text if no item is selected
+        search_respondent.setOnDismissListener(() -> {
+            String enteredText = search_respondent.getText().toString();
+            if (!respondentNames.contains(enteredText)) {
+                search_respondent.setText(enteredText); // Keep what the user typed
+            }
+        });
+        //End Search Respondent
 
         // Retrieve fw_uuid from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);

@@ -340,7 +340,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="Enumeration"
                 style="@style/SecondaryButton"
-                android:textSize="18sp" />
+                />
 
 
         </LinearLayout>

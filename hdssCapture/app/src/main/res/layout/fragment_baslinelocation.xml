@@ -176,6 +176,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
@@ -184,6 +185,7 @@
                     android:text="@string/site"/>
 
                 <Spinner
+                    android:visibility="gone"
                     android:id="@+id/site"
                     selection="@{locations.site}"
                     android:layout_width="match_parent"
@@ -194,24 +196,7 @@
                     android:padding="20dp"
                     android:spinnerMode="dialog" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="Compound Number"
-                    android:text="Compound Number">
 
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/locationextid"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={locations.compextId}"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:inputType="textPersonName|textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
@@ -308,6 +293,42 @@
                         android:inputType="textPersonName|textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
+
+
+                <EditText
+                    android:id="@+id/altitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:textColor="@color/black"
+                    android:paddingStart="20dp"
+                    android:focusable="false"
+                    android:hint="@string/altitude"
+                    android:text="@={locations.altitude}"
+                    android:focusableInTouchMode="false"
+                    android:inputType="textPersonName|textCapCharacters"
+                    android:background="@drawable/txtbox_rone_wbevel"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="Compound Number"
+                    android:text="Compound Number">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/locationextid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={locations.compextId}"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:inputType="textPersonName|textCapCharacters"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <TextView
                     android:layout_width="match_parent"
@@ -399,6 +420,7 @@
             android:orientation="horizontal">
 
             <Button
+                goneUnless="@{locations.accuracy != null &amp;&amp; !locations.accuracy.isEmpty() &amp;&amp; Float.parseFloat(locations.accuracy) &lt; 11}"
                 android:id="@+id/button_submit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

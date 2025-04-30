@@ -273,6 +273,15 @@
                     android:textSize="20sp"
                     tools:ignore="TextContrastCheck" />
 
+                <TextView
+                    goneUnless="@{relationship.aIsToB==2}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:text="@string/mar"
+                    android:textColor="@color/black" />
+
                 <org.openhds.hdsscapture.SearchableSpinner
                     goneUnless="@{relationship.aIsToB==2}"
                     android:id="@+id/mar"
@@ -283,15 +292,6 @@
                     android:gravity="left"
                     android:spinnerMode="dialog"
                     android:padding="10dp"/>
-
-                <TextView
-                    goneUnless="@{relationship.aIsToB==2}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:text="@string/mar"
-                    android:textColor="@color/black" />
 
                 <TextView
                     android:layout_width="match_parent"

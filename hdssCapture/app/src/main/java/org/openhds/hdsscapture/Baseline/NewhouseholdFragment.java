@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -319,6 +320,7 @@ public class NewhouseholdFragment extends DialogFragment {
             final Residency residency = binding.getResidency();
             individual.setExtId(this.individual.getExtId());
 
+
             boolean isExists = false;
             binding.individualExtid.setError(null);
             binding.individualInsertDate.setError(null);
@@ -352,6 +354,16 @@ public class NewhouseholdFragment extends DialogFragment {
         loadCodeData(binding.rltnHead, "rltnhead");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
+
+            String comp = binding.sociagroupExtid.getText().toString();
+            boolean val = false;
+
+            if (binding.getSocialgroup().extId != null && comp.length() != 11) {
+                binding.sociagroupExtid.setError("Household ID must be 11 characters in length");
+                Toast.makeText(getActivity(), "Household ID must be 11 characters in length", Toast.LENGTH_LONG).show();
+                val = true;
+                return;
+            }
 
             save(true, true);
         });

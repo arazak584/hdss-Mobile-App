@@ -156,11 +156,12 @@
                     android:hint="@string/respondent"
                     android:text="@string/respondent">
 
-                    <androidx.appcompat.widget.AppCompatEditText
+                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                         android:id="@+id/visit_respondent"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={visit.respondent}"
+                        android:padding="15dp"
                         android:inputType="textCapCharacters"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
