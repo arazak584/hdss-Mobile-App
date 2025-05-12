@@ -283,6 +283,11 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual WHERE firstName!='FAKE' AND substr(extId, 1, 4) = 'null' ")
     List<Individual> nulls();
 
+    @Query("SELECT a.uuid,b.compno as hohID,a.compno,a.firstName || ' ' || a.lastName as firstName,b.firstName || ' ' || b.lastName as  lastName FROM individual as a INNER JOIN individual b ON a.mother_uuid=b.uuid WHERE " +
+            " STRFTIME('%Y', 'now') - STRFTIME('%Y', DATE(a.dob/1000, 'unixepoch')) < (SELECT hoh_age from config) AND a.endType=1 AND b.endType=1" +
+            " AND b.compno = :id AND b.hohID =:ids AND a.compno != :id")
+    List<Individual> minors(String id,String ids);
+
     @Query("SELECT COUNT(hohID) FROM individual WHERE hohID = :id AND compno = :ids AND endType=1 AND firstName!='FAKE'")
     long count(String id,String ids);
 

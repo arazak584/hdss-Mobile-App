@@ -320,6 +320,15 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public List<Individual> minors(String id,String ids) throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.minors(id,ids);
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public Individual mother(String id) throws ExecutionException, InterruptedException {
 
         Callable<Individual> callable = () -> dao.mother(id);

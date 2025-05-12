@@ -123,6 +123,10 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.retrieveOmg(id);
     }
 
+    public List<Individual> minors(String id,String ids) throws ExecutionException, InterruptedException {
+        return individualRepository.minors(id,ids);
+    }
+
     public Individual mother(String id) throws ExecutionException, InterruptedException {
         return individualRepository.mother(id);
     }

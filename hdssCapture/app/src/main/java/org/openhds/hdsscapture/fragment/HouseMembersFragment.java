@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Adapter.EndEventsAdapter;
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
+import org.openhds.hdsscapture.Dialog.MinorDialogFragment;
 import org.openhds.hdsscapture.odk.OdkFormAdapter;
 import org.openhds.hdsscapture.Dialog.PregnancyDialogFragment;
 import org.openhds.hdsscapture.Duplicate.DupFragment;
@@ -430,6 +431,18 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             e.printStackTrace();
         }
 
+        try {
+            List<Individual> individualList = individualViewModel.minors(ClusterFragment.selectedLocation.compno,socialgroup.getExtId());
+            if (individualList != null && !individualList.isEmpty()) {
+                showMinorsDialog();
+            }
+
+        }catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         AppCompatButton event = view.findViewById(R.id.menu);
 
         //imageView = view.findViewById(R.id.menu);
@@ -496,7 +509,11 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
     }
 
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 
 
     @Override
@@ -1072,6 +1089,11 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private void showPregnancyDialog() {
         PregnancyDialogFragment.newInstance(locations, socialgroup)
                 .show(getChildFragmentManager(), "PregnancyDialogFragment");
+    }
+
+    private void showMinorsDialog() {
+        MinorDialogFragment.newInstance(locations, socialgroup)
+                .show(getChildFragmentManager(), "MinorDialogFragment");
     }
 
     private void updateButtonState() {

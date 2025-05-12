@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="true">HDSS CAPTURE</string>
-    <string name="versions">2025.05.01</string>
+    <string name="versions">2025.05.02</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>
@@ -58,7 +58,6 @@
     <string name="itn">Insecticide treated net (ITN)</string>
     <string name="send_vaccination">Send Vaccination</string>
     <!--    TODO: VACCINATION TEXT END-->
-
 
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -850,6 +849,10 @@
     <string name="measles2">MEASLES RUBELLA 2</string>
     <string name="yf">YELLOW FEVER</string>
     <string name="altitude">Altitude</string>
+    <string name="minors">These children are in different compound from the mother</string>
+    <string name="childname">"Child Name: "</string>
+    <string name="childcompno">"Child Compno: "</string>
+    <string name="mothername">"Mother Name: "</string>
 
 
 </resources>
