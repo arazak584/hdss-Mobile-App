@@ -1076,6 +1076,7 @@ public class IndividualFragment extends Fragment {
                     omg.edit = 1;
                     omg.visit_uuid = binding.getInmigration().visit_uuid;
                     omg.socialgroup_uuid = binding.getOmgg().socialgroup_uuid;
+                    omg.location_uuid = binding.getOmgg().loc;
 
                     omgModel.add(omg);
                 }
