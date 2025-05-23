@@ -395,9 +395,9 @@ public class IndividualFragment extends Fragment {
                 if (data.otherName != null && individual.other==null) {
                     data.other=1;
                 }
-                if (data.ghanacard != null && data.ghanacard !="") {
-                    binding.ghanacard.setEnabled(false);
-                }
+//                if (data.ghanacard != null && data.ghanacard !="") {
+//                    binding.ghanacard.setEnabled(false);
+//                }
                 if (data.otherName != null && data.otherName !="") {
                     binding.individualNickName.setEnabled(false);
                 }

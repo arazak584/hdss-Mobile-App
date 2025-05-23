@@ -593,12 +593,6 @@ public class HierarchyActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-//        final Button remainder = findViewById(R.id.btn_visit);
-//        remainder.setOnClickListener(v -> {
-//            Intent i = new Intent(getApplicationContext(),RemainderActivity.class);
-//            startActivity(i);
-//        });
-
         final Button dups = findViewById(R.id.btn_dup);
         dups.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(), DuplicateActivity.class);
