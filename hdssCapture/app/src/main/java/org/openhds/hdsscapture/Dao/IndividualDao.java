@@ -163,6 +163,10 @@ public interface IndividualDao {
             " strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) >=(SELECT rel_age from config) order by dob")
     List<Individual> retrievePartner(String id);
 
+//    @Query("SELECT a.uuid,a.compno,a.dob,a.firstName,a.lastName,b.uuid as hohID,a.extId FROM individual as a INNER JOIN locations as b ON a.compno=b.compno WHERE endType=1 and gender=1 and a.compno=:id and firstName!='FAKE' and " +
+//            " strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) >=(SELECT rel_age from config) order by dob")
+//    List<Individual> retrievePartner(String id);
+
     @Query("SELECT *, firstName || ' ' || lastName as fullName, lastName || ' ' ||  firstName as Names FROM individual WHERE gender = 1 AND endType = 1 AND firstName!='FAKE' AND " +
             "strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) >=(SELECT father_age from config) AND " +
             "(fullName LIKE :id OR Names LIKE :id OR compno LIKE :id OR ghanacard LIKE :id OR phone1 LIKE :id)")

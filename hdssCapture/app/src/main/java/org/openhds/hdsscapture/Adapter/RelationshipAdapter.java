@@ -9,11 +9,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Dialog.RelationshipDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
@@ -88,11 +92,26 @@ public class RelationshipAdapter extends RecyclerView.Adapter<RelationshipAdapte
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LocationViewModel locationViewModel = new ViewModelProvider((ViewModelStoreOwner) activity).get(LocationViewModel.class);
                 // Get the text field in the IndividualFragment where you want to insert the mother's ID
                 EditText partnerIdField = activity.requireActivity().findViewById(R.id.man_extidB);
-
+                AppCompatEditText partnerLocationField = activity.requireActivity().findViewById(R.id.locationB_uuid);
                 // Set the mother's ID in the text field
                 partnerIdField.setText(individual.getUuid());
+                //partnerlocation.setText(individual.compno);
+
+                try {
+                    Locations location = locationViewModel.find(individual.getCompno());
+                    if (location != null) {
+                        partnerLocationField.setText(location.getUuid());
+                    } else {
+                        partnerLocationField.setText(""); // if no match found
+                    }
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                    partnerLocationField.setText(""); // fallback on exception
+                }
+
 
                 // Hide the MotherDialogFragment
                 activity.dismiss();

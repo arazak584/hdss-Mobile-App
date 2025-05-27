@@ -57,6 +57,9 @@ public interface HierarchyDao {
             "where a.level_uuid='hierarchyLevelId3' and e.fw_name=:fw and a.parent_uuid=:id GROUP BY a.uuid order by a.name")
     List<Hierarchy> retrieveLevel3i(String id,String fw);
 
+    @Query("SELECT * FROM locationhierarchy WHERE parent_uuid = :parentId AND level_uuid = :level")
+    List<Hierarchy> getHierarchyByParentAndLevel(String parentId, String level);
+
     @Query("select a.* from locationhierarchy as a left join locationhierarchy as b" +
             " on a.parent_uuid=b.uuid where a.level_uuid='hierarchyLevelId4' and a.parent_uuid=:id order by a.name")
     List<Hierarchy> retrieveLevel4(String id);

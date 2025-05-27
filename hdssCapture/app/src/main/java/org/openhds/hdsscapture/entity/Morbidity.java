@@ -113,6 +113,11 @@ public class Morbidity extends BaseObservable {
     public String fw_name;
     @Expose
     public String compno;
+    @Expose
+    public String sttime;
+
+    @Expose
+    public String edtime;
 
 
     public Morbidity(){}
@@ -132,6 +137,22 @@ public class Morbidity extends BaseObservable {
         } catch (ParseException e) {
             System.out.println("Date Error " + e.getMessage());
         }
+    }
+
+    public String getSttime() {
+        return sttime;
+    }
+
+    public void setSttime(String sttime) {
+        this.sttime = sttime;
+    }
+
+    public String getEdtime() {
+        return edtime;
+    }
+
+    public void setEdtime(String edtime) {
+        this.edtime = edtime;
     }
 
     @Bindable

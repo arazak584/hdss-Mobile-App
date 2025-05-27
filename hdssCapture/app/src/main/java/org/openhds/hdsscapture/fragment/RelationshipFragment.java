@@ -216,6 +216,7 @@ public class RelationshipFragment extends Fragment {
             Relationship data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid);
             if (data != null) {
                 binding.setRelationship(data);
+                data.location_uuid = ClusterFragment.selectedLocation.getUuid();
                 if(data.status!=null && data.status==2){
                     cmt.setVisibility(View.VISIBLE);
                     rsv.setVisibility(View.VISIBLE);
@@ -237,6 +238,7 @@ public class RelationshipFragment extends Fragment {
 
                 data.individualA_uuid = HouseMembersFragment.selectedIndividual.getUuid();
                 data.dob = HouseMembersFragment.selectedIndividual.dob;
+                data.location_uuid = ClusterFragment.selectedLocation.getUuid();
 
                 Date currentDate = new Date(); // Get the current date and time
                 // Create a Calendar instance and set it to the current date and time

@@ -1490,7 +1490,7 @@ public class PullActivity extends AppCompatActivity {
                             .addColumn("insertDate").addColumn("marital").addColumn("occupation").addColumn("occupation_oth")
                             .addColumn("phone1").addColumn("phone2").addColumn("denomination").addColumn("akan_tribe")
                             .addColumn("religion").addColumn("religion_oth").addColumn("sttime").addColumn("tribe").addColumn("tribe_oth")
-                            .addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate").build();
+                            .addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate").addColumn("location_uuid").build();
                 }
                 return CsvSchema.emptySchema();
             }
@@ -1722,7 +1722,7 @@ public class PullActivity extends AppCompatActivity {
                             .addColumn("fw_uuid").addColumn("individualA_uuid").addColumn("individualB_uuid").addColumn("insertDate").addColumn("lcow").addColumn("mar")
                             .addColumn("mrank").addColumn("nchdm").addColumn("nwive").addColumn("polygamous")
                             .addColumn("startDate").addColumn("sttime").addColumn("tnbch").addColumn("comment")
-                            .addColumn("status").addColumn("supervisor").addColumn("approveDate").build();
+                            .addColumn("status").addColumn("supervisor").addColumn("approveDate").addColumn("location_uuid").addColumn("locationB_uuid").build();
                 }
                 return CsvSchema.emptySchema();
             }

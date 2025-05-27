@@ -101,6 +101,10 @@ public class Relationship extends BaseObservable implements Parcelable {
     public String supervisor;
     @Expose
     public Date approveDate;
+    @Expose
+    public String location_uuid;
+    @Expose
+    public String locationB_uuid;
 
     public Relationship(){}
 
@@ -119,6 +123,22 @@ public class Relationship extends BaseObservable implements Parcelable {
             status = Integer.parseInt(TAG);
             patternSkipper(view);
         }
+    }
+
+    public String getLocation_uuid() {
+        return location_uuid;
+    }
+
+    public void setLocation_uuid(String location_uuid) {
+        this.location_uuid = location_uuid;
+    }
+
+    public String getLocationB_uuid() {
+        return locationB_uuid;
+    }
+
+    public void setLocationB_uuid(String locationB_uuid) {
+        this.locationB_uuid = locationB_uuid;
     }
 
     public String getComment() {

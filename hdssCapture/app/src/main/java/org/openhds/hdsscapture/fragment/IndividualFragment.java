@@ -675,12 +675,14 @@ public class IndividualFragment extends Fragment {
 
             if (data != null) {
                 binding.setDemographic(data);
+                data.location_uuid = ClusterFragment.selectedLocation.uuid;
 
             } else {
                 data = new Demographic();
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.complete = 1;
                 data.individual_uuid = binding.getIndividual().uuid;
+                data.location_uuid = ClusterFragment.selectedLocation.uuid;
 
                 binding.setDemographic(data);
                 binding.getDemographic().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));

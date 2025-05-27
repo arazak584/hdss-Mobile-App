@@ -103,6 +103,8 @@ public class Demographic extends BaseObservable implements Parcelable {
     public Integer denomination;
     @Expose
     public Integer akan_tribe;
+    @Expose
+    public String location_uuid;
 
     public Demographic(){}
 
@@ -181,6 +183,14 @@ public class Demographic extends BaseObservable implements Parcelable {
         } catch (ParseException e) {
             System.out.println("Visit Date Error " + e.getMessage());
         }
+    }
+
+    public String getLocation_uuid() {
+        return location_uuid;
+    }
+
+    public void setLocation_uuid(String location_uuid) {
+        this.location_uuid = location_uuid;
     }
 
     public Integer getReligion() {

@@ -62,7 +62,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/country"
+            android:id="@+id/layout_level1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
@@ -76,7 +76,7 @@
                 android:paddingStart="5dp"
                 android:layout_weight="1"
                 android:textSize="25dp"
-                android:text="@string/text_country" />
+                android:text="@string/level1" />
 
             <Spinner
                 android:id="@+id/spCountry"
@@ -95,7 +95,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/region"
+            android:id="@+id/layout_level2"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -109,7 +109,7 @@
                 android:paddingStart="5dp"
                 android:layout_weight="1"
                 android:textSize="25dp"
-                android:text="@string/region" />
+                android:text="@string/level2" />
 
             <Spinner
                 android:id="@+id/spRegion"
@@ -128,7 +128,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/dist"
+            android:id="@+id/layout_level3"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -142,7 +142,7 @@
                 android:paddingStart="5dp"
                 android:layout_weight="1"
                 android:textSize="25dp"
-                android:text="@string/district" />
+                android:text="@string/level3" />
 
             <Spinner
                 android:id="@+id/spDistrict"
@@ -161,7 +161,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/sub"
+            android:id="@+id/layout_level4"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -175,7 +175,7 @@
                 android:paddingStart="5dp"
                 android:layout_weight="1"
                 android:textSize="25dp"
-                android:text="@string/subdistrict" />
+                android:text="@string/level4" />
 
             <Spinner
                 android:id="@+id/spSubdistrict"
@@ -194,7 +194,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/vill"
+            android:id="@+id/layout_level5"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -208,7 +208,7 @@
                 android:paddingStart="5dp"
                 android:layout_weight="1"
                 android:textSize="25dp"
-                android:text="@string/village" />
+                android:text="@string/level5" />
 
             <org.openhds.hdsscapture.SearchableSpinner
                 android:id="@+id/spVillage"
@@ -227,7 +227,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/clus"
+            android:id="@+id/layout_level6"
             android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -241,7 +241,7 @@
                 android:paddingStart="10dp"
                 android:layout_weight="1"
                 android:textSize="25dp"
-                android:text="@string/cluster" />
+                android:text="@string/level6" />
 
             <org.openhds.hdsscapture.SearchableSpinner
                 android:id="@+id/spCluster"
@@ -258,6 +258,72 @@
                 android:dropDownVerticalOffset="55dp"/>
 
         </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_level7"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:paddingStart="10dp"
+                    android:layout_weight="1"
+                    android:textSize="25dp"
+                    android:text="@string/level7" />
+
+                <org.openhds.hdsscapture.SearchableSpinner
+                    android:id="@+id/spLevel7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="15dp"
+                    android:paddingStart="10dp"
+                    android:background="@drawable/rs_spinner"
+                    android:spinnerMode="dropdown"
+                    android:dropDownVerticalOffset="55dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_level8"
+                android:padding="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="280dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:paddingStart="10dp"
+                    android:layout_weight="1"
+                    android:textSize="25dp"
+                    android:text="@string/level8" />
+
+                <org.openhds.hdsscapture.SearchableSpinner
+                    android:id="@+id/spLevel8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="15dp"
+                    android:paddingStart="10dp"
+                    android:background="@drawable/rs_spinner"
+                    android:spinnerMode="dropdown"
+                    android:dropDownVerticalOffset="55dp"/>
+
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/login_username"

@@ -105,6 +105,15 @@ public class HierarchyRepository {
         return future.get();
     }
 
+    public List<Hierarchy> retrieveLevel(String parentId,String level) throws ExecutionException, InterruptedException {
+
+        Callable<List<Hierarchy>> callable = () -> dao.getHierarchyByParentAndLevel(parentId,level);
+
+        Future<List<Hierarchy>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Hierarchy> retrieveLevel2i(String id,String fw) throws ExecutionException, InterruptedException {
 
         Callable<List<Hierarchy>> callable = () -> dao.retrieveLevel2i(id,fw);

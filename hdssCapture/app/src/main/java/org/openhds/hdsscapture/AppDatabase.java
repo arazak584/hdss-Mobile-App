@@ -80,7 +80,7 @@ import java.util.concurrent.Executors;
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
         Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class, Duplicate.class,
         ApiUrl.class, Configsettings.class, OdkForm.class, Vpm.class, CommunityReport.class, Morbidity.class, HierarchyLevel.class, Registry.class
-        }, version = 8 , exportSchema = true)
+        }, version = 9 , exportSchema = true)
 
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -120,85 +120,6 @@ public abstract class AppDatabase extends RoomDatabase {
     // If the version of the database is 2 you upgrade to 3 then set the MIGRATION_2_3 which means version 2 to 3
     //Then write the script to implement the change
 
-    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
-        @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN pets INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN dogs INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN guinea_pigs INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN cats INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN fish INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN birds INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN rabbits INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN reptiles INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN pet_other INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN pet_other_spfy TEXT");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN pet_vac INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0001 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0002 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0003 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0004 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0005 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0006 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0006_1 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0007 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0007_1 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0008 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN id0008_1 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0009 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0009_1 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0010 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0010_1 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0011 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0011_1 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0012 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0012_1 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0013 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0013_1 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0014 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0014_1 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0015 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0015_1 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0016 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0016_1 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0017 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0017_1 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0018 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0018_1 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0019 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0019_1 INTEGER");
-            database.execSQL("ALTER TABLE sociodemo ADD COLUMN  id0021 TEXT");
-            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1001 INTEGER");
-            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1002 INTEGER");
-            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1003 INTEGER");
-            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1004 INTEGER");
-            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1005 INTEGER");
-            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1006 INTEGER");
-            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1007 INTEGER");
-            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1008 INTEGER");
-            database.execSQL("ALTER TABLE pregnancyoutcome ADD COLUMN id1009 INTEGER");
-            database.execSQL("ALTER TABLE pregnancy ADD COLUMN preg_ready INTEGER");
-            database.execSQL("ALTER TABLE pregnancy ADD COLUMN family_plan INTEGER");
-            database.execSQL("ALTER TABLE pregnancy ADD COLUMN plan_method INTEGER");
-            database.execSQL("ALTER TABLE pregnancy ADD COLUMN plan_method_oth TEXT");
-
-            database.execSQL("CREATE TABLE IF NOT EXISTS hierarchylevel (" +
-                    "uuid TEXT NOT NULL PRIMARY KEY, " +
-                    "keyIdentifier INTEGER, " +
-                    "name TEXT)");
-        }
-    };
-
-    static final Migration MIGRATION_3_4 = new Migration(3, 4) {
-        @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE inmigration ADD COLUMN why_ext TEXT");
-            database.execSQL("ALTER TABLE inmigration ADD COLUMN why_int TEXT");
-            database.execSQL("ALTER TABLE inmigration ADD COLUMN how_lng INTEGER");
-
-        }
-    };
-
     static final Migration MIGRATION_5_6 = new Migration(5, 6) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
@@ -225,54 +146,6 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
-    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
-        @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            // Create the new table
-            database.execSQL("CREATE TABLE IF NOT EXISTS morbidity (" +
-                    "individual_uuid TEXT NOT NULL PRIMARY KEY, " +
-                    "insertDate INTEGER, " +  // Date stored as INTEGER (timestamp)
-                    "complete INTEGER, " +
-                    "fw_uuid TEXT, " +
-                    "uuid TEXT, " +
-                    "location_uuid TEXT, " +
-                    "socialgroup_uuid TEXT, " +
-                    "ind_name TEXT, " +
-                    "fever INTEGER, " +
-                    "fever_days INTEGER, " +
-                    "fever_treat INTEGER, " +
-                    "hypertension INTEGER, " +
-                    "hypertension_dur INTEGER, " +
-                    "hypertension_trt INTEGER, " +
-                    "diabetes INTEGER, " +
-                    "diabetes_dur INTEGER, " +
-                    "diabetes_trt INTEGER, " +
-                    "heart INTEGER, " +
-                    "heart_dur INTEGER, " +
-                    "heart_trt INTEGER, " +
-                    "stroke INTEGER, " +
-                    "stroke_dur INTEGER, " +
-                    "stroke_trt INTEGER, " +
-                    "sickle INTEGER, " +
-                    "sickle_dur INTEGER, " +
-                    "sickle_trt INTEGER, " +
-                    "asthma INTEGER, " +
-                    "asthma_dur INTEGER, " +
-                    "asthma_trt INTEGER, " +
-                    "epilepsy INTEGER, " +
-                    "epilepsy_dur INTEGER, " +
-                    "epilepsy_trt INTEGER, " +
-                    "comment TEXT, " +
-                    "status INTEGER DEFAULT 0, " +
-                    "supervisor TEXT, " +
-                    "approveDate INTEGER, " +  // Date stored as INTEGER (timestamp)
-                    "fw_name TEXT, " +
-                    "compno TEXT)");
-
-            // Create indices
-            database.execSQL("CREATE INDEX IF NOT EXISTS index_morbidity_individual_uuid_fw_uuid_complete_socialgroup_uuid ON morbidity(individual_uuid, fw_uuid, complete, socialgroup_uuid)");
-        }
-    };
 
     static final Migration MIGRATION_6_7 = new Migration(6, 7) {
         @Override
@@ -294,6 +167,18 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
 
+    static final Migration MIGRATION_8_9 = new Migration(8, 9) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE demographic ADD COLUMN location_uuid TEXT");
+            database.execSQL("ALTER TABLE morbidity ADD COLUMN sttime TEXT");
+            database.execSQL("ALTER TABLE morbidity ADD COLUMN edtime TEXT");
+            database.execSQL("ALTER TABLE relationship ADD COLUMN location_uuid TEXT");
+            database.execSQL("ALTER TABLE relationship ADD COLUMN locationB_uuid TEXT");
+
+        }
+    };
+
     private static volatile AppDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
@@ -304,7 +189,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                 AppDatabase.class, "hdss")
                                 .addCallback(sRoomDatabaseCallback)
-                                .addMigrations(MIGRATION_1_2,MIGRATION_2_3,MIGRATION_3_4,MIGRATION_4_5,MIGRATION_5_6,MIGRATION_6_7,MIGRATION_7_8)
+                                .addMigrations(MIGRATION_4_5,MIGRATION_5_6,MIGRATION_6_7,MIGRATION_7_8,MIGRATION_8_9)
                                 .fallbackToDestructiveMigrationOnDowngrade()
                                 .build();
             }
