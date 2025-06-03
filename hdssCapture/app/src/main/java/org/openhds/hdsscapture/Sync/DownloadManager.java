@@ -159,7 +159,8 @@ public class DownloadManager extends Worker {
                             for (Inmigration newInmigration : inmigrations) {
                                 Inmigration existingInmigration = inmigrationDao.ins(newInmigration.uuid);
 
-                                if ((existingInmigration != null && !(existingInmigration.complete != null && existingInmigration.complete == 1))) {
+                                //((existingInmigration != null && !(existingInmigration.complete != null && existingInmigration.complete == 1)))
+                                if (existingInmigration != null) {
                                     inmigrationDao.create(newInmigration);
                                     Log.d(TAG, "Added or updated Inmigration record with UUID: " + newInmigration.uuid);
                                 } else {
@@ -203,7 +204,9 @@ public class DownloadManager extends Worker {
                                     Outmigration existingOutmigration = outmigrationDao.ins(newOutmigration.uuid);
 
                                     // Ensure existingOutmigration is NOT NULL and complete is NOT 1
-                                    if ((existingOutmigration != null && !(existingOutmigration.complete != null && existingOutmigration.complete == 1))) {
+                                    //((existingOutmigration != null && !(existingOutmigration.complete != null && existingOutmigration.complete == 1)))
+                                    if (existingOutmigration != null ) {
+                                        newOutmigration.edit = 1;
                                         outmigrationDao.create(newOutmigration);
                                         Log.d(TAG, "Updated existing Outmigration record with UUID: " + newOutmigration.uuid);
                                     } else {
@@ -245,8 +248,9 @@ public class DownloadManager extends Worker {
                                     Death existingDeath = deathDao.ins(newDeath.uuid);
 
                                     // Ensure existingDeath is NOT NULL and complete is NOT 1
-                                    if ((existingDeath != null && !(existingDeath.complete != null && existingDeath.complete == 1))) {
+                                    if (existingDeath != null) {
                                         newDeath.complete = 0;
+                                        newDeath.edit = 1;
                                         deathDao.create(newDeath);
                                         Log.d(TAG, "Updated existing Death record with UUID: " + newDeath.uuid);
                                     } else {
@@ -288,7 +292,7 @@ public class DownloadManager extends Worker {
                             for (Pregnancy newPregnancy : newPregs) {
                                 Pregnancy existingPregnancy = pregnancyDao.ins(newPregnancy.uuid);
 
-                                if ((existingPregnancy != null && !(existingPregnancy.complete != null && existingPregnancy.complete == 1))) {
+                                if (existingPregnancy != null) {
                                     // Update newPregnancy with fields from existingPregnancy
                                     newPregnancy.extra = existingPregnancy.extra;
                                     newPregnancy.outcome = existingPregnancy.outcome;
@@ -337,7 +341,7 @@ public class DownloadManager extends Worker {
                             for (Demographic newDemographic : demographics) {
                                 Demographic existingDemographic = demographicDao.ins(newDemographic.individual_uuid);
 
-                                if (existingDemographic != null && !(existingDemographic.complete != null && existingDemographic.complete == 1)) {
+                                if (existingDemographic != null) {
                                     // Save updated demographic data
                                     demographicDao.create(newDemographic);
                                     Log.d(TAG, "Updated and saved Demographic record with UUID: " + newDemographic.individual_uuid);
@@ -381,7 +385,7 @@ public class DownloadManager extends Worker {
                             for (Relationship newRelationship : relationships) {
                                 Relationship existingRelationship = relationshipDao.ins(newRelationship.uuid);
 
-                                if ((existingRelationship != null && !(existingRelationship.complete != null && existingRelationship.complete == 1))) {
+                                if (existingRelationship != null) {
                                     // Save updated relationship data
                                     relationshipDao.create(newRelationship);
                                     Log.d(TAG, "Updated and saved Relationship record with UUID: " + newRelationship.uuid);
@@ -425,7 +429,7 @@ public class DownloadManager extends Worker {
                                     Vaccination existingVaccination = vaccinationDao.ins(newVaccination.uuid);
 
                                     // Ensure existingVaccination is NOT NULL and complete is NOT 1
-                                    if ((existingVaccination != null && !(existingVaccination.complete != null && existingVaccination.complete == 1))) {
+                                    if (existingVaccination != null) {
                                         vaccinationDao.create(newVaccination);
                                         Log.d(TAG, "Updated existing Vaccination record with UUID: " + newVaccination.uuid);
                                     } else {
@@ -470,7 +474,7 @@ public class DownloadManager extends Worker {
                                     HdssSociodemo existingHdssSociodemo = hdssSociodemoDao.ins(newHdssSociodemo.uuid);
 
                                     // Ensure existing record is NOT NULL and complete is NOT 1 before updating
-                                    if ((existingHdssSociodemo != null && !(existingHdssSociodemo.complete != null && existingHdssSociodemo.complete == 1))) {
+                                    if (existingHdssSociodemo != null ) {
                                         hdssSociodemoDao.create(newHdssSociodemo);
                                         Log.d(TAG, "Added/Updated HdssSociodemo record with UUID: " + newHdssSociodemo.uuid);
                                     } else {
@@ -514,7 +518,7 @@ public class DownloadManager extends Worker {
                                     Morbidity existingMorbidity = morbidityDao.ins(newMorbidity.uuid);
 
                                     // Ensure existing record is NOT NULL and complete is NOT 1 before updating
-                                    if ((existingMorbidity != null && !(existingMorbidity.complete != null && existingMorbidity.complete == 1))) {
+                                    if (existingMorbidity != null) {
                                         morbidityDao.create(newMorbidity);
                                         Log.d(TAG, "Added/Updated Morbidity record with UUID: " + newMorbidity.uuid);
                                     } else {
@@ -557,7 +561,7 @@ public class DownloadManager extends Worker {
                                 for (Pregnancyoutcome newPregnancy : newPregnancies) {
                                     Pregnancyoutcome existingPregnancy = pregnancyDao.ins(newPregnancy.uuid);
 
-                                    if ((existingPregnancy != null && !(existingPregnancy.complete != null && existingPregnancy.complete == 1))) {
+                                    if (existingPregnancy != null) {
                                             // Preserve certain fields while updating
                                             newPregnancy.location = existingPregnancy.location;
                                             newPregnancy.id = existingPregnancy.id;

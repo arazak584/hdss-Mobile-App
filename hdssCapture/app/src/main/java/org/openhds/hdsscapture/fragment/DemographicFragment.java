@@ -341,7 +341,7 @@ public class DemographicFragment extends DialogFragment {
             // Format the components into a string with leading zeros
             String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
 
-            if (finalData.sttime !=null && finalData.edtime==null){
+            if (finalData.sttime !=null){
                 finalData.edtime = endtime;
             }
 

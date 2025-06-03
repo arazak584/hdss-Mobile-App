@@ -51,6 +51,9 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     @ColumnInfo(name = "insertDate")
     public Date insertDate;
 
+    @Expose
+    public Date formcompldate;
+
     @SerializedName("outcome")
     @Expose
     @ColumnInfo(name = "outcome")
@@ -220,6 +223,22 @@ public class Pregnancy extends BaseObservable implements Parcelable {
         } catch (ParseException e) {
             System.out.println("Date Error " + e.getMessage());
         }
+    }
+
+    @Bindable
+    public String getFormcompldate() {
+        if (formcompldate == null) return null;
+        return f.format(formcompldate);
+    }
+
+    public void setFormcompldate(String formcompldate) {
+        if(formcompldate == null ) this.formcompldate=null;
+        else
+            try {
+                this.formcompldate = f.parse(formcompldate);
+            } catch (ParseException e) {
+                System.out.println("Visit Date Error " + e.getMessage());
+            }
     }
 
     @NotNull

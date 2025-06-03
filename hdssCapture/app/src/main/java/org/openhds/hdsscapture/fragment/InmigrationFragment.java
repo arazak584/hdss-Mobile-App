@@ -8,7 +8,10 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +32,7 @@ import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
+import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.databinding.FragmentInmigrationBinding;
 import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Fieldworker;
@@ -40,6 +44,8 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.OmgUpdate;
 import org.openhds.hdsscapture.entity.subentity.ResidencyUpdate;
+import org.openhds.hdsscapture.entity.subentity.ResidencyUpdateEndDate;
+import org.openhds.hdsscapture.entity.subentity.SocialgroupAmendment;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.ParseException;
@@ -50,6 +56,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -200,6 +208,19 @@ public class InmigrationFragment extends Fragment {
             e.printStackTrace();
         }
 
+        //Find residency_uuid for last but one record where endtype=2(OMG)
+        AppCompatEditText old_res = binding.getRoot().findViewById(R.id.old_residency_uuid);
+        try {
+            Residency datae = viewModel.findLastButOne(HouseMembersFragment.selectedIndividual.uuid);
+            if (datae != null && datae.endType==2) {
+                binding.setResidency(datae);
+                old_res.setVisibility(View.VISIBLE);
+                Log.d("Old", "Old Residency Data: " + datae.getUuid());
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
         //Get Earliest Event Date
         ConfigViewModel configViewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
         List<Configsettings> configsettings = null;
@@ -291,6 +312,57 @@ public class InmigrationFragment extends Fragment {
                 e.printStackTrace();
             }
 
+            //Validate the number of months the individual moved in
+            try {
+                String hlngStr = binding.howLng.getText().toString().trim();
+                String imgDateStr = binding.imgDate.getText().toString().trim();
+
+                if (!hlngStr.isEmpty() && !imgDateStr.isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+
+                    Date insertDate = finalData.insertDate; // Assume this is the current or reference date
+                    Date imgDate = f.parse(imgDateStr);     // Date of immigration entered by user
+                    int hlng = Integer.parseInt(hlngStr);   // Number of months entered
+
+                    // Calculate the difference in months
+                    Calendar startCal = Calendar.getInstance();
+                    startCal.setTime(imgDate);
+
+                    Calendar endCal = Calendar.getInstance();
+                    endCal.setTime(insertDate);
+
+                    int yearDiff = endCal.get(Calendar.YEAR) - startCal.get(Calendar.YEAR);
+                    int monthDiff = endCal.get(Calendar.MONTH) - startCal.get(Calendar.MONTH);
+                    int dayDiff = endCal.get(Calendar.DAY_OF_MONTH) - startCal.get(Calendar.DAY_OF_MONTH);
+
+                    // Adjust monthDiff if day is negative
+                    if (dayDiff < 0) {
+                        monthDiff--;
+                    }
+
+                    int totalDiffMonths = yearDiff * 12 + monthDiff;
+
+                    // If it doesn't match, calculate the correct immigration date
+                    if (hlng != totalDiffMonths) {
+                        Calendar possibleCal = Calendar.getInstance();
+                        possibleCal.setTime(insertDate);
+                        possibleCal.add(Calendar.MONTH, -hlng); // Go back by hlng months
+                        String possibleDate = f.format(possibleCal.getTime());
+
+                        binding.howLng.setError("Date does not match number of months. Suggested Date: " + possibleDate);
+                        Toast.makeText(getActivity(), "Date does not match number of months. Suggested: " + possibleDate, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    // Clear any previous errors if valid
+                    binding.imgDate.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+
+
             try {
                 if (!binding.endDate.getText().toString().trim().isEmpty() && !binding.imgDate.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -317,46 +389,120 @@ public class InmigrationFragment extends Fragment {
             }
 
             finalData.complete = 1;
-            inmigrationViewModel.add(finalData);
 
-            //Update Outmigration
-            OutmigrationViewModel omgModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
-            String res = finalData.residency_uuid;
-            try {
-                Outmigration data = omgModel.finds(HouseMembersFragment.selectedIndividual.uuid,res);
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
 
-                if (data != null) {
+                //Update Outmigration
+                OutmigrationViewModel omgModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
+                //String old_res = binding.getResidency().uuid;
+                String old_res = binding.getResidency().getUuid();
+                Log.d("Omg", "Old Residency ID: " + old_res);
+                try {
+                    Outmigration data = omgModel.findLast(old_res);
+                    if (data !=null) {
                     OmgUpdate omg = new OmgUpdate();
-                    omg.residency_uuid = binding.getInmigration().residency_uuid;
+                    omg.residency_uuid = binding.getResidency().getUuid();
                     omg.destination = binding.getInmigration().origin;
                     omg.reason = binding.getInmigration().reason;
                     omg.reason_oth = binding.getInmigration().reason_oth;
                     omg.complete = 1;
                     omg.edit = 1;
-                    omgModel.update(omg);
-                }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
+                    if (data.status != null && data.status == 2) {
+                        omg.status = 3;
+                    }
+                    // Subtract one day from the recordedDate
+                    Date recordedDate = binding.getInmigration().recordedDate;
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(recordedDate);
+                    calendar.add(Calendar.DAY_OF_MONTH, -1);
+                    omg.recordedDate = calendar.getTime();
+
+                    Log.d("Omg", "Recorded Date: " + calendar.getTime());
+
+                        omgModel.update(omg, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("OutmigrationFragment", "Outmigration Update successful!");
+                                    } else {
+                                        Log.d("OutmigrationFragment", "Outmigration Update Failed!");
+                                    }
+                                })
+                        );
+
+                    }
+
+            } catch (Exception e) {
+                Log.e("OutmigrationFragment", "Error in update", e);
                 e.printStackTrace();
             }
 
-            //Update StartDate For Residency
-            ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-            try {
-                Residency data = resModel.updateres(res);
-                if (data != null) {
-                    ResidencyUpdate item = new ResidencyUpdate();
-                    item.uuid = binding.getInmigration().residency_uuid;
-                    item.startDate = binding.getInmigration().recordedDate;
-                    item.complete = 1;
-                    resModel.update(item);
+                //Update StartDate For Residency
+                ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+                String res = finalData.getResidency_uuid();
+                try {
+                    Residency data = resModel.updateres(res);
+                    if (data != null) {
+                        ResidencyUpdate item = new ResidencyUpdate();
+                        item.uuid = binding.getInmigration().residency_uuid;
+                        item.startDate = binding.getInmigration().recordedDate;
+                        item.complete = 1;
+                        //resModel.update(item);
+
+                        resModel.updates(item, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("ResidencyFragment", "Residency Update successful!");
+                                    } else {
+                                        Log.d("ResidencyFragment", "Residency Update Failed!");
+                                    }
+                                })
+                        );
+
+                    }
+                } catch (Exception e) {
+                    Log.e("ResidencyFragment", "Error in update", e);
+                    e.printStackTrace();
                 }
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+                //Update Previous Residency
+                try {
+                    Residency data = resModel.updateres(old_res);
+                    if (data != null) {
+                        ResidencyUpdateEndDate items = new ResidencyUpdateEndDate();
+                        items.uuid = binding.getResidency().getUuid();
+                        items.complete = 1;
+                        // Subtract one day from the recordedDate
+                        Date recordedDate = binding.getInmigration().recordedDate;
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(recordedDate);
+                        calendar.add(Calendar.DAY_OF_MONTH, -1);
+                        items.endDate = calendar.getTime();
+                        //resModel.update(item);
+                        Log.d("Omg", "Residency End Date: " + calendar.getTime());
+
+                        resModel.updatez(items, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("ResidencyFragment", "Old Residency Update successful!");
+                                    } else {
+                                        Log.d("ResidencyFragment", "Old Residency Update Failed!");
+                                    }
+                                })
+                        );
+
+                    }
+                } catch (Exception e) {
+                    Log.e("ResidencyFragment", "Error in update", e);
+                    e.printStackTrace();
+                }
+
+
+
+            });
+            executor.shutdown();
+
+            inmigrationViewModel.add(finalData);
 
         }
         if (close) {

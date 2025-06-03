@@ -589,7 +589,7 @@
                     android:id="@+id/button_residency_startDate"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/startdate"
+                    android:text="@string/imgdate"
                     tools:ignore="DuplicateSpeakableTextCheck"
                     style="@style/SupervisorButton"
                     android:layout_gravity="center"
@@ -605,7 +605,6 @@
                     android:text="@={residency.startDate}"
                     android:textSize="20sp"
                     tools:ignore="TextContrastCheck" />
-
 
                 <TextView
                     android:layout_width="match_parent"

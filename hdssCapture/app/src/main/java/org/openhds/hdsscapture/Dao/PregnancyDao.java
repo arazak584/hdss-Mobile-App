@@ -100,7 +100,7 @@ public interface PregnancyDao {
     List<Pregnancy> retrievePregnancy(String id);
 
     @Query("SELECT COUNT(*) FROM pregnancy a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
-            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
+            " WHERE (a.insertDate BETWEEN :startDate AND :endDate OR a.formcompldate BETWEEN :startDate AND :endDate) AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
     @Query("SELECT a.uuid,b.firstName as sttime,b.lastName as edtime,b.extId as bnet_loc_other,b.compno as visit_uuid,a.approveDate,a.comment,a.fw_uuid,a.supervisor FROM pregnancy a INNER JOIN individual b on a.individual_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 order by a.insertDate DESC")

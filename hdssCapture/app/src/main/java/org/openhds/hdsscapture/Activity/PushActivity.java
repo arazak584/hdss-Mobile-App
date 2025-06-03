@@ -2814,7 +2814,7 @@ public class PushActivity extends AppCompatActivity {
                                     public void onResponse(@NonNull Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
                                         runOnUiThread(() -> {
                                             progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
+                                            if (response.isSuccessful() && response.body() != null) {
                                                 Death[] d = data.getData().toArray(new Death[0]);
 
                                                 for (Death elem : d) {
@@ -2906,7 +2906,7 @@ public class PushActivity extends AppCompatActivity {
                                     public void onResponse(@NonNull Call<DataWrapper<Vpm>> call, Response<DataWrapper<Vpm>> response) {
                                         runOnUiThread(() -> {
                                             progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
+                                            if (response.isSuccessful() && response.body() != null) {
                                                 Vpm[] d = data.getData().toArray(new Vpm[0]);
 
                                                 for (Vpm elem : d) {
@@ -3273,7 +3273,7 @@ public class PushActivity extends AppCompatActivity {
                                     public void onResponse(@NonNull Call<DataWrapper<Outmigration>> call, Response<DataWrapper<Outmigration>> response) {
                                         runOnUiThread(() -> {
                                             progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
+                                            if (response.isSuccessful() && response.body() != null) {
                                                 Outmigration[] d = data.getData().toArray(new Outmigration[0]);
 
                                                 for (Outmigration elem : d) {

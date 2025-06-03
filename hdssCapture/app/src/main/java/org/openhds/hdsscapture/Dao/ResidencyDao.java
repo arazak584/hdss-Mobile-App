@@ -13,6 +13,7 @@ import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subentity.ResidencyUpdate;
+import org.openhds.hdsscapture.entity.subentity.ResidencyUpdateEndDate;
 
 import java.util.Date;
 import java.util.List;
@@ -40,7 +41,10 @@ public interface ResidencyDao {
     int update(ResidencyAmendment s);
 
     @Update(entity = Residency.class)
-    int update(ResidencyUpdate s);
+    int updates(ResidencyUpdate s);
+
+    @Update(entity = Residency.class)
+    int updatez(ResidencyUpdateEndDate s);
 
     @Query("DELETE FROM residency")
     void deleteAll();
@@ -56,6 +60,9 @@ public interface ResidencyDao {
 
     @Query("SELECT * FROM residency where individual_uuid=:id and location_uuid!=:locid and endType=1")
     Residency findEnd(String id, String locid);
+
+    @Query("SELECT * FROM residency WHERE individual_uuid = :id ORDER BY startDate DESC LIMIT 1 OFFSET 1")
+    Residency findLastButOne(String id);
 
     @Query("SELECT * FROM residency where individual_uuid=:id AND endDate is not null ORDER BY startDate DESC LIMIT 1")
     Residency finds(String id);

@@ -1,6 +1,10 @@
 package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
+
+import androidx.core.util.Consumer;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.OutmigrationDao;
@@ -27,10 +31,17 @@ public class OutmigrationRepository {
         dao = db.outmigrationDao();
     }
 
-    public int update(OmgUpdate s) {
-        AtomicInteger row = new AtomicInteger();
-        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
-        return row.intValue();
+//    public int update(OmgUpdate s) {
+//        AtomicInteger row = new AtomicInteger();
+//        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
+//        return row.intValue();
+//    }
+
+    public void update(OmgUpdate s, Consumer<Integer> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int result = dao.update(s);
+            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
     }
 
     public void create(Outmigration data) {
@@ -84,6 +95,15 @@ public class OutmigrationRepository {
     public Outmigration finds(String id,String res) throws ExecutionException, InterruptedException {
 
         Callable<Outmigration> callable = () -> dao.finds(id,res);
+
+        Future<Outmigration> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Outmigration findLast(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Outmigration> callable = () -> dao.findLast(id);
 
         Future<Outmigration> future = Executors.newSingleThreadExecutor().submit(callable);
 

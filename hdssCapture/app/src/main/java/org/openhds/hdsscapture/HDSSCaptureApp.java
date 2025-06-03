@@ -1,6 +1,11 @@
 package org.openhds.hdsscapture;
 
 import android.app.Application;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.work.Configuration;
@@ -19,6 +24,7 @@ public class HDSSCaptureApp extends Application implements Configuration.Provide
     @Override
     public void onCreate() {
         super.onCreate();
+
 
         if (!isInitialized) {
             initializeNotifications();

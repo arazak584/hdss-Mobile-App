@@ -65,6 +65,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -286,6 +287,21 @@ public class ListingFragment extends Fragment {
                 //data.latitude = ClusterFragment.selectedLocation.getLatitude();
                 //data.accuracy = ClusterFragment.selectedLocation.getAccuracy();
                 data.compextId = ClusterFragment.selectedLocation.getCompextId();
+
+                Date tDate = new Date();
+                Date loc = ClusterFragment.selectedLocation.insertDate;
+
+                //Only Generate Pre populate the GPS when it is a new location
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                String todayStr = sdf.format(tDate);
+                String locStr = sdf.format(loc);
+
+                if (todayStr.equals(locStr)) {
+                    data.longitude = ClusterFragment.selectedLocation.getLongitude();
+                    data.latitude = ClusterFragment.selectedLocation.getLatitude();
+                    data.accuracy = ClusterFragment.selectedLocation.getAccuracy();
+                }
+
 
                 String regex = "[A-Z]{2}\\d{4}";
                 String input = ClusterFragment.selectedLocation.getCompno();

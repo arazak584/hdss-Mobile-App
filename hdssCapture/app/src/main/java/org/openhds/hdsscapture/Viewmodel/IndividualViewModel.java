@@ -119,8 +119,8 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.retrieveDth(id);
     }
 
-    public List<Individual> retrieveOmg(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveOmg(id);
+    public List<Individual> retrieveOmg(String loc) throws ExecutionException, InterruptedException {
+        return individualRepository.retrieveOmg(loc);
     }
 
     public List<Individual> minors(String id,String ids) throws ExecutionException, InterruptedException {

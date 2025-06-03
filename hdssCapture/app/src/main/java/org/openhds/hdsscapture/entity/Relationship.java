@@ -62,6 +62,9 @@ public class Relationship extends BaseObservable implements Parcelable {
     public Date insertDate;
 
     @Expose
+    public Date formcompldate;
+
+    @Expose
     public Integer endType  = 1;
 
     @Expose
@@ -176,6 +179,22 @@ public class Relationship extends BaseObservable implements Parcelable {
         } catch (ParseException e) {
             System.out.println("Date Error " + e.getMessage());
         }
+    }
+
+    @Bindable
+    public String getFormcompldate() {
+        if (formcompldate == null) return null;
+        return f.format(formcompldate);
+    }
+
+    public void setFormcompldate(String formcompldate) {
+        if(formcompldate == null ) this.formcompldate=null;
+        else
+            try {
+                this.formcompldate = f.parse(formcompldate);
+            } catch (ParseException e) {
+                System.out.println("Visit Date Error " + e.getMessage());
+            }
     }
 
     @NotNull

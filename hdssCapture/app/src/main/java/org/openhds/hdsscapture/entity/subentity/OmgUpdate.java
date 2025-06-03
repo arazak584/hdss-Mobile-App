@@ -3,6 +3,8 @@ package org.openhds.hdsscapture.entity.subentity;
 import androidx.annotation.NonNull;
 import androidx.room.PrimaryKey;
 
+import java.util.Date;
+
 public class OmgUpdate {
 
     @PrimaryKey
@@ -13,5 +15,7 @@ public class OmgUpdate {
     public Integer complete;
     public Integer edit;
     public String reason_oth;
+    public Integer status;
+    public Date recordedDate;
 
 }

@@ -1,10 +1,12 @@
 package org.openhds.hdsscapture.odk;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,6 +14,11 @@ import androidx.annotation.Nullable;
 
 import org.json.JSONObject;
 import org.openhds.hdsscapture.entity.Individual;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.UUID;
 
 public class OdkUtils {
     public static final String ODK_PACKAGE = "org.odk.collect.android";
@@ -63,22 +70,45 @@ public class OdkUtils {
         }
     }
 
-    public static int getOdkFormId(@NonNull Context context, @Nullable String jrFormId) {
-        if (jrFormId == null) return -1;
+    public static Uri createAndSaveOdkInstance(Context context, String formId, Individual individual) {
+        String instanceId = formId + "_" + UUID.randomUUID().toString();
+        File instanceDir = new File(
+                Environment.getExternalStorageDirectory(),
+                "Android/data/org.odk.collect.android/files/instances/" + instanceId
+        );
+        if (!instanceDir.exists()) instanceDir.mkdirs();
 
-        Uri formUri = Uri.parse(ODK_FORMS_PROVIDER);
-        try (Cursor cursor = context.getContentResolver().query(formUri, PROJECTION, null, null, null)) {
-            if (cursor != null) {
-                while (cursor.moveToNext()) {
-                    String retrievedFormId = cursor.getString(cursor.getColumnIndexOrThrow("jrFormId"));
-                    if (jrFormId.equals(retrievedFormId)) {
-                        return cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
-                    }
-                }
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "Error querying ODK forms", e);
+        File instanceFile = new File(instanceDir, instanceId + ".xml");
+
+        try (FileOutputStream fos = new FileOutputStream(instanceFile)) {
+            String xml =
+                    "<data id=\"" + formId + "\">\n" +
+                            "  <ind_id>" + individual.getUuid() + "</ind_id>\n" +
+                            "  <firstname>" + individual.getFirstName() + "</firstname>\n" +
+                            "</data>";
+
+            fos.write(xml.getBytes());
+        } catch (IOException e) {
+            Log.e("ODKUtils", "Error writing instance XML", e);
+            return null;
         }
-        return -1;
+
+        // Insert into ODK's content provider so it recognizes the instance
+        ContentValues values = new ContentValues();
+        values.put("displayName", instanceId);
+        values.put("instanceFilePath", instanceFile.getAbsolutePath());
+        values.put("jrFormId", formId);
+        values.put("status", "incomplete");
+        values.put("lastStatusChangeDate", System.currentTimeMillis());
+
+        Uri instanceUri = context.getContentResolver().insert(
+                Uri.parse("content://org.odk.collect.android.provider.odk.instances/instances"),
+                values
+        );
+
+        return instanceUri;
     }
+
+
+
 }

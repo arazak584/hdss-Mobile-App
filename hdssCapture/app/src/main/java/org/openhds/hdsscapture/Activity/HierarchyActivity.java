@@ -312,7 +312,7 @@ public class HierarchyActivity extends AppCompatActivity {
 
         int nextLevelIndex = currentLevel; // Next level index (0-based)
         if (nextLevelIndex >= maxHierarchyLevel) {
-            showErrorToast("No more levels to load");
+            //showErrorToast("No more levels to load");
             return;
         }
 

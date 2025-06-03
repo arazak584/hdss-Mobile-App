@@ -3,6 +3,7 @@ package org.openhds.hdsscapture.Viewmodel;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Consumer;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.OutmigrationRepository;
@@ -43,6 +44,10 @@ public class OutmigrationViewModel extends AndroidViewModel {
         return outmigrationRepository.finds(id,res);
     }
 
+    public Outmigration findLast(String id) throws ExecutionException, InterruptedException {
+        return outmigrationRepository.findLast(id);
+    }
+
     public List<Outmigration> end(String id) throws ExecutionException, InterruptedException {
         return outmigrationRepository.end(id);
     }
@@ -70,8 +75,12 @@ public class OutmigrationViewModel extends AndroidViewModel {
         return outmigrationRepository.rej(uuid);
     }
 
-    public int update(OmgUpdate s){
-        return outmigrationRepository.update(s);
+//    public int update(OmgUpdate s){
+//        return outmigrationRepository.update(s);
+//    }
+
+    public void update(OmgUpdate s, Consumer<Integer> callback) {
+        outmigrationRepository.update(s, callback);
     }
     //public void add(Death... data){     deathRepository.create(data);  }
 }

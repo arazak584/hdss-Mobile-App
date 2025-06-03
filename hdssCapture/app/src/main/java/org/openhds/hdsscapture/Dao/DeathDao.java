@@ -50,7 +50,7 @@ public interface DeathDao {
     List<Death> error();
 
     @Query("SELECT COUNT(*) FROM death a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
-            " WHERE a.insertDate BETWEEN :startDate AND :endDate AND b.username = :username AND a.complete IS NOT NULL")
+            " WHERE a.insertDate BETWEEN :startDate AND :endDate AND b.username = :username AND a.edit!=2")
     long count(Date startDate, Date endDate, String username);
 
     @Query("SELECT * FROM death WHERE insertDate > (SELECT startDate FROM round LIMIT 1) AND complete IS NOT NULL order by insertDate DESC")

@@ -225,7 +225,7 @@ public class PregFragment extends DialogFragment {
             Pregnancy data = viewModel.ins(pregnancy.uuid);
             if (data != null) {
                 binding.setPregnancy(data);
-
+                binding.getPregnancy().setFormcompldate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                 if(data.status!=null && data.status==2){
                     cmt.setVisibility(View.VISIBLE);
                     rsv.setVisibility(View.VISIBLE);
@@ -560,20 +560,7 @@ public class PregFragment extends DialogFragment {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
                 return;
             }
-            Date end = new Date(); // Get the current date and time
-            // Create a Calendar instance and set it to the current date and time
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(end);
-            // Extract the hour, minute, and second components
-            int hh = cal.get(Calendar.HOUR_OF_DAY);
-            int mm = cal.get(Calendar.MINUTE);
-            int ss = cal.get(Calendar.SECOND);
-            // Format the components into a string with leading zeros
-            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
 
-            if (finalData.sttime !=null && finalData.edtime==null){
-                finalData.edtime = endtime;
-            }
             finalData.complete=1;
             viewModel.add(finalData);
 

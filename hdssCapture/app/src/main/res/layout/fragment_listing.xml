@@ -453,7 +453,7 @@
 
 
             <Button
-                goneUnless="@{listing.accuracy != null &amp;&amp; !listing.accuracy.isEmpty() &amp;&amp; Float.parseFloat(listing.accuracy) &lt; 11}"
+                goneUnless="@{listing.accuracy != null &amp;&amp; !listing.accuracy.isEmpty() &amp;&amp; Float.parseFloat(listing.accuracy) &lt; 11 }"
                 android:id="@+id/buttonSaveClose"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

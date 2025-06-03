@@ -296,22 +296,6 @@ public class DthFragment extends Fragment {
                 e.printStackTrace();
             }
 
-
-            Date end = new Date(); // Get the current date and time
-            // Create a Calendar instance and set it to the current date and time
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(end);
-            // Extract the hour, minute, and second components
-            int hh = cal.get(Calendar.HOUR_OF_DAY);
-            int mm = cal.get(Calendar.MINUTE);
-            int ss = cal.get(Calendar.SECOND);
-            // Format the components into a string with leading zeros
-            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
-
-            if (finalData.sttime !=null && finalData.edtime==null){
-                finalData.edtime = endtime;
-            }
-
             VpmViewModel vpmViewModel = new ViewModelProvider(this).get(VpmViewModel.class);
 
 

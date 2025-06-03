@@ -217,6 +217,7 @@ public class RelationshipFragment extends Fragment {
             if (data != null) {
                 binding.setRelationship(data);
                 data.location_uuid = ClusterFragment.selectedLocation.getUuid();
+                binding.getRelationship().setFormcompldate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                 if(data.status!=null && data.status==2){
                     cmt.setVisibility(View.VISIBLE);
                     rsv.setVisibility(View.VISIBLE);
@@ -226,6 +227,19 @@ public class RelationshipFragment extends Fragment {
                     rsv.setVisibility(View.GONE);
                     rsvd.setVisibility(View.GONE);
                 }
+
+                Date currentDate = new Date(); // Get the current date and time
+                // Create a Calendar instance and set it to the current date and time
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(currentDate);
+                // Extract the hour, minute, and second components
+                int hh = cal.get(Calendar.HOUR_OF_DAY);
+                int mm = cal.get(Calendar.MINUTE);
+                int ss = cal.get(Calendar.SECOND);
+                // Format the components into a string with leading zeros
+                String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
+                data.sttime = timeString;
+
             } else {
                 data = new Relationship();
 
@@ -255,6 +269,7 @@ public class RelationshipFragment extends Fragment {
 
                 binding.setRelationship(data);
                 binding.getRelationship().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                binding.getRelationship().setFormcompldate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 
             }
         } catch (ExecutionException | InterruptedException e) {
@@ -372,7 +387,7 @@ public class RelationshipFragment extends Fragment {
             // Format the components into a string with leading zeros
             String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
 
-            if (finalData.sttime !=null && finalData.edtime==null){
+            if (finalData.sttime !=null){
                 finalData.edtime = endtime;
             }
             finalData.complete=1;

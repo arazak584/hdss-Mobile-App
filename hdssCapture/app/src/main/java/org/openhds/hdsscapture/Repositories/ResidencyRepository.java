@@ -13,6 +13,7 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subentity.ResidencyUpdate;
+import org.openhds.hdsscapture.entity.subentity.ResidencyUpdateEndDate;
 
 import java.util.Date;
 import java.util.List;
@@ -56,11 +57,25 @@ public class ResidencyRepository {
         });
     }
 
-    public int update(ResidencyUpdate s) {
-        AtomicInteger row = new AtomicInteger();
-        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
-        return row.intValue();
+    public void updates(ResidencyUpdate s, Consumer<Integer> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int result = dao.updates(s);
+            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
     }
+
+    public void updatez(ResidencyUpdateEndDate s, Consumer<Integer> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int result = dao.updatez(s);
+            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
+    }
+
+//    public int update(ResidencyUpdate s) {
+//        AtomicInteger row = new AtomicInteger();
+//        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.update(s)));
+//        return row.intValue();
+//    }
 
     public List<Residency> findToSync() throws ExecutionException, InterruptedException {
 
@@ -119,6 +134,15 @@ public class ResidencyRepository {
     public Residency finds(String id) throws ExecutionException, InterruptedException {
 
         Callable<Residency> callable = () -> dao.finds(id);
+
+        Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Residency findLastButOne(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Residency> callable = () -> dao.findLastButOne(id);
 
         Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
 

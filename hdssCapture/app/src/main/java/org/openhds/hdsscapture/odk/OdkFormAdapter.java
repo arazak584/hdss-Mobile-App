@@ -105,6 +105,19 @@ public class OdkFormAdapter extends RecyclerView.Adapter<OdkFormAdapter.OdkFormV
             }
         }
 
+        private void launchPrefilledOdkForm(Individual individual, String formJrId) {
+            Uri instanceUri = OdkUtils.createAndSaveOdkInstance(context, formJrId, individual);
+            if (instanceUri != null) {
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                intent.setData(instanceUri);
+                intent.setPackage(ODK_PACKAGE);
+                context.startActivity(intent);
+            } else {
+                Toast.makeText(context, "Failed to create pre-filled ODK instance", Toast.LENGTH_LONG).show();
+            }
+        }
+
+
         private int getOdkFormId(Context context, String jrFormId) {
             if (jrFormId == null) {
                 Log.e(TAG, "jrFormId is null");

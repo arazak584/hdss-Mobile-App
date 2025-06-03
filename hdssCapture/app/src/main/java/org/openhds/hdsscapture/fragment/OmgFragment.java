@@ -264,22 +264,7 @@ public class OmgFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            Date end = new Date(); // Get the current date and time
-            // Create a Calendar instance and set it to the current date and time
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(end);
-            // Extract the hour, minute, and second components
-            int hh = cal.get(Calendar.HOUR_OF_DAY);
-            int mm = cal.get(Calendar.MINUTE);
-            int ss = cal.get(Calendar.SECOND);
-            // Format the components into a string with leading zeros
-            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
-
-            if (finalData.sttime !=null && finalData.edtime==null){
-                finalData.edtime = endtime;
-            }
-            finalData.complete = 1;
-
+            finalData.complete = binding.getOutmigration().edit;
             ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
             IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
 

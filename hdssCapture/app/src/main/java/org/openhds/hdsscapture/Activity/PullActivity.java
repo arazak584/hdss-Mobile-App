@@ -1714,7 +1714,7 @@ public class PullActivity extends AppCompatActivity {
                             .addColumn("pregnancyNumber").addColumn("recordedDate").addColumn("slp_bednet").addColumn("trt_bednet").addColumn("ttinjection")
                             .addColumn("why_no").addColumn("why_no_other").addColumn("individual_uuid").addColumn("sttime").addColumn("visit_uuid")
                             .addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate")
-                            .addColumn("preg_ready").addColumn("family_plan").addColumn("plan_method").addColumn("plan_method_oth")
+                            .addColumn("preg_ready").addColumn("family_plan").addColumn("plan_method").addColumn("plan_method_oth").addColumn("formcompldate")
                             .build();
                 } else if (entityClass.equals(Relationship.class)) {
                     return CsvSchema.builder()
@@ -1722,7 +1722,8 @@ public class PullActivity extends AppCompatActivity {
                             .addColumn("fw_uuid").addColumn("individualA_uuid").addColumn("individualB_uuid").addColumn("insertDate").addColumn("lcow").addColumn("mar")
                             .addColumn("mrank").addColumn("nchdm").addColumn("nwive").addColumn("polygamous")
                             .addColumn("startDate").addColumn("sttime").addColumn("tnbch").addColumn("comment")
-                            .addColumn("status").addColumn("supervisor").addColumn("approveDate").addColumn("location_uuid").addColumn("locationB_uuid").build();
+                            .addColumn("status").addColumn("supervisor").addColumn("approveDate").addColumn("location_uuid").addColumn("locationB_uuid").addColumn("formcompldate")
+                            .build();
                 }
                 return CsvSchema.emptySchema();
             }

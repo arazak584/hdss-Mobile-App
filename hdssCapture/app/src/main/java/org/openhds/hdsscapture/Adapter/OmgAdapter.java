@@ -17,6 +17,7 @@ import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
 import org.openhds.hdsscapture.fragment.OmgFragment;
 import org.openhds.hdsscapture.fragment.OmgAdapterFragment;
 
@@ -102,7 +103,7 @@ public class OmgAdapter extends RecyclerView.Adapter<OmgAdapter.ViewHolder>{
         individualList.clear();
         if(socialgroup != null)
             try {
-                List<Individual> list = individualViewModel.retrieveOmg(socialgroup.getExtId());
+                List<Individual> list = individualViewModel.retrieveOmg(ClusterFragment.selectedLocation.compno);
 
                 if (list != null) {
                     individualList.addAll(list);

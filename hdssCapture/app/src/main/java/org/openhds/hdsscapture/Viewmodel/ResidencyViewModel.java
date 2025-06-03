@@ -12,6 +12,7 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subentity.ResidencyUpdate;
+import org.openhds.hdsscapture.entity.subentity.ResidencyUpdateEndDate;
 
 import java.util.Date;
 import java.util.List;
@@ -49,6 +50,10 @@ public class ResidencyViewModel extends AndroidViewModel {
 
     public Residency finds(String id) throws ExecutionException, InterruptedException {
         return residencyRepository.finds(id);
+    }
+
+    public Residency findLastButOne(String id) throws ExecutionException, InterruptedException {
+        return residencyRepository.findLastButOne(id);
     }
 
     public Residency updateres(String id) throws ExecutionException, InterruptedException {
@@ -105,7 +110,15 @@ public class ResidencyViewModel extends AndroidViewModel {
         residencyRepository.update(s, callback);
     }
 
-    public int update(ResidencyUpdate s){
-        return residencyRepository.update(s);
+    public void updates(ResidencyUpdate s, Consumer<Integer> callback) {
+        residencyRepository.updates(s, callback);
     }
+
+    public void updatez(ResidencyUpdateEndDate s, Consumer<Integer> callback) {
+        residencyRepository.updatez(s, callback);
+    }
+
+//    public int update(ResidencyUpdate s){
+//        return residencyRepository.update(s);
+//    }
 }

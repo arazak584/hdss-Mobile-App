@@ -311,9 +311,9 @@ public class IndividualRepository {
         return future.get();
     }
 
-    public List<Individual> retrieveOmg(String id) throws ExecutionException, InterruptedException {
+    public List<Individual> retrieveOmg(String loc) throws ExecutionException, InterruptedException {
 
-        Callable<List<Individual>> callable = () -> dao.retrieveOmg(id);
+        Callable<List<Individual>> callable = () -> dao.retrieveOmg(loc);
 
         Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
 

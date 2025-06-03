@@ -409,6 +409,10 @@ public class RejectionsActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<DataWrapper<Outmigration>> call, Response<DataWrapper<Outmigration>> response) {
                         Outmigration[] i = response.body().getData().toArray(new Outmigration[0]);
+                        for (Outmigration item : i) {
+                            item.edit = 1;
+                            Log.d("Omg", "Edit Omg: " + item.edit + "Uuid: " +item.uuid);
+                        }
                         outmigrationViewModel.add(i);
 
                         // Next Step: Death
@@ -419,6 +423,10 @@ public class RejectionsActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
                                 Death[] co = response.body().getData().toArray(new Death[0]);
+                                for (Death item : co) {
+                                    item.edit = 1;
+                                    Log.d("Dth", "Edit Dth: " + item.edit);
+                                }
                                 deathViewModel.add(co);
 
                                 // Next Step: Pregnancy

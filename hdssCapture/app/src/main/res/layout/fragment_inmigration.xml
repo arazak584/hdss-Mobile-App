@@ -14,6 +14,10 @@
             name="res"
             type="org.openhds.hdsscapture.entity.Residency" />
 
+        <variable
+            name="residency"
+            type="org.openhds.hdsscapture.entity.Residency" />
+
 
         <import type="android.view.View" />
 
@@ -109,6 +113,25 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={inmigration.individual_uuid}"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/residency"
+                    android:text="@string/residency">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/old_residency_uuid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={residency.uuid}"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 

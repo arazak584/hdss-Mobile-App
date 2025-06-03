@@ -398,17 +398,17 @@ public class IndividualFragment extends Fragment {
 //                if (data.ghanacard != null && data.ghanacard !="") {
 //                    binding.ghanacard.setEnabled(false);
 //                }
-                if (data.otherName != null && data.otherName !="") {
-                    binding.individualNickName.setEnabled(false);
-                }
-                if (data.firstName != null) {
-                    binding.individualFirstName.setEnabled(false);
-                    binding.individualLastName.setEnabled(false);
-                    //binding.buttonIndividualDob.setVisibility(View.GONE);
-                    binding.dobAspect.setEnabled(false);
-                    binding.gender.setEnabled(false);
-                    binding.buttonIndividualDob.setEnabled(false);
-                }
+//                if (data.otherName != null && data.otherName !="") {
+//                    binding.individualNickName.setEnabled(false);
+//                }
+//                if (data.firstName != null) {
+//                    binding.individualFirstName.setEnabled(false);
+//                    binding.individualLastName.setEnabled(false);
+//                    //binding.buttonIndividualDob.setVisibility(View.GONE);
+//                    binding.dobAspect.setEnabled(false);
+//                    binding.gender.setEnabled(false);
+//                    binding.buttonIndividualDob.setEnabled(false);
+//                }
 
             }else{
                     data = new Individual();
@@ -998,6 +998,56 @@ public class IndividualFragment extends Fragment {
                     binding.phone1.setError("Phone Number is incorrect");
                     return;
                 }
+            }
+
+            //Validate the number of months the individual moved in
+            try {
+                String hlngStr = binding.howLng.getText().toString().trim();
+                String imgDateStr = binding.editTextStartDate.getText().toString().trim();
+
+                if (!hlngStr.isEmpty() && !imgDateStr.isEmpty()) {
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+
+                    Date insertDate = new Date(); // Assume this is the current or reference date
+                    Date imgDate = f.parse(imgDateStr);     // Date of immigration entered by user
+                    int hlng = Integer.parseInt(hlngStr);   // Number of months entered
+
+                    // Calculate the difference in months
+                    Calendar startCal = Calendar.getInstance();
+                    startCal.setTime(imgDate);
+
+                    Calendar endCal = Calendar.getInstance();
+                    endCal.setTime(insertDate);
+
+                    int yearDiff = endCal.get(Calendar.YEAR) - startCal.get(Calendar.YEAR);
+                    int monthDiff = endCal.get(Calendar.MONTH) - startCal.get(Calendar.MONTH);
+                    int dayDiff = endCal.get(Calendar.DAY_OF_MONTH) - startCal.get(Calendar.DAY_OF_MONTH);
+
+                    // Adjust monthDiff if day is negative
+                    if (dayDiff < 0) {
+                        monthDiff--;
+                    }
+
+                    int totalDiffMonths = yearDiff * 12 + monthDiff;
+
+                    // If it doesn't match, calculate the correct immigration date
+                    if (hlng != totalDiffMonths) {
+                        Calendar possibleCal = Calendar.getInstance();
+                        possibleCal.setTime(insertDate);
+                        possibleCal.add(Calendar.MONTH, -hlng); // Go back by hlng months
+                        String possibleDate = f.format(possibleCal.getTime());
+
+                        binding.howLng.setError("Date does not match number of months. Suggested Date: " + possibleDate);
+                        Toast.makeText(getActivity(), "Date does not match number of months. Suggested: " + possibleDate, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    // Clear any previous errors if valid
+                    binding.editTextStartDate.setError(null);
+                }
+            } catch (ParseException e) {
+                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
 
             if (hasErrors) {

@@ -522,10 +522,6 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         // Update the householdAdapter with the selected location
         if (selectedIndividual != null) {
 
-
-                // Check permissions
-
-
                 // Handle ODK return flow
                 OdkUtils.returnToOdk(requireActivity(), selectedIndividual);
 
@@ -1094,6 +1090,16 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private void showMinorsDialog() {
         MinorDialogFragment.newInstance(locations, socialgroup)
                 .show(getChildFragmentManager(), "MinorDialogFragment");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Individual selectedIndividual = HouseMembersFragment.selectedIndividual;
+        if (selectedIndividual != null) {
+            // Handle returning from ODK Collect
+            OdkUtils.returnToOdk(requireActivity(), selectedIndividual);
+        }
     }
 
     private void updateButtonState() {
