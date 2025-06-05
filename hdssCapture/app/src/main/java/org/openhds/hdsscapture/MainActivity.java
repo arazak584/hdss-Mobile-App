@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.setData(Uri.parse("package:" + getPackageName()));
                 startActivity(intent); // Open settings screen for user to grant permission
             } else {
-                Toast.makeText(this, "All Files Access granted", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "All Files Access granted", Toast.LENGTH_SHORT).show();
             }
         }
 
