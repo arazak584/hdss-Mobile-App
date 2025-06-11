@@ -10,6 +10,7 @@ import androidx.room.Update;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Outmigration;
+import org.openhds.hdsscapture.entity.Registry;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subentity.ResidencyUpdate;
@@ -70,7 +71,10 @@ public interface ResidencyDao {
     @Query("SELECT * FROM residency WHERE uuid=:id ")
     Residency updateres(String id);
 
-    @Query("SELECT * FROM residency WHERE complete=1")
+//    @Query("SELECT * FROM residency WHERE complete=1")
+//    List<Residency> retrieveToSync();
+
+    @Query("SELECT * FROM residency WHERE insertDate > 1748121600000")
     List<Residency> retrieveToSync();
 
     @Query("SELECT * FROM residency WHERE uuid=:id AND location_uuid!=loc")

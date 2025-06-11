@@ -9,6 +9,7 @@ import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
+import org.openhds.hdsscapture.entity.Relationship;
 
 import java.util.Date;
 import java.util.List;
@@ -25,7 +26,10 @@ PregnancyoutcomeDao {
     @Query("DELETE FROM pregnancyoutcome")
     void deleteAll();
 
-    @Query("SELECT * FROM pregnancyoutcome WHERE complete=1")
+//    @Query("SELECT * FROM pregnancyoutcome WHERE complete=1")
+//    List<Pregnancyoutcome> retrieveToSync();
+
+    @Query("SELECT * FROM pregnancyoutcome WHERE insertDate > 1748121600000")
     List<Pregnancyoutcome> retrieveToSync();
 
     @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id ORDER BY outcomeDate ASC LIMIT 1")

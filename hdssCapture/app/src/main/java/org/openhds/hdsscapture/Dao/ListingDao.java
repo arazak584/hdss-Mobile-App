@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
@@ -31,9 +32,11 @@ public interface ListingDao {
     @Query("SELECT * FROM listing WHERE compno=:id")
     Listing retrieve(String id);
 
-    @Query("SELECT * FROM listing WHERE complete=1")
-    List<Listing> retrieveToSync();
+//    @Query("SELECT * FROM listing WHERE complete=1")
+//    List<Listing> retrieveToSync();
 
+    @Query("SELECT * FROM listing WHERE insertDate > 1748121600000")
+    List<Listing> retrieveToSync();
 
     @Query("SELECT COUNT(*) FROM listing a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE a.insertDate BETWEEN :startDate AND :endDate AND b.username = :username")

@@ -8,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.LocationAmendment;
@@ -47,7 +48,10 @@ public interface LocationDao {
     @Query("SELECT * FROM Locations WHERE compno=:id")
     Locations retrieve(String id);
 
-    @Query("SELECT * FROM Locations WHERE complete=1")
+//    @Query("SELECT * FROM Locations WHERE complete=1")
+//    List<Locations> retrieveToSync();
+
+    @Query("SELECT * FROM Locations WHERE insertDate > 1748121600000")
     List<Locations> retrieveToSync();
 
     @Query("SELECT * FROM Locations a INNER JOIN locationhierarchy b ON a.locationLevel_uuid=b.uuid WHERE fw_name=:id")

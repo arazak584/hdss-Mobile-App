@@ -89,6 +89,12 @@ public class OdkFormAdapter extends RecyclerView.Adapter<OdkFormAdapter.OdkFormV
                 return;
             }
 
+            // Check if ODK Collect is installed
+            if (!OdkUtils.isOdkCollectInstalled(context)) {
+                Toast.makeText(context, "ODK Collect is not installed", Toast.LENGTH_LONG).show();
+                return;
+            }
+
             int formId = getOdkFormId(context, currentForm.getFormID());
             if (formId == -1) {
                 Toast.makeText(context, "Form not found in ODK Collect", Toast.LENGTH_LONG).show();
@@ -96,24 +102,33 @@ public class OdkFormAdapter extends RecyclerView.Adapter<OdkFormAdapter.OdkFormV
             }
 
             String formUri = ODK_FORMS_PROVIDER + "/" + formId;
+
             try {
-                Intent intent = OdkUtils.createOdkFormIntent(formUri, selectedIndividual);
+                // Use external app integration to pass data
+                Intent intent = OdkUtils.createExternalAppIntent(context, formUri, selectedIndividual);
+
+                // Log the intent details for debugging
+                Log.d(TAG, "Launching ODK form with URI: " + formUri);
+                Log.d(TAG, "Individual data: " + selectedIndividual.getFirstName() + " " + selectedIndividual.getLastName());
+                Log.d(TAG, "Launching form: " + currentForm.getFormID() + " for " + selectedIndividual.getFirstName());
+
+                intent.putExtra("firstname", "John");
                 context.startActivity(intent);
+
             } catch (Exception e) {
-                Toast.makeText(context, "Error launching ODK form: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 Log.e(TAG, "Error launching ODK form", e);
+                Toast.makeText(context, "Error launching ODK form: " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
 
-        private void launchPrefilledOdkForm(Individual individual, String formJrId) {
-            Uri instanceUri = OdkUtils.createAndSaveOdkInstance(context, formJrId, individual);
-            if (instanceUri != null) {
-                Intent intent = new Intent(Intent.ACTION_EDIT);
-                intent.setData(instanceUri);
-                intent.setPackage(ODK_PACKAGE);
+        // Alternative method for testing - launches form picker
+        private void launchOdkFormPicker() {
+            try {
+                Intent intent = OdkUtils.createFormPickerIntent();
                 context.startActivity(intent);
-            } else {
-                Toast.makeText(context, "Failed to create pre-filled ODK instance", Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                Toast.makeText(context, "Error launching ODK form picker: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                Log.e(TAG, "Error launching ODK form picker", e);
             }
         }
 

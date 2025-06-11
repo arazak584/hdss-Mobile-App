@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import org.openhds.hdsscapture.entity.Amendment;
+import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Registry;
 
 import java.util.Date;
@@ -33,7 +34,10 @@ public interface RegistryDao {
     @Query("SELECT * FROM registry")
     List<Registry> retrieve();
 
-    @Query("SELECT * FROM registry WHERE complete=1")
+//    @Query("SELECT * FROM registry WHERE complete=1")
+//    List<Registry> retrieveSync();
+
+    @Query("SELECT * FROM registry WHERE insertDate > 1748121600000")
     List<Registry> retrieveSync();
 
     @Query("SELECT * FROM registry where individual_uuid=:id")

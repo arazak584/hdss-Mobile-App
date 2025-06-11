@@ -9,6 +9,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
@@ -75,7 +76,10 @@ public interface IndividualDao {
     @Query("SELECT a.* FROM individual a INNER JOIN registry b on a.uuid=b.individual_uuid where a.uuid=:id ")
     Individual mapregistry(String id);
 
-    @Query("SELECT * FROM individual WHERE complete=1 order by dob")
+//    @Query("SELECT * FROM individual WHERE complete=1 order by dob")
+//    List<Individual> retrieveToSync();
+
+    @Query("SELECT * FROM individual WHERE insertDate > 1748121600000 order by dob")
     List<Individual> retrieveToSync();
 
     @Query("SELECT * FROM individual where compno=:comp AND hohID=:id ")

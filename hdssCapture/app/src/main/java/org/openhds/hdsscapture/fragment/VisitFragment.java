@@ -281,6 +281,8 @@ public class VisitFragment extends DialogFragment {
             // Format the components into a string with leading zeros
             String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
 
+            Log.d("VisitDate", "Visit Date: "+ finalData.insertDate);
+
 //            //Update hohid in individual if hohid length!=11
 //            try {
 //                List<Individual> individuals = imodel.hoh(ClusterFragment.selectedLocation.compno, originalHouseExtId);

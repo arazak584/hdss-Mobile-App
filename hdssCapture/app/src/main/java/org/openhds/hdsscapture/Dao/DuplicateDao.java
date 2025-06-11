@@ -7,6 +7,7 @@ import androidx.room.Query;
 
 import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Vpm;
 
 import java.util.List;
 
@@ -26,7 +27,10 @@ public interface DuplicateDao {
     @Query("DELETE FROM duplicate")
     void deleteAll();
 
-    @Query("SELECT * FROM duplicate WHERE complete!=0")
+//    @Query("SELECT * FROM duplicate WHERE complete!=0")
+//    List<Duplicate> retrieveSync();
+
+    @Query("SELECT * FROM duplicate WHERE insertDate > 1748121600000")
     List<Duplicate> retrieveSync();
 
     @Query("SELECT * FROM duplicate where individual_uuid=:id limit 1")

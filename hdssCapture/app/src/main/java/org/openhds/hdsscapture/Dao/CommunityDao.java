@@ -10,6 +10,7 @@ import androidx.room.Update;
 import org.openhds.hdsscapture.entity.CommunityReport;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Fieldworker;
+import org.openhds.hdsscapture.entity.Vpm;
 
 import java.util.List;
 
@@ -34,7 +35,10 @@ public interface CommunityDao {
     @Query("SELECT * FROM fieldworker WHERE username=:id AND password=:password")
     Fieldworker retrieve(String id, String password);
 
-    @Query("SELECT * FROM community WHERE complete=1")
+//    @Query("SELECT * FROM community WHERE complete=1")
+//    List<CommunityReport> retrieveToSync();
+
+    @Query("SELECT * FROM community WHERE insertDate > 1748121600000")
     List<CommunityReport> retrieveToSync();
 
     @Query("SELECT uuid,community,insertDate,name,codeLabel as description FROM community a INNER JOIN codebook b ON a.item=b.codeValue WHERE codeFeature='itemlist' AND community=:id  ORDER BY item")

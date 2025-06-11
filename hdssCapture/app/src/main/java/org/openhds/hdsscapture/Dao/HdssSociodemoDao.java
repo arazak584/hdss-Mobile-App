@@ -13,6 +13,7 @@ import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Vaccination;
+import org.openhds.hdsscapture.entity.Visit;
 
 import java.util.Date;
 import java.util.List;
@@ -51,7 +52,10 @@ public interface HdssSociodemoDao {
     @Query("SELECT * FROM sociodemo where uuid=:id ")
     HdssSociodemo ins(String id);
 
-    @Query("SELECT * FROM sociodemo WHERE complete=1")
+//    @Query("SELECT * FROM sociodemo WHERE complete=1")
+//    List<HdssSociodemo> retrieveToSync();
+
+    @Query("SELECT * FROM sociodemo WHERE insertDate > 1748121600000")
     List<HdssSociodemo> retrieveToSync();
 
     @Query("SELECT a.socialgroup_uuid,b.extId as sttime,b.groupName as edtime,c.compno as visit_uuid" +

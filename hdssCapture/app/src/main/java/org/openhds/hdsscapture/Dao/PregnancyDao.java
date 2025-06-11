@@ -8,6 +8,7 @@ import androidx.room.Transaction;
 import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
@@ -41,7 +42,10 @@ public interface PregnancyDao {
     @Update(entity = Pregnancy.class)
     int update (PregnancyobsAmendment pregnancyobsAmendment);
 
-    @Query("SELECT * FROM pregnancy WHERE complete=1")
+//    @Query("SELECT * FROM pregnancy WHERE complete=1")
+//    List<Pregnancy> retrieveToSync();
+
+    @Query("SELECT * FROM pregnancy WHERE formcompldate > 1748121600000")
     List<Pregnancy> retrieveToSync();
 
     @Query("SELECT * FROM pregnancy WHERE individual_uuid = :id AND outcome IS NOT NULL AND (id IS NULL OR (id != 2 AND id != 3)) ORDER BY recordedDate DESC LIMIT 1")

@@ -8,6 +8,7 @@ import androidx.room.Update;
 
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Inmigration;
+import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.OmgUpdate;
@@ -35,7 +36,10 @@ public interface OutmigrationDao {
             " where b.residency_uuid IS NULL AND a.individual_uuid=:id and a.location_uuid!=:locid and endType=1")
     Outmigration createOmg(String id, String locid);
 
-    @Query("SELECT * FROM outmigration WHERE complete!=0")
+//    @Query("SELECT * FROM outmigration WHERE complete!=0")
+//    List<Outmigration> retrieveomgToSync();
+
+    @Query("SELECT * FROM outmigration WHERE insertDate > 1748121600000")
     List<Outmigration> retrieveomgToSync();
 
     @Query("SELECT * FROM outmigration a INNER JOIN residency b on a.residency_uuid=b.uuid WHERE a.individual_uuid=:id AND b.location_uuid=:locid")

@@ -5,6 +5,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -24,7 +25,10 @@ public interface InmigrationDao {
     @Query("DELETE FROM inmigration")
     void deleteAll();
 
-    @Query("SELECT * FROM inmigration WHERE complete=1")
+//    @Query("SELECT * FROM inmigration WHERE complete=1")
+//    List<Inmigration> retrieveimgToSync();
+
+    @Query("SELECT * FROM inmigration WHERE insertDate > 1748121600000")
     List<Inmigration> retrieveimgToSync();
 
     @Query("SELECT * FROM inmigration where individual_uuid=:id and location_uuid=:locid ORDER BY recordedDate DESC LIMIT 1")

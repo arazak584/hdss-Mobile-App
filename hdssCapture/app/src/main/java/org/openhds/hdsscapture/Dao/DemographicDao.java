@@ -14,6 +14,7 @@ import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.Vpm;
 import org.openhds.hdsscapture.entity.subentity.DemographicAmendment;
 
 import java.util.Date;
@@ -48,7 +49,10 @@ public interface DemographicDao {
     @Delete
     void Delete(Demographic user);
 
-    @Query("SELECT * FROM demographic WHERE complete=1")
+//    @Query("SELECT * FROM demographic WHERE complete=1")
+//    List<Demographic> retrieveToSync();
+
+    @Query("SELECT * FROM demographic WHERE insertDate > 1748121600000")
     List<Demographic> retrieveToSync();
 
     @Query("SELECT * FROM demographic where individual_uuid=:id")

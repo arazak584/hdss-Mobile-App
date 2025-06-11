@@ -158,17 +158,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Android 11 (SDK 30) or higher, this permission does not get granted automatically, even if it's declared
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (!Environment.isExternalStorageManager()) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-                intent.setData(Uri.parse("package:" + getPackageName()));
-                startActivity(intent); // Open settings screen for user to grant permission
+                try {
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                    intent.setData(Uri.parse("package:" + getPackageName()));
+                    startActivity(intent);
+                } catch (Exception e) {
+                    // Fallback to general settings if the specific one fails
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                    startActivity(intent);
+                }
             } else {
-                //Toast.makeText(this, "All Files Access granted", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "All Files Access already granted", Toast.LENGTH_SHORT).show();
             }
         }
-
 
 
         preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);

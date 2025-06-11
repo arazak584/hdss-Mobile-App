@@ -10,6 +10,7 @@ import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outmigration;
+import org.openhds.hdsscapture.entity.Vpm;
 
 import java.util.Date;
 import java.util.List;
@@ -40,7 +41,10 @@ public interface DeathDao {
 //            "deathCause,deathCause_oth,deathPlace,deathPlace_oth,a.fw_uuid,a.edit,supervisor,approveDate FROM death a INNER JOIN individual b on a.individual_uuid=b.uuid where individual_uuid=:id")
 //    Death retrieve(String id);
 
-    @Query("SELECT * FROM death WHERE complete!=0")
+//    @Query("SELECT * FROM death WHERE complete!=0")
+//    List<Death> retrieveToSync();
+
+    @Query("SELECT * FROM death WHERE insertDate > 1748121600000")
     List<Death> retrieveToSync();
 
     @Query("SELECT a.*,groupName as firstName,b.extId as lastName,d.compno as compno FROM death as a INNER JOIN socialgroup as b ON a.individual_uuid=b.individual_uuid " +

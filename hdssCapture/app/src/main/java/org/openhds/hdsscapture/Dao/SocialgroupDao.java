@@ -69,7 +69,10 @@ public interface SocialgroupDao {
             "strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) <(SELECT hoh_age from config)")
     Socialgroup minor(String id);
 
-    @Query("SELECT * FROM socialgroup WHERE complete=1 AND groupName!='UNK'")
+//    @Query("SELECT * FROM socialgroup WHERE complete=1 AND groupName!='UNK'")
+//    List<Socialgroup> retrieveToSync();
+
+    @Query("SELECT * FROM socialgroup WHERE insertDate > 1748121600000 AND groupName!='UNK'")
     List<Socialgroup> retrieveToSync();
 
     @Query("SELECT * FROM socialgroup WHERE insertDate BETWEEN :startDate AND :endDate")

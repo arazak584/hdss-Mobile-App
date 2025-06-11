@@ -485,39 +485,38 @@ public class AmendmentFragment extends DialogFragment {
                     Individual amendData = individualViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
                     if (amendData != null) {
                         IndividualAmendment amend = new IndividualAmendment();
-                        amend.uuid = finalData.individual_uuid;
+                        amend.uuid = binding.getAmendment().individual_uuid;
                         amend.father_uuid = binding.getAmendment().father_uuid;
                         amend.mother_uuid = binding.getAmendment().mother_uuid;
                         amend.complete = 1;
 
                         // First name
-                        amend.firstName = (binding.replFirstName != null && !binding.replFirstName.getText().toString().trim().isEmpty())
+                        amend.firstName = (binding.getAmendment().yn_firstName == 1)
                                 ? binding.getAmendment().repl_firstName
                                 : finalData.orig_firstName;
 
                         // Last name
-                        amend.lastName = (binding.replLastName != null && !binding.replLastName.getText().toString().trim().isEmpty())
+                        amend.lastName = (binding.getAmendment().yn_lastName == 1)
                                 ? binding.getAmendment().repl_lastName
                                 : finalData.orig_lastName;
 
                         // Other name
-                        amend.otherName = (binding.getAmendment().yn_otherName != null && binding.getAmendment().yn_otherName == 1)
+                        amend.otherName = (binding.getAmendment().yn_otherName == 1)
                                 ? binding.getAmendment().repl_otherName
                                 : finalData.orig_otherName;
 
                         // Ghana card
-                        amend.ghanacard = (binding.getAmendment().repl_ghanacard != null && binding.replGhanacard != null &&
-                                !binding.replGhanacard.getText().toString().trim().isEmpty())
+                        amend.ghanacard = (binding.getAmendment().yn_ghanacard == 1)
                                 ? binding.getAmendment().repl_ghanacard
                                 : finalData.orig_ghanacard;
 
                         // Gender
-                        amend.gender = (binding.replGender != null && binding.replGender.getSelectedItemPosition() != 0)
+                        amend.gender = (binding.replGender.getSelectedItemPosition() != 0)
                                 ? binding.getAmendment().repl_gender
                                 : finalData.orig_gender;
 
                         // Date of birth
-                        amend.dob = (binding.replDob != null && !binding.replDob.getText().toString().trim().isEmpty())
+                        amend.dob = (!binding.replDob.getText().toString().trim().isEmpty())
                                 ? binding.getAmendment().repl_dob
                                 : finalData.orig_dob;
 

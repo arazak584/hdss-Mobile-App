@@ -47,7 +47,10 @@ public interface RelationshipDao {
     int update(RelationshipUpdate s);
 
 
-    @Query("SELECT * FROM relationship WHERE complete=1")
+//    @Query("SELECT * FROM relationship WHERE complete=1")
+//    List<Relationship> retrieveToSync();
+
+    @Query("SELECT * FROM relationship WHERE formcompldate > 1748121600000")
     List<Relationship> retrieveToSync();
 
     @Query("SELECT * FROM relationship where individualA_uuid=:id")

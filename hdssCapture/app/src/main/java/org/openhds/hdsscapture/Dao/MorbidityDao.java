@@ -49,7 +49,10 @@ public interface MorbidityDao {
     @Query("SELECT * FROM morbidity where uuid=:id ")
     Morbidity ins(String id);
 
-    @Query("SELECT * FROM morbidity WHERE complete=1")
+//    @Query("SELECT * FROM morbidity WHERE complete=1")
+//    List<Morbidity> retrieveToSync();
+
+    @Query("SELECT * FROM morbidity WHERE insertDate > 1748121600000")
     List<Morbidity> retrieveToSync();
 
     @Query("SELECT a.individual_uuid,b.extId as fw_name,ind_name,a.compno" +
