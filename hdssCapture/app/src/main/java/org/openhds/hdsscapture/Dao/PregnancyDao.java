@@ -42,11 +42,11 @@ public interface PregnancyDao {
     @Update(entity = Pregnancy.class)
     int update (PregnancyobsAmendment pregnancyobsAmendment);
 
-//    @Query("SELECT * FROM pregnancy WHERE complete=1")
-//    List<Pregnancy> retrieveToSync();
-
-    @Query("SELECT * FROM pregnancy WHERE formcompldate > 1748121600000")
+    @Query("SELECT * FROM pregnancy WHERE complete=1")
     List<Pregnancy> retrieveToSync();
+
+//    @Query("SELECT * FROM pregnancy WHERE formcompldate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
+//    List<Pregnancy> retrieveToSync();
 
     @Query("SELECT * FROM pregnancy WHERE individual_uuid = :id AND outcome IS NOT NULL AND (id IS NULL OR (id != 2 AND id != 3)) ORDER BY recordedDate DESC LIMIT 1")
     Pregnancy find(String id);

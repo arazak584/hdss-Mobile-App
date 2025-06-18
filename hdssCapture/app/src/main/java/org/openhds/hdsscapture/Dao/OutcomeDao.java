@@ -24,11 +24,11 @@ OutcomeDao {
     @Query("DELETE FROM outcome")
     void deleteAll();
 
-//    @Query("SELECT * FROM outcome WHERE complete=1")
-//    List<Outcome> retrieveToSync();
-
-    @Query("SELECT * FROM outcome WHERE insertDate > 1748121600000")
+    @Query("SELECT * FROM outcome WHERE complete=1")
     List<Outcome> retrieveToSync();
+
+//    @Query("SELECT * FROM outcome WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
+//    List<Outcome> retrieveToSync();
 
 //    @Query("SELECT a.uuid,c.extId as extId,e.compextId as childuuid,c.firstName,c.lastName FROM outcome as a left join pregnancyoutcome as b on a.preg_uuid=b.uuid " +
 //            " INNER JOIN individual as c on a.mother_uuid=c.uuid INNER JOIN residency as d on c.uuid=d.individual_uuid " +

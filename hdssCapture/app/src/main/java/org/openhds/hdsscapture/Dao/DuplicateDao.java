@@ -27,11 +27,11 @@ public interface DuplicateDao {
     @Query("DELETE FROM duplicate")
     void deleteAll();
 
-//    @Query("SELECT * FROM duplicate WHERE complete!=0")
-//    List<Duplicate> retrieveSync();
-
-    @Query("SELECT * FROM duplicate WHERE insertDate > 1748121600000")
+    @Query("SELECT * FROM duplicate WHERE complete!=0")
     List<Duplicate> retrieveSync();
+
+//    @Query("SELECT * FROM duplicate WHERE insertDate > 1748121600000")
+//    List<Duplicate> retrieveSync();
 
     @Query("SELECT * FROM duplicate where individual_uuid=:id limit 1")
     Duplicate find(String id);

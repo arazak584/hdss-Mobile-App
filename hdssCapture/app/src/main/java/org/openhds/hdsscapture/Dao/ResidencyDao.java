@@ -71,11 +71,11 @@ public interface ResidencyDao {
     @Query("SELECT * FROM residency WHERE uuid=:id ")
     Residency updateres(String id);
 
-//    @Query("SELECT * FROM residency WHERE complete=1")
-//    List<Residency> retrieveToSync();
-
-    @Query("SELECT * FROM residency WHERE insertDate > 1748121600000")
+    @Query("SELECT * FROM residency WHERE complete=1")
     List<Residency> retrieveToSync();
+
+//    @Query("SELECT * FROM residency WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 AND complete!=2")
+//    List<Residency> retrieveToSync();
 
     @Query("SELECT * FROM residency WHERE uuid=:id AND location_uuid!=loc")
     Residency fetch(String id);

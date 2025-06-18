@@ -26,11 +26,11 @@ PregnancyoutcomeDao {
     @Query("DELETE FROM pregnancyoutcome")
     void deleteAll();
 
-//    @Query("SELECT * FROM pregnancyoutcome WHERE complete=1")
-//    List<Pregnancyoutcome> retrieveToSync();
-
-    @Query("SELECT * FROM pregnancyoutcome WHERE insertDate > 1748121600000")
+    @Query("SELECT * FROM pregnancyoutcome WHERE complete=1")
     List<Pregnancyoutcome> retrieveToSync();
+
+//    @Query("SELECT * FROM pregnancyoutcome WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
+//    List<Pregnancyoutcome> retrieveToSync();
 
     @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id ORDER BY outcomeDate ASC LIMIT 1")
     Pregnancyoutcome find(String id);

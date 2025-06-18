@@ -41,11 +41,11 @@ public interface DeathDao {
 //            "deathCause,deathCause_oth,deathPlace,deathPlace_oth,a.fw_uuid,a.edit,supervisor,approveDate FROM death a INNER JOIN individual b on a.individual_uuid=b.uuid where individual_uuid=:id")
 //    Death retrieve(String id);
 
-//    @Query("SELECT * FROM death WHERE complete!=0")
-//    List<Death> retrieveToSync();
-
-    @Query("SELECT * FROM death WHERE insertDate > 1748121600000")
+    @Query("SELECT * FROM death WHERE complete!=0")
     List<Death> retrieveToSync();
+
+//    @Query("SELECT * FROM death WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
+//    List<Death> retrieveToSync();
 
     @Query("SELECT a.*,groupName as firstName,b.extId as lastName,d.compno as compno FROM death as a INNER JOIN socialgroup as b ON a.individual_uuid=b.individual_uuid " +
             " INNER JOIN residency as c on b.uuid=c.socialgroup_uuid " +

@@ -35,11 +35,11 @@ public interface CommunityDao {
     @Query("SELECT * FROM fieldworker WHERE username=:id AND password=:password")
     Fieldworker retrieve(String id, String password);
 
-//    @Query("SELECT * FROM community WHERE complete=1")
-//    List<CommunityReport> retrieveToSync();
-
-    @Query("SELECT * FROM community WHERE insertDate > 1748121600000")
+    @Query("SELECT * FROM community WHERE complete=1")
     List<CommunityReport> retrieveToSync();
+
+//    @Query("SELECT * FROM community WHERE insertDate > 1748121600000")
+//    List<CommunityReport> retrieveToSync();
 
     @Query("SELECT uuid,community,insertDate,name,codeLabel as description FROM community a INNER JOIN codebook b ON a.item=b.codeValue WHERE codeFeature='itemlist' AND community=:id  ORDER BY item")
     List<CommunityReport> retrieves(String id);

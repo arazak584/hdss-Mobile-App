@@ -79,11 +79,7 @@ public class OdkUtils {
         intent.setPackage(ODK_PACKAGE);
         intent.setData(Uri.parse(formUri));
 
-        // Set up external app integration
-        String packageName = context.getPackageName();
-        intent.putExtra("external-app", packageName);
-
-        // Add individual data
+        // Add individual data as intent extras
         addIndividualExtras(intent, individual);
 
         return intent;

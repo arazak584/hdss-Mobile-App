@@ -47,11 +47,11 @@ public interface RelationshipDao {
     int update(RelationshipUpdate s);
 
 
-//    @Query("SELECT * FROM relationship WHERE complete=1")
-//    List<Relationship> retrieveToSync();
-
-    @Query("SELECT * FROM relationship WHERE formcompldate > 1748121600000")
+    @Query("SELECT * FROM relationship WHERE complete=1")
     List<Relationship> retrieveToSync();
+
+//    @Query("SELECT * FROM relationship WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
+//    List<Relationship> retrieveToSync();
 
     @Query("SELECT * FROM relationship where individualA_uuid=:id")
     Relationship find(String id);

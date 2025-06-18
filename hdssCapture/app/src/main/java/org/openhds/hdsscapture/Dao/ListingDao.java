@@ -32,11 +32,11 @@ public interface ListingDao {
     @Query("SELECT * FROM listing WHERE compno=:id")
     Listing retrieve(String id);
 
-//    @Query("SELECT * FROM listing WHERE complete=1")
-//    List<Listing> retrieveToSync();
-
-    @Query("SELECT * FROM listing WHERE insertDate > 1748121600000")
+    @Query("SELECT * FROM listing WHERE complete=1")
     List<Listing> retrieveToSync();
+
+//    @Query("SELECT * FROM listing WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
+//    List<Listing> retrieveToSync();
 
     @Query("SELECT COUNT(*) FROM listing a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
             " WHERE a.insertDate BETWEEN :startDate AND :endDate AND b.username = :username")

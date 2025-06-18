@@ -52,11 +52,11 @@ public interface HdssSociodemoDao {
     @Query("SELECT * FROM sociodemo where uuid=:id ")
     HdssSociodemo ins(String id);
 
-//    @Query("SELECT * FROM sociodemo WHERE complete=1")
-//    List<HdssSociodemo> retrieveToSync();
-
-    @Query("SELECT * FROM sociodemo WHERE insertDate > 1748121600000")
+    @Query("SELECT * FROM sociodemo WHERE complete=1")
     List<HdssSociodemo> retrieveToSync();
+
+//    @Query("SELECT * FROM sociodemo WHERE insertDate > 1748121600000")
+//    List<HdssSociodemo> retrieveToSync();
 
     @Query("SELECT a.socialgroup_uuid,b.extId as sttime,b.groupName as edtime,c.compno as visit_uuid" +
             ",a.approveDate,a.comment,a.fw_uuid,a.supervisor FROM sociodemo a INNER JOIN socialgroup b on a.socialgroup_uuid=b.uuid " +

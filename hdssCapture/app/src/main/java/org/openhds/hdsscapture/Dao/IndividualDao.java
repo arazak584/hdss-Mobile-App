@@ -76,11 +76,11 @@ public interface IndividualDao {
     @Query("SELECT a.* FROM individual a INNER JOIN registry b on a.uuid=b.individual_uuid where a.uuid=:id ")
     Individual mapregistry(String id);
 
-//    @Query("SELECT * FROM individual WHERE complete=1 order by dob")
-//    List<Individual> retrieveToSync();
-
-    @Query("SELECT * FROM individual WHERE insertDate > 1748121600000 order by dob")
+    @Query("SELECT * FROM individual WHERE complete=1 order by dob")
     List<Individual> retrieveToSync();
+
+//    @Query("SELECT * FROM individual WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 AND firstName!='FAKE' order by dob")
+//    List<Individual> retrieveToSync();
 
     @Query("SELECT * FROM individual where compno=:comp AND hohID=:id ")
     List<Individual> hoh(String comp,String id);

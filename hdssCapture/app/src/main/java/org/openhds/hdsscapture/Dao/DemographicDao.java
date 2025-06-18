@@ -49,11 +49,11 @@ public interface DemographicDao {
     @Delete
     void Delete(Demographic user);
 
-//    @Query("SELECT * FROM demographic WHERE complete=1")
-//    List<Demographic> retrieveToSync();
-
-    @Query("SELECT * FROM demographic WHERE insertDate > 1748121600000")
+    @Query("SELECT * FROM demographic WHERE complete=1")
     List<Demographic> retrieveToSync();
+
+//    @Query("SELECT * FROM demographic WHERE insertDate > 1748121600000")
+//    List<Demographic> retrieveToSync();
 
     @Query("SELECT * FROM demographic where individual_uuid=:id")
     Demographic find(String id);

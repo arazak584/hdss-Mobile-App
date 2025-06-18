@@ -36,11 +36,11 @@ public interface OutmigrationDao {
             " where b.residency_uuid IS NULL AND a.individual_uuid=:id and a.location_uuid!=:locid and endType=1")
     Outmigration createOmg(String id, String locid);
 
-//    @Query("SELECT * FROM outmigration WHERE complete!=0")
-//    List<Outmigration> retrieveomgToSync();
-
-    @Query("SELECT * FROM outmigration WHERE insertDate > 1748121600000")
+    @Query("SELECT * FROM outmigration WHERE complete!=0")
     List<Outmigration> retrieveomgToSync();
+
+//    @Query("SELECT * FROM outmigration WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
+//    List<Outmigration> retrieveomgToSync();
 
     @Query("SELECT * FROM outmigration a INNER JOIN residency b on a.residency_uuid=b.uuid WHERE a.individual_uuid=:id AND b.location_uuid=:locid")
     Outmigration find(String id,String locid);

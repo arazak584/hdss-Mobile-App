@@ -34,11 +34,11 @@ public interface RegistryDao {
     @Query("SELECT * FROM registry")
     List<Registry> retrieve();
 
-//    @Query("SELECT * FROM registry WHERE complete=1")
-//    List<Registry> retrieveSync();
-
-    @Query("SELECT * FROM registry WHERE insertDate > 1748121600000")
+    @Query("SELECT * FROM registry WHERE complete=1")
     List<Registry> retrieveSync();
+
+//    @Query("SELECT * FROM registry WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
+//    List<Registry> retrieveSync();
 
     @Query("SELECT * FROM registry where individual_uuid=:id")
     Registry find(String id);

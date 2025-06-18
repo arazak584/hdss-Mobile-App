@@ -29,11 +29,11 @@ public interface VisitDao {
     @Query("SELECT * FROM visit where socialgroup_uuid=:id")
     Visit find(String id);
 
-//    @Query("SELECT * FROM visit WHERE complete=1")
-//    List<Visit> retrieveToSync();
-
-    @Query("SELECT * FROM visit WHERE insertDate > 1748121600000")
+    @Query("SELECT * FROM visit WHERE complete=1")
     List<Visit> retrieveToSync();
+
+//    @Query("SELECT * FROM visit WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
+//    List<Visit> retrieveToSync();
     //1746057600000
 
     @Query("SELECT COUNT(*) FROM visit a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +

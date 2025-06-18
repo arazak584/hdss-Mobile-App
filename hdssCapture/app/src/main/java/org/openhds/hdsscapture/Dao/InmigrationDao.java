@@ -25,11 +25,11 @@ public interface InmigrationDao {
     @Query("DELETE FROM inmigration")
     void deleteAll();
 
-//    @Query("SELECT * FROM inmigration WHERE complete=1")
-//    List<Inmigration> retrieveimgToSync();
-
-    @Query("SELECT * FROM inmigration WHERE insertDate > 1748121600000")
+    @Query("SELECT * FROM inmigration WHERE complete=1")
     List<Inmigration> retrieveimgToSync();
+
+//    @Query("SELECT * FROM inmigration WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
+//    List<Inmigration> retrieveimgToSync();
 
     @Query("SELECT * FROM inmigration where individual_uuid=:id and location_uuid=:locid ORDER BY recordedDate DESC LIMIT 1")
     Inmigration find(String id, String locid);

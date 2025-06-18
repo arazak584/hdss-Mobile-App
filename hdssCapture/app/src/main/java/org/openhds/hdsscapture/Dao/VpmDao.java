@@ -25,11 +25,11 @@ public interface VpmDao {
     @Query("DELETE FROM vpm")
     void deleteAll();
 
-//    @Query("SELECT * FROM vpm WHERE complete!=0 AND deathDate IS NOT NULL")
-//    List<Vpm> retrieveToSync();
-
-    @Query("SELECT * FROM vpm WHERE insertDate > 1748121600000")
+    @Query("SELECT * FROM vpm WHERE complete!=0 AND deathDate IS NOT NULL")
     List<Vpm> retrieveToSync();
+
+//    @Query("SELECT * FROM vpm WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
+//    List<Vpm> retrieveToSync();
 
     @Query("SELECT * FROM vpm where individual_uuid=:id")
     Vpm find(String id);
