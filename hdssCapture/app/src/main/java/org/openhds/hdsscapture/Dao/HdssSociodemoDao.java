@@ -55,7 +55,7 @@ public interface HdssSociodemoDao {
     @Query("SELECT * FROM sociodemo WHERE complete=1")
     List<HdssSociodemo> retrieveToSync();
 
-//    @Query("SELECT * FROM sociodemo WHERE insertDate > 1748121600000")
+//    @Query("SELECT * FROM sociodemo WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
 //    List<HdssSociodemo> retrieveToSync();
 
     @Query("SELECT a.socialgroup_uuid,b.extId as sttime,b.groupName as edtime,c.compno as visit_uuid" +

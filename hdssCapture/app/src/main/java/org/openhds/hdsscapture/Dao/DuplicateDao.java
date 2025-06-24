@@ -30,7 +30,7 @@ public interface DuplicateDao {
     @Query("SELECT * FROM duplicate WHERE complete!=0")
     List<Duplicate> retrieveSync();
 
-//    @Query("SELECT * FROM duplicate WHERE insertDate > 1748121600000")
+//    @Query("SELECT * FROM duplicate WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
 //    List<Duplicate> retrieveSync();
 
     @Query("SELECT * FROM duplicate where individual_uuid=:id limit 1")

@@ -45,7 +45,7 @@ public interface PregnancyDao {
     @Query("SELECT * FROM pregnancy WHERE complete=1")
     List<Pregnancy> retrieveToSync();
 
-//    @Query("SELECT * FROM pregnancy WHERE formcompldate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
+//    @Query("SELECT * FROM pregnancy WHERE (formcompldate BETWEEN 1748121600000 AND 1749427200000) OR (insertDate BETWEEN 1748121600000 AND 1749427200000) ORDER BY insertDate ASC")
 //    List<Pregnancy> retrieveToSync();
 
     @Query("SELECT * FROM pregnancy WHERE individual_uuid = :id AND outcome IS NOT NULL AND (id IS NULL OR (id != 2 AND id != 3)) ORDER BY recordedDate DESC LIMIT 1")
@@ -103,8 +103,8 @@ public interface PregnancyDao {
             " WHERE endType=1 and outcome=2 and hohID=:id ")
     List<Pregnancy> retrievePregnancy(String id);
 
-    @Query("SELECT COUNT(*) FROM pregnancy a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
-            " WHERE (a.insertDate BETWEEN :startDate AND :endDate OR a.formcompldate BETWEEN :startDate AND :endDate) AND b.username = :username")
+    @Query("SELECT COUNT(DISTINCT a.uuid) FROM pregnancy a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
+            " WHERE a.formcompldate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
     @Query("SELECT a.uuid,b.firstName as sttime,b.lastName as edtime,b.extId as bnet_loc_other,b.compno as visit_uuid,a.approveDate,a.comment,a.fw_uuid,a.supervisor FROM pregnancy a INNER JOIN individual b on a.individual_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 order by a.insertDate DESC")
