@@ -169,7 +169,7 @@ public class Relationship extends BaseObservable implements Parcelable {
     }
 
     public String getApproveDate() {
-        if (approveDate == null) return "";
+        if (approveDate == null) return null;
         return g.format(approveDate);
     }
 

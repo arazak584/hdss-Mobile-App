@@ -318,13 +318,11 @@ public class InmigrationFragment extends Fragment {
                 String imgDateStr = binding.imgDate.getText().toString().trim();
 
                 if (!hlngStr.isEmpty() && !imgDateStr.isEmpty()) {
-                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US); // adjust to your date format
+                    Date insertDate = binding.getInmigration().insertDate;  // e.g., 2025-05-17
+                    Date imgDate = f.parse(imgDateStr);                    // e.g., 03/15/2024
+                    int hlng = Integer.parseInt(hlngStr);                  // expected number of months
 
-                    Date insertDate = finalData.insertDate; // Assume this is the current or reference date
-                    Date imgDate = f.parse(imgDateStr);     // Date of immigration entered by user
-                    int hlng = Integer.parseInt(hlngStr);   // Number of months entered
-
-                    // Calculate the difference in months
                     Calendar startCal = Calendar.getInstance();
                     startCal.setTime(imgDate);
 
@@ -333,35 +331,33 @@ public class InmigrationFragment extends Fragment {
 
                     int yearDiff = endCal.get(Calendar.YEAR) - startCal.get(Calendar.YEAR);
                     int monthDiff = endCal.get(Calendar.MONTH) - startCal.get(Calendar.MONTH);
-                    int dayDiff = endCal.get(Calendar.DAY_OF_MONTH) - startCal.get(Calendar.DAY_OF_MONTH);
+                    int totalMonths = yearDiff * 12 + monthDiff;
 
-                    // Adjust monthDiff if day is negative
-                    if (dayDiff < 0) {
-                        monthDiff--;
+                    // Adjust if insertDate day-of-month is before imgDate day-of-month
+                    if (endCal.get(Calendar.DAY_OF_MONTH) < startCal.get(Calendar.DAY_OF_MONTH)) {
+                        totalMonths--;
                     }
 
-                    int totalDiffMonths = yearDiff * 12 + monthDiff;
+                    Log.d("Inmigration", "IMG MONTHS: " + totalMonths);
 
-                    // If it doesn't match, calculate the correct immigration date
-                    if (hlng != totalDiffMonths) {
-                        Calendar possibleCal = Calendar.getInstance();
-                        possibleCal.setTime(insertDate);
-                        possibleCal.add(Calendar.MONTH, -hlng); // Go back by hlng months
-                        String possibleDate = f.format(possibleCal.getTime());
+                    if (hlng != totalMonths) {
+                        Calendar suggestedDateCal = Calendar.getInstance();
+                        suggestedDateCal.setTime(insertDate);
+                        suggestedDateCal.add(Calendar.MONTH, -hlng);
+                        String suggestedDate = f.format(suggestedDateCal.getTime());
 
-                        binding.howLng.setError("Date does not match number of months. Suggested Date: " + possibleDate);
-                        Toast.makeText(getActivity(), "Date does not match number of months. Suggested: " + possibleDate, Toast.LENGTH_LONG).show();
+                        binding.howLng.setError("Mismatch. Suggested Date: " + suggestedDate + " (" + totalMonths + " Months)");
+                        Toast.makeText(getActivity(), "Mismatch. Suggested Date: " + suggestedDate+ " (" + totalMonths + " Months)", Toast.LENGTH_LONG).show();
                         return;
                     }
 
-                    // Clear any previous errors if valid
+                    binding.howLng.setError(null);
                     binding.imgDate.setError(null);
                 }
             } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Invalid date format", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
-
 
             try {
                 if (!binding.endDate.getText().toString().trim().isEmpty() && !binding.imgDate.getText().toString().trim().isEmpty()) {

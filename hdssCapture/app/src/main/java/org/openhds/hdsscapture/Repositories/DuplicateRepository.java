@@ -43,6 +43,15 @@ public class DuplicateRepository {
         return future.get();
     }
 
+    public Duplicate finds(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Duplicate> callable = () -> dao.finds(id);
+
+        Future<Duplicate> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
 
     public List<Duplicate> findToSync() throws ExecutionException, InterruptedException {
 

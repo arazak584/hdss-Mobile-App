@@ -39,6 +39,17 @@
                 android:textColor="@color/black"
                 android:textAlignment="center"/>
 
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/txt_comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:text="@={dup.comment}"
+            android:textColor="@color/purple_700"
+            android:gravity="start"/>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="2dp"
@@ -301,6 +312,24 @@
                         android:text="@={dup.dup_lname}"
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:hint="@string/compno"
+                    android:text="@string/compno">
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:id="@+id/dup_compno"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={dup.dup_compno}"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
                 <LinearLayout
@@ -348,6 +377,8 @@
                             android:focusableInTouchMode="false"
                             android:inputType="textPersonName"/>
                     </com.google.android.material.textfield.TextInputLayout>
+
+
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:visibility="gone"
@@ -399,6 +430,24 @@
                             android:text="@={dup.dup1_lname}"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/compno"
+                        android:text="@string/compno">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:id="@+id/dup1_compno"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={dup.dup1_compno}"
                             android:inputType="textPersonName"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -502,7 +551,65 @@
                             android:inputType="textPersonName"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:hint="@string/compno"
+                        android:text="@string/compno">
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:id="@+id/dup2_compno"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={dup.dup2_compno}"
+                            android:inputType="textPersonName"/>
+                    </com.google.android.material.textfield.TextInputLayout>
+
                 </LinearLayout>
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/resolve"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/query_reslve" />
+
+                <RadioGroup
+                    android:visibility="gone"
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onCheckedChanged="@{dup::setStatus}"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/no_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{dup.status==3}"
+                        android:tag="3"
+                        android:text="@string/yes" />
+
+                    <RadioButton
+                        android:id="@+id/no_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{dup.status==2}"
+                        android:tag="2"
+                        android:text="@string/no" />
+
+                    <RadioButton
+                        android:visibility="invisible"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:checked="@{dup.status==0}"
+                        android:tag="0"/>
+                </RadioGroup>
 
 
                 <TextView

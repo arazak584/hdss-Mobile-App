@@ -44,6 +44,6 @@ public interface InmigrationDao {
     @Query("SELECT COUNT(*) FROM inmigration WHERE status=2 AND fw_uuid = :uuid ")
     long rej(String uuid);
 
-    @Query("SELECT * FROM inmigration where uuid=:id")
+    @Query("SELECT * FROM inmigration where uuid=:id AND complete!=1")
     Inmigration ins(String id);
 }

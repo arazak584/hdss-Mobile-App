@@ -80,7 +80,7 @@ import java.util.concurrent.Executors;
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
         Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class, Duplicate.class,
         ApiUrl.class, Configsettings.class, OdkForm.class, Vpm.class, CommunityReport.class, Morbidity.class, HierarchyLevel.class, Registry.class
-        }, version = 10 , exportSchema = true)
+        }, version = 1 , exportSchema = true)
 
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -120,73 +120,38 @@ public abstract class AppDatabase extends RoomDatabase {
     // If the version of the database is 2 you upgrade to 3 then set the MIGRATION_2_3 which means version 2 to 3
     //Then write the script to implement the change
 
-    static final Migration MIGRATION_5_6 = new Migration(5, 6) {
-        @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE death ADD COLUMN estimated_dod INTEGER");
+//    static final Migration MIGRATION_4_5 = new Migration(4, 5) {
+//        @Override
+//        public void migrate(@NonNull SupportSQLiteDatabase database) {
+//            // Create the new table
+//            database.execSQL("CREATE TABLE IF NOT EXISTS registry (" +
+//                    "individual_uuid TEXT NOT NULL PRIMARY KEY, " +
+//                    "insertDate INTEGER, " +  // Date stored as INTEGER (timestamp)
+//                    "name TEXT, " +
+//                    "socialgroup_uuid TEXT, " +
+//                    "location_uuid TEXT, " +
+//                    "status INTEGER, " +
+//                    "complete INTEGER, " +
+//                    "fw_uuid TEXT)");
+//            // Create indices
+//            database.execSQL("CREATE INDEX IF NOT EXISTS index_registry_individual_uuid_fw_uuid_complete_socialgroup_uuid ON registry(individual_uuid, fw_uuid, complete, socialgroup_uuid)");
+//        }
+//    };
 
-        }
-    };
-
-    static final Migration MIGRATION_4_5 = new Migration(4, 5) {
-        @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            // Create the new table
-            database.execSQL("CREATE TABLE IF NOT EXISTS registry (" +
-                    "individual_uuid TEXT NOT NULL PRIMARY KEY, " +
-                    "insertDate INTEGER, " +  // Date stored as INTEGER (timestamp)
-                    "name TEXT, " +
-                    "socialgroup_uuid TEXT, " +
-                    "location_uuid TEXT, " +
-                    "status INTEGER, " +
-                    "complete INTEGER, " +
-                    "fw_uuid TEXT)");
-            // Create indices
-            database.execSQL("CREATE INDEX IF NOT EXISTS index_registry_individual_uuid_fw_uuid_complete_socialgroup_uuid ON registry(individual_uuid, fw_uuid, complete, socialgroup_uuid)");
-        }
-    };
-
-
-    static final Migration MIGRATION_6_7 = new Migration(6, 7) {
-        @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE Form ADD COLUMN status INTEGER");
-            database.execSQL("ALTER TABLE Form ADD COLUMN csv TEXT");
-
-        }
-    };
-
-    static final Migration MIGRATION_7_8 = new Migration(7, 8) {
-        @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE listing ADD COLUMN edit_compno INTEGER");
-            database.execSQL("ALTER TABLE locations ADD COLUMN altitude TEXT");
-            database.execSQL("ALTER TABLE listing ADD COLUMN altitude TEXT");
-            database.execSQL("ALTER TABLE config ADD COLUMN compno TEXT");
-
-        }
-    };
-
-    static final Migration MIGRATION_8_9 = new Migration(8, 9) {
-        @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE demographic ADD COLUMN location_uuid TEXT");
-            database.execSQL("ALTER TABLE morbidity ADD COLUMN sttime TEXT");
-            database.execSQL("ALTER TABLE morbidity ADD COLUMN edtime TEXT");
-            database.execSQL("ALTER TABLE relationship ADD COLUMN location_uuid TEXT");
-            database.execSQL("ALTER TABLE relationship ADD COLUMN locationB_uuid TEXT");
-
-        }
-    };
-
-    static final Migration MIGRATION_9_10 = new Migration(9, 10) {
-        @Override
-        public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE pregnancy ADD COLUMN formcompldate INTEGER");
-            database.execSQL("ALTER TABLE relationship ADD COLUMN formcompldate INTEGER");
-
-        }
-    };
+//    static final Migration MIGRATION_10_11 = new Migration(1, 2) {
+//        @Override
+//        public void migrate(@NonNull SupportSQLiteDatabase database) {
+//            database.execSQL("ALTER TABLE duplicate ADD COLUMN approveDate INTEGER");
+//            database.execSQL("ALTER TABLE duplicate ADD COLUMN status INTEGER");
+//            database.execSQL("ALTER TABLE duplicate ADD COLUMN supervisor TEXT");
+//            database.execSQL("ALTER TABLE duplicate ADD COLUMN comment TEXT");
+//            database.execSQL("ALTER TABLE duplicate ADD COLUMN dup_compno TEXT");
+//            database.execSQL("ALTER TABLE duplicate ADD COLUMN dup1_compno TEXT");
+//            database.execSQL("ALTER TABLE duplicate ADD COLUMN dup2_compno TEXT");
+//            database.execSQL("ALTER TABLE duplicate ADD COLUMN compno TEXT");
+//
+//        }
+//    };
 
 
 
@@ -200,7 +165,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                 AppDatabase.class, "hdss")
                                 .addCallback(sRoomDatabaseCallback)
-                                .addMigrations(MIGRATION_4_5,MIGRATION_5_6,MIGRATION_6_7,MIGRATION_7_8,MIGRATION_8_9,MIGRATION_9_10)
+                                //.addMigrations(MIGRATION_1_2)
                                 .fallbackToDestructiveMigrationOnDowngrade()
                                 .build();
             }

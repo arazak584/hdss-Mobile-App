@@ -7,6 +7,7 @@ import androidx.room.Query;
 
 import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Vpm;
 
 import java.util.List;
@@ -35,6 +36,12 @@ public interface DuplicateDao {
 
     @Query("SELECT * FROM duplicate where individual_uuid=:id limit 1")
     Duplicate find(String id);
+
+    @Query("SELECT * FROM duplicate where individual_uuid=:id AND complete_n!=2 limit 1")
+    Duplicate finds(String id);
+
+    @Query("SELECT * FROM duplicate where individual_uuid=:id AND complete!=1 ")
+    Duplicate ins(String id);
 
     @Query("SELECT a.*,b.compno as dup_uuid,b.hohID as dup1_uuid FROM duplicate a inner join individual as b on a.individual_uuid=b.uuid ")
     List<Duplicate> repo();

@@ -63,6 +63,8 @@ public class Duplicate extends BaseObservable {
 
     @Expose
     public Integer complete;
+    @Expose
+    public Integer complete_n;
 
     @Expose
     public String fw_uuid;
@@ -93,11 +95,77 @@ public class Duplicate extends BaseObservable {
 
     @Expose
     public String visit_uuid;
+    @Expose
+    public String dup_compno;
+    @Expose
+    public String dup1_compno;
+    @Expose
+    public String dup2_compno;
+    @Expose
+    public String compno;
+    @Expose
+    public String comment;
+    @Expose
+    public Integer status = 0;
+    @Expose
+    public String supervisor;
+    @Expose
+    public Date approveDate;
 
     public Duplicate(){}
 
     @Ignore
     private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    @Ignore
+    private transient final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+
+    public void setStatus(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
+        }
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            status = Integer.parseInt(TAG);
+            patternSkipper(view);
+        }
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(String supervisor) {
+        this.supervisor = supervisor;
+    }
+
+    public String getApproveDate() {
+        if (approveDate == null) return "";
+        return g.format(approveDate);
+    }
+
+    public void setApproveDate(String approveDate) {
+        try {
+            this.approveDate = g.parse(approveDate);
+        } catch (ParseException e) {
+            System.out.println("Date Error " + e.getMessage());
+        }
+    }
 
     @Bindable
     public String getInsertDate() {

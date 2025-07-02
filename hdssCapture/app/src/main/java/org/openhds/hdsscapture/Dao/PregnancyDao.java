@@ -66,7 +66,7 @@ public interface PregnancyDao {
     @Query("SELECT * FROM pregnancy where individual_uuid=:id AND id=3")
     Pregnancy find3(String id);
 
-    @Query("SELECT * FROM pregnancy where uuid=:id")
+    @Query("SELECT * FROM pregnancy where uuid=:id AND complete!=1")
     Pregnancy ins(String id);
 
     @Query("SELECT a.uuid, b.firstName, b.lastName, a.insertDate,b.hohID, b.extId as visit_uuid,a.recordedDate " +

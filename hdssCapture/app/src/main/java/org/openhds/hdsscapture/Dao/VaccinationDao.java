@@ -40,7 +40,7 @@ public interface VaccinationDao {
     @Query("SELECT * FROM vaccination where individual_uuid=:id")
     Vaccination find(String id);
 
-    @Query("SELECT * FROM vaccination where uuid=:id ")
+    @Query("SELECT * FROM vaccination where uuid=:id AND complete!=1 ")
     Vaccination ins(String id);
 
     @Query("SELECT COUNT(*) FROM vaccination a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +

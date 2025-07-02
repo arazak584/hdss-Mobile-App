@@ -56,7 +56,7 @@ public interface RelationshipDao {
     @Query("SELECT * FROM relationship where individualA_uuid=:id")
     Relationship find(String id);
 
-    @Query("SELECT * FROM relationship where uuid=:id")
+    @Query("SELECT * FROM relationship where uuid=:id AND complete!=1")
     Relationship ins(String id);
 
     @Query("SELECT * FROM relationship where individualB_uuid=:id")

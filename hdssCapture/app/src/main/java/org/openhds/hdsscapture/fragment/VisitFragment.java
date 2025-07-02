@@ -283,7 +283,7 @@ public class VisitFragment extends DialogFragment {
 
             Log.d("VisitDate", "Visit Date: "+ finalData.insertDate);
 
-//            //Update hohid in individual if hohid length!=11
+            //Update hohid in individual if hohid length!=11
 //            try {
 //                List<Individual> individuals = imodel.hoh(ClusterFragment.selectedLocation.compno, originalHouseExtId);
 //                Log.d("Individual", "HOHID LENGTH 2: " + originalHouseExtId + " " + ClusterFragment.selectedLocation.compno);

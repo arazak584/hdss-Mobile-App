@@ -77,7 +77,7 @@ PregnancyoutcomeDao {
             " WHERE b.hohID = :id ")
     List<Pregnancyoutcome> retrieveOutcome(String id);
 
-    @Query("SELECT * FROM pregnancyoutcome where uuid=:id")
+    @Query("SELECT * FROM pregnancyoutcome where uuid=:id AND complete!=1")
     Pregnancyoutcome ins(String id);
 
     @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id ORDER BY outcomeDate DESC LIMIT 1")

@@ -96,6 +96,9 @@ public interface ApiDao {
     @GET("/api/mor/reject")
     Call<DataWrapper<Morbidity>> getMor(@Header("Authorization") String authorizationHeader, @Query("fw") String fw);
 
+    @GET("/api/dup/reject")
+    Call<DataWrapper<Duplicate>> getDup(@Header("Authorization") String authorizationHeader, @Query("fw") String fw);
+
     @GET("/api/zip/location")
     Call<ResponseBody> downloadLocation(@Header("Authorization") String authorizationHeader);
 

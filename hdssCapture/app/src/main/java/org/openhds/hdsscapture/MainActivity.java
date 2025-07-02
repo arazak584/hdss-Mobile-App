@@ -480,7 +480,7 @@ public class MainActivity extends AppCompatActivity {
 //        });
 
         send.setOnClickListener(v -> {
-            if (status == 1) {
+            if (status == 1 || status==2) {
                 Intent i = new Intent(getApplicationContext(), PushActivity.class);
                 startActivity(i);
             } else {

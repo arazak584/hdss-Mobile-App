@@ -46,7 +46,7 @@ public interface MorbidityDao {
     @Query("SELECT * FROM morbidity WHERE individual_uuid=:id")
     Morbidity find(String id);
 
-    @Query("SELECT * FROM morbidity where uuid=:id ")
+    @Query("SELECT * FROM morbidity where uuid=:id AND complete!=1 ")
     Morbidity ins(String id);
 
     @Query("SELECT * FROM morbidity WHERE complete=1")

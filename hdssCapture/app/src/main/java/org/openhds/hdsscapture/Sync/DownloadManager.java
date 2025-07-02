@@ -17,6 +17,7 @@ import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.Dao.ApiDao;
 import org.openhds.hdsscapture.Dao.DeathDao;
 import org.openhds.hdsscapture.Dao.DemographicDao;
+import org.openhds.hdsscapture.Dao.DuplicateDao;
 import org.openhds.hdsscapture.Dao.HdssSociodemoDao;
 import org.openhds.hdsscapture.Dao.InmigrationDao;
 import org.openhds.hdsscapture.Dao.MorbidityDao;
@@ -37,6 +38,7 @@ import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Inmigration;
@@ -101,33 +103,26 @@ public class DownloadManager extends Worker {
             try {
                 // Download Inmigration data
                 downloadInmigrationData();
-
                 // Download Outmigration data
                 downloadOutmigrationData();
-
                 // Download Death data
                 downloadDeathData();
-
                 // Download Pregnancy data
                 downloadPregnancyData();
-
                 // Download Demographic data
                 downloadDemographicData();
-
                 // Download Relationship data
                 downloadRelationshipData();
-
                 // Download Vaccination data
                 downloadVaccinationData();
-
                 // Download HdssSociodemo data
                 downloadHdssSociodemoData();
-
                 // Download Morbidity data
                 downloadMorbidityData();
-
                 // Download PregnancyOutcome data
                 downloadPregnancyOutcomeData();
+                // Download Duplicate data
+                downloadDuplicateData();
 
                 Log.d(TAG, "Download process completed successfully");
             } catch (Exception e) {
@@ -590,6 +585,48 @@ public class DownloadManager extends Worker {
             @Override
             public void onFailure(@NonNull Call<DataWrapper<Pregnancyoutcome>> call, @NonNull Throwable t) {
                 Log.e(TAG, "Error downloading PregnancyOutcome data: " + t.getMessage(), t);
+            }
+        });
+    }
+
+    private void downloadDuplicateData() {
+        Call<DataWrapper<Duplicate>> call = dao.getDup(authorizationHeader, fw);
+        call.enqueue(new Callback<DataWrapper<Duplicate>>() {
+            @Override
+            public void onResponse(@NonNull Call<DataWrapper<Duplicate>> call, @NonNull Response<DataWrapper<Duplicate>> response) {
+                try {
+                    if (response.isSuccessful() && response.body() != null) {
+                        Duplicate[] item = response.body().getData().toArray(new Duplicate[0]);
+
+                        DuplicateDao duplicateDao = AppDatabase.getDatabase(context).duplicateDao();
+                        // Run database operations in a background thread
+                        Executors.newSingleThreadExecutor().execute(() -> {
+                            for (Duplicate newDuplicate : item) {
+                                Duplicate existingDuplicate = duplicateDao.ins(newDuplicate.individual_uuid);
+
+                                // Ensure existing record is NOT NULL and complete is NOT 1 before updating
+                                if (existingDuplicate != null) {
+                                    duplicateDao.create(newDuplicate);
+                                    Log.d(TAG, "Added/Updated Duplicate record with UUID: " + newDuplicate.individual_uuid);
+                                } else {
+                                    Log.d(TAG, "Skipping existing Duplicate record with UUID: " + newDuplicate.individual_uuid);
+                                }
+                            }
+                            Log.d(TAG, "Duplicate data processed successfully");
+                        });
+
+
+                    } else {
+                        Log.e(TAG, "Failed to download Duplicate data, Response Code: " + response.code());
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Error processing Duplicate data: " + e.getMessage(), e);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DataWrapper<Duplicate>> call, @NonNull Throwable t) {
+                Log.e(TAG, "Error downloading Morbidity data: " + t.getMessage(), t);
             }
         });
     }

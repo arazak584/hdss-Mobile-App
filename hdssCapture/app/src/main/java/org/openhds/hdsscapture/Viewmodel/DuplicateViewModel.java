@@ -24,6 +24,9 @@ public class DuplicateViewModel extends AndroidViewModel {
         return duplicateRepository.find(id);
     }
 
+    public Duplicate finds(String id) throws ExecutionException, InterruptedException {
+        return duplicateRepository.finds(id);
+    }
 
     public List<Duplicate> findToSync() throws ExecutionException, InterruptedException {
         return duplicateRepository.findToSync();

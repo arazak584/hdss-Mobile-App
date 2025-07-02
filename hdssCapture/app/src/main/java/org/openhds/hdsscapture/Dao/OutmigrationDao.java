@@ -67,6 +67,6 @@ public interface OutmigrationDao {
     @Query("SELECT COUNT(*) FROM outmigration WHERE status=2 AND fw_uuid = :uuid ")
     long rej(String uuid);
 
-    @Query("SELECT * FROM outmigration where uuid=:id ")
+    @Query("SELECT * FROM outmigration where uuid=:id AND complete!=1 ")
     Outmigration ins(String id);
 }

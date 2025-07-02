@@ -81,7 +81,7 @@ public interface DeathDao {
             "where c.endType=1 and a.firstName!='Still' AND d.firstName!='FAKE' AND a.edit!=2 AND d.hohID = :id AND d.compno = :ids ")
     long err(String id, String ids);
 
-    @Query("SELECT * FROM death where uuid=:id")
+    @Query("SELECT * FROM death where uuid=:id AND complete!=1")
     Death ins(String id);
 
 }

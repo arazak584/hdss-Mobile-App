@@ -49,7 +49,7 @@ public interface HdssSociodemoDao {
     @Query("SELECT * FROM sociodemo WHERE socialgroup_uuid=:id")
    HdssSociodemo findses(String id);
 
-    @Query("SELECT * FROM sociodemo where uuid=:id ")
+    @Query("SELECT * FROM sociodemo where uuid=:id AND complete!=1 ")
     HdssSociodemo ins(String id);
 
     @Query("SELECT * FROM sociodemo WHERE complete=1")

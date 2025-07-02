@@ -58,7 +58,7 @@ public interface DemographicDao {
     @Query("SELECT * FROM demographic where individual_uuid=:id")
     Demographic find(String id);
 
-    @Query("SELECT * FROM demographic where individual_uuid=:id ")
+    @Query("SELECT * FROM demographic where individual_uuid=:id AND complete!=1 ")
     Demographic ins(String id);
 
     @Query("SELECT COUNT(*) FROM demographic a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +

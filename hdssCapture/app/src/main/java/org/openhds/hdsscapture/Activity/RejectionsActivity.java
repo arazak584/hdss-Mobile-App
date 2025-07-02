@@ -66,6 +66,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -220,15 +222,22 @@ public class RejectionsActivity extends AppCompatActivity {
                 g++;
             }
 
-            int h=1;
+            int h = 1;
             for (Relationship e : relationshipViewModel.reject(fw)) {
-                String formattedDate = f.format(e.approveDate);
+                String formattedDate;
+                if (e.approveDate != null) {
+                    formattedDate = f.format(e.approveDate);
+                } else {
+                    Log.e("NullDate", "approveDate is null for Relationship UUID: " + e.uuid);
+                    formattedDate = "N/A"; // or use `continue;` to skip adding it
+                }
+
                 RejectEvent r1 = new RejectEvent();
-                r1.id1 = h + ". Relationship" + " (" + e.supervisor + ")";
-                r1.id2 = "" + e.sttime + " " + e.edtime;
-                r1.id3 = "" + e.visit_uuid+ " - " + e.individualB_uuid;
-                r1.id4 = "" + formattedDate;
-                r1.id5 = "" + e.comment;
+                r1.id1 = String.format("%d. Relationship (%s)", h, e.supervisor != null ? e.supervisor : "Unknown");
+                r1.id2 = String.format("%s %s", e.sttime != null ? e.sttime : "-", e.edtime != null ? e.edtime : "-");
+                r1.id3 = String.format("%s - %s", e.visit_uuid != null ? e.visit_uuid : "-", e.individualB_uuid != null ? e.individualB_uuid : "-");
+                r1.id4 = formattedDate;
+                r1.id5 = e.comment != null ? e.comment : "";
                 r1.index = h;
 
                 list.add(r1);
@@ -326,8 +335,6 @@ public class RejectionsActivity extends AppCompatActivity {
             }
 
 
-
-
             filterAll = new ArrayList<>(list);
 
             viewsAdapter = new RejectAdapter(this);
@@ -398,8 +405,34 @@ public class RejectionsActivity extends AppCompatActivity {
         c_callable.enqueue(new Callback<DataWrapper<Inmigration>>() {
             @Override
             public void onResponse(Call<DataWrapper<Inmigration>> call, Response<DataWrapper<Inmigration>> response) {
-                Inmigration[] img = response.body().getData().toArray(new Inmigration[0]);
-                inmigrationViewModel.add(img);
+                ExecutorService executor = Executors.newSingleThreadExecutor();
+                executor.execute(() -> {
+                    try {
+                        if (response.body() != null && response.body().getData() != null) {
+                            Inmigration[] data = response.body().getData().toArray(new Inmigration[0]);
+                            List<Inmigration> toAdd = new ArrayList<>();
+
+                            for (Inmigration item : data) {
+                                Inmigration exist = inmigrationViewModel.ins(item.uuid);
+                                if (exist != null) {
+                                    toAdd.add(item); // Only add the existing ones
+                                }
+                            }
+
+                            if (!toAdd.isEmpty()) {
+                                inmigrationViewModel.add(toAdd.toArray(new Inmigration[0]));
+                            }
+
+                        } else {
+                            Log.e("Error", "Response body or data is null");
+                        }
+                    } catch (ExecutionException | InterruptedException e) {
+                        Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+                        Thread.currentThread().interrupt();
+                    } catch (Exception e) {
+                        Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+                    }
+                });
 
                 // Next Step: Outmigration
                 progres.setMessage("Downloading...");
@@ -408,12 +441,35 @@ public class RejectionsActivity extends AppCompatActivity {
                 c_callable.enqueue(new Callback<DataWrapper<Outmigration>>() {
                     @Override
                     public void onResponse(Call<DataWrapper<Outmigration>> call, Response<DataWrapper<Outmigration>> response) {
-                        Outmigration[] i = response.body().getData().toArray(new Outmigration[0]);
-                        for (Outmigration item : i) {
-                            item.edit = 1;
-                            Log.d("Omg", "Edit Omg: " + item.edit + "Uuid: " +item.uuid);
-                        }
-                        outmigrationViewModel.add(i);
+                        ExecutorService executor = Executors.newSingleThreadExecutor();
+                        executor.execute(() -> {
+                            try {
+                                if (response.body() != null && response.body().getData() != null) {
+                                    Outmigration[] data = response.body().getData().toArray(new Outmigration[0]);
+                                    List<Outmigration> toAdd = new ArrayList<>();
+
+                                    for (Outmigration item : data) {
+                                        Outmigration exist = outmigrationViewModel.ins(item.uuid);
+                                        if (exist != null) {
+                                            item.edit = 1;
+                                            toAdd.add(item);
+                                        }
+                                    }
+
+                                    if (!toAdd.isEmpty()) {
+                                        outmigrationViewModel.add(toAdd.toArray(new Outmigration[0]));
+                                    }
+
+                                } else {
+                                    Log.e("Error", "Response body or data is null");
+                                }
+                            } catch (ExecutionException | InterruptedException e) {
+                                Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+                                Thread.currentThread().interrupt();
+                            } catch (Exception e) {
+                                Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+                            }
+                        });
 
                         // Next Step: Death
                         progres.setMessage("Downloading...");
@@ -422,12 +478,35 @@ public class RejectionsActivity extends AppCompatActivity {
                         c_callable.enqueue(new Callback<DataWrapper<Death>>() {
                             @Override
                             public void onResponse(Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
-                                Death[] co = response.body().getData().toArray(new Death[0]);
-                                for (Death item : co) {
-                                    item.edit = 1;
-                                    Log.d("Dth", "Edit Dth: " + item.edit);
-                                }
-                                deathViewModel.add(co);
+                                ExecutorService executor = Executors.newSingleThreadExecutor();
+                                executor.execute(() -> {
+                                    try {
+                                        if (response.body() != null && response.body().getData() != null) {
+                                            Death[] data = response.body().getData().toArray(new Death[0]);
+                                            List<Death> toAdd = new ArrayList<>();
+
+                                            for (Death item : data) {
+                                                Death exist = deathViewModel.ins(item.uuid);
+                                                if (exist != null) {
+                                                    item.edit = 1;
+                                                    toAdd.add(item);
+                                                }
+                                            }
+
+                                            if (!toAdd.isEmpty()) {
+                                                deathViewModel.add(toAdd.toArray(new Death[0]));
+                                            }
+
+                                        } else {
+                                            Log.e("Error", "Response body or data is null");
+                                        }
+                                    } catch (ExecutionException | InterruptedException e) {
+                                        Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+                                        Thread.currentThread().interrupt();
+                                    } catch (Exception e) {
+                                        Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+                                    }
+                                });
 
                                 // Next Step: Pregnancy
                                 progres.setMessage("Downloading...");
@@ -436,38 +515,39 @@ public class RejectionsActivity extends AppCompatActivity {
                                 c_callable.enqueue(new Callback<DataWrapper<Pregnancy>>() {
                                     @Override
                                     public void onResponse(Call<DataWrapper<Pregnancy>> call, Response<DataWrapper<Pregnancy>> response) {
-                                        try {
-                                        if (response.body() != null && response.body().getData() != null) {
-                                            Pregnancy[] newPregs = response.body().getData().toArray(new Pregnancy[0]);
-                                            for (Pregnancy newPregnancy : newPregs) {
-                                                // Fetch the existing pregnancy record by UUID
-                                                Pregnancy existingPregnancy = pregnancyViewModel.ins(newPregnancy.uuid);
-                                                if (existingPregnancy != null) {
-                                                    // Preserve location and id fields from the existing record
-                                                    newPregnancy.extra = existingPregnancy.extra;
-                                                    newPregnancy.outcome = existingPregnancy.outcome;
-                                                    newPregnancy.id = existingPregnancy.id;
-                                                    newPregnancy.complete = 0;
+                                        ExecutorService executor = Executors.newSingleThreadExecutor();
+                                        executor.execute(() -> {
+                                            try {
+                                                if (response.body() != null && response.body().getData() != null) {
+                                                    Pregnancy[] data = response.body().getData().toArray(new Pregnancy[0]);
+                                                    List<Pregnancy> toAdd = new ArrayList<>();
 
-                                                    Log.d("Insertion", "Pregnancy insert outcome: " + existingPregnancy.outcome);
+                                                    for (Pregnancy item : data) {
+                                                        Pregnancy exist = pregnancyViewModel.ins(item.uuid);
+                                                        if (exist != null) {
+                                                            item.extra = exist.extra;
+                                                            item.outcome = exist.outcome;
+                                                            item.id = exist.id;
+                                                            item.complete = 0;
+                                                            toAdd.add(item);
+                                                        }
+                                                    }
+
+                                                    if (!toAdd.isEmpty()) {
+                                                        pregnancyViewModel.add(toAdd.toArray(new Pregnancy[0]));
+                                                    }
+
+                                                } else {
+                                                    Log.e("Error", "Response body or data is null");
                                                 }
+                                            } catch (ExecutionException | InterruptedException e) {
+                                                Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+                                                Thread.currentThread().interrupt();
+                                            } catch (Exception e) {
+                                                Log.e("Error", "Unexpected error: " + e.getMessage(), e);
                                             }
-                                            pregnancyViewModel.add(newPregs);
-                                        } else {
-                                            Log.e("Error", "Response body or data is null");
-                                        }
+                                        });
 
-                                        } catch (ExecutionException e) {
-                                            Log.e("Error", "ExecutionException occurred while fetching existing pregnancy: " + e.getMessage());
-                                            e.printStackTrace();
-                                        } catch (InterruptedException e) {
-                                            Log.e("Error", "InterruptedException occurred while fetching existing pregnancy: " + e.getMessage());
-                                            e.printStackTrace();
-                                            Thread.currentThread().interrupt(); // Restore interrupted status
-                                        } catch (Exception e) {
-                                            Log.e("Error", "An unexpected error occurred: " + e.getMessage());
-                                            e.printStackTrace();
-                                        }
 
                                         // Next Step: Demographic
                                         progres.setMessage("Downloading...");
@@ -476,18 +556,73 @@ public class RejectionsActivity extends AppCompatActivity {
                                         c_callable.enqueue(new Callback<DataWrapper<Demographic>>() {
                                             @Override
                                             public void onResponse(Call<DataWrapper<Demographic>> call, Response<DataWrapper<Demographic>> response) {
-                                                Demographic[] dm = response.body().getData().toArray(new Demographic[0]);
-                                                demographicViewModel.add(dm);
+                                                ExecutorService executor = Executors.newSingleThreadExecutor();
+                                                executor.execute(() -> {
+                                                    try {
+                                                        if (response.body() != null && response.body().getData() != null) {
+                                                            Demographic[] data = response.body().getData().toArray(new Demographic[0]);
+                                                            List<Demographic> toAdd = new ArrayList<>();
+
+                                                            for (Demographic item : data) {
+                                                                Demographic exist = demographicViewModel.ins(item.individual_uuid);
+                                                                if (exist != null) {
+                                                                    toAdd.add(item);
+                                                                }
+                                                            }
+
+                                                            if (!toAdd.isEmpty()) {
+                                                                demographicViewModel.add(toAdd.toArray(new Demographic[0]));
+                                                            }
+
+                                                        } else {
+                                                            Log.e("Error", "Response body or data is null");
+                                                        }
+                                                    } catch (ExecutionException | InterruptedException e) {
+                                                        Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+                                                        Thread.currentThread().interrupt();
+                                                    } catch (Exception e) {
+                                                        Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+                                                    }
+                                                });
+
 
                                                 // Next Step: Relationship
-                                                progres.setMessage("Downloading...");
+                                                progres.setMessage("Downloading Relationship...");
                                                 final RelationshipViewModel relationshipViewModel = new ViewModelProvider(RejectionsActivity.this).get(RelationshipViewModel.class);
                                                 Call<DataWrapper<Relationship>> c_callable = dao.getRel(authorizationHeader, fw);
                                                 c_callable.enqueue(new Callback<DataWrapper<Relationship>>() {
                                                     @Override
                                                     public void onResponse(Call<DataWrapper<Relationship>> call, Response<DataWrapper<Relationship>> response) {
-                                                        Relationship[] rel = response.body().getData().toArray(new Relationship[0]);
-                                                        relationshipViewModel.add(rel);
+                                                        ExecutorService executor = Executors.newSingleThreadExecutor();
+                                                        executor.execute(() -> {
+                                                            try {
+                                                                if (response.body() != null && response.body().getData() != null) {
+                                                                    Relationship[] data = response.body().getData().toArray(new Relationship[0]);
+                                                                    List<Relationship> toAdd = new ArrayList<>();
+
+                                                                    for (Relationship item : data) {
+                                                                        Relationship exist = relationshipViewModel.ins(item.uuid);
+                                                                        Log.d("Relationship", "Approval Date1: "+ item.approveDate);
+                                                                        if (exist != null) {
+                                                                            toAdd.add(item);
+                                                                            Log.d("Relationship", "Approval Date: "+ item.approveDate);
+                                                                        }
+                                                                    }
+
+                                                                    if (!toAdd.isEmpty()) {
+                                                                        relationshipViewModel.add(toAdd.toArray(new Relationship[0]));
+                                                                    }
+
+                                                                } else {
+                                                                    Log.e("Error", "Response body or data is null");
+                                                                }
+                                                            } catch (ExecutionException | InterruptedException e) {
+                                                                Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+                                                                Thread.currentThread().interrupt();
+                                                            } catch (Exception e) {
+                                                                Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+                                                            }
+                                                        });
 
                                                         // Next Step: Vaccination
                                                         progres.setMessage("Downloading...");
@@ -496,8 +631,34 @@ public class RejectionsActivity extends AppCompatActivity {
                                                         c_callable.enqueue(new Callback<DataWrapper<Vaccination>>() {
                                                         @Override
                                                         public void onResponse(Call<DataWrapper<Vaccination>> call, Response<DataWrapper<Vaccination>> response) {
-                                                        Vaccination[] vac = response.body().getData().toArray(new Vaccination[0]);
-                                                        vaccinationViewModel.add(vac);
+                                                            ExecutorService executor = Executors.newSingleThreadExecutor();
+                                                            executor.execute(() -> {
+                                                                try {
+                                                                    if (response.body() != null && response.body().getData() != null) {
+                                                                        Vaccination[] data = response.body().getData().toArray(new Vaccination[0]);
+                                                                        List<Vaccination> toAdd = new ArrayList<>();
+
+                                                                        for (Vaccination item : data) {
+                                                                            Vaccination exist = vaccinationViewModel.ins(item.uuid);
+                                                                            if (exist != null) {
+                                                                                toAdd.add(item);
+                                                                            }
+                                                                        }
+
+                                                                        if (!toAdd.isEmpty()) {
+                                                                            vaccinationViewModel.add(toAdd.toArray(new Vaccination[0]));
+                                                                        }
+
+                                                                    } else {
+                                                                        Log.e("Error", "Response body or data is null");
+                                                                    }
+                                                                } catch (ExecutionException | InterruptedException e) {
+                                                                    Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+                                                                    Thread.currentThread().interrupt();
+                                                                } catch (Exception e) {
+                                                                    Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+                                                                }
+                                                            });
 
                                                             // Next Step: Ses
                                                             progres.setMessage("Downloading...");
@@ -506,9 +667,34 @@ public class RejectionsActivity extends AppCompatActivity {
                                                             c_callable.enqueue(new Callback<DataWrapper<HdssSociodemo>>() {
                                                                 @Override
                                                                 public void onResponse(Call<DataWrapper<HdssSociodemo>> call, Response<DataWrapper<HdssSociodemo>> response) {
-                                                                HdssSociodemo[] ses = response.body().getData().toArray(new HdssSociodemo[0]);
-                                                                hdssSociodemoViewModel.add(ses);
-                                                                    // Next Step: Ses
+                                                                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                                                                    executor.execute(() -> {
+                                                                        try {
+                                                                            if (response.body() != null && response.body().getData() != null) {
+                                                                                HdssSociodemo[] data = response.body().getData().toArray(new HdssSociodemo[0]);
+                                                                                List<HdssSociodemo> toAdd = new ArrayList<>();
+
+                                                                                for (HdssSociodemo item : data) {
+                                                                                    HdssSociodemo exist = hdssSociodemoViewModel.ins(item.uuid);
+                                                                                    if (exist != null) {
+                                                                                        toAdd.add(item);
+                                                                                    }
+                                                                                }
+
+                                                                                if (!toAdd.isEmpty()) {
+                                                                                    hdssSociodemoViewModel.add(toAdd.toArray(new HdssSociodemo[0]));
+                                                                                }
+
+                                                                            } else {
+                                                                                Log.e("Error", "Response body or data is null");
+                                                                            }
+                                                                        } catch (ExecutionException | InterruptedException e) {
+                                                                            Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+                                                                            Thread.currentThread().interrupt();
+                                                                        } catch (Exception e) {
+                                                                            Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+                                                                        }
+                                                                    });
 
                                                                     progres.setMessage("Downloading...");
                                                                     final MorbidityViewModel morbidityViewModel = new ViewModelProvider(RejectionsActivity.this).get(MorbidityViewModel.class);
@@ -516,8 +702,34 @@ public class RejectionsActivity extends AppCompatActivity {
                                                                     c_callable.enqueue(new Callback<DataWrapper<Morbidity>>() {
                                                                         @Override
                                                                         public void onResponse(Call<DataWrapper<Morbidity>> call, Response<DataWrapper<Morbidity>> response) {
-                                                                            Morbidity[] mor = response.body().getData().toArray(new Morbidity[0]);
-                                                                            morbidityViewModel.add(mor);
+                                                                            ExecutorService executor = Executors.newSingleThreadExecutor();
+                                                                            executor.execute(() -> {
+                                                                                try {
+                                                                                    if (response.body() != null && response.body().getData() != null) {
+                                                                                        Morbidity[] data = response.body().getData().toArray(new Morbidity[0]);
+                                                                                        List<Morbidity> toAdd = new ArrayList<>();
+
+                                                                                        for (Morbidity item : data) {
+                                                                                            Morbidity exist = morbidityViewModel.ins(item.uuid);
+                                                                                            if (exist != null) {
+                                                                                                toAdd.add(item);
+                                                                                            }
+                                                                                        }
+
+                                                                                        if (!toAdd.isEmpty()) {
+                                                                                            morbidityViewModel.add(toAdd.toArray(new Morbidity[0]));
+                                                                                        }
+
+                                                                                    } else {
+                                                                                        Log.e("Error", "Response body or data is null");
+                                                                                    }
+                                                                                } catch (ExecutionException | InterruptedException e) {
+                                                                                    Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+                                                                                    Thread.currentThread().interrupt();
+                                                                                } catch (Exception e) {
+                                                                                    Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+                                                                                }
+                                                                            });
 
                                                         // Final Step: Pregnancy Outcome
                                                         progres.setMessage("Downloading...");
@@ -526,37 +738,38 @@ public class RejectionsActivity extends AppCompatActivity {
                                                         c_callable.enqueue(new Callback<DataWrapper<Pregnancyoutcome>>() {
                                                             @Override
                                                             public void onResponse(Call<DataWrapper<Pregnancyoutcome>> call, Response<DataWrapper<Pregnancyoutcome>> response) {
-                                                                try {
-                                                                if (response.body() != null && response.body().getData() != null) {
-                                                                    Pregnancyoutcome[] newPregs = response.body().getData().toArray(new Pregnancyoutcome[0]);
-                                                                    for (Pregnancyoutcome newPregnancy : newPregs) {
-                                                                        // Fetch the existing outcome record by ID
-                                                                        Pregnancyoutcome existingPregnancy = pregout.ins(newPregnancy.uuid);
-                                                                        if (existingPregnancy != null) {
-                                                                            // Preserve location and id fields from the existing record
-                                                                            newPregnancy.location = existingPregnancy.location;
-                                                                            newPregnancy.id = existingPregnancy.id;
-                                                                            newPregnancy.complete = 0;
-                                                                            newPregnancy.extra = existingPregnancy.extra;
-                                                                            Log.d("Insertion", "Outcome Location: " + existingPregnancy.location);
-                                                                        }
-                                                                    }
-                                                                    pregout.add(newPregs);
-                                                                } else {
-                                                                    Log.e("Error", "Response body or data is null");
-                                                                }
-                                                                } catch (ExecutionException e) {
-                                                                    Log.e("Error", "ExecutionException occurred while fetching existing pregnancy: " + e.getMessage());
-                                                                    e.printStackTrace();
-                                                                } catch (InterruptedException e) {
-                                                                    Log.e("Error", "InterruptedException occurred while fetching existing pregnancy: " + e.getMessage());
-                                                                    e.printStackTrace();
-                                                                    Thread.currentThread().interrupt(); // Restore interrupted status
-                                                                } catch (Exception e) {
-                                                                    Log.e("Error", "An unexpected error occurred: " + e.getMessage());
-                                                                    e.printStackTrace();
-                                                                }
+                                                                ExecutorService executor = Executors.newSingleThreadExecutor();
+                                                                executor.execute(() -> {
+                                                                    try {
+                                                                        if (response.body() != null && response.body().getData() != null) {
+                                                                            Pregnancyoutcome[] data = response.body().getData().toArray(new Pregnancyoutcome[0]);
+                                                                            List<Pregnancyoutcome> toAdd = new ArrayList<>();
 
+                                                                            for (Pregnancyoutcome item : data) {
+                                                                                Pregnancyoutcome exist = pregout.ins(item.uuid);
+                                                                                if (exist != null) {
+                                                                                    item.extra = exist.extra;
+                                                                                    item.location = exist.location;
+                                                                                    item.id = exist.id;
+                                                                                    item.complete = 0;
+                                                                                    toAdd.add(item);
+                                                                                }
+                                                                            }
+
+                                                                            if (!toAdd.isEmpty()) {
+                                                                                pregout.add(toAdd.toArray(new Pregnancyoutcome[0]));
+                                                                            }
+
+                                                                        } else {
+                                                                            Log.e("Error", "Response body or data is null");
+                                                                        }
+                                                                    } catch (ExecutionException | InterruptedException e) {
+                                                                        Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+                                                                        Thread.currentThread().interrupt();
+                                                                    } catch (Exception e) {
+                                                                        Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+                                                                    }
+                                                                });
 
                                                                 progres.dismiss();
                                                                 refreshActivity();

@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,8 +42,10 @@ import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
 import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
 import org.openhds.hdsscapture.entity.subqueries.EventForm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
+import org.openhds.hdsscapture.fragment.ClusterFragment;
 import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -204,6 +208,11 @@ public class DupFragment extends DialogFragment {
             }
         });
 
+
+        final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
+        final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
+        final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
+
         DuplicateViewModel viewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
         try {
             Duplicate data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid);
@@ -213,6 +222,16 @@ public class DupFragment extends DialogFragment {
                 binding.lname.setEnabled(false);
                 binding.dupFname.setEnabled(false);
                 binding.dupLname.setEnabled(false);
+
+                if(data.status!=null && data.status==2){
+                    cmt.setVisibility(View.VISIBLE);
+                    rsv.setVisibility(View.VISIBLE);
+                    rsvd.setVisibility(View.VISIBLE);
+                }else{
+                    cmt.setVisibility(View.GONE);
+                    rsv.setVisibility(View.GONE);
+                    rsvd.setVisibility(View.GONE);
+                }
             } else {
                 data = new Duplicate();
 
@@ -221,6 +240,7 @@ public class DupFragment extends DialogFragment {
                 data.fname = HouseMembersFragment.selectedIndividual.getFirstName();
                 data.lname = HouseMembersFragment.selectedIndividual.getLastName();
                 data.dob = HouseMembersFragment.selectedIndividual.dob;
+                data.compno = ClusterFragment.selectedLocation.getCompno();
 
                 binding.fname.setEnabled(false);
                 binding.lname.setEnabled(false);
@@ -279,6 +299,93 @@ public class DupFragment extends DialogFragment {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
                 return;
             }
+
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+                String dp1 = binding.getDup().dup_uuid;
+                String dp2 = binding.getDup().dup1_uuid;
+                String dp3 = binding.getDup().dup2_uuid;
+
+                if (dp1 != null || dp2 != null || dp3 != null) {
+                    try {
+                        if (dp1 != null && viewModel.finds(dp1) != null) {
+                            requireActivity().runOnUiThread(() -> {
+                                binding.dupFname.setError("Same Individual Exist as Duplicate");
+                                Toast.makeText(requireContext(), "Same Individual Exist as Duplicate", Toast.LENGTH_LONG).show();
+                            });
+                            return;
+                        }
+
+                        if (dp2 != null && viewModel.finds(dp2) != null) {
+                            requireActivity().runOnUiThread(() -> {
+                                binding.dup1Fname.setError("Second Duplicate Individual Exist as Duplicate");
+                                Toast.makeText(requireContext(), "Second Duplicate Individual Exist as Duplicate", Toast.LENGTH_LONG).show();
+                            });
+                            return;
+                        }
+
+                        if (dp3 != null && viewModel.finds(dp3) != null) {
+                            requireActivity().runOnUiThread(() -> {
+                                binding.dup2Fname.setError("Third Duplicate Individual Exist as Duplicate");
+                                Toast.makeText(requireContext(), "Third Duplicate Individual Exist as Duplicate", Toast.LENGTH_LONG).show();
+                            });
+                            return;
+                        }
+
+                        // If all checks pass, continue processing here
+                        requireActivity().runOnUiThread(() -> {
+                            // Do your next action (e.g., save or navigate)
+                        });
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+
+//            String dp1 = binding.getDup().dup_uuid;
+//            String dp2 = binding.getDup().dup1_uuid;
+//            String dp3 = binding.getDup().dup2_uuid;
+//
+//            if (dp1 != null || dp2 != null || dp3 != null) {
+//
+//                try {
+//                if (dp1 != null) {
+//                    Duplicate data = viewModel.finds(dp1);
+//                    if (data != null) {
+//                        binding.dupFname.setError("Same Individual Exist as Duplicate");
+//                        Toast.makeText(requireContext(), "Same Individual Exist as Duplicate", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                }
+//
+//                if (dp2 != null) {
+//                    Duplicate data1 = viewModel.finds(dp2);
+//                    if (data1 != null) {
+//                        binding.dup1Fname.setError("Second Duplicate Individual Exist as Duplicate");
+//                        Toast.makeText(requireContext(), "Second Duplicate Individual Exist as Duplicate", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                }
+//
+//                if (dp3 != null) {
+//                    Duplicate data2 = viewModel.finds(dp3);
+//                    if (data2 != null) {
+//                        binding.dup2Fname.setError("Third Duplicate Individual Exist as Duplicate");
+//                        Toast.makeText(requireContext(), "Third Duplicate Individual Exist as Duplicate", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                }
+//
+//                } catch (ExecutionException | InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+
+
+            finalData.complete_n = finalData.getComplete();
 
             if (finalData.numberofdup != null) {
 
@@ -342,7 +449,7 @@ public class DupFragment extends DialogFragment {
 
             IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
 
-            ExecutorService executor = Executors.newSingleThreadExecutor();
+            //ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute(() -> {
 
                 if (binding.getDup().numberofdup>=1 && finalData.complete ==1) {
@@ -445,5 +552,6 @@ public class DupFragment extends DialogFragment {
         }
 
     }
+
 
 }

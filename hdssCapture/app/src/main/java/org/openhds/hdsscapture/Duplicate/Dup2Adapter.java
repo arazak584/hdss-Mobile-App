@@ -98,12 +98,14 @@ public class Dup2Adapter extends RecyclerView.Adapter<Dup2Adapter.ViewHolder>{
                 EditText fname = activity.requireActivity().findViewById(R.id.dup2_fname);
                 EditText lname = activity.requireActivity().findViewById(R.id.dup2_lname);
                 EditText dob = activity.requireActivity().findViewById(R.id.dup2_dob);
+                EditText compno = activity.requireActivity().findViewById(R.id.dup2_compno);
 
                 // Set the mother's ID in the text field
                 partnerIdField.setText(individual.getUuid());
                 fname.setText(individual.getFirstName());
                 lname.setText(individual.getLastName());
                 dob.setText(individual.getDob());
+                compno.setText(individual.getCompno());
 
                 // Hide the MotherDialogFragment
                 activity.dismiss();
