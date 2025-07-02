@@ -55,6 +55,8 @@ public class Configsettings extends BaseObservable implements Parcelable {
     public String site;
     @Expose
     public String compno;
+    public Integer mis;
+    public Integer stb;
 
 
     public Configsettings() {
@@ -136,6 +138,22 @@ public class Configsettings extends BaseObservable implements Parcelable {
 
     public void setCompno(String compno) {
         this.compno = compno;
+    }
+
+    public Integer getMis() {
+        return mis;
+    }
+
+    public void setMis(Integer mis) {
+        this.mis = mis;
+    }
+
+    public Integer getStb() {
+        return stb;
+    }
+
+    public void setStb(Integer stb) {
+        this.stb = stb;
     }
 
     public String getEarliestDate() {
