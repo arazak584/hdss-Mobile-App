@@ -45,6 +45,10 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.retrieveByLocationId(id);
     }
 
+    public LiveData<List<Individual>> retrieveByHouseId(String id) {
+        return individualRepository.retrieveByHouseId(id); // No throws, no Executor
+    }
+
     public List<Individual> retrieveReturn(String id) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveReturn(id);
     }
@@ -205,24 +209,28 @@ public class IndividualViewModel extends AndroidViewModel {
 //    public int dthupdate(IndividualEnd e){
 //        return individualRepository.dthupdate(e);
 //    }
-    public void visited(IndividualVisited e, Consumer<Integer> callback) {
-        individualRepository.visited(e, callback);
-    }
+//    public void visited(IndividualVisited e, Consumer<Integer> callback) {
+//        individualRepository.visited(e, callback);
+//    }
 
     public void dthupdate(IndividualEnd e, Consumer<Integer> callback) {
         individualRepository.dthupdate(e, callback);
     }
 
-//    public int visited(IndividualVisited e){
-//        return individualRepository.visited(e);
-//    }
+    public int visited(IndividualVisited e){
+        return individualRepository.visited(e);
+    }
 
     public void updateres(IndividualResidency e, Consumer<Integer> callback) {
         individualRepository.updateres(e, callback);
     }
 
-    public void contact(IndividualPhone e, Consumer<Integer> callback) {
-        individualRepository.contact(e, callback);
+//    public void contact(IndividualPhone e, Consumer<Integer> callback) {
+//        individualRepository.contact(e, callback);
+//    }
+
+    public int contact(IndividualPhone e){
+        return individualRepository.contact(e);
     }
 
 }

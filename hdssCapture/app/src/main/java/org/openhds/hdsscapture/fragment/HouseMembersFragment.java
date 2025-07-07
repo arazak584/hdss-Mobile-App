@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -121,6 +122,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private AppCompatButton finish;
     private OdkViewModel odkViewModel;
     private RecyclerView recyclerViewOdk;
+    private IndividualViewAdapter adapter;
+    private RecyclerView recyclerView;
 
     public HouseMembersFragment() {
         // Required empty public constructor
@@ -178,7 +181,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         finish = view.findViewById(R.id.button_cpvisit);
         updateButtonState();
         recyclerViewOdk = view.findViewById(R.id.recyclerView_odk);
-        grantStoragePermission();
+        //grantStoragePermission();
         //query();
 
         //final TextView hh = view.findViewById(R.id.textView_compextId);
@@ -190,20 +193,75 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         }
 
 
-        final RecyclerView recyclerView = view.findViewById(R.id.recyclerView_household);
-        final IndividualViewAdapter adapter = new IndividualViewAdapter(this, locations, socialgroup,this );
-        //final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
+//        final RecyclerView recyclerView = view.findViewById(R.id.recyclerView_household);
+//        final IndividualViewAdapter adapter = new IndividualViewAdapter(this, locations, socialgroup,this );
+//        //final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
+//
+//        //recyclerView.setHasFixedSize(true);
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+//                RecyclerView.VERTICAL);
+//        recyclerView.addItemDecoration(dividerItemDecoration);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+//        recyclerView.setAdapter(adapter);
+//
+//        //initial loading of Individuals in locations
+//        adapter.filter("", individualViewModel);
 
-        //recyclerView.setHasFixedSize(true);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                RecyclerView.VERTICAL);
-        recyclerView.addItemDecoration(dividerItemDecoration);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        //Second Option
+//        final RecyclerView recyclerView = view.findViewById(R.id.recyclerView_household);
+//        final ProgressBar progressBar = view.findViewById(R.id.progressBar); // Make sure this is in your XML
+//
+//// 1. Initialize the adapter with empty list for now
+//        final IndividualViewAdapter adapter = new IndividualViewAdapter(this, locations, socialgroup, this);
+//
+//// 2. Set up the RecyclerView
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), RecyclerView.VERTICAL);
+//        recyclerView.addItemDecoration(dividerItemDecoration);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+//        recyclerView.setAdapter(adapter);
+//
+//// 3. Show progress bar before loading data
+//        progressBar.setVisibility(View.VISIBLE);
+//
+//// 4. Delay the data loading so the fragment shows first
+//        recyclerView.post(() -> {
+//            // Load individuals after layout is drawn (this runs after fragment UI is ready)
+//            adapter.filterAsync("", individualViewModel);
+//
+//            // Hide progress bar after loading
+//            progressBar.setVisibility(View.GONE);
+//        });
+
+//        IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
+//// Set up RecyclerView and adapter
+//        final RecyclerView recyclerView = view.findViewById(R.id.recyclerView_household);
+//        final IndividualViewAdapter adapter = new IndividualViewAdapter(this, locations, socialgroup, this);
+//
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), RecyclerView.VERTICAL);
+//        recyclerView.addItemDecoration(dividerItemDecoration);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+//        recyclerView.setAdapter(adapter);
+//
+//    // Observe LiveData
+//        if (socialgroup != null) {
+//            individualViewModel.retrieveByHouseId(socialgroup.getExtId()).observe(getViewLifecycleOwner(), individuals -> {
+//                if (individuals != null && !individuals.isEmpty()) {
+//                    adapter.setIndividuals(individuals);
+//                } else {
+//                    Toast.makeText(requireContext(), "No Active Individual Found", Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//        }
+
+        recyclerView = view.findViewById(R.id.recyclerView_household);
+        adapter = new IndividualViewAdapter(this, locations, socialgroup, this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
 
-        //initial loading of Individuals in locations
-        adapter.filter("", individualViewModel);
-
+        // ✅ Defer data loading to after layout
+        view.post(() -> observeData());
 
         final AppCompatButton sea = view.findViewById(R.id.search);
         sea.setOnClickListener(v -> {
@@ -219,6 +277,22 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 min.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.Red));
             }else{
                 min.setText("");
+            }
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+           final AppCompatButton cghoh = view.findViewById(R.id.hoh);
+        SocialgroupViewModel model = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+        try {
+            Socialgroup data = model.find(socialgroup.uuid);
+            if (data != null) {
+                cghoh.setEnabled(true);
+                cghoh.setVisibility(View.VISIBLE);
+                cghoh.setText("Change Household Head");
             }
 
         } catch (ExecutionException e) {
@@ -274,19 +348,12 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                     Pregnancy3Fragment.newInstance(individual,locations, socialgroup)).commit();
         });
 
-
         final AppCompatButton dup = view.findViewById(R.id.dup);
         dup.setOnClickListener(v -> {
             //final Duplicate duplicate = new Duplicate();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     DupFragment.newInstance(individual,residency, locations, socialgroup)).commit();
         });
-
-//        final AppCompatButton finish = view.findViewById(R.id.button_cpvisit);
-//        finish.setOnClickListener(view -> {
-//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-//                    ClusterFragment.newInstance(level6Data, locations, socialgroup)).commit();
-//        });
 
         final AppCompatButton demo = view.findViewById(R.id.demographic);
         demo.setOnClickListener(v -> {
@@ -301,10 +368,6 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     RegisterFragment.newInstance(locations, socialgroup,individual)).commit();
         });
-//        demo.setOnClickListener(v -> {
-//            DemographicFragment.newInstance(individual, locations, socialgroup)
-//                    .show(getChildFragmentManager(), "DemographicFragment");
-//        });
 
         final AppCompatButton dth = view.findViewById(R.id.death);
         dth.setOnClickListener(v -> {
@@ -357,29 +420,11 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                     RelationshipFragment.newInstance(individual, locations, socialgroup)).commit();
         });
 
-        final AppCompatButton cghoh = view.findViewById(R.id.hoh);
         cghoh.setOnClickListener(v -> {
            // final Socialgroup socialgroup1 = new Socialgroup();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     SocialgroupFragment.newInstance(individual, locations, socialgroup)).commit();
         });
-
-
-
-        SocialgroupViewModel model = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-        try {
-            Socialgroup data = model.find(socialgroup.uuid);
-            if (data != null) {
-                cghoh.setEnabled(true);
-                cghoh.setVisibility(View.VISIBLE);
-                cghoh.setText("Change Household Head");
-            }
-
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         final AppCompatButton img = view.findViewById(R.id.img);
         img.setOnClickListener(v -> {
@@ -419,32 +464,30 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
         PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
 
-        try {
-            List<Pregnancy> pregnancyList = pregnancyViewModel.retrievePregnancy(socialgroup.getExtId());
-            if (pregnancyList != null && !pregnancyList.isEmpty()) {
-                showPregnancyDialog();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        executor.execute(() -> {
+            try {
+                List<Pregnancy> pregnancyList = pregnancyViewModel.retrievePregnancy(socialgroup.getExtId());
+                if (pregnancyList != null && !pregnancyList.isEmpty()) {
+                    handler.post(this::showPregnancyDialog);
+                }
+
+                List<Individual> individualList = individualViewModel.minors(
+                        ClusterFragment.selectedLocation.compno,
+                        socialgroup.getExtId()
+                );
+                if (individualList != null && !individualList.isEmpty()) {
+                    handler.post(this::showMinorsDialog);
+                }
+
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
             }
+        });
 
-        }catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            List<Individual> individualList = individualViewModel.minors(ClusterFragment.selectedLocation.compno,socialgroup.getExtId());
-            if (individualList != null && !individualList.isEmpty()) {
-                showMinorsDialog();
-            }
-
-        }catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         AppCompatButton event = view.findViewById(R.id.menu);
-
         //imageView = view.findViewById(R.id.menu);
         event.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -464,45 +507,12 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                             OmgAdapterFragment.newInstance(locations, socialgroup, individual)
                                     .show(getChildFragmentManager(), "OmgAdapterFragment");
                         }
-//                        else if (itemId == R.id.preg){
-//                            // open DialogFragment OmgFragment
-//                            PregAdapterFragment.newInstance(locations, socialgroup, individual,pregnancy)
-//                                    .show(getChildFragmentManager(), "PregAdapterFragment");
-//                        }else if (itemId == R.id.outcome){
-//                            // open DialogFragment OmgFragment
-//                            OutcomeAdapterFragment.newInstance(locations, socialgroup, individual,pregnancyoutcome)
-//                                    .show(getChildFragmentManager(), "OutcomeAdapterFragment");
-//                        }
                         return true;
                     }
                 });
                 popupMenu.show();
             }
         });
-
-//        AppCompatButton odkButton = view.findViewById(R.id.odk);
-//        odkButton.setOnClickListener(v -> {
-//            Intent intent = new Intent(Intent.ACTION_VIEW);
-//            intent.setType("vnd.android.cursor.dir/vnd.odk.form");
-//            startActivity(intent);
-//        });
-
-//        odkButton.setOnClickListener(v -> {
-//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-//                    OdkFragment.newInstance(locations, socialgroup,individual )).commit();
-//        });
-
-//        // This callback will intercept the back button press
-//        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
-//            @Override
-//            public void handleOnBackPressed() {
-//                // Disable back button functionality by doing nothing
-//                // Or show a Toast message if you want to inform the user
-//                Toast.makeText(requireContext(), "Back button is disabled on this screen", Toast.LENGTH_SHORT).show();
-//            }
-//        };
-//        // Add the callback to the activity's OnBackPressedDispatcher
-//        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), callback);
 
 
         return view;
@@ -1178,109 +1188,18 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         });
     }
 
-
-
-//    private void countRegister() {
-//        AppCompatButton finish = view.findViewById(R.id.button_cpvisit);
-//
-//        try {
-//            long totalInd = individualViewModel.count(socialgroup.extId);
-//            long totalRegistry = registryViewModel.count(socialgroup.uuid);
-//            long totalVisit = visitViewModel.count(socialgroup.uuid);
-//
-//            if (totalInd > 0 && totalVisit > 0 && totalRegistry <= 0) {
-//                // Simulate disabled appearance by changing background color or text color
-//                finish.setBackgroundColor(getResources().getColor(R.color.home)); // Replace with your disabled color
-//                finish.setTextColor(getResources().getColor(R.color.color_border_lightgray)); // Replace with your disabled text color
-//
-//                // Set a click listener to show the message without disabling the button
-//                finish.setOnClickListener(v -> {
-//                    Toast.makeText(requireContext(), "Complete Household Registry Before Exit", Toast.LENGTH_SHORT).show();
-//                });
-//            } else {
-//                // Reset to enabled appearance and functionality
-//                finish.setBackgroundColor(getResources().getColor(R.color.home)); // Original color
-//                finish.setTextColor(getResources().getColor(R.color.color_border_lightgray)); // Original text color
-//                finish.setEnabled(true);
-//                finish.setOnClickListener(v -> {
-//                    requireActivity().getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.container_cluster, ClusterFragment.newInstance(level6Data, locations, socialgroup))
-//                            .commit();
-//                });
-//            }
-//
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-
-
-//    private void query() {
-//        List<EndEvents> list = new ArrayList<>();
-//
-//        try {
-//            int d = 1;
-//            for (Death death : deathViewModel.end(socialgroup.uuid)) {
-//                EndEvents endEvent = new EndEvents();
-//                endEvent.eventName = "Death ";
-//                endEvent.eventId = "" + death.lastName + " " + death.firstName;
-//                endEvent.eventDate = "" + death.getInsertDate();
-//                endEvent.eventError = "";
-//                list.add(endEvent);
-//                d++;
-//            }
-//
-//            int a = 1;
-//            for (Outmigration e : outmigrationViewModel.end(socialgroup.uuid)) {
-//                EndEvents endEvent = new EndEvents();
-//                endEvent.eventName = "Outmigration ";
-//                endEvent.eventId = "" + e.visit_uuid + " " + e.location_uuid;
-//                endEvent.eventDate = "" + e.getInsertDate();
-//                endEvent.eventError = "";
-//                list.add(endEvent);
-//                a++;
-//            }
-//
-//            // Assuming filterAll is a field in your class
-//            filterAll = new ArrayList<>(list);
-//
-//            // Assuming eventsAdapter is a field in your class
-//            eventsAdapter = new EndEventsAdapter(requireContext(), this);
-//            eventsAdapter.setQueries(list);
-//
-//            RecyclerView recyclerView = view.findViewById(R.id.recyclerView_end);
-//            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-//            recyclerView.setAdapter(eventsAdapter);
-//
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    private void grantStoragePermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (requireContext().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                try {
-                    if (requireContext().getPackageManager() != null) {
-                        String packageName = requireContext().getPackageName();
-                        String command = String.format(
-                                "pm grant %s android.permission.READ_EXTERNAL_STORAGE",
-                                packageName
-                        );
-                        Runtime.getRuntime().exec(new String[]{"su", "-c", command});
-
-                        // Small delay to allow permission to take effect
-                        Thread.sleep(100);
-                    }
-                } catch (Exception e) {
-                    Log.e("Permission", "Error granting permission: " + e.getMessage());
-                }
-            }
+    private void observeData() {
+        if (socialgroup != null) {
+            individualViewModel.retrieveByHouseId(socialgroup.getExtId())
+                    .observe(getViewLifecycleOwner(), individuals -> {
+                        if (individuals != null && !individuals.isEmpty()) {
+                            adapter.setIndividualList(individuals);
+                        } else {
+                            Toast.makeText(requireContext(), "No Active Individual Found", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
     }
-
 
 
     // Override the onBackPressed() method in the hosting activity

@@ -1,6 +1,7 @@
 package org.openhds.hdsscapture.Dao;
 
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -85,8 +86,11 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual where compno=:comp AND hohID=:id ")
     List<Individual> hoh(String comp,String id);
 
-    @Query("SELECT * from individual WHERE endType=1 and firstName!='FAKE' and hohID=:id order by dob")
+    @Query("SELECT uuid,extId,firstName,lastName,dob,gender,compno,ghanacard,otherName,phone1,hohID from individual WHERE endType=1 and firstName!='FAKE' and hohID=:id order by dob")
     List<Individual> retrieveByLocationId(String id);
+
+    @Query("SELECT uuid, extId, firstName, lastName, dob, gender, compno, ghanacard, otherName, phone1, hohID,complete FROM individual WHERE endType=1 AND firstName!='FAKE' AND hohID=:id ORDER BY dob")
+    LiveData<List<Individual>> retrieveByHouseId(String id);
 
     @Query("SELECT * from individual WHERE endType=2 and firstName!='FAKE' and compno=:id order by dob")
     List<Individual> retrieveReturn(String id);

@@ -1,6 +1,8 @@
 package org.openhds.hdsscapture.Adapter;
 
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAdapter.ViewHolder> {
 
@@ -118,11 +122,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
             holder.nickname.setText("(" + otherName + ")");
         }
         Integer gender = individual.gender;
-        if (gender == 1){
-            holder.gender.setText("Male");
-        }else{
-            holder.gender.setText("Female");
-        }
+        holder.gender.setText(gender == 1 ? "Male" : "Female");
         String ph = individual.phone1;
         if (ph != null && ph.length() == 10) {
             holder.status.setText("(" + ph + ")");
@@ -158,61 +158,18 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         return individualList.size();
     }
 
-
-//    public void search(String selectedSpinnerItem, String searchText, IndividualViewModel individualViewModel) {
-//        individualList.clear();
-//        if (searchText != null && selectedSpinnerItem!= null) {
-//            searchText = searchText.toLowerCase(Locale.getDefault());
-//
-//            try {
-//                List<Individual> searchResults = individualViewModel.retrieveBySearch(selectedSpinnerItem, searchText);
-//                individualList.addAll(searchResults);
-//            } catch (ExecutionException | InterruptedException e) {
-//                e.printStackTrace();
-//                Toast.makeText(activity.getActivity(), "Error searching individuals", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//        notifyDataSetChanged();
-//        activity.dismissLoadingDialog();
-//    }
-
-//    public void search(String selectedSpinnerItem, String searchText, IndividualViewModel individualViewModel) {
-//        individualList.clear();
-//
-//        // Check if either selectedSpinnerItem or searchText is not empty (non-null and non-empty) before proceeding with the search
-//        if ((selectedSpinnerItem != null && !selectedSpinnerItem.isEmpty()) && (searchText != null && !searchText.isEmpty())) {
-//            if (searchText != null) {
-//                searchText = searchText.toLowerCase(Locale.getDefault());
-//            }
-//
-//            try {
-//                List<Individual> searchResults = individualViewModel.retrieveBySearch(selectedSpinnerItem, searchText);
-//                individualList.addAll(searchResults);
-//            } catch (ExecutionException | InterruptedException e) {
-//                e.printStackTrace();
-//                Toast.makeText(activity.getActivity(), "Error searching individuals", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//
-//        notifyDataSetChanged();
-//        activity.dismissLoadingDialog();
-//    }
-//
-//
-//
-//
-//    public void pull(IndividualViewModel individualViewModel) {
+//    public void filter(String charText,IndividualViewModel individualViewModel) {
 //        individualList.clear();
 //        if(socialgroup != null)
 //            try {
-//                List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getUuid());
+//                List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getExtId());
 //
 //                if (list != null) {
 //                    individualList.addAll(list);
 //                }
 //
 //                if (list.isEmpty()) {
-//                    Toast.makeText(activity.getActivity(), "No Active Individual Found", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(fragment.requireContext(), "No Active Individual Found", Toast.LENGTH_SHORT).show();
 //                }
 //
 //            } catch (ExecutionException e) {
@@ -221,31 +178,40 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
 //                e.printStackTrace();
 //            }
 //        notifyDataSetChanged();
-//        activity.dismissLoadingDialogs();
 //    }
 
-    public void filter(String charText,IndividualViewModel individualViewModel) {
+//    public void filterAsync(String charText, IndividualViewModel individualViewModel) {
+//        individualList.clear();
+//
+//        if (socialgroup != null) {
+//            ExecutorService executor = Executors.newSingleThreadExecutor();
+//            Handler handler = new Handler(Looper.getMainLooper());
+//
+//            executor.execute(() -> {
+//                try {
+//                    List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getExtId());
+//
+//                    handler.post(() -> {
+//                        if (list != null && !list.isEmpty()) {
+//                            individualList.addAll(list);
+//                        } else {
+//                            Toast.makeText(fragment.requireContext(), "No Active Individual Found", Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                        notifyDataSetChanged();
+//                    });
+//
+//                } catch (ExecutionException | InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            });
+//        }
+//    }
+
+    public void setIndividualList(List<Individual> individuals) {
         individualList.clear();
-        if(socialgroup != null)
-            try {
-                List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getExtId());
-
-                if (list != null) {
-                    individualList.addAll(list);
-                }
-
-                if (list.isEmpty()) {
-                    Toast.makeText(fragment.requireContext(), "No Active Individual Found", Toast.LENGTH_SHORT).show();
-                }
-
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        individualList.addAll(individuals);
         notifyDataSetChanged();
     }
-
-
 
 }

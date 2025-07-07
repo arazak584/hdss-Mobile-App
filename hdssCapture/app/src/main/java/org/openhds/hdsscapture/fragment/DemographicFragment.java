@@ -37,6 +37,7 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.HvisitAmendment;
 import org.openhds.hdsscapture.entity.subentity.IndividualPhone;
 import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
+import org.openhds.hdsscapture.entity.subentity.LocationAmendment;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 
 import java.text.SimpleDateFormat;
@@ -274,61 +275,95 @@ public class DemographicFragment extends DialogFragment {
             }
 
             IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            executor.execute(() -> {
+            try {
 
-                try {
-                    // Second block - visited update (with different variable name)
-                    Individual visitedData = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
-                    if (visitedData != null) {
-                        IndividualVisited visited = new IndividualVisited();
-                        visited.uuid = binding.getDemographic().individual_uuid;
-                        visited.complete = 1;
-
-                        iview.visited(visited, result ->
-                                new Handler(Looper.getMainLooper()).post(() -> {
-                                    if (result > 0) {
-                                        Log.d("DemographicFragment", "Visit Update successful!");
-                                    } else {
-                                        Log.d("DemographicFragment", "Visit Update Failed!");
-                                    }
-                                })
-                        );
-                    }
-                } catch (Exception e) {
-                    Log.e("DemographicFragment", "Error in visited update", e);
-                    e.printStackTrace();
+                Individual visitedData = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                if (visitedData != null) {
+                    IndividualVisited visited = new IndividualVisited();
+                    visited.uuid = binding.getDemographic().individual_uuid;
+                    visited.complete = 1;
+                    iview.visited(visited);
                 }
 
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-                //Update Phone Number for Individual
-                try {
-                    Individual data = iview.find(HouseMembersFragment.selectedIndividual.uuid);
-                    String phone1 = binding.getDemographic().phone1;
-                    if (data != null && phone1 != null && phone1.length() == 10) {
-                        IndividualPhone cnt = new IndividualPhone();
-                        cnt.uuid = finalData.individual_uuid;
-                        cnt.phone1 = binding.getDemographic().phone1;
+            try {
 
-                        iview.contact(cnt, result ->
-                                new Handler(Looper.getMainLooper()).post(() -> {
-                                    if (result > 0) {
-                                        Log.d("DemographicFragment", "Phone Update successful!");
-                                    } else {
-                                        Log.d("DemographicFragment", "Phone Update Failed!");
-                                    }
-                                })
-                        );
-                    }
-
-                } catch (Exception e) {
-                    Log.e("DemographicFragment", "Error in update", e);
-                    e.printStackTrace();
+                Individual data = iview.find(HouseMembersFragment.selectedIndividual.uuid);
+                String phone1 = binding.getDemographic().phone1;
+                if (data != null && phone1 != null && phone1.length() == 10) {
+                    IndividualPhone cnt = new IndividualPhone();
+                    cnt.uuid = finalData.individual_uuid;
+                    cnt.phone1 = binding.getDemographic().phone1;
+                    iview.contact(cnt);
                 }
 
-            });
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-            executor.shutdown();
+
+//            ExecutorService executor = Executors.newSingleThreadExecutor();
+//            executor.execute(() -> {
+//
+//                try {
+//                    // Second block - visited update (with different variable name)
+//                    Individual visitedData = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+//                    if (visitedData != null) {
+//                        IndividualVisited visited = new IndividualVisited();
+//                        visited.uuid = binding.getDemographic().individual_uuid;
+//                        visited.complete = 1;
+//
+//                        iview.visited(visited, result ->
+//                                new Handler(Looper.getMainLooper()).post(() -> {
+//                                    if (result > 0) {
+//                                        Log.d("DemographicFragment", "Visit Update successful!");
+//                                    } else {
+//                                        Log.d("DemographicFragment", "Visit Update Failed!");
+//                                    }
+//                                })
+//                        );
+//                    }
+//                } catch (Exception e) {
+//                    Log.e("DemographicFragment", "Error in visited update", e);
+//                    e.printStackTrace();
+//                }
+//
+//
+//                //Update Phone Number for Individual
+//                try {
+//                    Individual data = iview.find(HouseMembersFragment.selectedIndividual.uuid);
+//                    String phone1 = binding.getDemographic().phone1;
+//                    if (data != null && phone1 != null && phone1.length() == 10) {
+//                        IndividualPhone cnt = new IndividualPhone();
+//                        cnt.uuid = finalData.individual_uuid;
+//                        cnt.phone1 = binding.getDemographic().phone1;
+//
+//                        iview.contact(cnt, result ->
+//                                new Handler(Looper.getMainLooper()).post(() -> {
+//                                    if (result > 0) {
+//                                        Log.d("DemographicFragment", "Phone Update successful!");
+//                                    } else {
+//                                        Log.d("DemographicFragment", "Phone Update Failed!");
+//                                    }
+//                                })
+//                        );
+//                    }
+//
+//                } catch (Exception e) {
+//                    Log.e("DemographicFragment", "Error in update", e);
+//                    e.printStackTrace();
+//                }
+//
+//            });
+//
+//            executor.shutdown();
 
             Date end = new Date(); // Get the current date and time
             // Create a Calendar instance and set it to the current date and time

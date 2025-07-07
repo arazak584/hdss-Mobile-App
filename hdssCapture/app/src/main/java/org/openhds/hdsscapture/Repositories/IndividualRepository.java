@@ -17,6 +17,7 @@ import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
 import org.openhds.hdsscapture.entity.subentity.IndividualPhone;
 import org.openhds.hdsscapture.entity.subentity.IndividualResidency;
 import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
+import org.openhds.hdsscapture.entity.subentity.LocationAmendment;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -96,11 +97,23 @@ public class IndividualRepository {
 //        return row.intValue();
 //    }
 
-    public void contact(IndividualPhone e, Consumer<Integer> callback) {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
-            int result = dao.contact(e);
-            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
-        });
+//    public void contact(IndividualPhone e, Consumer<Integer> callback) {
+//        AppDatabase.databaseWriteExecutor.execute(() -> {
+//            int result = dao.contact(e);
+//            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+//        });
+//    }
+
+    public int visited(IndividualVisited s) {
+        AtomicInteger row = new AtomicInteger();
+        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.visited(s)));
+        return row.intValue();
+    }
+
+    public int contact(IndividualPhone s) {
+        AtomicInteger row = new AtomicInteger();
+        AppDatabase.databaseWriteExecutor.execute(() -> row.set(dao.contact(s)));
+        return row.intValue();
     }
 
     public void updateres(IndividualResidency e, Consumer<Integer> callback) {
@@ -165,6 +178,9 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public LiveData<List<Individual>> retrieveByHouseId(String id) {
+        return dao.retrieveByHouseId(id); // No Future or Callable needed
+    }
 
     public List<Individual> retrieveReturn(String id) throws ExecutionException, InterruptedException {
 

@@ -1392,35 +1392,21 @@ public class VaccinationFragment extends Fragment {
             finalData.complete=1;
 
             IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            executor.execute(() -> {
+            try {
 
-                try {
-                    Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
-                    if (data != null) {
-                        IndividualVisited visited = new IndividualVisited();
-                        visited.uuid = finalData.individual_uuid;
-                        visited.complete = 1;
-
-                        iview.visited(visited, result ->
-                                new Handler(Looper.getMainLooper()).post(() -> {
-                                    if (result > 0) {
-                                        Log.d("RelationshipFragment", "visit Update successful!");
-                                    } else {
-                                        Log.d("RelationshipFragment", "visit Update Failed!");
-                                    }
-                                })
-                        );
-                    }
-
-                } catch (Exception e) {
-                    Log.e("RelationshipFragment", "Error in update", e);
-                    e.printStackTrace();
+                Individual visitedData = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                if (visitedData != null) {
+                    IndividualVisited visited = new IndividualVisited();
+                    visited.uuid = finalData.individual_uuid;
+                    visited.complete = 1;
+                    iview.visited(visited);
                 }
 
-            });
-
-            executor.shutdown();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             viewModel.add(finalData);
 

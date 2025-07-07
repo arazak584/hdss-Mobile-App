@@ -295,35 +295,52 @@ public class MorbidityFragment extends Fragment {
             finalData.complete=1;
 
             IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            executor.execute(() -> {
+            try {
 
-                try {
-                    Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
-                    if (data != null) {
-                        IndividualVisited visited = new IndividualVisited();
-                        visited.uuid = finalData.individual_uuid;
-                        visited.complete = 1;
-
-                        iview.visited(visited, result ->
-                                new Handler(Looper.getMainLooper()).post(() -> {
-                                    if (result > 0) {
-                                        Log.d("morbidityFragment", "visit Update successful!");
-                                    } else {
-                                        Log.d("morbidityFragment", "visit Update Failed!");
-                                    }
-                                })
-                        );
-                    }
-
-                } catch (Exception e) {
-                    Log.e("pregnancyFragment", "Error in update", e);
-                    e.printStackTrace();
+                Individual visitedData = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                if (visitedData != null) {
+                    IndividualVisited visited = new IndividualVisited();
+                    visited.uuid = finalData.individual_uuid;
+                    visited.complete = 1;
+                    iview.visited(visited);
                 }
 
-            });
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-            executor.shutdown();
+//            IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
+//            ExecutorService executor = Executors.newSingleThreadExecutor();
+//            executor.execute(() -> {
+//
+//                try {
+//                    Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+//                    if (data != null) {
+//                        IndividualVisited visited = new IndividualVisited();
+//                        visited.uuid = finalData.individual_uuid;
+//                        visited.complete = 1;
+//
+//                        iview.visited(visited, result ->
+//                                new Handler(Looper.getMainLooper()).post(() -> {
+//                                    if (result > 0) {
+//                                        Log.d("morbidityFragment", "visit Update successful!");
+//                                    } else {
+//                                        Log.d("morbidityFragment", "visit Update Failed!");
+//                                    }
+//                                })
+//                        );
+//                    }
+//
+//                } catch (Exception e) {
+//                    Log.e("pregnancyFragment", "Error in update", e);
+//                    e.printStackTrace();
+//                }
+//
+//            });
+//
+//            executor.shutdown();
 
             viewModel.add(finalData);
         }
