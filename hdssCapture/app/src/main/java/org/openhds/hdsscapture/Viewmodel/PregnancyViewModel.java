@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.PregnancyRepository;
 import org.openhds.hdsscapture.entity.Individual;
@@ -88,6 +89,11 @@ public class PregnancyViewModel extends AndroidViewModel {
     public Pregnancy findpreg(String id) throws ExecutionException, InterruptedException {
         return pregnancyRepository.findpreg(id);
     }
+
+    public LiveData<Pregnancy> getView(String id) {
+        return pregnancyRepository.view(id);
+    }
+
 
     public long count(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
         return pregnancyRepository.count(startDate, endDate, username);

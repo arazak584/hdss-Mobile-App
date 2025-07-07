@@ -2,6 +2,8 @@ package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
+
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.PregnancyDao;
 import org.openhds.hdsscapture.entity.Individual;
@@ -186,6 +188,10 @@ public class PregnancyRepository {
         Future<Pregnancy> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
+    }
+
+    public LiveData<Pregnancy> view(String id) {
+        return dao.getView(id);
     }
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {

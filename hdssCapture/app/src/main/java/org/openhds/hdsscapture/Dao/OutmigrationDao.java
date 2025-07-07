@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Outcome;
@@ -69,4 +70,7 @@ public interface OutmigrationDao {
 
     @Query("SELECT * FROM outmigration where uuid=:id AND complete!=1 ")
     Outmigration ins(String id);
+
+    @Query("SELECT uuid, 'Outmigration' AS formType, 'Outmigration: ' || ' (' || insertDate || ')' AS displayText FROM outmigration WHERE complete = 1")
+    List<CompletedForm> getCompletedForms();
 }

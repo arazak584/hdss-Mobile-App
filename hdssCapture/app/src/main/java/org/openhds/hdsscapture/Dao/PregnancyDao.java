@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -7,6 +8,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
@@ -69,6 +71,8 @@ public interface PregnancyDao {
     @Query("SELECT * FROM pregnancy where uuid=:id AND complete!=1")
     Pregnancy ins(String id);
 
+
+
     @Query("SELECT a.uuid, b.firstName, b.lastName, a.insertDate,b.hohID, b.extId as visit_uuid,a.recordedDate " +
             " FROM pregnancy as a INNER JOIN individual as b ON a.individual_uuid = b.uuid " +
             " WHERE a.insertDate >= (SELECT r.startDate from round r ORDER BY r.roundNumber DESC limit 1) AND (a.outcome IS NULL OR a.outcome != 2) AND b.hohID = :id ")
@@ -112,4 +116,10 @@ public interface PregnancyDao {
 
     @Query("SELECT COUNT(*) FROM pregnancy WHERE status=2 AND fw_uuid = :uuid ")
     long rej(String uuid);
+
+    @Query("SELECT uuid, 'Pregnancy' AS formType, 'Pregnancy: ' || ' (' || insertDate || ')' AS displayText FROM pregnancy WHERE complete = 1")
+    List<CompletedForm> getCompletedForms();
+
+    @Query("SELECT * FROM pregnancy where uuid=:id")
+    LiveData<Pregnancy> getView(String id);
 }

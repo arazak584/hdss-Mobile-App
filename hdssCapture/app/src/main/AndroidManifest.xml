@@ -98,7 +98,7 @@
             android:name=".Duplicate.DuplicateActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.ViewActivity"
+            android:name=".Views.ViewActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.QueryActivity"

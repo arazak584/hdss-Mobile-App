@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="20dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
-    android:orientation="vertical"
-    tools:context=".Activity.ViewActivity">
+    tools:context=".Views.ViewActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,73 +13,29 @@
         android:elevation="15dp"
         android:background="@color/white"
         android:orientation="horizontal">
-
-
-        <TextView
-            android:id="@+id/app"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:text="@string/new_hl"
-            android:textAlignment="center"
-            android:layout_gravity="center"
-            android:textColor="@color/black"/>
-
-
-            <Button
-                    android:id="@+id/btnSync"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="@string/sync"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"
-                    android:textAlignment="center"
-                    android:textSize="25sp" />
-
-
+        <!-- Optional top bar -->
     </LinearLayout>
 
-    <ScrollView
+    <SearchView
+        android:id="@+id/searchloc"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="fill">
+        android:layout_height="wrap_content"
+        android:minHeight="48dip"
+        android:inputType="textPersonName|textCapCharacters"
+        android:queryHint="@string/search" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="fill"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="visible">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_completed"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical" />
 
-            <SearchView
-                android:id="@+id/searchloc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="48dip"
-                android:inputType="textPersonName|textCapCharacters"
-                android:queryHint="@string/search">
-
-                <requestFocus />
-            </SearchView>
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/my_recycler_view_all"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:scrollbars="vertical"/>
-
-
-        </LinearLayout>
-
-
-    </ScrollView>
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#FFFFFF" />
 
 </LinearLayout>

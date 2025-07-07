@@ -32,10 +32,10 @@ public class CompletedFormsViewModel extends AndroidViewModel {
 
     public List<CompletedForm> getAllCompletedForms() {
         List<CompletedForm> all = new ArrayList<>();
-        //all.addAll(pregDao.getCompletedForms());
+        all.addAll(pregDao.getCompletedForms());
         all.addAll(deathDao.getCompletedForms());
-        //all.addAll(migInDao.getCompletedForms());
-        //all.addAll(migOutDao.getCompletedForms());
+        all.addAll(migInDao.getCompletedForms());
+        all.addAll(migOutDao.getCompletedForms());
         return all;
     }
 }

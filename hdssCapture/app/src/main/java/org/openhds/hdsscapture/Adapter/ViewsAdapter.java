@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.openhds.hdsscapture.Activity.ViewActivity;
+import org.openhds.hdsscapture.Views.ViewActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.entity.subqueries.Newloc;
 

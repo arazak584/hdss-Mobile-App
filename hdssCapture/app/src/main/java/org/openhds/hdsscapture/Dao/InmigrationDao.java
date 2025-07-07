@@ -5,6 +5,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
@@ -46,4 +47,7 @@ public interface InmigrationDao {
 
     @Query("SELECT * FROM inmigration where uuid=:id AND complete!=1")
     Inmigration ins(String id);
+
+    @Query("SELECT uuid, 'Inmigration' AS formType, 'Inmigration: ' || ' (' || insertDate || ')' AS displayText FROM inmigration WHERE complete = 1")
+    List<CompletedForm> getCompletedForms();
 }
