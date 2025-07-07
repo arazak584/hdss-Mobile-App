@@ -355,7 +355,6 @@ public class DeathFragment extends DialogFragment {
 
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute(() -> {
-
                 //Set Relationship to Widowed
                 try {
                     // Second block - visited update (with different variable name)

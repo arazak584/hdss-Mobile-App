@@ -18,12 +18,14 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Utilities.UniqueIDGen;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.databinding.FragmentBirthCBinding;
+import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
@@ -247,34 +249,41 @@ public class Birth3CFragment extends Fragment {
                     boolean weight = false;
                     if (inf.chd_weight!=null && inf.chd_weight == 1 && !binding.weigHcard.getText().toString().trim().isEmpty()) {
                         double childWeight = Double.parseDouble(binding.weigHcard.getText().toString().trim());
-                        if (childWeight < 1.0 || childWeight > 5.0) {
+                        if (childWeight < 1.0 || childWeight > 6.0) {
                             weight = true;
-                            binding.weigHcard.setError("Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0");
-                            Toast.makeText(getContext(), "Child Weight Cannot be More than 5.0 Kilograms or Less than 1.0", Toast.LENGTH_LONG).show();
+                            binding.weigHcard.setError("Child Weight Cannot be More than 6.0 Kilograms or Less than 1.0");
+                            Toast.makeText(getContext(), "Child Weight Cannot be More than 6.0 Kilograms or Less than 1.0", Toast.LENGTH_LONG).show();
                             return;
                         }
                     }
+
+                    ConfigViewModel viewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
+                    List<Configsettings> configsettings = null;
+                    try {
+                        configsettings = viewModel.findAll();
+                    } catch (ExecutionException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    int mis = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).mis : 0;  // e.g., 19
+                    int stb = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).stb : 0;  // e.g., 20
 
                     if (finalData.outcomeDate != null && finalData.conceptionDate != null) {
                         Date outcomeDate = finalData.outcomeDate;
                         Date conceptionDate = finalData.conceptionDate;
 
-                        // Calculate the difference in milliseconds
                         long diffInMillis = outcomeDate.getTime() - conceptionDate.getTime();
-
-                        // Convert milliseconds to days
                         long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMillis);
-
-                        // Convert days to weeks
                         int totalWeeks = (int) (diffInDays / 7);
 
-                        if (totalWeeks < 20 && (inf.type == 1 || inf.type == 2)) {
-                            // Display message for Live Birth or Still Birth
-                            Toast.makeText(getActivity(), "Outcome cannot be Live Birth or Still Birth for " + totalWeeks + " Weeks Pregnancy", Toast.LENGTH_LONG).show();
+                        // Miscarriage or Abortion allowed only if weeks <= mis
+                        if ((inf.type == 3 || inf.type == 4) && totalWeeks > mis) {
+                            Toast.makeText(getActivity(), "Miscarriage or Abortion is not allowed beyond " + mis + " weeks", Toast.LENGTH_LONG).show();
                             return;
-                        } else if (totalWeeks > 19 && inf.type == 3) {
-                            // Display message for Miscarriage
-                            Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalWeeks + " Weeks Pregnancy", Toast.LENGTH_LONG).show();
+                        }
+
+                        // Live Birth or Still Birth allowed only if weeks >= stb
+                        if ((inf.type == 1 || inf.type == 2) && totalWeeks < stb) {
+                            Toast.makeText(getActivity(), "Live Birth or Still Birth is not allowed before " + stb + " weeks", Toast.LENGTH_LONG).show();
                             return;
                         }
                     }

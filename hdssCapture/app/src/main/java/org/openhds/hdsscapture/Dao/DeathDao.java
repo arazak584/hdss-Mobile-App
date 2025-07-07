@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
@@ -83,5 +84,8 @@ public interface DeathDao {
 
     @Query("SELECT * FROM death where uuid=:id AND complete!=1")
     Death ins(String id);
+
+    @Query("SELECT uuid, 'Death' AS formType, 'Death: ' || firstName || ' ' ||  lastName || ' (' || deathDate || ')' AS displayText FROM Death WHERE complete = 1")
+    List<CompletedForm> getCompletedForms();
 
 }

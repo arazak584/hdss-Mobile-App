@@ -300,6 +300,7 @@ public class ListingFragment extends Fragment {
                     data.longitude = ClusterFragment.selectedLocation.getLongitude();
                     data.latitude = ClusterFragment.selectedLocation.getLatitude();
                     data.accuracy = ClusterFragment.selectedLocation.getAccuracy();
+                    data.altitude = ClusterFragment.selectedLocation.getAltitude();
                 }
 
 
@@ -476,30 +477,6 @@ public class ListingFragment extends Fragment {
                         locationz.accuracy = binding.getListing().accuracy;
                         locationz.altitude = binding.getListing().altitude;
                     }
-
-//                    // Assuming vill_extId is a String
-//                    String villExtId = binding.getListing().vill_extId;
-//                    String compExtId = finalData.compextId;
-//                    Log.d("Listing", "Generated Villcode: " + villExtId);
-//
-//                    // Determine the desired format for compExtId based on the length of villExtId
-//                    if (villExtId.length() == 3) {
-//                        // If vill_extId has 3 characters, pick the last 4 numbers from finalData.compno
-//                        int startIndex = Math.max(finalData.compno.length() - 4, 0);
-//                        compExtId = villExtId + "00" + finalData.compno.substring(startIndex);
-//                        Log.d("Listing", "Generated Compno: " + compExtId);
-//                    } else if (villExtId.length() == 4) {
-//                        // If vill_extId has 4 characters, pick the last 3 numbers from finalData.compno
-//                        int startIndex = Math.max(finalData.compno.length() - 3, 0);
-//                        compExtId = villExtId + "00" + finalData.compno.substring(startIndex);
-//                        Log.d("Listing", "Generated Compno: " + compExtId);
-//
-//                    } else {
-//                        // Handle other cases or validation as needed
-//                        compExtId = finalData.compextId; // Keep the original value
-//                    }
-//
-//                    locationz.compextId = compExtId;
                     locationz.complete = 1;
 
                     locationViewModel.update(locationz);
