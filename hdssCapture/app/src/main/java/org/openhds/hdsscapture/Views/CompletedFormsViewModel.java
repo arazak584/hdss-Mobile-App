@@ -4,6 +4,8 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.DeathDao;
@@ -30,12 +32,36 @@ public class CompletedFormsViewModel extends AndroidViewModel {
         this.migOutDao = db.outmigrationDao();
     }
 
-    public List<CompletedForm> getAllCompletedForms() {
-        List<CompletedForm> all = new ArrayList<>();
-        all.addAll(pregDao.getCompletedForms());
-        all.addAll(deathDao.getCompletedForms());
-        all.addAll(migInDao.getCompletedForms());
-        all.addAll(migOutDao.getCompletedForms());
-        return all;
+    public LiveData<List<CompletedForm>> getAllCompletedForms() {
+        MutableLiveData<List<CompletedForm>> result = new MutableLiveData<>();
+
+        // Execute on background thread using the database executor
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            try {
+                List<CompletedForm> all = new ArrayList<>();
+
+                // Get completed forms from each DAO
+                List<CompletedForm> pregnancies = pregDao.getCompletedForms();
+                List<CompletedForm> deaths = deathDao.getCompletedForms();
+                List<CompletedForm> inmigrations = migInDao.getCompletedForms();
+                List<CompletedForm> outmigrations = migOutDao.getCompletedForms();
+
+                // Add all forms to the combined list
+                if (pregnancies != null) all.addAll(pregnancies);
+                if (deaths != null) all.addAll(deaths);
+                if (inmigrations != null) all.addAll(inmigrations);
+                if (outmigrations != null) all.addAll(outmigrations);
+
+                // Post the result back to the main thread
+                result.postValue(all);
+
+            } catch (Exception e) {
+                // Handle any database errors
+                e.printStackTrace();
+                result.postValue(new ArrayList<>()); // Return empty list on error
+            }
+        });
+
+        return result;
     }
 }

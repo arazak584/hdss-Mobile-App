@@ -26,7 +26,9 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.RelationshipDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.databinding.FragmentRelationshipBinding;
@@ -69,6 +71,8 @@ public class RelationshipFragment extends Fragment {
     private Individual individual;
     private FragmentRelationshipBinding binding;
     private ProgressDialog progressDialog;
+    private Locations selectedLocation;
+    private Individual selectedIndividual;
 
     public RelationshipFragment() {
         // Required empty public constructor
@@ -110,11 +114,16 @@ public class RelationshipFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentRelationshipBinding.inflate(inflater, container, false);
 
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
+
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
+        ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
+
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_partner);
-
         // Set a click listener on the button for partner
         showDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,10 +222,10 @@ public class RelationshipFragment extends Fragment {
         final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
         RelationshipViewModel viewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
         try {
-            Relationship data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+            Relationship data = viewModel.find(selectedIndividual.uuid);
             if (data != null) {
                 binding.setRelationship(data);
-                data.location_uuid = ClusterFragment.selectedLocation.getUuid();
+                data.location_uuid = selectedLocation.getUuid();
                 binding.getRelationship().setFormcompldate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                 if(data.status!=null && data.status==2){
                     cmt.setVisibility(View.VISIBLE);
@@ -250,9 +259,9 @@ public class RelationshipFragment extends Fragment {
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
 
-                data.individualA_uuid = HouseMembersFragment.selectedIndividual.getUuid();
-                data.dob = HouseMembersFragment.selectedIndividual.dob;
-                data.location_uuid = ClusterFragment.selectedLocation.getUuid();
+                data.individualA_uuid = selectedIndividual.getUuid();
+                data.dob = selectedIndividual.dob;
+                data.location_uuid = selectedLocation.getUuid();
 
                 Date currentDate = new Date(); // Get the current date and time
                 // Create a Calendar instance and set it to the current date and time
@@ -395,7 +404,7 @@ public class RelationshipFragment extends Fragment {
             IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
             try {
 
-                Individual visitedData = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                Individual visitedData = iview.visited(selectedIndividual.uuid);
                 if (visitedData != null) {
                     IndividualVisited visited = new IndividualVisited();
                     visited.uuid = finalData.individualA_uuid;

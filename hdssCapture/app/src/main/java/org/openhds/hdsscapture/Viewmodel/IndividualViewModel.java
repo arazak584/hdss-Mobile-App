@@ -196,6 +196,14 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.findIndividualsBatched(gender, minAge, maxAge, status);
     }
 
+    public List<Individual> dupRegistration(String uuid,String ghcard,String phone) throws ExecutionException, InterruptedException {
+        return individualRepository.dupRegistration(uuid, ghcard,phone);
+    }
+
+    public List<Individual> DuplicatesByPhone(String uuid,String ghcard) throws ExecutionException, InterruptedException {
+        return individualRepository.DuplicatesByPhone(uuid, ghcard);
+    }
+
     public void add(Individual data){ individualRepository.create(data);}
 
     public void add(Individual... data){

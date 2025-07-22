@@ -33,6 +33,7 @@ public class SocialgroupAdapter extends RecyclerView.Adapter<SocialgroupAdapter.
     private final List<Socialgroup> socialgroupList;
     private Residency residency;
     private final Individual individual;
+    private final String compno;
 
     public interface HouseholdSelectionListener {
         void onHouseholdSelected(String HouseholdId);
@@ -44,10 +45,11 @@ public class SocialgroupAdapter extends RecyclerView.Adapter<SocialgroupAdapter.
         this.listener = listener;
     }
 
-    public SocialgroupAdapter(HouseholdDialogFragment activity, Locations locations, Individual individual) {
+    public SocialgroupAdapter(HouseholdDialogFragment activity, Locations locations, Individual individual,String compno) {
         this.activity = activity;
         this.locations = locations;
         this.individual = individual;
+        this.compno = compno;
         socialgroupList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -109,9 +111,9 @@ public class SocialgroupAdapter extends RecyclerView.Adapter<SocialgroupAdapter.
 
     public void filter(String charText, SocialgroupViewModel socialgroupViewModel) {
         socialgroupList.clear();
-            if(ClusterFragment.selectedLocation != null)
+            if(compno != null)
                 try {
-                    List<Socialgroup> list = socialgroupViewModel.changehousehold(ClusterFragment.selectedLocation.getCompno());
+                    List<Socialgroup> list = socialgroupViewModel.changehousehold(compno);
 
                     if (list != null) {
                         socialgroupList.addAll(list);

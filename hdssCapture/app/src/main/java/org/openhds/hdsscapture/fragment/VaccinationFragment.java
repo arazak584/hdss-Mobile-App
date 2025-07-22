@@ -22,7 +22,9 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.databinding.FragmentVaccinationBinding;
@@ -64,6 +66,8 @@ public class VaccinationFragment extends Fragment {
     private Individual individual;
     private FragmentVaccinationBinding binding;
     private Vaccination vaccination;
+    private Locations selectedLocation;
+    private Individual selectedIndividual;
 
     public VaccinationFragment() {
         // Required empty public constructor
@@ -106,9 +110,14 @@ public class VaccinationFragment extends Fragment {
         binding = FragmentVaccinationBinding.inflate(inflater, container, false);
         binding.setVaccination(vaccination);
 
-        final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
 
+        final TextView ind = binding.getRoot().findViewById(R.id.ind);
+        ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
+
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -431,7 +440,7 @@ public class VaccinationFragment extends Fragment {
 
         VaccinationViewModel viewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
         try {
-            Vaccination data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+            Vaccination data = viewModel.find(selectedIndividual.uuid);
             if (data != null) {
                 binding.setVaccination(data);
 
@@ -446,9 +455,9 @@ public class VaccinationFragment extends Fragment {
                 }
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.location_uuid = ClusterFragment.selectedLocation.uuid;
+                data.location_uuid = selectedLocation.uuid;
                 data.socialgroup_uuid = socialgroup.uuid;
-                data.dob = HouseMembersFragment.selectedIndividual.dob;
+                data.dob = selectedIndividual.dob;
 
                 if (data.bcg!=null){
                     binding.btnBcg.setEnabled(false);
@@ -722,10 +731,10 @@ public class VaccinationFragment extends Fragment {
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
-                data.individual_uuid = HouseMembersFragment.selectedIndividual.uuid;
-                data.location_uuid = ClusterFragment.selectedLocation.uuid;
+                data.individual_uuid = selectedIndividual.uuid;
+                data.location_uuid = selectedLocation.uuid;
                 data.socialgroup_uuid = socialgroup.uuid;
-                data.dob = HouseMembersFragment.selectedIndividual.dob;
+                data.dob = selectedIndividual.dob;
                 data.complete = 1;
 
                 Date currentDate = new Date(); // Get the current date and time
@@ -1394,7 +1403,7 @@ public class VaccinationFragment extends Fragment {
             IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
             try {
 
-                Individual visitedData = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                Individual visitedData = iview.visited(selectedIndividual.uuid);
                 if (visitedData != null) {
                     IndividualVisited visited = new IndividualVisited();
                     visited.uuid = finalData.individual_uuid;

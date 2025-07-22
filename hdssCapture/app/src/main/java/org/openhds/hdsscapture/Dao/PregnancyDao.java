@@ -117,7 +117,7 @@ public interface PregnancyDao {
     @Query("SELECT COUNT(*) FROM pregnancy WHERE status=2 AND fw_uuid = :uuid ")
     long rej(String uuid);
 
-    @Query("SELECT uuid, 'Pregnancy' AS formType, 'Pregnancy: ' || ' (' || insertDate || ')' AS displayText FROM pregnancy WHERE complete = 1")
+    @Query("SELECT a.uuid, 'Pregnancy' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM pregnancy as a inner join individual as b ON a.individual_uuid=b.uuid WHERE a.complete = 1")
     List<CompletedForm> getCompletedForms();
 
     @Query("SELECT * FROM pregnancy where uuid=:id")

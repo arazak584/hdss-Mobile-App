@@ -27,8 +27,10 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.FatherOutcomeDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
@@ -80,6 +82,8 @@ public class BirthFragment extends Fragment {
     private Individual individual;
     private FragmentBirthBinding binding;
     private ProgressDialog progressDialog;
+    private Locations selectedLocation;
+    private Individual selectedIndividual;
 
     public BirthFragment() {
         // Required empty public constructor
@@ -122,11 +126,17 @@ public class BirthFragment extends Fragment {
         //return inflater.inflate(R.layout.fragment_birth, container, false);
         binding = FragmentBirthBinding.inflate(inflater, container, false);
 
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
+
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
+        ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
 
         final Intent intent = getActivity().getIntent();
         final Round roundData = intent.getParcelableExtra(HierarchyActivity.ROUND_DATA);
+
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
         Button showDialogButtons = binding.getRoot().findViewById(R.id.button_outcome_father);
 
@@ -194,7 +204,7 @@ public class BirthFragment extends Fragment {
         PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         try {
-            Pregnancyoutcome data = viewModel.findloc(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.compno);
+            Pregnancyoutcome data = viewModel.findloc(selectedIndividual.uuid, selectedLocation.compno);
             if (data != null) {
                 binding.setPregoutcome(data);
                 binding.buttonOutcomeConception.setEnabled(false);
@@ -204,7 +214,7 @@ public class BirthFragment extends Fragment {
                 binding.whoAnc.setEnabled(false);
                 binding.numAnc.setEnabled(false);
                 binding.preguuid.setEnabled(false);
-                data.location = ClusterFragment.selectedLocation.uuid;
+                data.location = selectedLocation.uuid;
 
                 if(data.status!=null && data.status==2){
                     cmt.setVisibility(View.VISIBLE);
@@ -213,7 +223,7 @@ public class BirthFragment extends Fragment {
                 }
                 Log.d("Outcome", "Status Option "+ data.status);
 
-                Pregnancy dts = pregnancyViewModel.out(HouseMembersFragment.selectedIndividual.uuid);
+                Pregnancy dts = pregnancyViewModel.out(selectedIndividual.uuid);
                 if (dts != null){
                     data.outcomeDate = dts.outcome_date;
                     data.conceptionDate = dts.recordedDate;
@@ -226,7 +236,7 @@ public class BirthFragment extends Fragment {
             } else {
                 data = new Pregnancyoutcome();
 
-                Pregnancy dts = pregnancyViewModel.out(HouseMembersFragment.selectedIndividual.uuid);
+                Pregnancy dts = pregnancyViewModel.out(selectedIndividual.uuid);
                 if (dts != null){
                     data.outcomeDate = dts.outcome_date;
                     data.conceptionDate = dts.recordedDate;
@@ -256,9 +266,9 @@ public class BirthFragment extends Fragment {
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fw;
                 data.uuid = uuidString;
-                data.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
+                data.mother_uuid = selectedIndividual.getUuid();
                 //data.complete = 1;
-                data.location = ClusterFragment.selectedLocation.uuid;
+                data.location = selectedLocation.uuid;
 
                 Date currentDate = new Date(); // Get the current date and time
                 // Create a Calendar instance and set it to the current date and time
@@ -495,7 +505,7 @@ public class BirthFragment extends Fragment {
 
             }
 
-            finalData.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
+            finalData.mother_uuid = selectedIndividual.getUuid();
             finalData.visit_uuid = binding.getPregoutcome().visit_uuid;
             finalData.uuid = binding.getPregoutcome().uuid;
 
@@ -503,7 +513,7 @@ public class BirthFragment extends Fragment {
             IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
             try {
 
-                Individual visitedData = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                Individual visitedData = iview.visited(selectedIndividual.uuid);
                 if (visitedData != null) {
                     IndividualVisited visited = new IndividualVisited();
                     visited.uuid = finalData.mother_uuid;

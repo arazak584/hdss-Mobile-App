@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentDupDialogBinding;
 import org.openhds.hdsscapture.entity.Individual;
@@ -43,6 +45,7 @@ public class DupDialogFragment extends DialogFragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentDupDialogBinding binding;
+    private Locations selectedLocation;
 
     public DupDialogFragment() {
         // Required empty public constructor
@@ -87,12 +90,20 @@ public class DupDialogFragment extends DialogFragment {
         // Inflate the layout for this fragment
        View view = inflater.inflate(R.layout.fragment_dup_dialog, container, false);
 
-        final TextView compno = view.findViewById(R.id.textViewman_compextId);
-        if (ClusterFragment.selectedLocation.compno != null) {
-            compno.setText(ClusterFragment.selectedLocation.getCompno());
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        Locations selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+        String compno = selectedLocation != null ? selectedLocation.getCompno() : null;
+
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        Individual selectedIndividual = sharedModel.getCurrentSelectedIndividual();
+        String individid = selectedIndividual !=null ? selectedIndividual.getUuid() : null;
+
+        final TextView compnos = view.findViewById(R.id.textViewman_compextId);
+        if (compno != null) {
+            compnos.setText(compno);
         } else {
             // Handle the case where locations is null
-            compno.setText("Error loading locations data");
+            compnos.setText("Error loading locations data");
         }
 
         Button closeButton = view.findViewById(R.id.button_rclose);
@@ -106,7 +117,7 @@ public class DupDialogFragment extends DialogFragment {
 
         //Load Father Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_duplicate);
-        final DupAdapter adapter = new DupAdapter(this, residency, locations, socialgroup );
+        final DupAdapter adapter = new DupAdapter(this, residency, locations, socialgroup,compno,individid );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
 

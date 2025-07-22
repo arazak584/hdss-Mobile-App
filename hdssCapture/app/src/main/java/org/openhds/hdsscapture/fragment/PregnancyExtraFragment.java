@@ -24,6 +24,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
@@ -67,6 +68,7 @@ public class PregnancyExtraFragment extends DialogFragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentPregnancyBinding binding;
+    private Individual selectedIndividual;
 
 
     public PregnancyExtraFragment() {
@@ -110,8 +112,11 @@ public class PregnancyExtraFragment extends DialogFragment {
         binding = FragmentPregnancyBinding.inflate(inflater, container, false);
         binding.setPregnancy(pregnancy);
 
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
+
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
+        ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
 
 
         final TextView title = binding.getRoot().findViewById(R.id.preg);
@@ -231,7 +236,7 @@ public class PregnancyExtraFragment extends DialogFragment {
         PregnancyViewModel pviewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
         try {
-            Pregnancy data = viewModel.finds(HouseMembersFragment.selectedIndividual.uuid);
+            Pregnancy data = viewModel.finds(selectedIndividual.uuid);
             if (data != null) {
                 binding.setPregnancy(data);
 
@@ -257,7 +262,7 @@ public class PregnancyExtraFragment extends DialogFragment {
                 data.sttime = timeString;
 
                 // Fetch the last record before the current one
-                Pregnancy previousPregnancy = viewModel.lastpregs(HouseMembersFragment.selectedIndividual.uuid, data.recordedDate);
+                Pregnancy previousPregnancy = viewModel.lastpregs(selectedIndividual.uuid, data.recordedDate);
                 if (previousPregnancy != null) {
                     binding.setPreg(previousPregnancy);
                 } else {
@@ -277,7 +282,7 @@ public class PregnancyExtraFragment extends DialogFragment {
                 }
 
                 // Fetch the last record before the current one
-                Pregnancy previousPregnancy = viewModel.lastpregs(HouseMembersFragment.selectedIndividual.uuid, data.recordedDate);
+                Pregnancy previousPregnancy = viewModel.lastpregs(selectedIndividual.uuid, data.recordedDate);
                 if (previousPregnancy != null) {
                     binding.setPreg(previousPregnancy);
                 } else {
@@ -288,7 +293,7 @@ public class PregnancyExtraFragment extends DialogFragment {
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
-                data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
+                data.individual_uuid = selectedIndividual.getUuid();
                 data.id = 2;
                 data.first_preg = 2;
 

@@ -28,8 +28,10 @@ import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.DuplicateViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentDupBinding;
 import org.openhds.hdsscapture.entity.Duplicate;
@@ -76,8 +78,9 @@ public class DupFragment extends DialogFragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentDupBinding binding;
-    private EventForm eventForm;
     private ProgressDialog progressDialog;
+    private Locations selectedLocation;
+    private Individual selectedIndividual;
 
     public DupFragment() {
         // Required empty public constructor
@@ -125,6 +128,12 @@ public class DupFragment extends DialogFragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
+
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+
         // Retrieve fw_uuid from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
         fw = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
@@ -133,7 +142,7 @@ public class DupFragment extends DialogFragment {
         Button showDialogButton1 = binding.getRoot().findViewById(R.id.button1_dup);
         Button showDialogButton2 = binding.getRoot().findViewById(R.id.button2_dup);
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
+        ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
 
         // Set a click listener on the button for partner
         showDialogButton.setOnClickListener(new View.OnClickListener() {
@@ -215,7 +224,7 @@ public class DupFragment extends DialogFragment {
 
         DuplicateViewModel viewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
         try {
-            Duplicate data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+            Duplicate data = viewModel.find(selectedIndividual.uuid);
             if (data != null) {
                 binding.setDup(data);
                 binding.fname.setEnabled(false);
@@ -236,11 +245,11 @@ public class DupFragment extends DialogFragment {
                 data = new Duplicate();
 
                 data.fw_uuid = fw;
-                data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
-                data.fname = HouseMembersFragment.selectedIndividual.getFirstName();
-                data.lname = HouseMembersFragment.selectedIndividual.getLastName();
-                data.dob = HouseMembersFragment.selectedIndividual.dob;
-                data.compno = ClusterFragment.selectedLocation.getCompno();
+                data.individual_uuid = selectedIndividual.getUuid();
+                data.fname = selectedIndividual.getFirstName();
+                data.lname = selectedIndividual.getLastName();
+                data.dob = selectedIndividual.dob;
+                data.compno = selectedLocation.getCompno();
 
                 binding.fname.setEnabled(false);
                 binding.lname.setEnabled(false);

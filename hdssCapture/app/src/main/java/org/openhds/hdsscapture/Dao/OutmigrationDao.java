@@ -71,6 +71,9 @@ public interface OutmigrationDao {
     @Query("SELECT * FROM outmigration where uuid=:id AND complete!=1 ")
     Outmigration ins(String id);
 
-    @Query("SELECT uuid, 'Outmigration' AS formType, 'Outmigration: ' || ' (' || insertDate || ')' AS displayText FROM outmigration WHERE complete = 1")
+    @Query("SELECT a.uuid, 'Outmigration' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM outmigration as a inner join individual as b ON a.individual_uuid=b.uuid WHERE a.complete = 1")
     List<CompletedForm> getCompletedForms();
+
+//    @Query("SELECT uuid, 'Outmigration' AS formType, 'Outmigration: ' || ' (' || insertDate || ')' AS displayText FROM outmigration WHERE complete = 1")
+//    List<CompletedForm> getCompletedForms();
 }

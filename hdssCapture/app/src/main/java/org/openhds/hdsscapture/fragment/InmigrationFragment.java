@@ -27,8 +27,10 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
@@ -75,6 +77,8 @@ public class InmigrationFragment extends Fragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentInmigrationBinding binding;
+    private Locations selectedLocation;
+    private Individual selectedIndividual;
 
     public InmigrationFragment() {
         // Required empty public constructor
@@ -117,11 +121,17 @@ public class InmigrationFragment extends Fragment {
         //return inflater.inflate(R.layout.fragment_inmigration, container, false);
         binding = FragmentInmigrationBinding.inflate(inflater, container, false);
 
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
+
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
+        ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -166,10 +176,10 @@ public class InmigrationFragment extends Fragment {
         mySpinner.setEnabled(false);
 
         try {
-            Inmigration dataimg = inmigrationViewModel.find(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
+            Inmigration dataimg = inmigrationViewModel.find(selectedIndividual.uuid, selectedLocation.getUuid());
             if (dataimg != null) {
                 binding.setInmigration(dataimg);
-                dataimg.location_uuid = ClusterFragment.selectedLocation.getUuid();
+                dataimg.location_uuid = selectedLocation.getUuid();
                 if (dataimg.status != null && dataimg.status == 2) {
                     cmt.setVisibility(View.VISIBLE);
                     rsv.setVisibility(View.VISIBLE);
@@ -195,7 +205,7 @@ public class InmigrationFragment extends Fragment {
         TextInputLayout end = binding.getRoot().findViewById(R.id.edate);
         AppCompatEditText ends = binding.getRoot().findViewById(R.id.endDate);
         try {
-            Residency datas = viewModel.finds(HouseMembersFragment.selectedIndividual.uuid);
+            Residency datas = viewModel.finds(selectedIndividual.uuid);
             if (datas != null) {
                 binding.setRes(datas);
                 end.setVisibility(View.VISIBLE);
@@ -211,7 +221,7 @@ public class InmigrationFragment extends Fragment {
         //Find residency_uuid for last but one record where endtype=2(OMG)
         AppCompatEditText old_res = binding.getRoot().findViewById(R.id.old_residency_uuid);
         try {
-            Residency datae = viewModel.findLastButOne(HouseMembersFragment.selectedIndividual.uuid);
+            Residency datae = viewModel.findLastButOne(selectedIndividual.uuid);
             if (datae != null && datae.endType==2) {
                 binding.setResidency(datae);
                 old_res.setVisibility(View.VISIBLE);

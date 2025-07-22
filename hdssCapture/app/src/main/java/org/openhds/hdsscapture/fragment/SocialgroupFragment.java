@@ -19,6 +19,7 @@ import org.openhds.hdsscapture.Dialog.ChangeHohFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.databinding.FragmentSocialgroupBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
@@ -49,6 +50,7 @@ public class SocialgroupFragment extends Fragment {
     private Individual individual;
     private FragmentSocialgroupBinding binding;
     private ProgressDialog progressDialog;
+    private Individual selectedIndividual;
 
     public SocialgroupFragment() {
         // Required empty public constructor
@@ -95,6 +97,9 @@ public class SocialgroupFragment extends Fragment {
         //View view = inflater.inflate(R.layout.fragment_house_visit, container, false);
         binding.setSocialgroup(socialgroup);
 
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
+
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
@@ -134,10 +139,10 @@ public class SocialgroupFragment extends Fragment {
 //
 //                binding.setSocialgroup(data);
 //
-//                if (HouseMembersFragment.selectedIndividual.firstName != null && "UNK".equals(data.groupName)){
+//                if (selectedIndividual.firstName != null && "UNK".equals(data.groupName)){
 //
-//                    data.groupName = HouseMembersFragment.selectedIndividual.firstName +' '+ HouseMembersFragment.selectedIndividual.lastName;
-//                    data.individual_uuid = HouseMembersFragment.selectedIndividual.uuid;
+//                    data.groupName = selectedIndividual.firstName +' '+ selectedIndividual.lastName;
+//                    data.individual_uuid = selectedIndividual.uuid;
 //                }
 //
 //            }

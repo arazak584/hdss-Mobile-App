@@ -33,6 +33,7 @@ import org.openhds.hdsscapture.Adapter.HouseholdAdapter;
 import org.openhds.hdsscapture.Adapter.LocationAdapter;
 import org.openhds.hdsscapture.Dialog.FilterDialogFragment;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
@@ -64,8 +65,8 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private HouseholdAdapter householdAdapter;
     private View view;
-    private Button button;
     private ProgressBar progressBar;
+    private ClusterSharedViewModel clusterSharedViewModel;
 
     public interface LocationClickListener {
         void onLocationClick(Locations selectedLocation);
@@ -104,6 +105,7 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
             this.locations = getArguments().getParcelable(LOC_LOCATION_IDS);
         }
         socialgroupViewModel = new ViewModelProvider(requireActivity()).get(SocialgroupViewModel.class);
+        clusterSharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
     }
 
     @Override
@@ -115,9 +117,7 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
         //TextView done = view.findViewById(R.id.compl);
         final Intent i = getActivity().getIntent();
         final Hierarchy level6Data = i.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
-
-        final Intent j = getActivity().getIntent();
-        final Hierarchy level5Data = j.getParcelableExtra(HierarchyActivity.LEVEL5_DATA);
+        final Hierarchy level5Data = i.getParcelableExtra(HierarchyActivity.LEVEL5_DATA);
 
         final Button home = view.findViewById(R.id.home);
         home.setOnClickListener(view -> {
@@ -134,7 +134,7 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
                 RecyclerView.VERTICAL);
         recyclerViewHousehold.addItemDecoration(dividerItemDecorations);
         recyclerViewHousehold.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        householdAdapter = new HouseholdAdapter(requireContext(),this, locations, socialgroup, socialgroupViewModel);
+        householdAdapter = new HouseholdAdapter(requireContext(),this, clusterSharedViewModel, socialgroup, socialgroupViewModel);
         recyclerViewHousehold.setAdapter(householdAdapter);
 
         // Instantiate the SocialgroupViewModel
@@ -155,7 +155,7 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
 
         //Location Adapter
         final RecyclerView recyclerView = view.findViewById(R.id.compoundsview);
-        final LocationAdapter adapter = new LocationAdapter(this, level6Data, this);
+        final LocationAdapter adapter = new LocationAdapter(this, level6Data, this, clusterSharedViewModel);
         final LocationViewModel locationViewModel = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
 
         //recyclerView.setHasFixedSize(true);
@@ -167,6 +167,30 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
 
         //initial loading of cluster locations
         adapter.filter("", locationViewModel);
+
+        // Observe selected location changes
+        clusterSharedViewModel.getSelectedLocation().observe(getViewLifecycleOwner(), selectedLocation -> {
+            if (selectedLocation != null) {
+                adapter.refreshSelection(); // Refresh the visual selection in LocationAdapter
+                if (householdAdapter != null) {
+                    householdAdapter.setSelectedLocation(selectedLocation);
+                }
+                updateButtonVisibility(true);
+            } else {
+                updateButtonVisibility(false);
+            }
+        });
+
+        // Check if there's already a selected location (for fragment recreation)
+//        if (clusterSharedViewModel.hasSelectedLocation()) {
+//            Locations currentLocation = clusterSharedViewModel.getCurrentSelectedLocation();
+//            if (currentLocation != null) {
+//                householdAdapter.setSelectedLocation(currentLocation);
+//                updateButtonVisibility(true);
+//            }
+//        }
+
+
 
         // Locate the EditText in listview_main.xml
         final SearchView editSearch = view.findViewById(R.id.comp_search);
@@ -182,30 +206,6 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
                 return false;
             }
         });
-
-//        final ImageView refresh = view.findViewById(R.id.refresh);
-//        refresh.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                        adapter.refresh(locationViewModel);
-//
-//            }
-//
-//        });
-
-//        try {
-//            // Call the counts method on locationViewModel to retrieve data
-//            long count = locationViewModel.counts(level6Data.uuid);
-//            long counts = individualViewModel.counts(level6Data.name);
-//                // Update UI with the count (assuming done is a TextView)
-//                //done.setText(String.valueOf(count));
-//                done.setText("(" + String.valueOf(count) + ", " + String.valueOf(counts) + ")");
-//                done.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.Green));
-//        } catch (ExecutionException e) {
-//            e.printStackTrace();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
 
 
         final AppCompatButton add_location = view.findViewById(R.id.button_new_location);
@@ -226,11 +226,6 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
                     ListingFragment.newInstance(locations)).commit();
         });
-//        add_listing.setOnClickListener(v -> {
-//            final Listing listing = new Listing();
-//            ListingFragment.newInstance(locations)
-//                    .show(getChildFragmentManager(), "ListingFragment");
-//        });
 
         final AppCompatButton add_household = view.findViewById(R.id.button_newhousehold);
             add_household.setOnClickListener(v -> {
@@ -242,47 +237,19 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
             });
 
 
-
-
-
-
-
-//        add_household.setOnClickListener(v -> {
-//            final Individual individual = new Individual();
-//            final Residency residency = new Residency();
-//            final Socialgroup socialgroup = new Socialgroup();
-//
-//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-//                    NewSocialgroupFragment.newInstance(individual, residency, locations, socialgroup)).commit();
-//        });
-
-
         return view;
 
 
     }
 
-//    @Override
-//    public void onLocationClick(Locations selectedLocation) {
-//        this.selectedLocation = selectedLocation; // Assign the selected location to the class-level variable
-//        Log.d("ClusterFragment", "onLocationClick called for location: " + selectedLocation.getCompno());
-//        Toast.makeText(requireContext(), "Location clicked: " + selectedLocation.getCompno(), Toast.LENGTH_SHORT).show();
-//
-//        // Update the householdAdapter with the selected location
-//        if (householdAdapter != null) {
-//            householdAdapter.setSelectedLocation(this.selectedLocation); // Use the class-level variable instead of the local variable
-//        } else {
-//            Log.d("ClusterFragment", "selectedLocation or householdAdapter is null in onLocationClick");
-//        }
-//    }
-
     @Override
     public void onLocationClick(Locations selectedLocation) {
-        ClusterFragment.selectedLocation = selectedLocation; // Always update the selectedLocation variable
+        //ClusterFragment.selectedLocation = selectedLocation; // Always update the selectedLocation variable
         //Log.d("ClusterFragment", "onLocationClick called for location: " + selectedLocation.getCompno());
         //Toast.makeText(requireContext(), "Location clicked: " + selectedLocation.getCompno(), Toast.LENGTH_SHORT).show();
         // Show ProgressBar when location is clicked
 //        showProgressBar();
+        clusterSharedViewModel.setSelectedLocation(selectedLocation);
 
         // Update the householdAdapter with the selected location
         if (householdAdapter != null) {
@@ -317,5 +284,13 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
         }
     }
 
+    private void updateButtonVisibility(boolean show) {
+        AppCompatButton addHousehold = view.findViewById(R.id.button_newhousehold);
+        AppCompatButton addListing = view.findViewById(R.id.button_listing);
+
+        int visibility = show ? View.VISIBLE : View.GONE;
+        if (addHousehold != null) addHousehold.setVisibility(visibility);
+        if (addListing != null) addListing.setVisibility(visibility);
+    }
 
 }

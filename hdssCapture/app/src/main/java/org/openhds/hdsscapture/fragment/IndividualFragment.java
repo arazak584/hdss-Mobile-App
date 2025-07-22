@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.fragment;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -23,6 +24,8 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
@@ -34,6 +37,7 @@ import org.openhds.hdsscapture.Utilities.Calculators;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Utilities.SimpleDialog;
 import org.openhds.hdsscapture.Utilities.UniqueIDGen;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
@@ -98,6 +102,7 @@ public class IndividualFragment extends Fragment {
     private Individual individual;
     private FragmentIndividualBinding binding;
     private ProgressDialog progressDialog;
+    private String compno, cmpuuid, cmpextid, locname;
 
     private void showDialogInfo(String message, String codeFragment) {
         SimpleDialog simpleDialog = SimpleDialog.newInstance(message, codeFragment);
@@ -156,9 +161,14 @@ public class IndividualFragment extends Fragment {
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+        final Hierarchy level6Data = i.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
 
-        final Intent j = getActivity().getIntent();
-        final Hierarchy level6Data = j.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        Locations selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+        compno = selectedLocation != null ? selectedLocation.getCompno() : null;
+        cmpuuid = selectedLocation != null ? selectedLocation.getUuid() : null;
+        cmpextid = selectedLocation != null ? selectedLocation.getCompextId() : null;
+        locname = selectedLocation != null ? selectedLocation.getLocationName() : null;
 
         ImageButton appInfoButton = binding.getRoot().findViewById(R.id.deno_button);
         appInfoButton.setOnClickListener(new View.OnClickListener() {
@@ -374,7 +384,7 @@ public class IndividualFragment extends Fragment {
 
                 String indid = data.getExtId();
                 if (indid.length() != 12) {
-                    String id = UniqueIDGen.generateUniqueId(individualViewModel, ClusterFragment.selectedLocation.compextId);
+                    String id = UniqueIDGen.generateUniqueId(individualViewModel, cmpextid);
                     binding.getIndividual().extId = id;
 
                 }else{
@@ -440,11 +450,11 @@ public class IndividualFragment extends Fragment {
 
                 // Generate ID if extId is null
                 if (binding.getIndividual().extId == null) {
-                    String id = UniqueIDGen.generateUniqueId(individualViewModel, ClusterFragment.selectedLocation.compextId);
+                    String id = UniqueIDGen.generateUniqueId(individualViewModel, cmpextid);
                     binding.getIndividual().extId = id;
 //                    final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
 //                    int sequenceNumber = 1;
-//                    String id = ClusterFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
+//                    String id = cmpextid + String.format("%03d", sequenceNumber); // generate ID with sequence number padded with zeros
 //                    while (true) {
 //                        try {
 //                            if (individualViewModels.findAll(id) == null) break;
@@ -454,7 +464,7 @@ public class IndividualFragment extends Fragment {
 //                            e.printStackTrace();
 //                        } // check if ID already exists in ViewModel
 //                        sequenceNumber++; // increment sequence number if ID exists
-//                        id = ClusterFragment.selectedLocation.compextId + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
+//                        id = cmpextid + String.format("%03d", sequenceNumber); // generate new ID with updated sequence number
 //                    }
 //                    binding.getIndividual().extId = id; // set the generated ID to the extId property of the Individual object
                 }
@@ -501,7 +511,7 @@ public class IndividualFragment extends Fragment {
         }
 
         try {
-            Residency data = viewModel.findRes(individual.uuid,ClusterFragment.selectedLocation.uuid);
+            Residency data = viewModel.findRes(individual.uuid,cmpuuid);
 
             if (data != null) {
                 binding.setResidency(data);
@@ -516,7 +526,7 @@ public class IndividualFragment extends Fragment {
                 data.uuid = uuidString;
                 data.startType = 1;
                 data.endType = 1;
-                data.location_uuid = ClusterFragment.selectedLocation.uuid;
+                data.location_uuid = cmpuuid;
                 data.socialgroup_uuid = socialgroup.uuid;
                 data.complete = 1;
                 data.individual_uuid = binding.getIndividual().uuid;
@@ -576,7 +586,7 @@ public class IndividualFragment extends Fragment {
 
         //Use to Generate Outmigration and end residency for a previous active residency
         try {
-            Residency datae = viewModel.findEnd(individual.uuid, ClusterFragment.selectedLocation.uuid);
+            Residency datae = viewModel.findEnd(individual.uuid, cmpuuid);
             if (datae != null) {
                 binding.setOmgg(datae);
                 binding.getOmgg().loc = datae.getLocation_uuid();
@@ -609,7 +619,7 @@ public class IndividualFragment extends Fragment {
         final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
 
         try {
-            Inmigration dataimg = inmigrationViewModel.find(individual.uuid,ClusterFragment.selectedLocation.uuid);
+            Inmigration dataimg = inmigrationViewModel.find(individual.uuid,cmpuuid);
             if (dataimg != null && binding.getResidency().img!=null) {
                 binding.setInmigration(dataimg);
 
@@ -633,7 +643,7 @@ public class IndividualFragment extends Fragment {
                 dataimg.fw_uuid = fieldworkerData.getFw_uuid();
                 dataimg.individual_uuid = binding.getIndividual().uuid;
                 dataimg.complete = 1;
-                dataimg.location_uuid = ClusterFragment.selectedLocation.uuid;
+                dataimg.location_uuid = cmpuuid;
                 Visit dts = visitViewModel.find(socialgroup.uuid);
                 if (dts != null){
                     dataimg.visit_uuid = dts.uuid;
@@ -675,14 +685,14 @@ public class IndividualFragment extends Fragment {
 
             if (data != null) {
                 binding.setDemographic(data);
-                data.location_uuid = ClusterFragment.selectedLocation.uuid;
+                data.location_uuid = cmpuuid;
 
             } else {
                 data = new Demographic();
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.complete = 1;
                 data.individual_uuid = binding.getIndividual().uuid;
-                data.location_uuid = ClusterFragment.selectedLocation.uuid;
+                data.location_uuid = cmpuuid;
 
                 binding.setDemographic(data);
                 binding.getDemographic().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
@@ -721,14 +731,23 @@ public class IndividualFragment extends Fragment {
         loadCodeData(binding.akan, "akan");
         loadCodeData(binding.denomination, "denomination");
 
-        binding.buttonSaveClose.setOnClickListener(v -> {
+//        binding.buttonSaveClose.setOnClickListener(v -> {
+//
+//            save(true, true, viewModel, individualViewModel,inmigrationViewModel,demographicViewModel);
+//        });
+//
+//        binding.buttonClose.setOnClickListener(v -> {
+//
+//            save(false, true, viewModel, individualViewModel,inmigrationViewModel,demographicViewModel);
+//        });
 
-            save(true, true, viewModel, individualViewModel,inmigrationViewModel,demographicViewModel);
+        // Update your button click listeners to:
+        binding.buttonSaveClose.setOnClickListener(v -> {
+            checkForDuplicatesAndSave(true, true, viewModel, individualViewModel, inmigrationViewModel, demographicViewModel);
         });
 
         binding.buttonClose.setOnClickListener(v -> {
-
-            save(false, true, viewModel, individualViewModel,inmigrationViewModel,demographicViewModel);
+            checkForDuplicatesAndSave(false, true, viewModel, individualViewModel, inmigrationViewModel, demographicViewModel);
         });
 
         binding.setEventname(AppConstants.EVENT_MIND00S);
@@ -738,13 +757,173 @@ public class IndividualFragment extends Fragment {
 
     }
 
-    private void save(boolean save, boolean close, ResidencyViewModel viewModel,  IndividualViewModel individualViewModel,InmigrationViewModel inmigrationViewModel,DemographicViewModel demographicViewModel) {
 
+    // In your save method, replace the existing duplicate check with:
+    private void checkForDuplicatesAndSave(boolean save, boolean close, ResidencyViewModel viewModel,
+                                           IndividualViewModel individualViewModel, InmigrationViewModel inmigrationViewModel,
+                                           DemographicViewModel demographicViewModel) {
+
+        Individual finalData = binding.getIndividual();
+        Demographic demo = binding.getDemographic();
+
+        String ghcard = finalData.ghanacard;
+        String phone = demo.phone1;
+        String currentUuid = finalData.uuid; // Assuming you have the current record's UUID
+
+        // Check for duplicates - add null checks
+        boolean hasGhcard = ghcard != null && !ghcard.trim().isEmpty();
+        boolean hasPhone = phone != null && !phone.trim().isEmpty();
+
+        if (hasGhcard || hasPhone) {
+
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+                try {
+                    // Pass the actual values, handling nulls
+                    String ghcardForQuery = hasGhcard ? ghcard : "";
+                    String phoneForQuery = hasPhone ? phone : "";
+
+                    List<Individual> duplicates = individualViewModel.dupRegistration(currentUuid, ghcardForQuery, phoneForQuery);
+
+                    // Switch back to main thread to update UI
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        if (duplicates != null && !duplicates.isEmpty()) {
+                            showDuplicateDialog(duplicates, save, close, viewModel, individualViewModel,
+                                    inmigrationViewModel, demographicViewModel);
+                        } else {
+                            // No duplicates found, proceed with save
+                            proceedWithSave(save, close, viewModel, individualViewModel,
+                                    inmigrationViewModel, demographicViewModel);
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        Toast.makeText(getActivity(), "Error checking for duplicates", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            });
+
+            executor.shutdown();
+        } else {
+            // No ID or phone to check, proceed with save
+            proceedWithSave(save, close, viewModel, individualViewModel, inmigrationViewModel, demographicViewModel);
+        }
+    }
+
+    private void showDuplicateDialog(List<Individual> duplicates, boolean save, boolean close,
+                                     ResidencyViewModel viewModel, IndividualViewModel individualViewModel,
+                                     InmigrationViewModel inmigrationViewModel, DemographicViewModel demographicViewModel) {
+
+        // Create dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Potential Duplicate Records Found");
+
+        // Create message with duplicate information
+        StringBuilder message = new StringBuilder();
+        message.append("The following individuals have the same Ghana Card or Phone Number:\n\n");
+
+        for (Individual duplicate : duplicates) {
+            message.append("Name: ").append(duplicate.getFirstName()).append(" ").append(duplicate.getLastName()).append("\n");
+            message.append("Compno: ").append(duplicate.getCompno()).append("\n");
+            if (duplicate.ghanacard != null && !duplicate.ghanacard.isEmpty()) {
+                message.append("Ghana Card: ").append(duplicate.ghanacard).append("\n");
+            }
+            if (duplicate.phone1 != null && !duplicate.phone1.isEmpty()) {
+                message.append("Phone: ").append(duplicate.phone1).append("\n");
+            }
+            message.append("\n");
+        }
+
+        message.append("Do you want to continue with the registration?");
+        builder.setMessage(message.toString());
+
+        // Continue button
+        builder.setPositiveButton("Continue", (dialog, which) -> {
+            dialog.dismiss();
+            proceedWithSave(save, close, viewModel, individualViewModel, inmigrationViewModel, demographicViewModel);
+        });
+
+        // Close button
+        builder.setNegativeButton("Close", (dialog, which) -> {
+            dialog.dismiss();
+            // Don't save, just return to form
+        });
+
+        // Make dialog non-cancelable
+        builder.setCancelable(false);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    // RecyclerView Adapter for displaying duplicates
+    public class DuplicateListAdapter extends RecyclerView.Adapter<DuplicateListAdapter.ViewHolder> {
+        private List<Individual> duplicates;
+
+        public DuplicateListAdapter(List<Individual> duplicates) {
+            this.duplicates = duplicates;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_duplicate_individual, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            Individual individual = duplicates.get(position);
+
+            holder.tvName.setText(individual.getFirstName() + " " + individual.getLastName());
+            holder.tvCompno.setText(individual.compno);
+
+            if (individual.ghanacard != null && !individual.ghanacard.isEmpty()) {
+                holder.tvGhanaCard.setText("Ghana Card: " + individual.ghanacard);
+                holder.tvGhanaCard.setVisibility(View.VISIBLE);
+            } else {
+                holder.tvGhanaCard.setVisibility(View.GONE);
+            }
+
+            if (individual.phone1 != null && !individual.phone1.isEmpty()) {
+                holder.tvPhone.setText("Phone: " + individual.phone1);
+                holder.tvPhone.setVisibility(View.VISIBLE);
+            } else {
+                holder.tvPhone.setVisibility(View.GONE);
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return duplicates.size();
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            TextView tvName, tvGhanaCard, tvPhone, tvCompno;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+                tvName = itemView.findViewById(R.id.tv_name);
+                tvGhanaCard = itemView.findViewById(R.id.tv_ghana_card);
+                tvPhone = itemView.findViewById(R.id.tv_phone);
+                tvCompno = itemView.findViewById(R.id.tv_compno);
+            }
+        }
+    }
+
+    private void proceedWithSave(boolean save, boolean close, ResidencyViewModel viewModel,
+                                 IndividualViewModel individualViewModel, InmigrationViewModel inmigrationViewModel,
+                                 DemographicViewModel demographicViewModel) {
+
+        // Your existing save logic goes here (without the duplicate check part)
         if (save) {
             Individual finalData = binding.getIndividual();
             Residency Data = binding.getResidency();
             Inmigration img = binding.getInmigration();
             Demographic demo = binding.getDemographic();
+
             boolean sdate = false;
             boolean isOmg = false;
             boolean dthdate = false;
@@ -753,6 +932,7 @@ public class IndividualFragment extends Fragment {
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.INDIVIDUALLAYOUT, validateOnComplete, false);
+
 
             boolean missedout = false;
 
@@ -1074,7 +1254,7 @@ public class IndividualFragment extends Fragment {
             }
 
             finalData.phone1 = binding.getDemographic().phone1;
-            finalData.compno = ClusterFragment.selectedLocation.compno;
+            finalData.compno = compno;
             finalData.endType = Data.endType;
             finalData.hohID = socialgroup.extId;
 
@@ -1089,15 +1269,13 @@ public class IndividualFragment extends Fragment {
             Data.complete=1;
             demo.complete=1;
 
-
-
             final Intent i = getActivity().getIntent();
             final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
             //Generate Outmigration for previous active episode
             OutmigrationViewModel omgModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
             try {
-                Outmigration data = omgModel.createOmg(individual.uuid, ClusterFragment.selectedLocation.uuid);
+                Outmigration data = omgModel.createOmg(individual.uuid, cmpuuid);
 //                if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim()))
                 if (data != null) {
 
@@ -1135,6 +1313,20 @@ public class IndividualFragment extends Fragment {
                 e.printStackTrace();
             }
 
+            if (hasErrors) {
+                Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            // Save the data
+            finalData.complete = 1;
+            Data.complete = 1;
+            demo.complete = 1;
+
+            viewModel.add(Data);
+            individualViewModel.add(finalData);
+            demographicViewModel.add(demo);
+
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute(() -> {
 
@@ -1169,7 +1361,7 @@ public class IndividualFragment extends Fragment {
 
                 //Update Previous Residency if It is Active
                 try {
-                    Residency data = viewModel.fetchs(individual.uuid, ClusterFragment.selectedLocation.uuid);
+                    Residency data = viewModel.fetchs(individual.uuid, cmpuuid);
                     if (data != null) {
                         ResidencyAmendment residencyAmendment = new ResidencyAmendment();
                         Date recordedDate = binding.getInmigration().recordedDate;
@@ -1253,18 +1445,539 @@ public class IndividualFragment extends Fragment {
             });
 
             executor.shutdown();
-
-            viewModel.add(Data);
-            individualViewModel.add(finalData);
-            demographicViewModel.add(demo);
-
-            }
-        if (close)  {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseMembersFragment.newInstance(locations, socialgroup,individual)).commit();
         }
 
+        if (close) {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    HouseMembersFragment.newInstance(locations, socialgroup, individual)).commit();
+        }
     }
+
+//    private void save(boolean save, boolean close, ResidencyViewModel viewModel,  IndividualViewModel individualViewModel,InmigrationViewModel inmigrationViewModel,DemographicViewModel demographicViewModel) {
+//
+//        if (save) {
+//            Individual finalData = binding.getIndividual();
+//            Residency Data = binding.getResidency();
+//            Inmigration img = binding.getInmigration();
+//            Demographic demo = binding.getDemographic();
+//            boolean sdate = false;
+//            boolean isOmg = false;
+//            boolean dthdate = false;
+//            boolean imgdate = false;
+//            boolean omgdate = false;
+//
+//            final boolean validateOnComplete = true;//finalData.complete == 1;
+//            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.INDIVIDUALLAYOUT, validateOnComplete, false);
+//
+//            boolean missedout = false;
+//
+//            if (img.migType!=null && img.migType==2){
+//                if (img.reason!=null && img.reason==19) {
+//                    missedout = true;
+//                    Toast.makeText(getActivity(), "Reason cannot be missed out for Internal Inmigration", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//            }
+//
+//            try {
+//                if (!binding.dob.getText().toString().trim().isEmpty()) {
+//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                    Date currentDate = new Date();
+//                    Date stdate = f.parse(binding.dob.getText().toString().trim());
+//                    if (stdate.after(currentDate)) {
+//                        binding.dob.setError("Date of Birth Cannot Be a Future Date");
+//                        Toast.makeText(getActivity(), "Date of Birth Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    // clear error if validation passes
+//                    binding.dob.setError(null);
+//                }
+//            } catch (ParseException e) {
+//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//
+//            boolean agedif = false;
+//            boolean modif = false;
+//
+//            if (!binding.fathers.fathersAge.getText().toString().trim().isEmpty() && !binding.individAge.getText().toString().trim().isEmpty()) {
+//                int fAgeValue = Integer.parseInt(binding.fathers.fathersAge.getText().toString().trim());
+//                int individidAgeValue = Integer.parseInt(binding.individAge.getText().toString().trim());
+//                if (fAgeValue - individidAgeValue < 10) {
+//                    agedif = true;
+//                    binding.fathers.fathersAge.setError("Father selected is too young to be the father of this Individual");
+//                    Toast.makeText(getActivity(), "Father selected is too young to be the father of this Individual", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//            }
+//
+//            if (!binding.mothers.mothersAge.getText().toString().trim().isEmpty() && !binding.individAge.getText().toString().trim().isEmpty()) {
+//                int mthgeValue = Integer.parseInt(binding.mothers.mothersAge.getText().toString().trim());
+//                int individidAge = Integer.parseInt(binding.individAge.getText().toString().trim());
+//                if (mthgeValue - individidAge < 10) {
+//                    modif = true;
+//                    binding.mothers.mothersAge.setError("Mother selected is too young to be the mother of this Individual");
+//                    Toast.makeText(getActivity(), "Mother selected is too young to be the mother of this Individual", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//            }
+//
+//
+//            boolean gh = false;
+//
+//            if (!binding.ghanacard.getText().toString().trim().isEmpty()) {
+//                String input = binding.ghanacard.getText().toString().trim();
+//                String regex = "[A-Z]{3}-\\d{9}-\\d";
+//
+//                if (!input.matches(regex)) {
+//                    gh = true;
+//                    Toast.makeText(getActivity(), "Ghana Card Number or format is incorrect", Toast.LENGTH_LONG).show();
+//                    binding.ghanacard.setError("Format Should Be GHA-XXXXXXXXX-X");
+//                    return;
+//                }
+//            }
+//
+//            // Individual Name Validation
+//            boolean hasError = false;
+//            String firstName = binding.individualFirstName.getText().toString();
+//            String lastName = binding.individualLastName.getText().toString();
+//            // Validate First Name
+//            if (firstName.trim().length() != firstName.length()) {
+//                // Leading or trailing spaces not allowed
+//                binding.individualFirstName.setError("Spaces are not allowed before or after the Name");
+//                Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
+//                hasError = true;
+//            } else if (!firstName.matches("^[a-zA-Z]+([ '-][a-zA-Z]+)*$")) {
+//                // Only letters, hyphens, and single spaces allowed
+//                binding.individualFirstName.setError("Only letters, hyphens, and single spaces are allowed in the Name");
+//                Toast.makeText(getContext(), "Only letters, hyphens, and single spaces are allowed in the Name", Toast.LENGTH_LONG).show();
+//                hasError = true;
+//            } else {
+//                // Valid name
+//                binding.individualFirstName.setError(null);
+//            }
+//
+//            // Validate Last Name
+//            if (lastName.startsWith(" ") || lastName.endsWith(" ")) {
+//                binding.individualLastName.setError("Spaces are not allowed before or after the Name");
+//                Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
+//                hasError = true;
+//            }
+//            else if (!lastName.matches("^[a-zA-Z]+([ '-][a-zA-Z]+)*$")) {
+//                binding.individualLastName.setError("Only letters, hyphens, and single spaces are allowed in the Name");
+//                Toast.makeText(getContext(), "Only letters, hyphens, and single spaces are allowed in the Name", Toast.LENGTH_LONG).show();
+//                hasError = true;
+//            }
+//            else {
+//                binding.individualLastName.setError(null);
+//            }
+//
+//            // Stop execution if any errors exist
+//            if (hasError) {
+//                return;
+//            }
+//
+//
+//
+//            //Date Validations
+//            try {
+//                if (!binding.dob.getText().toString().trim().isEmpty() && !binding.editTextStartDate.getText().toString().trim().isEmpty()) {
+//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
+//                    Date edate = f.parse(binding.dob.getText().toString().trim());
+//                    if (edate.after(stdate)) {
+//                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Date of Birth");
+//                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Date of Birth", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    // clear error if validation passes
+//                    binding.editTextStartDate.setError(null);
+//                }
+//            } catch (ParseException e) {
+//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//
+//            try {
+//                if (!binding.earliest.getText().toString().trim().isEmpty() && !binding.editTextStartDate.getText().toString().trim().isEmpty()) {
+//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
+//                    Date edate = f.parse(binding.earliest.getText().toString().trim());
+//                    if (edate.after(stdate) && binding.getInmigration().reason!=null) {
+//                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Earliest Date");
+//                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Earliest Date", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    // clear error if validation passes
+//                    binding.editTextStartDate.setError(null);
+//                }
+//            } catch (ParseException e) {
+//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//
+//            try {
+//                if (!binding.omgg.oldStartDate.getText().toString().trim().isEmpty() && !binding.editTextStartDate.getText().toString().trim().isEmpty()) {
+//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
+//                    Date edate = f.parse(binding.omgg.oldStartDate.getText().toString().trim());
+//
+//                    Calendar calendar = Calendar.getInstance();
+//                    calendar.setTime(edate);
+//                    calendar.add(Calendar.DAY_OF_MONTH, 3);
+//                    Date minStartDate = calendar.getTime();
+//
+//                    if (stdate.before(minStartDate)) {
+//                        binding.editTextStartDate.setError("Start Date must be at least three days after the previous start date " + f.format(minStartDate));
+//                        Toast.makeText(getActivity(), "Start Date must be at least three days after the previous start date " + f.format(minStartDate), Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//
+//                    // Clear error if validation passes
+//                    binding.editTextStartDate.setError(null);
+//                }
+//            } catch (ParseException e) {
+//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//
+//            try {
+//                if (!binding.editTextStartDate.getText().toString().trim().isEmpty() && !binding.res.resEndDate.getText().toString().trim().isEmpty()) {
+//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
+//                    Date edate = f.parse(binding.res.resEndDate.getText().toString().trim());
+//                    String formattedDate = f.format(edate);
+//                    if (edate.after(stdate)) {
+//                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Or Equal to " + formattedDate);
+//                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Or Equal to " + formattedDate, Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//
+//                    if (edate.equals(stdate)) {
+//                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Or Equal to " + formattedDate);
+//                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Or Equal to " + formattedDate, Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    // clear error if validation passes
+//                    binding.editTextStartDate.setError(null);
+//                }
+//            } catch (ParseException e) {
+//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//
+//            try {
+//                if (!binding.editTextStartDate.getText().toString().trim().isEmpty()) {
+//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                    //Date currentDate = new Date();
+//                    Date currentDate = f.parse(f.format(new Date()));
+//                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
+//                    if (stdate.after(currentDate)) {
+//                        binding.editTextStartDate.setError("Start Date Cannot Be a Future Date");
+//                        Toast.makeText(getActivity(), "Start Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    if (stdate.equals(currentDate)) {
+//                        String errorMessage = getString(R.string.startdateerr);
+//                        binding.editTextStartDate.setError(errorMessage);
+//                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    // clear error if validation passes
+//                    binding.editTextStartDate.setError(null);
+//                }
+//            } catch (ParseException e) {
+//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//
+//            boolean compyrs = false;
+//            if (!binding.compYrs.getText().toString().trim().isEmpty()) {
+//                int yrs = Integer.parseInt(binding.compYrs.getText().toString().trim());
+//                if (yrs < 0 || yrs > 6) {
+//                    compyrs = true;
+//                    binding.compYrs.setError("Cannot be less than 1 or More than 6");
+//                    Toast.makeText(getActivity(), "Cannot be less than 1 or More than 6", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//            }
+//
+//            boolean ph = false;
+//            if (!binding.phone1.getText().toString().trim().isEmpty()) {
+//                String input = binding.phone1.getText().toString().trim();
+//                String regex = "[0-9]{10}";
+//
+//                if (!input.matches(regex)) {
+//                    ph = true;
+//                    Toast.makeText(getActivity(), "Phone Number is incorrect", Toast.LENGTH_LONG).show();
+//                    binding.phone1.setError("Phone Number is incorrect");
+//                    return;
+//                }
+//            }
+//
+//            //Validate the number of months the individual moved in
+//            try {
+//                String hlngStr = binding.howLng.getText().toString().trim();
+//                String imgDateStr = binding.editTextStartDate.getText().toString().trim();
+//
+//                if (!hlngStr.isEmpty() && !imgDateStr.isEmpty()) {
+//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US); // adjust to your date format
+//                    Date insertDate = binding.getInmigration().insertDate;  // e.g., 2025-05-17
+//                    Date imgDate = f.parse(imgDateStr);                    // e.g., 03/15/2024
+//                    int hlng = Integer.parseInt(hlngStr);                  // expected number of months
+//
+//                    Calendar startCal = Calendar.getInstance();
+//                    startCal.setTime(imgDate);
+//
+//                    Calendar endCal = Calendar.getInstance();
+//                    endCal.setTime(insertDate);
+//
+//                    int yearDiff = endCal.get(Calendar.YEAR) - startCal.get(Calendar.YEAR);
+//                    int monthDiff = endCal.get(Calendar.MONTH) - startCal.get(Calendar.MONTH);
+//                    int totalMonths = yearDiff * 12 + monthDiff;
+//
+//                    // Adjust if insertDate day-of-month is before imgDate day-of-month
+//                    if (endCal.get(Calendar.DAY_OF_MONTH) < startCal.get(Calendar.DAY_OF_MONTH)) {
+//                        totalMonths--;
+//                    }
+//
+//                    Log.d("Inmigration", "IMG MONTHS: " + totalMonths);
+//
+//                    if (hlng != totalMonths) {
+//                        Calendar suggestedDateCal = Calendar.getInstance();
+//                        suggestedDateCal.setTime(insertDate);
+//                        suggestedDateCal.add(Calendar.MONTH, -hlng);
+//                        String suggestedDate = f.format(suggestedDateCal.getTime());
+//
+//                        binding.howLng.setError("Mismatch. Suggested Date: " + suggestedDate+ " (" + totalMonths + " Months)");
+//                        Toast.makeText(getActivity(), "Mismatch. Suggested Date: " + suggestedDate+ " (" + totalMonths + " Months)", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//
+//                    binding.howLng.setError(null);
+//                    binding.editTextStartDate.setError(null);
+//                }
+//            } catch (ParseException e) {
+//                Toast.makeText(getActivity(), "Invalid date format", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//
+//            if (hasErrors) {
+//                Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//
+//            Date end = new Date(); // Get the current date and time
+//            // Create a Calendar instance and set it to the current date and time
+//            Calendar cal = Calendar.getInstance();
+//            cal.setTime(end);
+//            // Extract the hour, minute, and second components
+//            int hh = cal.get(Calendar.HOUR_OF_DAY);
+//            int mm = cal.get(Calendar.MINUTE);
+//            int ss = cal.get(Calendar.SECOND);
+//            // Format the components into a string with leading zeros
+//            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
+//
+//            if (finalData.sttime !=null && finalData.edtime==null){
+//                finalData.edtime = endtime;
+//            }
+//            if (Data.sttime !=null && Data.edtime==null){
+//                Data.edtime = endtime;
+//            }
+//            if (img.sttime !=null && img.edtime==null){
+//                img.edtime = endtime;
+//            }
+//
+//            finalData.phone1 = binding.getDemographic().phone1;
+//            finalData.compno = compno;
+//            finalData.endType = Data.endType;
+//            finalData.hohID = socialgroup.extId;
+//
+//            if(binding.getResidency().img != null){
+//                img.residency_uuid = Data.uuid;
+//                img.recordedDate = Data.startDate;
+//                img.complete=1;
+//                inmigrationViewModel.add(img);
+//            }
+//
+//            finalData.complete=1;
+//            Data.complete=1;
+//            demo.complete=1;
+//
+//            final Intent i = getActivity().getIntent();
+//            final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+//
+//            //Generate Outmigration for previous active episode
+//            OutmigrationViewModel omgModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
+//            try {
+//                Outmigration data = omgModel.createOmg(individual.uuid, cmpuuid);
+////                if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim()))
+//                if (data != null) {
+//
+//                    Outmigration omg = new Outmigration();
+//
+//                    String uuid = UUID.randomUUID().toString();
+//                    String uuidString = uuid.replaceAll("-", "");
+//
+//                    // Subtract one day from the recordedDate
+//                    Date recordedDate = binding.getInmigration().recordedDate;
+//                    Calendar calendar = Calendar.getInstance();
+//                    calendar.setTime(recordedDate);
+//                    calendar.add(Calendar.DAY_OF_MONTH, -1);
+//
+//                    omg.recordedDate = calendar.getTime();
+//                    omg.uuid = uuidString;
+//                    omg.individual_uuid = finalData.uuid;
+//                    omg.insertDate = new Date();
+//                    omg.destination = binding.getInmigration().origin;
+//                    omg.reason = binding.getInmigration().reason;
+//                    omg.reason_oth = binding.getInmigration().reason_oth;
+//                    omg.residency_uuid = binding.getOmgg().old_residency;
+//                    omg.fw_uuid = fieldworkerData.fw_uuid;
+//                    omg.complete = 1;
+//                    omg.edit = 1;
+//                    omg.visit_uuid = binding.getInmigration().visit_uuid;
+//                    omg.socialgroup_uuid = binding.getOmgg().socialgroup_uuid;
+//                    omg.location_uuid = binding.getOmgg().loc;
+//
+//                    omgModel.add(omg);
+//                }
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//
+//            ExecutorService executor = Executors.newSingleThreadExecutor();
+//            executor.execute(() -> {
+//
+//                //Update The Househead for the new household
+//                SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+//                try {
+//                    Socialgroup data = socialgroupViewModel.find(socialgroup.uuid);
+//                    if (data !=null && "UNK".equals(data.groupName)) {
+//
+//                        SocialgroupAmendment socialgroupAmendment = new SocialgroupAmendment();
+//                        socialgroupAmendment.individual_uuid = finalData.uuid;
+//                        socialgroupAmendment.groupName = finalData.getFirstName() + ' ' + finalData.getLastName();
+//                        socialgroupAmendment.uuid = socialgroup.uuid;
+//                        socialgroupAmendment.complete =1;
+//                        //Toast.makeText(requireContext(), "Successfully Amended Household Head", Toast.LENGTH_LONG).show();
+//
+//                        socialgroupViewModel.update(socialgroupAmendment, result ->
+//                                new Handler(Looper.getMainLooper()).post(() -> {
+//                                    if (result > 0) {
+//                                        Log.d("IndividualFragment", "Socialgroup Update successful!");
+//                                    } else {
+//                                        Log.d("IndividualFragment", "Socialgroup Update Failed!");
+//                                    }
+//                                })
+//                        );
+//                    }
+//
+//                } catch (Exception e) {
+//                    Log.e("IndividualFragment", "Error in update", e);
+//                    e.printStackTrace();
+//                }
+//
+//                //Update Previous Residency if It is Active
+//                try {
+//                    Residency data = viewModel.fetchs(individual.uuid, cmpuuid);
+//                    if (data != null) {
+//                        ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+//                        Date recordedDate = binding.getInmigration().recordedDate;
+//                        Calendar calendar = Calendar.getInstance();
+//                        calendar.setTime(recordedDate);
+//                        calendar.add(Calendar.DAY_OF_MONTH, -1);
+//                        residencyAmendment.endType = 2;
+//                        residencyAmendment.endDate = calendar.getTime();
+//                        residencyAmendment.uuid = binding.getOmgg().old_residency;
+//                        residencyAmendment.complete = 1;
+//
+//                        viewModel.update(residencyAmendment, result ->
+//                                new Handler(Looper.getMainLooper()).post(() -> {
+//                                    if (result > 0) {
+//                                        Log.d("IndividualFragment", "Omg Update successful!");
+//                                    } else {
+//                                        Log.d("IndividualFragment", "Omg Update Failed!");
+//                                    }
+//                                })
+//                        );
+//
+//                    }
+//
+//                } catch (Exception e) {
+//                    Log.e("IndividualFragment", "Error in update", e);
+//                    e.printStackTrace();
+//                }
+//
+//                //Update Fake Individual's Residency that was used to create the socialgroup
+//                try {
+//                    Residency datas = viewModel.unk(socialgroup.uuid);
+//                    if (datas != null) {
+//                        ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+//                        residencyAmendment.endType = 2;
+//                        residencyAmendment.endDate = new Date();
+//                        residencyAmendment.uuid = datas.uuid;
+//                        residencyAmendment.complete = 2;
+//
+//                        viewModel.update(residencyAmendment, result ->
+//                                new Handler(Looper.getMainLooper()).post(() -> {
+//                                    if (result > 0) {
+//                                        Log.d("IndividualFragment", "Fake Update successful!");
+//                                    } else {
+//                                        Log.d("IndividualFragment", "Fake Update Failed!");
+//                                    }
+//                                })
+//                        );
+//                    }
+//                } catch (Exception e) {
+//                    Log.e("IndividualFragment", "Error in update", e);
+//                    e.printStackTrace();
+//                }
+//
+//                //Update Fake Individual's Residency that was used to create the socialgroup
+//                try {
+//                    Individual datas = individualViewModel.unk(socialgroup.extId);
+//                    if (datas != null) {
+//                        IndividualEnd endInd = new IndividualEnd();
+//                        endInd.endType = 2;
+//                        endInd.uuid = datas.uuid;
+//                        endInd.complete = 2;
+//
+//                        individualViewModel.dthupdate(endInd, result ->
+//                                new Handler(Looper.getMainLooper()).post(() -> {
+//                                    if (result > 0) {
+//                                        Log.d("IndividualFragment", "Res Update successful!");
+//                                    } else {
+//                                        Log.d("IndividualFragment", "Res Update Failed!");
+//                                    }
+//                                })
+//                        );
+//                    }
+//                } catch (ExecutionException e) {
+//                    e.printStackTrace();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//
+//
+//
+//            });
+//
+//            executor.shutdown();
+//
+//            viewModel.add(Data);
+//            individualViewModel.add(finalData);
+//            demographicViewModel.add(demo);
+//
+//            }
+//        if (close)  {
+//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                    HouseMembersFragment.newInstance(locations, socialgroup,individual)).commit();
+//        }
+//
+//    }
 
     @Override
     public void onDestroyView() {

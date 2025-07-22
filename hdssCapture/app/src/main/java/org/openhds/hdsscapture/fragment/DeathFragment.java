@@ -24,9 +24,11 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
@@ -77,6 +79,8 @@ public class DeathFragment extends DialogFragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentDeathBinding binding;
+    private Individual selectedIndividual;
+    private Locations selectedLocation;
 
     public DeathFragment() {
         // Required empty public constructor
@@ -118,14 +122,18 @@ public class DeathFragment extends DialogFragment {
         // Inflate the layout for this fragment
         binding = FragmentDeathBinding.inflate(inflater, container, false);
 
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
+
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
+        ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+        final Hierarchy level6Data = i.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
 
-        final Intent j = getActivity().getIntent();
-        final Hierarchy level6Data = j.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -177,8 +185,8 @@ public class DeathFragment extends DialogFragment {
         DeathViewModel viewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         try {
-            Death data = viewModel.finds(HouseMembersFragment.selectedIndividual.uuid);
-            Residency dataRes = resModel.findRes(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
+            Death data = viewModel.finds(selectedIndividual.uuid);
+            Residency dataRes = resModel.findRes(selectedIndividual.uuid, selectedLocation.uuid);
             if (data != null) {
                 if (dataRes != null){
                     //data.dob = dataRes.startDate;
@@ -208,14 +216,14 @@ public class DeathFragment extends DialogFragment {
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
-                data.firstName = HouseMembersFragment.selectedIndividual.getFirstName();
-                data.lastName = HouseMembersFragment.selectedIndividual.getLastName();
-                data.gender = HouseMembersFragment.selectedIndividual.getGender();
-                data.compno = ClusterFragment.selectedLocation.getCompno();
-                data.extId = HouseMembersFragment.selectedIndividual.getExtId();
-                data.compname = ClusterFragment.selectedLocation.getLocationName();
-                data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
-                data.dob = HouseMembersFragment.selectedIndividual.dob;
+                data.firstName = selectedIndividual.getFirstName();
+                data.lastName = selectedIndividual.getLastName();
+                data.gender = selectedIndividual.getGender();
+                data.compno = selectedLocation.compno;
+                data.extId = selectedIndividual.getExtId();
+                data.compname = selectedLocation.locationName;
+                data.individual_uuid = selectedIndividual.getUuid();
+                data.dob = selectedIndividual.dob;
                 data.villname = level6Data.getName();
                 data.villcode = level6Data.getExtId();
                 data.complete = 1;
@@ -358,12 +366,12 @@ public class DeathFragment extends DialogFragment {
                 //Set Relationship to Widowed
                 try {
                     // Second block - visited update (with different variable name)
-                    Relationship reldata = relModel.finds(HouseMembersFragment.selectedIndividual.uuid);
+                    Relationship reldata = relModel.finds(selectedIndividual.uuid);
                     if (reldata != null) {
                         RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
                         relationshipUpdate.endType = 2;
                         relationshipUpdate.endDate = binding.getDeath().deathDate;
-                        relationshipUpdate.individualA_uuid = HouseMembersFragment.selectedIndividual.uuid;
+                        relationshipUpdate.individualA_uuid = selectedIndividual.uuid;
                         relationshipUpdate.complete = 1;
 
                         relModel.update(relationshipUpdate, result ->
@@ -383,13 +391,13 @@ public class DeathFragment extends DialogFragment {
 
                 //Set Relationship to Dead
                 try {
-                    Relationship dthdata = relModel.find(HouseMembersFragment.selectedIndividual.uuid);
+                    Relationship dthdata = relModel.find(selectedIndividual.uuid);
                     if (dthdata != null && !binding.dthDeathDate.getText().toString().trim().isEmpty()) {
 
                         RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
                         relationshipUpdate.endType = 4;
                         relationshipUpdate.endDate = binding.getDeath().deathDate;
-                        relationshipUpdate.individualA_uuid = HouseMembersFragment.selectedIndividual.uuid;
+                        relationshipUpdate.individualA_uuid = selectedIndividual.uuid;
                         relationshipUpdate.complete = 1;
 
                         relModel.update(relationshipUpdate, result ->
@@ -410,7 +418,7 @@ public class DeathFragment extends DialogFragment {
 
                 //End Residency In residency entity
                 try {
-                    Residency resdata = resModel.dth(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
+                    Residency resdata = resModel.dth(selectedIndividual.uuid, selectedLocation.uuid);
                     if (resdata != null) {
                         ResidencyAmendment residencyAmendment = new ResidencyAmendment();
                         residencyAmendment.endType = 3;
@@ -438,7 +446,7 @@ public class DeathFragment extends DialogFragment {
 
                 //End Residency In individual entity
                 try {
-                    Individual inddata = individualViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+                    Individual inddata = individualViewModel.find(selectedIndividual.uuid);
                     if (inddata != null) {
                         IndividualEnd endInd = new IndividualEnd();
                         endInd.endType = 3;

@@ -47,6 +47,7 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.ClusterDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
@@ -86,7 +87,7 @@ public class ListingFragment extends Fragment {
     private FragmentListingBinding binding;
     public static  Locations selectedLocation;
     private LocationManager locationManager;
-    private Location currentLocation;
+    private String compno, cmpuuid, cmpextid, locname;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
@@ -97,6 +98,7 @@ public class ListingFragment extends Fragment {
     private EditText latitudeEditText, longitudeEditText, accuracyEditText, altitudeEditText;
     private AppCompatEditText comp;
     List<Configsettings> configsettings;
+    //private Locations selectedLocation;
 
     public ListingFragment() {
         // Required empty public constructor
@@ -131,6 +133,13 @@ public class ListingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentListingBinding.inflate(inflater, container, false);
+
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+        compno = selectedLocation != null ? selectedLocation.getCompno() : null;
+//        cmpuuid = selectedLocation != null ? selectedLocation.getUuid() : null;
+//        cmpextid = selectedLocation != null ? selectedLocation.getCompextId() : null;
+//        locname = selectedLocation != null ? selectedLocation.getLocationName() : null;
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_change_cluster);
         // Set a click listener on the button for mother
@@ -248,7 +257,7 @@ public class ListingFragment extends Fragment {
 
         ListingViewModel viewModel = new ViewModelProvider(this).get(ListingViewModel.class);
         try {
-            Listing data = viewModel.find(ClusterFragment.selectedLocation.compno);
+            Listing data = viewModel.find(compno);
             if (data != null) {
                 binding.setListing(data);
                 binding.locationName.setEnabled(false);
@@ -256,7 +265,7 @@ public class ListingFragment extends Fragment {
                 binding.villcode.setEnabled(false);
 
                 String regex = "[A-Z]{2}\\d{4}";
-                String input = ClusterFragment.selectedLocation.getCompno();
+                String input = compno;
                 if (!input.matches(regex)){
                     binding.buttonChangeCluster.setEnabled(false);
                 }else{
@@ -274,22 +283,22 @@ public class ListingFragment extends Fragment {
                 data = new Listing();
 
                 data.fw_uuid = fw;
-                //data.compextId = ClusterFragment.selectedLocation.getCompextId();
-                data.compno = ClusterFragment.selectedLocation.getCompno();
-                data.status = ClusterFragment.selectedLocation.getStatus();
+                //data.compextId = selectedLocation.getCompextId();
+                data.compno = compno;
+                data.status = selectedLocation.getStatus();
                 data.village = level6Data.getName();
                 data.fw_name = fwname;
-                data.locationName = ClusterFragment.selectedLocation.getLocationName();
-                data.location_uuid = ClusterFragment.selectedLocation.getUuid();
+                data.locationName = selectedLocation.getLocationName();
+                data.location_uuid = cmpuuid;
                 data.vill_extId = level6Data.getExtId();
-                data.cluster_id = ClusterFragment.selectedLocation.getLocationLevel_uuid();
-                //data.longitude = ClusterFragment.selectedLocation.getLongitude();
-                //data.latitude = ClusterFragment.selectedLocation.getLatitude();
-                //data.accuracy = ClusterFragment.selectedLocation.getAccuracy();
-                data.compextId = ClusterFragment.selectedLocation.getCompextId();
+                data.cluster_id = selectedLocation.getLocationLevel_uuid();
+                //data.longitude = selectedLocation.getLongitude();
+                //data.latitude = selectedLocation.getLatitude();
+                //data.accuracy = selectedLocation.getAccuracy();
+                data.compextId = selectedLocation.getCompextId();
 
                 Date tDate = new Date();
-                Date loc = ClusterFragment.selectedLocation.insertDate;
+                Date loc = selectedLocation.insertDate;
 
                 //Only Generate Pre populate the GPS when it is a new location
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -297,15 +306,15 @@ public class ListingFragment extends Fragment {
                 String locStr = sdf.format(loc);
 
                 if (todayStr.equals(locStr)) {
-                    data.longitude = ClusterFragment.selectedLocation.getLongitude();
-                    data.latitude = ClusterFragment.selectedLocation.getLatitude();
-                    data.accuracy = ClusterFragment.selectedLocation.getAccuracy();
-                    data.altitude = ClusterFragment.selectedLocation.getAltitude();
+                    data.longitude = selectedLocation.getLongitude();
+                    data.latitude = selectedLocation.getLatitude();
+                    data.accuracy = selectedLocation.getAccuracy();
+                    data.altitude = selectedLocation.getAltitude();
                 }
 
 
                 String regex = "[A-Z]{2}\\d{4}";
-                String input = ClusterFragment.selectedLocation.getCompno();
+                String input = compno;
                 if (!input.matches(regex)){
                     binding.buttonChangeCluster.setEnabled(false);
                 }else{
@@ -446,7 +455,7 @@ public class ListingFragment extends Fragment {
 
             try {
 
-                Locations data = locationViewModel.find(ClusterFragment.selectedLocation.compno);
+                Locations data = locationViewModel.find(compno);
                 if (data !=null) {
 
                     LocationAmendment locationz = new LocationAmendment();

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Adapter.ChangeHOH;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentChangeHohBinding;
 import org.openhds.hdsscapture.entity.Individual;
@@ -79,6 +80,10 @@ public class ChangeHohFragment extends DialogFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_change_hoh, container, false);
 
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        Locations selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+        String compno = selectedLocation != null ? selectedLocation.getCompno() : null;
+
         final TextView hh = view.findViewById(R.id.textView_hoh);
         if (socialgroup != null) {
             hh.setText(socialgroup.getExtId());
@@ -98,7 +103,7 @@ public class ChangeHohFragment extends DialogFragment {
 
         //Load Father Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_hoh);
-        final ChangeHOH adapter = new ChangeHOH(this, locations, socialgroup );
+        final ChangeHOH adapter = new ChangeHOH(this, locations, socialgroup, compno );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
         //recyclerView.setHasFixedSize(true);

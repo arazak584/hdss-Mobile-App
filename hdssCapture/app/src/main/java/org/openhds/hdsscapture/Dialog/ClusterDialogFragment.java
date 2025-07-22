@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Adapter.ClusterAdapter;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.fragment.ClusterFragment;
@@ -30,6 +31,7 @@ public class ClusterDialogFragment extends DialogFragment {
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
 
     private Locations locations;
+    private Locations selectedLocation;
 
     public ClusterDialogFragment() {
         // Required empty public constructor
@@ -65,12 +67,17 @@ public class ClusterDialogFragment extends DialogFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cluster_dialog, container, false);
 
-        final TextView compno = view.findViewById(R.id.textView_compextId);
-        if (ClusterFragment.selectedLocation != null) {
-            compno.setText(ClusterFragment.selectedLocation.getCompextId());
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        Locations selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+        String compno = selectedLocation != null ? selectedLocation.getCompextId() : null;
+        String village = selectedLocation != null ? selectedLocation.getVill_extId() : null;
+
+        final TextView compnos = view.findViewById(R.id.textView_compextId);
+        if (compno != null) {
+            compnos.setText(compno);
         } else {
             // Handle the case where locations is null
-            compno.setText("Error loading locations data");
+            compnos.setText("Error loading locations data");
         }
 
         Button closeButton = view.findViewById(R.id.cluster_close);
@@ -84,7 +91,7 @@ public class ClusterDialogFragment extends DialogFragment {
 
         //Load Socialgroup Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_cluster);
-        final ClusterAdapter adapter = new ClusterAdapter(this, locations);
+        final ClusterAdapter adapter = new ClusterAdapter(this, locations, village);
         final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(requireActivity()).get(HierarchyViewModel.class);
 
         //recyclerView.setHasFixedSize(true);

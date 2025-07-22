@@ -363,9 +363,6 @@ public class Locations extends BaseObservable implements Parcelable {
         this.longitude = in.readString();
         this.latitude = in.readString();
         this.accuracy = in.readString();
-        this.edit = in.readInt();
-        this.site = in.readInt();
-        this.complete = in.readInt();
         this.extId = in.readString();
         this.vill_extId = in.readString();
     }
@@ -399,9 +396,6 @@ public class Locations extends BaseObservable implements Parcelable {
         dest.writeString(this.longitude);
         dest.writeString(this.latitude);
         dest.writeString(this.accuracy);
-        dest.writeInt(this.edit);
-        dest.writeInt(this.site);
-        dest.writeInt(this.complete);
         dest.writeString(this.extId);
         dest.writeString(this.vill_extId);
     }

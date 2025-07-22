@@ -30,6 +30,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.databinding.FragmentAmendmentBinding;
@@ -80,6 +81,7 @@ public class AmendmentFragment extends DialogFragment {
     private EventForm eventForm;
     private ProgressDialog progressDialog;
     private IndividualViewModel individualViewModel;
+    private Individual selectedIndividual;
 
     public AmendmentFragment() {
         // Required empty public constructor
@@ -122,9 +124,11 @@ public class AmendmentFragment extends DialogFragment {
         binding = FragmentAmendmentBinding.inflate(inflater, container, false);
         //binding.setIndividual(individual);
 
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
 
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
+        ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -221,7 +225,7 @@ public class AmendmentFragment extends DialogFragment {
         AmendmentViewModel viewModel = new ViewModelProvider(this).get(AmendmentViewModel.class);
         ResidencyViewModel resViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         try {
-            Amendment data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+            Amendment data = viewModel.find(selectedIndividual.uuid);
             if (data != null) {
                 binding.setAmendment(data);
                 binding.amendFirstName.setEnabled(false);
@@ -240,20 +244,20 @@ public class AmendmentFragment extends DialogFragment {
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
-                data.orig_firstName = HouseMembersFragment.selectedIndividual.getFirstName();
-                data.orig_lastName = HouseMembersFragment.selectedIndividual.getLastName();
-                data.orig_otherName = HouseMembersFragment.selectedIndividual.getOtherName();
-                data.orig_ghanacard = HouseMembersFragment.selectedIndividual.getGhanacard();
-                data.orig_dob = HouseMembersFragment.selectedIndividual.dob;
-                data.orig_gender = HouseMembersFragment.selectedIndividual.getGender();
-                data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
+                data.orig_firstName = selectedIndividual.getFirstName();
+                data.orig_lastName = selectedIndividual.getLastName();
+                data.orig_otherName = selectedIndividual.getOtherName();
+                data.orig_ghanacard = selectedIndividual.getGhanacard();
+                data.orig_dob = selectedIndividual.dob;
+                data.orig_gender = selectedIndividual.getGender();
+                data.individual_uuid = selectedIndividual.getUuid();
 
-                Individual datae = individualViewModel.mother(HouseMembersFragment.selectedIndividual.uuid);
+                Individual datae = individualViewModel.mother(selectedIndividual.uuid);
                 if (datae!=null){
                     data.mother_uuid=datae.uuid;
                 }
 
-                Individual dataf = individualViewModel.father(HouseMembersFragment.selectedIndividual.uuid);
+                Individual dataf = individualViewModel.father(selectedIndividual.uuid);
                 if (dataf!=null){
                     data.father_uuid=dataf.uuid;
                 }
@@ -272,7 +276,7 @@ public class AmendmentFragment extends DialogFragment {
         }
 
         try {
-            Residency datas = resViewModel.amend(HouseMembersFragment.selectedIndividual.uuid);
+            Residency datas = resViewModel.amend(selectedIndividual.uuid);
             if (datas != null) {
                 binding.setRes(datas);
 
@@ -283,7 +287,7 @@ public class AmendmentFragment extends DialogFragment {
 
 
         try {
-            Individual datae = individualViewModel.mother(HouseMembersFragment.selectedIndividual.uuid);
+            Individual datae = individualViewModel.mother(selectedIndividual.uuid);
             if (datae != null) {
                 binding.setMother(datae);
                 AppCompatEditText name = binding.getRoot().findViewById(R.id.mother_name);
@@ -298,7 +302,7 @@ public class AmendmentFragment extends DialogFragment {
         }
 
         try {
-            Individual data = individualViewModel.father(HouseMembersFragment.selectedIndividual.uuid);
+            Individual data = individualViewModel.father(selectedIndividual.uuid);
             if (data != null) {
                 binding.setFather(data);
                 AppCompatEditText name = binding.getRoot().findViewById(R.id.father_name);
@@ -313,7 +317,7 @@ public class AmendmentFragment extends DialogFragment {
         }
 
         try {
-            Individual datae = individualViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+            Individual datae = individualViewModel.find(selectedIndividual.uuid);
             if (datae != null) {
                 binding.setIndividual(datae);
 
@@ -482,7 +486,7 @@ public class AmendmentFragment extends DialogFragment {
             executor.execute(() -> {
                 try {
                     // First block - amendment update
-                    Individual amendData = individualViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+                    Individual amendData = individualViewModel.find(selectedIndividual.uuid);
                     if (amendData != null) {
                         IndividualAmendment amend = new IndividualAmendment();
                         amend.uuid = binding.getAmendment().individual_uuid;
@@ -544,7 +548,7 @@ public class AmendmentFragment extends DialogFragment {
 
 //                try {
 //                    // Second block - visited update (with different variable name)
-//                    Individual visitedData = individualViewModel.visited(HouseMembersFragment.selectedIndividual.uuid);
+//                    Individual visitedData = individualViewModel.visited(selectedIndividual.uuid);
 //                    if (visitedData != null) {
 //                        IndividualVisited visited = new IndividualVisited();
 //                        visited.uuid = binding.getAmendment().individual_uuid;

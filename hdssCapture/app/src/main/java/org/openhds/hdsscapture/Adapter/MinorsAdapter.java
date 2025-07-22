@@ -34,12 +34,14 @@ public class MinorsAdapter extends RecyclerView.Adapter<MinorsAdapter.ViewHolder
     private final Socialgroup socialgroup;
     private final Residency residency;
     private final List<Individual> individualList;
+    private final String compno;
 
-    public MinorsAdapter(MinorDialogFragment activity, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public MinorsAdapter(MinorDialogFragment activity, Residency residency, Locations locations, Socialgroup socialgroup, String compno) {
         this.activity = activity;
         this.locations = locations;
         this.residency = residency;
         this.socialgroup = socialgroup;
+        this.compno = compno;
         individualList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -88,7 +90,7 @@ public class MinorsAdapter extends RecyclerView.Adapter<MinorsAdapter.ViewHolder
         individualList.clear();
             if(socialgroup != null)
                 try {
-                    List<Individual> list = individualViewModel.minors(ClusterFragment.selectedLocation.compno, socialgroup.extId);
+                    List<Individual> list = individualViewModel.minors(compno, socialgroup.extId);
 
                     if (list != null) {
                         individualList.addAll(list);

@@ -18,6 +18,7 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.Adapter.RegistryAdapter;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.RegistryViewModel;
 import org.openhds.hdsscapture.databinding.FragmentRegisterBinding;
@@ -52,6 +53,7 @@ public class RegisterFragment extends Fragment {
     private RegistryViewModel registryViewModel;
     private IndividualViewModel individualViewModel; // Add IndividualViewModel
     private RegistryAdapter registryAdapter;
+    private Locations selectedLocation;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -88,6 +90,9 @@ public class RegisterFragment extends Fragment {
         final Intent i = getActivity().getIntent();
         fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+
         // Setup RecyclerView and Adapter
         RecyclerView recyclerView = binding.recyclerView;
         registryAdapter = new RegistryAdapter(getContext(), new ArrayList<>(), registryViewModel, individualViewModel, socialgroup);
@@ -118,7 +123,7 @@ public class RegisterFragment extends Fragment {
 //                    newRegistry.setIndividual_uuid(individual.uuid);
 //                    newRegistry.setFw_uuid(fieldworkerData.getFw_uuid());
 //                    newRegistry.setSocialgroup_uuid(socialgroup.getUuid());
-//                    newRegistry.setLocation_uuid(ClusterFragment.selectedLocation.getUuid());
+//                    newRegistry.setLocation_uuid(selectedLocation.getUuid());
 
                     registryAdapter.filter();
                     binding.setRegistry(newRegistry);
@@ -139,7 +144,7 @@ public class RegisterFragment extends Fragment {
                     registry.setIndividual_uuid(individual.getUuid());
                     registry.setName(individual.getFirstName() + " " + individual.getLastName());
                     registry.setSocialgroup_uuid(socialgroup.getUuid());
-                    registry.setLocation_uuid(ClusterFragment.selectedLocation.getUuid());
+                    registry.setLocation_uuid(selectedLocation.getUuid());
                     registry.setFw_uuid(fieldworkerData.getFw_uuid());
                     //registry.insertDate = new Date();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());

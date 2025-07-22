@@ -27,6 +27,7 @@ import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
 import org.openhds.hdsscapture.Adapter.SearchAdapter;
 import org.openhds.hdsscapture.Duplicate.DupFragment;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentHouseMembersBinding;
@@ -101,13 +102,16 @@ public class SearchFragment extends DialogFragment {
         binding = FragmentSearchBinding.inflate(inflater, container, false);
 
         Button closeButton = binding.getRoot().findViewById(R.id.button_close);
-
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
             }
         });
+
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        Locations selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+        String compno = selectedLocation != null ? selectedLocation.getCompno() : null;
 
         final AppCompatButton dup = binding.getRoot().findViewById(R.id.button_newindividual);
         dup.setOnClickListener(v -> {
@@ -119,7 +123,7 @@ public class SearchFragment extends DialogFragment {
         final HierarchyViewModel hierarchyViewModel = new ViewModelProvider(this).get(HierarchyViewModel.class);
 
         final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_individual);
-        final SearchAdapter adapter = new SearchAdapter(this, locations, socialgroup );
+        final SearchAdapter adapter = new SearchAdapter(this, locations, socialgroup, compno );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
         //recyclerView.setHasFixedSize(true);

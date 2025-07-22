@@ -32,6 +32,7 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
     private final Locations locations;
     private final List<Individual> individualList;
 
+    private final String compno;
     public interface FatherSelectionListener {
         void onFatherSelected(String fatherId);
     }
@@ -42,9 +43,10 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
         this.listener = listener;
     }
 
-    public FatherAdapter(FatherDialogFragment activity, Locations locations) {
+    public FatherAdapter(FatherDialogFragment activity, Locations locations, String compno) {
         this.activity = activity;
         this.locations = locations;
+        this.compno = compno;
         individualList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -131,9 +133,9 @@ public class FatherAdapter extends RecyclerView.Adapter<FatherAdapter.ViewHolder
             }
         } else {
 
-            if(ClusterFragment.selectedLocation != null)
+            if(compno != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveByFather(ClusterFragment.selectedLocation.getCompno());
+                    List<Individual> list = individualViewModel.retrieveByFather(compno);
 
                     if (list != null) {
                         individualList.addAll(list);

@@ -48,6 +48,6 @@ public interface InmigrationDao {
     @Query("SELECT * FROM inmigration where uuid=:id AND complete!=1")
     Inmigration ins(String id);
 
-    @Query("SELECT uuid, 'Inmigration' AS formType, 'Inmigration: ' || ' (' || insertDate || ')' AS displayText FROM inmigration WHERE complete = 1")
+    @Query("SELECT a.uuid, 'Inmigration' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM inmigration as a inner join individual as b ON a.individual_uuid=b.uuid WHERE a.complete = 1")
     List<CompletedForm> getCompletedForms();
 }

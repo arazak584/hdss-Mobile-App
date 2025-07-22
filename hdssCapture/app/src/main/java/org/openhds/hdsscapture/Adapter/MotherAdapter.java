@@ -38,15 +38,17 @@ public class MotherAdapter extends RecyclerView.Adapter<MotherAdapter.ViewHolder
     }
 
     private MotherSelectionListener listener;
+    private final String compno;
 
     public void setMotherSelectionListener(MotherSelectionListener listener) {
         this.listener = listener;
     }
 
 
-    public MotherAdapter(MotherDialogFragment activity, Locations locations, Socialgroup socialgroup) {
+    public MotherAdapter(MotherDialogFragment activity, Locations locations, Socialgroup socialgroup, String compno) {
         this.activity = activity;
         this.locations = locations;
+        this.compno = compno;
         individualList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -130,9 +132,9 @@ public class MotherAdapter extends RecyclerView.Adapter<MotherAdapter.ViewHolder
             }
         } else {
 
-            if(ClusterFragment.selectedLocation != null)
+            if(compno != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveByMother(ClusterFragment.selectedLocation.getCompno());
+                    List<Individual> list = individualViewModel.retrieveByMother(compno);
 
                     if (list != null) {
                         individualList.addAll(list);

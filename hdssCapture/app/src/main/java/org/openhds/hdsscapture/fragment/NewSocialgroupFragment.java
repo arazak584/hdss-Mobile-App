@@ -19,6 +19,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.Calculators;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Utilities.UniqueIDGen;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
@@ -67,7 +68,7 @@ public class NewSocialgroupFragment extends DialogFragment {
     private FragmentNewSocialgroupBinding binding;
     private Socialgroup socialgroup;
     private Hierarchy level6Data;
-    private EventForm eventForm;
+    private Locations selectedLocation;
 
     public NewSocialgroupFragment() {
         // Required empty public constructor
@@ -124,6 +125,8 @@ public class NewSocialgroupFragment extends DialogFragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
         // Generate a UUID
         if(individual.uuid == null) {
@@ -163,8 +166,8 @@ public class NewSocialgroupFragment extends DialogFragment {
         }
 
         if(residency.location_uuid==null){
-            binding.getResidency().location_uuid = ClusterFragment.selectedLocation.getUuid();
-            binding.getIndividual().compno = ClusterFragment.selectedLocation.getCompno();
+            binding.getResidency().location_uuid = selectedLocation.getUuid();
+            binding.getIndividual().compno = selectedLocation.getCompno();
         }
 
         if(socialgroup.complete==null){
@@ -191,7 +194,7 @@ public class NewSocialgroupFragment extends DialogFragment {
         if (binding.getIndividual().extId == null) {
             final IndividualViewModel individualViewModels = new ViewModelProvider(this).get(IndividualViewModel.class);
             int sequenceNumber = 1;
-            String id = ClusterFragment.selectedLocation.compextId + String.format("%04d", sequenceNumber); // generate ID with sequence number padded with zeros
+            String id = selectedLocation.compextId + String.format("%04d", sequenceNumber); // generate ID with sequence number padded with zeros
             while (true) {
                 try {
                     if (individualViewModels.findAll(id) == null) break;
@@ -201,7 +204,7 @@ public class NewSocialgroupFragment extends DialogFragment {
                     e.printStackTrace();
                 } // check if ID already exists in ViewModel
                 sequenceNumber++; // increment sequence number if ID exists
-                id = ClusterFragment.selectedLocation.compextId + String.format("%04d", sequenceNumber); // generate new ID with updated sequence number
+                id = selectedLocation.compextId + String.format("%04d", sequenceNumber); // generate new ID with updated sequence number
             }
             binding.getIndividual().extId = id; // set the generated ID to the extId property of the Individual object
         }
@@ -209,7 +212,7 @@ public class NewSocialgroupFragment extends DialogFragment {
         // Generate ID if extId is null
         if (binding.getSocialgroup().extId == null) {
             final SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-            String id = UniqueIDGen.generateHouseholdId(socialgroupViewModel, ClusterFragment.selectedLocation.compextId);
+            String id = UniqueIDGen.generateHouseholdId(socialgroupViewModel, selectedLocation.compextId);
             binding.getIndividual().hohID = id;
             binding.getSocialgroup().extId = id;
 

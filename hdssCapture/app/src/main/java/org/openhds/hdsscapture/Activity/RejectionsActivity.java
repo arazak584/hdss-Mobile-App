@@ -164,10 +164,6 @@ public class RejectionsActivity extends AppCompatActivity {
     private void query() {
         List<RejectEvent> list = new ArrayList<>();
 
-//        final Intent i = getIntent();
-//        final Fieldworker fieldworkerDatas = i.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
-//        String username = fieldworkerDatas.getFw_uuid();
-
         try {
 
             //final SimpleDateFormat f = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
@@ -395,10 +391,6 @@ public class RejectionsActivity extends AppCompatActivity {
         }
         progres.setMessage("Downloading...");
         progres.show();
-
-//        final Intent f = getIntent();
-//        final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
-//        String fw = fieldworkerDatas.getFw_uuid();
 
         final InmigrationViewModel inmigrationViewModel = new ViewModelProvider(RejectionsActivity.this).get(InmigrationViewModel.class);
         Call<DataWrapper<Inmigration>> c_callable = dao.getImg(authorizationHeader, fw);

@@ -5,15 +5,14 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     card_view:cardCornerRadius="8dp"
-    card_view:cardElevation="4dp">
+    card_view:cardElevation="2dp">
 
     <TextView
         android:id="@+id/formText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:padding="5dp"
         android:text="Form Title"
         android:textSize="16sp"
-        android:textColor="#000000"
-        android:textStyle="bold" />
+        android:textStyle="normal" />
 </androidx.cardview.widget.CardView>

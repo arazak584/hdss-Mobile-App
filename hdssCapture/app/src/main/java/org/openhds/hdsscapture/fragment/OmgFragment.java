@@ -25,6 +25,7 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
@@ -69,6 +70,7 @@ public class OmgFragment extends Fragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentOutmigrationBinding binding;
+    private Locations selectedLocation;
 
     public OmgFragment() {
         // Required empty public constructor
@@ -114,6 +116,9 @@ public class OmgFragment extends Fragment {
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -171,7 +176,7 @@ public class OmgFragment extends Fragment {
         RadioButton no = binding.getRoot().findViewById(R.id.no);
         OutmigrationViewModel viewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
         try {
-            Outmigration data = viewModel.find(individual.uuid, ClusterFragment.selectedLocation.uuid);
+            Outmigration data = viewModel.find(individual.uuid, selectedLocation.uuid);
             if (data != null) {
                 binding.setOutmigration(data);
                 ind.setText(individual.firstName + " " + individual.lastName);
@@ -180,7 +185,7 @@ public class OmgFragment extends Fragment {
                 no.setVisibility(View.VISIBLE);
                 data.edit = 1;
                 data.socialgroup_uuid = socialgroup.uuid;
-                data.location_uuid = ClusterFragment.selectedLocation.getUuid();
+                data.location_uuid = selectedLocation.getUuid();
 
                 if(data.status!=null && data.status==2){
                     cmt.setVisibility(View.VISIBLE);
@@ -274,7 +279,7 @@ public class OmgFragment extends Fragment {
                 //1==No
                 //End Residency In residency entity
                 try {
-                    Residency data = resModel.dth(individual.uuid, ClusterFragment.selectedLocation.uuid);
+                    Residency data = resModel.dth(individual.uuid, selectedLocation.uuid);
                     if (data != null && binding.getOutmigration().edit==1) {
                         ResidencyAmendment residencyAmendment = new ResidencyAmendment();
                         residencyAmendment.endType = 2;
@@ -300,7 +305,7 @@ public class OmgFragment extends Fragment {
 
                 //Restore Residency In residency entity
                 try {
-                    Residency data = resModel.resomg(individual.uuid, ClusterFragment.selectedLocation.uuid);
+                    Residency data = resModel.resomg(individual.uuid, selectedLocation.uuid);
                     if (data != null && binding.getOutmigration().edit==2) {
                         ResidencyAmendment residencyAmendment = new ResidencyAmendment();
                         residencyAmendment.endType = 1;

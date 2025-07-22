@@ -21,7 +21,9 @@ import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
@@ -66,6 +68,8 @@ public class BirthExtraSFragment extends Fragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentBirthSBinding binding;
+    private Locations selectedLocation;
+    private Individual selectedIndividual;
 
     public BirthExtraSFragment() {
         // Required empty public constructor
@@ -110,6 +114,12 @@ public class BirthExtraSFragment extends Fragment {
         final Intent intent = getActivity().getIntent();
         final Round roundData = intent.getParcelableExtra(HierarchyActivity.ROUND_DATA);
 
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
+
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+
         // Retrieve fw_uuid from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
         fw = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
@@ -124,7 +134,7 @@ public class BirthExtraSFragment extends Fragment {
         OutcomeViewModel outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
         VpmViewModel vpmViewModel = new ViewModelProvider(this).get(VpmViewModel.class);
         try {
-            Pregnancyoutcome datas = viewModel.findsloc(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.compno);
+            Pregnancyoutcome datas = viewModel.findsloc(selectedIndividual.uuid, selectedLocation.compno);
             if (datas != null) {
                 binding.setPregoutcome(datas);
 
@@ -137,8 +147,8 @@ public class BirthExtraSFragment extends Fragment {
                 }
 
                 try {
-                    final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD5 + 0 + roundData.roundNumber;
-                    Outcome data = outcomeViewModel.find(child_id,ClusterFragment.selectedLocation.uuid);
+                    final String child_id = selectedIndividual.uuid + AppConstants.CHILD5 + 0 + roundData.roundNumber;
+                    Outcome data = outcomeViewModel.find(child_id,selectedLocation.uuid);
                     if (data != null) {
                         binding.setPregoutcome1(data);
 
@@ -149,8 +159,8 @@ public class BirthExtraSFragment extends Fragment {
 
                 //Child2
                 try {
-                    final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD6 + 0 + roundData.roundNumber;
-                    Outcome data = outcomeViewModel.find(child_id,ClusterFragment.selectedLocation.uuid);
+                    final String child_id = selectedIndividual.uuid + AppConstants.CHILD6 + 0 + roundData.roundNumber;
+                    Outcome data = outcomeViewModel.find(child_id,selectedLocation.uuid);
                     if (data != null) {
                         binding.setPregoutcome2(data);
 
@@ -161,8 +171,8 @@ public class BirthExtraSFragment extends Fragment {
 
                 //Child3
                 try {
-                    final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD7 + 0 + roundData.roundNumber;
-                    Outcome data = outcomeViewModel.find(child_id,ClusterFragment.selectedLocation.uuid);
+                    final String child_id = selectedIndividual.uuid + AppConstants.CHILD7 + 0 + roundData.roundNumber;
+                    Outcome data = outcomeViewModel.find(child_id,selectedLocation.uuid);
                     if (data != null) {
                         binding.setPregoutcome3(data);
 
@@ -173,8 +183,8 @@ public class BirthExtraSFragment extends Fragment {
 
                 //Child4
                 try {
-                    final String child_id = HouseMembersFragment.selectedIndividual.uuid + AppConstants.CHILD8 + 0 + roundData.roundNumber;
-                    Outcome data = outcomeViewModel.find(child_id,ClusterFragment.selectedLocation.uuid);
+                    final String child_id = selectedIndividual.uuid + AppConstants.CHILD8 + 0 + roundData.roundNumber;
+                    Outcome data = outcomeViewModel.find(child_id,selectedLocation.uuid);
                     if (data != null) {
                         binding.setPregoutcome4(data);
 
@@ -193,7 +203,7 @@ public class BirthExtraSFragment extends Fragment {
         }
 
         try {
-            final String child_id = "ST2-"+ HouseMembersFragment.selectedIndividual.extId;
+            final String child_id = "ST2-"+ selectedIndividual.extId;
             Vpm data = vpmViewModel.find(child_id);
             if (data != null) {
                 binding.setDeath(data);
@@ -209,19 +219,19 @@ public class BirthExtraSFragment extends Fragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fw;
-                data.uuid = "ST2-"+ HouseMembersFragment.selectedIndividual.getExtId();
+                data.uuid = "ST2-"+ selectedIndividual.getExtId();
                 data.insertDate = new Date();
                 data.firstName = "Still";
                 data.lastName = "Birth";
                 data.gender = 3;
-                data.compno = ClusterFragment.selectedLocation.getCompno();
-                data.extId = "ST2-"+ HouseMembersFragment.selectedIndividual.getExtId();
-                data.compname = ClusterFragment.selectedLocation.getLocationName();
-                data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
+                data.compno = selectedLocation.getCompno();
+                data.extId = "ST2-"+ selectedIndividual.getExtId();
+                data.compname = selectedLocation.getLocationName();
+                data.individual_uuid = selectedIndividual.getUuid();
                 data.villname = level6Data.getName();
                 data.villcode = level6Data.getExtId();
-                data.respondent = HouseMembersFragment.selectedIndividual.getFirstName() +" "+ HouseMembersFragment.selectedIndividual.getLastName();
-                data.househead = HouseMembersFragment.selectedIndividual.getFirstName() +" "+ HouseMembersFragment.selectedIndividual.getLastName();
+                data.respondent = selectedIndividual.getFirstName() +" "+ selectedIndividual.getLastName();
+                data.househead = selectedIndividual.getFirstName() +" "+ selectedIndividual.getLastName();
                 data.deathCause = 77;
                 data.complete=1;
                 data.deathPlace =1;
@@ -320,7 +330,7 @@ public class BirthExtraSFragment extends Fragment {
                 vpm.deathDate = binding.getPregoutcome().outcomeDate;
                 vpm.dob = binding.getPregoutcome().outcomeDate;
                 vpm.deathPlace = 1;
-                vpm.extId = "ST2-" + HouseMembersFragment.selectedIndividual.getExtId();
+                vpm.extId = "ST2-" + selectedIndividual.getExtId();
                 vpmViewModel.add(vpm);
 
             }

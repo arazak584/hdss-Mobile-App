@@ -25,6 +25,7 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Utilities.UniqueIDGen;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
@@ -74,7 +75,7 @@ public class VisitFragment extends DialogFragment {
     private static final String SOCIAL_ID = "SOCIAL_ID";
 
     private final String TAG = "VISIT.TAG";
-
+    private String compno, cmpuuid, cmpextid;
 
 
 
@@ -127,6 +128,12 @@ public class VisitFragment extends DialogFragment {
 
         final Intent intent = getActivity().getIntent();
         final Round roundData = intent.getParcelableExtra(HierarchyActivity.ROUND_DATA);
+
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        Locations selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+        compno = selectedLocation != null ? selectedLocation.getCompno() : null;
+        cmpuuid = selectedLocation != null ? selectedLocation.getUuid() : null;
+        cmpextid = selectedLocation != null ? selectedLocation.getCompextId() : null;
 
         //Search Respondent
         IndividualViewModel vmodel = new ViewModelProvider(this).get(IndividualViewModel.class);
@@ -199,7 +206,7 @@ public class VisitFragment extends DialogFragment {
 
                 data.uuid = uuidString;
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.location_uuid = ClusterFragment.selectedLocation.getUuid();
+                data.location_uuid = cmpuuid;
                 data.roundNumber = roundData.getRoundNumber();
                 //data.uuid = socialgroup.getVisit_uuid();
                 data.complete = 1;
@@ -258,7 +265,7 @@ public class VisitFragment extends DialogFragment {
             final Visit finalData = binding.getVisit();
             SocialgroupViewModel vmodel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             IndividualViewModel imodel = new ViewModelProvider(this).get(IndividualViewModel.class);
-            String id = UniqueIDGen.generateHouseholdId(vmodel, ClusterFragment.selectedLocation.compextId);
+            String id = UniqueIDGen.generateHouseholdId(vmodel, cmpextid);
             String originalHouseExtId = finalData.houseExtId;
 
                 final boolean validateOnComplete = true;//finalData.complete == 1;
@@ -285,8 +292,8 @@ public class VisitFragment extends DialogFragment {
 
             //Update hohid in individual if hohid length!=11
 //            try {
-//                List<Individual> individuals = imodel.hoh(ClusterFragment.selectedLocation.compno, originalHouseExtId);
-//                Log.d("Individual", "HOHID LENGTH 2: " + originalHouseExtId + " " + ClusterFragment.selectedLocation.compno);
+//                List<Individual> individuals = imodel.hoh(compno, originalHouseExtId);
+//                Log.d("Individual", "HOHID LENGTH 2: " + originalHouseExtId + " " + compno);
 //                Log.d("Individual", "Individuals List Size: " + (individuals != null ? individuals.size() : "null"));
 //                // Iterate over each Individual record
 //                for (Individual data : individuals) {

@@ -32,6 +32,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.openhds.hdsscapture.Adapter.EndEventsAdapter;
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
 import org.openhds.hdsscapture.Dialog.MinorDialogFragment;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.odk.OdkFormAdapter;
 import org.openhds.hdsscapture.Dialog.PregnancyDialogFragment;
 import org.openhds.hdsscapture.Duplicate.DupFragment;
@@ -81,6 +83,7 @@ import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subqueries.EndEvents;
 import org.openhds.hdsscapture.odk.OdkForm;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -117,6 +120,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private RegistryViewModel registryViewModel;
     private VisitViewModel visitViewModel;
     private IndividualViewModel individualViewModel;
+    private SocialgroupViewModel socialgroupViewModel;
     private  Pregnancy pregnancy;
     private Pregnancyoutcome pregnancyoutcome;
     private AppCompatButton finish;
@@ -124,6 +128,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private RecyclerView recyclerViewOdk;
     private IndividualViewAdapter adapter;
     private RecyclerView recyclerView;
+    private Locations currentLocation;
+    private IndividualSharedViewModel individualSharedViewModel;
 
     public HouseMembersFragment() {
         // Required empty public constructor
@@ -160,6 +166,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             this.locations = getArguments().getParcelable(LOC_LOCATION_IDS);
             this.individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
+        individualSharedViewModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
     }
 
     @Override
@@ -169,6 +176,12 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         //binding = FragmentHouseMembersBinding.inflate(inflater, container, false);
         view = inflater.inflate(R.layout.fragment_house_members, container, false);
         //binding.setIndividual(individual);
+
+        ClusterSharedViewModel clusterSharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        currentLocation = clusterSharedViewModel.getCurrentSelectedLocation();
+
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
 
         //Ended Events
         deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
@@ -186,12 +199,19 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
         //final TextView hh = view.findViewById(R.id.textView_compextId);
         TextView name = view.findViewById(R.id.textView_hh);
-         if (socialgroup != null) {
-            name.setText(socialgroup.getGroupName() + "-" + socialgroup.getExtId());
-        }else{
-            name.setText("Loading...");
-        }
+        try {
+            Socialgroup data = viewModel.findhse(socialgroup.uuid);
+            if (data != null) {
+                name.setText(data.getGroupName() + " - " + data.getExtId());
+            }else{
+                name.setText("Loading...");
+            }
 
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 //        final RecyclerView recyclerView = view.findViewById(R.id.recyclerView_household);
 //        final IndividualViewAdapter adapter = new IndividualViewAdapter(this, locations, socialgroup,this );
@@ -254,14 +274,14 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 //        }
 
         recyclerView = view.findViewById(R.id.recyclerView_household);
-        adapter = new IndividualViewAdapter(this, locations, socialgroup, this);
+        adapter = new IndividualViewAdapter(this, locations, socialgroup, this, individualSharedViewModel);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
 
-        // ✅ Defer data loading to after layout
-        view.post(() -> observeData());
+        // 🟡 Use viewLifecycleOwner to avoid memory leaks
+        view.post(this::observeData);
 
         final AppCompatButton sea = view.findViewById(R.id.search);
         sea.setOnClickListener(v -> {
@@ -473,10 +493,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                     handler.post(this::showPregnancyDialog);
                 }
 
-                List<Individual> individualList = individualViewModel.minors(
-                        ClusterFragment.selectedLocation.compno,
-                        socialgroup.getExtId()
-                );
+                List<Individual> individualList = individualViewModel.minors(currentLocation.compno,socialgroup.getExtId());
                 if (individualList != null && !individualList.isEmpty()) {
                     handler.post(this::showMinorsDialog);
                 }
@@ -528,9 +545,11 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
     @Override
     public void onIndividualClick(Individual selectedIndividual) {
-        HouseMembersFragment.selectedIndividual = selectedIndividual; // Always update the selectedLocation variable
+        //HouseMembersFragment.selectedIndividual = selectedIndividual; // Always update the selectedLocation variable
+
         // Update the householdAdapter with the selected location
         if (selectedIndividual != null) {
+            individualSharedViewModel.setSelectedIndividual(selectedIndividual);
 
                 // Handle ODK return flow
                 OdkUtils.returnToOdk(requireActivity(), selectedIndividual);
@@ -928,7 +947,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
             InmigrationViewModel imgViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
             try {
-                Inmigration data = imgViewModel.find(selectedIndividual.uuid,ClusterFragment.selectedLocation.uuid);
+                Inmigration data = imgViewModel.find(selectedIndividual.uuid,currentLocation.uuid);
                 if (data != null) {
                     String TextImg = "Update Inmigration";
                     img.setVisibility(View.VISIBLE);
@@ -1105,10 +1124,13 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     @Override
     public void onResume() {
         super.onResume();
-        Individual selectedIndividual = HouseMembersFragment.selectedIndividual;
+        //Individual selectedIndividual = HouseMembersFragment.selectedIndividual;
+        Individual selected = individualSharedViewModel.getCurrentSelectedIndividual();
+
         if (selectedIndividual != null) {
             // Handle returning from ODK Collect
             OdkUtils.returnToOdk(requireActivity(), selectedIndividual);
+            onIndividualClick(selected);
         }
     }
 
@@ -1124,16 +1146,18 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
         executor.execute(() -> {
             try {
+
                 // Perform database operations in the background
-                long totalInd = (individualViewModel != null) ? individualViewModel.count(socialgroup != null ? socialgroup.extId : "", ClusterFragment.selectedLocation != null ? ClusterFragment.selectedLocation.compno : "") : 0;
-                long totalRegistry = (registryViewModel != null) ? registryViewModel.count(socialgroup != null ? socialgroup.uuid : "") : 0;
+                long totalInd = (individualViewModel != null) ? individualViewModel.count(socialgroup != null ? socialgroup.extId : "", currentLocation.compno != null ? currentLocation.compno : "") : 0;
+                long totalRegistry = (registryViewModel != null) ? registryViewModel.count(socialgroup != null ? socialgroup.getUuid() : "") : 0;
                 long totalVisit = (visitViewModel != null) ? visitViewModel.count(socialgroup != null ? socialgroup.uuid : "") : 0;
-                long cnt = (deathViewModel != null) ? deathViewModel.err(socialgroup != null ? socialgroup.extId : "", ClusterFragment.selectedLocation != null ? ClusterFragment.selectedLocation.compno : "") : 0;
-                long err = (individualViewModel != null) ? individualViewModel.err(socialgroup != null ? socialgroup.extId : "", ClusterFragment.selectedLocation != null ? ClusterFragment.selectedLocation.compno : "") : 0;
-                long errs = (individualViewModel != null) ? individualViewModel.errs(socialgroup != null ? socialgroup.extId : "", ClusterFragment.selectedLocation != null ? ClusterFragment.selectedLocation.compno : "") : 0;
+                long cnt = (deathViewModel != null) ? deathViewModel.err(socialgroup != null ? socialgroup.extId : "", currentLocation.compno != null ? currentLocation.compno : "") : 0;
+                long err = (individualViewModel != null) ? individualViewModel.err(socialgroup != null ? socialgroup.extId : "", currentLocation.compno != null ? currentLocation.compno : "") : 0;
+                long errs = (individualViewModel != null) ? individualViewModel.errs(socialgroup != null ? socialgroup.extId : "", currentLocation.compno != null ? currentLocation.compno : "") : 0;
 
                 handler.post(() -> {
                     if (getActivity() == null || !isAdded()) return; // Ensure fragment is still attached
+                    Log.d("Count", "Count: " + totalInd +" : " + totalVisit + " : " + totalVisit);
 
                     try {
                         if (cnt > 0) {
@@ -1194,12 +1218,21 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                     .observe(getViewLifecycleOwner(), individuals -> {
                         if (individuals != null && !individuals.isEmpty()) {
                             adapter.setIndividualList(individuals);
+
+                            // ✅ Trigger button visibility logic
+                            Individual selected = individualSharedViewModel.getCurrentSelectedIndividual();
+                            if (selected != null) {
+                                onIndividualClick(selected); // triggers UI updates like buttons
+                            }
                         } else {
+                            adapter.setIndividualList(Collections.emptyList());
                             Toast.makeText(requireContext(), "No Active Individual Found", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
     }
+
+
 
 
     // Override the onBackPressed() method in the hosting activity

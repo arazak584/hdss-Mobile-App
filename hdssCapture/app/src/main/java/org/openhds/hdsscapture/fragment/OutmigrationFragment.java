@@ -24,8 +24,10 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
@@ -70,7 +72,8 @@ public class OutmigrationFragment extends DialogFragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentOutmigrationBinding binding;
-
+    private Locations selectedLocation;
+    private Individual selectedIndividual;
     public OutmigrationFragment() {
         // Required empty public constructor
     }
@@ -111,11 +114,17 @@ public class OutmigrationFragment extends DialogFragment {
         // Inflate the layout for this fragment
         binding = FragmentOutmigrationBinding.inflate(inflater, container, false);
 
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
+
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
+        ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
+
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -166,7 +175,7 @@ public class OutmigrationFragment extends DialogFragment {
 
         OutmigrationViewModel viewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
         try {
-            Outmigration data = viewModel.edit(HouseMembersFragment.selectedIndividual.uuid,ClusterFragment.selectedLocation.uuid);
+            Outmigration data = viewModel.edit(selectedIndividual.uuid,selectedLocation.uuid);
             VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
             if (data != null) {
                 binding.setOutmigration(data);
@@ -179,7 +188,7 @@ public class OutmigrationFragment extends DialogFragment {
                 }
 
                 ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-                Residency dataRes = resModel.findRes(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
+                Residency dataRes = resModel.findRes(selectedIndividual.uuid, selectedLocation.uuid);
                 if (dataRes != null){
                     data.startDate = dataRes.startDate;
                     data.residency_uuid = dataRes.uuid;
@@ -190,10 +199,10 @@ public class OutmigrationFragment extends DialogFragment {
 
                 data.uuid=uuidString;
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
+                data.individual_uuid = selectedIndividual.getUuid();
                 data.complete = 1;
                 data.socialgroup_uuid = socialgroup.uuid;
-                data.location_uuid = ClusterFragment.selectedLocation.uuid;
+                data.location_uuid = selectedLocation.uuid;
 
                 Date currentDate = new Date(); // Get the current date and time
                 Calendar cal = Calendar.getInstance();
@@ -304,7 +313,7 @@ public class OutmigrationFragment extends DialogFragment {
                 //1==No
                 //End Residency In residency entity
                 try {
-                    Residency data = resModel.dth(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
+                    Residency data = resModel.dth(selectedIndividual.uuid, selectedLocation.uuid);
                     if (data != null) {
                         ResidencyAmendment residencyAmendment = new ResidencyAmendment();
                         residencyAmendment.endType = 2;
@@ -330,7 +339,7 @@ public class OutmigrationFragment extends DialogFragment {
 
                 //End Residency In individual entity
                 try {
-                    Individual data = individualViewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+                    Individual data = individualViewModel.find(selectedIndividual.uuid);
                     if (data != null) {
                         IndividualEnd endInd = new IndividualEnd();
                         endInd.endType = 2;

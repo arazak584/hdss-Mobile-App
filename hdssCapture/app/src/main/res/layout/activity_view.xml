@@ -1,41 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:padding="20dp"
+    android:id="@+id/root_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="@dimen/fragment_horizontal_margin"
     tools:context=".Views.ViewActivity">
 
     <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
+        android:name="org.openhds.hdsscapture.Views.ViewFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="15dp"
-        android:background="@color/white"
-        android:orientation="horizontal">
-        <!-- Optional top bar -->
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        tools:layout="@layout/fragment_view" />
+
     </LinearLayout>
 
-    <SearchView
-        android:id="@+id/searchloc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="48dip"
-        android:inputType="textPersonName|textCapCharacters"
-        android:queryHint="@string/search" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_completed"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scrollbars="vertical" />
-
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#FFFFFF" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

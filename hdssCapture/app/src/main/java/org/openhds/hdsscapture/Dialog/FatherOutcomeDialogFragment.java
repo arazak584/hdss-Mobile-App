@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Adapter.FatherOutcomeAdapter;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentFatherOutcomeDialogBinding;
 import org.openhds.hdsscapture.entity.Individual;
@@ -40,6 +41,7 @@ public class FatherOutcomeDialogFragment extends DialogFragment {
     private Locations locations;
     private Socialgroup socialgroup;
     private Individual individual;
+    private Locations selectedLocation;
     private FragmentFatherOutcomeDialogBinding binding;
     public FatherOutcomeDialogFragment() {
         // Required empty public constructor
@@ -81,12 +83,16 @@ public class FatherOutcomeDialogFragment extends DialogFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_father_outcome_dialog, container, false);
 
-        final TextView compno = view.findViewById(R.id.textViewfather_compextId);
-        if (ClusterFragment.selectedLocation != null) {
-            compno.setText(ClusterFragment.selectedLocation.getCompno());
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        Locations selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+        String compno = selectedLocation != null ? selectedLocation.getCompno() : null;
+
+        final TextView compnos = view.findViewById(R.id.textViewfather_compextId);
+        if (selectedLocation != null) {
+            compnos.setText(selectedLocation.getCompno());
         } else {
             // Handle the case where locations is null
-            compno.setText("Error loading locations data");
+            compnos.setText("Error loading locations data");
         }
 
         Button closeButton = view.findViewById(R.id.button_fclose);
@@ -100,7 +106,7 @@ public class FatherOutcomeDialogFragment extends DialogFragment {
 
         //Load Father Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_father);
-        final FatherOutcomeAdapter adapter = new FatherOutcomeAdapter(this, locations, socialgroup );
+        final FatherOutcomeAdapter adapter = new FatherOutcomeAdapter(this, locations, socialgroup, compno );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
         //recyclerView.setHasFixedSize(true);

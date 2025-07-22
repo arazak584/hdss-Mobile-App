@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Adapter.PregnancyAdapter;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.databinding.FragmentPregnancyDialogBinding;
 import org.openhds.hdsscapture.entity.Individual;
@@ -46,6 +47,7 @@ public class PregnancyDialogFragment extends DialogFragment {
     private Individual individual;
     private Pregnancy pregnancy;
     private FragmentPregnancyDialogBinding binding;
+    private Locations selectedLocation;
 
     public PregnancyDialogFragment() {
         // Required empty public constructor
@@ -89,9 +91,12 @@ public class PregnancyDialogFragment extends DialogFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pregnancy_dialog, container, false);
 
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+
         final TextView compno = view.findViewById(R.id.preg_compextId);
-        if (ClusterFragment.selectedLocation != null) {
-            compno.setText(ClusterFragment.selectedLocation.getCompno());
+        if (selectedLocation != null) {
+            compno.setText(selectedLocation.getCompno());
         } else {
             // Handle the case where locations is null
             compno.setText("Error loading locations data");

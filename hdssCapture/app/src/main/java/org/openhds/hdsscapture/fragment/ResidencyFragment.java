@@ -21,7 +21,9 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.HouseholdDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
 import org.openhds.hdsscapture.databinding.FragmentMembershipBinding;
@@ -59,6 +61,8 @@ public class ResidencyFragment extends Fragment {
     private Individual individual;
     private FragmentMembershipBinding binding;
     private ProgressDialog progressDialog;
+    private Locations selectedLocation;
+    private Individual selectedIndividual;
 
 
     public ResidencyFragment() {
@@ -103,6 +107,12 @@ public class ResidencyFragment extends Fragment {
         binding = FragmentMembershipBinding.inflate(inflater, container, false);
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_change_hh);
 
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
+
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+
         // Set a click listener on the button for mother
         showDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +138,7 @@ public class ResidencyFragment extends Fragment {
             }
         });
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
+        ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
 
 
         // Find the button view
@@ -136,7 +146,7 @@ public class ResidencyFragment extends Fragment {
 
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         try {
-            Residency dataRes = viewModel.findRes(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
+            Residency dataRes = viewModel.findRes(selectedIndividual.uuid, selectedLocation.uuid);
 
             if (dataRes != null) {
                 binding.setResidency(dataRes);
@@ -193,7 +203,7 @@ public class ResidencyFragment extends Fragment {
             executor.execute(() -> {
 
                 try {
-                    Residency dataRes = viewModel.findRes(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.uuid);
+                    Residency dataRes = viewModel.findRes(selectedIndividual.uuid, selectedLocation.uuid);
                     if (dataRes != null) {
                         IndividualResidency res = new IndividualResidency();
                         res.uuid = finalData.individual_uuid;

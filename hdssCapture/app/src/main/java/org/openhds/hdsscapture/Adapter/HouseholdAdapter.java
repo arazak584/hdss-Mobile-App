@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
@@ -38,18 +39,30 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
 
     private final ClusterFragment activity;
     private final LayoutInflater inflater;
-    private static Locations selectedLocation;
+    //private static Locations selectedLocation;
     private final List<Socialgroup> socialgroupList;
     private final SocialgroupViewModel socialgroupViewModel;
     private final Socialgroup socialgroup;
     private final FragmentActivity activity1;
     private Individual individual;
+    private final ClusterSharedViewModel clusterSharedViewModel;
+    private Locations currentSelectedLocation;
 
 
-    public HouseholdAdapter(Context context, ClusterFragment activity, Locations selectedLocation, Socialgroup socialgroup, SocialgroupViewModel socialgroupViewModel) {
+//    public HouseholdAdapter(Context context, ClusterFragment activity, Locations selectedLocation, Socialgroup socialgroup, SocialgroupViewModel socialgroupViewModel) {
+//        this.activity1 = activity.requireActivity();
+//        this.activity = activity;
+//        this.selectedLocation = selectedLocation;
+//        this.socialgroup = socialgroup;
+//        this.socialgroupViewModel = socialgroupViewModel;
+//        socialgroupList = new ArrayList<>();
+//        inflater = LayoutInflater.from(activity.requireContext());
+//    }
+
+    public HouseholdAdapter(Context context, ClusterFragment activity, ClusterSharedViewModel viewModel, Socialgroup socialgroup, SocialgroupViewModel socialgroupViewModel) {
         this.activity1 = activity.requireActivity();
         this.activity = activity;
-        this.selectedLocation = selectedLocation;
+        this.clusterSharedViewModel = viewModel;
         this.socialgroup = socialgroup;
         this.socialgroupViewModel = socialgroupViewModel;
         socialgroupList = new ArrayList<>();
@@ -78,13 +91,50 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
         return viewHolder;
     }
 
+//    @Override
+//    public void onBindViewHolder(@NonNull HouseholdAdapter.ViewHolder holder, int position) {
+//        final Socialgroup socialgroup = socialgroupList.get(position);
+//        Locations currentSelectedLocation = clusterSharedViewModel.getCurrentSelectedLocation();
+//
+//        if (ClusterFragment.selectedLocation != null) {
+//            holder.name.setText(socialgroup.getGroupName());
+//            holder.hhid.setText(socialgroup.getExtId()+ " " + "(" + ClusterFragment.selectedLocation.getCompno() + ")" );
+//
+//            Integer visit = socialgroup.complete;
+//
+//            if (visit != null) {
+//                holder.hhid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
+//                holder.name.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
+//            } else {
+//                holder.hhid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+//                holder.name.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+//            }
+//        }else {
+//            // Handle the case when selectedLocation is null
+//            holder.name.setText("No selected location");
+//            holder.hhid.setText("");
+//        }
+//
+//        holder.linearLayout.setOnClickListener(v -> {
+//            // Use the stored activity reference to access the getSupportFragmentManager()
+//            activity1.getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.container_cluster, HouseMembersFragment.newInstance(selectedLocation, socialgroup,individual))
+//                    .addToBackStack(null)
+//                    .commit();
+//        });
+//
+//    }
+
     @Override
     public void onBindViewHolder(@NonNull HouseholdAdapter.ViewHolder holder, int position) {
         final Socialgroup socialgroup = socialgroupList.get(position);
 
-        if (ClusterFragment.selectedLocation != null) {
+        // Get the current selected location from the shared ViewModel
+        Locations currentSelectedLocation = clusterSharedViewModel.getCurrentSelectedLocation();
+
+        if (currentSelectedLocation != null) {
             holder.name.setText(socialgroup.getGroupName());
-            holder.hhid.setText(socialgroup.getExtId()+ " " + "(" + ClusterFragment.selectedLocation.getCompno() + ")" );
+            holder.hhid.setText(socialgroup.getExtId() + " " + "(" + currentSelectedLocation.getCompno() + ")");
 
             Integer visit = socialgroup.complete;
 
@@ -92,54 +142,31 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
                 holder.hhid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
                 holder.name.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
             } else {
-                holder.hhid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
-                holder.name.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+                holder.hhid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Red));
+                holder.name.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Red));
             }
-        }else {
+        } else {
             // Handle the case when selectedLocation is null
             holder.name.setText("No selected location");
             holder.hhid.setText("");
         }
 
         holder.linearLayout.setOnClickListener(v -> {
+            // Get the current selected location from the shared ViewModel
+            Locations currentLocation = clusterSharedViewModel.getCurrentSelectedLocation();
+
             // Use the stored activity reference to access the getSupportFragmentManager()
             activity1.getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container_cluster, HouseMembersFragment.newInstance(selectedLocation, socialgroup,individual))
+                    .replace(R.id.container_cluster, HouseMembersFragment.newInstance(currentLocation, socialgroup, individual))
                     .addToBackStack(null)
                     .commit();
         });
-
     }
 
     @Override
     public int getItemCount() {
         return socialgroupList.size();
     }
-
-//    public void setSelectedLocation(Locations selectedLocation) {
-//        socialgroupList.clear();
-//        if (selectedLocation != null) {
-//
-//            try {
-//                List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(selectedLocation.getCompno());
-//
-//                if (list != null) {
-//                    socialgroupList.addAll(list);
-//                }
-//                if (list.isEmpty()){
-//                    Toast.makeText(activity.getActivity(), "No Active Household In " + selectedLocation.getCompno(), Toast.LENGTH_SHORT).show();
-//                }
-//            } catch (ExecutionException e) {
-//                e.printStackTrace();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        //activity.hideProgressBar();
-//        notifyDataSetChanged();
-//        //activity.hideProgressBar();
-//    }
 
     public void setSelectedLocation(Locations selectedLocation) {
         socialgroupList.clear();
@@ -150,6 +177,7 @@ public class HouseholdAdapter extends RecyclerView.Adapter<HouseholdAdapter.View
                     List<Socialgroup> list = socialgroupViewModel.retrieveBySocialgroup(selectedLocation.getCompno());
 
                     if (list != null) {
+                        socialgroupList.clear();
                         socialgroupList.addAll(list);
                     }
                     if (list.isEmpty()){

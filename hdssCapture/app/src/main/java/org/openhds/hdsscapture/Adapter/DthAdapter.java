@@ -35,11 +35,13 @@ public class DthAdapter extends RecyclerView.Adapter<DthAdapter.ViewHolder> {
     private final Locations locations;
     private final Socialgroup socialgroup;
     private final List<Individual> individualList;
+    private final String compno;
 
-    public DthAdapter(DthAdapterFragment activity, Locations locations, Socialgroup socialgroup) {
+    public DthAdapter(DthAdapterFragment activity, Locations locations, Socialgroup socialgroup, String compno) {
         this.activity = activity;
         this.locations = locations;
         this.socialgroup = socialgroup;
+        this.compno = compno;
         individualList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -103,7 +105,7 @@ public class DthAdapter extends RecyclerView.Adapter<DthAdapter.ViewHolder> {
         individualList.clear();
         if(socialgroup != null)
             try {
-                List<Individual> list = individualViewModel.retrieveDth(ClusterFragment.selectedLocation.getCompno());
+                List<Individual> list = individualViewModel.retrieveDth(compno);
 
                 if (list != null) {
                     individualList.addAll(list);

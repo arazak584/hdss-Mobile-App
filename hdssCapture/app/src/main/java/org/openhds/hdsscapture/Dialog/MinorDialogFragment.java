@@ -17,6 +17,7 @@ import android.widget.Button;
 import org.openhds.hdsscapture.Adapter.MinorsAdapter;
 import org.openhds.hdsscapture.Adapter.PregnancyAdapter;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.databinding.FragmentMinorDialogBinding;
@@ -95,9 +96,13 @@ public class MinorDialogFragment extends DialogFragment {
             }
         });
 
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        Locations selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+        String compno = selectedLocation != null ? selectedLocation.getCompno() : null;
+
         //Load Minors Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_minors);
-        final MinorsAdapter adapter = new MinorsAdapter(this, residency, locations, socialgroup );
+        final MinorsAdapter adapter = new MinorsAdapter(this, residency, locations, socialgroup, compno);
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
         //recyclerView.setHasFixedSize(true);

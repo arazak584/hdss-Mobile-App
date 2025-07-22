@@ -21,7 +21,9 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
 import org.openhds.hdsscapture.databinding.FragmentMorbidityBinding;
@@ -59,6 +61,8 @@ public class MorbidityFragment extends Fragment {
     private Individual individual;
     private Morbidity morbidity;
     private FragmentMorbidityBinding binding;
+    private Locations selectedLocation;
+    private Individual selectedIndividual;
 
     public MorbidityFragment() {
         // Required empty public constructor
@@ -102,8 +106,11 @@ public class MorbidityFragment extends Fragment {
         binding = FragmentMorbidityBinding.inflate(inflater, container, false);
         binding.setMorbidity(morbidity);
 
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
+
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
+        ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
@@ -112,11 +119,13 @@ public class MorbidityFragment extends Fragment {
         final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
         final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
 
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
         MorbidityViewModel viewModel = new ViewModelProvider(this).get(MorbidityViewModel.class);
 
         try {
-            Morbidity data = viewModel.finds(HouseMembersFragment.selectedIndividual.uuid);
+            Morbidity data = viewModel.finds(selectedIndividual.uuid);
             if (data != null) {
                 binding.setMorbidity(data);
 
@@ -137,13 +146,13 @@ public class MorbidityFragment extends Fragment {
                 String uuidString = uuid.replaceAll("-", "");
 
                 data.uuid = uuidString;
-                String fname = HouseMembersFragment.selectedIndividual.getFirstName() + " " + HouseMembersFragment.selectedIndividual.getLastName();
-                data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
-                data.location_uuid = ClusterFragment.selectedLocation.getUuid();
+                String fname = selectedIndividual.getFirstName() + " " + selectedIndividual.getLastName();
+                data.individual_uuid = selectedIndividual.getUuid();
+                data.location_uuid = selectedLocation.getUuid();
                 data.socialgroup_uuid = socialgroup.getUuid();
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.fw_name = fieldworkerData.getFirstName() + " " + fieldworkerData.getLastName();
-                data.compno = ClusterFragment.selectedLocation.getCompno();
+                data.compno = selectedLocation.getCompno();
                 data.ind_name = fname;
 
                 Date currentDate = new Date(); // Get the current date and time
@@ -297,7 +306,7 @@ public class MorbidityFragment extends Fragment {
             IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
             try {
 
-                Individual visitedData = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                Individual visitedData = iview.visited(selectedIndividual.uuid);
                 if (visitedData != null) {
                     IndividualVisited visited = new IndividualVisited();
                     visited.uuid = finalData.individual_uuid;
@@ -316,7 +325,7 @@ public class MorbidityFragment extends Fragment {
 //            executor.execute(() -> {
 //
 //                try {
-//                    Individual data = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+//                    Individual data = iview.visited(selectedIndividual.uuid);
 //                    if (data != null) {
 //                        IndividualVisited visited = new IndividualVisited();
 //                        visited.uuid = finalData.individual_uuid;

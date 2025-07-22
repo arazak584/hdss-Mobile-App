@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.entity.Hierarchy;
@@ -45,15 +46,17 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
     private final Hierarchy level6Data;
     private Socialgroup socialgroup;
     private final Fragment fragment;
+    private final ClusterSharedViewModel clusterSharedViewModel;
 
     public interface LocationClickListener {
         void onLocationClick(Locations selectedLocation);
     }
 
-    public LocationAdapter(Fragment fragment, Hierarchy level6Data, LocationClickListener listener) {
+    public LocationAdapter(Fragment fragment, Hierarchy level6Data, LocationClickListener listener,ClusterSharedViewModel clusterSharedViewModel) {
         this.fragment = fragment;
         this.level6Data = level6Data;
         this.locationClickListener = listener;
+        this.clusterSharedViewModel = clusterSharedViewModel;
         locationsList = new ArrayList<>();
     }
 
@@ -89,6 +92,21 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         holder.compno.setText(locations.getCompno());
         holder.gps.setText(locations.getLatitude() + "," + locations.getLongitude());
 
+        // Check if this location is currently selected
+        Locations currentSelected = clusterSharedViewModel.getCurrentSelectedLocation();
+        boolean isSelected = currentSelected != null &&
+                currentSelected.getCompno().equals(locations.getCompno());
+
+        // Apply selection styling
+        if (isSelected) {
+            // Selected location styling
+            holder.linearLayout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LightGrey));
+            // You can also add other visual indicators like border, different text color, etc.
+        } else {
+            // Default styling
+            holder.linearLayout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), android.R.color.transparent));
+        }
+
         Integer st = locations.complete;
         if (st != null) {
             holder.compno.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
@@ -104,6 +122,12 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
             if (locationClickListener != null) {
                 locationClickListener.onLocationClick(locations);
                 //Log.d("LocationAdapter", "Location clicked: " + locations.getCompno());
+
+                // Update the shared ViewModel with the selected location
+                clusterSharedViewModel.setSelectedLocation(locations);
+
+                // Refresh the adapter to update visual selection
+                notifyDataSetChanged();
             }
         });
 
@@ -141,6 +165,9 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.ViewHo
         notifyDataSetChanged();
     }
 
-
+    // Method to refresh the adapter when selection changes externally
+    public void refreshSelection() {
+        notifyDataSetChanged();
+    }
 
 }

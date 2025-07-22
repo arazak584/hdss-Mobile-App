@@ -37,11 +37,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     private final Socialgroup socialgroup;
     private Residency residency;
     private final List<Individual> individualList;
+    private final String compno;
 
-    public SearchAdapter(SearchFragment activity, Locations locations, Socialgroup socialgroup) {
+    public SearchAdapter(SearchFragment activity, Locations locations, Socialgroup socialgroup,String compno) {
         this.activity = activity;
         this.locations = locations;
         this.socialgroup = socialgroup;
+        this.compno = compno;
         individualList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -185,7 +187,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         individualList.clear();
         if(socialgroup != null)
             try {
-                List<Individual> list = individualViewModel.retrieveReturn(ClusterFragment.selectedLocation.getCompno());
+                List<Individual> list = individualViewModel.retrieveReturn(compno);
 
                 if (list != null) {
                     individualList.addAll(list);

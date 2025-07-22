@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Adapter.RelationshipAdapter;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentRelationshipDialogBinding;
 import org.openhds.hdsscapture.entity.Individual;
@@ -42,6 +43,7 @@ public class RelationshipDialogFragment extends DialogFragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentRelationshipDialogBinding binding;
+    private Locations selectedLocation;
 
     public RelationshipDialogFragment() {
         // Required empty public constructor
@@ -83,12 +85,16 @@ public class RelationshipDialogFragment extends DialogFragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_relationship_dialog, container, false);
 
-        final TextView compno = view.findViewById(R.id.textViewman_compextId);
-        if (ClusterFragment.selectedLocation != null) {
-            compno.setText(ClusterFragment.selectedLocation.getCompno());
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        Locations selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+        String compno = selectedLocation != null ? selectedLocation.getCompno() : null;
+
+        final TextView compnos = view.findViewById(R.id.textViewman_compextId);
+        if (compno != null) {
+            compnos.setText(selectedLocation.getCompno());
         } else {
             // Handle the case where locations is null
-            compno.setText("Error loading locations data");
+            compnos.setText("Error loading locations data");
         }
 
         Button closeButton = view.findViewById(R.id.button_rclose);
@@ -102,7 +108,7 @@ public class RelationshipDialogFragment extends DialogFragment {
 
         //Load Father Data
         final RecyclerView recyclerView = view.findViewById(R.id.my_recycler_view_relationship);
-        final RelationshipAdapter adapter = new RelationshipAdapter(this, locations, socialgroup );
+        final RelationshipAdapter adapter = new RelationshipAdapter(this, locations, socialgroup, compno );
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
 

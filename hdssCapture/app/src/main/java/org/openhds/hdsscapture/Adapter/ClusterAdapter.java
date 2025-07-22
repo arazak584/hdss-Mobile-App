@@ -34,14 +34,16 @@ public class ClusterAdapter extends RecyclerView.Adapter<ClusterAdapter.ViewHold
     }
 
     private ClusterAdapter.ClusterSelectionListener listener;
+    private final String village;
 
     public void setClusterSelectionListener(ClusterAdapter.ClusterSelectionListener listener) {
         this.listener = listener;
     }
 
-    public ClusterAdapter(ClusterDialogFragment activity,Locations locations) {
+    public ClusterAdapter(ClusterDialogFragment activity,Locations locations,String village) {
         this.activity = activity;
         this.locations = locations;
+        this.village = village;
         hierarchyList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -101,9 +103,9 @@ public class ClusterAdapter extends RecyclerView.Adapter<ClusterAdapter.ViewHold
 
     public void clusters(String charText, HierarchyViewModel hierarchyViewModel) {
         hierarchyList.clear();
-        if(ClusterFragment.selectedLocation != null)
+        if(village != null)
             try {
-                List<Hierarchy> list = hierarchyViewModel.clusters(ClusterFragment.selectedLocation.getVill_extId());
+                List<Hierarchy> list = hierarchyViewModel.clusters(village);
 
                 if (list != null) {
                     hierarchyList.addAll(list);

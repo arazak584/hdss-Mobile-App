@@ -40,16 +40,20 @@ public class Dup1Adapter extends RecyclerView.Adapter<Dup1Adapter.ViewHolder>{
     }
 
     private Dup1Adapter.PartnerSelectionListener listener;
+    private final String compno;
+    private final String individid;
 
     public void setPartnerSelectionListener(Dup1Adapter.PartnerSelectionListener listener) {
         this.listener = listener;
     }
 
-    public Dup1Adapter(Dup1DialogFragment activity, Residency residency, Locations locations, Socialgroup socialgroup) {
+    public Dup1Adapter(Dup1DialogFragment activity, Residency residency, Locations locations, Socialgroup socialgroup,String compno,String individid) {
         this.activity = activity;
         this.locations = locations;
         this.residency = residency;
         this.socialgroup = socialgroup;
+        this.compno = compno;
+        this.individid = individid;
         individualList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -136,9 +140,9 @@ public class Dup1Adapter extends RecyclerView.Adapter<Dup1Adapter.ViewHolder>{
             }
         } else {
 
-            if(ClusterFragment.selectedLocation != null)
+            if(socialgroup != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveDup(ClusterFragment.selectedLocation.getCompno(), HouseMembersFragment.selectedIndividual.getUuid());
+                    List<Individual> list = individualViewModel.retrieveDup(compno, individid);
 
                     if (list != null) {
                         individualList.addAll(list);

@@ -300,7 +300,7 @@ public interface IndividualDao {
             " AND b.compno = :id AND b.hohID =:ids AND a.compno != :id")
     List<Individual> minors(String id,String ids);
 
-    @Query("SELECT COUNT(hohID) FROM individual WHERE hohID = :id AND compno = :ids AND endType=1 AND firstName!='FAKE'")
+    @Query("SELECT COUNT(*) FROM individual WHERE hohID = :id AND compno = :ids AND endType=1 AND firstName!='FAKE'")
     long count(String id,String ids);
 
 //    @Query("SELECT COUNT(hohID) FROM individual AS a WHERE a.firstName != 'FAKE' AND endType = 1 AND hohID= :id AND compno= :ids " +
@@ -345,6 +345,15 @@ public interface IndividualDao {
             ") GROUP BY hohID " +
             "ORDER BY compno")
     long cntss();
+
+    @Query("SELECT * FROM individual WHERE uuid != :currentUuid AND (ghanacard = :ghanacard OR phone1 = :phone)")
+    List<Individual> dupRegistration(String currentUuid, String ghanacard, String phone);
+
+    @Query("SELECT * FROM individual WHERE uuid != :currentUuid AND ghanacard = :ghanacard AND ghanacard IS NOT NULL AND ghanacard != ''")
+    List<Individual> findDuplicatesByGhanaCard(String currentUuid, String ghanacard);
+
+    @Query("SELECT * FROM individual WHERE uuid != :currentUuid AND phone1 = :phone AND phone1 IS NOT NULL AND phone1 != ''")
+    List<Individual> findDuplicatesByPhone(String currentUuid, String phone);
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)

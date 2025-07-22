@@ -29,7 +29,6 @@ public class FilterDialogFragment extends DialogFragment {
 
     private static final String ARG_CLUSTER_ID = "ARG_CLUSTER_ID";
     private Hierarchy level6Data;
-    private Locations locations;
 
     public FilterDialogFragment() {
         // Required empty public constructor

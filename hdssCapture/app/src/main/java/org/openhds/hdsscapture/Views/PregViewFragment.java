@@ -34,6 +34,7 @@ import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import org.openhds.hdsscapture.fragment.DatePickerFragment;
+import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 import org.openhds.hdsscapture.fragment.PregAdapterFragment;
 
 import java.text.ParseException;
@@ -51,7 +52,7 @@ import java.util.concurrent.Executors;
  * Use the {@link PregViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PregViewFragment extends DialogFragment {
+public class PregViewFragment extends Fragment {
 
     private final String TAG = "PREGNANCY.TAG";
     private static final String PREGNANCY_ID = "PREGNANCY_ID";
@@ -86,22 +87,9 @@ public class PregViewFragment extends DialogFragment {
         repository = new PregnancyRepository(requireActivity().getApplication());
 
         if (getArguments() != null) {
-            String uuid = getArguments().getString(PREGNANCY_ID);
-            // Safely run the DB query on a background thread
-            Executors.newSingleThreadExecutor().execute(() -> {
-                try {
-                    pregnancy = repository.view(uuid);
-
-                    // Update UI on the main thread
-                    requireActivity().runOnUiThread(() -> {
-                        if (binding != null) {
-                            binding.setPregnancy(pregnancy);
-                        }
-                    });
-                } catch (ExecutionException | InterruptedException e) {
-                    e.printStackTrace();
-                }
-            });
+            String uuid = getArguments().getString(PREGNANCY_ID); // Correct key
+            this.pregnancy = new Pregnancy();  // Initialize placeholder
+            this.pregnancy.uuid = uuid;        // Assign UUID to fetch from DB
         }
     }
 
@@ -224,11 +212,24 @@ public class PregViewFragment extends DialogFragment {
         final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
 
         PregnancyViewModel viewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
-
-        viewModel.view(pregnancy.uuid).observe(getViewLifecycleOwner(), data -> {
+        viewModel.getView(pregnancy.uuid).observe(getViewLifecycleOwner(), data -> {
             if (data != null) {
                 binding.setPregnancy(data);
-                binding.getPregnancy().setFormcompldate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+
+                // Fetch the last record before the current one
+                try {
+                    Pregnancy previousPregnancy = viewModel.lastpregs(data.individual_uuid, data.recordedDate);
+                    if (previousPregnancy != null) {
+                        binding.setPreg(previousPregnancy);
+                    } else {
+                        binding.lastPreg.setVisibility(View.GONE);
+                    }
+                } catch (ExecutionException | InterruptedException e) {
+                    // Handle exceptions properly
+                    e.printStackTrace();
+                    // Optionally, show an error message to the user
+                    Toast.makeText(getContext(), "Error fetching previous pregnancy data", Toast.LENGTH_SHORT).show();
+                }
 
                 if (data.status != null && data.status == 2) {
                     cmt.setVisibility(View.VISIBLE);
@@ -280,6 +281,7 @@ public class PregViewFragment extends DialogFragment {
         loadCodeData(binding.healthfacility, "complete");
         loadCodeData(binding.medicineforpregnancy, "complete");
         loadCodeData(binding.medicineforpregnancy, "complete");
+        loadCodeData(binding.extra, "complete");
         loadCodeData(binding.pregReady, "more_chd");
         loadCodeData(binding.familyPlan, "complete");
         loadCodeData(binding.planMethod, "fam_plan_method");
@@ -451,7 +453,7 @@ public class PregViewFragment extends DialogFragment {
                         return;
                     }
                     if (edate.before(stdate) || edate.equals(stdate)) {
-                        binding.expectedDelivery.setError("Delivery Date Cannot Be Less than Conception Date");
+                        binding.expectedDelivery.setError(String.valueOf(R.string.deliv));
                         Toast.makeText(getActivity(), "Delivery Date Cannot Be Less than Conception Date", Toast.LENGTH_LONG).show();
                         return;
                     }
@@ -463,27 +465,27 @@ public class PregViewFragment extends DialogFragment {
                 e.printStackTrace();
             }
 
-            try {
-                if (!binding.lastPreg.getText().toString().trim().isEmpty() && !binding.editTextRecordedDate.getText().toString().trim().isEmpty()
-                        && !binding.uuidPreg.getText().toString().trim().isEmpty() && !binding.uuid.getText().toString().trim().isEmpty()) {
-                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date stdate = f.parse(binding.lastPreg.getText().toString().trim());
-                    Date edate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
-                    String uuid = binding.uuid.getText().toString().trim();
-                    String uuidPreg = binding.uuidPreg.getText().toString().trim();
-                    String formattedDate = f.format(stdate);
-                    if (edate.before(stdate) && !uuid.equals(uuidPreg)) {
-                        binding.editTextRecordedDate.setError("Pregnancy with a later Date exist " + formattedDate);
-                        Toast.makeText(getActivity(), "Pregnancy with a later Date exist " + formattedDate, Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    // clear error if validation passes
-                    binding.editTextRecordedDate.setError(null);
-                }
-            } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
+//            try {
+//                if (!binding.lastPreg.getText().toString().trim().isEmpty() && !binding.editTextRecordedDate.getText().toString().trim().isEmpty()
+//                        && !binding.uuidPreg.getText().toString().trim().isEmpty() && !binding.uuid.getText().toString().trim().isEmpty()) {
+//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                    Date stdate = f.parse(binding.lastPreg.getText().toString().trim());
+//                    Date edate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
+//                    String uuid = binding.uuid.getText().toString().trim();
+//                    String uuidPreg = binding.uuidPreg.getText().toString().trim();
+//                    String formattedDate = f.format(stdate);
+//                    if (edate.before(stdate) && !uuid.equals(uuidPreg)) {
+//                        binding.editTextRecordedDate.setError("Pregnancy with a later Date exist " + formattedDate);
+//                        Toast.makeText(getActivity(), "Pregnancy with a later Date exist " + formattedDate, Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    // clear error if validation passes
+//                    binding.editTextRecordedDate.setError(null);
+//                }
+//            } catch (ParseException e) {
+//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
 
             try {
                 if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextRecordedDate.getText().toString().trim().isEmpty()) {
@@ -543,15 +545,24 @@ public class PregViewFragment extends DialogFragment {
                 return;
             }
 
+            if (hasErrors) {
+                Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
+                return;
+            }
+
             finalData.complete=1;
             viewModel.add(finalData);
 
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
         }
+//        if (close) {
+//            Intent intent = new Intent(requireContext(), ViewActivity.class);
+//            startActivity(intent);
+//            requireActivity().finish(); // Optional: finish current activity if you want to remove it from backstack
+//        }
         if (close) {
-            Intent intent = new Intent(requireContext(), ViewActivity.class);
-            startActivity(intent);
-            requireActivity().finish(); // Optional: finish current activity if you want to remove it from backstack
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    ViewFragment.newInstance()).commit();
         }
 
 

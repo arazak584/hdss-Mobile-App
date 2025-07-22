@@ -24,8 +24,10 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.FatherOutcomeDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
@@ -75,6 +77,8 @@ public class Birth3Fragment extends Fragment {
     private Individual individual;
     private FragmentBirthBinding binding;
     private ProgressDialog progressDialog;
+    private Locations selectedLocation;
+    private Individual selectedIndividual;
 
     public Birth3Fragment() {
         // Required empty public constructor
@@ -117,8 +121,14 @@ public class Birth3Fragment extends Fragment {
         //return inflater.inflate(R.layout.fragment_birth, container, false);
         binding = FragmentBirthBinding.inflate(inflater, container, false);
 
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
+
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
+        ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
+
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
         final Intent intent = getActivity().getIntent();
         final Round roundData = intent.getParcelableExtra(HierarchyActivity.ROUND_DATA);
@@ -188,7 +198,7 @@ public class Birth3Fragment extends Fragment {
         PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
         PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         try {
-            Pregnancyoutcome data = viewModel.find3(HouseMembersFragment.selectedIndividual.uuid, ClusterFragment.selectedLocation.compno);
+            Pregnancyoutcome data = viewModel.find3(selectedIndividual.uuid, selectedLocation.compno);
             if (data != null) {
                 binding.setPregoutcome(data);
                 binding.buttonOutcomeConception.setEnabled(false);
@@ -198,7 +208,7 @@ public class Birth3Fragment extends Fragment {
                 binding.whoAnc.setEnabled(false);
                 binding.numAnc.setEnabled(false);
                 binding.preguuid.setEnabled(false);
-                data.location = ClusterFragment.selectedLocation.uuid;
+                data.location = selectedLocation.uuid;
 
                 if(data.status!=null && data.status==2){
                     cmt.setVisibility(View.VISIBLE);
@@ -206,7 +216,7 @@ public class Birth3Fragment extends Fragment {
                     cmt.setVisibility(View.GONE);
                 }
 
-                Pregnancy dts = pregnancyViewModel.out3(HouseMembersFragment.selectedIndividual.uuid);
+                Pregnancy dts = pregnancyViewModel.out3(selectedIndividual.uuid);
                 if (dts != null){
                     data.outcomeDate = dts.outcome_date;
                     data.conceptionDate = dts.recordedDate;
@@ -218,7 +228,7 @@ public class Birth3Fragment extends Fragment {
                 }
 
                 // Fetch the last record before the current one
-                Pregnancyoutcome previousOutcome = viewModel.lastpregs(HouseMembersFragment.selectedIndividual.uuid, data.outcomeDate);
+                Pregnancyoutcome previousOutcome = viewModel.lastpregs(selectedIndividual.uuid, data.outcomeDate);
                 if (previousOutcome != null) {
                     binding.setPreg(previousOutcome);
                 } else {
@@ -227,7 +237,7 @@ public class Birth3Fragment extends Fragment {
             } else {
                 data = new Pregnancyoutcome();
 
-                Pregnancy dts = pregnancyViewModel.out3(HouseMembersFragment.selectedIndividual.uuid);
+                Pregnancy dts = pregnancyViewModel.out3(selectedIndividual.uuid);
                 if (dts != null){
                     data.outcomeDate = dts.outcome_date;
                     data.conceptionDate = dts.recordedDate;
@@ -254,7 +264,7 @@ public class Birth3Fragment extends Fragment {
                 }
 
                 // Fetch the last record before the current one
-                Pregnancyoutcome previousOutcome = viewModel.lastpregs(HouseMembersFragment.selectedIndividual.uuid, data.outcomeDate);
+                Pregnancyoutcome previousOutcome = viewModel.lastpregs(selectedIndividual.uuid, data.outcomeDate);
                 if (previousOutcome != null) {
                     binding.setPreg(previousOutcome);
                 } else {
@@ -266,9 +276,9 @@ public class Birth3Fragment extends Fragment {
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fw;
                 data.uuid = uuidString;
-                data.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
+                data.mother_uuid = selectedIndividual.getUuid();
                 //data.complete = 1;
-                data.location = ClusterFragment.selectedLocation.uuid;
+                data.location = selectedLocation.uuid;
                 data.extra = 2;
                 data.id = 3;
 
@@ -294,7 +304,7 @@ public class Birth3Fragment extends Fragment {
         }
 
 //        try {
-//            Pregnancyoutcome datas = viewModel.findpreg(HouseMembersFragment.selectedIndividual.uuid);
+//            Pregnancyoutcome datas = viewModel.findpreg(selectedIndividual.uuid);
 //            if (datas != null) {
 //                binding.setPreg(datas);
 //
@@ -517,7 +527,7 @@ public class Birth3Fragment extends Fragment {
 
             }
 
-            finalData.mother_uuid = HouseMembersFragment.selectedIndividual.getUuid();
+            finalData.mother_uuid = selectedIndividual.getUuid();
             finalData.visit_uuid = binding.getPregoutcome().visit_uuid;
             finalData.uuid = binding.getPregoutcome().uuid;
             //finalData.complete=1;

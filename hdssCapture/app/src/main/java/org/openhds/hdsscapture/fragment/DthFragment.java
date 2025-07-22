@@ -25,9 +25,11 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
@@ -76,6 +78,8 @@ public class DthFragment extends Fragment {
     private Individual individual;
     private Death dth;
     private FragmentDeathBinding binding;
+    private Locations selectedLocation;
+    private Individual selectedIndividual;
 
     public DthFragment() {
         // Required empty public constructor
@@ -118,9 +122,15 @@ public class DthFragment extends Fragment {
         binding = FragmentDeathBinding.inflate(inflater, container, false);
         //binding.setDeath(death);
 
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
+
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
         final Intent j = getActivity().getIntent();
         final Hierarchy level6Data = j.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
+
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -189,8 +199,8 @@ public class DthFragment extends Fragment {
 
                 data.villname = level6Data.getName();
                 data.villcode = level6Data.getExtId();
-                data.compname = ClusterFragment.selectedLocation.getLocationName();
-                data.compno = ClusterFragment.selectedLocation.getCompno();
+                data.compname = selectedLocation.getLocationName();
+                data.compno = selectedLocation.getCompno();
                 Log.d("Death", "Status: " + data.status);
                 //data.edit = null;
                 //data.visit_uuid = dts.uuid;
@@ -220,7 +230,7 @@ public class DthFragment extends Fragment {
                 }
 
                 ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-                Residency dataRes = resModel.findDth(individual.uuid, ClusterFragment.selectedLocation.uuid);
+                Residency dataRes = resModel.findDth(individual.uuid, selectedLocation.getUuid());
                 if (dataRes != null){
                     //data.dob = dataRes.startDate;
                     binding.setRes(dataRes);
@@ -378,7 +388,7 @@ public class DthFragment extends Fragment {
                         RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
                         relationshipUpdate.endType = 2;
                         relationshipUpdate.endDate = binding.getDeath().deathDate;
-                        relationshipUpdate.individualA_uuid = HouseMembersFragment.selectedIndividual.uuid;
+                        relationshipUpdate.individualA_uuid = selectedIndividual.uuid;
                         relationshipUpdate.complete = 1;
 
                         relModel.update(relationshipUpdate, result ->
@@ -429,7 +439,7 @@ public class DthFragment extends Fragment {
                         RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
                         relationshipUpdate.endType = 4;
                         relationshipUpdate.endDate = binding.getDeath().deathDate;
-                        relationshipUpdate.individualA_uuid = HouseMembersFragment.selectedIndividual.uuid;
+                        relationshipUpdate.individualA_uuid = selectedIndividual.uuid;
                         relationshipUpdate.complete = 1;
 
                         relModel.update(relationshipUpdate, result ->
@@ -475,7 +485,7 @@ public class DthFragment extends Fragment {
 
                 //End Residency In residency entity
                 try {
-                    Residency resdata = resModel.dth(individual.uuid, ClusterFragment.selectedLocation.uuid);
+                    Residency resdata = resModel.dth(individual.uuid, selectedLocation.getUuid());
                     if (resdata != null) {
                         ResidencyAmendment residencyAmendment = new ResidencyAmendment();
                         residencyAmendment.endType = 3;

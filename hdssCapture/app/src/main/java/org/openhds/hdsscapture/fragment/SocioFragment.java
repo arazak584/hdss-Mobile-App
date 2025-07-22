@@ -18,8 +18,10 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.databinding.FragmentSocioBinding;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
@@ -52,6 +54,8 @@ public class SocioFragment extends Fragment {
     private Socialgroup socialgroup;
     private Individual individual;
     private FragmentSocioBinding binding;
+    private Locations selectedLocation;
+    private Individual selectedIndividual;
 
     public SocioFragment() {
         // Required empty public constructor
@@ -93,12 +97,18 @@ public class SocioFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentSocioBinding.inflate(inflater, container, false);
 
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
+
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
         final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
         final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
         final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
+
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
         HdssSociodemoViewModel viewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
 
@@ -128,8 +138,8 @@ public class SocioFragment extends Fragment {
                 String uuidString = uuid.replaceAll("-", "");
 
                 data.uuid = uuidString;
-                data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
-                data.location_uuid = ClusterFragment.selectedLocation.getUuid();
+                data.individual_uuid = selectedIndividual.getUuid();
+                data.location_uuid = selectedLocation.getUuid();
                 data.socialgroup_uuid = socialgroup.getUuid();
                 data.fw_uuid = fieldworkerData.getFw_uuid();
 

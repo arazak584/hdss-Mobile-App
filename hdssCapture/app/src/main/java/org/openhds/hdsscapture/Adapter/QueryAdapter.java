@@ -19,52 +19,52 @@ import org.openhds.hdsscapture.entity.subqueries.Queries;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QueryAdapter extends RecyclerView.Adapter<QueryAdapter.ViewHolder>{
+public class QueryAdapter extends RecyclerView.Adapter<QueryAdapter.ViewHolder> {
 
-    QueryActivity activity;
-    LayoutInflater inflater;
+    private QueryActivity activity;
+    private LayoutInflater inflater;
     private List<Queries> queries;
-
     private List<Queries> filter;
-
-    private final Context context;
-
-    public QueryAdapter(Context context) {
-        this.context = context;
-        this.queries = new ArrayList<>();
-    }
-
 
     public QueryAdapter(QueryActivity activity) {
         this.activity = activity;
+        this.inflater = LayoutInflater.from(activity);
         this.queries = new ArrayList<>();
-        inflater = LayoutInflater.from(activity);
-        context = activity;
+        this.filter = new ArrayList<>();
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void searchNotes(List<Queries> filterName) {
-        if (filterName != null) {
-            this.filter = filterName;
+    public void searchNotes(String query) {
+        if (query == null || query.isEmpty()) {
+            filter.clear();
+            filter.addAll(queries);
         } else {
-            this.filter = new ArrayList<>(); // Reset to an empty list if null
+            filter.clear();
+            for (Queries item : queries) {
+                if (item.name.toLowerCase().contains(query.toLowerCase()) ||
+                        item.date.toLowerCase().contains(query.toLowerCase()) ||
+                        item.extid.toLowerCase().contains(query.toLowerCase()) ||
+                        item.error.toLowerCase().contains(query.toLowerCase())) {
+                    filter.add(item);
+                }
+            }
         }
         notifyDataSetChanged();
     }
-
 
     public List<Queries> getQueries() {
         return queries;
     }
 
-    public void setQueries(List<Queries> queries)
-    {
+    public void setQueries(List<Queries> queries) {
         this.queries = queries;
+        filter.clear();
+        filter.addAll(queries);
         notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView title,edate , extid,error;
+        TextView title, edate, extid, error;
         LinearLayout linearLayout;
 
         public ViewHolder(View view) {
@@ -74,7 +74,6 @@ public class QueryAdapter extends RecyclerView.Adapter<QueryAdapter.ViewHolder>{
             this.extid = view.findViewById(R.id.txt_extid);
             this.error = view.findViewById(R.id.txt_query);
             this.linearLayout = view.findViewById(R.id.hdssQuery);
-
         }
     }
 
@@ -82,23 +81,21 @@ public class QueryAdapter extends RecyclerView.Adapter<QueryAdapter.ViewHolder>{
     @Override
     public QueryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View listItem = inflater.inflate(R.layout.query_item, parent, false);
-        QueryAdapter.ViewHolder viewHolder = new QueryAdapter.ViewHolder(listItem);
-        return viewHolder;
+        return new QueryAdapter.ViewHolder(listItem);
     }
 
     @Override
     public void onBindViewHolder(@NonNull QueryAdapter.ViewHolder holder, int position) {
-        final Queries item = queries.get(position);
+        Queries item = filter.get(position);
         holder.title.setText(item.name);
         holder.edate.setText(item.date);
         holder.extid.setText(item.extid);
         holder.error.setText(item.error);
         holder.error.setTextColor(Color.RED);
-
     }
 
     @Override
     public int getItemCount() {
-        return queries.size();
+        return filter.size();
     }
 }

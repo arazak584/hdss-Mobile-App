@@ -34,6 +34,7 @@ public class FatherOutcomeAdapter extends RecyclerView.Adapter<FatherOutcomeAdap
     private final Locations locations;
     private final Socialgroup socialgroup;
     private final List<Individual> individualList;
+    private final String compno;
 
     public interface FatherSelectionListener {
         void onFatherSelected(String fatherId);
@@ -45,10 +46,11 @@ public class FatherOutcomeAdapter extends RecyclerView.Adapter<FatherOutcomeAdap
         this.listener = listener;
     }
 
-    public FatherOutcomeAdapter(FatherOutcomeDialogFragment activity, Locations locations, Socialgroup socialgroup) {
+    public FatherOutcomeAdapter(FatherOutcomeDialogFragment activity, Locations locations, Socialgroup socialgroup,String compno) {
         this.activity = activity;
         this.locations = locations;
         this.socialgroup = socialgroup;
+        this.compno = compno;
         individualList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -134,9 +136,9 @@ public class FatherOutcomeAdapter extends RecyclerView.Adapter<FatherOutcomeAdap
             }
         } else {
 
-            if(ClusterFragment.selectedLocation != null)
+            if(compno != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveByFather(ClusterFragment.selectedLocation.getCompno());
+                    List<Individual> list = individualViewModel.retrieveByFather(compno);
 
                     if (list != null) {
                         individualList.addAll(list);

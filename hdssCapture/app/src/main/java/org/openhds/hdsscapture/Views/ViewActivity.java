@@ -1,6 +1,9 @@
 package org.openhds.hdsscapture.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,9 +15,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.Adapter.ViewsAdapter;
@@ -38,13 +43,6 @@ import java.util.concurrent.ExecutionException;
 
 public class ViewActivity extends AppCompatActivity {
 
-    private SocialgroupViewModel socialgroupViewModel;
-    private LocationViewModel locationViewModel;
-    private DeathViewModel deathViewModel;
-    private IndividualViewModel individualViewModel;
-    private CompletedFormsAdapter adapter;
-    private SearchView searchView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,58 +50,19 @@ public class ViewActivity extends AppCompatActivity {
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        final Intent f = getIntent();
-        final Fieldworker fieldworkerDatas = f.getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
 
-        socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-        locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
-        deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
-        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-
-        searchView = findViewById(R.id.searchloc); // ✅ Fix: initialize searchView
-
-        RecyclerView recyclerView = findViewById(R.id.recyclerview_completed);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        CompletedFormsViewModel viewModel = new ViewModelProvider(this).get(CompletedFormsViewModel.class);
-        List<CompletedForm> completedForms = viewModel.getAllCompletedForms();
-
-        adapter = new CompletedFormsAdapter(completedForms, this);
-        recyclerView.setAdapter(adapter);
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                adapter.filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.filter(newText);
-                return false;
-            }
-        });
     }
 
 
-    @Override
-    public void onBackPressed() {
-        new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.exit_confirmation_title))
-                .setMessage(getString(R.string.exiting_lbl))
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // Start MainActivity
-                        Intent intent = new Intent(ViewActivity.this, MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                        startActivity(intent);
-                        // Finish the current activity
-                        ViewActivity.this.finish();
-                    }
-                })
-                .setNegativeButton(getString(R.string.no), null)
-                .show();
+    private void loadFragment(Fragment fragment) {
+        // create a FragmentManager
+        FragmentManager fm = getSupportFragmentManager();
+        // create a FragmentTransaction to begin the transaction and replace the Fragment
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        // replace the FrameLayout with new Fragment
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.commit(); // save the changes
     }
+
+
 }

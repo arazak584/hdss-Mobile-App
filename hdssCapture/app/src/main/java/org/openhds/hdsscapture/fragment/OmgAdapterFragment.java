@@ -16,6 +16,7 @@ import android.widget.Button;
 
 import org.openhds.hdsscapture.Adapter.OmgAdapter;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentOmgAdapterBinding;
 import org.openhds.hdsscapture.entity.Individual;
@@ -79,6 +80,10 @@ public class OmgAdapterFragment extends DialogFragment {
         //return inflater.inflate(R.layout.fragment_omgedit, container, false);
         binding = FragmentOmgAdapterBinding.inflate(inflater, container, false);
 
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        Locations selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+        String compno = selectedLocation != null ? selectedLocation.getCompno() : null;
+
         Button closeButton = binding.getRoot().findViewById(R.id.button_close);
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +93,7 @@ public class OmgAdapterFragment extends DialogFragment {
         });
 
         final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_omg);
-        final OmgAdapter adapter = new OmgAdapter(this, locations, socialgroup);
+        final OmgAdapter adapter = new OmgAdapter(this, locations, socialgroup, compno);
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
         //recyclerView.setHasFixedSize(true);

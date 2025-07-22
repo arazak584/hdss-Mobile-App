@@ -35,11 +35,13 @@ public class OmgAdapter extends RecyclerView.Adapter<OmgAdapter.ViewHolder>{
     private final Locations locations;
     private final Socialgroup socialgroup;
     private final List<Individual> individualList;
+    private final String compno;
 
-    public OmgAdapter(OmgAdapterFragment activity, Locations locations, Socialgroup socialgroup) {
+    public OmgAdapter(OmgAdapterFragment activity, Locations locations, Socialgroup socialgroup,String compno) {
         this.activity = activity;
         this.locations = locations;
         this.socialgroup = socialgroup;
+        this.compno = compno;
         individualList = new ArrayList<>();
         inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -103,7 +105,7 @@ public class OmgAdapter extends RecyclerView.Adapter<OmgAdapter.ViewHolder>{
         individualList.clear();
         if(socialgroup != null)
             try {
-                List<Individual> list = individualViewModel.retrieveOmg(ClusterFragment.selectedLocation.compno);
+                List<Individual> list = individualViewModel.retrieveOmg(compno);
 
                 if (list != null) {
                     individualList.addAll(list);

@@ -18,6 +18,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
@@ -44,16 +46,20 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
     private final Fragment fragment;
     private final IndividualClickListener individualClickListener;
 
+    private final IndividualSharedViewModel individualSharedViewModel;
+    private String selectedUuid;
+
 
     public interface IndividualClickListener {
         void onIndividualClick(Individual selectedIndividual);
     }
 
-    public IndividualViewAdapter(Fragment fragment, Locations locations, Socialgroup socialgroup,IndividualClickListener listener) {
+    public IndividualViewAdapter(Fragment fragment, Locations locations, Socialgroup socialgroup,IndividualClickListener listener,IndividualSharedViewModel individualSharedViewModel) {
         this.fragment = fragment;
         this.locations = locations;
         this.socialgroup = socialgroup;
         this.individualClickListener = listener;
+        this.individualSharedViewModel = individualSharedViewModel;
         individualList = new ArrayList<>();
         //inflater = LayoutInflater.from(activity.requireContext());
     }
@@ -76,7 +82,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
             this.compno = view.findViewById(R.id.text_compno);
             this.status = view.findViewById(R.id.text_status);
             this.hhid = view.findViewById(R.id.text_hhid);
-            this.cardView = view.findViewById(R.id.searchedIindividual);
+            this.linearLayout = view.findViewById(R.id.searchedIindividual);
         }
     }
 
@@ -109,8 +115,8 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         //holder.hhid.setText(String.valueOf(individual.age));
         String hh  = individual.getGhanacard();
         if (hh == null || hh.isEmpty()){
-            holder.hhid.setText("No Ghana Card");
-            holder.hhid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+            holder.hhid.setText("No National ID");
+            holder.hhid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Red));
         }else{
             holder.hhid.setText(individual.getGhanacard());
         }
@@ -124,12 +130,12 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         Integer gender = individual.gender;
         holder.gender.setText(gender == 1 ? "Male" : "Female");
         String ph = individual.phone1;
-        if (ph != null && ph.length() == 10) {
+        if (ph != null && ph.length() > 5) {
             holder.status.setText("(" + ph + ")");
             holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
         } else {
             holder.status.setText("(" + "No Contact" + ")");
-            holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+            holder.status.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Red));
         }
         Integer st = individual.complete;
         if (st != null) {
@@ -137,17 +143,33 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
             holder.firstname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
             holder.lastname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LimeGreen));
         }else {
-            holder.permid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
-            holder.firstname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
-            holder.lastname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.pop));
+            holder.permid.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Red));
+            holder.firstname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Red));
+            holder.lastname.setTextColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.Red));
+        }
+
+        // Check if this location is currently selected
+        Individual currentSelected = individualSharedViewModel.getCurrentSelectedIndividual();
+        boolean isSelected = selectedUuid != null && selectedUuid.equals(individual.getUuid());
+
+
+        // Apply selection styling
+        if (isSelected) {
+            // Selected location styling
+            holder.linearLayout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LightGrey));
+            // You can also add other visual indicators like border, different text color, etc.
+        } else {
+            // Default styling
+            holder.linearLayout.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), android.R.color.transparent));
         }
 
 
-        holder.cardView.setOnClickListener(v -> {
+        holder.linearLayout.setOnClickListener(v -> {
             if (individualClickListener != null) {
                 individualClickListener.onIndividualClick(individual);
-                //Log.d("IndividualViewAdapter", "Person clicked: " + individual.getExtId());
-                //Toast.makeText(fragment.requireContext(), "Individual" + individual.age, Toast.LENGTH_SHORT).show();
+                selectedUuid = individual.getUuid(); // ✅ set directly
+                individualSharedViewModel.setSelectedIndividual(individual);
+                notifyDataSetChanged(); // update UI
             }
         });
 
@@ -208,9 +230,28 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
 //        }
 //    }
 
+//    public void setIndividualList(List<Individual> individuals) {
+//        individualList.clear();
+//        individualList.addAll(individuals);
+//        notifyDataSetChanged();
+//    }
+
     public void setIndividualList(List<Individual> individuals) {
         individualList.clear();
         individualList.addAll(individuals);
+
+        // Re-check selected UUID from sharedViewModel
+        Individual selected = individualSharedViewModel.getCurrentSelectedIndividual();
+        if (selected != null) {
+            selectedUuid = selected.getUuid();
+        } else {
+            selectedUuid = null;
+        }
+        notifyDataSetChanged();
+    }
+
+
+    public void refreshSelection() {
         notifyDataSetChanged();
     }
 

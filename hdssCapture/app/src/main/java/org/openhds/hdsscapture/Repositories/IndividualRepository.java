@@ -462,6 +462,24 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public List<Individual> dupRegistration(String uuid,String ghcard,String phone) throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.dupRegistration(uuid,ghcard, phone);
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Individual> DuplicatesByPhone(String uuid,String phone) throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.findDuplicatesByPhone(uuid,phone);
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Individual> findIndividualsBatched(int gender, int minAge, int maxAge, int status) {
         List<Individual> allIndividuals = new ArrayList<>();
         int offset = 0;

@@ -25,8 +25,10 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Utilities.SimpleDialog;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentDemographicBinding;
 import org.openhds.hdsscapture.entity.Demographic;
@@ -68,6 +70,8 @@ public class DemographicFragment extends DialogFragment {
     private Individual individual;
     private FragmentDemographicBinding binding;
     private Demographic demographic;
+    private Individual selectedIndividual;
+    private Locations selectedLocation;
 
     private void showDialogInfo(String message, String codeFragment) {
         SimpleDialog simpleDialog = SimpleDialog.newInstance(message, codeFragment);
@@ -116,8 +120,14 @@ public class DemographicFragment extends DialogFragment {
         binding = FragmentDemographicBinding.inflate(inflater, container, false);
         binding.setDemographic(demographic);
 
+        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
+
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
-        ind.setText(HouseMembersFragment.selectedIndividual.firstName + " " + HouseMembersFragment.selectedIndividual.lastName);
+        ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
+
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
         ImageButton appInfoButton = binding.getRoot().findViewById(R.id.deno_button);
         appInfoButton.setOnClickListener(new View.OnClickListener() {
@@ -136,12 +146,12 @@ public class DemographicFragment extends DialogFragment {
 
         DemographicViewModel viewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
         try {
-            Demographic data = viewModel.find(HouseMembersFragment.selectedIndividual.uuid);
+            Demographic data = viewModel.find(selectedIndividual.uuid);
             if (data != null) {
                 binding.setDemographic(data);
                 binding.getDemographic().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.location_uuid = ClusterFragment.selectedLocation.uuid;
+                data.location_uuid = selectedLocation.getUuid();
 
                 Date currentDate = new Date(); // Get the current date and time
                 // Create a Calendar instance and set it to the current date and time
@@ -169,8 +179,8 @@ public class DemographicFragment extends DialogFragment {
                 data = new Demographic();
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.individual_uuid = HouseMembersFragment.selectedIndividual.getUuid();
-                data.location_uuid = ClusterFragment.selectedLocation.uuid;
+                data.individual_uuid = selectedIndividual.getUuid();
+                data.location_uuid = selectedLocation.getUuid();
                 Date currentDate = new Date(); // Get the current date and time
                 // Create a Calendar instance and set it to the current date and time
                 Calendar cal = Calendar.getInstance();
@@ -192,7 +202,7 @@ public class DemographicFragment extends DialogFragment {
 
         IndividualViewModel indage = new ViewModelProvider(this).get(IndividualViewModel.class);
         try {
-            Individual datae = indage.find(HouseMembersFragment.selectedIndividual.uuid);
+            Individual datae = indage.find(selectedIndividual.uuid);
             if (datae != null) {
                 binding.setIndividual(datae);
 
@@ -277,7 +287,7 @@ public class DemographicFragment extends DialogFragment {
             IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
             try {
 
-                Individual visitedData = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+                Individual visitedData = iview.visited(selectedIndividual.uuid);
                 if (visitedData != null) {
                     IndividualVisited visited = new IndividualVisited();
                     visited.uuid = binding.getDemographic().individual_uuid;
@@ -293,7 +303,7 @@ public class DemographicFragment extends DialogFragment {
 
             try {
 
-                Individual data = iview.find(HouseMembersFragment.selectedIndividual.uuid);
+                Individual data = iview.find(selectedIndividual.uuid);
                 String phone1 = binding.getDemographic().phone1;
                 if (data != null && phone1 != null && phone1.length() == 10) {
                     IndividualPhone cnt = new IndividualPhone();
@@ -314,7 +324,7 @@ public class DemographicFragment extends DialogFragment {
 //
 //                try {
 //                    // Second block - visited update (with different variable name)
-//                    Individual visitedData = iview.visited(HouseMembersFragment.selectedIndividual.uuid);
+//                    Individual visitedData = iview.visited(selectedIndividual.uuid);
 //                    if (visitedData != null) {
 //                        IndividualVisited visited = new IndividualVisited();
 //                        visited.uuid = binding.getDemographic().individual_uuid;
@@ -338,7 +348,7 @@ public class DemographicFragment extends DialogFragment {
 //
 //                //Update Phone Number for Individual
 //                try {
-//                    Individual data = iview.find(HouseMembersFragment.selectedIndividual.uuid);
+//                    Individual data = iview.find(selectedIndividual.uuid);
 //                    String phone1 = binding.getDemographic().phone1;
 //                    if (data != null && phone1 != null && phone1.length() == 10) {
 //                        IndividualPhone cnt = new IndividualPhone();

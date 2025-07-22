@@ -16,6 +16,7 @@ import android.widget.Button;
 
 import org.openhds.hdsscapture.Adapter.DthAdapter;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.databinding.FragmentDthAdapterBinding;
 import org.openhds.hdsscapture.entity.Individual;
@@ -79,6 +80,10 @@ public class DthAdapterFragment extends DialogFragment {
         //return inflater.inflate(R.layout.fragment_dthedit, container, false);
         binding = FragmentDthAdapterBinding.inflate(inflater, container, false);
 
+        ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
+        Locations selectedLocation = sharedViewModel.getCurrentSelectedLocation();
+        String compno = selectedLocation != null ? selectedLocation.getCompno() : null;
+
         Button closeButton = binding.getRoot().findViewById(R.id.button_close);
 
         closeButton.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +94,7 @@ public class DthAdapterFragment extends DialogFragment {
         });
 
         final RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerView_dth);
-        final DthAdapter adapter = new DthAdapter(this, locations, socialgroup);
+        final DthAdapter adapter = new DthAdapter(this, locations, socialgroup, compno);
         final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
 
         //recyclerView.setHasFixedSize(true);
