@@ -1,6 +1,7 @@
 package org.openhds.hdsscapture.Dao;
 
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -9,8 +10,10 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -73,4 +76,10 @@ public interface DemographicDao {
 
     @Query("SELECT COUNT(*) FROM demographic WHERE status=2 AND fw_uuid = :uuid ")
     long rej(String uuid);
+
+    @Query("SELECT a.individual_uuid as uuid, 'Demographic' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM demographic as a inner join individual as b ON a.individual_uuid=b.uuid WHERE a.complete = 1")
+    List<CompletedForm> getCompletedForms();
+
+    @Query("SELECT * FROM demographic where individual_uuid=:id")
+    LiveData<Demographic> getView(String id);
 }

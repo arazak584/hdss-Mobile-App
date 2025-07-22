@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.DeathDao;
+import org.openhds.hdsscapture.Dao.DemographicDao;
 import org.openhds.hdsscapture.Dao.InmigrationDao;
 import org.openhds.hdsscapture.Dao.OutmigrationDao;
 import org.openhds.hdsscapture.Dao.PregnancyDao;
@@ -22,6 +23,7 @@ public class CompletedFormsViewModel extends AndroidViewModel {
     private final DeathDao deathDao;
     private final InmigrationDao migInDao;
     private final OutmigrationDao migOutDao;
+    private final DemographicDao demographicDao;
 
     public CompletedFormsViewModel(@NonNull Application application) {
         super(application);
@@ -30,6 +32,7 @@ public class CompletedFormsViewModel extends AndroidViewModel {
         this.deathDao = db.deathDao();
         this.migInDao = db.inmigrationDao();
         this.migOutDao = db.outmigrationDao();
+        this.demographicDao = db.demographicDao();
     }
 
     public LiveData<List<CompletedForm>> getAllCompletedForms() {
@@ -42,15 +45,18 @@ public class CompletedFormsViewModel extends AndroidViewModel {
 
                 // Get completed forms from each DAO
                 List<CompletedForm> pregnancies = pregDao.getCompletedForms();
+                List<CompletedForm> demographic = demographicDao.getCompletedForms();
                 List<CompletedForm> deaths = deathDao.getCompletedForms();
                 List<CompletedForm> inmigrations = migInDao.getCompletedForms();
                 List<CompletedForm> outmigrations = migOutDao.getCompletedForms();
+
 
                 // Add all forms to the combined list
                 if (pregnancies != null) all.addAll(pregnancies);
                 if (deaths != null) all.addAll(deaths);
                 if (inmigrations != null) all.addAll(inmigrations);
                 if (outmigrations != null) all.addAll(outmigrations);
+                if (demographic != null) all.addAll(demographic);
 
                 // Post the result back to the main thread
                 result.postValue(all);

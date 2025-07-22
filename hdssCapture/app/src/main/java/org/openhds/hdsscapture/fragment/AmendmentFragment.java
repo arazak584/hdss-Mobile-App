@@ -456,31 +456,6 @@ public class AmendmentFragment extends DialogFragment {
                 return;
             }
 
-//            boolean val = false;
-//            if (!binding.replFirstName.getText().toString().trim().isEmpty()) {
-//                if (firstName.charAt(0) == ' ' || firstName.charAt(firstName.length() - 1) == ' ') {
-//                    binding.replFirstName.setError("Spaces are not allowed before or after the Name");
-//                    Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
-//                    val = true;
-//                    return;
-//                } else {
-//                    binding.replFirstName.setError(null); // Clear the error if the input is valid
-//                }
-//            }
-//
-//            boolean vals = false;
-//            if (!binding.replLastName.getText().toString().trim().isEmpty()) {
-//                if (lastName.charAt(0) == ' ' || lastName.charAt(lastName.length() - 1) == ' ') {
-//                    binding.replLastName.setError("Spaces are not allowed before or after the Name");
-//                    Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
-//                    vals = true;
-//                    return;
-//                } else {
-//                    binding.replLastName.setError(null); // Clear the error if the input is valid
-//                }
-//            }
-
-
 
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute(() -> {

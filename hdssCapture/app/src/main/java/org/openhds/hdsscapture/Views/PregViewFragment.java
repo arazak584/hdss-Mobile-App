@@ -215,6 +215,8 @@ public class PregViewFragment extends Fragment {
         viewModel.getView(pregnancy.uuid).observe(getViewLifecycleOwner(), data -> {
             if (data != null) {
                 binding.setPregnancy(data);
+                binding.outcometype.setEnabled(false);
+
 
                 // Fetch the last record before the current one
                 try {

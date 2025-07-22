@@ -46,9 +46,9 @@ public class CompletedFormsAdapter extends RecyclerView.Adapter<CompletedFormsAd
                 case "Pregnancy":
                     fragment = PregViewFragment.newInstance(form.uuid);
                     break;
-//                case "Death":
-//                    fragment = DeathFragment.newInstance(form.uuid);
-//                    break;
+                case "Demographic":
+                    fragment = DemoViewFragment.newInstance(form.uuid);
+                    break;
 //                case "Inmigration":
 //                    fragment = InmigrationFragment.newInstance(form.uuid);
 //                    break;

@@ -2,10 +2,13 @@ package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
+
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.DemographicDao;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Inmigration;
+import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
 import java.util.Date;
@@ -90,5 +93,9 @@ public class DemographicRepository {
         Future<List<Demographic>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
+    }
+
+    public LiveData<Demographic> view(String id) {
+        return dao.getView(id);
     }
 }

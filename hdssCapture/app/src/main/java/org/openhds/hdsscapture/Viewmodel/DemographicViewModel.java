@@ -4,10 +4,12 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.DemographicRepository;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Inmigration;
+import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
 import java.util.Date;
@@ -45,6 +47,10 @@ public class DemographicViewModel extends AndroidViewModel {
 
     public List<Demographic> reject(String id) throws ExecutionException, InterruptedException {
         return demographicRepository.reject(id);
+    }
+
+    public LiveData<Demographic> getView(String id) {
+        return demographicRepository.view(id);
     }
 
     public List<Demographic> error() throws ExecutionException, InterruptedException {
