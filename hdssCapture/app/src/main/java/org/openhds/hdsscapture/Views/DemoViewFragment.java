@@ -63,12 +63,8 @@ public class DemoViewFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
-    private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
-    private static final String SOCIAL_ID = "SOCIAL_ID";
     public static final String DENO_INFO = "file:///android_asset/deno_views.html";
 
-    // TODO: Rename and change types of parameters
-    private Individual individual;
     private FragmentDemographicBinding binding;
     private Demographic demographic;
     private DemographicRepository repository;

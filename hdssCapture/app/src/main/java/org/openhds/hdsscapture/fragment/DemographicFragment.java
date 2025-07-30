@@ -165,9 +165,9 @@ public class DemographicFragment extends DialogFragment {
                 String timeString = String.format("%02d:%02d:%02d", hh, mm, ss);
                 data.sttime = timeString;
 
-                if (data.phone1 != null){
-                    data.phone =1;
-                }
+//                if (data.phone1 != null){
+//                    data.phone =1;
+//                }
 
                 if(data.status!=null && data.status==2){
                     cmt.setVisibility(View.VISIBLE);

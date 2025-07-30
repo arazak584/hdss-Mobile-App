@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.core.util.Consumer;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.OutmigrationDao;
@@ -147,5 +148,9 @@ public class OutmigrationRepository {
         Callable<Long> callable = () -> dao.rej(uuid);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
+    }
+
+    public LiveData<Outmigration> view(String id) {
+        return dao.getView(id);
     }
 }

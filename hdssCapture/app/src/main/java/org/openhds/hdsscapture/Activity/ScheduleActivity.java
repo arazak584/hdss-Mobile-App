@@ -161,7 +161,7 @@ public class ScheduleActivity extends AppCompatActivity {
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // Start MainActivity
-                        Intent intent = new Intent(ScheduleActivity.this, MainActivity.class);
+                        Intent intent = new Intent(ScheduleActivity.this, RemainderActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
                         // Finish the current activity

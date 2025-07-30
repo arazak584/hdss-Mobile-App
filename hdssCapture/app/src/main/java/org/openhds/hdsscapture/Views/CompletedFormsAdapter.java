@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Views;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,28 +43,66 @@ public class CompletedFormsAdapter extends RecyclerView.Adapter<CompletedFormsAd
 
         holder.itemView.setOnClickListener(v -> {
             Fragment fragment = null;
-            switch (form.formType) {
-                case "Pregnancy":
+            Log.d("CompletedFormsAdapter", "Form type: '" + form.formType + "'");
+
+            switch (form.formType.toLowerCase()) {
+                case "pregnancy":
                     fragment = PregViewFragment.newInstance(form.uuid);
                     break;
-                case "Demographic":
+                case "demographic":
                     fragment = DemoViewFragment.newInstance(form.uuid);
                     break;
-//                case "Inmigration":
-//                    fragment = InmigrationFragment.newInstance(form.uuid);
+                case "amendment":
+                    fragment = AmendmentViewFragment.newInstance(form.uuid);
+                    break;
+                case "death":
+                    fragment = DeathViewFragment.newInstance(form.uuid);
+                    break;
+                case "ses":
+                    //Log.d("CompletedFormsAdapter", "Opening SES view with UUID: " + form.uuid);
+                    fragment = SocioAViewFragment.newInstance(form.uuid);
+                    break;
+                case "individual":
+                    fragment = IndividualViewFragment.newInstance(form.uuid);
+                    break;
+                case "inmigration":
+                    fragment = InmigrationViewFragment.newInstance(form.uuid);
+                    break;
+                case "outmigration":
+                    fragment = OutmigrationViewFragment.newInstance(form.uuid);
+                    break;
+                case "listing":
+                    Log.d("CompletedFormsAdapter", "Opening Listing view with UUID: " + form.uuid);
+                    fragment = ListingViewFragment.newInstance(form.uuid);
+                    break;
+                case "morbidity":
+                    fragment = MorbidityViewFragment.newInstance(form.uuid);
+                    break;
+                case "relationship":
+                    fragment = RelationshipViewFragment.newInstance(form.uuid);
+                    break;
+                case "membership":
+                    fragment = ResidencyViewFragment.newInstance(form.uuid);
+                    break;
+                case "vaccination":
+                    fragment = VaccinationViewFragment.newInstance(form.uuid);
+                    break;
+//                case "pregnancy outcome":
+//                    fragment = BirthViewFragment.newInstance(form.uuid);
 //                    break;
-//                case "Outmigration":
-//                    fragment = OutmigrationFragment.newInstance(form.uuid);
-//                    break;
+                default:
+                    Log.d("CompletedFormsAdapter", "Unknown form type: " + form.formType);
+                    break;
             }
 
             if (fragment != null) {
                 FragmentTransaction transaction = activity.getParentFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment);
-                transaction.addToBackStack(null);
+                //transaction.addToBackStack(null);
                 transaction.commit();
+            } else {
+                Log.d("CompletedFormsAdapter", "Fragment is null for form type: " + form.formType);
             }
-
         });
     }
 

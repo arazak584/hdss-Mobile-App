@@ -41,7 +41,7 @@ public class Locations extends BaseObservable implements Parcelable {
     @SerializedName("compextId")
     @Expose
     @ColumnInfo(name = "compextId")
-    public String compextId;//=AppConstants.Location;
+    public String compextId;
 
     @SerializedName("compno")
     @Expose
@@ -193,10 +193,10 @@ public class Locations extends BaseObservable implements Parcelable {
         return compextId;
     }
 
-    public void setCompextId(String compextId) {
-        this.compextId = compextId;
-
-    }
+//    public void setCompextId(String compextId) {
+//        this.compextId = compextId;
+//
+//    }
 
 
     public String getLocationLevel_uuid() {
@@ -222,46 +222,31 @@ public class Locations extends BaseObservable implements Parcelable {
         return compno;
     }
 
+    public void setCompno(String compno) {
+        this.compno = compno;
+        generateCompextId(); // trigger compextId generation
+        notifyPropertyChanged(BR.compno);
+    }
+
 //    public void setCompno(String compno) {
-//        this.compextId = null;
-//        //this.compno = compno;
+//        this.compno = compno;
+//
+//        // Only update compextId if both compno and extId are non-null
 //        if (compno != null && extId != null) {
 //            try {
-//                // When Village == 3
 //                if (extId.length() == 3) {
 //                    this.compextId = extId + "00" + compno.substring(2, 6);
-//                }
-//                // When Village == 4
-//                else if (extId.length() == 4) {
+//                } else if (extId.length() == 4) {
 //                    this.compextId = extId + "00" + compno.substring(4, 7);
 //                }
 //            } catch (StringIndexOutOfBoundsException e) {
-//                // Handle cases where substring indices are invalid
-//                e.printStackTrace();
+//                e.printStackTrace(); // You can replace this with proper logging
 //            }
+//
+//            notifyPropertyChanged(BR.compextId);
 //        }
-//        notifyPropertyChanged(BR.compextId);
+//        // else: leave compextId untouched
 //    }
-
-    public void setCompno(String compno) {
-        this.compno = compno;
-
-        // Only update compextId if both compno and extId are non-null
-        if (compno != null && extId != null) {
-            try {
-                if (extId.length() == 3) {
-                    this.compextId = extId + "00" + compno.substring(2, 6);
-                } else if (extId.length() == 4) {
-                    this.compextId = extId + "00" + compno.substring(4, 7);
-                }
-            } catch (StringIndexOutOfBoundsException e) {
-                e.printStackTrace(); // You can replace this with proper logging
-            }
-
-            notifyPropertyChanged(BR.compextId);
-        }
-        // else: leave compextId untouched
-    }
 
     @Bindable
     public String getLocationName() {
@@ -335,12 +320,15 @@ public class Locations extends BaseObservable implements Parcelable {
         this.complete = complete;
     }
 
+    @Bindable
     public String getVill_extId() {
         return vill_extId;
     }
 
     public void setVill_extId(String vill_extId) {
         this.vill_extId = vill_extId;
+        generateCompextId(); // trigger compextId generation
+        notifyPropertyChanged(BR.vill_extId);
     }
 
     public String getExtId() {
@@ -498,6 +486,21 @@ public class Locations extends BaseObservable implements Parcelable {
 
 
             notifyPropertyChanged(BR._all);
+        }
+    }
+
+    private void generateCompextId() {
+        if (compno != null && extId != null) {
+            try {
+                if (extId.length() == 3) {
+                    this.compextId = extId + "00" + compno.substring(2, 6);
+                } else if (extId.length() == 4) {
+                    this.compextId = extId + "00" + compno.substring(4, 7);
+                }
+                notifyPropertyChanged(BR.compextId);
+            } catch (StringIndexOutOfBoundsException e) {
+                e.printStackTrace(); // log error
+            }
         }
     }
 

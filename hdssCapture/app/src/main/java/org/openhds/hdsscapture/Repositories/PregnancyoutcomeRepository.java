@@ -1,12 +1,20 @@
 package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
+
+import androidx.core.util.Consumer;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.PregnancyoutcomeDao;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
+import org.openhds.hdsscapture.entity.subentity.OutcomeUpdate;
+import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 
 import java.util.Date;
 import java.util.List;
@@ -37,6 +45,13 @@ public class PregnancyoutcomeRepository {
         });
     }
 
+    public void update(OutcomeUpdate s, Consumer<Integer> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int result = dao.update(s);
+            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
+    }
+
     public List<Pregnancyoutcome> findToSync() throws ExecutionException, InterruptedException {
         Callable<List<Pregnancyoutcome>> callable = () -> dao.retrieveToSync();
         Future<List<Pregnancyoutcome>> future = Executors.newSingleThreadExecutor().submit(callable);
@@ -54,6 +69,13 @@ public class PregnancyoutcomeRepository {
         Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }
+
+    public Pregnancyoutcome preg(String id) throws ExecutionException, InterruptedException {
+        Callable<Pregnancyoutcome> callable = () -> dao.preg(id);
+        Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
     public Pregnancyoutcome find1(String id) throws ExecutionException, InterruptedException {
         Callable<Pregnancyoutcome> callable = () -> dao.find1(id);
         Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
@@ -61,6 +83,12 @@ public class PregnancyoutcomeRepository {
     }
     public Pregnancyoutcome findloc(String id,String locid) throws ExecutionException, InterruptedException {
         Callable<Pregnancyoutcome> callable = () -> dao.findloc(id,locid);
+        Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    public Pregnancyoutcome findMother(String id) throws ExecutionException, InterruptedException {
+        Callable<Pregnancyoutcome> callable = () -> dao.findMother(id);
         Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }
@@ -158,5 +186,9 @@ public class PregnancyoutcomeRepository {
         Future<List<Pregnancyoutcome>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
+    }
+
+    public LiveData<Pregnancyoutcome> view(String id) {
+        return dao.getView(id);
     }
 }

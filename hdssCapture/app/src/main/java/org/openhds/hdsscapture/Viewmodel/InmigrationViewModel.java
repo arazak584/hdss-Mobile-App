@@ -4,8 +4,10 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.InmigrationRepository;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
@@ -45,6 +47,10 @@ public class InmigrationViewModel extends AndroidViewModel {
 
     public long rej(String uuid) throws ExecutionException, InterruptedException {
         return inmigrationRepository.rej(uuid);
+    }
+
+    public LiveData<Inmigration> getView(String id) {
+        return inmigrationRepository.view(id);
     }
 
     public void add(Inmigration data){ inmigrationRepository.create(data);}

@@ -2,8 +2,11 @@ package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
+
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.HdssSociodemoDao;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Vaccination;
 
@@ -107,5 +110,9 @@ public class HdssSociodemoRepository {
         Future<List<HdssSociodemo>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
+    }
+
+    public LiveData<HdssSociodemo> view(String id) {
+        return dao.getView(id);
     }
 }

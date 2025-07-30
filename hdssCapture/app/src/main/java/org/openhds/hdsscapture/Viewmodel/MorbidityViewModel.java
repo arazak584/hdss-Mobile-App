@@ -4,8 +4,10 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.MorbidityRepository;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Morbidity;
 
 import java.util.Date;
@@ -51,6 +53,10 @@ public class MorbidityViewModel extends AndroidViewModel {
 
     public long rej(String uuid) throws ExecutionException, InterruptedException {
         return morbidityRepository.rej(uuid);
+    }
+
+    public LiveData<Morbidity> getView(String id) {
+        return morbidityRepository.view(id);
     }
 
     public void add(Morbidity s){

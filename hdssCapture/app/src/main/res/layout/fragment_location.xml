@@ -261,7 +261,7 @@
                     android:layout_height="50dp"
                     android:hint="@string/compno"
                     style="@style/AppCompatEditTextStyle"
-                    android:text="@={locations.compextId}"
+                    android:text="@{locations.compextId}"
                     android:focusableInTouchMode="false"
                     android:focusable="false"
                     android:inputType="textPersonName|textCapCharacters"/>

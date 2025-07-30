@@ -9,6 +9,7 @@ import androidx.room.Query;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Outcome;
+import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 
 import java.util.List;
 
@@ -48,4 +49,7 @@ OutcomeDao {
 
     @Query("SELECT * FROM outcome where uuid=:id AND location=:locid")
     Outcome find(String id,String locid);
+
+    @Query("SELECT * FROM outcome where preg_uuid=:id")
+    LiveData<Outcome> getView(String id);
 }

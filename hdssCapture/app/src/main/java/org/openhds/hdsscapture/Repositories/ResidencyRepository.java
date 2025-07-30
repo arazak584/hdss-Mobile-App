@@ -5,9 +5,11 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.core.util.Consumer;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.ResidencyDao;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
@@ -195,6 +197,15 @@ public class ResidencyRepository {
         return future.get();
     }
 
+    public Residency views(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Residency> callable = () -> dao.views(id);
+
+        Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public Residency dth(String id, String locid) throws ExecutionException, InterruptedException {
 
         Callable<Residency> callable = () -> dao.dth(id,locid);
@@ -226,6 +237,10 @@ public class ResidencyRepository {
         Callable<Long> callable = () -> dao.count(startDate, endDate, username);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
+    }
+
+    public LiveData<Residency> view(String id) {
+        return dao.getView(id);
     }
 
 }

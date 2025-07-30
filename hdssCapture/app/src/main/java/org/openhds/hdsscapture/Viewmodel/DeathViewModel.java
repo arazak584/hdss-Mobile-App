@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.DeathRepository;
 import org.openhds.hdsscapture.entity.Death;
+import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
@@ -74,6 +75,10 @@ public class DeathViewModel extends AndroidViewModel {
     }
     public Death ins(String id) throws ExecutionException, InterruptedException {
         return deathRepository.ins(id);
+    }
+
+    public LiveData<Death> getView(String id) {
+        return deathRepository.view(id);
     }
 
     public void add(Death data){ deathRepository.create(data);}

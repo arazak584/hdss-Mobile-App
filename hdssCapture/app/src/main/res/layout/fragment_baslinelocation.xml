@@ -323,7 +323,7 @@
                         android:id="@+id/locationextid"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={locations.compextId}"
+                        android:text="@{locations.compextId}"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:inputType="textPersonName|textCapCharacters"/>

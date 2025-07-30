@@ -1,11 +1,13 @@
 package org.openhds.hdsscapture.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import org.openhds.hdsscapture.Views.CompletedForm;
+import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
@@ -48,6 +50,9 @@ public interface InmigrationDao {
     @Query("SELECT * FROM inmigration where uuid=:id AND complete!=1")
     Inmigration ins(String id);
 
-    @Query("SELECT a.uuid, 'Inmigration' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM inmigration as a inner join individual as b ON a.individual_uuid=b.uuid WHERE a.complete = 1")
+    @Query("SELECT a.uuid, 'Inmigration' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM inmigration as a inner join individual as b ON a.individual_uuid=b.uuid WHERE a.complete = 1 ORDER BY a.insertDate DESC")
     List<CompletedForm> getCompletedForms();
+
+    @Query("SELECT * FROM inmigration where uuid=:id")
+    LiveData<Inmigration> getView(String id);
 }

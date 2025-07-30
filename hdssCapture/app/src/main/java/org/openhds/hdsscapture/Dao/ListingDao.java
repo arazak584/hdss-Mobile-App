@@ -2,11 +2,14 @@ package org.openhds.hdsscapture.Dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.Views.CompletedForm;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -22,6 +25,9 @@ public interface ListingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Listing listing);
+
+    @Query("DELETE FROM listing WHERE compno = :compextId")
+    int deleteByCompno(String compextId);
 
     @Query("DELETE FROM listing")
     void deleteAll();
@@ -54,5 +60,10 @@ public interface ListingDao {
             " LEFT JOIN listing as b ON a.location_uuid=b.location_uuid" +
             " where b.location_uuid IS NULL GROUP BY a.location_uuid")
     long cnt();
+
+    @Query("SELECT compextId as uuid, 'Listing' AS formType, insertDate, compno || ' - ' || compextId as fullName FROM listing WHERE complete = 1 ORDER BY insertDate DESC")
+    List<CompletedForm> getCompletedForms();
+    @Query("SELECT * FROM listing where compextId= :id")
+    LiveData<Listing> getView(String id);
 
 }

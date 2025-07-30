@@ -2,7 +2,10 @@ package org.openhds.hdsscapture.Views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +27,18 @@ import org.openhds.hdsscapture.Repositories.PregnancyRepository;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
+import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.databinding.FragmentPregnancyBinding;
 import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Pregnancy;
+import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.OutcomeUpdate;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import org.openhds.hdsscapture.fragment.DatePickerFragment;
 import org.openhds.hdsscapture.fragment.HouseMembersFragment;
@@ -45,6 +52,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -104,15 +112,15 @@ public class PregViewFragment extends Fragment {
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             // We use a String here, but any type that can be put in a Bundle is supported
-             if (bundle.containsKey((PregViewFragment.DATE_BUNDLES.RECORDDATE.getBundleKey()))) {
-                final String result = bundle.getString(PregViewFragment.DATE_BUNDLES.RECORDDATE.getBundleKey());
-                binding.editTextRecordedDate.setText(result);
-            }
-
-            if (bundle.containsKey((PregViewFragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey()))) {
-                final String result = bundle.getString(PregViewFragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey());
-                binding.editTextOutcomeDate.setText(result);
-            }
+//             if (bundle.containsKey((PregViewFragment.DATE_BUNDLES.RECORDDATE.getBundleKey()))) {
+//                final String result = bundle.getString(PregViewFragment.DATE_BUNDLES.RECORDDATE.getBundleKey());
+//                binding.editTextRecordedDate.setText(result);
+//            }
+//
+//            if (bundle.containsKey((PregViewFragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey()))) {
+//                final String result = bundle.getString(PregViewFragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey());
+//                binding.editTextOutcomeDate.setText(result);
+//            }
 
             if (bundle.containsKey((PregViewFragment.DATE_BUNDLES.CLINICDATE.getBundleKey()))) {
                 final String result = bundle.getString(PregViewFragment.DATE_BUNDLES.CLINICDATE.getBundleKey());
@@ -467,28 +475,6 @@ public class PregViewFragment extends Fragment {
                 e.printStackTrace();
             }
 
-//            try {
-//                if (!binding.lastPreg.getText().toString().trim().isEmpty() && !binding.editTextRecordedDate.getText().toString().trim().isEmpty()
-//                        && !binding.uuidPreg.getText().toString().trim().isEmpty() && !binding.uuid.getText().toString().trim().isEmpty()) {
-//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-//                    Date stdate = f.parse(binding.lastPreg.getText().toString().trim());
-//                    Date edate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
-//                    String uuid = binding.uuid.getText().toString().trim();
-//                    String uuidPreg = binding.uuidPreg.getText().toString().trim();
-//                    String formattedDate = f.format(stdate);
-//                    if (edate.before(stdate) && !uuid.equals(uuidPreg)) {
-//                        binding.editTextRecordedDate.setError("Pregnancy with a later Date exist " + formattedDate);
-//                        Toast.makeText(getActivity(), "Pregnancy with a later Date exist " + formattedDate, Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
-//                    // clear error if validation passes
-//                    binding.editTextRecordedDate.setError(null);
-//                }
-//            } catch (ParseException e) {
-//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-//                e.printStackTrace();
-//            }
-
             try {
                 if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextRecordedDate.getText().toString().trim().isEmpty()) {
                     final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
@@ -538,7 +524,6 @@ public class PregViewFragment extends Fragment {
                 }
             }
 
-
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.PREGNANCYLAYOUT, validateOnComplete, false);
 
@@ -547,10 +532,45 @@ public class PregViewFragment extends Fragment {
                 return;
             }
 
-            if (hasErrors) {
-                Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
-                return;
-            }
+            PregnancyoutcomeViewModel iview = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
+
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
+
+                try {
+                    // Update Variables in Pregnancy Outcome
+                    Pregnancyoutcome data = iview.preg(finalData.uuid);
+                    if (data != null) {
+                        OutcomeUpdate upd = new OutcomeUpdate();
+                        upd.uuid = data.getUuid();
+                        upd.complete = 1;
+                        upd.outcomeDate = finalData.outcome_date;
+                        upd.conceptionDate = finalData.recordedDate;
+                        upd.rec_anc = finalData.anteNatalClinic;
+                        upd.month_pg = finalData.first_rec;
+                        upd.who_anc = finalData.attend_you;
+                        upd.num_anc = finalData.anc_visits;
+                        upd.pregnancy_uuid = finalData.uuid;
+
+                        iview.update(upd, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("PregnancyOutcome", "Update successful!");
+                                    } else {
+                                        Log.d("PregnancyOutcome", "Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+                } catch (Exception e) {
+                    Log.e("DemographicFragment", "Error in visited update", e);
+                    e.printStackTrace();
+                }
+
+            });
+
+            executor.shutdown();
+
 
             finalData.complete=1;
             viewModel.add(finalData);

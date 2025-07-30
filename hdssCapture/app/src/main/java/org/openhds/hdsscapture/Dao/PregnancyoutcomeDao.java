@@ -1,15 +1,21 @@
 package org.openhds.hdsscapture.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
+import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
+import org.openhds.hdsscapture.entity.Residency;
+import org.openhds.hdsscapture.entity.subentity.OutcomeUpdate;
+import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 
 import java.util.Date;
 import java.util.List;
@@ -23,6 +29,9 @@ PregnancyoutcomeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Pregnancyoutcome... pregnancyoutcome);
 
+    @Update(entity = Pregnancyoutcome.class)
+    int update(OutcomeUpdate s);
+
     @Query("DELETE FROM pregnancyoutcome")
     void deleteAll();
 
@@ -35,6 +44,9 @@ PregnancyoutcomeDao {
     @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id ORDER BY outcomeDate ASC LIMIT 1")
     Pregnancyoutcome find(String id);
 
+    @Query("SELECT * FROM pregnancyoutcome where pregnancy_uuid=:id LIMIT 1")
+    Pregnancyoutcome preg(String id);
+
     @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id AND (id IS NULL OR (id != 2 AND id != 3)) ORDER BY outcomeDate ASC LIMIT 1")
     Pregnancyoutcome find1(String id);
 
@@ -44,6 +56,9 @@ PregnancyoutcomeDao {
     @Query("SELECT a.* FROM pregnancyoutcome a INNER JOIN individual b ON a.mother_uuid=b.uuid " +
             "where a.mother_uuid=:id and b.compno=:locid AND (id IS NULL OR (id != 2 AND id != 3)) ORDER BY outcomeDate ASC LIMIT 1")
     Pregnancyoutcome findloc(String id, String locid);
+
+    @Query("SELECT * FROM pregnancyoutcome where mother_uuid=:id AND (id IS NULL OR (id != 2 AND id != 3)) ORDER BY outcomeDate ASC LIMIT 1")
+    Pregnancyoutcome findMother(String id);
 
     @Query("SELECT a.* FROM pregnancyoutcome a INNER JOIN individual b ON a.mother_uuid=b.uuid " +
             "where a.uuid=:id and b.hohID=:locid")
@@ -100,4 +115,10 @@ PregnancyoutcomeDao {
     @Query("SELECT COUNT(*) FROM pregnancyoutcome a " +
             " INNER JOIN individual as b on a.mother_uuid=b.uuid WHERE a.complete IS NULL AND a.fw_uuid = :id ")
     long cnt(String id);
+
+    @Query("SELECT a.uuid, 'Pregnancy Outcome' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM pregnancyoutcome as a inner join individual as b ON a.mother_uuid=b.uuid WHERE a.complete = 1 ORDER BY a.insertDate DESC")
+    List<CompletedForm> getCompletedForms();
+
+    @Query("SELECT * FROM pregnancyoutcome where uuid=:id")
+    LiveData<Pregnancyoutcome> getView(String id);
 }

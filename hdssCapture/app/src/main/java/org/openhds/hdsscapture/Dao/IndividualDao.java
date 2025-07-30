@@ -10,6 +10,8 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.Views.CompletedForm;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -349,11 +351,14 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual WHERE uuid != :currentUuid AND (ghanacard = :ghanacard OR phone1 = :phone)")
     List<Individual> dupRegistration(String currentUuid, String ghanacard, String phone);
 
-    @Query("SELECT * FROM individual WHERE uuid != :currentUuid AND ghanacard = :ghanacard AND ghanacard IS NOT NULL AND ghanacard != ''")
-    List<Individual> findDuplicatesByGhanaCard(String currentUuid, String ghanacard);
-
     @Query("SELECT * FROM individual WHERE uuid != :currentUuid AND phone1 = :phone AND phone1 IS NOT NULL AND phone1 != ''")
     List<Individual> findDuplicatesByPhone(String currentUuid, String phone);
+
+    @Query("SELECT uuid, 'Individual' AS formType, insertDate, firstName || ' ' || lastName as fullName FROM individual WHERE complete = 1 " +
+            " AND insertDate >= (SELECT startDate from round ORDER BY roundNumber DESC limit 1) ORDER BY insertDate DESC")
+    List<CompletedForm> getCompletedForms();
+    @Query("SELECT * FROM individual where uuid=:id")
+    LiveData<Individual> getView(String id);
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)

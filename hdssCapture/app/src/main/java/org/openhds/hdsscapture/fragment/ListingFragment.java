@@ -68,6 +68,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -87,7 +89,7 @@ public class ListingFragment extends Fragment {
     private FragmentListingBinding binding;
     public static  Locations selectedLocation;
     private LocationManager locationManager;
-    private String compno, cmpuuid, cmpextid, locname;
+    private String compno;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
@@ -137,9 +139,6 @@ public class ListingFragment extends Fragment {
         ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
         selectedLocation = sharedViewModel.getCurrentSelectedLocation();
         compno = selectedLocation != null ? selectedLocation.getCompno() : null;
-//        cmpuuid = selectedLocation != null ? selectedLocation.getUuid() : null;
-//        cmpextid = selectedLocation != null ? selectedLocation.getCompextId() : null;
-//        locname = selectedLocation != null ? selectedLocation.getLocationName() : null;
 
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_change_cluster);
         // Set a click listener on the button for mother
@@ -257,15 +256,16 @@ public class ListingFragment extends Fragment {
 
         ListingViewModel viewModel = new ViewModelProvider(this).get(ListingViewModel.class);
         try {
-            Listing data = viewModel.find(compno);
+            Listing data = viewModel.find(selectedLocation.compno);
             if (data != null) {
                 binding.setListing(data);
                 binding.locationName.setEnabled(false);
                 binding.clusterCode.setEnabled(false);
                 binding.villcode.setEnabled(false);
+                data.location_uuid = selectedLocation.uuid;
 
                 String regex = "[A-Z]{2}\\d{4}";
-                String input = compno;
+                String input = selectedLocation.compno;
                 if (!input.matches(regex)){
                     binding.buttonChangeCluster.setEnabled(false);
                 }else{
@@ -284,12 +284,12 @@ public class ListingFragment extends Fragment {
 
                 data.fw_uuid = fw;
                 //data.compextId = selectedLocation.getCompextId();
-                data.compno = compno;
+                data.compno = selectedLocation.compno;
                 data.status = selectedLocation.getStatus();
                 data.village = level6Data.getName();
                 data.fw_name = fwname;
                 data.locationName = selectedLocation.getLocationName();
-                data.location_uuid = cmpuuid;
+                data.location_uuid = selectedLocation.uuid;
                 data.vill_extId = level6Data.getExtId();
                 data.cluster_id = selectedLocation.getLocationLevel_uuid();
                 //data.longitude = selectedLocation.getLongitude();
@@ -314,7 +314,7 @@ public class ListingFragment extends Fragment {
 
 
                 String regex = "[A-Z]{2}\\d{4}";
-                String input = compno;
+                String input = selectedLocation.compno;
                 if (!input.matches(regex)){
                     binding.buttonChangeCluster.setEnabled(false);
                 }else{
@@ -453,51 +453,73 @@ public class ListingFragment extends Fragment {
 
             LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
 
-            try {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
 
-                Locations data = locationViewModel.find(compno);
-                if (data !=null) {
+                try {
+                    // Update Location
+                    Locations data = locationViewModel.find(binding.getListing().compno);
+                    if (data != null) {
+                        LocationAmendment locationz = new LocationAmendment();
+                        locationz.uuid = binding.getListing().location_uuid;
+                        locationz.compno = finalData.compno;
+                        locationz.compextId = finalData.compextId;
 
-                    LocationAmendment locationz = new LocationAmendment();
-                    locationz.uuid = finalData.location_uuid;
-                    locationz.compno = finalData.compno;
-                    locationz.compextId = finalData.compextId;
+                        if (!binding.repllocationName.getText().toString().trim().isEmpty()) {
+                            locationz.locationName = binding.getListing().repl_locationName;
+                        } else {
+                            locationz.locationName = finalData.locationName;
+                        }
+                        locationz.status = binding.getListing().status;
+                        locationz.locationLevel_uuid = finalData.cluster_id;
+                        locationz.extId = finalData.vill_extId;
 
-                    if (!binding.repllocationName.getText().toString().trim().isEmpty()) {
-                        locationz.locationName = binding.getListing().repl_locationName;
-                    } else {
-                        locationz.locationName = finalData.locationName;
+                        Log.d("Listing", "Compound Status: "+ finalData.location_uuid);
+
+                        if (finalData.status!=null && finalData.status == 3){
+                            locationz.longitude = data.longitude;
+                            locationz.latitude = data.latitude;
+                            locationz.accuracy = data.accuracy;
+                            locationz.altitude = data.altitude;
+
+                        }else{
+                            locationz.longitude = binding.getListing().longitude;
+                            locationz.latitude = binding.getListing().latitude;
+                            locationz.accuracy = binding.getListing().accuracy;
+                            locationz.altitude = binding.getListing().altitude;
+                        }
+                        locationz.complete = 1;
+
+                        locationViewModel.update(locationz, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("LocationFragment", "List Update successful!");
+                                    } else {
+                                        Log.d("LocationFragment", "List Update Failed!");
+                                    }
+                                })
+                        );
                     }
-                    locationz.status = binding.getListing().status;
-                    locationz.locationLevel_uuid = binding.getListing().cluster_id;
-                    locationz.extId = binding.getListing().vill_extId;
-
-                    Log.d("Listing", "Compound Status: "+ finalData.status);
-
-                    if (finalData.status!=null && finalData.status == 3){
-                        locationz.longitude = data.longitude;
-                        locationz.latitude = data.latitude;
-                        locationz.accuracy = data.accuracy;
-                        locationz.altitude = data.altitude;
-
-                    }else{
-                        locationz.longitude = binding.getListing().longitude;
-                        locationz.latitude = binding.getListing().latitude;
-                        locationz.accuracy = binding.getListing().accuracy;
-                        locationz.altitude = binding.getListing().altitude;
-                    }
-                    locationz.complete = 1;
-
-                    locationViewModel.update(locationz);
+                } catch (Exception e) {
+                    //Log.e("LocationFragment", "Error in update", e);
+                    Log.e("LocationFragment", "Error in update: " + e.getMessage(), e);
+                    e.printStackTrace();
                 }
 
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
-            viewModel.add(finalData);
+            });
+
+            executor.shutdown();
+
+            // delete existing record with the same compno
+            Log.d("Listing", "Deleting by compno: " + finalData.compno);
+            viewModel.deleteByCompno(finalData.compno, () -> {
+                Log.d("Listing", "Deleted or not found. Adding new entry.");
+                viewModel.add(finalData);
+            });
+
+
+            // viewModel.add(finalData);
 
         }
         if (close) {

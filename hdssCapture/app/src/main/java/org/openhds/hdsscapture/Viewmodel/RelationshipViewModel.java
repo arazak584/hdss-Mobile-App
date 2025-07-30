@@ -5,8 +5,10 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.core.util.Consumer;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.RelationshipRepository;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
@@ -51,6 +53,10 @@ public class RelationshipViewModel extends AndroidViewModel {
 
     public List<Relationship> reject(String id) throws ExecutionException, InterruptedException {
         return relationshipRepository.reject(id);
+    }
+
+    public LiveData<Relationship> getView(String id) {
+        return relationshipRepository.view(id);
     }
 
     public void add(Relationship data){ relationshipRepository.create(data);}

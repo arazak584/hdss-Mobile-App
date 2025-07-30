@@ -92,8 +92,8 @@
             android:exported="false" />
         <activity
             android:name=".Activity.ScheduleActivity"
-            android:exported="false"
-            android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert" />
+            android:exported="false" />
+<!--        android:theme="@style/Theme.MaterialComponents.Light.Dialog.Alert" />-->
         <activity
             android:name=".Duplicate.DuplicateActivity"
             android:exported="false" />

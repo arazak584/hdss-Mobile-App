@@ -131,14 +131,17 @@ public class Listing extends BaseObservable {
         }
     }
 
+    @Bindable
     @NotNull
     public String getCompextId() {
         return compextId;
     }
 
-    public void setCompextId(@NotNull String compextId) {
-        this.compextId = compextId;
-    }
+//
+//
+//    private void setCompextId(@NotNull String compextId) {
+//        this.compextId = compextId;
+//    }
 
     public String getVillage() {
         return village;
@@ -173,23 +176,29 @@ public class Listing extends BaseObservable {
 
     public void setCompno(String compno) {
         this.compno = compno;
-
-        // Only update compextId if both compno and extId are non-null
-        if (compno != null && vill_extId != null) {
-            try {
-                if (vill_extId.length() == 3) {
-                    this.compextId = vill_extId + "00" + compno.substring(2, 6);
-                } else if (vill_extId.length() == 4) {
-                    this.compextId = vill_extId + "00" + compno.substring(4, 7);
-                }
-            } catch (StringIndexOutOfBoundsException e) {
-                e.printStackTrace(); // You can replace this with proper logging
-            }
-
-            notifyPropertyChanged(BR.compextId);
-        }
-        // else: leave compextId untouched
+        generateCompextId(); // trigger compextId generation
+        notifyPropertyChanged(BR.compno);
     }
+
+//    public void setCompno(String compno) {
+//        this.compno = compno;
+//
+//        // Only update compextId if both compno and extId are non-null
+//        if (compno != null && vill_extId != null) {
+//            try {
+//                if (vill_extId.length() == 3) {
+//                    this.compextId = vill_extId + "00" + compno.substring(2, 6);
+//                } else if (vill_extId.length() == 4) {
+//                    this.compextId = vill_extId + "00" + compno.substring(4, 7);
+//                }
+//            } catch (StringIndexOutOfBoundsException e) {
+//                e.printStackTrace(); // You can replace this with proper logging
+//            }
+//
+//            notifyPropertyChanged(BR.compextId);
+//        }
+//        // else: leave compextId untouched
+//    }
 
 
     @Bindable
@@ -241,12 +250,15 @@ public class Listing extends BaseObservable {
         notifyPropertyChanged(BR._all);
     }
 
+    @Bindable
     public String getVill_extId() {
         return vill_extId;
     }
 
     public void setVill_extId(String vill_extId) {
         this.vill_extId = vill_extId;
+        generateCompextId(); // trigger compextId generation
+        notifyPropertyChanged(BR.vill_extId);
     }
 
     public String getAltitude() {
@@ -318,6 +330,19 @@ public class Listing extends BaseObservable {
 
     }
 
-
+    private void generateCompextId() {
+        if (compno != null && vill_extId != null) {
+            try {
+                if (vill_extId.length() == 3) {
+                    this.compextId = vill_extId + "00" + compno.substring(2, 6);
+                } else if (vill_extId.length() == 4) {
+                    this.compextId = vill_extId + "00" + compno.substring(4, 7);
+                }
+                notifyPropertyChanged(BR.compextId);
+            } catch (StringIndexOutOfBoundsException e) {
+                e.printStackTrace(); // log error
+            }
+        }
+    }
 
 }

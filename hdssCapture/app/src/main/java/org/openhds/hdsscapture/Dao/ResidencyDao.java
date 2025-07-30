@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -7,6 +8,8 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.Views.CompletedForm;
+import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Outmigration;
@@ -90,6 +93,9 @@ public interface ResidencyDao {
     @Query("SELECT * FROM residency where individual_uuid=:id ORDER BY startDate ASC LIMIT 1")
     Residency amend(String id);
 
+    @Query("SELECT * FROM residency where individual_uuid=:id ORDER BY startDate DESC LIMIT 1")
+    Residency views(String id);
+
     @Query("SELECT * FROM residency where individual_uuid=:id AND location_uuid=:locid and endType=1 ORDER BY startDate ASC")
     Residency dth(String id, String locid);
 
@@ -115,5 +121,11 @@ public interface ResidencyDao {
     @Query("SELECT b.uuid,a.location_uuid as extId FROM residency as a INNER JOIN socialgroup as b on a.socialgroup_uuid=b.uuid WHERE b.insertDate>'2023-08-15'" +
             " GROUP BY a.socialgroup_uuid")
     List<Residency> error();
+
+    @Query("SELECT a.uuid, 'Membership' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM residency as a inner join individual as b ON a.individual_uuid=b.uuid WHERE a.complete = 1 and a.endType=1 ORDER BY a.insertDate DESC")
+    List<CompletedForm> getCompletedForms();
+
+    @Query("SELECT * FROM residency where uuid=:id")
+    LiveData<Residency> getView(String id);
 
 }

@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -8,6 +9,7 @@ import androidx.room.Update;
 
 import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.Death;
+import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Outmigration;
@@ -71,9 +73,10 @@ public interface OutmigrationDao {
     @Query("SELECT * FROM outmigration where uuid=:id AND complete!=1 ")
     Outmigration ins(String id);
 
-    @Query("SELECT a.uuid, 'Outmigration' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM outmigration as a inner join individual as b ON a.individual_uuid=b.uuid WHERE a.complete = 1")
+    @Query("SELECT a.uuid, 'Outmigration' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM outmigration as a inner join individual as b ON a.individual_uuid=b.uuid WHERE a.complete = 1 ORDER BY a.insertDate DESC")
     List<CompletedForm> getCompletedForms();
 
-//    @Query("SELECT uuid, 'Outmigration' AS formType, 'Outmigration: ' || ' (' || insertDate || ')' AS displayText FROM outmigration WHERE complete = 1")
-//    List<CompletedForm> getCompletedForms();
+    @Query("SELECT * FROM outmigration where uuid=:id")
+    LiveData<Outmigration> getView(String id);
+
 }

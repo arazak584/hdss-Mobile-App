@@ -13,6 +13,8 @@ import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,6 +64,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -183,6 +187,7 @@ public class BaseListingFragment extends Fragment {
                 binding.locationName.setEnabled(false);
                 binding.clusterCode.setEnabled(false);
                 binding.villcode.setEnabled(false);
+                data.location_uuid = BaseFragment.selectedLocation.uuid;
 
                 String regex = "[A-Z]{2}\\d{4}";
                 String input = BaseFragment.selectedLocation.getCompno();
@@ -352,54 +357,70 @@ public class BaseListingFragment extends Fragment {
 
 
             finalData.complete=1;
-            viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
             LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
 
-            try {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
 
-                Locations data = locationViewModel.find(BaseFragment.selectedLocation.compno);
-                if (data !=null) {
+                try {
+                    // Update Location
+                    Locations data = locationViewModel.find(compno);
+                    if (data != null) {
+                        LocationAmendment locationz = new LocationAmendment();
+                        locationz.uuid = finalData.location_uuid;
+                        locationz.compno = finalData.compno;
+                        locationz.compextId = finalData.compextId;
 
-                    LocationAmendment locationz = new LocationAmendment();
-                    locationz.uuid = finalData.location_uuid;
-                    locationz.compno = finalData.compno;
-                    locationz.compextId = finalData.compextId;
+                        if (!binding.repllocationName.getText().toString().trim().isEmpty()) {
+                            locationz.locationName = binding.getListing().repl_locationName;
+                        } else {
+                            locationz.locationName = finalData.locationName;
+                        }
+                        locationz.status = binding.getListing().status;
+                        locationz.locationLevel_uuid = finalData.cluster_id;
+                        locationz.extId = finalData.vill_extId;
 
-                    if (!binding.repllocationName.getText().toString().trim().isEmpty()) {
-                        locationz.locationName = binding.getListing().repl_locationName;
-                    } else {
-                        locationz.locationName = finalData.locationName;
+                        Log.d("Listing", "Compound Status: "+ finalData.status);
+
+                        if (finalData.status!=null && finalData.status == 3){
+                            locationz.longitude = data.longitude;
+                            locationz.latitude = data.latitude;
+                            locationz.accuracy = data.accuracy;
+                            locationz.altitude = data.altitude;
+
+                        }else{
+                            locationz.longitude = binding.getListing().longitude;
+                            locationz.latitude = binding.getListing().latitude;
+                            locationz.accuracy = binding.getListing().accuracy;
+                            locationz.altitude = binding.getListing().altitude;
+                        }
+                        locationz.complete = 1;
+
+                        locationViewModel.update(locationz, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("LocationFragment", "List Update successful!");
+                                    } else {
+                                        Log.d("LocationFragment", "List Update Failed!");
+                                    }
+                                })
+                        );
                     }
-                    locationz.status = binding.getListing().status;
-                    locationz.locationLevel_uuid = binding.getListing().cluster_id;
-                    locationz.extId = binding.getListing().vill_extId;
-
-                    Log.d("Listing", "Compound Status: "+ finalData.status);
-
-                    if (finalData.status!=null && finalData.status == 3){
-                        locationz.longitude = data.longitude;
-                        locationz.latitude = data.latitude;
-                        locationz.accuracy = data.accuracy;
-                        locationz.altitude = data.altitude;
-
-                    }else{
-                        locationz.longitude = binding.getListing().longitude;
-                        locationz.latitude = binding.getListing().latitude;
-                        locationz.accuracy = binding.getListing().accuracy;
-                        locationz.altitude = binding.getListing().altitude;
-                    }
-                    locationz.complete = 1;
-
-                    locationViewModel.update(locationz);
+                } catch (Exception e) {
+                    Log.e("LocationFragment", "Error in update", e);
+                    e.printStackTrace();
                 }
 
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+            });
+
+            executor.shutdown();
+
+            viewModel.deleteByCompno(finalData.compno, () -> {
+                viewModel.add(finalData);
+            });
 
         }
         if (close) {

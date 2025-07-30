@@ -1,12 +1,15 @@
 package org.openhds.hdsscapture.Viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Repositories.ListingRepository;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
@@ -46,7 +49,9 @@ public class ListingViewModel extends AndroidViewModel {
         return listingRepository.error();
     }
 
-
+    public LiveData<Listing> getView(String id) {
+        return listingRepository.view(id);
+    }
 
     public void add(Listing data){
         listingRepository.create(data);
@@ -55,5 +60,11 @@ public class ListingViewModel extends AndroidViewModel {
     public void add(Listing... data){
         listingRepository.create(data);
     }
+
+    public void deleteByCompno(String compno, Runnable onComplete) {
+        listingRepository.deleteByCompno(compno, onComplete);
+    }
+
+
 
 }

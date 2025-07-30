@@ -3,12 +3,14 @@ package org.openhds.hdsscapture.Viewmodel;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Consumer;
 import androidx.lifecycle.AndroidViewModel;
 
 import org.openhds.hdsscapture.Repositories.LocationRepository;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.LocationAmendment;
+import org.openhds.hdsscapture.entity.subentity.OutcomeUpdate;
 
 import java.util.Date;
 import java.util.List;
@@ -90,7 +92,11 @@ public class LocationViewModel extends AndroidViewModel {
         locationRepository.create(data);
     }
 
-    public int update(LocationAmendment s){
-        return locationRepository.update(s);
+//    public int update(LocationAmendment s){
+//        return locationRepository.update(s);
+//    }
+
+    public void update(LocationAmendment s, Consumer<Integer> callback) {
+        locationRepository.update(s, callback);
     }
 }

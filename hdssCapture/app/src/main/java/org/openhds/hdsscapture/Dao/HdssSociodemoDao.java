@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -8,6 +9,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Listing;
@@ -85,4 +87,9 @@ public interface HdssSociodemoDao {
             " INNER JOIN locations as c on a.location_uuid=c.uuid " +
             " where a.form_comments_yn IS NULL GROUP BY a.socialgroup_uuid")
     long cnt();
+
+    @Query("SELECT a.uuid, 'SES' AS formType, a.insertDate, extId || ' - ' || groupName as fullName FROM sociodemo as a inner join socialgroup as b ON a.socialgroup_uuid=b.uuid WHERE a.complete = 1 ORDER BY a.insertDate DESC")
+    List<CompletedForm> getCompletedForms();
+    @Query("SELECT * FROM sociodemo where uuid=:id")
+    LiveData<HdssSociodemo> getView(String id);
 }

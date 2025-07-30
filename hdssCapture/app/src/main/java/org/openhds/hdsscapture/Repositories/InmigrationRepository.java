@@ -2,8 +2,11 @@ package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
+
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.InmigrationDao;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Socialgroup;
 
@@ -81,6 +84,10 @@ public class InmigrationRepository {
         Future<List<Inmigration>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
+    }
+
+    public LiveData<Inmigration> view(String id) {
+        return dao.getView(id);
     }
 
 }

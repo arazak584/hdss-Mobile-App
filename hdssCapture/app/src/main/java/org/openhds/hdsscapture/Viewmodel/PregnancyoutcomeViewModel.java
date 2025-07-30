@@ -3,12 +3,17 @@ package org.openhds.hdsscapture.Viewmodel;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Consumer;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.PregnancyoutcomeRepository;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
+import org.openhds.hdsscapture.entity.subentity.OutcomeUpdate;
+import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 
 import java.util.Date;
 import java.util.List;
@@ -36,12 +41,21 @@ public class PregnancyoutcomeViewModel extends AndroidViewModel {
         return pregnancyoutcomeRepository.find(id);
     }
 
+    public Pregnancyoutcome preg(String id) throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.preg(id);
+    }
+
     public Pregnancyoutcome find1(String id) throws ExecutionException, InterruptedException {
         return pregnancyoutcomeRepository.find1(id);
     }
     public Pregnancyoutcome findloc(String id,String locid) throws ExecutionException, InterruptedException {
         return pregnancyoutcomeRepository.findloc(id,locid);
     }
+
+    public Pregnancyoutcome findMother(String id) throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.findMother(id);
+    }
+
     public Pregnancyoutcome findedit(String id,String locid) throws ExecutionException, InterruptedException {
         return pregnancyoutcomeRepository.findedit(id,locid);
     }
@@ -99,6 +113,14 @@ public class PregnancyoutcomeViewModel extends AndroidViewModel {
 
     public List<Pregnancyoutcome> retrieveOutcome(String id) throws ExecutionException, InterruptedException {
         return pregnancyoutcomeRepository.retrieveOutcome(id);
+    }
+
+    public LiveData<Pregnancyoutcome> getView(String id) {
+        return pregnancyoutcomeRepository.view(id);
+    }
+
+    public void update(OutcomeUpdate s, Consumer<Integer> callback) {
+        pregnancyoutcomeRepository.update(s, callback);
     }
 
     public void add(Pregnancyoutcome data){ pregnancyoutcomeRepository.create(data);}

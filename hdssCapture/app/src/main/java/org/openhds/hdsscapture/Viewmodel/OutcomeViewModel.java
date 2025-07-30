@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import org.openhds.hdsscapture.Repositories.OutcomeRepository;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Outcome;
+import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -29,6 +30,10 @@ public class OutcomeViewModel extends AndroidViewModel {
 
     public Outcome find(String id,String locid) throws ExecutionException, InterruptedException {
         return outcomeRepository.find(id,locid);
+    }
+
+    public LiveData<Outcome> getView(String id) {
+        return outcomeRepository.view(id);
     }
 
     public List<Outcome> error(String id) throws ExecutionException, InterruptedException {

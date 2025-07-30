@@ -4,8 +4,10 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.VaccinationRepository;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Vaccination;
 
@@ -44,6 +46,10 @@ public class VaccinationViewModel extends AndroidViewModel {
 
     public long rej(String uuid) throws ExecutionException, InterruptedException {
         return vaccinationRepository.rej(uuid);
+    }
+
+    public LiveData<Vaccination> getView(String id) {
+        return vaccinationRepository.view(id);
     }
 
     public void add(Vaccination data){

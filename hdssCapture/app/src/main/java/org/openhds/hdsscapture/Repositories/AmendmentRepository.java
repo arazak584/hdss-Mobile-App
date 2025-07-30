@@ -2,9 +2,12 @@ package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
+
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.AmendmentDao;
 import org.openhds.hdsscapture.entity.Amendment;
+import org.openhds.hdsscapture.entity.Demographic;
 
 import java.util.Date;
 import java.util.List;
@@ -58,6 +61,10 @@ public class AmendmentRepository {
         Callable<Long> callable = () -> dao.count(startDate, endDate, username);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
+    }
+
+    public LiveData<Amendment> view(String id) {
+        return dao.getView(id);
     }
 
 }

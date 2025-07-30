@@ -4,9 +4,11 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.AmendmentRepository;
 import org.openhds.hdsscapture.entity.Amendment;
+import org.openhds.hdsscapture.entity.Demographic;
 
 import java.util.Date;
 import java.util.List;
@@ -31,6 +33,10 @@ public class AmendmentViewModel extends AndroidViewModel {
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
         return amendmentRepository.count(startDate, endDate, username);
+    }
+
+    public LiveData<Amendment> getView(String id) {
+        return amendmentRepository.view(id);
     }
 
     public void add(Amendment data){

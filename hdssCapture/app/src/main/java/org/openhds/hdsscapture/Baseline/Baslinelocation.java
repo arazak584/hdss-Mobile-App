@@ -224,7 +224,7 @@ public class Baslinelocation extends DialogFragment {
             final LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
 
             final Locations locations = binding.getLocations();
-            locations.setCompextId(this.locations.getCompextId());
+            //ocations.setCompextId(this.locations.getCompextId());
 
             boolean isExists = false;
             binding.locationextid.setError(null);

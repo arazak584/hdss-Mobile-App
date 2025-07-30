@@ -4,8 +4,10 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.HdssSociodemoRepository;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Vaccination;
 
@@ -60,6 +62,10 @@ public class HdssSociodemoViewModel extends AndroidViewModel {
 
     public List<HdssSociodemo> error() throws ExecutionException, InterruptedException {
         return hdssSociodemoRepository.error();
+    }
+
+    public LiveData<HdssSociodemo> getView(String id) {
+        return hdssSociodemoRepository.view(id);
     }
 
     public void add(HdssSociodemo s){

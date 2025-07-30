@@ -8,6 +8,7 @@ import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.OutcomeDao;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Outcome;
+import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -62,5 +63,9 @@ public class OutcomeRepository {
         Callable<Outcome> callable = () -> dao.find(id,locid);
         Future<Outcome> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
+    }
+
+    public LiveData<Outcome> view(String id) {
+        return dao.getView(id);
     }
 }

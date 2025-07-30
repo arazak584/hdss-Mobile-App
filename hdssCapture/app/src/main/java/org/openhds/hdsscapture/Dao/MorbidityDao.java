@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -8,6 +9,8 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.Views.CompletedForm;
+import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Locations;
@@ -71,4 +74,10 @@ public interface MorbidityDao {
 
     @Query("SELECT COUNT(*) FROM morbidity WHERE status=2 AND fw_uuid = :uuid ")
     long rej(String uuid);
+
+    @Query("SELECT a.uuid, 'Morbidity' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM morbidity as a inner join individual as b ON a.individual_uuid=b.uuid WHERE a.complete = 1 ORDER BY a.insertDate DESC")
+    List<CompletedForm> getCompletedForms();
+
+    @Query("SELECT * FROM morbidity where uuid=:id")
+    LiveData<Morbidity> getView(String id);
 }

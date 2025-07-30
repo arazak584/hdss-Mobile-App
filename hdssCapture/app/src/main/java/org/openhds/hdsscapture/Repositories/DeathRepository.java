@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.DeathDao;
 import org.openhds.hdsscapture.entity.Death;
+import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
@@ -144,5 +145,9 @@ public class DeathRepository {
         Future<Death> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
+    }
+
+    public LiveData<Death> view(String id) {
+        return dao.getView(id);
     }
 }

@@ -5,8 +5,10 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.core.util.Consumer;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.ResidencyRepository;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
@@ -81,6 +83,10 @@ public class ResidencyViewModel extends AndroidViewModel {
         return residencyRepository.amend(id);
     }
 
+    public Residency views(String id) throws ExecutionException, InterruptedException {
+        return residencyRepository.views(id);
+    }
+
     public Residency dth(String id, String locid) throws ExecutionException, InterruptedException {
         return residencyRepository.dth(id,locid);
     }
@@ -96,6 +102,11 @@ public class ResidencyViewModel extends AndroidViewModel {
     public List<Residency> error() throws ExecutionException, InterruptedException {
         return residencyRepository.error();
     }
+
+    public LiveData<Residency> getView(String id) {
+        return residencyRepository.view(id);
+    }
+
     public void add(Residency data){ residencyRepository.create(data);}
 
     public void add(Residency... data){

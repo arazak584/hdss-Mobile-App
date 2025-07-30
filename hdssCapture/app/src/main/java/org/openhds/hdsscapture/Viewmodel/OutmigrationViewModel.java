@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.core.util.Consumer;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.OutmigrationRepository;
 import org.openhds.hdsscapture.entity.Death;
@@ -73,6 +74,10 @@ public class OutmigrationViewModel extends AndroidViewModel {
 
     public long rej(String uuid) throws ExecutionException, InterruptedException {
         return outmigrationRepository.rej(uuid);
+    }
+
+    public LiveData<Outmigration> getView(String id) {
+        return outmigrationRepository.view(id);
     }
 
 //    public int update(OmgUpdate s){

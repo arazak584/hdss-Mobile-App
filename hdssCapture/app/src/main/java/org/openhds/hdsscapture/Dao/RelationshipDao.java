@@ -1,6 +1,7 @@
 package org.openhds.hdsscapture.Dao;
 
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -8,6 +9,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Pregnancy;
@@ -75,4 +77,10 @@ public interface RelationshipDao {
 
     @Query("SELECT COUNT(*) FROM relationship WHERE status=2 AND fw_uuid = :uuid ")
     long rej(String uuid);
+
+    @Query("SELECT a.uuid, 'Relationship' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM relationship as a inner join individual as b ON a.individualA_uuid=b.uuid WHERE a.complete = 1 ORDER BY a.insertDate DESC")
+    List<CompletedForm> getCompletedForms();
+
+    @Query("SELECT * FROM relationship where uuid=:id")
+    LiveData<Relationship> getView(String id);
 }

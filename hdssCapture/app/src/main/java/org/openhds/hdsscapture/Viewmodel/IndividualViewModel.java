@@ -204,6 +204,10 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.DuplicatesByPhone(uuid, ghcard);
     }
 
+    public LiveData<Individual> getView(String id) {
+        return individualRepository.view(id);
+    }
+
     public void add(Individual data){ individualRepository.create(data);}
 
     public void add(Individual... data){

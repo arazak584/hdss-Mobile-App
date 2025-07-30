@@ -480,6 +480,10 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public LiveData<Individual> view(String id) {
+        return dao.getView(id);
+    }
+
     public List<Individual> findIndividualsBatched(int gender, int minAge, int maxAge, int status) {
         List<Individual> allIndividuals = new ArrayList<>();
         int offset = 0;

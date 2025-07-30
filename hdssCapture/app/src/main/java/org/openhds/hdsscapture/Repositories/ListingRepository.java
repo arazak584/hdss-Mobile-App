@@ -1,13 +1,19 @@
 package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 
+import androidx.core.util.Consumer;
 import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.ListingDao;
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Listing;
 import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.subentity.OutcomeUpdate;
 
 import java.util.Date;
 import java.util.List;
@@ -36,6 +42,16 @@ public class ListingRepository {
             dao.create(data);
         });
     }
+
+    public void deleteByCompno(String compno, Runnable onComplete) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            dao.deleteByCompno(compno);
+            if (onComplete != null) {
+                onComplete.run();
+            }
+        });
+    }
+
 
 
     public Listing find(String id) throws ExecutionException, InterruptedException {
@@ -81,6 +97,10 @@ public class ListingRepository {
         Future<List<Listing>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
+    }
+
+    public LiveData<Listing> view(String id) {
+        return dao.getView(id);
     }
 
 
