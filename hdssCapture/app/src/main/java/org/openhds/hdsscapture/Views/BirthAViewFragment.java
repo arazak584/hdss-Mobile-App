@@ -61,9 +61,6 @@ import java.util.concurrent.TimeUnit;
 public class BirthAViewFragment extends Fragment {
 
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
-    private Locations locations;
-    private Socialgroup socialgroup;
-    private Individual individual;
     private FragmentBirthABinding binding;
     private OutcomeRepository repository;
     private Outcome outcome;
@@ -107,7 +104,7 @@ public class BirthAViewFragment extends Fragment {
 
         PregnancyoutcomeViewModel viewModels = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         OutcomeViewModel viewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
-        viewModel.getView(outcome.preg_uuid).observe(getViewLifecycleOwner(), data -> {
+        viewModel.getView1(outcome.preg_uuid).observe(getViewLifecycleOwner(), data -> {
             if (data != null) {
                 binding.setPregoutcome1(data);
 
@@ -116,6 +113,14 @@ public class BirthAViewFragment extends Fragment {
                 binding.individual1LastName.setEnabled(false);
                 binding.gender.setEnabled(false);
                 binding.rltnHead.setEnabled(false);
+
+                viewModels.getView(data.preg_uuid).observe(getViewLifecycleOwner(), data1 -> {
+                    //Outcome data1 = outcomeViewModel.getView1(data.uuid);
+                    if (data1 != null) {
+                        binding.setPregoutcome(data1);
+
+                    }
+                });
 
 
             }
@@ -151,10 +156,6 @@ public class BirthAViewFragment extends Fragment {
             Outcome data = binding.getPregoutcome1();
 
             Pregnancyoutcome finalData = binding.getPregoutcome();
-
-            final Intent j = getActivity().getIntent();
-            final Hierarchy level6Data = j.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
-
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.OUTCOMELAYOUT, validateOnComplete, false);
@@ -240,13 +241,13 @@ public class BirthAViewFragment extends Fragment {
             Fragment fragment;
 
             if (lb > 1) {
-                fragment = BirthBFragment.newInstance(individual, locations, socialgroup);
+                fragment = BirthBViewFragment.newInstance(outcome.preg_uuid);
             } else {
-                fragment = BirthSFragment.newInstance(individual, locations, socialgroup);
+                fragment = BirthSViewFragment.newInstance(outcome.preg_uuid);
             }
 
             requireActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container_cluster, fragment)
+                    .replace(R.id.fragment_container, fragment)
                     .commit();
 
         } else if (close) {

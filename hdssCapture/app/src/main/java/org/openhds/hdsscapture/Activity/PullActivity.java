@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -675,33 +676,40 @@ public class PullActivity extends AppCompatActivity {
             }
 
             private void checkAndProcessLocation() {
-                // Check if the location.zip file exists
                 if (locationZipFile.exists()) {
-                    // File exists, extract and process it
-                    textView_Sync.setText("Location file exists. Extracting and processing...");
+                    runOnUiThread(() -> textView_Sync.setText("Location file exists. Extracting and processing..."));
+
+                    // Do file extraction and processing in background if it's long-running
                     extractAndProcessFile("location.zip", "location.csv", Locations.class, locationCounts, loc, this::checkAndProcessSocialgroup);
                 } else {
-                    // File does not exist
-                    textView_Sync.setText("Location file not downloaded. Please download it first.");
-                    textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    runOnUiThread(() -> {
+                        textView_Sync.setText("Location file not downloaded. Please download it first.");
+                        textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    });
                 }
             }
+
             private void checkAndProcessSocialgroup() {
-                // Check if the socialgroup.zip file exists
                 if (socialgroupZipFile.exists()) {
-                    // File exists, extract and process it
-                    textView_Sync.setText("Socialgroup file exists. Extracting and processing...");
+                    runOnUiThread(() -> textView_Sync.setText("Socialgroup file exists. Extracting and processing..."));
+
                     extractAndProcessFile("socialgroup.zip", "socialgroup.csv", Socialgroup.class, socialgroupCounts, soc, () -> {
                         // All datasets processed, perform any final actions here
-                        //deleteFiles(getExternalCacheDir());
-                        progres.dismiss();
+                        runOnUiThread(() -> {
+                            // If progres might be null or already dismissed, add checks
+                            if (progres != null && progres.isShowing()) {
+                                progres.dismiss();
+                            }
+                        });
                     });
                 } else {
-                    // File does not exist
-                    textView_Sync.setText("Socialgroup file not downloaded. Please download it first.");
-                    textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    runOnUiThread(() -> {
+                        textView_Sync.setText("Socialgroup file not downloaded. Please download it first.");
+                        textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    });
                 }
             }
+
 
             private void extractAndProcessFile(String zipFileName, String extractedFileName, Class<?> entityClass, AtomicLong countKey, String files, Runnable nextStep) {
                 // Extract the zip file and process it
@@ -901,31 +909,37 @@ public class PullActivity extends AppCompatActivity {
             }
 
             private void checkAndProcessIndividual() {
-                // Check if the individual.zip file exists
                 if (individualZipFile.exists()) {
-                    // File exists, extract and process it
-                    textView_Sync.setText("Individual file exists. Extracting and processing...");
+                    runOnUiThread(() -> textView_Sync.setText("Individual file exists. Extracting and processing..."));
+
                     extractAndProcessFile("individual.zip", "individual.csv", Individual.class, individualCounts, ind, this::checkAndProcessResidency);
                 } else {
-                    // File does not exist
-                    textView_Sync.setText("Individual file not downloaded. Please download it first.");
-                    textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    runOnUiThread(() -> {
+                        textView_Sync.setText("Individual file not downloaded. Please download it first.");
+                        textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    });
                 }
             }
+
             private void checkAndProcessResidency() {
-                // Check if the residency.zip file exists
                 if (residencyZipFile.exists()) {
-                    // File exists, extract and process it
-                    textView_Sync.setText("Residency file exists. Extracting and processing...");
+                    runOnUiThread(() -> textView_Sync.setText("Residency file exists. Extracting and processing..."));
+
                     extractAndProcessFile("residency.zip", "residency.csv", Residency.class, residencyCounts, res, () -> {
-                      progres.dismiss();
+                        runOnUiThread(() -> {
+                            if (progres != null && progres.isShowing()) {
+                                progres.dismiss();
+                            }
+                        });
                     });
                 } else {
-                    // File does not exist
-                    textView_Sync.setText("Residency file not downloaded. Please download it first.");
-                    textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    runOnUiThread(() -> {
+                        textView_Sync.setText("Residency file not downloaded. Please download it first.");
+                        textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    });
                 }
             }
+
 
             private void extractAndProcessFile(String zipFileName, String extractedFileName, Class<?> entityClass, AtomicLong countKey, String files, Runnable nextStep) {
                 // Extract the zip file and process it
@@ -1372,21 +1386,24 @@ public class PullActivity extends AppCompatActivity {
             }
 
             private void checkAndProcessDemographic() {
-                // Check if the Relationship.zip file exists
                 if (demographicsZipFile.exists()) {
-                    // File exists, extract and process it
-                    textView_Sync.setText("Demographics file exists. Extracting and processing...");
+                    runOnUiThread(() -> textView_Sync.setText("Demographics file exists. Extracting and processing..."));
+
                     extractAndProcessFile("demographics.zip", "demographics.csv", Demographic.class, demographicsCounts, dem, () -> {
-                        // All datasets processed, perform any final actions here
-                        //deleteFiles(getExternalCacheDir());
-                        progres.dismiss();
+                        runOnUiThread(() -> {
+                            if (progres != null && progres.isShowing()) {
+                                progres.dismiss();
+                            }
+                        });
                     });
                 } else {
-                    // File does not exist
-                    textView_Sync.setText("Demographics file not downloaded. Please download it first.");
-                    textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    runOnUiThread(() -> {
+                        textView_Sync.setText("Demographics file not downloaded. Please download it first.");
+                        textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    });
                 }
             }
+
 
             private void extractAndProcessFile(String zipFileName, String extractedFileName, Class<?> entityClass, AtomicLong countKey, String files, Runnable nextStep) {
                 // Extract the zip file and process it
@@ -1580,33 +1597,37 @@ public class PullActivity extends AppCompatActivity {
             }
 
             private void checkAndProcessPregnancy() {
-                // Check if the Pregnancy.zip file exists
                 if (pregnancyZipFile.exists()) {
-                    // File exists, extract and process it
-                    textView_Sync.setText("Pregnancy file exists. Extracting and processing...");
+                    runOnUiThread(() -> textView_Sync.setText("Pregnancy file exists. Extracting and processing..."));
+
                     extractAndProcessFile("pregnancy.zip", "pregnancy.csv", Pregnancy.class, pregnancyCounts, preg, this::checkAndProcessRelationship);
                 } else {
-                    // File does not exist
-                    textView_Sync.setText("Pregnancy file not downloaded. Please download it first.");
-                    textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    runOnUiThread(() -> {
+                        textView_Sync.setText("Pregnancy file not downloaded. Please download it first.");
+                        textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    });
                 }
             }
+
             private void checkAndProcessRelationship() {
-                // Check if the Relationship.zip file exists
                 if (relationshipZipFile.exists()) {
-                    // File exists, extract and process it
-                    textView_Sync.setText("Relationship file exists. Extracting and processing...");
+                    runOnUiThread(() -> textView_Sync.setText("Relationship file exists. Extracting and processing..."));
+
                     extractAndProcessFile("relationship.zip", "relationship.csv", Relationship.class, relationshipCounts, rel, () -> {
-                        // All datasets processed, perform any final actions here
-                        //deleteFiles(getExternalCacheDir());
-                        progres.dismiss();
+                        runOnUiThread(() -> {
+                            if (progres != null && progres.isShowing()) {
+                                progres.dismiss();
+                            }
+                        });
                     });
                 } else {
-                    // File does not exist
-                    textView_Sync.setText("Relationship file not downloaded. Please download it first.");
-                    textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    runOnUiThread(() -> {
+                        textView_Sync.setText("Relationship file not downloaded. Please download it first.");
+                        textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    });
                 }
             }
+
 
             private void extractAndProcessFile(String zipFileName, String extractedFileName, Class<?> entityClass, AtomicLong countKey, String files, Runnable nextStep) {
                 // Extract the zip file and process it
@@ -1816,33 +1837,38 @@ public class PullActivity extends AppCompatActivity {
             }
 
             private void checkAndProcessSes() {
-                // Check if the ses.zip file exists
                 if (sesZipFile.exists()) {
-                    // File exists, extract and process it
-                    textView_Sync.setText("SES file exists. Extracting and processing...");
+                    runOnUiThread(() -> textView_Sync.setText("SES file exists. Extracting and processing..."));
+
                     extractAndProcessFile("ses.zip", "ses.csv", HdssSociodemo.class, sesCounts, ses, this::checkAndProcessVac);
                 } else {
-                    // File does not exist
-                    textView_Sync.setText("SES file not downloaded. Please download it first.");
-                    textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    runOnUiThread(() -> {
+                        textView_Sync.setText("SES file not downloaded. Please download it first.");
+                        textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    });
                 }
             }
+
             private void checkAndProcessVac() {
-                // Check if the vac.zip file exists
                 if (vaccinationZipFile.exists()) {
-                    // File exists, extract and process it
-                    textView_Sync.setText("Vaccination file exists. Extracting and processing...");
+                    runOnUiThread(() -> textView_Sync.setText("Vaccination file exists. Extracting and processing..."));
+
                     extractAndProcessFile("vaccination.zip", "vaccination.csv", Vaccination.class, vaccinationCounts, vac, () -> {
-                        // All datasets processed, perform any final actions here
-                        //deleteFiles(getExternalCacheDir());
-                        progres.dismiss();
+                        runOnUiThread(() -> {
+                            if (progres != null && progres.isShowing()) {
+                                progres.dismiss();
+                            }
+                            // Optionally: deleteFiles(getExternalCacheDir());
+                        });
                     });
                 } else {
-                    // File does not exist
-                    textView_Sync.setText("Vaccination file not downloaded. Please download it first.");
-                    textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    runOnUiThread(() -> {
+                        textView_Sync.setText("Vaccination file not downloaded. Please download it first.");
+                        textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                    });
                 }
             }
+
 
             private void extractAndProcessFile(String zipFileName, String extractedFileName, Class<?> entityClass, AtomicLong countKey, String files, Runnable nextStep) {
                 // Extract the zip file and process it
@@ -2155,15 +2181,45 @@ public class PullActivity extends AppCompatActivity {
 
     private void resetAndShowProgress(String title, String message) {
         runOnUiThread(() -> {
-            if (progres.isShowing()) {
-                progres.dismiss();
+            try {
+                // Avoid showing if activity is finishing or destroyed
+                if (isFinishing() || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && isDestroyed())) {
+                    return;
+                }
+
+                if (progres != null && progres.isShowing()) {
+                    progres.dismiss();
+                }
+
+                if (progres == null) {
+                    progres = new ProgressDialog(this);
+                    progres.setCancelable(false);
+                    progres.setIndeterminate(true);
+                }
+
+                progres.setTitle(title);
+                progres.setMessage(message);
+                progres.setProgress(0);
+                progres.setMax(0);
+
+                // Again check activity state before showing
+                if (!isFinishing() && (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || !isDestroyed())) {
+                    progres.show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace(); // For logging; replace with Log.e if needed
             }
-            progres.setProgress(0);
-            progres.setMax(0);
-            progres.setMessage(message);
-            progres.setTitle(title);
-            progres.show();
         });
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        if (progres != null && progres.isShowing()) {
+            progres.dismiss();
+            progres = null;
+        }
+        super.onDestroy();
     }
 
 

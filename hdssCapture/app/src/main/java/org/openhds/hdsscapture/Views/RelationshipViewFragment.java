@@ -25,7 +25,7 @@ import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.databinding.FragmentRelationshipBinding;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
-import org.openhds.hdsscapture.fragment.DatePickerFragment;
+import org.openhds.hdsscapture.Utilities.DatePickerFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.AppConstants;
-import org.openhds.hdsscapture.OutcomeFragment.BirthAFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Repositories.PregnancyoutcomeRepository;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
@@ -25,7 +24,7 @@ import org.openhds.hdsscapture.databinding.FragmentBirthBinding;
 import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
-import org.openhds.hdsscapture.fragment.DatePickerFragment;
+import org.openhds.hdsscapture.Utilities.DatePickerFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -127,6 +126,7 @@ public class BirthViewFragment extends Fragment {
                 binding.whoAnc.setEnabled(false);
                 binding.numAnc.setEnabled(false);
                 binding.preguuid.setEnabled(false);
+                binding.outcomes.setEnabled(false);
 
                 if(data.status!=null && data.status==2){
                     cmt.setVisibility(View.VISIBLE);

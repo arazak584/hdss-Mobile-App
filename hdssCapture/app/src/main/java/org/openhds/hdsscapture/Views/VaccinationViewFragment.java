@@ -1,6 +1,5 @@
 package org.openhds.hdsscapture.Views;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,29 +14,16 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Repositories.DeathRepository;
 import org.openhds.hdsscapture.Repositories.VaccinationRepository;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
-import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
-import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
-import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.databinding.FragmentVaccinationBinding;
-import org.openhds.hdsscapture.entity.Death;
-import org.openhds.hdsscapture.entity.Fieldworker;
-import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Locations;
-import org.openhds.hdsscapture.entity.Residency;
-import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
-import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
-import org.openhds.hdsscapture.fragment.DatePickerFragment;
-import org.openhds.hdsscapture.fragment.HouseMembersFragment;
+import org.openhds.hdsscapture.Utilities.DatePickerFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,7 +32,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**

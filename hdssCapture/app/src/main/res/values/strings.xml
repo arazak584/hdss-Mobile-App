@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="true">HDSS CAPTURE</string>
-    <string name="versions">2025.07.5</string>
+    <string name="versions">2025.07.6</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>
@@ -864,6 +864,13 @@
     <string name="level7">Level 7</string>
     <string name="level8">Level 8</string>
     <string name="text_search">Search</string>
+
+    <string name="vis_ss">[Do/Does] [you/he/she] have difficulty seeing, even if wearing glasses?</string>
+    <string name="hear_ss"> [Do/Does] [you/he/she] have difficulty hearing, even if using a hearing aid(s)</string>
+    <string name="mob_ss"> [Do/Does] [you/he/she] have difficulty walking or climbing steps?</string>
+    <string name="cog_ss"> [Do/does] [you/he/she] have difficulty remembering or concentrating?</string>
+    <string name="sc_ss">[Do/does] [you/he/she] have difficulty with self-care, such as washing all over or dressing?</string>
+    <string name="com_ss"> Using [your/his/her] usual language, [do/does] [you/he/she] have difficulty communicating, for example understanding or being understood?</string>
 
 
 </resources>

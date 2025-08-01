@@ -50,6 +50,18 @@ OutcomeDao {
     @Query("SELECT * FROM outcome where uuid=:id AND location=:locid")
     Outcome find(String id,String locid);
 
+    @Query("SELECT * FROM outcome where preg_uuid=:id and chd_num=1")
+    LiveData<Outcome> getView1(String id);
+
+    @Query("SELECT * FROM outcome where preg_uuid=:id and chd_num=2")
+    LiveData<Outcome> getView2(String id);
+
+    @Query("SELECT * FROM outcome where preg_uuid=:id and chd_num=3")
+    LiveData<Outcome> getView3(String id);
+
+    @Query("SELECT * FROM outcome where preg_uuid=:id and chd_num=4")
+    LiveData<Outcome> getView4(String id);
+
     @Query("SELECT * FROM outcome where preg_uuid=:id")
     LiveData<Outcome> getView(String id);
 }

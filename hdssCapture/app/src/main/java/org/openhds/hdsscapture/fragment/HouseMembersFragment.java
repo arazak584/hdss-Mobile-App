@@ -1048,13 +1048,11 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             if (selectedIndividual.getAge() >= hoh){
                 ses.setVisibility(View.VISIBLE);
                 choh.setVisibility(View.VISIBLE);
-                mor.setVisibility(View.VISIBLE);
                 id12.setVisibility(View.VISIBLE);
                 id11.setVisibility(View.VISIBLE);
             }else{
                 ses.setVisibility(View.GONE);
                 choh.setVisibility(View.GONE);
-                mor.setVisibility(View.GONE);
                 id12.setVisibility(View.GONE);
                 id11.setVisibility(View.GONE);
             }

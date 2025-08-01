@@ -80,7 +80,7 @@ import java.util.concurrent.Executors;
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
         Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class, Duplicate.class,
         ApiUrl.class, Configsettings.class, OdkForm.class, Vpm.class, CommunityReport.class, Morbidity.class, HierarchyLevel.class, Registry.class
-        }, version = 1 , exportSchema = true)
+        }, version = 2 , exportSchema = true)
 
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -138,20 +138,19 @@ public abstract class AppDatabase extends RoomDatabase {
 //        }
 //    };
 
-//    static final Migration MIGRATION_10_11 = new Migration(1, 2) {
-//        @Override
-//        public void migrate(@NonNull SupportSQLiteDatabase database) {
-//            database.execSQL("ALTER TABLE duplicate ADD COLUMN approveDate INTEGER");
-//            database.execSQL("ALTER TABLE duplicate ADD COLUMN status INTEGER");
-//            database.execSQL("ALTER TABLE duplicate ADD COLUMN supervisor TEXT");
-//            database.execSQL("ALTER TABLE duplicate ADD COLUMN comment TEXT");
-//            database.execSQL("ALTER TABLE duplicate ADD COLUMN dup_compno TEXT");
-//            database.execSQL("ALTER TABLE duplicate ADD COLUMN dup1_compno TEXT");
-//            database.execSQL("ALTER TABLE duplicate ADD COLUMN dup2_compno TEXT");
-//            database.execSQL("ALTER TABLE duplicate ADD COLUMN compno TEXT");
-//
-//        }
-//    };
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE morbidity ADD COLUMN vis_ss INTEGER");
+            database.execSQL("ALTER TABLE morbidity ADD COLUMN hear_ss INTEGER");
+            database.execSQL("ALTER TABLE morbidity ADD COLUMN mob_ss INTEGER");
+            database.execSQL("ALTER TABLE morbidity ADD COLUMN cog_ss INTEGER");
+            database.execSQL("ALTER TABLE morbidity ADD COLUMN sc_ss INTEGER");
+            database.execSQL("ALTER TABLE morbidity ADD COLUMN com_ss INTEGER");
+            database.execSQL("ALTER TABLE outcome ADD COLUMN chd_num INTEGER");
+
+        }
+    };
 
 
 
@@ -165,7 +164,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                 AppDatabase.class, "hdss")
                                 .addCallback(sRoomDatabaseCallback)
-                                //.addMigrations(MIGRATION_1_2)
+                                .addMigrations(MIGRATION_1_2)
                                 .fallbackToDestructiveMigrationOnDowngrade()
                                 .build();
             }

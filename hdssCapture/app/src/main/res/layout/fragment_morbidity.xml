@@ -986,6 +986,119 @@
 
                 </TableLayout>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/vis_ss"/>
+
+                <Spinner
+                    android:id="@+id/vis_ss"
+                    selection="@{morbidity.vis_ss}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{morbidity::setVis_ss}"
+                    android:padding="15dp"
+                    android:spinnerMode="dialog"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/hear_ss"/>
+
+                <Spinner
+                    android:id="@+id/hear_ss"
+                    selection="@{morbidity.hear_ss}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{morbidity::setHear_ss}"
+                    android:padding="15dp"
+                    android:spinnerMode="dialog"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/mob_ss"/>
+
+                <Spinner
+                    android:id="@+id/mob_ss"
+                    selection="@{morbidity.mob_ss}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{morbidity::setMob_ss}"
+                    android:padding="15dp"
+                    android:spinnerMode="dialog"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/cog_ss"/>
+
+                <Spinner
+                    android:id="@+id/cog_ss"
+                    selection="@{morbidity.cog_ss}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{morbidity::setCog_ss}"
+                    android:padding="15dp"
+                    android:spinnerMode="dialog"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/sc_ss"/>
+
+                <Spinner
+                    android:id="@+id/sc_ss"
+                    selection="@{morbidity.sc_ss}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{morbidity::setSc_ss}"
+                    android:padding="15dp"
+                    android:spinnerMode="dialog"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:padding="5dp"
+                    android:textColor="@color/black"
+                    android:text="@string/com_ss"/>
+
+                <Spinner
+                    android:id="@+id/com_ss"
+                    selection="@{morbidity.com_ss}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:minHeight="48dp"
+                    android:onItemSelected="@{morbidity::setCom_ss}"
+                    android:padding="15dp"
+                    android:spinnerMode="dialog"/>
 
 
 

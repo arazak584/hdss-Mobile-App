@@ -100,6 +100,8 @@ public class Outcome extends BaseObservable {
 
     @Expose
     public String location;
+    @Expose
+    public Integer chd_num;
 
     public Outcome(){}
 

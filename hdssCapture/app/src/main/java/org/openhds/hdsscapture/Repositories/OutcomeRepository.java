@@ -65,6 +65,22 @@ public class OutcomeRepository {
         return future.get();
     }
 
+    public LiveData<Outcome> view1(String id) {
+        return dao.getView1(id);
+    }
+
+    public LiveData<Outcome> view2(String id) {
+        return dao.getView2(id);
+    }
+
+    public LiveData<Outcome> view3(String id) {
+        return dao.getView3(id);
+    }
+
+    public LiveData<Outcome> view4(String id) {
+        return dao.getView4(id);
+    }
+
     public LiveData<Outcome> view(String id) {
         return dao.getView(id);
     }

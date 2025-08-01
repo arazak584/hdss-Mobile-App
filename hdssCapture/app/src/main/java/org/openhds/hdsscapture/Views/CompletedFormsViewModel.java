@@ -88,7 +88,7 @@ public class CompletedFormsViewModel extends AndroidViewModel {
                 List<CompletedForm> relationship = relationshipDao.getCompletedForms();
                 List<CompletedForm> membership = residencyDao.getCompletedForms();
                 List<CompletedForm> vaccination = vaccinationDao.getCompletedForms();
-                //List<CompletedForm> birth = pregnancyoutcomeDao.getCompletedForms();
+                List<CompletedForm> birth = pregnancyoutcomeDao.getCompletedForms();
 
 
                 // Add all forms to the combined list
@@ -105,7 +105,7 @@ public class CompletedFormsViewModel extends AndroidViewModel {
                 if (relationship != null) all.addAll(relationship);
                 if (membership != null) all.addAll(membership);
                 if (vaccination != null) all.addAll(vaccination);
-                //if (birth != null) all.addAll(birth);
+                if (birth != null) all.addAll(birth);
 
 
                 // Sort by insertDate (most recent first)

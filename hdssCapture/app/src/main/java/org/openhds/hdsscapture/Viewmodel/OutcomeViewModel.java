@@ -32,6 +32,19 @@ public class OutcomeViewModel extends AndroidViewModel {
         return outcomeRepository.find(id,locid);
     }
 
+    public LiveData<Outcome> getView1(String id) {
+        return outcomeRepository.view1(id);
+    }
+    public LiveData<Outcome> getView2(String id) {
+        return outcomeRepository.view2(id);
+    }
+    public LiveData<Outcome> getView3(String id) {
+        return outcomeRepository.view3(id);
+    }
+    public LiveData<Outcome> getView4(String id) {
+        return outcomeRepository.view4(id);
+    }
+
     public LiveData<Outcome> getView(String id) {
         return outcomeRepository.view(id);
     }

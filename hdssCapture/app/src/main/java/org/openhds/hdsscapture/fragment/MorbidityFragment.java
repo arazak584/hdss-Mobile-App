@@ -175,6 +175,12 @@ public class MorbidityFragment extends Fragment {
         }
 
         loadCodeData(binding.feverTreat, "submit");
+        loadCodeData(binding.visSs, "wgs");
+        loadCodeData(binding.hearSs, "wgs");
+        loadCodeData(binding.mobSs, "wgs");
+        loadCodeData(binding.cogSs, "wgs");
+        loadCodeData(binding.scSs, "wgs");
+        loadCodeData(binding.comSs, "wgs");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 

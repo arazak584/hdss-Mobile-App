@@ -354,6 +354,7 @@ public class Birth3DFragment extends Fragment {
                         res.socialgroup_uuid = socialgroup.uuid;
                         res.fw_uuid= binding.getPregoutcome().fw_uuid;
                         res.rltn_head = prg.rltn_head;
+                        res.hohID = socialgroup.extId;
                         res.complete = 1;
                         try {
                             Death dta = dth.finds(prg.individual_uuid);
@@ -422,6 +423,7 @@ public class Birth3DFragment extends Fragment {
 
             data.mother_uuid = selectedIndividual.getUuid();
             data.complete=1;
+            data.chd_num=4;
             outcomeViewModel.add(data);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_SHORT).show();
 

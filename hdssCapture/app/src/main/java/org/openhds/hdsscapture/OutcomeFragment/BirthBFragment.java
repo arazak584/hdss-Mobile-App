@@ -353,6 +353,7 @@ public class BirthBFragment extends Fragment {
                         res.socialgroup_uuid = socialgroup.uuid;
                         res.fw_uuid= binding.getPregoutcome().fw_uuid;
                         res.rltn_head = prg.rltn_head;
+                        res.hohID = socialgroup.extId;
                         res.complete = 1;
 
                         try {
@@ -422,6 +423,7 @@ public class BirthBFragment extends Fragment {
 
             data.mother_uuid = selectedIndividual.getUuid();
             data.complete=1;
+            data.chd_num=2;
             outcomeViewModel.add(data);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_SHORT).show();
 
