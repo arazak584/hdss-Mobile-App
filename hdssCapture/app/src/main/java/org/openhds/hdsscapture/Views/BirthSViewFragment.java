@@ -1,8 +1,6 @@
 package org.openhds.hdsscapture.Views;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,40 +15,22 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
-import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.AppConstants;
-import org.openhds.hdsscapture.OutcomeFragment.BirthAFragment;
-import org.openhds.hdsscapture.OutcomeFragment.BirthBFragment;
-import org.openhds.hdsscapture.OutcomeFragment.BirthCFragment;
-import org.openhds.hdsscapture.OutcomeFragment.BirthDFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Repositories.OutcomeRepository;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
-import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
-import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
-import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.Viewmodel.VpmViewModel;
 import org.openhds.hdsscapture.databinding.FragmentBirthSBinding;
 import org.openhds.hdsscapture.entity.Hierarchy;
-import org.openhds.hdsscapture.entity.Individual;
-import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
-import org.openhds.hdsscapture.entity.Round;
-import org.openhds.hdsscapture.entity.Socialgroup;
-import org.openhds.hdsscapture.entity.Visit;
-import org.openhds.hdsscapture.entity.Vpm;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
-import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -102,9 +82,6 @@ public class BirthSViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentBirthSBinding.inflate(inflater, container, false);
-
-        final Intent intent = getActivity().getIntent();
-        final Round roundData = intent.getParcelableExtra(HierarchyActivity.ROUND_DATA);
 
         final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
         final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
@@ -160,17 +137,6 @@ public class BirthSViewFragment extends Fragment {
 
             }
         });
-
-
-//        try {
-//            final String child_id = "ST-"+ selectedIndividual.extId;
-//            Vpm data = vpmViewModel.find(child_id);
-//            if (data != null) {
-//                binding.setDeath(data);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
 
 
         final CodeBookViewModel codeBookViewModel = new ViewModelProvider(this).get(CodeBookViewModel.class);
