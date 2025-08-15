@@ -340,7 +340,7 @@
                     app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <TextView
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:id="@+id/editText_startDate"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"

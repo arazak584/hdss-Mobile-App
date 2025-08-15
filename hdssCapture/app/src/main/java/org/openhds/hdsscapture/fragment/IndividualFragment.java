@@ -769,18 +769,16 @@ public class IndividualFragment extends Fragment {
         String phone = demo.phone1;
         String currentUuid = finalData.uuid; // Assuming you have the current record's UUID
 
-        // Check for duplicates - add null checks
-        boolean hasGhcard = ghcard != null && !ghcard.trim().isEmpty();
-        boolean hasPhone = phone != null && !phone.trim().isEmpty();
+        // Pass the actual values, handling nulls
+        String ghcardForQuery = (ghcard != null && !ghcard.trim().isEmpty()) ? ghcard : null;
+        String phoneForQuery = (phone != null && !phone.trim().isEmpty()) ? phone : null;
 
-        if (hasGhcard || hasPhone) {
+        if (ghcardForQuery != null || phoneForQuery != null) {
 
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute(() -> {
                 try {
-                    // Pass the actual values, handling nulls
-                    String ghcardForQuery = hasGhcard ? ghcard : "";
-                    String phoneForQuery = hasPhone ? phone : "";
+
 
                     List<Individual> duplicates = individualViewModel.dupRegistration(currentUuid, ghcardForQuery, phoneForQuery);
 
@@ -821,7 +819,7 @@ public class IndividualFragment extends Fragment {
 
         // Create message with duplicate information
         StringBuilder message = new StringBuilder();
-        message.append("The following individuals have the same Ghana Card or Phone Number:\n\n");
+        message.append("The following individual(s) have the same Ghana Card or Phone Number:\n\n");
 
         for (Individual duplicate : duplicates) {
             message.append("Name: ").append(duplicate.getFirstName()).append(" ").append(duplicate.getLastName()).append("\n");

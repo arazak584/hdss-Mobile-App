@@ -456,6 +456,7 @@ public class AmendmentFragment extends DialogFragment {
                 return;
             }
 
+            String replDobText = binding.replDob.getText().toString().trim();
 
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute(() -> {
@@ -469,35 +470,60 @@ public class AmendmentFragment extends DialogFragment {
                         amend.mother_uuid = binding.getAmendment().mother_uuid;
                         amend.complete = 1;
 
-                        // First name
-                        amend.firstName = (binding.getAmendment().yn_firstName == 1)
-                                ? binding.getAmendment().repl_firstName
-                                : finalData.orig_firstName;
+                        // First name - check both flag and non-empty value
+                        if (finalData.yn_firstName == 1 &&
+                                finalData.repl_firstName != null &&
+                                !finalData.repl_firstName.trim().isEmpty()) {
+                            amend.firstName = finalData.repl_firstName;
+                        } else {
+                            amend.firstName = finalData.orig_firstName;
+                        }
 
-                        // Last name
-                        amend.lastName = (binding.getAmendment().yn_lastName == 1)
-                                ? binding.getAmendment().repl_lastName
-                                : finalData.orig_lastName;
+                        // Last name - check both flag and non-empty value
+                        if (finalData.yn_lastName == 1 &&
+                                finalData.repl_lastName != null &&
+                                !finalData.repl_lastName.trim().isEmpty()) {
+                            amend.lastName = finalData.repl_lastName;
+                        } else {
+                            amend.lastName = finalData.orig_lastName;
+                        }
 
                         // Other name
-                        amend.otherName = (binding.getAmendment().yn_otherName == 1)
-                                ? binding.getAmendment().repl_otherName
-                                : finalData.orig_otherName;
+                        if (finalData.yn_otherName == 1 &&
+                                finalData.repl_otherName != null &&
+                                !finalData.repl_otherName.trim().isEmpty()) {
+                            amend.otherName = finalData.repl_otherName;
+                        } else {
+                            amend.otherName = finalData.orig_otherName;
+                        }
 
                         // Ghana card
-                        amend.ghanacard = (binding.getAmendment().yn_ghanacard == 1)
-                                ? binding.getAmendment().repl_ghanacard
-                                : finalData.orig_ghanacard;
+                        if (finalData.yn_ghanacard == 1 &&
+                                finalData.repl_ghanacard != null &&
+                                !finalData.repl_ghanacard.trim().isEmpty()) {
+                            amend.ghanacard = finalData.repl_ghanacard;
+                        } else {
+                            amend.ghanacard = finalData.orig_ghanacard;
+                        }
 
                         // Gender
                         amend.gender = (binding.replGender.getSelectedItemPosition() != 0)
                                 ? binding.getAmendment().repl_gender
                                 : finalData.orig_gender;
 
-                        // Date of birth
-                        amend.dob = (!binding.replDob.getText().toString().trim().isEmpty())
-                                ? binding.getAmendment().repl_dob
-                                : finalData.orig_dob;
+                        // Date of birth - with flag check (if you have yn_dob field)
+                        if (finalData.yn_dob == 1 &&
+                                !replDobText.isEmpty() &&
+                                finalData.repl_dob != null) {
+                            amend.dob = finalData.repl_dob;
+                        } else {
+                            amend.dob = finalData.orig_dob;
+                        }
+
+//                        // Date of birth
+//                        amend.dob = (!binding.replDob.getText().toString().trim().isEmpty())
+//                                ? binding.getAmendment().repl_dob
+//                                : finalData.orig_dob;
 
                         individualViewModel.update(amend, result ->
                                 new Handler(Looper.getMainLooper()).post(() -> {
@@ -513,36 +539,6 @@ public class AmendmentFragment extends DialogFragment {
                     Log.e("AmendmentFragment", "Error in amendment update", e);
                     e.printStackTrace();
                 }
-
-//                // Add a small delay between operations to ensure the first one completes
-//                try {
-//                    Thread.sleep(100);
-//                } catch (InterruptedException e) {
-//                    Thread.currentThread().interrupt();
-//                }
-
-//                try {
-//                    // Second block - visited update (with different variable name)
-//                    Individual visitedData = individualViewModel.visited(selectedIndividual.uuid);
-//                    if (visitedData != null) {
-//                        IndividualVisited visited = new IndividualVisited();
-//                        visited.uuid = binding.getAmendment().individual_uuid;
-//                        visited.complete = 1;
-//
-//                        individualViewModel.visited(visited, result ->
-//                                new Handler(Looper.getMainLooper()).post(() -> {
-//                                    if (result > 0) {
-//                                        Log.d("AmendmentFragment", "Visit Update successful!");
-//                                    } else {
-//                                        Log.d("AmendmentFragment", "Visit Update Failed!");
-//                                    }
-//                                })
-//                        );
-//                    }
-//                } catch (Exception e) {
-//                    Log.e("AmendmentFragment", "Error in visited update", e);
-//                    e.printStackTrace();
-//                }
             });
 
             executor.shutdown();

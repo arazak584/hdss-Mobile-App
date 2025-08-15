@@ -231,7 +231,7 @@ public class Demographic extends BaseObservable implements Parcelable {
     }
 
     public void setPhone1(String phone1) {
-        this.phone1 = phone1;
+        this.phone1 = (phone1 != null && !phone1.trim().isEmpty()) ? phone1 : null;
     }
 
     public String getPhone2() {
@@ -239,7 +239,7 @@ public class Demographic extends BaseObservable implements Parcelable {
     }
 
     public void setPhone2(String phone2) {
-        this.phone2 = phone2;
+        this.phone2 = (phone2 != null && !phone2.trim().isEmpty()) ? phone2 : null;
     }
 
     public String getFw_uuid() {

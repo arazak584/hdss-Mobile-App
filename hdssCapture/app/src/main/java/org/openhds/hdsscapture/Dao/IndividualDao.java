@@ -348,8 +348,13 @@ public interface IndividualDao {
             "ORDER BY compno")
     long cntss();
 
-    @Query("SELECT * FROM individual WHERE uuid != :currentUuid AND (ghanacard = :ghanacard OR phone1 = :phone)")
+//    @Query("SELECT * FROM individual WHERE uuid != :currentUuid AND (ghanacard = :ghanacard OR phone1 = :phone)")
+//    List<Individual> dupRegistration(String currentUuid, String ghanacard, String phone);
+
+    @Query("SELECT * FROM individual WHERE uuid != :currentUuid AND ((:ghanacard IS NOT NULL AND ghanacard = :ghanacard) OR " +
+        " (:phone IS NOT NULL AND phone1 = :phone) ) ")
     List<Individual> dupRegistration(String currentUuid, String ghanacard, String phone);
+
 
     @Query("SELECT * FROM individual WHERE uuid != :currentUuid AND phone1 = :phone AND phone1 IS NOT NULL AND phone1 != ''")
     List<Individual> findDuplicatesByPhone(String currentUuid, String phone);

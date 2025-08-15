@@ -485,7 +485,7 @@ public class Individual extends BaseObservable implements Parcelable {
         if (phone1 != null && phone1.length() == 9) {
             this.phone1 = "0" + phone1;
         } else {
-            this.phone1 = phone1;
+            this.phone1 = (phone1 != null && !phone1.trim().isEmpty()) ? phone1 : null;
         }
     }
 
