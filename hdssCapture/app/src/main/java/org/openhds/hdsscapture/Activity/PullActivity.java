@@ -683,8 +683,12 @@ public class PullActivity extends AppCompatActivity {
                     extractAndProcessFile("location.zip", "location.csv", Locations.class, locationCounts, loc, this::checkAndProcessSocialgroup);
                 } else {
                     runOnUiThread(() -> {
-                        textView_Sync.setText("Location file not downloaded. Please download it first.");
+                        textView_Sync.setText("Location file not downloaded. Download Zip Data");
                         textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                        // Dismiss progress dialog if file is not found
+                        if (progres != null && progres.isShowing()) {
+                            progres.dismiss();
+                        }
                     });
                 }
             }
@@ -704,8 +708,12 @@ public class PullActivity extends AppCompatActivity {
                     });
                 } else {
                     runOnUiThread(() -> {
-                        textView_Sync.setText("Socialgroup file not downloaded. Please download it first.");
+                        textView_Sync.setText("Socialgroup file not downloaded. Download Zip Data");
                         textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                        // Dismiss progress dialog if file is not found
+                        if (progres != null && progres.isShowing()) {
+                            progres.dismiss();
+                        }
                     });
                 }
             }
@@ -748,12 +756,24 @@ public class PullActivity extends AppCompatActivity {
                     MappingIterator<?> iterator = mapper.readerFor(entityClass).with(schema).readValues(extractedFile);
 
                     AppDatabase.databaseWriteExecutor.execute(() -> {
+                        // *** RESET TABLE BEFORE INSERTION ***
+                        resetTableForEntity(entityClass);
+                        // Update UI to show table is being reset
+                        runOnUiThread(() -> {
+                            textView_Sync.setText("Clearing existing " + files + " data...");
+                        });
+
                         long[] totalRecords = new long[1];
                         totalRecords[0] = countTotalRecords(extractedFile);
                         AtomicLong counts = new AtomicLong();
                         List<Object> entities = new ArrayList<>();
-                        int batchSize = 10000;
+                        int batchSize = 20000;
                         int batchCount = 0;
+
+                        // Update UI to show processing is starting
+                        runOnUiThread(() -> {
+                            textView_Sync.setText("Processing " + files + " data...");
+                        });
 
                         while (iterator.hasNext()) {
                             Object entity = iterator.next();
@@ -806,17 +826,24 @@ public class PullActivity extends AppCompatActivity {
                     });
                 }
             }
+
+            // *** RESET TABLE METHOD ***
+            private void resetTableForEntity(Class<?> entityClass) {
+                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                if (entityClass.equals(Locations.class)) {
+                    // Clear all data from Locations table
+                    locationDao.deleteAll(); // You'll need to add this method to your DAO
+                } else if (entityClass.equals(Socialgroup.class)) {
+                    // Clear all data from Socialgroup table
+                    socialgroupDao.deleteAll(); // You'll need to add this method to your DAO
+                }
+            }
+
             private CsvSchema getCsvSchemaForEntity(Class<?> entityClass) {
                 if (entityClass.equals(Locations.class)) {
-                    return CsvSchema.builder()
-                            .addColumn("uuid").addColumn("accuracy").addColumn("compextId").addColumn("compno").addColumn("edtime")
-                            .addColumn("fw_uuid").addColumn("insertDate").addColumn("latitude").addColumn("locationLevel_uuid").addColumn("locationName")
-                            .addColumn("locationType").addColumn("longitude").addColumn("status").addColumn("sttime").addColumn("vill_extId").addColumn("altitude").build();
+                    return CsvSchema.emptySchema().withHeader();
                 } else if (entityClass.equals(Socialgroup.class)) {
-                    return CsvSchema.builder()
-                            .addColumn("uuid").addColumn("extId").addColumn("fw_uuid").addColumn("groupName")
-                            .addColumn("groupType").addColumn("insertDate")
-                            .addColumn("individual_uuid").build();
+                    return CsvSchema.emptySchema().withHeader();
                 }
                 return CsvSchema.emptySchema();
             }
@@ -915,8 +942,12 @@ public class PullActivity extends AppCompatActivity {
                     extractAndProcessFile("individual.zip", "individual.csv", Individual.class, individualCounts, ind, this::checkAndProcessResidency);
                 } else {
                     runOnUiThread(() -> {
-                        textView_Sync.setText("Individual file not downloaded. Please download it first.");
+                        textView_Sync.setText("Individual file not downloaded. Download Zip Data");
                         textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                        // Dismiss progress dialog if file is not found
+                        if (progres != null && progres.isShowing()) {
+                            progres.dismiss();
+                        }
                     });
                 }
             }
@@ -934,8 +965,12 @@ public class PullActivity extends AppCompatActivity {
                     });
                 } else {
                     runOnUiThread(() -> {
-                        textView_Sync.setText("Residency file not downloaded. Please download it first.");
+                        textView_Sync.setText("Residency file not downloaded. Download Zip Data");
                         textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                        // Dismiss progress dialog if file is not found
+                        if (progres != null && progres.isShowing()) {
+                            progres.dismiss();
+                        }
                     });
                 }
             }
@@ -978,12 +1013,24 @@ public class PullActivity extends AppCompatActivity {
                     MappingIterator<?> iterator = mapper.readerFor(entityClass).with(schema).readValues(extractedFile);
 
                     AppDatabase.databaseWriteExecutor.execute(() -> {
+                        // *** RESET TABLE BEFORE INSERTION ***
+                        resetTableForEntity(entityClass);
+                        // Update UI to show table is being reset
+                        runOnUiThread(() -> {
+                            textView_Sync.setText("Clearing existing " + files + " data...");
+                        });
+
                         long[] totalRecords = new long[1];
                         totalRecords[0] = countTotalRecords(extractedFile);
                         AtomicLong counts = new AtomicLong();
                         List<Object> entities = new ArrayList<>();
-                        int batchSize = 10000;
+                        int batchSize = 20000;
                         int batchCount = 0;
+
+                        // Update UI to show processing is starting
+                        runOnUiThread(() -> {
+                            textView_Sync.setText("Processing " + files + " data...");
+                        });
 
                         while (iterator.hasNext()) {
                             Object entity = iterator.next();
@@ -1036,21 +1083,24 @@ public class PullActivity extends AppCompatActivity {
                     });
                 }
             }
+
+            // *** RESET TABLE METHOD ***
+            private void resetTableForEntity(Class<?> entityClass) {
+                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                if (entityClass.equals(Individual.class)) {
+                    // Clear all data from Individual table
+                    individualDao.deleteAll(); // You'll need to add this method to your DAO
+                } else if (entityClass.equals(Residency.class)) {
+                    // Clear all data from residency table
+                    residencyDao.deleteAll(); // You'll need to add this method to your DAO
+                }
+            }
+
             private CsvSchema getCsvSchemaForEntity(Class<?> entityClass) {
                 if (entityClass.equals(Individual.class)) {
-                    return CsvSchema.builder()
-                            .addColumn("uuid").addColumn("dob").addColumn("dobAspect").addColumn("edtime").addColumn("extId")
-                            .addColumn("firstName").addColumn("fw_uuid").addColumn("gender").addColumn("ghanacard").addColumn("insertDate")
-                            .addColumn("lastName").addColumn("otherName").addColumn("father_uuid").addColumn("mother_uuid")
-                            .addColumn("sttime").addColumn("endType").addColumn("compno")
-                            .addColumn("village").addColumn("hohID").addColumn("phone1").build();
+                    return CsvSchema.emptySchema().withHeader();
                 } else if (entityClass.equals(Residency.class)) {
-                    return CsvSchema.builder()
-                            .addColumn("uuid").addColumn("edtime").addColumn("endDate").addColumn("endType")
-                            .addColumn("fw_uuid").addColumn("insertDate").addColumn("rltn_head")
-                            .addColumn("startDate").addColumn("startType")
-                            .addColumn("individual_uuid").addColumn("location_uuid").addColumn("socialgroup_uuid")
-                            .addColumn("sttime").build();
+                    return CsvSchema.emptySchema().withHeader();
                 }
                 return CsvSchema.emptySchema();
             }
@@ -1112,251 +1162,6 @@ public class PullActivity extends AppCompatActivity {
         });
 
 
-//        //Sync Individual and Residency
-//        String IndSyncDatetime = getIndSyncDatetime();
-//        if (IndSyncDatetime.isEmpty()) {
-//            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault());
-//            IndSyncDatetime = sdf.format(new Date());
-//            setLastIndDatetime(IndSyncDatetime);
-//        }
-//        final TextView syncDateTextView = findViewById(R.id.syncIndividualDate);
-//        syncDateTextView.setText(IndSyncDatetime);
-//        // Assuming this is inside your Activity class
-//
-//        final Button button_SyncAll = findViewById(R.id.syncIndividual);
-//        button_SyncAll.setOnClickListener(new View.OnClickListener() {
-//            final TextView textView_Sync = findViewById(R.id.syncIndividualMessage);
-//            final ProgressBar progressBar = findViewById(R.id.IndividualProgressBar);
-//            AtomicLong individualCounts = new AtomicLong();
-//            AtomicLong residencyCounts = new AtomicLong();
-//            String ind = "Individual";
-//            String res = "Residency";
-//
-//            @Override
-//            public void onClick(View v) {
-//                resetAllCounts();
-//                downloadAndProcessIndividual();
-//            }
-//
-//            private void downloadAndProcessIndividual() {
-//                // Download and process "individuals" dataset
-//                CsvSchema individualsSchema = CsvSchema.builder()
-//                        .addColumn("uuid").addColumn("dob").addColumn("dobAspect").addColumn("edtime").addColumn("extId")
-//                        .addColumn("firstName").addColumn("fw_uuid").addColumn("gender").addColumn("ghanacard").addColumn("insertDate")
-//                        .addColumn("lastName").addColumn("otherName").addColumn("father_uuid").addColumn("mother_uuid")
-//                        .addColumn("sttime").addColumn("endType").addColumn("compno")
-//                        .addColumn("village").addColumn("hohID").addColumn("phone1").build();
-//
-//                downloadAndProcessDataset("individual.zip", "individual.csv", () -> dao.downloadIndividual(authorizationHeader), Individual.class, individualsSchema, individualCounts, ind, this::downloadAndProcessResidency);
-//            }
-//
-//            private void downloadAndProcessResidency() {
-//                // Download and process "residency" dataset
-//                CsvSchema residencySchema = CsvSchema.builder()
-//                        .addColumn("uuid").addColumn("edtime").addColumn("endDate").addColumn("endType")
-//                        .addColumn("fw_uuid").addColumn("insertDate").addColumn("rltn_head")
-//                        .addColumn("startDate").addColumn("startType")
-//                        .addColumn("individual_uuid").addColumn("location_uuid").addColumn("socialgroup_uuid")
-//                        .addColumn("sttime").build();
-//
-//                downloadAndProcessDataset("residency.zip", "residency.csv", () -> dao.downloadResidency(authorizationHeader), Residency.class, residencySchema, residencyCounts, res, () -> {
-//                    // All datasets processed, perform any final actions here
-//                    //deleteFiles(getExternalCacheDir());
-//                });
-//            }
-//
-//            private void resetAllCounts() {
-//                resetCountOnClick(ind);
-//                resetCountOnClick(res);
-//            }
-//
-//            private <T> void downloadAndProcessDataset(String zipFileName, String extractedFileName, Supplier<Call<ResponseBody>> downloadCallSupplier, Class<T> entityClass, CsvSchema schema, AtomicLong countKey, String files, Runnable nextStep) {
-//                textView_Sync.setText("Downloading " + files + " Dataset");
-//                progres.setTitle("Downloading " + files + " Dataset");
-//                progres.show();
-//                progres.setProgress(0);
-//                progres.setMax(0);
-//                progressBar.setProgress(0);
-//
-//                // File path for the downloaded file
-//                File file = new File(getExternalCacheDir(), zipFileName);
-//                Call<ResponseBody> call = downloadCallSupplier.get();
-//                call.enqueue(new Callback<ResponseBody>() {
-//                    @Override
-//                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                        //progress.show();
-//                        if (response.isSuccessful()) {
-//                            try {
-//                                // Read the response body into a file
-//                                InputStream inputStream = response.body().byteStream();
-//                                FileOutputStream fileOutputStream = new FileOutputStream(file);
-//                                byte[] buffer = new byte[1024];
-//                                int read;
-//                                while ((read = inputStream.read(buffer)) != -1) {
-//                                    fileOutputStream.write(buffer, 0, read);
-//                                }
-//                                fileOutputStream.close();
-//
-//                                // Unzip the file
-//                                ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(file));
-//                                ZipEntry zipEntry = zipInputStream.getNextEntry();
-//                                while (zipEntry != null) {
-//                                    String fileName = zipEntry.getName();
-//                                    if (fileName.equals(extractedFileName)) {
-//                                        File newFile = new File(getExternalCacheDir() + File.separator + fileName);
-//                                        FileOutputStream fos = new FileOutputStream(newFile);
-//                                        int len;
-//                                        while ((len = zipInputStream.read(buffer)) > 0) {
-//                                            fos.write(buffer, 0, len);
-//                                        }
-//                                        fos.close();
-//                                        // Check if the extracted CSV file is empty
-//                                        if (newFile.length() == 0) {
-//                                            // CSV file is empty, skip processing and move to the next step
-//                                            nextStep.run();
-//                                            return;
-//                                        }
-//                                        break;
-//                                    }
-//                                    zipEntry = zipInputStream.getNextEntry();
-//                                }
-//                                zipInputStream.close();
-//
-//                                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
-//
-//                                // Use the appropriate DAO based on the entity class
-//                                if (entityClass.equals(Individual.class)) {
-//                                    individualDao = appDatabase.individualDao();
-//                                } else if (entityClass.equals(Residency.class)) {
-//                                    residencyDao = appDatabase.residencyDao();
-//                                }
-//
-//                                // Import the unzipped CSV file into the Room database
-//                                if (individualDao != null || residencyDao != null) {
-//                                    File unzippedFile = new File(getExternalCacheDir() + File.separator + extractedFileName);
-//                                    CsvMapper mapper = new CsvMapper();
-//                                    MappingIterator<T> iterator = mapper.readerFor(entityClass).with(schema).readValues(unzippedFile);
-//                                    progres.show();
-//                                    progressBar.setProgress(0);
-//                                    long[] totalRecords = new long[1];
-//                                    CsvMapper countMapper = new CsvMapper();
-//                                    //CsvSchema countSchema = CsvSchema.emptySchema();  // No header since CSV has no header
-//                                    CsvSchema countSchema = CsvSchema.emptySchema().withHeader();  // Assuming your CSV has a header
-//                                    ObjectReader countReader = countMapper.readerFor(Map.class).with(countSchema);
-//                                    Iterator<Map<String, String>> countIterator = countReader.readValues(unzippedFile);
-//
-//                                    totalRecords[0] = 0;
-//                                    while (countIterator.hasNext()) {
-//                                        countIterator.next();
-//                                        totalRecords[0]++;
-//                                    }
-//
-//                                    AtomicLong counts = new AtomicLong();
-//                                    AppDatabase.databaseWriteExecutor.execute(() -> {
-//                                        int batchSize = 10000;
-//                                        List<T> entities = new ArrayList<>();
-//                                        int batchCount = 0;
-//                                        while (iterator.hasNext()) {
-//                                            T entity = iterator.next();
-//                                            if (entity != null) {
-//                                                entities.add(entity);
-//                                                batchCount++;
-//
-//                                                if (batchCount == batchSize) {
-//                                                    if (entityClass.equals(Individual.class)) {
-//                                                        individualDao.insert((Individual[]) entities.toArray(new Individual[0]));
-//                                                        //individualDao.insert((List<Individual>) entities);
-//                                                    } else if (entityClass.equals(Residency.class)) {
-//                                                        //residencyDao.insert((List<Residency>) entities);
-//                                                        residencyDao.insert((Residency[]) entities.toArray(new Residency[0]));
-//                                                    }
-//                                                    entities.clear();
-//                                                    batchCount = 0;
-//                                                }
-//
-//                                                runOnUiThread(() -> {
-//                                                    long currentCount = counts.incrementAndGet();
-//                                                    int progress = (int) (((double) currentCount / totalRecords[0]) * 100);
-//                                                    int totalRecordsCount = (int) totalRecords[0];
-//                                                    int cnt = (int) currentCount;
-//                                                    // Update UI every 500 records or when the task is complete
-//                                                    if (currentCount % 500 == 0 || currentCount == totalRecords[0]) {
-//                                                        runOnUiThread(() -> {
-//                                                            textView_Sync.setText("Saving " + progress + "% of " + files);
-//                                                            progressBar.setProgress(progress);
-//                                                            progres.setMax(totalRecordsCount);
-//                                                            progres.setTitle("Downloading " + files + " Dataset");
-//                                                            progres.setProgress(cnt); // Set progress based on current count
-//
-//                                                            // Assuming 'progres' is a ProgressDialog
-//                                                            progres.setMessage("Saving " + currentCount + " of " + totalRecords[0] + " " + files);
-//
-//                                                            // Ensure the style is set correctly
-//                                                            progres.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-//
-//                                                            // If ProgressDialog is indeterminate, set it to false
-//                                                            if (progres.isIndeterminate()) {
-//                                                                progres.setIndeterminate(false);
-//                                                            }
-//                                                        });
-//                                                    }
-//                                                });
-//                                            }
-//                                        }
-//                                        if (batchCount > 0) {
-//                                            if (entityClass.equals(Individual.class)) {
-//                                                individualDao.insert((Individual[]) entities.toArray(new Individual[0]));
-//                                                individualDao.insert((List<Individual>) entities);
-//                                            } else if (entityClass.equals(Residency.class)) {
-//                                                residencyDao.insert((Residency[]) entities.toArray(new Residency[0]));
-//                                            }
-//                                        }
-//                                        runOnUiThread(() -> {
-//                                            long finalCount = counts.get();
-//                                            int finalProgress = (int) (((double) finalCount / totalRecords[0]) * 100);
-//                                            textView_Sync.setText("Successful Download ");
-//                                            textView_Sync.setTextColor(Color.parseColor("#32CD32"));
-//                                            progressBar.setProgress(finalProgress);
-//                                            progres.dismiss();
-//                                            //Log.d("Three", "Location Count: " + files + " " + finalCount);
-//                                            saveCountsToSharedPreferences(files, finalCount);
-//
-//                                            // Execute the next step
-//                                            nextStep.run();
-//
-//                                            // Update the synchronization date
-//                                            final AtomicReference<String> EventsDatetime = new AtomicReference<>(getIndSyncDatetime());
-//
-//                                            // Inside the synchronization process after a successful sync
-//                                            // Only change the date if there is another sync
-//                                            String currentDateWithTime = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(new Date());
-//                                            if (!currentDateWithTime.equals(EventsDatetime.get())) {
-//                                                syncDateTextView.setText(currentDateWithTime);
-//                                                EventsDatetime.set(currentDateWithTime);
-//                                                setLastIndDatetime(currentDateWithTime);
-//                                            }
-//                                        });
-//                                    });
-//                                }
-//
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                        // Show error message
-//                        textView_Sync.setText("Download Error! Retry or Contact Administrator");
-//                        progressBar.setProgress(0);
-//                        progres.dismiss();
-//                        textView_Sync.setTextColor(Color.RED);
-//                    }
-//                });
-//            }
-//        });
-
         //Download Demographic
         String DemoDatetime = getLastDemoDatetime();
         if (DemoDatetime.isEmpty()) {
@@ -1398,8 +1203,12 @@ public class PullActivity extends AppCompatActivity {
                     });
                 } else {
                     runOnUiThread(() -> {
-                        textView_Sync.setText("Demographics file not downloaded. Please download it first.");
+                        textView_Sync.setText("Demographics file not downloaded. Download Zip Data");
                         textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                        // Dismiss progress dialog if file is not found
+                        if (progres != null && progres.isShowing()) {
+                            progres.dismiss();
+                        }
                     });
                 }
             }
@@ -1442,12 +1251,24 @@ public class PullActivity extends AppCompatActivity {
                     MappingIterator<?> iterator = mapper.readerFor(entityClass).with(schema).readValues(extractedFile);
 
                     AppDatabase.databaseWriteExecutor.execute(() -> {
+                        // *** RESET TABLE BEFORE INSERTION ***
+                        resetTableForEntity(entityClass);
+                        // Update UI to show table is being reset
+                        runOnUiThread(() -> {
+                            textView_Sync.setText("Clearing existing " + files + " data...");
+                        });
+
                         long[] totalRecords = new long[1];
                         totalRecords[0] = countTotalRecords(extractedFile);
                         AtomicLong counts = new AtomicLong();
                         List<Object> entities = new ArrayList<>();
-                        int batchSize = 10000;
+                        int batchSize = 20000;
                         int batchCount = 0;
+
+                        // Update UI to show processing is starting
+                        runOnUiThread(() -> {
+                            textView_Sync.setText("Processing " + files + " data...");
+                        });
 
                         while (iterator.hasNext()) {
                             Object entity = iterator.next();
@@ -1500,14 +1321,19 @@ public class PullActivity extends AppCompatActivity {
                     });
                 }
             }
+
+            // *** RESET TABLE METHOD ***
+            private void resetTableForEntity(Class<?> entityClass) {
+                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                if (entityClass.equals(Demographic.class)) {
+                    // Clear all data from Demographic table
+                    demographicDao.deleteAll(); // You'll need to add this method to your DAO
+                }
+            }
+
             private CsvSchema getCsvSchemaForEntity(Class<?> entityClass) {
                 if (entityClass.equals(Demographic.class)) {
-                    return CsvSchema.builder()
-                            .addColumn("individual_uuid").addColumn("comp_yrs").addColumn("edtime").addColumn("education").addColumn("fw_uuid")
-                            .addColumn("insertDate").addColumn("marital").addColumn("occupation").addColumn("occupation_oth")
-                            .addColumn("phone1").addColumn("phone2").addColumn("denomination").addColumn("akan_tribe")
-                            .addColumn("religion").addColumn("religion_oth").addColumn("sttime").addColumn("tribe").addColumn("tribe_oth")
-                            .addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate").addColumn("location_uuid").build();
+                    return CsvSchema.emptySchema().withHeader();
                 }
                 return CsvSchema.emptySchema();
             }
@@ -1603,8 +1429,12 @@ public class PullActivity extends AppCompatActivity {
                     extractAndProcessFile("pregnancy.zip", "pregnancy.csv", Pregnancy.class, pregnancyCounts, preg, this::checkAndProcessRelationship);
                 } else {
                     runOnUiThread(() -> {
-                        textView_Sync.setText("Pregnancy file not downloaded. Please download it first.");
+                        textView_Sync.setText("Pregnancy file not downloaded. Download Zip Data");
                         textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                        // Dismiss progress dialog if file is not found
+                        if (progres != null && progres.isShowing()) {
+                            progres.dismiss();
+                        }
                     });
                 }
             }
@@ -1622,8 +1452,12 @@ public class PullActivity extends AppCompatActivity {
                     });
                 } else {
                     runOnUiThread(() -> {
-                        textView_Sync.setText("Relationship file not downloaded. Please download it first.");
+                        textView_Sync.setText("Relationship file not downloaded. Download Zip Data");
                         textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                        // Dismiss progress dialog if file is not found
+                        if (progres != null && progres.isShowing()) {
+                            progres.dismiss();
+                        }
                     });
                 }
             }
@@ -1666,12 +1500,24 @@ public class PullActivity extends AppCompatActivity {
                     MappingIterator<?> iterator = mapper.readerFor(entityClass).with(schema).readValues(extractedFile);
 
                     AppDatabase.databaseWriteExecutor.execute(() -> {
+                        // *** RESET TABLE BEFORE INSERTION ***
+                        resetTableForEntity(entityClass);
+                        // Update UI to show table is being reset
+                        runOnUiThread(() -> {
+                            textView_Sync.setText("Clearing existing " + files + " data...");
+                        });
+
                         long[] totalRecords = new long[1];
                         totalRecords[0] = countTotalRecords(extractedFile);
                         AtomicLong counts = new AtomicLong();
                         List<Object> entities = new ArrayList<>();
-                        int batchSize = 10000;
+                        int batchSize = 20000;
                         int batchCount = 0;
+
+                        // Update UI to show processing is starting
+                        runOnUiThread(() -> {
+                            textView_Sync.setText("Processing " + files + " data...");
+                        });
 
                         while (iterator.hasNext()) {
                             Object entity = iterator.next();
@@ -1724,27 +1570,24 @@ public class PullActivity extends AppCompatActivity {
                     });
                 }
             }
+
+            // *** RESET TABLE METHOD ***
+            private void resetTableForEntity(Class<?> entityClass) {
+                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                if (entityClass.equals(Pregnancy.class)) {
+                    // Clear all data from Pregnancy table
+                    pregnancyDao.deleteAll(); // You'll need to add this method to your DAO
+                } else if (entityClass.equals(Relationship.class)) {
+                    // Clear all data from Relationship table
+                    relationshipDao.deleteAll(); // You'll need to add this method to your DAO
+                }
+            }
+
             private CsvSchema getCsvSchemaForEntity(Class<?> entityClass) {
                 if (entityClass.equals(Pregnancy.class)) {
-                    return CsvSchema.builder()
-                            .addColumn("uuid").addColumn("ageOfPregFromPregNotes").addColumn("anc_visits").addColumn("anteNatalClinic").addColumn("attend_you")
-                            .addColumn("attend_you_other").addColumn("bnet_loc").addColumn("bnet_loc_other").addColumn("bnet_sou").addColumn("bnet_sou_other")
-                            .addColumn("edtime").addColumn("estimatedAgeOfPreg").addColumn("expectedDeliveryDate").addColumn("first_preg").addColumn("first_rec")
-                            .addColumn("fw_uuid").addColumn("healthfacility").addColumn("how_many").addColumn("insertDate").addColumn("lastClinicVisitDate")
-                            .addColumn("medicineforpregnancy").addColumn("outcome").addColumn("outcome_date").addColumn("own_bnet")
-                            .addColumn("pregnancyNumber").addColumn("recordedDate").addColumn("slp_bednet").addColumn("trt_bednet").addColumn("ttinjection")
-                            .addColumn("why_no").addColumn("why_no_other").addColumn("individual_uuid").addColumn("sttime").addColumn("visit_uuid")
-                            .addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate")
-                            .addColumn("preg_ready").addColumn("family_plan").addColumn("plan_method").addColumn("plan_method_oth").addColumn("formcompldate")
-                            .build();
+                    return CsvSchema.emptySchema().withHeader();
                 } else if (entityClass.equals(Relationship.class)) {
-                    return CsvSchema.builder()
-                            .addColumn("uuid").addColumn("aIsToB").addColumn("edtime").addColumn("endDate").addColumn("endType")
-                            .addColumn("fw_uuid").addColumn("individualA_uuid").addColumn("individualB_uuid").addColumn("insertDate").addColumn("lcow").addColumn("mar")
-                            .addColumn("mrank").addColumn("nchdm").addColumn("nwive").addColumn("polygamous")
-                            .addColumn("startDate").addColumn("sttime").addColumn("tnbch").addColumn("comment")
-                            .addColumn("status").addColumn("supervisor").addColumn("approveDate").addColumn("location_uuid").addColumn("locationB_uuid").addColumn("formcompldate")
-                            .build();
+                    return CsvSchema.emptySchema().withHeader();
                 }
                 return CsvSchema.emptySchema();
             }
@@ -1843,8 +1686,12 @@ public class PullActivity extends AppCompatActivity {
                     extractAndProcessFile("ses.zip", "ses.csv", HdssSociodemo.class, sesCounts, ses, this::checkAndProcessVac);
                 } else {
                     runOnUiThread(() -> {
-                        textView_Sync.setText("SES file not downloaded. Please download it first.");
+                        textView_Sync.setText("SES file not downloaded. Download Zip Data");
                         textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                        // Dismiss progress dialog if file is not found
+                        if (progres != null && progres.isShowing()) {
+                            progres.dismiss();
+                        }
                     });
                 }
             }
@@ -1863,8 +1710,12 @@ public class PullActivity extends AppCompatActivity {
                     });
                 } else {
                     runOnUiThread(() -> {
-                        textView_Sync.setText("Vaccination file not downloaded. Please download it first.");
+                        textView_Sync.setText("Vaccination file not downloaded. Download Zip Data");
                         textView_Sync.setTextColor(Color.parseColor("#FF0000"));
+                        // Dismiss progress dialog if file is not found
+                        if (progres != null && progres.isShowing()) {
+                            progres.dismiss();
+                        }
                     });
                 }
             }
@@ -1907,12 +1758,24 @@ public class PullActivity extends AppCompatActivity {
                     MappingIterator<?> iterator = mapper.readerFor(entityClass).with(schema).readValues(extractedFile);
 
                     AppDatabase.databaseWriteExecutor.execute(() -> {
+                        // *** RESET TABLE BEFORE INSERTION ***
+                        resetTableForEntity(entityClass);
+                        // Update UI to show table is being reset
+                        runOnUiThread(() -> {
+                            textView_Sync.setText("Clearing existing " + files + " data...");
+                        });
+
                         long[] totalRecords = new long[1];
                         totalRecords[0] = countTotalRecords(extractedFile);
                         AtomicLong counts = new AtomicLong();
                         List<Object> entities = new ArrayList<>();
-                        int batchSize = 10000;
+                        int batchSize = 20000;
                         int batchCount = 0;
+
+                        // Update UI to show processing is starting
+                        runOnUiThread(() -> {
+                            textView_Sync.setText("Processing " + files + " data...");
+                        });
 
                         while (iterator.hasNext()) {
                             Object entity = iterator.next();
@@ -1965,91 +1828,24 @@ public class PullActivity extends AppCompatActivity {
                     });
                 }
             }
+
+            // *** RESET TABLE METHOD ***
+            private void resetTableForEntity(Class<?> entityClass) {
+                AppDatabase appDatabase = AppDatabase.getDatabase(PullActivity.this);
+                if (entityClass.equals(HdssSociodemo.class)) {
+                    // Clear all data from SES table
+                    hdssSociodemoDao.deleteAll(); // You'll need to add this method to your DAO
+                } else if (entityClass.equals(Vaccination.class)) {
+                    // Clear all data from Vaccination table
+                    vaccinationDao.deleteAll(); // You'll need to add this method to your DAO
+                }
+            }
+
             private CsvSchema getCsvSchemaForEntity(Class<?> entityClass) {
                 if (entityClass.equals(HdssSociodemo.class)) {
-                    return CsvSchema.builder()
-                            .addColumn("socialgroup_uuid")
-                            .addColumn("aircon_fcorres").addColumn("aircon_num_fcorres").addColumn("animal_othr_fcorres").addColumn("animal_othr_num_fcorres")
-                            .addColumn("animal_othr_spfy_fcorres").addColumn("bike_fcorres").addColumn("bike_num_fcorres").addColumn("blender_fcorres")
-                            .addColumn("blender_num_fcorres").addColumn("boat_fcorres").addColumn("boat_num_fcorres").addColumn("cabinets_fcorres")
-                            .addColumn("cabinets_num_fcorres").addColumn("car_fcorres").addColumn("car_num_fcorres").addColumn("cart_fcorres")
-                            .addColumn("cart_num_fcorres").addColumn("cattle_fcorres").addColumn("cattle_num_fcorres").addColumn("cethnic")
-                            .addColumn("chew_bnut_oecoccur").addColumn("chew_oecoccur").addColumn("computer_fcorres").addColumn("computer_num_fcorres")
-                            .addColumn("cooking_inside_fcorres").addColumn("cooking_loc_fcorres").addColumn("cooking_room_fcorres").addColumn("cooking_vent_fcorres")
-                            .addColumn("donkey_fcorres").addColumn("donkey_num_fcorres").addColumn("drink_oecoccur").addColumn("dvd_cd_fcorres")
-                            .addColumn("dvd_cd_num_fcorres").addColumn("edtime").addColumn("electricity_fcorres").addColumn("ext_wall_fcorres").addColumn("ext_wall_spfy_fcorres")
-                            .addColumn("floor_fcorres").addColumn("floor_spfy_fcorres").addColumn("foam_matt_fcorres").addColumn("foam_matt_num_fcorres")
-                            .addColumn("form_comments_txt").addColumn("form_comments_yn").addColumn("formcompldate").addColumn("fridge_fcorres").addColumn("fridge_num_fcorres")
-                            .addColumn("fw_uuid").addColumn("goat_fcorres").addColumn("goat_num_fcorres")
-                            .addColumn("h2o_dist_fcorres").addColumn("h2o_fcorres").addColumn("h2o_hours_fcorres")
-                            .addColumn("h2o_mins_fcorres").addColumn("h2o_prep_fcorres").addColumn("h2o_prep_spfy_fcorres_1")
-                            .addColumn("h2o_prep_spfy_fcorres_2").addColumn("h2o_prep_spfy_fcorres_3")
-                            .addColumn("h2o_prep_spfy_fcorres_4").addColumn("h2o_prep_spfy_fcorres_5").addColumn("h2o_spfy_fcorres")
-                            .addColumn("head_hh_fcorres").addColumn("head_hh_spfy_fcorres").addColumn("horse_fcorres")
-                            .addColumn("horse_num_fcorres").addColumn("house_occ_ge5_fcorres").addColumn("house_occ_lt5_fcorres")
-                            .addColumn("house_occ_tot_fcorres").addColumn("house_room_child_fcorres")
-                            .addColumn("house_rooms_fcorres").addColumn("individual_uuid").addColumn("insertDate")
-                            .addColumn("internet_fcorres").addColumn("job_busown_spfy_scorres").addColumn("job_othr_spfy_scorres")
-                            .addColumn("job_salary_spfy_scorres").addColumn("job_scorres").addColumn("job_skilled_spfy_scorres")
-                            .addColumn("job_smbus_spfy_scorres").addColumn("job_unskilled_spfy_scorres").addColumn("land_fcorres")
-                            .addColumn("land_use_fcorres_1").addColumn("land_use_fcorres_2").addColumn("land_use_fcorres_3")
-                            .addColumn("land_use_fcorres_4").addColumn("land_use_fcorres_5").addColumn("land_use_fcorres_88")
-                            .addColumn("land_use_spfy_fcorres_88").addColumn("landline_fcorres").addColumn("lantern_fcorres")
-                            .addColumn("lantern_num_fcorres").addColumn("livestock_fcorres").addColumn("location_uuid")
-                            .addColumn("marital_age").addColumn("marital_scorres")
-                            .addColumn("mobile_access_fcorres").addColumn("mobile_fcorres").addColumn("mobile_num_fcorres")
-                            .addColumn("mosquito_net_fcorres").addColumn("mosquito_net_num_fcorres").addColumn("motorcycle_fcorres")
-                            .addColumn("motorcycle_num_fcorres").addColumn("nth_trb_spfy_cethnic")
-                            .addColumn("othr_trb_spfy_cethnic").addColumn("own_rent_scorres").addColumn("own_rent_spfy_scorres")
-                            .addColumn("pig_fcorres").addColumn("pig_num_fcorres").addColumn("plough_fcorres")
-                            .addColumn("plough_num_fcorres").addColumn("poultry_fcorres").addColumn("poultry_num_fcorres")
-                            .addColumn("ptr_busown_spfy_scorres").addColumn("ptr_othr_spfy_scorres")
-                            .addColumn("ptr_salary_spfy_scorres").addColumn("ptr_scorres").addColumn("ptr_skilled_spfy_scorres")
-                            .addColumn("ptr_smbus_spfy_scorres").addColumn("ptr_unskilled_spfy_scorres").addColumn("radio_fcorres")
-                            .addColumn("radio_num_fcorres").addColumn("religion_scorres").addColumn("religion_spfy_scorres")
-                            .addColumn("roof_fcorres").addColumn("roof_spfy_fcorres").addColumn("sat_dish_fcorres")
-                            .addColumn("sat_dish_num_fcorres").addColumn("sd_obsstdat").addColumn("sew_fcorres")
-                            .addColumn("sew_num_fcorres").addColumn("sheep_fcorres").addColumn("sheep_num_fcorres")
-                            .addColumn("smoke_hhold_in_oecdosfrq").addColumn("smoke_hhold_oecoccur").addColumn("smoke_in_oecdosfrq")
-                            .addColumn("smoke_oecoccur").addColumn("sofa_fcorres").addColumn("sofa_num_fcorres")
-                            .addColumn("solar_fcorres").addColumn("spring_matt_fcorres").addColumn("spring_matt_num_fcorres")
-                            .addColumn("stove_fcorres").addColumn("stove_fuel_fcorres_1").addColumn("stove_fuel_fcorres_10")
-                            .addColumn("stove_fuel_fcorres_11").addColumn("stove_fuel_fcorres_12")
-                            .addColumn("stove_fuel_fcorres_13").addColumn("stove_fuel_fcorres_14").addColumn("stove_fuel_fcorres_2")
-                            .addColumn("stove_fuel_fcorres_3").addColumn("stove_fuel_fcorres_4").addColumn("stove_fuel_fcorres_5")
-                            .addColumn("stove_fuel_fcorres_6").addColumn("stove_fuel_fcorres_7").addColumn("stove_fuel_fcorres_8")
-                            .addColumn("stove_fuel_fcorres_88").addColumn("stove_fuel_fcorres_9")
-                            .addColumn("stove_fuel_spfy_fcorres_88").addColumn("stove_spfy_fcorres").addColumn("straw_matt_fcorres").addColumn("sttime")
-                            .addColumn("straw_matt_num_fcorres").addColumn("tables_fcorres").addColumn("tables_num_fcorres")
-                            .addColumn("toilet_fcorres").addColumn("toilet_loc_fcorres").addColumn("toilet_loc_spfy_fcorres")
-                            .addColumn("toilet_share_fcorres").addColumn("toilet_share_num_fcorres")
-                            .addColumn("toilet_spfy_fcorres").addColumn("tractor_fcorres").addColumn("tractor_num_fcorres")
-                            .addColumn("tricycles_fcorres").addColumn("tricycles_num_fcorres").addColumn("tv_fcorres")
-                            .addColumn("tv_num_fcorres").addColumn("uuid").addColumn("wash_fcorres").addColumn("wash_num_fcorres")
-                            .addColumn("watch_fcorres").addColumn("watch_num_fcorres").addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate")
-                            .addColumn("pets").addColumn("dogs").addColumn("guinea_pigs").addColumn("cats").addColumn("fish").addColumn("birds")
-                            .addColumn("rabbits").addColumn("reptiles").addColumn("pet_other").addColumn("pet_other_spfy").addColumn("pet_vac")
-                            .addColumn("id0001").addColumn("id0002").addColumn("id0003").addColumn("id0004").addColumn("id0005")
-                            .addColumn("id0006").addColumn("id0006_1").addColumn("id0007").addColumn("id0007_1").addColumn("id0008").addColumn("id0008_1").addColumn("id0009").addColumn("id0009_1").addColumn("id0010")
-                            .addColumn("id0010_1").addColumn("id0011").addColumn("id0011_1").addColumn("id0012").addColumn("id0012_1").addColumn("id0014").addColumn("id0014_1").addColumn("id0015").addColumn("id0015_1").addColumn("id0016").addColumn("id0016_1").addColumn("id0017").addColumn("id0017_1").addColumn("id0018").addColumn("id0018_1").addColumn("id0019").addColumn("id0019_1").addColumn("id0013").addColumn("id0013_1").addColumn("id0021")
-                            .build();
+                    return CsvSchema.emptySchema().withHeader();
                 } else if (entityClass.equals(Vaccination.class)) {
-                    return CsvSchema.builder()
-                            .addColumn("individual_uuid").addColumn("admission")
-                            .addColumn("admitDate").addColumn("arti").addColumn("artitreat").addColumn("bcg").addColumn("bednet")
-                            .addColumn("chlbednet").addColumn("diarrhoea").addColumn("diarrhoeatreat").addColumn("dob")
-                            .addColumn("dpt_hepb_hib1").addColumn("dpt_hepb_hib2").addColumn("dpt_hepb_hib3").addColumn("editDate").addColumn("edtime").addColumn("fever")
-                            .addColumn("fevertreat").addColumn("fw_uuid").addColumn("hcard").addColumn("hl").addColumn("hod")
-                            .addColumn("hom").addColumn("insertDate").addColumn("ipv").addColumn("itn").addColumn("location_uuid")
-                            .addColumn("measles_rubella1").addColumn("measles_rubella2").addColumn("menA").addColumn("muac")
-                            .addColumn("nhis").addColumn("onet").addColumn("opv0").addColumn("opv1").addColumn("opv2")
-                            .addColumn("opv3").addColumn("pneumo1").addColumn("pneumo2").addColumn("pneumo3").addColumn("rea")
-                            .addColumn("rea_oth").addColumn("reason").addColumn("reason_oth").addColumn("rota1").addColumn("rota2")
-                            .addColumn("rota3").addColumn("rtss18").addColumn("rtss6").addColumn("rtss7").addColumn("rtss9")
-                            .addColumn("sbf").addColumn("scar").addColumn("slpbednet").addColumn("socialgroup_uuid")
-                            .addColumn("stm").addColumn("sttime").addColumn("sty").addColumn("uuid").addColumn("vitaminA12").addColumn("vitaminA18")
-                            .addColumn("vitaminA6").addColumn("weight").addColumn("yellow_fever")
-                            .addColumn("comment").addColumn("status").addColumn("supervisor").addColumn("approveDate").build();
+                    return CsvSchema.emptySchema().withHeader();
                 }
                 return CsvSchema.emptySchema();
             }

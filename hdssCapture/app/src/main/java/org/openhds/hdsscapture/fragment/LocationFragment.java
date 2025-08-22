@@ -374,7 +374,7 @@ public class LocationFragment extends DialogFragment {
                 if(locations.getCompno()!=null) {
                     Log.e("COMPNO","LOCATION IS " + isExists);
                     locations1 = locationViewModel.find(locations.getCompno());
-                    if (locations1 != null && this.locations.edit==1) {
+                    if (locations1 != null) {
                         isExists = true;
                         binding.locationcompno.setError("Already Exists");
                         Toast.makeText(getActivity(), "Compound Number Already Exists", Toast.LENGTH_LONG).show();
