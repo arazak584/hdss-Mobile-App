@@ -17,15 +17,11 @@
     <uses-permission
         android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="org.odk.collect.android.provider.odk.forms.permission.READ_FORMS" />
-    <uses-permission android:name="org.odk.collect.android.provider.odk.forms.permission.WRITE_FORMS" />
-    <uses-permission android:name="org.odk.collect.android.permission.READ_FORMLIST"/>
-    <uses-permission android:name="org.odk.collect.android.permission.WRITE_RESULTS"/>
-    <uses-permission android:name="org.odk.collect.android.provider.forms.READ_ONLY"/>
-    <uses-permission android:name="org.odk.collect.android.provider.instances.READ_WRITE"/>
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
@@ -46,6 +42,7 @@
     </queries>
 
     <application
+        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -62,9 +59,9 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />

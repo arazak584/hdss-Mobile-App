@@ -1,12 +1,10 @@
 package org.openhds.hdsscapture.fragment;
 
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +38,6 @@ import org.openhds.hdsscapture.OutcomeFragment.Birth3Fragment;
 import org.openhds.hdsscapture.OutcomeFragment.BirthExtraFragment;
 import org.openhds.hdsscapture.OutcomeFragment.BirthFragment;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.odk.OdkUtils;
 import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
@@ -82,6 +78,7 @@ import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subqueries.EndEvents;
 import org.openhds.hdsscapture.odk.OdkForm;
+import org.openhds.hdsscapture.odk.OdkUtilsPrefilledInstance;
 
 import java.util.Collections;
 import java.util.List;
@@ -212,66 +209,6 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-//        final RecyclerView recyclerView = view.findViewById(R.id.recyclerView_household);
-//        final IndividualViewAdapter adapter = new IndividualViewAdapter(this, locations, socialgroup,this );
-//        //final IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
-//
-//        //recyclerView.setHasFixedSize(true);
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-//                RecyclerView.VERTICAL);
-//        recyclerView.addItemDecoration(dividerItemDecoration);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-//        recyclerView.setAdapter(adapter);
-//
-//        //initial loading of Individuals in locations
-//        adapter.filter("", individualViewModel);
-
-        //Second Option
-//        final RecyclerView recyclerView = view.findViewById(R.id.recyclerView_household);
-//        final ProgressBar progressBar = view.findViewById(R.id.progressBar); // Make sure this is in your XML
-//
-//// 1. Initialize the adapter with empty list for now
-//        final IndividualViewAdapter adapter = new IndividualViewAdapter(this, locations, socialgroup, this);
-//
-//// 2. Set up the RecyclerView
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), RecyclerView.VERTICAL);
-//        recyclerView.addItemDecoration(dividerItemDecoration);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-//        recyclerView.setAdapter(adapter);
-//
-//// 3. Show progress bar before loading data
-//        progressBar.setVisibility(View.VISIBLE);
-//
-//// 4. Delay the data loading so the fragment shows first
-//        recyclerView.post(() -> {
-//            // Load individuals after layout is drawn (this runs after fragment UI is ready)
-//            adapter.filterAsync("", individualViewModel);
-//
-//            // Hide progress bar after loading
-//            progressBar.setVisibility(View.GONE);
-//        });
-
-//        IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity()).get(IndividualViewModel.class);
-//// Set up RecyclerView and adapter
-//        final RecyclerView recyclerView = view.findViewById(R.id.recyclerView_household);
-//        final IndividualViewAdapter adapter = new IndividualViewAdapter(this, locations, socialgroup, this);
-//
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), RecyclerView.VERTICAL);
-//        recyclerView.addItemDecoration(dividerItemDecoration);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-//        recyclerView.setAdapter(adapter);
-//
-//    // Observe LiveData
-//        if (socialgroup != null) {
-//            individualViewModel.retrieveByHouseId(socialgroup.getExtId()).observe(getViewLifecycleOwner(), individuals -> {
-//                if (individuals != null && !individuals.isEmpty()) {
-//                    adapter.setIndividuals(individuals);
-//                } else {
-//                    Toast.makeText(requireContext(), "No Active Individual Found", Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//        }
 
         recyclerView = view.findViewById(R.id.recyclerView_household);
         adapter = new IndividualViewAdapter(this, locations, socialgroup, this, individualSharedViewModel);
@@ -547,24 +484,25 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     public void onIndividualClick(Individual selectedIndividual) {
         //HouseMembersFragment.selectedIndividual = selectedIndividual; // Always update the selectedLocation variable
 
-        // Update the householdAdapter with the selected location
+        // Update the householdAdapter with the selected individual
         if (selectedIndividual != null) {
             individualSharedViewModel.setSelectedIndividual(selectedIndividual);
 
-                // Handle ODK return flow
-                OdkUtils.returnToOdk(requireActivity(), selectedIndividual);
+            // Handle ODK return flow
+            setupOdkFormsList(selectedIndividual);
 
-                // Set up ODK forms list
-                try {
-                    List<OdkForm> odkForms = odkViewModel.find();
-                    if (odkForms != null && !odkForms.isEmpty()) {
-                        recyclerViewOdk.setLayoutManager(new LinearLayoutManager(requireContext()));
-                        recyclerViewOdk.setAdapter(new OdkFormAdapter(odkForms));
-                    }
-                } catch (ExecutionException | InterruptedException e) {
-                    Log.d("HouseMembersFragment", "Error retrieving ODK forms", e);
-                    Toast.makeText(requireContext(), "Error retrieving ODK forms", Toast.LENGTH_SHORT).show();
-                }
+            // Set up ODK forms list
+//            try {
+//                List<OdkForm> odkForms = odkViewModel.find();
+//                if (odkForms != null && !odkForms.isEmpty()) {
+//                    recyclerViewOdk.setLayoutManager(new LinearLayoutManager(requireContext()));
+//                    // Pass the individual directly to avoid ViewModel issues
+//                    recyclerViewOdk.setAdapter(new OdkFormAdapter(odkForms, selectedIndividual));
+//                }
+//            } catch (ExecutionException | InterruptedException e) {
+//                Log.d("HouseMembersFragment", "Error retrieving ODK forms", e);
+//                Toast.makeText(requireContext(), "Error retrieving ODK forms", Toast.LENGTH_SHORT).show();
+//            }
 
 
             ConfigViewModel viewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
@@ -1119,19 +1057,6 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 .show(getChildFragmentManager(), "MinorDialogFragment");
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //Individual selectedIndividual = HouseMembersFragment.selectedIndividual;
-        Individual selected = individualSharedViewModel.getCurrentSelectedIndividual();
-
-        if (selectedIndividual != null) {
-            // Handle returning from ODK Collect
-            OdkUtils.returnToOdk(requireActivity(), selectedIndividual);
-            onIndividualClick(selected);
-        }
-    }
-
     private void updateButtonState() {
         if (getActivity() == null || !isAdded()) return; // Ensure fragment is still attached
 
@@ -1230,6 +1155,146 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         }
     }
 
+
+    //ODK CONFIGURATION FOR FRAGMENT
+    private void setupOdkFormsList(Individual selectedIndividual) {
+        Log.d("HouseMembersFragment", "Setting up ODK forms list for individual: " +
+                (selectedIndividual != null ? selectedIndividual.getExtId() : "null"));
+
+        // Validate individual data before proceeding
+        if (selectedIndividual == null) {
+            Log.e("HouseMembersFragment", "Cannot setup ODK forms - no individual selected");
+            showToastSafe("No individual selected for ODK forms");
+            return;
+        }
+
+        // Validate individual has required data for ODK
+        if (!OdkUtilsPrefilledInstance.validateIndividualData(selectedIndividual)) {
+            Log.e("HouseMembersFragment", "Individual data validation failed");
+            showToastSafe("Individual data is incomplete for ODK forms");
+            return;
+        }
+
+        // Check if ODK Collect is installed before proceeding
+        if (!OdkUtilsPrefilledInstance.isOdkCollectInstalled(requireContext())) {
+            Log.w("HouseMembersFragment", "ODK Collect is not installed");
+            showToastSafe("ODK Collect is not installed. Please install it to use forms.");
+            return;
+        }
+
+        // Run database operations on background thread
+        new Thread(() -> {
+            try {
+                // Retrieve ODK forms
+                List<OdkForm> odkForms = odkViewModel.find();
+
+                // Update UI on main thread
+                requireActivity().runOnUiThread(() -> {
+                    handleOdkFormsResult(odkForms, selectedIndividual);
+                });
+
+            } catch (Exception e) {
+                Log.e("HouseMembersFragment", "Error retrieving ODK forms", e);
+                requireActivity().runOnUiThread(() -> {
+                    showToastSafe("Error retrieving ODK forms: " + e.getMessage());
+                });
+            }
+        }).start();
+    }
+
+    private void handleOdkFormsResult(List<OdkForm> odkForms, Individual selectedIndividual) {
+        if (odkForms == null) {
+            Log.w("HouseMembersFragment", "ODK forms list is null");
+            showToastSafe("No ODK forms available");
+            return;
+        }
+
+        if (odkForms.isEmpty()) {
+            Log.w("HouseMembersFragment", "ODK forms list is empty");
+            showToastSafe("No ODK forms found. Please add forms to ODK Collect first.");
+            showOdkCollectPrompt();
+            return;
+        }
+
+        Log.d("HouseMembersFragment", "Found " + odkForms.size() + " ODK forms");
+
+        // Set up RecyclerView with forms
+        recyclerViewOdk.setLayoutManager(new LinearLayoutManager(requireContext()));
+
+        // Create adapter with direct individual reference to avoid ViewModel issues
+        OdkFormAdapter adapter = new OdkFormAdapter(odkForms, selectedIndividual);
+        recyclerViewOdk.setAdapter(adapter);
+
+        // Show success message
+        showToastSafe("Found " + odkForms.size() + " forms for " +
+                selectedIndividual.getFirstName() + " " + selectedIndividual.getLastName());
+
+        // Check for pending forms and notify user
+        checkForPendingForms(selectedIndividual);
+    }
+
+    private void showToastSafe(String message) {
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void checkForPendingForms(Individual selectedIndividual) {
+        try {
+            boolean hasPending = OdkUtilsPrefilledInstance.hasPendingForms(requireContext(), selectedIndividual);
+
+            if (hasPending) {
+                String[] pendingForms = OdkUtilsPrefilledInstance.getPendingFormsForIndividual(requireContext(), selectedIndividual);
+
+                String message = "Found " + pendingForms.length + " incomplete forms for " +
+                        selectedIndividual.getFirstName() + ". Continue in ODK Collect?";
+
+                // Show dialog to user
+                showPendingFormsDialog(selectedIndividual, pendingForms, message);
+            }
+
+        } catch (Exception e) {
+            Log.w("HouseMembersFragment", "Error checking for pending forms", e);
+        }
+    }
+
+    private void showPendingFormsDialog(Individual individual, String[] pendingForms, String message) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Pending Forms Found")
+                .setMessage(message)
+                .setPositiveButton("Open ODK Collect", (dialog, which) -> {
+                    OdkUtilsPrefilledInstance.returnToOdk(requireActivity(), individual);
+                })
+                .setNegativeButton("Stay Here", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void showOdkCollectPrompt() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("No Forms Available")
+                .setMessage("No ODK forms found. Would you like to open ODK Collect to download forms?")
+                .setPositiveButton("Open ODK Collect", (dialog, which) -> {
+                    try {
+                        Intent intent = requireContext().getPackageManager().getLaunchIntentForPackage(OdkUtilsPrefilledInstance.ODK_PACKAGE);
+                        if (intent != null) {
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(requireContext(), "Cannot open ODK Collect", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        Log.e("HouseMembersFragment", "Error opening ODK Collect", e);
+                        Toast.makeText(requireContext(), "Error opening ODK Collect", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    private void setupOdkFormsListWithReturnOption(Individual selectedIndividual) {
+        // First setup the forms list
+        setupOdkFormsList(selectedIndividual);
+
+    }
 
 
 
