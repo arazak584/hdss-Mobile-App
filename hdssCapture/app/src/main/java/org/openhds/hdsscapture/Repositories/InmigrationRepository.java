@@ -56,6 +56,15 @@ public class InmigrationRepository {
         return future.get();
     }
 
+    public Inmigration dup(String id,String ids) throws ExecutionException, InterruptedException {
+
+        Callable<Inmigration> callable = () -> dao.dup(id,ids);
+
+        Future<Inmigration> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Inmigration> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Inmigration>> callable = () -> dao.retrieveimgToSync();

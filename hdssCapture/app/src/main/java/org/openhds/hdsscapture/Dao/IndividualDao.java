@@ -221,7 +221,7 @@ public interface IndividualDao {
     @Query("SELECT b.uuid,b.firstName,b.lastName,a.insertDate,b.hohID socialgroup_uuid,b.extId,location_uuid,residency_uuid" +
             " FROM outmigration as a " +
             "INNER JOIN individual as b on a.individual_uuid=b.uuid " +
-            "WHERE (a.edit IS NULL OR a.edit != 2) AND endType =2 AND compno =:loc")
+            "WHERE (a.edit IS NULL OR a.edit != 2) AND endType =2 AND compno =:loc ORDER BY a.recordedDate DESC LIMIT 1")
     List<Individual> retrieveOmg(String loc);
 
     //(a.edit IS NULL OR a.edit = 1)

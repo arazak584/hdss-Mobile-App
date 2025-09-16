@@ -1224,6 +1224,26 @@ public class IndividualFragment extends Fragment {
                 e.printStackTrace();
             }
 
+            boolean dup = false;
+            String xuuid = img.uuid;
+            String resuuid = Data.uuid;
+
+            try {
+                Inmigration datas = inmigrationViewModel.dup(xuuid, resuuid);
+                Log.d("DupResidency", "Checking uuid: " + xuuid + " with residency: " + resuuid);
+                if (datas != null) {
+                    Log.d("DupResidency", "Found duplicate - uuid: " + xuuid +
+                            " already exists with different residency: " + datas.residency_uuid);
+                    dup = true;
+                    Toast.makeText(getActivity(), "Invalid inmigration, Same individual cannot be migrated twice to the same compound in the same round", Toast.LENGTH_LONG).show();
+                    binding.howLng.setError("Invalid inmigration, Same individual cannot be migrated twice to the same compound in the same round ");
+                    return;
+                }
+            }catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
             if (hasErrors) {
                 Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
                 return;
@@ -1300,7 +1320,7 @@ public class IndividualFragment extends Fragment {
                     omg.edit = 1;
                     omg.visit_uuid = binding.getInmigration().visit_uuid;
                     omg.socialgroup_uuid = binding.getOmgg().socialgroup_uuid;
-                    omg.location_uuid = binding.getOmgg().loc;
+                    omg.location_uuid = null;//binding.getOmgg().loc;
 
                     omgModel.add(omg);
                 }

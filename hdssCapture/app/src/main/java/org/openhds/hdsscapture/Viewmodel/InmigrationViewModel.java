@@ -37,6 +37,10 @@ public class InmigrationViewModel extends AndroidViewModel {
         return inmigrationRepository.ins(id);
     }
 
+    public Inmigration dup(String id,String ids) throws ExecutionException, InterruptedException {
+        return inmigrationRepository.dup(id,ids);
+    }
+
     public List<Inmigration> reject(String id) throws ExecutionException, InterruptedException {
         return inmigrationRepository.reject(id);
     }

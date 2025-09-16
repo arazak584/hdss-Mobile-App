@@ -55,4 +55,7 @@ public interface InmigrationDao {
 
     @Query("SELECT * FROM inmigration where uuid=:id")
     LiveData<Inmigration> getView(String id);
+
+    @Query("SELECT * FROM inmigration where uuid=:id AND residency_uuid != :ids LIMIT 1")
+    Inmigration dup(String id,String ids);
 }

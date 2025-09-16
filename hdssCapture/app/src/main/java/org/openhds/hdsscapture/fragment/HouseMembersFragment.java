@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -80,6 +81,7 @@ import org.openhds.hdsscapture.entity.subqueries.EndEvents;
 import org.openhds.hdsscapture.odk.OdkForm;
 import org.openhds.hdsscapture.odk.OdkUtilsPrefilledInstance;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -489,20 +491,20 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             individualSharedViewModel.setSelectedIndividual(selectedIndividual);
 
             // Handle ODK return flow
-            setupOdkFormsList(selectedIndividual);
+            //setupOdkFormsList(selectedIndividual);
 
             // Set up ODK forms list
-//            try {
-//                List<OdkForm> odkForms = odkViewModel.find();
-//                if (odkForms != null && !odkForms.isEmpty()) {
-//                    recyclerViewOdk.setLayoutManager(new LinearLayoutManager(requireContext()));
-//                    // Pass the individual directly to avoid ViewModel issues
-//                    recyclerViewOdk.setAdapter(new OdkFormAdapter(odkForms, selectedIndividual));
-//                }
-//            } catch (ExecutionException | InterruptedException e) {
-//                Log.d("HouseMembersFragment", "Error retrieving ODK forms", e);
-//                Toast.makeText(requireContext(), "Error retrieving ODK forms", Toast.LENGTH_SHORT).show();
-//            }
+            try {
+                List<OdkForm> odkForms = odkViewModel.find();
+                if (odkForms != null && !odkForms.isEmpty()) {
+                    recyclerViewOdk.setLayoutManager(new LinearLayoutManager(requireContext()));
+                    // Pass the individual directly to avoid ViewModel issues
+                    recyclerViewOdk.setAdapter(new OdkFormAdapter(odkForms, selectedIndividual));
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                Log.d("HouseMembersFragment", "Error retrieving ODK forms", e);
+                Toast.makeText(requireContext(), "Error retrieving ODK forms", Toast.LENGTH_SHORT).show();
+            }
 
 
             ConfigViewModel viewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
@@ -1156,81 +1158,168 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     }
 
 
-    //ODK CONFIGURATION FOR FRAGMENT
     private void setupOdkFormsList(Individual selectedIndividual) {
-        Log.d("HouseMembersFragment", "Setting up ODK forms list for individual: " +
+        Log.d("HouseMembersFragment", "Setting up ODK forms for: " +
                 (selectedIndividual != null ? selectedIndividual.getExtId() : "null"));
 
-        // Validate individual data before proceeding
         if (selectedIndividual == null) {
-            Log.e("HouseMembersFragment", "Cannot setup ODK forms - no individual selected");
-            showToastSafe("No individual selected for ODK forms");
+            showToastSafe("No individual selected");
             return;
         }
 
-        // Validate individual has required data for ODK
         if (!OdkUtilsPrefilledInstance.validateIndividualData(selectedIndividual)) {
-            Log.e("HouseMembersFragment", "Individual data validation failed");
-            showToastSafe("Individual data is incomplete for ODK forms");
+            showToastSafe("Individual data is incomplete");
             return;
         }
 
-        // Check if ODK Collect is installed before proceeding
         if (!OdkUtilsPrefilledInstance.isOdkCollectInstalled(requireContext())) {
-            Log.w("HouseMembersFragment", "ODK Collect is not installed");
-            showToastSafe("ODK Collect is not installed. Please install it to use forms.");
-            return;
-        }
-
-        // Run database operations on background thread
-        new Thread(() -> {
-            try {
-                // Retrieve ODK forms
-                List<OdkForm> odkForms = odkViewModel.find();
-
-                // Update UI on main thread
-                requireActivity().runOnUiThread(() -> {
-                    handleOdkFormsResult(odkForms, selectedIndividual);
-                });
-
-            } catch (Exception e) {
-                Log.e("HouseMembersFragment", "Error retrieving ODK forms", e);
-                requireActivity().runOnUiThread(() -> {
-                    showToastSafe("Error retrieving ODK forms: " + e.getMessage());
-                });
-            }
-        }).start();
-    }
-
-    private void handleOdkFormsResult(List<OdkForm> odkForms, Individual selectedIndividual) {
-        if (odkForms == null) {
-            Log.w("HouseMembersFragment", "ODK forms list is null");
-            showToastSafe("No ODK forms available");
-            return;
-        }
-
-        if (odkForms.isEmpty()) {
-            Log.w("HouseMembersFragment", "ODK forms list is empty");
-            showToastSafe("No ODK forms found. Please add forms to ODK Collect first.");
+            showToastSafe("ODK Collect not installed");
             showOdkCollectPrompt();
             return;
         }
 
-        Log.d("HouseMembersFragment", "Found " + odkForms.size() + " ODK forms");
+        loadAndValidateOdkForms(selectedIndividual);
+    }
 
-        // Set up RecyclerView with forms
+    private void loadAndValidateOdkForms(Individual selectedIndividual) {
+        new Thread(() -> {
+            try {
+                // Get forms from Room database using your ViewModel
+                List<OdkForm> appForms = odkViewModel.find();
+
+                if (appForms == null || appForms.isEmpty()) {
+                    requireActivity().runOnUiThread(() -> {
+                        showToastSafe("No forms found in local database");
+                        showOdkCollectPrompt();
+                    });
+                    return;
+                }
+
+                Log.d("HouseMembersFragment", "Found " + appForms.size() + " forms in database");
+
+                // Log form IDs for debugging
+                for (OdkForm form : appForms) {
+                    Log.d("HouseMembersFragment", "Form ID: " + form.getFormID() +
+                            ", Name: " + form.getFormName());
+                }
+
+                // Validate against ODK Collect - this checks if forms exist in ODK
+                List<OdkForm> validForms = OdkUtilsPrefilledInstance.validateFormsInOdkCollect(
+                        requireContext(),
+                        appForms
+                );
+
+                requireActivity().runOnUiThread(() -> {
+                    updateRecyclerView(validForms, selectedIndividual);
+                });
+
+            } catch (Exception e) {
+                Log.e("HouseMembersFragment", "Error loading forms", e);
+                requireActivity().runOnUiThread(() ->
+                        showToastSafe("Error loading forms: " + e.getMessage()));
+            }
+        }).start();
+    }
+
+    private void updateRecyclerView(List<OdkForm> validForms, Individual selectedIndividual) {
+        if (validForms == null || validForms.isEmpty()) {
+            Log.w("HouseMembersFragment", "No valid forms found in ODK Collect");
+            showToastSafe("No matching forms found in ODK Collect. Please download forms first.");
+            showOdkCollectPrompt();
+            return;
+        }
+
+        Log.d("HouseMembersFragment", "Setting up RecyclerView with " + validForms.size() + " valid forms");
+
+        // Set up RecyclerView with valid forms
         recyclerViewOdk.setLayoutManager(new LinearLayoutManager(requireContext()));
-
-        // Create adapter with direct individual reference to avoid ViewModel issues
-        OdkFormAdapter adapter = new OdkFormAdapter(odkForms, selectedIndividual);
+        OdkFormAdapter adapter = new OdkFormAdapter(validForms, selectedIndividual);
         recyclerViewOdk.setAdapter(adapter);
 
-        // Show success message
-        showToastSafe("Found " + odkForms.size() + " forms for " +
-                selectedIndividual.getFirstName() + " " + selectedIndividual.getLastName());
+        showToastSafe("Found " + validForms.size() + " forms for " +
+                selectedIndividual.getFirstName());
 
-        // Check for pending forms and notify user
+        // Check for any incomplete forms for this individual
         checkForPendingForms(selectedIndividual);
+    }
+
+    // Alternative simpler approach if you don't need validation
+    private void setupOdkFormsListSimple(Individual selectedIndividual) {
+        try {
+            List<OdkForm> odkForms = odkViewModel.find();
+
+            if (odkForms != null && !odkForms.isEmpty()) {
+                Log.d("HouseMembersFragment", "Setting up " + odkForms.size() + " ODK forms");
+
+                recyclerViewOdk.setLayoutManager(new LinearLayoutManager(requireContext()));
+                OdkFormAdapter adapter = new OdkFormAdapter(odkForms, selectedIndividual);
+                recyclerViewOdk.setAdapter(adapter);
+
+                showToastSafe("Loaded " + odkForms.size() + " forms");
+            } else {
+                showToastSafe("No forms available");
+                showOdkCollectPrompt();
+            }
+
+        } catch (Exception e) {
+            Log.e("HouseMembersFragment", "Error retrieving ODK forms", e);
+            showToastSafe("Error retrieving ODK forms: " + e.getMessage());
+        }
+    }
+
+    private void checkForPendingForms(Individual selectedIndividual) {
+        new Thread(() -> {
+            try {
+                boolean hasPending = OdkUtilsPrefilledInstance.hasPendingForms(
+                        requireContext(), selectedIndividual);
+
+                if (hasPending) {
+                    String[] pendingForms = OdkUtilsPrefilledInstance.getPendingFormsForIndividual(
+                            requireContext(), selectedIndividual);
+
+                    requireActivity().runOnUiThread(() ->
+                            showPendingFormsDialog(selectedIndividual, pendingForms));
+                }
+            } catch (Exception e) {
+                Log.w("HouseMembersFragment", "Error checking pending forms", e);
+            }
+        }).start();
+    }
+
+    private void showPendingFormsDialog(Individual individual, String[] pendingForms) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Pending Forms Found");
+        builder.setMessage("Found " + pendingForms.length + " incomplete forms for " +
+                individual.getFirstName() + ". Would you like to continue these forms in ODK Collect?");
+        builder.setPositiveButton("Open ODK", (dialog, which) ->
+                OdkUtilsPrefilledInstance.returnToOdk(requireActivity(), individual));
+        builder.setNegativeButton("Later", null);
+        builder.show();
+    }
+
+    private void showOdkCollectPrompt() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("ODK Collect Required");
+        builder.setMessage("Please download and install forms in ODK Collect first, then try again.");
+        builder.setPositiveButton("Open ODK Collect", (dialog, which) -> {
+            try {
+                Intent intent = requireContext().getPackageManager()
+                        .getLaunchIntentForPackage(OdkUtilsPrefilledInstance.ODK_PACKAGE);
+                if (intent != null) {
+                    startActivity(intent);
+                } else {
+                    // ODK Collect not installed, direct to Play Store
+                    Intent playStoreIntent = new Intent(Intent.ACTION_VIEW);
+                    playStoreIntent.setData(Uri.parse("market://details?id=" +
+                            OdkUtilsPrefilledInstance.ODK_PACKAGE));
+                    startActivity(playStoreIntent);
+                }
+            } catch (Exception e) {
+                showToastSafe("Could not open ODK Collect");
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
     }
 
     private void showToastSafe(String message) {
@@ -1239,61 +1328,32 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         }
     }
 
-    private void checkForPendingForms(Individual selectedIndividual) {
-        try {
-            boolean hasPending = OdkUtilsPrefilledInstance.hasPendingForms(requireContext(), selectedIndividual);
-
-            if (hasPending) {
-                String[] pendingForms = OdkUtilsPrefilledInstance.getPendingFormsForIndividual(requireContext(), selectedIndividual);
-
-                String message = "Found " + pendingForms.length + " incomplete forms for " +
-                        selectedIndividual.getFirstName() + ". Continue in ODK Collect?";
-
-                // Show dialog to user
-                showPendingFormsDialog(selectedIndividual, pendingForms, message);
-            }
-
-        } catch (Exception e) {
-            Log.w("HouseMembersFragment", "Error checking for pending forms", e);
+    // Method to manually open a specific form by ID (useful for testing)
+    private void openSpecificForm(String formId, Individual selectedIndividual) {
+        if (selectedIndividual == null) {
+            showToastSafe("No individual selected");
+            return;
         }
-    }
 
-    private void showPendingFormsDialog(Individual individual, String[] pendingForms, String message) {
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Pending Forms Found")
-                .setMessage(message)
-                .setPositiveButton("Open ODK Collect", (dialog, which) -> {
-                    OdkUtilsPrefilledInstance.returnToOdk(requireActivity(), individual);
-                })
-                .setNegativeButton("Stay Here", (dialog, which) -> dialog.dismiss())
-                .show();
-    }
+        if (!OdkUtilsPrefilledInstance.isOdkCollectInstalled(requireContext())) {
+            showToastSafe("ODK Collect not installed");
+            return;
+        }
 
-    private void showOdkCollectPrompt() {
-        new AlertDialog.Builder(requireContext())
-                .setTitle("No Forms Available")
-                .setMessage("No ODK forms found. Would you like to open ODK Collect to download forms?")
-                .setPositiveButton("Open ODK Collect", (dialog, which) -> {
-                    try {
-                        Intent intent = requireContext().getPackageManager().getLaunchIntentForPackage(OdkUtilsPrefilledInstance.ODK_PACKAGE);
-                        if (intent != null) {
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(requireContext(), "Cannot open ODK Collect", Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (Exception e) {
-                        Log.e("HouseMembersFragment", "Error opening ODK Collect", e);
-                        Toast.makeText(requireContext(), "Error opening ODK Collect", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                .show();
-    }
+        try {
+            Intent intent = OdkUtilsPrefilledInstance.createOdkFormWithPrefilledInstance(
+                    requireContext(), formId, selectedIndividual);
 
-    private void setupOdkFormsListWithReturnOption(Individual selectedIndividual) {
-        // First setup the forms list
-        setupOdkFormsList(selectedIndividual);
-
+            if (intent != null) {
+                startActivityForResult(intent, 1001); // ODK_REQUEST_CODE
+                showToastSafe("Opening form: " + formId);
+            } else {
+                showToastSafe("Could not open form: " + formId);
+            }
+        } catch (Exception e) {
+            Log.e("HouseMembersFragment", "Error opening specific form", e);
+            showToastSafe("Error opening form: " + e.getMessage());
+        }
     }
 
 
