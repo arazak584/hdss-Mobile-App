@@ -110,8 +110,6 @@
                         android:id="@+id/locationcompno"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
                         android:inputType="textPersonName|textCapCharacters"
                         android:text="@={listing.compno}" />
                 </com.google.android.material.textfield.TextInputLayout>

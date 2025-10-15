@@ -230,7 +230,7 @@ public class AmendmentFragment extends DialogFragment {
                 binding.setAmendment(data);
                 binding.amendFirstName.setEnabled(false);
                 binding.amendLastName.setEnabled(false);
-                binding.amendOtherName.setEnabled(false);
+                //binding.amendOtherName.setEnabled(false);
                 binding.amendGender.setEnabled(false);
                 binding.amendGhanacard.setEnabled(false);
 
@@ -264,7 +264,7 @@ public class AmendmentFragment extends DialogFragment {
 
                 binding.amendFirstName.setEnabled(false);
                 binding.amendLastName.setEnabled(false);
-                binding.amendOtherName.setEnabled(false);
+                //binding.amendOtherName.setEnabled(false);
                 binding.amendGender.setEnabled(false);
                 binding.amendGhanacard.setEnabled(false);
 

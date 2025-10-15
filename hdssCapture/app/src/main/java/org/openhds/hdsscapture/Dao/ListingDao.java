@@ -38,6 +38,9 @@ public interface ListingDao {
     @Query("SELECT * FROM listing WHERE compno=:id")
     Listing retrieve(String id);
 
+    @Query("SELECT * FROM listing WHERE location_uuid=:id")
+    Listing findByLocation(String id);
+
     @Query("SELECT * FROM listing WHERE complete=1")
     List<Listing> retrieveToSync();
 

@@ -256,7 +256,7 @@ public class ListingFragment extends Fragment {
 
         ListingViewModel viewModel = new ViewModelProvider(this).get(ListingViewModel.class);
         try {
-            Listing data = viewModel.find(selectedLocation.compno);
+            Listing data = viewModel.findByLocation(selectedLocation.uuid);
             if (data != null) {
                 binding.setListing(data);
                 binding.locationName.setEnabled(false);
@@ -272,11 +272,11 @@ public class ListingFragment extends Fragment {
                     binding.buttonChangeCluster.setEnabled(true);
                 }
 
-                if (data.edit_compno != null && data.edit_compno ==1){
-                    binding.locationcompno.setEnabled(true);
-                }else{
-                    binding.locationcompno.setEnabled(false);
-                }
+//                if (data.edit_compno != null && data.edit_compno ==1){
+//                    binding.locationcompno.setEnabled(true);
+//                }else{
+//                    binding.locationcompno.setEnabled(false);
+//                }
 
 
             } else {
@@ -321,11 +321,11 @@ public class ListingFragment extends Fragment {
                     binding.buttonChangeCluster.setEnabled(true);
                 }
 
-                if (data.edit_compno != null && data.edit_compno ==1){
-                    binding.locationcompno.setEnabled(true);
-                }else{
-                    binding.locationcompno.setEnabled(false);
-                }
+//                if (data.edit_compno != null && data.edit_compno ==1){
+//                    binding.locationcompno.setEnabled(true);
+//                }else{
+//                    binding.locationcompno.setEnabled(false);
+//                }
 
                 binding.locationName.setEnabled(false);
                 binding.clusterCode.setEnabled(false);
@@ -458,12 +458,12 @@ public class ListingFragment extends Fragment {
 
                 try {
                     // Update Location
-                    Locations data = locationViewModel.find(binding.getListing().compno);
+                    Locations data = locationViewModel.findByUuid(binding.getListing().location_uuid);
                     if (data != null) {
                         LocationAmendment locationz = new LocationAmendment();
                         locationz.uuid = binding.getListing().location_uuid;
-                        locationz.compno = finalData.compno;
-                        locationz.compextId = finalData.compextId;
+                        locationz.compno = binding.getListing().compno;
+                        locationz.compextId = binding.getListing().compextId;
 
                         if (!binding.repllocationName.getText().toString().trim().isEmpty()) {
                             locationz.locationName = binding.getListing().repl_locationName;

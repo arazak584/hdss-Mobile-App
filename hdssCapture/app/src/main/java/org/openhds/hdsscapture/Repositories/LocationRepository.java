@@ -65,6 +65,15 @@ public class LocationRepository {
         return future.get();
     }
 
+    public Locations findByUuid(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Locations> callable = () -> dao.findByUuid(id);
+
+        Future<Locations> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Locations> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Locations>> callable = () -> dao.retrieveToSync();

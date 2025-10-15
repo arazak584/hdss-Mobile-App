@@ -648,23 +648,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:padding="5dp"
-                android:hint="@string/othername"
-                android:text="@string/othername">
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/amend_otherName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@={amendment.orig_otherName}"
-                    android:inputType="textPersonName|textCapCharacters"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:padding="5dp"
                 android:hint="@string/ghanacard"
                 android:text="@string/ghanacard">
 
@@ -802,6 +785,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                goneUnless="@{amendment.yn_otherName==1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:padding="5dp"
+                android:hint="@string/othername"
+                android:text="@string/othername">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/amend_otherName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={amendment.orig_otherName}"
+                    android:inputType="textPersonName|textCapCharacters"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{amendment.yn_otherName==1}"

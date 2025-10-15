@@ -52,11 +52,18 @@ public class ListingRepository {
         });
     }
 
-
-
     public Listing find(String id) throws ExecutionException, InterruptedException {
 
         Callable<Listing> callable = () -> dao.retrieve(id);
+
+        Future<Listing> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Listing findByLocation(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Listing> callable = () -> dao.findByLocation(id);
 
         Future<Listing> future = Executors.newSingleThreadExecutor().submit(callable);
 

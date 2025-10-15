@@ -30,6 +30,10 @@ public class ListingViewModel extends AndroidViewModel {
         return listingRepository.find(id);
     }
 
+    public Listing findByLocation(String id) throws ExecutionException, InterruptedException {
+        return listingRepository.findByLocation(id);
+    }
+
     public List<Listing> findToSync() throws ExecutionException, InterruptedException {
         return listingRepository.findToSync();
     }

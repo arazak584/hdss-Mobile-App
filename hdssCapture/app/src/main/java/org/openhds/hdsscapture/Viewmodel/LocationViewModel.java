@@ -29,6 +29,10 @@ public class LocationViewModel extends AndroidViewModel {
         return locationRepository.find(id);
     }
 
+    public Locations findByUuid(String id) throws ExecutionException, InterruptedException {
+        return locationRepository.findByUuid(id);
+    }
+
     public List<Locations> findLocationsOfCluster(String id) throws ExecutionException, InterruptedException {
         return locationRepository.findByClusterId(id);
     }
