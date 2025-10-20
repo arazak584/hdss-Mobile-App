@@ -28,7 +28,7 @@ public interface DuplicateDao {
     @Query("DELETE FROM duplicate")
     void deleteAll();
 
-    @Query("SELECT * FROM duplicate WHERE complete!=0")
+    @Query("SELECT * FROM duplicate WHERE complete !=0")
     List<Duplicate> retrieveSync();
 
 //    @Query("SELECT * FROM duplicate WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
