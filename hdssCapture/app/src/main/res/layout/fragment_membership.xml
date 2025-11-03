@@ -305,7 +305,7 @@
                     android:textColor="@color/black"
                     android:text="@string/starttype"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/starttype"
                     selection="@{residency.startType}"
@@ -359,7 +359,7 @@
                     android:textColor="@color/black"
                     android:text="@string/endtype"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/endtype"
                     selection="@{residency.endType}"
@@ -410,7 +410,7 @@
                     android:textColor="@color/black"
                     android:text="@string/rltn_head"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/rltn_head"
                     selection="@{residency.rltn_head}"
                     android:layout_width="match_parent"
@@ -430,7 +430,7 @@
                     android:textColor="@color/black"
                     android:text="@string/new_img"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/residency_img"
                     android:layout_width="match_parent"
@@ -481,7 +481,7 @@
                     android:textColor="@color/black"
                     android:text="@string/form_complete"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/membership_complete"
                     android:layout_width="match_parent"

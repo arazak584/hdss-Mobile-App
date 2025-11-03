@@ -232,7 +232,7 @@
                         android:textColor="@color/black"
                         android:text="@string/destination"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         android:id="@+id/destination"
                         selection="@{outmigration.destination}"
                         android:layout_width="match_parent"
@@ -252,7 +252,7 @@
                         android:textColor="@color/black"
                         android:text="@string/reason_out"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         android:id="@+id/reason_out"
                         selection="@{outmigration.reason}"
                         android:layout_width="match_parent"

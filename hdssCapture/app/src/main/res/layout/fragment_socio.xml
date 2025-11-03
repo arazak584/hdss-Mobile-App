@@ -215,7 +215,7 @@
                                     android:textColor="@color/black"
                                     android:text="@string/MARITAL_SCORRES_SOCIO" />
 
-                                <org.openhds.hdsscapture.SearchableSpinner
+                                <org.openhds.searchSpinner.SearchableSpinner
                                     android:id="@+id/MARITAL_SCORRES"
                                     selection="@{sociodemo.marital_scorres}"
                                     android:layout_width="match_parent"
@@ -292,7 +292,7 @@
                                     android:textColor="@color/black"
                                     android:text="@string/CETHNIC_SOCIO" />
 
-                                <org.openhds.hdsscapture.SearchableSpinner
+                                <org.openhds.searchSpinner.SearchableSpinner
                                     android:id="@+id/CETHNIC"
                                     selection="@{sociodemo.cethnic}"
                                     android:layout_width="match_parent"
@@ -466,7 +466,7 @@
                                     android:textColor="@color/black"
                                     android:text="@string/id0003"/>
 
-                                <org.openhds.hdsscapture.SearchableSpinner
+                                <org.openhds.searchSpinner.SearchableSpinner
                                     android:id="@+id/id0003"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -485,7 +485,7 @@
                                     android:textColor="@color/black"
                                     android:text="@string/id0004"/>
 
-                                <org.openhds.hdsscapture.SearchableSpinner
+                                <org.openhds.searchSpinner.SearchableSpinner
                                     goneUnless="@{sociodemo.id0003==1}"
                                     android:id="@+id/id0004"
                                     android:layout_width="match_parent"
@@ -505,7 +505,7 @@
                                     android:textColor="@color/black"
                                     android:text="@string/id0005"/>
 
-                                <org.openhds.hdsscapture.SearchableSpinner
+                                <org.openhds.searchSpinner.SearchableSpinner
                                     goneUnless="@{sociodemo.id0003==3 || sociodemo.id0003==2}"
                                     android:id="@+id/id0005"
                                     android:layout_width="match_parent"

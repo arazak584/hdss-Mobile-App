@@ -180,7 +180,7 @@
                     android:textColor="@color/black" />
 
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/locationstatus"
                     selection="@{listing.status}"
                     android:layout_width="match_parent"
@@ -307,7 +307,7 @@
                     android:textColor="@color/black" />
 
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/correct"
                     selection="@{listing.correct_yn}"
                     android:layout_width="match_parent"
@@ -429,7 +429,7 @@
                     android:text="@string/form_complete"
                     android:visibility="gone" />
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/complete"
                     selection="@{listing.complete}"
                     android:layout_width="match_parent"

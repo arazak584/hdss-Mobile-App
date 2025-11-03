@@ -1,4 +1,4 @@
-package org.openhds.hdsscapture
+package org.openhds.searchSpinner
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

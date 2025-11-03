@@ -217,7 +217,7 @@
                     android:textColor="@color/black"
                     android:text="@string/starttype"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/rel_starttype"
                     selection="@{relationship.aIsToB}"
                     android:layout_width="match_parent"
@@ -257,7 +257,7 @@
                     android:textColor="@color/black"
                     android:text="@string/endtype"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/rel_endtype"
                     selection="@{relationship.endType}"
                     android:layout_width="match_parent"
@@ -300,7 +300,7 @@
                     android:text="@string/mar"
                     android:textColor="@color/black" />
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     goneUnless="@{relationship.aIsToB==2}"
                     android:id="@+id/mar"
                     android:layout_width="match_parent"
@@ -348,7 +348,7 @@
                     android:textColor="@color/black"
                     android:text="@string/polygamous"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     goneUnless="@{relationship.aIsToB==2}"
                     android:id="@+id/polygamous"
                     android:layout_width="match_parent"
@@ -384,7 +384,7 @@
                     android:textColor="@color/black"
                     android:text="@string/lcow"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     goneUnless="@{relationship.polygamous==1}"
                     android:id="@+id/lcow"
                     android:layout_width="match_parent"
@@ -420,7 +420,7 @@
                     android:textColor="@color/black"
                     android:text="@string/form_complete"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/rel_complete"
                     android:layout_width="match_parent"

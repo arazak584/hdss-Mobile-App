@@ -290,7 +290,7 @@
                     android:textColor="@color/black"
                     android:text="@string/anteNatalClinic"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/anteNatalClinic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -309,7 +309,7 @@
                     android:textColor="@color/black"
                     android:text="@string/why_no"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     goneUnless="@{pregnancy.anteNatalClinic==2}"
                     android:id="@+id/why_no"
                     android:layout_width="match_parent"
@@ -424,7 +424,7 @@
                         android:textColor="@color/black"
                         android:text="@string/attend_you"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         android:id="@+id/attend_you"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -459,7 +459,7 @@
                      android:textColor="@color/black"
                      android:text="@string/ttinjection"/>
 
-                 <org.openhds.hdsscapture.SearchableSpinner
+                 <org.openhds.searchSpinner.SearchableSpinner
                      android:id="@+id/ttinjection"
                      android:layout_width="match_parent"
                      android:layout_height="wrap_content"
@@ -523,7 +523,7 @@
                     android:textColor="@color/black"
                     android:text="@string/own_bnet"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/own_bnet"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -575,7 +575,7 @@
                         android:textColor="@color/black"
                         android:text="@string/bnet_sou"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         android:id="@+id/bnet_sou"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -610,7 +610,7 @@
                         android:textColor="@color/black"
                         android:text="@string/bnet_loc"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         android:id="@+id/bnet_loc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -646,7 +646,7 @@
                         android:textColor="@color/black"
                         android:text="@string/slp_bednet"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         android:id="@+id/slp_bednet"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -665,7 +665,7 @@
                         android:textColor="@color/black"
                         android:text="@string/trt_bednet"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         goneUnless="@{pregnancy.slp_bednet==1}"
                         android:id="@+id/trt_bednet"
                         android:layout_width="match_parent"
@@ -687,7 +687,7 @@
                     android:textColor="@color/black"
                     android:text="@string/healthfacility"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/healthfacility"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -705,7 +705,7 @@
                     android:textColor="@color/black"
                     android:text="@string/medicineforpregnancy"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/medicineforpregnancy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -723,7 +723,7 @@
                     android:textColor="@color/black"
                     android:text="@string/first_preg"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/first_preg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -764,7 +764,7 @@
                     android:textColor="@color/black"
                     android:text="@string/preg_ready"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/preg_ready"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -782,7 +782,7 @@
                     android:textColor="@color/black"
                     android:text="@string/family_plan"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/family_plan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -801,7 +801,7 @@
                     android:textColor="@color/black"
                     android:text="@string/plan_method"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     goneUnless="@{pregnancy.family_plan==1}"
                     android:id="@+id/plan_method"
                     android:layout_width="match_parent"
@@ -838,7 +838,7 @@
                     android:textColor="@color/black"
                     android:text="@string/outcome"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/outcometype"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -881,7 +881,7 @@
                     android:textColor="@color/black"
                     android:text="@string/extra"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     goneUnless="@{pregnancy.outcome==1}"
                     android:id="@+id/extra"
                     android:layout_width="match_parent"
@@ -901,7 +901,7 @@
                     android:textColor="@color/black"
                     android:text="@string/form_complete"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/individual_complete"
                     android:layout_width="match_parent"

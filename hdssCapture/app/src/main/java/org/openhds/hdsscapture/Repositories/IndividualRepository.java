@@ -484,6 +484,14 @@ public class IndividualRepository {
         return dao.getView(id);
     }
 
+    // New method to update compno for all individuals
+    public void updateCompnoForIndividuals(String oldCompno, String newCompno, Consumer<Integer> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int result = dao.updateCompnoForIndividuals(oldCompno, newCompno);
+            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
+    }
+
     public List<Individual> findIndividualsBatched(int gender, int minAge, int maxAge, int status) {
         List<Individual> allIndividuals = new ArrayList<>();
         int offset = 0;

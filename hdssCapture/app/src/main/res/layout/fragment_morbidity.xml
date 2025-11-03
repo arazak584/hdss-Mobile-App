@@ -269,7 +269,7 @@
                     android:textColor="@color/black"
                     android:text="@string/treats"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/fever_treat"
                     goneUnless="@{morbidity.fever==1}"
                     selection="@{morbidity.fever_treat}"

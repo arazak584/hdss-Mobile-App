@@ -108,7 +108,7 @@
                     android:textColor="@color/black"
                     android:text="@string/site"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/site"
                     android:layout_width="match_parent"
@@ -276,7 +276,7 @@
                     android:text="@string/location_status"/>
 
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/locationstatus"
                     selection="@{locations.status}"
                     android:layout_width="match_parent"
@@ -295,7 +295,7 @@
                     android:textColor="@color/black"
                     android:text="@string/locationtype"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/locationtype"
                     selection="@{locations.locationType}"
                     android:layout_width="match_parent"
@@ -313,7 +313,7 @@
                     android:padding="5dp"
                     android:text="@string/form_complete"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/complete"
                     android:layout_width="match_parent"
@@ -332,7 +332,7 @@
                     android:padding="5dp"
                     android:text="@string/edit_form"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/edit"
                     android:layout_width="match_parent"

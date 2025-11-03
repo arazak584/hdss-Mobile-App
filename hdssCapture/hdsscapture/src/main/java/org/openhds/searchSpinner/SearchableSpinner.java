@@ -1,4 +1,4 @@
-package org.openhds.hdsscapture;
+package org.openhds.searchSpinner;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,6 +12,9 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+
+
+import org.openhds.hdsscapture.searchSpinner.R;
 
 import java.util.ArrayList;
 import java.util.List;

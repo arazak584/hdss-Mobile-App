@@ -70,7 +70,7 @@
             android:textColor="@color/black"
             android:text="@string/H2O_FCORRES_SOCIO" />
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/H2O_FCORRES"
             selection="@{sociodemo.h2o_fcorres}"
             android:layout_width="match_parent"
@@ -462,7 +462,7 @@
             android:textColor="@color/black"
             android:text="@string/TOILET_FCORRES_SOCIO" />
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/TOILET_FCORRES"
             selection="@{sociodemo.toilet_fcorres}"
             android:layout_width="match_parent"
@@ -506,7 +506,7 @@
                 android:textColor="@color/black"
                 tools:ignore="TooManyViews" />
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 android:id="@+id/TOILET_LOC_FCORRES"
                 selection="@{sociodemo.toilet_loc_fcorres}"
                 android:layout_width="match_parent"
@@ -585,7 +585,7 @@
                     android:textColor="@color/black"
                     android:text="@string/TOILET_SHARE_NUM_FCORRES_SOCIO" />
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/TOILET_SHARE_NUM_FCORRES"
                     selection="@{sociodemo.toilet_share_num_fcorres}"
                     android:layout_width="match_parent"
@@ -608,7 +608,7 @@
             android:textColor="@color/black"
             android:text="@string/EXT_WALL_FCORRES_SOCIO" />
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/EXT_WALL_FCORRES"
             selection="@{sociodemo.ext_wall_fcorres}"
             android:layout_width="match_parent"
@@ -644,7 +644,7 @@
             android:textColor="@color/black"
             android:text="@string/FLOOR_FCORRES_SOCIO" />
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/FLOOR_FCORRES"
             selection="@{sociodemo.floor_fcorres}"
             android:layout_width="match_parent"
@@ -680,7 +680,7 @@
             android:textColor="@color/black"
             android:text="@string/ROOF_FCORRES_SOCIO" />
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/ROOF_FCORRES"
             selection="@{sociodemo.roof_fcorres}"
             android:layout_width="match_parent"

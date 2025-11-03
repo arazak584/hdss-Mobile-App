@@ -212,7 +212,7 @@
             android:textColor="@color/black"
             android:text="@string/hcard"/>
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/hcard"
             selection="@{vaccination.hcard}"
             android:layout_width="match_parent"
@@ -237,7 +237,7 @@
             android:textColor="@color/black"
             android:text="@string/vareason"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 android:id="@+id/reason"
                 selection="@{vaccination.reason}"
                 android:layout_width="match_parent"
@@ -273,7 +273,7 @@
                 android:textColor="@color/black"
                 android:text="@string/bednett"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 android:id="@+id/bednet"
                 selection="@{vaccination.bednet}"
                 android:layout_width="match_parent"
@@ -293,7 +293,7 @@
             android:textColor="@color/black"
             android:text="@string/onet"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 android:id="@+id/onet"
                 goneUnless="@{vaccination.bednet==1}"
                 selection="@{vaccination.onet}"
@@ -314,7 +314,7 @@
                 android:textColor="@color/black"
                 android:text="@string/slpbednet"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 android:id="@+id/slpbednet"
                 goneUnless="@{vaccination.bednet==1}"
                 selection="@{vaccination.slpbednet}"
@@ -368,7 +368,7 @@
                 android:textColor="@color/black"
                 android:text="@string/scar"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 android:id="@+id/scar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -386,7 +386,7 @@
                 android:textColor="@color/black"
                 android:text="@string/fever"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 android:id="@+id/fever"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -405,7 +405,7 @@
                 android:textColor="@color/black"
                 android:text="@string/treat"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 goneUnless="@{vaccination.fever==1}"
                 android:id="@+id/fevertreat"
                 android:layout_width="match_parent"
@@ -424,7 +424,7 @@
                 android:textColor="@color/black"
                 android:text="@string/diarrhoea"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 android:id="@+id/diarrhoea"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -443,7 +443,7 @@
                 android:textColor="@color/black"
                 android:text="@string/treat"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 goneUnless="@{vaccination.diarrhoea==1}"
                 android:id="@+id/diarrhoeatreat"
                 android:layout_width="match_parent"
@@ -462,7 +462,7 @@
                 android:textColor="@color/black"
                 android:text="@string/arti"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 android:id="@+id/arti"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -481,7 +481,7 @@
                 android:textColor="@color/black"
                 android:text="@string/treat"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 goneUnless="@{vaccination.arti==1}"
                 android:id="@+id/artitreat"
                 android:layout_width="match_parent"
@@ -516,7 +516,7 @@
                 android:textColor="@color/black"
                 android:text="@string/admission"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 android:id="@+id/admission"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -535,7 +535,7 @@
             android:textColor="@color/black"
             android:text="@string/rea"/>
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             goneUnless="@{vaccination.admission==1}"
             android:id="@+id/rea"
             android:layout_width="match_parent"
@@ -593,7 +593,7 @@
             android:textColor="@color/black"
             android:text="@string/hl"/>
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/hl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -637,7 +637,7 @@
             android:textColor="@color/black"
             android:text="@string/sbf"/>
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/sbf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -687,7 +687,7 @@
             android:textColor="@color/black"
             android:text="@string/nhis"/>
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/nhis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -1261,7 +1261,7 @@
             android:textColor="@color/black"
             android:text="@string/form_complete"/>
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:visibility="gone"
             android:id="@+id/vac_complete"
             android:layout_width="match_parent"

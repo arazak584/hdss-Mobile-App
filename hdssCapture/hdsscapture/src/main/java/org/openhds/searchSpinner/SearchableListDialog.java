@@ -1,4 +1,4 @@
-package org.openhds.hdsscapture;
+package org.openhds.searchSpinner;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,6 +16,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+
+
+import org.openhds.hdsscapture.searchSpinner.R;
 
 import java.io.Serializable;
 import java.util.List;

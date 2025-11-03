@@ -180,62 +180,6 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         return individualList.size();
     }
 
-//    public void filter(String charText,IndividualViewModel individualViewModel) {
-//        individualList.clear();
-//        if(socialgroup != null)
-//            try {
-//                List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getExtId());
-//
-//                if (list != null) {
-//                    individualList.addAll(list);
-//                }
-//
-//                if (list.isEmpty()) {
-//                    Toast.makeText(fragment.requireContext(), "No Active Individual Found", Toast.LENGTH_SHORT).show();
-//                }
-//
-//            } catch (ExecutionException e) {
-//                e.printStackTrace();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        notifyDataSetChanged();
-//    }
-
-//    public void filterAsync(String charText, IndividualViewModel individualViewModel) {
-//        individualList.clear();
-//
-//        if (socialgroup != null) {
-//            ExecutorService executor = Executors.newSingleThreadExecutor();
-//            Handler handler = new Handler(Looper.getMainLooper());
-//
-//            executor.execute(() -> {
-//                try {
-//                    List<Individual> list = individualViewModel.retrieveByLocationId(socialgroup.getExtId());
-//
-//                    handler.post(() -> {
-//                        if (list != null && !list.isEmpty()) {
-//                            individualList.addAll(list);
-//                        } else {
-//                            Toast.makeText(fragment.requireContext(), "No Active Individual Found", Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                        notifyDataSetChanged();
-//                    });
-//
-//                } catch (ExecutionException | InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            });
-//        }
-//    }
-
-//    public void setIndividualList(List<Individual> individuals) {
-//        individualList.clear();
-//        individualList.addAll(individuals);
-//        notifyDataSetChanged();
-//    }
-
     public void setIndividualList(List<Individual> individuals) {
         individualList.clear();
         individualList.addAll(individuals);

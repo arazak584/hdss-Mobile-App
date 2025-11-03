@@ -58,7 +58,7 @@
             android:textColor="@color/black"
             android:text="@string/first_nb"/>
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             goneUnless="@{pregoutcome1.type==1 || pregoutcome2.type==1 || pregoutcome3.type==1 || pregoutcome4.type==1}"
             android:id="@+id/first_nb"
             android:layout_width="match_parent"
@@ -125,7 +125,7 @@
                 android:textColor="@color/black"
                 android:text="@string/id1001"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 android:id="@+id/id1001"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -144,7 +144,7 @@
                 android:textColor="@color/black"
                 android:text="@string/id1002"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 goneUnless="@{pregoutcome.id1001==1}"
                 android:id="@+id/id1002"
                 android:layout_width="match_parent"
@@ -163,7 +163,7 @@
                 android:textColor="@color/black"
                 android:text="@string/id1003"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 android:id="@+id/id1003"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -182,7 +182,7 @@
                 android:textColor="@color/black"
                 android:text="@string/id1004"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 goneUnless="@{pregoutcome.id1001==1}"
                 android:id="@+id/id1004"
                 android:layout_width="match_parent"
@@ -201,7 +201,7 @@
                 android:textColor="@color/black"
                 android:text="@string/id1005"/>
 
-            <org.openhds.hdsscapture.SearchableSpinner
+            <org.openhds.searchSpinner.SearchableSpinner
                 android:id="@+id/id1005"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -222,7 +222,7 @@
             android:textColor="@color/black"
             android:text="@string/extras"/>
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/extras"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -241,7 +241,7 @@
             android:textColor="@color/black"
             android:text="@string/form_complete"/>
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:visibility="gone"
             android:id="@+id/individual_complete"
             android:layout_width="match_parent"

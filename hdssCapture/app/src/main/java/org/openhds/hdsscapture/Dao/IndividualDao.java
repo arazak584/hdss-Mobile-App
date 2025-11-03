@@ -97,6 +97,9 @@ public interface IndividualDao {
     @Query("SELECT * from individual WHERE endType=2 and firstName!='FAKE' and compno=:id order by dob")
     List<Individual> retrieveReturn(String id);
 
+    @Query("UPDATE individual SET compno = :newCompno WHERE compno = :oldCompno")
+    int updateCompnoForIndividuals(String oldCompno, String newCompno);
+
 
 //    @Query("SELECT a.*,f.extId as houseExtId, compno as compextId, firstName || ' ' || lastName as fullName, b.endType " +
 //            "FROM individual AS a " +

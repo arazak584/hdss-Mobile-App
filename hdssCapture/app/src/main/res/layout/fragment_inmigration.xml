@@ -201,7 +201,7 @@
                     android:textColor="@color/black"
                     android:text="@string/origin"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/origin"
                     selection="@{inmigration.origin}"
                     android:layout_width="match_parent"
@@ -220,7 +220,7 @@
                     android:textColor="@color/black"
                     android:text="@string/reason"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/reason"
                     selection="@{inmigration.reason}"
                     android:layout_width="match_parent"
@@ -341,7 +341,7 @@
                         android:textColor="@color/black"
                         android:text="@string/farm"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         android:id="@+id/farm"
                         selection="@{inmigration.farm}"
                         android:layout_width="match_parent"

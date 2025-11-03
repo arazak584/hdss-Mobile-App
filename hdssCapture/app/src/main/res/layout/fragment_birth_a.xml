@@ -189,7 +189,7 @@
             android:textColor="@color/black"
             android:text="@string/pregoutcome"/>
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/out1_type"
             selection="@{pregoutcome1.type}"
             android:layout_width="match_parent"
@@ -304,7 +304,7 @@
             android:textColor="@color/black"
             android:text="@string/gender"/>
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/gender"
             goneUnless="@{pregoutcome1.type==1}"
             selection="@{pregoutcome1.gender}"
@@ -326,7 +326,7 @@
             android:textColor="@color/black"
             android:text="@string/rltn_head"/>
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/rltn_head"
             goneUnless="@{pregoutcome1.type==1}"
             selection="@{pregoutcome1.rltn_head}"
@@ -348,7 +348,7 @@
             android:textColor="@color/black"
             android:text="@string/chd_weight"/>
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             goneUnless="@{pregoutcome1.type==1}"
             android:id="@+id/chd_weight"
             android:layout_width="match_parent"
@@ -385,7 +385,7 @@
             android:textColor="@color/black"
             android:text="@string/chd_size"/>
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             goneUnless="@{pregoutcome1.type==1}"
             android:id="@+id/chd_size"
             android:layout_width="match_parent"

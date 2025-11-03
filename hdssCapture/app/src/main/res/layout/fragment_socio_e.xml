@@ -70,7 +70,7 @@
             android:textColor="@color/black"
             android:text="@string/JOB_SCORRES_SOCIO" />
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/JOB_SCORRES"
             selection="@{sociodemo.job_scorres}"
             android:layout_width="match_parent"
@@ -110,7 +110,7 @@
             android:textColor="@color/black"
             android:text="@string/PTR_SCORRES_SOCIO" />
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             goneUnless="@{sociodemo.marital_scorres==1}"
             android:id="@+id/PTR_SCORRES"
             selection="@{sociodemo.ptr_scorres}"

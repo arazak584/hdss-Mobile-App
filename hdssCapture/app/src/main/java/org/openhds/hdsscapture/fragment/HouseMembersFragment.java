@@ -99,29 +99,20 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
-    private static final int ODK_REQUEST_CODE = 1;
     private Locations locations;
     private Socialgroup socialgroup;
     private FragmentHouseMembersBinding binding;
-    private ProgressDialog progress;
-    private ProgressDialog progres;
     private Residency residency;
     private Individual individual;
     private Hierarchy level6Data;
-    private ArrayAdapter<Hierarchy> level6Adapter;
-    public static  Individual selectedIndividual;
+    //public static  Individual selectedIndividual;
     private View view;
-    private EndEventsAdapter eventsAdapter;
-    private List<EndEvents> filterAll;
     private DeathViewModel deathViewModel;
     private OutmigrationViewModel outmigrationViewModel;
     private SocialgroupViewModel viewModel;
     private RegistryViewModel registryViewModel;
     private VisitViewModel visitViewModel;
     private IndividualViewModel individualViewModel;
-    private SocialgroupViewModel socialgroupViewModel;
-    private  Pregnancy pregnancy;
-    private Pregnancyoutcome pregnancyoutcome;
     private AppCompatButton finish;
     private OdkViewModel odkViewModel;
     private RecyclerView recyclerViewOdk;
@@ -129,6 +120,9 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private RecyclerView recyclerView;
     private Locations currentLocation;
     private IndividualSharedViewModel individualSharedViewModel;
+
+    private ExecutorService backgroundExecutor;
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     public HouseMembersFragment() {
         // Required empty public constructor
@@ -166,6 +160,9 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             this.individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
         individualSharedViewModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+
+        // Initialize executor once
+        backgroundExecutor = Executors.newSingleThreadExecutor();
     }
 
     @Override
@@ -178,9 +175,6 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
         ClusterSharedViewModel clusterSharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
         currentLocation = clusterSharedViewModel.getCurrentSelectedLocation();
-
-        IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
-        selectedIndividual = sharedModel.getCurrentSelectedIndividual();
 
         //Ended Events
         deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
@@ -490,23 +484,6 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         if (selectedIndividual != null) {
             individualSharedViewModel.setSelectedIndividual(selectedIndividual);
 
-            // Handle ODK return flow
-            //setupOdkFormsList(selectedIndividual);
-
-            // Set up ODK forms list
-            try {
-                List<OdkForm> odkForms = odkViewModel.find();
-                if (odkForms != null && !odkForms.isEmpty()) {
-                    recyclerViewOdk.setLayoutManager(new LinearLayoutManager(requireContext()));
-                    // Pass the individual directly to avoid ViewModel issues
-                    recyclerViewOdk.setAdapter(new OdkFormAdapter(odkForms, selectedIndividual));
-                }
-            } catch (ExecutionException | InterruptedException e) {
-                Log.d("HouseMembersFragment", "Error retrieving ODK forms", e);
-                Toast.makeText(requireContext(), "Error retrieving ODK forms", Toast.LENGTH_SHORT).show();
-            }
-
-
             ConfigViewModel viewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
             List<Configsettings> configsettings = null;
             try {
@@ -556,8 +533,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             View id14 = view.findViewById(R.id.id14);
             View id15 = view.findViewById(R.id.id15);
             View id16 = view.findViewById(R.id.id16);
-            View id21 = view.findViewById(R.id.id21);
-            View id22 = view.findViewById(R.id.id22);
+            View id17 = view.findViewById(R.id.id17);
+            View id18 = view.findViewById(R.id.id18);
 
             VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
             try {
@@ -873,7 +850,9 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 omg.setVisibility(View.VISIBLE);
                 dth.setVisibility(View.VISIBLE);
                 amend.setVisibility(View.VISIBLE);
+                id11.setVisibility(View.VISIBLE);
                 relhoh.setVisibility(View.VISIBLE);
+                id17.setVisibility(View.VISIBLE);
                 id1.setVisibility(View.VISIBLE);
                 id2.setVisibility(View.VISIBLE);
                 id3.setVisibility(View.VISIBLE);
@@ -883,6 +862,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 mor.setVisibility(View.VISIBLE);
                 id15.setVisibility(View.VISIBLE);
                 reg.setVisibility(View.VISIBLE);
+
             }
 
             InmigrationViewModel imgViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
@@ -891,6 +871,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 if (data != null) {
                     String TextImg = "Update Inmigration";
                     img.setVisibility(View.VISIBLE);
+                    id18.setVisibility(View.VISIBLE);
                     boolean isComplete = data.complete != null && data.complete == 1;
                     boolean isIncomplete = data.complete != null && data.complete == 0;
                     changeDupButtonColor(img, isComplete, isIncomplete);
@@ -908,10 +889,10 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 Pregnancy data = c.outcome2(selectedIndividual.uuid);
                 if (data != null && selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2) {
                     outcome2.setVisibility(View.VISIBLE);
-                    id8.setVisibility(View.VISIBLE);
+                    id9.setVisibility(View.VISIBLE);
                 } else {
                     outcome2.setVisibility(View.GONE);
-                    id8.setVisibility(View.GONE);
+                    id9.setVisibility(View.GONE);
                 }
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -923,10 +904,10 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 Pregnancy data = c.outcome3(selectedIndividual.uuid);
                 if (data != null && selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2) {
                     outcome3.setVisibility(View.VISIBLE);
-                    id22.setVisibility(View.VISIBLE);
+                    id10.setVisibility(View.VISIBLE);
                 } else {
                     outcome3.setVisibility(View.GONE);
-                    id22.setVisibility(View.GONE);
+                    id10.setVisibility(View.GONE);
                 }
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -953,10 +934,10 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 Pregnancy data = c.finds3(selectedIndividual.uuid);
                 if (data != null && selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2) {
                     preg3.setVisibility(View.VISIBLE);
-                    id21.setVisibility(View.VISIBLE);
+                    id7.setVisibility(View.VISIBLE);
                 } else {
                     preg3.setVisibility(View.GONE);
-                    id21.setVisibility(View.GONE);
+                    id7.setVisibility(View.GONE);
                 }
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -969,41 +950,41 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 outcome.setVisibility(View.VISIBLE);
                 //rel.setVisibility(View.VISIBLE);
                 id5.setVisibility(View.VISIBLE);
-                id7.setVisibility(View.VISIBLE);
+                id8.setVisibility(View.VISIBLE);
             }else{
                 preg.setVisibility(View.GONE);
                 outcome.setVisibility(View.GONE);
                 //rel.setVisibility(View.GONE);
                 id5.setVisibility(View.GONE);
-                id7.setVisibility(View.GONE);
+                id8.setVisibility(View.GONE);
             }
             if (selectedIndividual.getAge() >= mage && selectedIndividual.gender==2){
                 rel.setVisibility(View.VISIBLE);
-                id10.setVisibility(View.VISIBLE);
+                id12.setVisibility(View.VISIBLE);
             }else{
                 rel.setVisibility(View.GONE);
-                id10.setVisibility(View.GONE);
+                id12.setVisibility(View.GONE);
             }
 
             if (selectedIndividual.getAge() >= hoh){
                 ses.setVisibility(View.VISIBLE);
                 choh.setVisibility(View.VISIBLE);
-                id12.setVisibility(View.VISIBLE);
-                id11.setVisibility(View.VISIBLE);
+                id14.setVisibility(View.VISIBLE);
+                id13.setVisibility(View.VISIBLE);
             }else{
                 ses.setVisibility(View.GONE);
                 choh.setVisibility(View.GONE);
-                id12.setVisibility(View.GONE);
-                id11.setVisibility(View.GONE);
+                id14.setVisibility(View.GONE);
+                id13.setVisibility(View.GONE);
             }
 
 
             if (selectedIndividual.getAge() < 5){
                 vac.setVisibility(View.VISIBLE);
-                id13.setVisibility(View.VISIBLE);
+                id16.setVisibility(View.VISIBLE);
             }else{
                 vac.setVisibility(View.GONE);
-                id13.setVisibility(View.GONE);
+                id16.setVisibility(View.GONE);
             }
 
         } else {
@@ -1144,10 +1125,10 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                         if (individuals != null && !individuals.isEmpty()) {
                             adapter.setIndividualList(individuals);
 
-                            // ✅ Trigger button visibility logic
+                            //Trigger button visibility logic
                             Individual selected = individualSharedViewModel.getCurrentSelectedIndividual();
                             if (selected != null) {
-                                onIndividualClick(selected); // triggers UI updates like buttons
+                                onIndividualClick(selected);
                             }
                         } else {
                             adapter.setIndividualList(Collections.emptyList());
@@ -1156,207 +1137,6 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                     });
         }
     }
-
-
-    private void setupOdkFormsList(Individual selectedIndividual) {
-        Log.d("HouseMembersFragment", "Setting up ODK forms for: " +
-                (selectedIndividual != null ? selectedIndividual.getExtId() : "null"));
-
-        if (selectedIndividual == null) {
-            showToastSafe("No individual selected");
-            return;
-        }
-
-        if (!OdkUtilsPrefilledInstance.validateIndividualData(selectedIndividual)) {
-            showToastSafe("Individual data is incomplete");
-            return;
-        }
-
-        if (!OdkUtilsPrefilledInstance.isOdkCollectInstalled(requireContext())) {
-            showToastSafe("ODK Collect not installed");
-            showOdkCollectPrompt();
-            return;
-        }
-
-        loadAndValidateOdkForms(selectedIndividual);
-    }
-
-    private void loadAndValidateOdkForms(Individual selectedIndividual) {
-        new Thread(() -> {
-            try {
-                // Get forms from Room database using your ViewModel
-                List<OdkForm> appForms = odkViewModel.find();
-
-                if (appForms == null || appForms.isEmpty()) {
-                    requireActivity().runOnUiThread(() -> {
-                        showToastSafe("No forms found in local database");
-                        showOdkCollectPrompt();
-                    });
-                    return;
-                }
-
-                Log.d("HouseMembersFragment", "Found " + appForms.size() + " forms in database");
-
-                // Log form IDs for debugging
-                for (OdkForm form : appForms) {
-                    Log.d("HouseMembersFragment", "Form ID: " + form.getFormID() +
-                            ", Name: " + form.getFormName());
-                }
-
-                // Validate against ODK Collect - this checks if forms exist in ODK
-                List<OdkForm> validForms = OdkUtilsPrefilledInstance.validateFormsInOdkCollect(
-                        requireContext(),
-                        appForms
-                );
-
-                requireActivity().runOnUiThread(() -> {
-                    updateRecyclerView(validForms, selectedIndividual);
-                });
-
-            } catch (Exception e) {
-                Log.e("HouseMembersFragment", "Error loading forms", e);
-                requireActivity().runOnUiThread(() ->
-                        showToastSafe("Error loading forms: " + e.getMessage()));
-            }
-        }).start();
-    }
-
-    private void updateRecyclerView(List<OdkForm> validForms, Individual selectedIndividual) {
-        if (validForms == null || validForms.isEmpty()) {
-            Log.w("HouseMembersFragment", "No valid forms found in ODK Collect");
-            showToastSafe("No matching forms found in ODK Collect. Please download forms first.");
-            showOdkCollectPrompt();
-            return;
-        }
-
-        Log.d("HouseMembersFragment", "Setting up RecyclerView with " + validForms.size() + " valid forms");
-
-        // Set up RecyclerView with valid forms
-        recyclerViewOdk.setLayoutManager(new LinearLayoutManager(requireContext()));
-        OdkFormAdapter adapter = new OdkFormAdapter(validForms, selectedIndividual);
-        recyclerViewOdk.setAdapter(adapter);
-
-        showToastSafe("Found " + validForms.size() + " forms for " +
-                selectedIndividual.getFirstName());
-
-        // Check for any incomplete forms for this individual
-        checkForPendingForms(selectedIndividual);
-    }
-
-    // Alternative simpler approach if you don't need validation
-    private void setupOdkFormsListSimple(Individual selectedIndividual) {
-        try {
-            List<OdkForm> odkForms = odkViewModel.find();
-
-            if (odkForms != null && !odkForms.isEmpty()) {
-                Log.d("HouseMembersFragment", "Setting up " + odkForms.size() + " ODK forms");
-
-                recyclerViewOdk.setLayoutManager(new LinearLayoutManager(requireContext()));
-                OdkFormAdapter adapter = new OdkFormAdapter(odkForms, selectedIndividual);
-                recyclerViewOdk.setAdapter(adapter);
-
-                showToastSafe("Loaded " + odkForms.size() + " forms");
-            } else {
-                showToastSafe("No forms available");
-                showOdkCollectPrompt();
-            }
-
-        } catch (Exception e) {
-            Log.e("HouseMembersFragment", "Error retrieving ODK forms", e);
-            showToastSafe("Error retrieving ODK forms: " + e.getMessage());
-        }
-    }
-
-    private void checkForPendingForms(Individual selectedIndividual) {
-        new Thread(() -> {
-            try {
-                boolean hasPending = OdkUtilsPrefilledInstance.hasPendingForms(
-                        requireContext(), selectedIndividual);
-
-                if (hasPending) {
-                    String[] pendingForms = OdkUtilsPrefilledInstance.getPendingFormsForIndividual(
-                            requireContext(), selectedIndividual);
-
-                    requireActivity().runOnUiThread(() ->
-                            showPendingFormsDialog(selectedIndividual, pendingForms));
-                }
-            } catch (Exception e) {
-                Log.w("HouseMembersFragment", "Error checking pending forms", e);
-            }
-        }).start();
-    }
-
-    private void showPendingFormsDialog(Individual individual, String[] pendingForms) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Pending Forms Found");
-        builder.setMessage("Found " + pendingForms.length + " incomplete forms for " +
-                individual.getFirstName() + ". Would you like to continue these forms in ODK Collect?");
-        builder.setPositiveButton("Open ODK", (dialog, which) ->
-                OdkUtilsPrefilledInstance.returnToOdk(requireActivity(), individual));
-        builder.setNegativeButton("Later", null);
-        builder.show();
-    }
-
-    private void showOdkCollectPrompt() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("ODK Collect Required");
-        builder.setMessage("Please download and install forms in ODK Collect first, then try again.");
-        builder.setPositiveButton("Open ODK Collect", (dialog, which) -> {
-            try {
-                Intent intent = requireContext().getPackageManager()
-                        .getLaunchIntentForPackage(OdkUtilsPrefilledInstance.ODK_PACKAGE);
-                if (intent != null) {
-                    startActivity(intent);
-                } else {
-                    // ODK Collect not installed, direct to Play Store
-                    Intent playStoreIntent = new Intent(Intent.ACTION_VIEW);
-                    playStoreIntent.setData(Uri.parse("market://details?id=" +
-                            OdkUtilsPrefilledInstance.ODK_PACKAGE));
-                    startActivity(playStoreIntent);
-                }
-            } catch (Exception e) {
-                showToastSafe("Could not open ODK Collect");
-            }
-        });
-        builder.setNegativeButton("Cancel", null);
-        builder.show();
-    }
-
-    private void showToastSafe(String message) {
-        if (getActivity() != null && !getActivity().isFinishing()) {
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    // Method to manually open a specific form by ID (useful for testing)
-    private void openSpecificForm(String formId, Individual selectedIndividual) {
-        if (selectedIndividual == null) {
-            showToastSafe("No individual selected");
-            return;
-        }
-
-        if (!OdkUtilsPrefilledInstance.isOdkCollectInstalled(requireContext())) {
-            showToastSafe("ODK Collect not installed");
-            return;
-        }
-
-        try {
-            Intent intent = OdkUtilsPrefilledInstance.createOdkFormWithPrefilledInstance(
-                    requireContext(), formId, selectedIndividual);
-
-            if (intent != null) {
-                startActivityForResult(intent, 1001); // ODK_REQUEST_CODE
-                showToastSafe("Opening form: " + formId);
-            } else {
-                showToastSafe("Could not open form: " + formId);
-            }
-        } catch (Exception e) {
-            Log.e("HouseMembersFragment", "Error opening specific form", e);
-            showToastSafe("Error opening form: " + e.getMessage());
-        }
-    }
-
-
 
     // Override the onBackPressed() method in the hosting activity
     //@Override

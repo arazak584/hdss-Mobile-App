@@ -50,6 +50,7 @@ import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.ListingViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.databinding.FragmentListingBinding;
@@ -452,6 +453,7 @@ public class ListingFragment extends Fragment {
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
 
             LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
+            IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
 
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute(() -> {
@@ -461,7 +463,14 @@ public class ListingFragment extends Fragment {
                     Locations data = locationViewModel.findByUuid(binding.getListing().location_uuid);
                     if (data != null) {
                         LocationAmendment locationz = new LocationAmendment();
-                        locationz.uuid = binding.getListing().location_uuid;
+                        String oldCompno = data.compno;
+                        String newCompno = binding.getListing().compno;
+
+                        individualViewModel.updateCompnoForIndividuals(oldCompno, newCompno, count -> {
+                            Log.d("LocationFragment", "Updated " + count + " individuals with new compno");
+                        });
+
+                        locationz.uuid = data.uuid;
                         locationz.compno = binding.getListing().compno;
                         locationz.compextId = binding.getListing().compextId;
 

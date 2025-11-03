@@ -225,6 +225,10 @@ public class IndividualViewModel extends AndroidViewModel {
 //        individualRepository.visited(e, callback);
 //    }
 
+    public void updateCompnoForIndividuals(String oldCompno, String newCompno, Consumer<Integer> callback) {
+        individualRepository.updateCompnoForIndividuals(oldCompno, newCompno, callback);
+    }
+
     public void dthupdate(IndividualEnd e, Consumer<Integer> callback) {
         individualRepository.dthupdate(e, callback);
     }

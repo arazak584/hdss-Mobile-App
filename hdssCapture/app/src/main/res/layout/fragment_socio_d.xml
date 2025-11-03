@@ -423,7 +423,7 @@
                         android:textColor="@color/black"
                         android:text="@string/crop_use"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         goneUnless="@{sociodemo.id0006==1}"
                         android:id="@+id/id0006_1_option"
                         selection="@{sociodemo.id0006_1}"
@@ -484,7 +484,7 @@
                         android:textColor="@color/black"
                         android:text="@string/crop_use"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         goneUnless="@{sociodemo.id0007==1}"
                         android:id="@+id/id0007_1_option"
                         selection="@{sociodemo.id0007_1}"
@@ -545,7 +545,7 @@
                         android:textColor="@color/black"
                         android:text="@string/crop_use"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         goneUnless="@{sociodemo.id0008==1}"
                         android:id="@+id/id0008_1_option"
                         selection="@{sociodemo.id0008_1}"
@@ -606,7 +606,7 @@
                         android:textColor="@color/black"
                         android:text="@string/crop_use"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         goneUnless="@{sociodemo.id0009==1}"
                         android:id="@+id/id0009_1_option"
                         selection="@{sociodemo.id0009_1}"
@@ -667,7 +667,7 @@
                         android:textColor="@color/black"
                         android:text="@string/crop_use"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         goneUnless="@{sociodemo.id0010==1}"
                         android:id="@+id/id0010_1_option"
                         selection="@{sociodemo.id0010_1}"
@@ -728,7 +728,7 @@
                         android:textColor="@color/black"
                         android:text="@string/crop_use"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         goneUnless="@{sociodemo.id0011==1}"
                         android:id="@+id/id0011_1_option"
                         selection="@{sociodemo.id0011_1}"
@@ -789,7 +789,7 @@
                         android:textColor="@color/black"
                         android:text="@string/crop_use"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         goneUnless="@{sociodemo.id0012==1}"
                         android:id="@+id/id0012_1_option"
                         selection="@{sociodemo.id0012_1}"
@@ -850,7 +850,7 @@
                         android:textColor="@color/black"
                         android:text="@string/crop_use"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         goneUnless="@{sociodemo.id0013==1}"
                         android:id="@+id/id0013_1_option"
                         selection="@{sociodemo.id0013_1}"
@@ -911,7 +911,7 @@
                         android:textColor="@color/black"
                         android:text="@string/crop_use"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         goneUnless="@{sociodemo.id0014==1}"
                         android:id="@+id/id0014_1_option"
                         selection="@{sociodemo.id0014_1}"
@@ -972,7 +972,7 @@
                         android:textColor="@color/black"
                         android:text="@string/crop_use"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         goneUnless="@{sociodemo.id0015==1}"
                         android:id="@+id/id0015_1_option"
                         selection="@{sociodemo.id0015_1}"
@@ -1033,7 +1033,7 @@
                         android:textColor="@color/black"
                         android:text="@string/crop_use"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         goneUnless="@{sociodemo.id0016==1}"
                         android:id="@+id/id0016_1_option"
                         selection="@{sociodemo.id0016_1}"
@@ -1094,7 +1094,7 @@
                         android:textColor="@color/black"
                         android:text="@string/crop_use"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         goneUnless="@{sociodemo.id0017==1}"
                         android:id="@+id/id0017_1_option"
                         selection="@{sociodemo.id0017_1}"
@@ -1155,7 +1155,7 @@
                         android:textColor="@color/black"
                         android:text="@string/crop_use"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         goneUnless="@{sociodemo.id0018==1}"
                         android:id="@+id/id0018_1_option"
                         selection="@{sociodemo.id0018_1}"
@@ -1216,7 +1216,7 @@
                         android:textColor="@color/black"
                         android:text="@string/crop_use"/>
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         goneUnless="@{sociodemo.id0019==1}"
                         android:id="@+id/id0019_1_option"
                         selection="@{sociodemo.id0019_1}"
@@ -2167,7 +2167,7 @@
                     android:textColor="@color/black"
                     android:text="@string/pet_vac"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     goneUnless="@{sociodemo.dogs==1 || sociodemo.cats==1}"
                     android:id="@+id/pet_vac"
                     selection="@{sociodemo.pet_vac}"

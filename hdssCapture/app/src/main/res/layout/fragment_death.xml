@@ -387,7 +387,7 @@
                         android:text="@string/causeofdeath"
                         android:textColor="@color/black" />
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         android:id="@+id/dth_deathCause"
                         selection="@{death.deathCause}"
                         android:layout_width="match_parent"
@@ -423,7 +423,7 @@
                         android:text="@string/deathplace"
                         android:textColor="@color/black" />
 
-                    <org.openhds.hdsscapture.SearchableSpinner
+                    <org.openhds.searchSpinner.SearchableSpinner
                         android:id="@+id/dth_deathPlace"
                         selection="@{death.deathPlace}"
                         android:layout_width="match_parent"

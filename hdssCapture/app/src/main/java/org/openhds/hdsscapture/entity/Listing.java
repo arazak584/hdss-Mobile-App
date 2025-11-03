@@ -29,15 +29,15 @@ import java.util.Date;
         indices = {@Index(value = {"compextId","compno","location_uuid","fw_uuid","complete"}, unique = false)})
 public class Listing extends BaseObservable {
 
-    @SerializedName("compextId")
+    @SerializedName("location_uuid")
     @PrimaryKey
     @NotNull
     @Expose
-    @ColumnInfo(name = "compextId")
-    public String compextId;
+    @ColumnInfo(name = "location_uuid")
+    public String location_uuid;
 
     @Expose
-    public String location_uuid;
+    public String compextId;
 
     @SerializedName("compno")
     @Expose

@@ -61,7 +61,7 @@
             android:textColor="@color/black"
             android:text="@string/MARITAL_SCORRES_SOCIO" />
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/MARITAL_SCORRES"
             selection="@{sociodemo.marital_scorres}"
             android:layout_width="match_parent"
@@ -98,7 +98,7 @@
             android:textColor="@color/black"
             android:text="@string/RELIGION_SCORRES_SOCIO" />
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/RELIGION_SCORRES"
             selection="@{sociodemo.religion_scorres}"
             android:layout_width="match_parent"
@@ -136,7 +136,7 @@
             android:textColor="@color/black"
             android:text="@string/CETHNIC_SOCIO" />
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/CETHNIC"
             selection="@{sociodemo.cethnic}"
             android:layout_width="match_parent"
@@ -178,7 +178,7 @@
             android:textColor="@color/black"
             android:text="@string/HEAD_HH_FCORRES_SOCIO" />
 
-        <org.openhds.hdsscapture.SearchableSpinner
+        <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/HEAD_HH_FCORRES"
             selection="@{sociodemo.head_hh_fcorres}"
             android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package org.openhds.hdsscapture
+package org.openhds.searchSpinner
 
 import org.junit.Test
 

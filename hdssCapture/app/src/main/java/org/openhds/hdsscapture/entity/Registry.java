@@ -8,13 +8,11 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
 
 import com.google.gson.annotations.Expose;
 
 import org.jetbrains.annotations.NotNull;
 import org.openhds.hdsscapture.BR;
-import org.openhds.hdsscapture.Utilities.DateConverter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

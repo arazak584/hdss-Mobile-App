@@ -220,7 +220,7 @@
                     android:textColor="@color/black"
                     android:text="@string/other_name"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/other"
                     selection="@{individual.other}"
                     android:layout_width="match_parent"
@@ -255,7 +255,7 @@
                     android:textColor="@color/black"
                     android:text="@string/gh"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/gh"
                     selection="@{individual.gh}"
                     android:layout_width="match_parent"
@@ -325,7 +325,7 @@
                     android:textColor="@color/black"
                     android:text="@string/dob"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/dobAspect"
                     selection="@{individual.dobAspect}"
                     android:layout_width="match_parent"
@@ -363,7 +363,7 @@
                     android:textColor="@color/black"
                     android:text="@string/gender"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/gender"
                     selection="@{individual.gender}"
                     android:layout_width="match_parent"
@@ -385,7 +385,7 @@
                     android:textColor="@color/black"
                     android:text="@string/mother"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/mother"
                     selection="@{individual.mother}"
@@ -451,7 +451,7 @@
                     android:textColor="@color/black"
                     android:text="@string/father"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:visibility="gone"
                     android:id="@+id/father"
                     selection="@{individual.father}"

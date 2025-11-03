@@ -1,10 +1,5 @@
 package org.openhds.hdsscapture.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -16,53 +11,47 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import org.openhds.hdsscapture.Adapter.RejectAdapter;
-import org.openhds.hdsscapture.Adapter.ViewsAdapter;
 import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.Dao.ApiDao;
 import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Repositories.HdssSociodemoRepository;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
-import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
-import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
 import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
-import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
 import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Inmigration;
-import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
-import org.openhds.hdsscapture.entity.Round;
-import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
-import org.openhds.hdsscapture.entity.subqueries.Newloc;
 import org.openhds.hdsscapture.entity.subqueries.RejectEvent;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;

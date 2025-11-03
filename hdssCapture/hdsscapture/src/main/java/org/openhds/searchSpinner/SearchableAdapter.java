@@ -1,4 +1,4 @@
-package org.openhds.hdsscapture;
+package org.openhds.searchSpinner;
 
 import android.content.Context;
 import android.widget.ArrayAdapter;

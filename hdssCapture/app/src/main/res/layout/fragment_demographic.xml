@@ -201,7 +201,7 @@
                     android:textColor="@color/black"
                     android:text="@string/own_phone"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     goneUnless="@{individual.age>11}"
                     android:id="@+id/demo_phone"
                     selection="@{demographic.phone}"
@@ -240,7 +240,7 @@
                     android:textColor="@color/black"
                     android:text="@string/tribe"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     android:id="@+id/tribe"
                     selection="@{demographic.tribe}"
                     android:layout_width="match_parent"
@@ -415,7 +415,7 @@
                     android:textColor="@color/black"
                     android:text="@string/occupations"/>
 
-                <org.openhds.hdsscapture.SearchableSpinner
+                <org.openhds.searchSpinner.SearchableSpinner
                     goneUnless="@{individual.age>11}"
                     android:id="@+id/occupation"
                     selection="@{demographic.occupation}"
