@@ -986,14 +986,22 @@ public class IndividualFragment extends Fragment {
 
 
             boolean gh = false;
-
             if (!binding.ghanacard.getText().toString().trim().isEmpty()) {
-                String input = binding.ghanacard.getText().toString().trim();
-                String regex = "[A-Z]{3}-\\d{9}-\\d";
+                String input = binding.ghanacard.getText().toString(); // NO trim() here
+
+                // Check for spaces anywhere in the input (including start/end)
+                if (input.contains(" ")) {
+                    gh = true;
+                    Toast.makeText(getActivity(), "Spaces are not allowed in Ghana Card Number", Toast.LENGTH_LONG).show();
+                    binding.ghanacard.setError("Spaces are not allowed");
+                    return;
+                }
+                // Check format
+                String regex = "^[A-Z]{3}-\\d{9}-\\d$";
 
                 if (!input.matches(regex)) {
                     gh = true;
-                    Toast.makeText(getActivity(), "Ghana Card Number or format is incorrect", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Ghana Card Number format is incorrect", Toast.LENGTH_LONG).show();
                     binding.ghanacard.setError("Format Should Be GHA-XXXXXXXXX-X");
                     return;
                 }

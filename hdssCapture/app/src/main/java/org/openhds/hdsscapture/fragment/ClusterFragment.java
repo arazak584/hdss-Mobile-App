@@ -181,17 +181,6 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
             }
         });
 
-        // Check if there's already a selected location (for fragment recreation)
-//        if (clusterSharedViewModel.hasSelectedLocation()) {
-//            Locations currentLocation = clusterSharedViewModel.getCurrentSelectedLocation();
-//            if (currentLocation != null) {
-//                householdAdapter.setSelectedLocation(currentLocation);
-//                updateButtonVisibility(true);
-//            }
-//        }
-
-
-
         // Locate the EditText in listview_main.xml
         final SearchView editSearch = view.findViewById(R.id.comp_search);
         // below line is to call set on query text listener method.
@@ -244,11 +233,6 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
 
     @Override
     public void onLocationClick(Locations selectedLocation) {
-        //ClusterFragment.selectedLocation = selectedLocation; // Always update the selectedLocation variable
-        //Log.d("ClusterFragment", "onLocationClick called for location: " + selectedLocation.getCompno());
-        //Toast.makeText(requireContext(), "Location clicked: " + selectedLocation.getCompno(), Toast.LENGTH_SHORT).show();
-        // Show ProgressBar when location is clicked
-//        showProgressBar();
         clusterSharedViewModel.setSelectedLocation(selectedLocation);
 
         // Update the householdAdapter with the selected location
@@ -269,7 +253,6 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
 
         }
 
-        //hideProgressBar();
     }
 
     public void showProgressBar() {

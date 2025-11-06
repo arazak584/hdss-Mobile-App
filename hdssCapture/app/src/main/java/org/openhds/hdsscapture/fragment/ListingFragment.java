@@ -365,7 +365,7 @@ public class ListingFragment extends Fragment {
 
         if (save) {
             final Listing finalData = binding.getListing();
-
+            LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
 
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
@@ -393,7 +393,7 @@ public class ListingFragment extends Fragment {
             Log.d("ComActivity", "Compno Format: "+ cmp);
             int cmplength = (cmp != null) ? cmp.trim().length() : 0;
 
-           // String villExtId = level6Data.getExtId();
+            // String villExtId = level6Data.getExtId();
 
             if (cmplength != comp.length()){
                 binding.locationcompno.setError("Must be " + cmplength + " characters in length");
@@ -428,6 +428,7 @@ public class ListingFragment extends Fragment {
 
             boolean loc = false;
             String compno = binding.locationcompno.getText().toString().trim();
+            String loc_uuid = binding.uuid.getText().toString().trim();
             String extid = binding.locationextid.getText().toString().trim();
 
             if (!compno.isEmpty() && !extid.isEmpty()) {
@@ -449,93 +450,119 @@ public class ListingFragment extends Fragment {
                 }
             }
 
-            finalData.complete=1;
-            //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
-
-            LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
-            IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-
+            //Location exist
             ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute(() -> {
-
                 try {
-                    // Update Location
+                    // --------------------
+                    // FIRST: Check for duplicates BEFORE any operations
+                    // --------------------
+                    Log.d("LocationFragment", "Starting duplicate check - compno: " + compno + ", uuid: " + loc_uuid);
+                    Locations exists = locationViewModel.exist(compno, loc_uuid);
+                    if (exists != null) {
+                        // Duplicate found - stop everything
+                        Log.d("LocationFragment", "DUPLICATE FOUND - compno: " + exists.compno + " with uuid: " + exists.uuid);
+
+                        new Handler(Looper.getMainLooper()).post(() -> {
+                            if (isAdded()) {
+                                Toast.makeText(requireContext(), "Compno already exists!", Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        return; // Exit executor - DO NOT proceed with save or close
+                    }
+
+                    Log.d("LocationFragment", "No duplicate found, proceeding with save");
+
+                    // --------------------
+                    // Proceed with saving logic
+                    // --------------------
+                    finalData.complete = 1;
+
                     Locations data = locationViewModel.findByUuid(binding.getListing().location_uuid);
                     if (data != null) {
+                        Log.d("LocationFragment", "Found existing location by UUID, updating...");
+
                         LocationAmendment locationz = new LocationAmendment();
                         String oldCompno = data.compno;
                         String newCompno = binding.getListing().compno;
 
-                        individualViewModel.updateCompnoForIndividuals(oldCompno, newCompno, count -> {
-                            Log.d("LocationFragment", "Updated " + count + " individuals with new compno");
-                        });
+                        IndividualViewModel individualViewModel = new ViewModelProvider(requireActivity())
+                                .get(IndividualViewModel.class);
+
+                        individualViewModel.updateCompnoForIndividuals(oldCompno, newCompno, count ->
+                                Log.d("LocationFragment", "Updated " + count + " individuals with new compno")
+                        );
 
                         locationz.uuid = data.uuid;
                         locationz.compno = binding.getListing().compno;
                         locationz.compextId = binding.getListing().compextId;
-
-                        if (!binding.repllocationName.getText().toString().trim().isEmpty()) {
-                            locationz.locationName = binding.getListing().repl_locationName;
-                        } else {
-                            locationz.locationName = finalData.locationName;
-                        }
+                        locationz.locationName = !binding.repllocationName.getText().toString().trim().isEmpty()
+                                ? binding.getListing().repl_locationName
+                                : finalData.locationName;
                         locationz.status = binding.getListing().status;
                         locationz.locationLevel_uuid = finalData.cluster_id;
                         locationz.extId = finalData.vill_extId;
 
-                        Log.d("Listing", "Compound Status: "+ finalData.location_uuid);
-
-                        if (finalData.status!=null && finalData.status == 3){
+                        if (finalData.status != null && finalData.status == 3) {
                             locationz.longitude = data.longitude;
                             locationz.latitude = data.latitude;
                             locationz.accuracy = data.accuracy;
                             locationz.altitude = data.altitude;
-
-                        }else{
+                        } else {
                             locationz.longitude = binding.getListing().longitude;
                             locationz.latitude = binding.getListing().latitude;
                             locationz.accuracy = binding.getListing().accuracy;
                             locationz.altitude = binding.getListing().altitude;
                         }
+
                         locationz.complete = 1;
 
                         locationViewModel.update(locationz, result ->
                                 new Handler(Looper.getMainLooper()).post(() -> {
                                     if (result > 0) {
-                                        Log.d("LocationFragment", "List Update successful!");
+                                        Log.d("LocationFragment", "Location update successful!");
                                     } else {
-                                        Log.d("LocationFragment", "List Update Failed!");
+                                        Log.d("LocationFragment", "Location update failed!");
                                     }
                                 })
                         );
                     }
+
+                    // Add the new record
+                    viewModel.add(finalData);
+                    Log.d("LocationFragment", "New location record added");
+
+                    // Notify success on UI thread and THEN close if needed
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        if (isAdded()) {
+                            Toast.makeText(requireContext(), "Saved successfully!", Toast.LENGTH_SHORT).show();
+
+                            // Only close after successful save
+                            if (close) {
+                                requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                                        ClusterFragment.newInstance(level6Data, locations, socialgroup)).commit();
+                            }
+                        }
+                    });
+
                 } catch (Exception e) {
-                    //Log.e("LocationFragment", "Error in update", e);
-                    Log.e("LocationFragment", "Error in update: " + e.getMessage(), e);
-                    e.printStackTrace();
+                    Log.e("LocationFragment", "Error in save operation: " + e.getMessage(), e);
+
+                    // Show error on UI thread
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        if (isAdded()) {
+                            Toast.makeText(requireContext(), "Error saving data: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } finally {
+                    executor.shutdown();
                 }
-
-
             });
 
-            executor.shutdown();
-
-            // delete existing record with the same compno
-            Log.d("Listing", "Deleting by compno: " + finalData.compno);
-            viewModel.deleteByCompno(finalData.compno, () -> {
-                Log.d("Listing", "Deleted or not found. Adding new entry.");
-                viewModel.add(finalData);
-            });
-
-
-            // viewModel.add(finalData);
-
-        }
-        if (close) {
-
-
+        } else if (close) {
+            // If not saving but just closing, close immediately
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    ClusterFragment.newInstance(level6Data,locations, socialgroup)).commit();
+                    ClusterFragment.newInstance(level6Data, locations, socialgroup)).commit();
         }
     }
 

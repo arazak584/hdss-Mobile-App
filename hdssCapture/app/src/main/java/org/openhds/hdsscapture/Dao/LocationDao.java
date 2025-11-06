@@ -48,6 +48,9 @@ public interface LocationDao {
     @Query("SELECT * FROM Locations WHERE compno=:id")
     Locations retrieve(String id);
 
+    @Query("SELECT * FROM Locations WHERE compno=:id and uuid != :ids")
+    Locations exist(String id,String ids);
+
     @Query("SELECT * FROM Locations WHERE uuid=:id")
     Locations findByUuid(String id);
 

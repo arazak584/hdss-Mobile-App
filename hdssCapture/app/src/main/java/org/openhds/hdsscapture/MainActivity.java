@@ -290,69 +290,10 @@ public class MainActivity extends AppCompatActivity {
                                                                 configViewModel.add(cng);
 
 
-                                                                //Sync Listing
-                                                                progress.setMessage("Updating Listing...");
-                                                                final ListingViewModel listingViewModel = new ViewModelProvider(MainActivity.this).get(ListingViewModel.class);
-                                                                Call<DataWrapper<Listing>> c_callable = dao.getListing(authorizationHeader);
-                                                                c_callable.enqueue(new Callback<DataWrapper<Listing>>() {
-                                                                    @Override
-                                                                    public void onResponse(Call<DataWrapper<Listing>> call, Response<DataWrapper<Listing>> response) {
-                                                                        try {
-                                                                            if (response.body() != null && response.body().getData() != null) {
-                                                                            Listing[] list = response.body().getData().toArray(new Listing[0]);
-                                                                                for (Listing newList : list) {
-                                                                                    // Fetch the existing pregnancy record by UUID
-                                                                                    Listing existingListing = listingViewModel.find(newList.compno);
-                                                                                    if (existingListing != null) {
-                                                                                        // Preserve location and id fields from the existing record
-                                                                                        newList.longitude = existingListing.longitude;
-                                                                                        newList.latitude = existingListing.latitude;
-                                                                                        newList.accuracy = existingListing.accuracy;
-                                                                                        newList.altitude = existingListing.altitude;
-                                                                                        newList.vill_extId = existingListing.vill_extId;
-                                                                                        newList.cluster_id = existingListing.cluster_id;
-                                                                                        newList.locationName = existingListing.locationName;
-                                                                                        newList.correct_yn = existingListing.correct_yn;
-                                                                                        newList.repl_locationName = existingListing.repl_locationName;
-                                                                                        newList.edit_compno = 1;
-                                                                                        newList.complete = 0;
-
-                                                                                        Log.d("Insertion", "Listing insert: " + existingListing.compno);
-                                                                                    }
-                                                                                }
-                                                                            listingViewModel.add(list);
-
-
-                                                                            } else {
-                                                                                Log.e("Error", "Response body or data is null");
-                                                                            }
-
-                                                                        } catch (ExecutionException e) {
-                                                                            Log.e("Error", "ExecutionException occurred while fetching existing pregnancy: " + e.getMessage());
-                                                                            e.printStackTrace();
-                                                                        } catch (InterruptedException e) {
-                                                                            Log.e("Error", "InterruptedException occurred while fetching existing pregnancy: " + e.getMessage());
-                                                                            e.printStackTrace();
-                                                                            Thread.currentThread().interrupt(); // Restore interrupted status
-                                                                        } catch (Exception e) {
-                                                                            Log.e("Error", "An unexpected error occurred: " + e.getMessage());
-                                                                            e.printStackTrace();
-                                                                        }
-
-
                                                                 progress.dismiss();
                                                                 syncSettings.setText("Sync Successful");
                                                                 syncSettings.setTextColor(Color.parseColor("#32CD32"));
 
-                                                            }
-
-                                                                    @Override
-                                                                    public void onFailure(Call<DataWrapper<Listing>> call, Throwable t) {
-                                                                        progress.dismiss();
-                                                                        syncSettings.setText("Listing Sync Error!");
-                                                                        syncSettings.setTextColor(Color.RED);
-                                                                    }
-                                                                });
                                                             }
 
                                                                 @Override
