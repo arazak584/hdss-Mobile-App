@@ -41,9 +41,12 @@ public class QueryActivity extends AppCompatActivity {
     private ProgressDialog progress;
     private RecyclerView recyclerView;
     private QueryAdapter errorAdapter;
-    private List<Queries> filterAll;
     private SearchView searchView;
     private String username;
+    private Handler handler;
+
+    // Reusable date formatter to avoid creating multiple instances
+    private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,17 +54,31 @@ public class QueryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_query);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        handler = new Handler();
+
         recyclerView = findViewById(R.id.my_recycler_view_query);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        filterAll = new ArrayList<>();
 
-        // Initialize the adapter with the QueryActivity instance
+        // Initialize adapter with empty list
         errorAdapter = new QueryAdapter(this);
-
-        // Set the list of queries to the adapter
-        errorAdapter.setQueries(filterAll);
+        errorAdapter.setQueries(new ArrayList<>());
         recyclerView.setAdapter(errorAdapter);
 
+        setupSearchView();
+
+        SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        username = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
+
+        initializeViewModels();
+
+        Button generateQueryButton = findViewById(R.id.btn_query);
+        generateQueryButton.setOnClickListener(v -> generateQueries());
+
+        // Automatically load queries on startup
+        handler.postDelayed(this::generateQueries, 300);
+    }
+
+    private void setupSearchView() {
         searchView = findViewById(R.id.search);
         searchView.setQueryHint(getString(R.string.search));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -77,26 +94,19 @@ public class QueryActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
 
-        SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
-        username = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
-
-        // Initialize ViewModels
-        socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-        deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
-        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-        demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
-        outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
-        residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-        listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
-        hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
-        pregnancyoutcomeViewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
-
-        Button generateQueryButton = findViewById(R.id.btn_query);
-        generateQueryButton.setOnClickListener(v -> generateQueries());
-
-        // Automatically load queries on startup
-        new Handler().postDelayed(this::generateQueries, 300);
+    private void initializeViewModels() {
+        ViewModelProvider provider = new ViewModelProvider(this);
+        socialgroupViewModel = provider.get(SocialgroupViewModel.class);
+        deathViewModel = provider.get(DeathViewModel.class);
+        individualViewModel = provider.get(IndividualViewModel.class);
+        demographicViewModel = provider.get(DemographicViewModel.class);
+        outcomeViewModel = provider.get(OutcomeViewModel.class);
+        residencyViewModel = provider.get(ResidencyViewModel.class);
+        listingViewModel = provider.get(ListingViewModel.class);
+        hdssSociodemoViewModel = provider.get(HdssSociodemoViewModel.class);
+        pregnancyoutcomeViewModel = provider.get(PregnancyoutcomeViewModel.class);
     }
 
     private void generateQueries() {
@@ -106,10 +116,13 @@ public class QueryActivity extends AppCompatActivity {
             try {
                 List<Queries> list = fetchQueries();
                 runOnUiThread(() -> {
-                    filterAll.clear();
-                    filterAll.addAll(list);
-                    errorAdapter.setQueries(filterAll);
-                    hideLoadingDialog();
+                    try {
+                        errorAdapter.setQueries(list);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        hideLoadingDialog();
+                    }
                 });
             } catch (Exception e) {
                 runOnUiThread(() -> {
@@ -121,103 +134,186 @@ public class QueryActivity extends AppCompatActivity {
         }).start();
     }
 
-    private List<Queries> fetchQueries() throws Exception {
-        List<Queries> list = new ArrayList<>();
-        SimpleDateFormat f = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
+    private List<Queries> fetchQueries() {
+        // Use initial capacity estimate to reduce reallocations
+        List<Queries> list = new ArrayList<>(100);
 
-        int c = 1;
-        for (Pregnancyoutcome e : pregnancyoutcomeViewModel.error(username)) {
-            Queries q = new Queries();
-            q.name = c + ". PerM ID: " + e.pregnancy_uuid;
-            q.extid = "Compno: " + e.location + " - Name: " + e.mother_uuid + " " + e.father_uuid;
-            q.error = "Incomplete Pregnancy Outcome Form";
-            q.index = c++;
-            list.add(q);
-        }
-
-        int o = 1;
-        for (Individual e : individualViewModel.nulls()) {
-            Queries q = new Queries();
-            q.name = o + ". Household ID: " + e.hohID;
-            q.extid = "Compno: " + e.compno + " - " + e.firstName + " " + e.lastName;
-            q.date = "PerID: " + e.extId;
-            q.error = "NULL IDs";
-            q.index = o++;
-            list.add(q);
-        }
-
-        int n = 1;
-        for (HdssSociodemo e : hdssSociodemoViewModel.error()) {
-            Queries q = new Queries();
-            q.name = "Socio-Economic";
-            q.extid = "Compno: " + e.id0021 + " - Household Head: " + e.visit_uuid;
-            q.date = "Household ID: " + e.form_comments_txt;
-            q.error = "Incomplete SES Form";
-            q.index = n++;
-            list.add(q);
-        }
-
-        int l = 1;
-        for (Listing e : listingViewModel.error()) {
-            Queries q = new Queries();
-            q.name = l + ". Compno: " + e.compno;
-            q.extid = "Cluster: " + e.compextId + " - Compound Name: " + e.locationName;
-            q.error = "Listing Not Picked";
-            q.index = l++;
-            list.add(q);
-        }
-
-        int d = 1;
-        for (Death e : deathViewModel.error()) {
-            Queries q = new Queries();
-            q.name = d + ". Compno: " + e.compno;
-            q.extid = "Household ID: " + e.lastName + " - Household Head: " + e.firstName;
-            q.error = "Change Head of Household [HOH is Dead]";
-            q.index = d++;
-            list.add(q);
-        }
-
-        int g = 1;
-        for (Individual e : individualViewModel.error()) {
-            Queries q = new Queries();
-            q.name = g + ". Household ID: " + e.getHohID();
-            q.extid = e.compno + " - " + e.firstName + " " + e.lastName;
-            q.error = "Household Head is a Minor";
-            q.index = g++;
-            list.add(q);
-        }
-
-        int h = 1;
-        for (Individual e : individualViewModel.err()) {
-            Queries q = new Queries();
-            q.name = h + ". Household ID: " + e.getHohID();
-            q.extid = "Compno: " + e.compno;
-            q.error = "Head of Household is Unknown";
-            q.index = h++;
-            list.add(q);
-        }
-
-        int i = 1;
-        for (Outcome e : outcomeViewModel.error(username)) {
-            Queries q = new Queries();
-            q.name = i + ". Compno: " + e.childuuid;
-            q.extid = "PermID: " + e.extId + " - " + e.firstName + " " + e.lastName;
-            q.error = "Outcome Error (Pregnancy Outcome incomplete)";
-            q.index = i++;
-            list.add(q);
-        }
-
-        int k = 1;
-        for (Individual e : individualViewModel.errors()) {
-            Queries q = new Queries();
-            q.name = k + ". Household ID: " + e.getHohID();
-            q.extid = "Compno: " + e.compno + " - " + e.firstName + " " + e.lastName;
-            q.error = "Head of Household Not Updated";
-            q.index = k++;
-            list.add(q);
-        }
+        // Process each query type and immediately add to list
+        addPregnancyOutcomeQueries(list);
+        addNullIdQueries(list);
+        addSocioEconomicQueries(list);
+        addListingQueries(list);
+        addDeathQueries(list);
+        addMinorHohQueries(list);
+        addUnknownHohQueries(list);
+        addOutcomeErrorQueries(list);
+        addNotUpdatedHohQueries(list);
 
         return list;
+    }
+
+    private void addPregnancyOutcomeQueries(List<Queries> list) {
+        try {
+            List<Pregnancyoutcome> errors = pregnancyoutcomeViewModel.error(username);
+            int index = list.size() + 1;
+
+            for (Pregnancyoutcome e : errors) {
+                Queries q = new Queries();
+                q.name = index + ". PerM ID: " + e.pregnancy_uuid;
+                q.extid = "Compno: " + e.location + " - Name: " + e.mother_uuid + " " + e.father_uuid;
+                q.error = "Incomplete Pregnancy Outcome Form";
+                q.index = index++;
+                list.add(q);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addNullIdQueries(List<Queries> list) {
+        try {
+            List<Individual> nulls = individualViewModel.nulls();
+            int index = list.size() + 1;
+
+            for (Individual e : nulls) {
+                Queries q = new Queries();
+                q.name = index + ". Household ID: " + e.hohID;
+                q.extid = "Compno: " + e.compno + " - " + e.firstName + " " + e.lastName;
+                q.date = "PerID: " + e.extId;
+                q.error = "NULL IDs";
+                q.index = index++;
+                list.add(q);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addSocioEconomicQueries(List<Queries> list) {
+        try {
+            List<HdssSociodemo> errors = hdssSociodemoViewModel.error();
+            int index = list.size() + 1;
+
+            for (HdssSociodemo e : errors) {
+                Queries q = new Queries();
+                q.name = "Socio-Economic";
+                q.extid = "Compno: " + e.id0021 + " - Household Head: " + e.visit_uuid;
+                q.date = "Household ID: " + e.form_comments_txt;
+                q.error = "Incomplete SES Form";
+                q.index = index++;
+                list.add(q);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addListingQueries(List<Queries> list) {
+        try {
+            List<Listing> errors = listingViewModel.error();
+            int index = list.size() + 1;
+
+            for (Listing e : errors) {
+                Queries q = new Queries();
+                q.name = index + ". Compno: " + e.compno;
+                q.extid = "Cluster: " + e.compextId + " - Compound Name: " + e.locationName;
+                q.error = "Listing Not Picked";
+                q.index = index++;
+                list.add(q);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addDeathQueries(List<Queries> list) {
+        try {
+            List<Death> errors = deathViewModel.error();
+            int index = list.size() + 1;
+
+            for (Death e : errors) {
+                Queries q = new Queries();
+                q.name = index + ". Compno: " + e.compno;
+                q.extid = "Household ID: " + e.lastName + " - Household Head: " + e.firstName;
+                q.error = "Change Head of Household [HOH is Dead]";
+                q.index = index++;
+                list.add(q);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addMinorHohQueries(List<Queries> list) {
+        try {
+            List<Individual> errors = individualViewModel.error();
+            int index = list.size() + 1;
+
+            for (Individual e : errors) {
+                Queries q = new Queries();
+                q.name = index + ". Household ID: " + e.getHohID();
+                q.extid = e.compno + " - " + e.firstName + " " + e.lastName;
+                q.error = "Household Head is a Minor";
+                q.index = index++;
+                list.add(q);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addUnknownHohQueries(List<Queries> list) {
+        try {
+            List<Individual> errors = individualViewModel.err();
+            int index = list.size() + 1;
+
+            for (Individual e : errors) {
+                Queries q = new Queries();
+                q.name = index + ". Household ID: " + e.getHohID();
+                q.extid = "Compno: " + e.compno;
+                q.error = "Head of Household is Unknown";
+                q.index = index++;
+                list.add(q);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addOutcomeErrorQueries(List<Queries> list) {
+        try {
+            List<Outcome> errors = outcomeViewModel.error(username);
+            int index = list.size() + 1;
+
+            for (Outcome e : errors) {
+                Queries q = new Queries();
+                q.name = index + ". Compno: " + e.childuuid;
+                q.extid = "PermID: " + e.extId + " - " + e.firstName + " " + e.lastName;
+                q.error = "Outcome Error (Pregnancy Outcome incomplete)";
+                q.index = index++;
+                list.add(q);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addNotUpdatedHohQueries(List<Queries> list) {
+        try {
+            List<Individual> errors = individualViewModel.errors();
+            int index = list.size() + 1;
+
+            for (Individual e : errors) {
+                Queries q = new Queries();
+                q.name = index + ". Household ID: " + e.getHohID();
+                q.extid = "Compno: " + e.compno + " - " + e.firstName + " " + e.lastName;
+                q.error = "Head of Household Not Updated";
+                q.index = index++;
+                list.add(q);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void showLoadingDialog() {
@@ -234,6 +330,19 @@ public class QueryActivity extends AppCompatActivity {
     private void hideLoadingDialog() {
         if (progress != null && progress.isShowing()) {
             progress.dismiss();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Clean up resources
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
+        }
+        if (progress != null) {
+            progress.dismiss();
+            progress = null;
         }
     }
 }
