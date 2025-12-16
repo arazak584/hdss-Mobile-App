@@ -121,4 +121,7 @@ PregnancyoutcomeDao {
 
     @Query("SELECT * FROM pregnancyoutcome where uuid=:id")
     LiveData<Pregnancyoutcome> getView(String id);
+
+    @Query("SELECT COUNT(*) FROM pregnancyoutcome WHERE complete= 1")
+    LiveData<Long> sync();
 }

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.AmendmentRepository;
 import org.openhds.hdsscapture.Repositories.RegistryRepository;
@@ -45,6 +46,10 @@ public class RegistryViewModel extends AndroidViewModel {
 
     public void add(Registry... data){
         registryRepository.create(data);
+    }
+
+    public LiveData<Long> sync() {
+        return registryRepository.sync();
     }
 
 }

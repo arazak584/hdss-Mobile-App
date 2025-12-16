@@ -76,4 +76,8 @@ public class HdssSociodemoViewModel extends AndroidViewModel {
         hdssSociodemoRepository.create(s);
     }
 
+    public LiveData<Long> sync() {
+        return hdssSociodemoRepository.sync();
+    }
+
 }

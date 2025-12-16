@@ -122,4 +122,7 @@ public interface PregnancyDao {
 
     @Query("SELECT * FROM pregnancy where uuid=:id")
     LiveData<Pregnancy> getView(String id);
+
+    @Query("SELECT COUNT(*) FROM pregnancy WHERE complete= 1")
+    LiveData<Long> sync();
 }

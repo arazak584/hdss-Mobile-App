@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import androidx.core.util.Consumer;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.LocationDao;
@@ -190,6 +191,10 @@ public class LocationRepository {
         Future<List<Locations>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
+    }
+
+    public LiveData<Long> sync() {
+        return dao.sync();
     }
 
 }

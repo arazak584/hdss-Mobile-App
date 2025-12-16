@@ -60,4 +60,7 @@ public interface VaccinationDao {
 
     @Query("SELECT * FROM vaccination where uuid=:id")
     LiveData<Vaccination> getView(String id);
+
+    @Query("SELECT COUNT(*) FROM vaccination WHERE complete= 1")
+    LiveData<Long> sync();
 }

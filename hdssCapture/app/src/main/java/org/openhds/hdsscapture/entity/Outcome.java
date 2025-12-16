@@ -27,7 +27,16 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "outcome",
-indices = {@Index(value = {"uuid", "childuuid","complete"}, unique = false)})
+        indices = {
+                @Index(value = {"uuid"}, unique = true),
+                @Index(value = {"childuuid"}),
+                @Index(value = {"mother_uuid"}),
+                @Index(value = {"father_uuid"}),
+                @Index(value = {"residency_uuid"}),
+                @Index(value = {"individual_uuid"}),
+                @Index(value = {"location"}),
+                @Index(value = {"complete"})
+        })
 public class Outcome extends BaseObservable {
 
     @SerializedName("uuid")

@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -36,5 +37,8 @@ public interface VpmDao {
 
     @Query("SELECT * FROM vpm where extId=:id")
     Vpm finds(String id);
+
+    @Query("SELECT COUNT(*) FROM vpm WHERE complete= 1")
+    LiveData<Long> sync();
 
 }

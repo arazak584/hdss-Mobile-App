@@ -67,4 +67,8 @@ public class AmendmentRepository {
         return dao.getView(id);
     }
 
+    public LiveData<Long> sync() {
+        return dao.sync();
+    }
+
 }

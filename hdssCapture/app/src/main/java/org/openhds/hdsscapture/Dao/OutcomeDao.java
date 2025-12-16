@@ -27,16 +27,6 @@ OutcomeDao {
 
     @Query("SELECT * FROM outcome WHERE complete=1")
     List<Outcome> retrieveToSync();
-
-//    @Query("SELECT * FROM outcome WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
-//    List<Outcome> retrieveToSync();
-
-//    @Query("SELECT a.uuid,c.extId as extId,e.compextId as childuuid,c.firstName,c.lastName FROM outcome as a left join pregnancyoutcome as b on a.preg_uuid=b.uuid " +
-//            " INNER JOIN individual as c on a.mother_uuid=c.uuid INNER JOIN residency as d on c.uuid=d.individual_uuid " +
-//            " INNER JOIN locations as e on d.location_uuid=e.uuid " +
-//            "WHERE b.uuid is NULL and c.endType=1 ")
-//    List<Outcome> error();
-
     @Query("SELECT a.uuid,c.extId as extId,c.compno as childuuid,c.firstName,c.lastName FROM outcome as a left join pregnancyoutcome as b on a.preg_uuid=b.uuid " +
             " INNER JOIN individual as c on a.mother_uuid=c.uuid INNER JOIN visit d on a.location=d.location_uuid " +
             "WHERE b.uuid is NULL and endType=1 AND d.fw_uuid= :id ")
@@ -64,4 +54,7 @@ OutcomeDao {
 
     @Query("SELECT * FROM outcome where preg_uuid=:id")
     LiveData<Outcome> getView(String id);
+
+    @Query("SELECT COUNT(*) FROM outcome WHERE complete= 1")
+    LiveData<Long> sync();
 }

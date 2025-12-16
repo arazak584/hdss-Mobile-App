@@ -31,8 +31,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+
 @Entity(tableName = "death",
-indices = {@Index(value = {"individual_uuid","residency_uuid","fw_uuid","complete"}, unique = false)})
+        indices = {
+                @Index(value = {"uuid"}, unique = true),  // Primary lookups
+                @Index(value = {"individual_uuid"}, unique = true),
+                @Index(value = {"individual_uuid", "complete"}),
+                @Index(value = {"fw_uuid"}),
+                @Index(value = {"residency_uuid"}),
+                @Index(value = {"visit_uuid"}),
+                @Index(value = {"complete"})
+        })
 public class Death extends BaseObservable implements Parcelable {
 
     @Expose

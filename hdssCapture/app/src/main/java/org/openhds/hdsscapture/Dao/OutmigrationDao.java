@@ -79,4 +79,7 @@ public interface OutmigrationDao {
     @Query("SELECT * FROM outmigration where uuid=:id")
     LiveData<Outmigration> getView(String id);
 
+    @Query("SELECT COUNT(*) FROM outmigration WHERE complete= 1")
+    LiveData<Long> sync();
+
 }

@@ -191,4 +191,8 @@ public class PregnancyoutcomeRepository {
     public LiveData<Pregnancyoutcome> view(String id) {
         return dao.getView(id);
     }
+
+    public LiveData<Long> sync() {
+        return dao.sync();
+    }
 }

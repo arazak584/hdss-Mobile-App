@@ -2,6 +2,8 @@ package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
+
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.AmendmentDao;
 import org.openhds.hdsscapture.Dao.RegistryDao;
@@ -70,5 +72,8 @@ public class RegistryRepository {
         return future.get();
     }
 
+    public LiveData<Long> sync() {
+        return dao.sync();
+    }
 
 }

@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.VisitRepository;
 import org.openhds.hdsscapture.entity.Visit;
@@ -46,6 +47,10 @@ public class VisitViewModel extends AndroidViewModel {
     public void add(Visit data){ visitRepository.create(data);}
 
     public void add(Visit... data){visitRepository.create(data);}
+
+    public LiveData<Long> sync() {
+        return visitRepository.sync();
+    }
 
 
 }

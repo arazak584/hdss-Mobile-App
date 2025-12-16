@@ -28,7 +28,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity(tableName = "locations",
-indices = {@Index(value = {"uuid","compextId","compno","locationLevel_uuid"}, unique = false)})
+        indices = {
+                @Index(value = {"uuid"}, unique = true),
+                @Index(value = {"compno"}, unique = true),
+                @Index(value = {"compextId"}, unique = true),
+                @Index(value = {"compno", "complete"}),
+                @Index(value = {"houseExtId"}),
+                @Index(value = {"locationLevel_uuid"}),
+                @Index(value = {"extId"}),
+                @Index(value = {"vill_extId"}),
+                @Index(value = {"fw_uuid"}),
+                @Index(value = {"complete"})
+        })
 public class Locations extends BaseObservable implements Parcelable {
 
     @SerializedName("uuid")

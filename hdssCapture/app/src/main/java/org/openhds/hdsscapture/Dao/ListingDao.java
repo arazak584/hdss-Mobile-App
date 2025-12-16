@@ -69,4 +69,7 @@ public interface ListingDao {
     @Query("SELECT * FROM listing where compextId= :id")
     LiveData<Listing> getView(String id);
 
+    @Query("SELECT COUNT(*) FROM listing WHERE complete= 1")
+    LiveData<Long> sync();
+
 }

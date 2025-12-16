@@ -60,4 +60,8 @@ public class OutcomeViewModel extends AndroidViewModel {
     public void add(Outcome data){ outcomeRepository.create(data);}
 
     public void add(Outcome... data){ outcomeRepository.create(data);  }
+
+    public LiveData<Long> sync() {
+        return outcomeRepository.sync();
+    }
 }

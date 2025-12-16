@@ -29,8 +29,26 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+//@Entity(tableName = "individual",
+//indices = {@Index(value = {"uuid","ghanacard","firstName","lastName","compno","hohID","fw_uuid","complete","village"}, unique = false)})
 @Entity(tableName = "individual",
-indices = {@Index(value = {"uuid","ghanacard","firstName","lastName","compno","hohID","fw_uuid","complete","village"}, unique = false)})
+        indices = {
+                @Index(value = {"uuid"}, unique = true),  // Primary lookups
+                @Index(value = {"ghanacard"}),  // National ID searches
+                @Index(value = {"compno"}),  // Location-based queries
+                @Index(value = {"hohID"}),  // Head of household queries
+                @Index(value = {"fw_uuid"}),  // Fieldworker queries
+                @Index(value = {"firstName", "lastName"}),  // Name searches
+                @Index(value = {"firstName"}),  // Name searches
+                @Index(value = {"lastName"}),  // Name searches
+                @Index(value = {"complete"}),  // Status filtering
+                @Index(value = {"phone1"}),  // Search filtering
+                @Index(value = {"extId"}),
+                @Index(value = {"visit_uuid"}),
+                @Index(value = {"mother_uuid"}),
+                @Index(value = {"father_uuid"}),
+                @Index(value = {"village"})  // Village-based queries
+        })
 public class Individual extends BaseObservable implements Parcelable {
 
     @SerializedName("uuid")

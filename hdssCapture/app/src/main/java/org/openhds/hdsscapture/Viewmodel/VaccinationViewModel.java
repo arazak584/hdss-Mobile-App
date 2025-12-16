@@ -60,4 +60,8 @@ public class VaccinationViewModel extends AndroidViewModel {
         vaccinationRepository.create(data);
     }
 
+    public LiveData<Long> sync() {
+        return vaccinationRepository.sync();
+    }
+
 }

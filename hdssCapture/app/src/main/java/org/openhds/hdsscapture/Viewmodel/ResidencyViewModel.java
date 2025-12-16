@@ -129,6 +129,10 @@ public class ResidencyViewModel extends AndroidViewModel {
         residencyRepository.updatez(s, callback);
     }
 
+    public LiveData<Long> sync() {
+        return residencyRepository.sync();
+    }
+
 //    public int update(ResidencyUpdate s){
 //        return residencyRepository.update(s);
 //    }

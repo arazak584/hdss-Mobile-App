@@ -6,16 +6,23 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.util.Consumer;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.Dao.ApiDao;
@@ -66,9 +73,16 @@ import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.Vpm;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BiFunction;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -80,17 +94,89 @@ public class PushActivity extends AppCompatActivity {
     private ProgressDialog progress;
     private final String TAG = "Syncing Data Errors: ";
 
-    private ListingViewModel listingViewModel;
-    private Button buttonSendList , buttonSendVisit, buttonSendLocationdata, buttonSendIndividualdata, buttonSendSocialgroupdata,
-    buttonSendRelationshipdata,buttonSendPregnancydata,buttonSendOutcomedata,buttonSendOutcomesdata,buttonSendDemographicdata,buttondth,
-    buttonvpm,buttonSendSocio,buttonSendRes,buttonSendImg,buttonSendOmg,buttonSendAmend,buttonSendVac,buttonSendDup,buttonSendcom,buttonSendreg,buttonSendmor;
+    private Button buttonSyncAll;
     private String authorizationHeader;
     private SharedPreferences preferences;
+    private Handler handler;
+
+    // Batch configuration
+    private static final int BATCH_SIZE = 50;
+    private static final int BATCH_DELAY_MS = 500;
+
+    // Sync tracking
+    private int syncOperationsCompleted = 0;
+    private int totalSyncOperations = 0;
+    private final AtomicBoolean isSyncing = new AtomicBoolean(false);
+    private final AtomicBoolean isDestroyed = new AtomicBoolean(false);
+
+    // ViewModels
+    private ListingViewModel listingViewModel;
+    private VisitViewModel visitViewModel;
+    private LocationViewModel locationViewModel;
+    private IndividualViewModel individualViewModel;
+    private SocialgroupViewModel socialgroupViewModel;
+    private RelationshipViewModel relationshipViewModel;
+    private PregnancyViewModel pregnancyViewModel;
+    private PregnancyoutcomeViewModel pregnancyoutcomeViewModel;
+    private OutcomeViewModel outcomeViewModel;
+    private DemographicViewModel demographicViewModel;
+    private DeathViewModel deathViewModel;
+    private VpmViewModel vpmViewModel;
+    private HdssSociodemoViewModel hdssSociodemoViewModel;
+    private ResidencyViewModel residencyViewModel;
+    private InmigrationViewModel inmigrationViewModel;
+    private OutmigrationViewModel outmigrationViewModel;
+    private AmendmentViewModel amendmentViewModel;
+    private VaccinationViewModel vaccinationViewModel;
+    private DuplicateViewModel duplicateViewModel;
+    private CommunityViewModel communityViewModel;
+    private RegistryViewModel registryViewModel;
+    private MorbidityViewModel morbidityViewModel;
+    private TextView tvSyncStatus, tvLastSyncTime, totalRecords;
+    private LinearProgressIndicator syncProgressBar;
+    private ExecutorService syncExecutor;
+
+    // Count Completed - Flag to track if observers are set up
+    private boolean observersInitialized = false;
+    private LiveData<Long> locLiveData;
+    private LiveData<Long> visitLiveData;
+    private LiveData<Long> listingLiveData;
+    private LiveData<Long> indLiveData;
+    private LiveData<Long> hohLiveData;
+    private LiveData<Long> relLiveData;
+    private LiveData<Long> pregLiveData;
+    private LiveData<Long> pregoutLiveData;
+    private LiveData<Long> outcomeLiveData;
+    private LiveData<Long> demLiveData;
+    private LiveData<Long> dthLiveData;
+    private LiveData<Long> vpmLiveData;
+    private LiveData<Long> sesLiveData;
+    private LiveData<Long> resLiveData;
+    private LiveData<Long> imgLiveData;
+    private LiveData<Long> omgLiveData;
+    private LiveData<Long> amendLiveData;
+    private LiveData<Long> vacLiveData;
+    private LiveData<Long> dupLiveData;
+    private LiveData<Long> comLiveData;
+    private LiveData<Long> regLiveData;
+    private LiveData<Long> morLiveData;
+
+    private Long loc = 0L, visit = 0L, list = 0L, ind = 0L, hoh = 0L, rel = 0L, preg = 0L, pregout = 0L,
+            out = 0L, dem = 0L, dth = 0L, vpm = 0L, ses = 0L, res = 0L, img = 0L, omg = 0L, amend = 0L, vac = 0L,
+            dup = 0L, com = 0L, reg = 0L, mor = 0L;
 
     public boolean isInternetAvailable() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppJson api = AppJson.getInstance(this);
+        dao = api.getJsonApi();
+        updateLastSyncTime();
     }
 
     @Override
@@ -100,30 +186,18 @@ public class PushActivity extends AppCompatActivity {
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        buttonSendList = findViewById(R.id.buttonSendList);
-        buttonSendVisit = findViewById(R.id.buttonSendVisit);
-        buttonSendmor = findViewById(R.id.buttonSendMor);
-        buttonSendLocationdata = findViewById(R.id.buttonSendLocation);
-        buttonSendIndividualdata = findViewById(R.id.buttonSendIndividual);
-        buttonSendSocialgroupdata = findViewById(R.id.buttonSendSocialgroup);
-        buttonSendRelationshipdata = findViewById(R.id.buttonSendRelationship);
-        buttonSendPregnancydata = findViewById(R.id.buttonSendPregnancy);
-        buttonSendOutcomedata = findViewById(R.id.buttonSendOutcome);
-        buttonSendOutcomesdata = findViewById(R.id.buttonSendOutcomes);
-        buttonSendDemographicdata = findViewById(R.id.buttonSendDemography);
-        buttondth = findViewById(R.id.buttondth);
-        buttonvpm = findViewById(R.id.buttonvpm);
-        buttonSendSocio = findViewById(R.id.buttonSendSocio);
-        buttonSendRes = findViewById(R.id.buttonSendResidency);
-        buttonSendImg = findViewById(R.id.buttonSendImg);
-        buttonSendOmg = findViewById(R.id.buttonSendOmg);
-        buttonSendAmend = findViewById(R.id.buttonSendAmend);
-        buttonSendVac = findViewById(R.id.buttonSendVac);
-        buttonSendDup = findViewById(R.id.buttonSendDup);
-        buttonSendcom = findViewById(R.id.buttonSendCom);
-        buttonSendreg = findViewById(R.id.buttonSendReg);
-        listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
+        handler = new Handler(Looper.getMainLooper());
+        syncExecutor = Executors.newSingleThreadExecutor();
 
+        // Initialize single sync button
+        buttonSyncAll = findViewById(R.id.btnSync);
+        syncProgressBar = findViewById(R.id.syncProgressBar);
+        tvSyncStatus = findViewById(R.id.tvSyncStatus);
+        tvLastSyncTime = findViewById(R.id.tvLastSyncTime);
+        totalRecords = findViewById(R.id.viewRecords);
+
+        // Initialize ViewModels
+        initializeViewModels();
 
         progress = new ProgressDialog(PushActivity.this);
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -135,3714 +209,1130 @@ public class PushActivity extends AppCompatActivity {
         preferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
         authorizationHeader = preferences.getString("authorizationHeader", null);
 
-        //SEND DATA
-            initializeMorbidityReport();
-            initializeLocationReport();
-            initializeVisitReport();
-            initializeListingReport();
-            initializeIndividualReport();
-            initializeSocialgroupReport();
-            initializeRelationshipReport();
-            initializePregnancyReport();
-            initializePregnancyoutcomeReport();
-            initializeOutcomeReport();
-            initializeDemographicReport();
-            initializeDeathReport();
-            initializeVpmReport();
-            initializeSesReport();
-            initializeResidencyReport();
-            initializeInmigrationReport();
-            initializeOutmigrationReport();
-            initializeAmendmentReport();
-            initializeVaccinationReport();
-            initializeDuplicateReport();
-            initializeCommunityReport();
-            initializeRegistryReport();
+        updateLastSyncTime();
 
-//        //PUSH LOCATION
-//        //final TextView textViewSendLocationdata = findViewById(R.id.textViewSendLocation);
-//        final LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
-//        //GET MODIFIED DATA
-//        final List<Locations> locationsList = new ArrayList<>();
-//        try {
-//            locationsList.addAll(locationViewModel.findToSync());
-//            buttonSendLocationdata.setText("Locations(" + locationsList.size() + ") to send");
-//            buttonSendLocationdata.setTextColor(Color.WHITE);
-//            if (locationsList.isEmpty()) {
-//                buttonSendLocationdata.setVisibility(View.GONE);
-//                //textViewSendLocationdata.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendLocationdata.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Locations> data = new DataWrapper<>(locationsList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//                final Call<DataWrapper<Locations>> c_callable = dao.sendLocationdata(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Locations>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Locations>> call, Response<DataWrapper<Locations>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Locations[] d = data.getData().toArray(new Locations[0]);
-//                            for (Locations elem : d) {
-//                                elem.setComplete(0);
-//                                Log.e("PUSH.tag", "Has value " + elem.getCompno());
-//                            }
-//                            locationViewModel.add(d);
-//                            progress.dismiss();
-//                            buttonSendLocationdata.setText("Sent " + d.length + " record(s)");
-//                            //textViewSendLocationdata.setTextColor(Color.rgb(0, 114, 133));
-//                            buttonSendLocationdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendLocationdata.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendLocationdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Locations>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendLocationdata.setText("Failed to Send Location Data");
-//                        buttonSendLocationdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Location Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
+        // Initialize observers only once
+        countStats();
 
+        // Set up sync button
+        buttonSyncAll.setOnClickListener(v -> {
+            if (isSyncing.get()) {
+                Toast.makeText(this, "Sync already in progress", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-//        //PUSH VISIT DATA
-//        final VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
-//        //GET MODIFIED DATA
-//        final List<Visit> visitList = new ArrayList<>();
-//        try {
-//            visitList.addAll(visitViewModel.findToSync());
-//            buttonSendVisit.setText("Visit(" + visitList.size() + ") to send");
-//            buttonSendVisit.setTextColor(Color.WHITE);
-//            if (visitList.isEmpty()) {
-//                buttonSendVisit.setVisibility(View.GONE);
-//               // textViewSendVisit.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendVisit.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Visit> data = new DataWrapper<>(visitList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//                final Call<DataWrapper<Visit>> c_callable = dao.sendVisitdata(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Visit>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Visit>> call, Response<DataWrapper<Visit>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Visit[] d = data.getData().toArray(new Visit[0]);
-//
-//                            for (Visit elem : d) {
-//                                elem.complete = 0;
-//                            }
-//                            visitViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendVisit.setText("Sent " + d.length + " record(s)");
-//                            buttonSendVisit.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                            //buttonSendVisit.setTextColor(Color.parseColor("#FFFFFFFF"));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendVisit.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendVisit.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Visit>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendVisit.setText("Failed to Send Visit Data");
-//                        buttonSendVisit.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to send Visit data", Toast.LENGTH_LONG).show();
-//                        Log.e(TAG, t.getMessage());
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-        //GET MODIFIED DATA
-//        final List<Listing> listingList = new ArrayList<>();
-//        try {
-//            listingList.addAll(listingViewModel.findToSync());
-//            buttonSendList.setText("Listing(" + listingList.size() + ") to send");
-//            buttonSendList.setTextColor(Color.WHITE);
-//            if (listingList.isEmpty()) {
-//                buttonSendList.setVisibility(View.GONE);
-//                //textViewSendList.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendList.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Listing> data = new DataWrapper<>(listingList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//                final Call<DataWrapper<Listing>> c_callable = dao.sendListing(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Listing>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Listing>> call, Response<DataWrapper<Listing>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Listing[] d = data.getData().toArray(new Listing[0]);
-//
-//                            for (Listing elem : d) {
-//                                elem.complete = 0;
-//                            }
-//                            listingViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendList.setText("Sent " + d.length + " record(s)");
-//                            buttonSendList.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendList.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendList.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Listing>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendList.setText("Failed to Send Listing Data");
-//                        buttonSendList.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to send Listing", Toast.LENGTH_LONG).show();
-//                        Log.e(TAG, t.getMessage());
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-        //PUSH INDIVIDUAL
-        //final TextView textViewSendIndividualdata = findViewById(R.id.textViewSendIndividual);
-//        final IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-//
-//        //GET MODIFIED DATA
-//        final List<Individual> individualList = new ArrayList<>();
-//        try {
-//            individualList.addAll(individualViewModel.findToSync());
-//            buttonSendIndividualdata.setText("Individuals(" + individualList.size() + ") to send");
-//            buttonSendIndividualdata.setTextColor(Color.WHITE);
-//            if (individualList.isEmpty()) {
-//                buttonSendIndividualdata.setVisibility(View.GONE);
-//                //textViewSendIndividualdata.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendIndividualdata.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Individual> data = new DataWrapper<>(individualList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//                final Call<DataWrapper<Individual>> c_callable = dao.sendIndividualdata(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Individual>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Individual>> call, Response<DataWrapper<Individual>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Individual[] d = data.getData().toArray(new Individual[0]);
-//                            for (Individual elem : d) {
-//                                elem.complete = 0;
-//                            }
-//                            individualViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendIndividualdata.setText("Sent " + d.length + " Individual record(s)");
-//                            buttonSendIndividualdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendIndividualdata.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendIndividualdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Individual>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendIndividualdata.setText("Failed to Send Individual Data");
-//                        buttonSendIndividualdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Individual Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-
-//        //PUSH SOCIALGROUP
-//        //final TextView textViewSendSocialgroupdata = findViewById(R.id.textViewSendSocialgroup);
-//        final SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-//
-//        //GET MODIFIED DATA
-//        final List<Socialgroup> socialgroupList = new ArrayList<>();
-//        try {
-//            socialgroupList.addAll(socialgroupViewModel.findToSync());
-//            buttonSendSocialgroupdata.setText("Socialgroup (" + socialgroupList.size() + ") to send");
-//            buttonSendSocialgroupdata.setTextColor(Color.WHITE);
-//            if (socialgroupList.isEmpty()) {
-//                buttonSendSocialgroupdata.setVisibility(View.GONE);
-//                //textViewSendSocialgroupdata.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendSocialgroupdata.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Socialgroup> data = new DataWrapper<>(socialgroupList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//                final Call<DataWrapper<Socialgroup>> c_callable = dao.sendSocialgroupdata(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Socialgroup>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Socialgroup>> call, Response<DataWrapper<Socialgroup>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Socialgroup[] d = data.getData().toArray(new Socialgroup[0]);
-//
-//
-//                            for (Socialgroup elem : d) {
-//                                elem.complete = 0;
-//                            }
-//                            socialgroupViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendSocialgroupdata.setText("Sent " + d.length + " Socialgroup record(s)");
-//                            buttonSendSocialgroupdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendSocialgroupdata.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendSocialgroupdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Socialgroup>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendSocialgroupdata.setText("Failed to Send Socialgroup Data");
-//                        buttonSendSocialgroupdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Socialgroup Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-
-//        //PUSH Relationship
-//        final RelationshipViewModel relationshipViewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
-//        //GET MODIFIED DATA
-//        final List<Relationship> relationshipList = new ArrayList<>();
-//        try {
-//            relationshipList.addAll(relationshipViewModel.findToSync());
-//            buttonSendRelationshipdata.setText("Relationship (" + relationshipList.size() + ") to send");
-//            buttonSendRelationshipdata.setTextColor(Color.WHITE);
-//            if (relationshipList.isEmpty()) {
-//                buttonSendRelationshipdata.setVisibility(View.GONE);
-//                //textViewSendRelationshipdata.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendRelationshipdata.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Relationship> data = new DataWrapper<>(relationshipList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//
-//                final Call<DataWrapper<Relationship>> c_callable = dao.sendRelationshipdata(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Relationship>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Relationship>> call, Response<DataWrapper<Relationship>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Relationship[] d = data.getData().toArray(new Relationship[0]);
-//
-//                            for (Relationship elem : d) {
-//                                elem.complete = 0;
-//                            }
-//                            relationshipViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendRelationshipdata.setText("Sent " + d.length + " Relationship record(s)");
-//                            buttonSendRelationshipdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendRelationshipdata.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendRelationshipdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Relationship>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendRelationshipdata.setText("Failed to Send Relationship Data");
-//                        buttonSendRelationshipdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Relationship Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-
-//        //PUSH Pregnancy
-//        final PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
-//        //GET MODIFIED DATA
-//        final List<Pregnancy> pregnancyList = new ArrayList<>();
-//        try {
-//            pregnancyList.addAll(pregnancyViewModel.findToSync());
-//            buttonSendPregnancydata.setText("Pregnancy (" + pregnancyList.size() + ") to send");
-//            buttonSendPregnancydata.setTextColor(Color.WHITE);
-//            if (pregnancyList.isEmpty()) {
-//                buttonSendPregnancydata.setVisibility(View.GONE);
-//                //textViewSendPregnancydata.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendPregnancydata.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Pregnancy> data = new DataWrapper<>(pregnancyList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//                final Call<DataWrapper<Pregnancy>> c_callable = dao.sendPregnancydata(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Pregnancy>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Pregnancy>> call, Response<DataWrapper<Pregnancy>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Pregnancy[] d = data.getData().toArray(new Pregnancy[0]);
-//
-//                            for (Pregnancy elem : d) {
-//                                elem.complete = 0;
-//                            }
-//                            pregnancyViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendPregnancydata.setText("Sent " + d.length + " Pregnancy record(s)");
-//                            buttonSendPregnancydata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendPregnancydata.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendPregnancydata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Pregnancy>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendPregnancydata.setText("Failed to Send Pregnancy Data");
-//                        buttonSendPregnancydata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Pregnancy Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-
-//        //PUSH Pregnancyoutcome
-//        final PregnancyoutcomeViewModel pregnancyoutcomeViewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
-//        //GET MODIFIED DATA
-//        final List<Pregnancyoutcome> pregnancyoutcomeList = new ArrayList<>();
-//        try {
-//            pregnancyoutcomeList.addAll(pregnancyoutcomeViewModel.findToSync());
-//            buttonSendOutcomedata.setText("Pregnancy Outcome (" + pregnancyoutcomeList.size() + ") to send");
-//            buttonSendOutcomedata.setTextColor(Color.WHITE);
-//            if (pregnancyoutcomeList.isEmpty()) {
-//                buttonSendOutcomedata.setVisibility(View.GONE);
-//                //textViewSendOutcomedata.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendOutcomedata.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Pregnancyoutcome> data = new DataWrapper<>(pregnancyoutcomeList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//                final Call<DataWrapper<Pregnancyoutcome>> c_callable = dao.sendPregoutcomedata(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Pregnancyoutcome>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Pregnancyoutcome>> call, Response<DataWrapper<Pregnancyoutcome>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Pregnancyoutcome[] d = data.getData().toArray(new Pregnancyoutcome[0]);
-//
-//                            for (Pregnancyoutcome elem : d) {
-//                                elem.complete = 0;
-//                            }
-//                            pregnancyoutcomeViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendOutcomedata.setText("Sent " + d.length + " Pregnancy Outcome record(s)");
-//                            buttonSendOutcomedata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendOutcomedata.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendOutcomedata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Pregnancyoutcome>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendOutcomedata.setText("Failed to Send Pregnancy Outcome Data");
-//                        buttonSendOutcomedata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Pregnancy Outcome Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-//        //PUSH Pregnancyoutcomes
-//        final OutcomeViewModel outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
-//        //GET MODIFIED DATA
-//        final List<Outcome> outcomeList = new ArrayList<>();
-//        try {
-//            outcomeList.addAll(outcomeViewModel.findToSync());
-//            buttonSendOutcomesdata.setText("Outcome (" + outcomeList.size() + ") to send");
-//            buttonSendOutcomesdata.setTextColor(Color.WHITE);
-//            if (outcomeList.isEmpty()) {
-//                buttonSendOutcomesdata.setVisibility(View.GONE);
-//                //textViewSendOutcomesdata.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendOutcomesdata.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Outcome> data = new DataWrapper<>(outcomeList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//                final Call<DataWrapper<Outcome>> c_callable = dao.sendOutcomedata(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Outcome>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Outcome>> call, Response<DataWrapper<Outcome>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Outcome[] d = data.getData().toArray(new Outcome[0]);
-//
-//                            for (Outcome elem : d) {
-//                                elem.complete = 0;
-//                            }
-//                            outcomeViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendOutcomesdata.setText("Sent " + d.length + " Outcome record(s)");
-//                            buttonSendOutcomesdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendOutcomesdata.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendOutcomesdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Outcome>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendOutcomesdata.setText("Failed to Send Outcome Data");
-//                        buttonSendOutcomesdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Outcome Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-
-//        //PUSH Demographic
-//        final DemographicViewModel demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
-//        //GET MODIFIED DATA
-//        final List<Demographic> demographicList = new ArrayList<>();
-//        try {
-//            demographicList.addAll(demographicViewModel.findToSync());
-//            buttonSendDemographicdata.setText("Demographic (" + demographicList.size() + ") to send");
-//            buttonSendDemographicdata.setTextColor(Color.WHITE);
-//            if (demographicList.isEmpty()) {
-//                buttonSendDemographicdata.setVisibility(View.GONE);
-//               // textViewSendDemographicdata.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendDemographicdata.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Demographic> data = new DataWrapper<>(demographicList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//
-//                final Call<DataWrapper<Demographic>> c_callable = dao.sendDemographicdata(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Demographic>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Demographic>> call, Response<DataWrapper<Demographic>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Demographic[] d = data.getData().toArray(new Demographic[0]);
-//
-//                            for (Demographic elem : d) {
-//                                elem.complete = 0;
-//                                //Log.e("PUSH.tag", "Has value " + elem.edtime);
-//                            }
-//                            demographicViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendDemographicdata.setText("Sent " + d.length + " Demographic record(s)");
-//                            buttonSendDemographicdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendDemographicdata.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendDemographicdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Demographic>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendDemographicdata.setText("Failed to Send Demographic Data");
-//                        buttonSendDemographicdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Demographic Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-
-//        //PUSH DEATH
-//        final DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
-//        //GET MODIFIED DATA
-//        final List<Death> deathList = new ArrayList<>();
-//        try {
-//            deathList.addAll(deathViewModel.findToSync());
-//            buttondth.setText("Death (" + deathList.size() + ") to send");
-//            buttondth.setTextColor(Color.WHITE);
-//            if (deathList.isEmpty()) {
-//                buttondth.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttondth.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Death> data = new DataWrapper<>(deathList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//
-//                final Call<DataWrapper<Death>> c_callable = dao.sendDeathdata(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Death>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Death[] d = data.getData().toArray(new Death[0]);
-//
-//                            for (Death elem : d) {
-//                                elem.complete = 0;
-//                                //Log.e("PUSH.tag", "Has value " + elem.edtime);
-//                            }
-//                            deathViewModel.add(d);
-//                            progress.dismiss();
-//                            buttondth.setText("Sent " + d.length + " Death record(s)");
-//                            buttondth.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttondth.setText("Failed to Send Data: Error "+ response.code());
-//                            buttondth.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Death>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttondth.setText("Failed to Send Death Data");
-//                        buttondth.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Death Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-
-//        //PUSH VPM
-//        final VpmViewModel vpmViewModel = new ViewModelProvider(this).get(VpmViewModel.class);
-//        //GET MODIFIED DATA
-//        final List<Vpm> vpmList = new ArrayList<>();
-//        try {
-//            vpmList.addAll(vpmViewModel.retrieveToSync());
-//            buttonvpm.setText("VPM (" + vpmList.size() + ") to send");
-//            buttonvpm.setTextColor(Color.WHITE);
-//            if (vpmList.isEmpty()) {
-//                buttonvpm.setVisibility(View.GONE);
-//                // textViewSendDemographicdata.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonvpm.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Vpm> data = new DataWrapper<>(vpmList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//
-//                final Call<DataWrapper<Vpm>> c_callable = dao.sendVpmdata(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Vpm>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Vpm>> call, Response<DataWrapper<Vpm>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Vpm[] d = data.getData().toArray(new Vpm[0]);
-//
-//                            for (Vpm elems : d) {
-//                                elems.complete = 0;
-//                                //Log.e("PUSH.tag", "Has value " + elem.edtime);
-//                            }
-//                            vpmViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonvpm.setText("Sent " + d.length + " VPM record(s)");
-//                            buttonvpm.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonvpm.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonvpm.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Vpm>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonvpm.setText("Failed to Send VPM Data");
-//                        buttonvpm.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed " + t.getMessage(), Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-//        //PUSH SES DATA
-//        final HdssSociodemoViewModel hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
-//
-//        //GET MODIFIED DATA
-//        final List<HdssSociodemo> hdssSociodemoList = new ArrayList<>();
-//        try {
-//            hdssSociodemoList.addAll(hdssSociodemoViewModel.findToSync());
-//            buttonSendSocio.setText("Profiles[SES] (" + hdssSociodemoList.size() + ") to send");
-//            buttonSendSocio.setTextColor(Color.WHITE);
-//            if (hdssSociodemoList.isEmpty()) {
-//                buttonSendSocio.setVisibility(View.GONE);
-//                //textViewSendSocio.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendSocio.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<HdssSociodemo> data = new DataWrapper<>(hdssSociodemoList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//                final Call<DataWrapper<HdssSociodemo>> c_callable = dao.sendSociodata(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<HdssSociodemo>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<HdssSociodemo>> call, Response<DataWrapper<HdssSociodemo>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            HdssSociodemo[] d = data.getData().toArray(new HdssSociodemo[0]);
-//
-//                            for (HdssSociodemo elem : d) {
-//                                elem.complete = 0;
-//                            }
-//                            hdssSociodemoViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendSocio.setText("Sent " + d.length + " record(s)");
-//                            buttonSendSocio.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendSocio.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendSocio.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<HdssSociodemo>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendSocio.setText("Failed to Send SES Data");
-//                        buttonSendSocio.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to send SES Data", Toast.LENGTH_LONG).show();
-//                        Log.e(TAG, t.getMessage());
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-
-//        //PUSH Residency
-//        final ResidencyViewModel residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-//        //GET MODIFIED DATA
-//        final List<Residency> residencyList = new ArrayList<>();
-//        try {
-//            residencyList.addAll(residencyViewModel.findToSync());
-//            buttonSendRes.setText("Residency (" + residencyList.size() + ") to send");
-//            buttonSendRes.setTextColor(Color.WHITE);
-//            if (residencyList.isEmpty()) {
-//                buttonSendRes.setVisibility(View.GONE);
-//                //textViewSendRes.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendRes.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Residency> data = new DataWrapper<>(residencyList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//
-//                final Call<DataWrapper<Residency>> c_callable = dao.sendResidencydata(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Residency>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Residency>> call, Response<DataWrapper<Residency>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Residency[] d = data.getData().toArray(new Residency[0]);
-//
-//                            for (Residency elem : d) {
-//                                elem.complete = 0;
-//                            }
-//                            residencyViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendRes.setText("Sent " + d.length + " Residency record(s)");
-//                            buttonSendRes.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendRes.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendRes.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Residency>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        Toast.makeText(PushActivity.this, "Failed to Send Residency Data", Toast.LENGTH_LONG).show();
-//                        buttonSendRes.setText("Failed to Send Residency Data");
-//                        buttonSendRes.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-
-//        //PUSH Inmigration
-//        final InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
-//        //GET MODIFIED DATA
-//        final List<Inmigration> inmigrationList = new ArrayList<>();
-//        try {
-//            inmigrationList.addAll(inmigrationViewModel.findToSync());
-//            buttonSendImg.setText("Inmigration (" + inmigrationList.size() + ") to send");
-//            buttonSendImg.setTextColor(Color.WHITE);
-//            if (inmigrationList.isEmpty()) {
-//                buttonSendImg.setVisibility(View.GONE);
-//                //textViewSendImg.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendImg.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Inmigration> data = new DataWrapper<>(inmigrationList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//                final Call<DataWrapper<Inmigration>> c_callable = dao.sendInmigrationdata(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Inmigration>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Inmigration>> call, Response<DataWrapper<Inmigration>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Inmigration[] d = data.getData().toArray(new Inmigration[0]);
-//
-//                            for (Inmigration elem : d) {
-//                                elem.complete = 0;
-//                            }
-//                            inmigrationViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendImg.setText("Sent " + d.length + " Inmigration record(s)");
-//                            buttonSendImg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendImg.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendImg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Inmigration>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendImg.setText("Failed to Send Inmigration Data");
-//                        buttonSendImg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Inmigration Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-
-//        //PUSH Outmigration
-//        final OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
-//
-//        //GET MODIFIED DATA
-//        final List<Outmigration> outmigrationList = new ArrayList<>();
-//        try {
-//            outmigrationList.addAll(outmigrationViewModel.findToSync());
-//            buttonSendOmg.setText("Outmigration (" + outmigrationList.size() + ") to send");
-//            buttonSendOmg.setTextColor(Color.WHITE);
-//            if (outmigrationList.isEmpty()) {
-//                buttonSendOmg.setVisibility(View.GONE);
-//                //textViewSendOmg.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendOmg.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Outmigration> data = new DataWrapper<>(outmigrationList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//
-//                final Call<DataWrapper<Outmigration>> c_callable = dao.sendOutmigrationdata(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Outmigration>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Outmigration>> call, Response<DataWrapper<Outmigration>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Outmigration[] d = data.getData().toArray(new Outmigration[0]);
-//
-//                            for (Outmigration elem : d) {
-//                                elem.complete = 0;
-//                            }
-//                            outmigrationViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendOmg.setText("Sent " + d.length + " Outmigration record(s)");
-//                            buttonSendOmg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendOmg.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendOmg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Outmigration>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendOmg.setText("Failed to Send Outmigration Data");
-//                        buttonSendOmg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Outmigration Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-
-//        //PUSH Amendment
-//        final AmendmentViewModel amendmentViewModel = new ViewModelProvider(this).get(AmendmentViewModel.class);
-//
-//        //GET MODIFIED DATA
-//        final List<Amendment> amendmentList = new ArrayList<>();
-//        try {
-//            amendmentList.addAll(amendmentViewModel.findToSync());
-//            buttonSendAmend.setText("Amendment (" + amendmentList.size() + ") to send");
-//            buttonSendAmend.setTextColor(Color.WHITE);
-//            if (amendmentList.isEmpty()) {
-//                buttonSendAmend.setVisibility(View.GONE);
-//                //textViewSendAmend.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendAmend.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Amendment> data = new DataWrapper<>(amendmentList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//
-//                final Call<DataWrapper<Amendment>> c_callable = dao.sendAmendment(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Amendment>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Amendment>> call, Response<DataWrapper<Amendment>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Amendment[] d = data.getData().toArray(new Amendment[0]);
-//
-//                            for (Amendment elem : d) {
-//                                elem.complete = 0;
-//                            }
-//                            amendmentViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendAmend.setText("Sent " + d.length + " Amendment record(s)");
-//                            buttonSendAmend.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendAmend.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendAmend.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Amendment>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendAmend.setText("Failed to Send Amendment Data");
-//                        buttonSendAmend.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Amendment Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-
-//        //PUSH Vaccination
-//        final VaccinationViewModel vaccinationViewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
-//
-//        //GET MODIFIED DATA
-//        final List<Vaccination> vaccinationList = new ArrayList<>();
-//        try {
-//            vaccinationList.addAll(vaccinationViewModel.findToSync());
-//            buttonSendVac.setText("Vaccination (" + vaccinationList.size() + ") to send");
-//            buttonSendVac.setTextColor(Color.WHITE);
-//            if (vaccinationList.isEmpty()) {
-//                buttonSendVac.setVisibility(View.GONE);
-//                //textViewSendVac.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendVac.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Vaccination> data = new DataWrapper<>(vaccinationList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//
-//                final Call<DataWrapper<Vaccination>> c_callable = dao.sendVaccination(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Vaccination>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Vaccination>> call, Response<DataWrapper<Vaccination>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Vaccination[] d = data.getData().toArray(new Vaccination[0]);
-//
-//                            for (Vaccination elem : d) {
-//                                elem.complete = 0;
-//                            }
-//                            vaccinationViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendVac.setText("Sent " + d.length + " Vaccination record(s)");
-//                            buttonSendVac.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendVac.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendVac.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Vaccination>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendVac.setText("Failed to Send Vaccination Data");
-//                        buttonSendVac.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Vaccination Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-//        //PUSH Duplicates
-//        final DuplicateViewModel duplicateViewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
-//        //GET MODIFIED DATA
-//        final List<Duplicate> duplicateList = new ArrayList<>();
-//        try {
-//            duplicateList.addAll(duplicateViewModel.findToSync());
-//            buttonSendDup.setText("Duplicate (" + duplicateList.size() + ") to send");
-//            buttonSendDup.setTextColor(Color.WHITE);
-//            if (duplicateList.isEmpty()) {
-//                buttonSendDup.setVisibility(View.GONE);
-//                //textViewSendDup.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendDup.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Duplicate> data = new DataWrapper<>(duplicateList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//
-//                final Call<DataWrapper<Duplicate>> c_callable = dao.sendDup(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Duplicate>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Duplicate>> call, Response<DataWrapper<Duplicate>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Duplicate[] d = data.getData().toArray(new Duplicate[0]);
-//
-//                            for (Duplicate elem : d) {
-//                                elem.complete = 0;
-//                            }
-//                            duplicateViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendDup.setText("Sent " + d.length + " Duplicate record(s)");
-//                            buttonSendDup.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendDup.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendDup.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Duplicate>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendDup.setText("Failed to Send Vaccination Data");
-//                        buttonSendDup.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Vaccination Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-
-//        //PUSH Community
-//        final CommunityViewModel communityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
-//        //GET MODIFIED DATA
-//        final List<CommunityReport> communityReportList = new ArrayList<>();
-//        try {
-//            communityReportList.addAll(communityViewModel.retrieveToSync());
-//            buttonSendcom.setText("Community Report (" + communityReportList.size() + ") to send");
-//            buttonSendcom.setTextColor(Color.WHITE);
-//            if (communityReportList.isEmpty()) {
-//                buttonSendcom.setVisibility(View.GONE);
-//                //textViewSendDup.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendcom.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<CommunityReport> data = new DataWrapper<>(communityReportList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//
-//                final Call<DataWrapper<CommunityReport>> c_callable = dao.sendCommunity(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<CommunityReport>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<CommunityReport>> call, Response<DataWrapper<CommunityReport>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            CommunityReport[] d = data.getData().toArray(new CommunityReport[0]);
-//
-//                            for (CommunityReport elem : d) {
-//                                elem.complete = 0;
-//                            }
-//                            communityViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendcom.setText("Sent " + d.length + " Community record(s)");
-//                            buttonSendcom.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendcom.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendcom.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<CommunityReport>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendcom.setText("Failed to Send Community Report Data");
-//                        buttonSendcom.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Community Report Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-
-
-//        //PUSH Registry
-//        final RegistryViewModel registryViewModel = new ViewModelProvider(this).get(RegistryViewModel.class);
-//
-//        //GET MODIFIED DATA
-//        final List<Registry> registryList = new ArrayList<>();
-//        try {
-//            registryList.addAll(registryViewModel.findToSync());
-//            buttonSendreg.setText("Registry Report (" + registryList.size() + ") to send");
-//            buttonSendreg.setTextColor(Color.WHITE);
-//            if (registryList.isEmpty()) {
-//                buttonSendreg.setVisibility(View.GONE);
-//                //textViewSendDup.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendreg.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Registry> data = new DataWrapper<>(registryList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//
-//                final Call<DataWrapper<Registry>> c_callable = dao.sendRegistry(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Registry>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Registry>> call, Response<DataWrapper<Registry>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            // Log the entire response body for debugging
-//                            String responseBodyJson = new Gson().toJson(response.body());
-//                            Log.d("API Response", "Response Body: " + responseBodyJson);
-//
-//                            Registry[] d = data.getData().toArray(new Registry[0]);
-//
-//                            for (Registry elem : d) {
-//                                elem.complete = 0;
-//                                Log.d("Sync", "Registry Insert Date: " + elem.insertDate);
-//                            }
-//                            registryViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendreg.setText("Sent " + d.length + " Registry record(s)");
-//                            buttonSendreg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendreg.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendreg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Registry>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendreg.setText("Failed to Send Registry Report Data");
-//                        buttonSendreg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Registry Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-
-//        //PUSH Morbidity
-//        final Button buttonSendmor = findViewById(R.id.buttonSendMor);
-//        //final TextView textViewSendDup = findViewById(R.id.textViewSendDup);
-//        final MorbidityViewModel morbidityViewModel = new ViewModelProvider(this).get(MorbidityViewModel.class);
-//
-//        //GET MODIFIED DATA
-//        final List<Morbidity> morbidityList = new ArrayList<>();
-//        try {
-//            morbidityList.addAll(morbidityViewModel.retrieveToSync());
-//            buttonSendmor.setText("Morbidity Report (" + morbidityList.size() + ") to send");
-//            buttonSendmor.setTextColor(Color.WHITE);
-//            if (morbidityList.isEmpty()) {
-//                buttonSendmor.setVisibility(View.GONE);
-//                //textViewSendDup.setVisibility(View.GONE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendmor.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            //WRAP THE DATA
-//            final DataWrapper<Morbidity> data = new DataWrapper<>(morbidityList);
-//
-//            //SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//
-//                final Call<DataWrapper<Morbidity>> c_callable = dao.sendMorbidity(authorizationHeader,data);
-//                c_callable.enqueue(new Callback<DataWrapper<Morbidity>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Morbidity>> call, Response<DataWrapper<Morbidity>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Morbidity[] d = data.getData().toArray(new Morbidity[0]);
-//
-//                            for (Morbidity elem : d) {
-//                                elem.complete = 0;
-//
-//                            }
-//                            morbidityViewModel.add(d);
-//
-//                            progress.dismiss();
-//                            buttonSendmor.setText("Sent " + d.length + " Morbidity record(s)");
-//                            buttonSendmor.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        }else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendmor.setText("Failed to Send Data: Error "+ response.code());
-//                            buttonSendmor.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Morbidity>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendmor.setText("Failed to Send Morbidity Report Data");
-//                        buttonSendmor.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to Send Morbidity Report Data", Toast.LENGTH_LONG).show();
-//
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//
-//        });
-
-
-
-
+            if (isInternetAvailable()) {
+                performSync();
+                startBatchSync();
+            } else {
+                Toast.makeText(this, "No internet connection available", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        // Perform heavy tasks in the background
-        new Thread(() -> {
-            // Perform heavy tasks (e.g., retrieving data in the background)
-            if (!checkInternetAndNotify()) {
-                return;  // Exit the thread if no internet
-            }
-            initializeMorbidityReport();
-            initializeLocationReport();
-            initializeVisitReport();
-            initializeListingReport();
-            initializeIndividualReport();
-            initializeSocialgroupReport();
-            initializeRelationshipReport();
-            initializePregnancyReport();
-            initializePregnancyoutcomeReport();
-            initializeOutcomeReport();
-            initializeDemographicReport();
-            initializeDeathReport();
-            initializeVpmReport();
-            initializeSesReport();
-            initializeResidencyReport();
-            initializeInmigrationReport();
-            initializeOutmigrationReport();
-            initializeAmendmentReport();
-            initializeVaccinationReport();
-            initializeDuplicateReport();
-            initializeCommunityReport();
-            initializeRegistryReport();
+    protected void onDestroy() {
+        super.onDestroy();
+        isDestroyed.set(true);
+        isSyncing.set(false);
 
-            // Now update the UI on the main thread after the heavy tasks are complete
-            runOnUiThread(() -> {
-                // UI updates go here, such as refreshing views, showing results, etc.
-                //refreshUIAfterDataFetch();
-            });
-        }).start();
-    }
-
-    private boolean checkInternetAndNotify() {
-        if (!isInternetAvailable()) {
-            // Ensure the Toast runs on the main thread
-            runOnUiThread(() -> {
-                Toast.makeText(this, "No internet connection available", Toast.LENGTH_LONG).show();
-            });
-            return false;  // Internet is not available
-        }
-        return true;  // Internet is available
-    }
-
-    //SEND LOCATION DATA
-    private void initializeLocationReport() {
-        // Check for internet connection on the main thread
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> {
-                Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show();
-            });
-            return;
+        // Clean up handlers and remove all callbacks
+        if (handler != null) {
+            handler.removeCallbacksAndMessages(null);
         }
 
-        // Move the heavy operations to a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel in the background
-            final LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
-            final List<Locations> locationsList = new ArrayList<>();
-
-            try {
-                // GET MODIFIED DATA
-                locationsList.addAll(locationViewModel.findToSync());
-
-                // Update the UI after fetching the data
-                runOnUiThread(() -> {
-                    buttonSendLocationdata.setText("Locations(" + locationsList.size() + ") to send");
-                    //buttonSendLocationdata.setTextColor(Color.WHITE);
-
-                    if (locationsList.isEmpty()) {
-                        buttonSendLocationdata.setVisibility(View.GONE);
-                    } else {
-                        buttonSendLocationdata.setVisibility(View.VISIBLE);
-                    }
-
-                    buttonSendLocationdata.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Locations> data = new DataWrapper<>(locationsList);
-
-                        // Perform the network operation in the background
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-
-                                // Network call via Retrofit
-                                Call<DataWrapper<Locations>> c_callable = dao.sendLocationdata(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Locations>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Locations>> call, @NonNull Response<DataWrapper<Locations>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                Locations[] d = data.getData().toArray(new Locations[0]);
-                                                for (Locations elem : d) {
-                                                    elem.setComplete(0);
-                                                }
-                                                locationViewModel.add(d);
-
-                                                buttonSendLocationdata.setText("Sent " + d.length + " record(s)");
-                                                buttonSendLocationdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonSendLocationdata.setText("Failed to Send Location Data: Error " + response.code());
-                                                buttonSendLocationdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Locations>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendLocationdata.setText("Failed to Send Location Data");
-                                            buttonSendLocationdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Location Data", Toast.LENGTH_LONG).show();
-                                        });
-                                    }
-                                });
-                            } else {
-                                progress.dismiss();
-                            }
-                        }).start();  // Start the network operation in a new background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start the data fetching in a new background thread
-    }
-
-
-    //SEND VISIT DATA
-//    private void initializeVisitReport() {
-//        // Initialize the ViewModel
-//        final VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
-//        // GET MODIFIED DATA
-//        final List<Visit> visitList = new ArrayList<>();
-//
-//        try {
-//            visitList.addAll(visitViewModel.findToSync());
-//            buttonSendVisit.setText("Visit(" + visitList.size() + ") to send");
-//            buttonSendVisit.setTextColor(Color.WHITE);
-//
-//            if (visitList.isEmpty()) {
-//                buttonSendVisit.setVisibility(View.GONE);
-//                // Optional: Hide any other associated views if necessary
-//            }else{
-//                buttonSendVisit.setVisibility(View.VISIBLE);
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        buttonSendVisit.setOnClickListener(v -> {
-//            progress.setMessage(getResources().getString(R.string.init_syncing));
-//            progress.show();
-//
-//            // WRAP THE DATA
-//            final DataWrapper<Visit> data = new DataWrapper<>(visitList);
-//
-//            // SEND THE DATA
-//            if (data.getData() != null && !data.getData().isEmpty()) {
-//                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-//
-//                final Call<DataWrapper<Visit>> c_callable = dao.sendVisitdata(authorizationHeader, data);
-//                c_callable.enqueue(new Callback<DataWrapper<Visit>>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<DataWrapper<Visit>> call, Response<DataWrapper<Visit>> response) {
-//                        if (response != null && response.body() != null && response.isSuccessful()
-//                                && response.body().getData() != null && !response.body().getData().isEmpty()) {
-//
-//                            Visit[] d = data.getData().toArray(new Visit[0]);
-//
-//                            for (Visit elem : d) {
-//                                elem.complete = 0;  // Set the complete status
-//                            }
-//                            visitViewModel.add(d);  // Add visits to the ViewModel
-//
-//                            progress.dismiss();
-//                            buttonSendVisit.setText("Sent " + d.length + " record(s)");
-//                            buttonSendVisit.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-//                        } else {
-//                            // Handle the case where the server responds with an error
-//                            progress.dismiss();
-//                            buttonSendVisit.setText("Failed to Send Visit Data: Error " + response.code());
-//                            buttonSendVisit.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                            Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<DataWrapper<Visit>> call, @NonNull Throwable t) {
-//                        progress.dismiss();
-//                        buttonSendVisit.setText("Failed to Send Visit Data");
-//                        buttonSendVisit.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-//                        Toast.makeText(PushActivity.this, "Failed to send Visit data", Toast.LENGTH_LONG).show();
-//                        Log.e(TAG, t.getMessage());
-//                    }
-//                });
-//            } else {
-//                progress.dismiss();
-//            }
-//        });
-//    }
-    private void initializeVisitReport() {
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> {
-                Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show();
-            });
-            return;
-        }
-        // Move the heavy operations to a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel in the background
-            final VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
-            final List<Visit> visitList = new ArrayList<>();
-
-            try {
-                // GET MODIFIED DATA
-                visitList.addAll(visitViewModel.findToSync());
-
-                // Update the UI after fetching the data
-                runOnUiThread(() -> {
-                    buttonSendVisit.setText("Visit(" + visitList.size() + ") to send");
-                    //buttonSendVisit.setTextColor(Color.WHITE);
-
-                    if (visitList.isEmpty()) {
-                        buttonSendVisit.setVisibility(View.GONE);
-                    } else {
-                        buttonSendVisit.setVisibility(View.VISIBLE);
-                    }
-
-                    buttonSendVisit.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Visit> data = new DataWrapper<>(visitList);
-
-                        // Perform the network operation in the background
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-
-                                // Network call via Retrofit
-                                Call<DataWrapper<Visit>> c_callable = dao.sendVisitdata(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Visit>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Visit>> call, @NonNull Response<DataWrapper<Visit>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                Visit[] d = data.getData().toArray(new Visit[0]);
-                                                for (Visit elem : d) {
-                                                    elem.complete = 0;  // Set the complete status
-                                                }
-                                                visitViewModel.add(d);  // Add visits to the ViewModel
-
-                                                buttonSendVisit.setText("Sent " + d.length + " record(s)");
-                                                buttonSendVisit.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonSendVisit.setText("Failed to Send Visit Data: Error " + response.code());
-                                                buttonSendVisit.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Visit>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendVisit.setText("Failed to Send Visit Data");
-                                            buttonSendVisit.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to send Visit data", Toast.LENGTH_LONG).show();
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation in a new background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start the data fetching in a new background thread
-    }
-
-
-    //    SEND LISTING DATA
-    private void initializeListingReport() {
-        // Check internet availability and show a toast if unavailable
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> {
-                Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show();
-            });
-            return;
+        // Shut down executor service
+        if (syncExecutor != null && !syncExecutor.isShutdown()) {
+            syncExecutor.shutdownNow();
         }
 
-        // Move the heavy operations to a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel in the background
-            final ListingViewModel listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
-            final List<Listing> listingList = new ArrayList<>();
-
-            try {
-                // GET MODIFIED DATA
-                listingList.addAll(listingViewModel.findToSync());
-
-                // Update the UI after fetching the data
-                runOnUiThread(() -> {
-                    buttonSendList.setText("Listing(" + listingList.size() + ") to send");
-                    //buttonSendList.setTextColor(Color.WHITE);
-
-                    if (listingList.isEmpty()) {
-                        buttonSendList.setVisibility(View.GONE);
-                    } else {
-                        buttonSendList.setVisibility(View.VISIBLE);
-                    }
-
-                    buttonSendList.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Listing> data = new DataWrapper<>(listingList);
-
-                        // Perform the network operation in the background
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-
-                                // Network call via Retrofit
-                                Call<DataWrapper<Listing>> c_callable = dao.sendListing(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Listing>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Listing>> call, @NonNull Response<DataWrapper<Listing>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                Listing[] d = data.getData().toArray(new Listing[0]);
-                                                for (Listing elem : d) {
-                                                    elem.complete = 0;  // Set the complete status
-                                                }
-                                                listingViewModel.add(d);  // Add listings to the ViewModel
-
-                                                buttonSendList.setText("Sent " + d.length + " record(s)");
-                                                buttonSendList.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonSendList.setText("Failed to Send Listing Data: Error " + response.code());
-                                                buttonSendList.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Listing>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendList.setText("Failed to Send Listing Data");
-                                            buttonSendList.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to send Listing data", Toast.LENGTH_LONG).show();
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation in a new background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start the data fetching in a new background thread
-    }
-
-
-    //PUSH INDIVIDUAL
-    private void initializeIndividualReport() {
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> {
-                Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show();
-            });
-            return;
-        }
-        // Move the heavy operations to a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel in the background
-            final IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-            final List<Individual> individualList = new ArrayList<>();
-
-            try {
-                // GET MODIFIED DATA
-                individualList.addAll(individualViewModel.findToSync());
-
-                // Update the UI after fetching the data
-                runOnUiThread(() -> {
-                    buttonSendIndividualdata.setText("Individuals(" + individualList.size() + ") to send");
-                    //buttonSendIndividualdata.setTextColor(Color.WHITE);
-
-                    if (individualList.isEmpty()) {
-                        buttonSendIndividualdata.setVisibility(View.GONE);
-                    } else {
-                        buttonSendIndividualdata.setVisibility(View.VISIBLE);
-                    }
-
-                    // Set up the button click listener for sending data
-                    buttonSendIndividualdata.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Individual> data = new DataWrapper<>(individualList);
-
-                        // Move network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<Individual>> c_callable = dao.sendIndividualdata(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Individual>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Individual>> call, @NonNull Response<DataWrapper<Individual>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                Individual[] d = data.getData().toArray(new Individual[0]);
-                                                for (Individual elem : d) {
-                                                    elem.complete = 0;  // Set the complete status
-                                                }
-                                                individualViewModel.add(d);  // Add individuals to the ViewModel
-
-                                                buttonSendIndividualdata.setText("Sent " + d.length + " Individual record(s)");
-                                                buttonSendIndividualdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonSendIndividualdata.setText("Failed to Send Individual Data: Error " + response.code());
-                                                buttonSendIndividualdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Individual>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendIndividualdata.setText("Failed to Send Individual Data");
-                                            buttonSendIndividualdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Individual Data", Toast.LENGTH_LONG).show();
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start network operation in a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a new background thread
-    }
-
-    //PUSH SOCIALGROUP
-    private void initializeSocialgroupReport() {
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> {
-                Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show();
-            });
-            return;
-        }
-        // Move heavy operations to a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel
-            final SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-            final List<Socialgroup> socialgroupList = new ArrayList<>();
-
-            try {
-                // GET MODIFIED DATA
-                socialgroupList.addAll(socialgroupViewModel.findToSync());
-
-                // Update UI after fetching data
-                runOnUiThread(() -> {
-                    buttonSendSocialgroupdata.setText("Socialgroups(" + socialgroupList.size() + ") to send");
-                    //buttonSendSocialgroupdata.setTextColor(Color.WHITE);
-
-                    if (socialgroupList.isEmpty()) {
-                        buttonSendSocialgroupdata.setVisibility(View.GONE);
-                    } else {
-                        buttonSendSocialgroupdata.setVisibility(View.VISIBLE);
-                    }
-
-                    // Set up the button click listener for sending data
-                    buttonSendSocialgroupdata.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Socialgroup> data = new DataWrapper<>(socialgroupList);
-
-                        // Move the network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<Socialgroup>> c_callable = dao.sendSocialgroupdata(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Socialgroup>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Socialgroup>> call, @NonNull Response<DataWrapper<Socialgroup>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                Socialgroup[] d = data.getData().toArray(new Socialgroup[0]);
-                                                for (Socialgroup elem : d) {
-                                                    elem.complete = 0;  // Set the complete status
-                                                }
-                                                socialgroupViewModel.add(d);
-
-                                                buttonSendSocialgroupdata.setText("Sent " + d.length + " Socialgroup record(s)");
-                                                buttonSendSocialgroupdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonSendSocialgroupdata.setText("Failed to Send Socialgroup Data: Error " + response.code());
-                                                buttonSendSocialgroupdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Socialgroup>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendSocialgroupdata.setText("Failed to Send Socialgroup Data");
-                                            buttonSendSocialgroupdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Socialgroup Data", Toast.LENGTH_LONG).show();
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation on a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-
-    //SEND RELATIONSHIP
-    private void initializeRelationshipReport() {
-        // Check internet availability and show a toast if unavailable
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show());
-            return;
-        }
-
-        // Move heavy operations to a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel
-            final RelationshipViewModel relationshipViewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
-            final List<Relationship> relationshipList = new ArrayList<>();
-
-            try {
-                // GET MODIFIED DATA
-                relationshipList.addAll(relationshipViewModel.findToSync());
-
-                // Update the UI based on data fetched
-                runOnUiThread(() -> {
-                    buttonSendRelationshipdata.setText("Relationship (" + relationshipList.size() + ") to send");
-                    //buttonSendRelationshipdata.setTextColor(Color.WHITE);
-
-                    if (relationshipList.isEmpty()) {
-                        buttonSendRelationshipdata.setVisibility(View.GONE);
-                    } else {
-                        buttonSendRelationshipdata.setVisibility(View.VISIBLE);
-                    }
-
-                    // Set up the button click listener for sending data
-                    buttonSendRelationshipdata.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Relationship> data = new DataWrapper<>(relationshipList);
-
-                        // Move network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<Relationship>> c_callable = dao.sendRelationshipdata(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Relationship>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Relationship>> call, @NonNull Response<DataWrapper<Relationship>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                Relationship[] d = data.getData().toArray(new Relationship[0]);
-
-                                                for (Relationship elem : d) {
-                                                    elem.complete = 0;  // Set the complete status
-                                                }
-                                                relationshipViewModel.add(d);  // Add relationships to the ViewModel
-
-                                                buttonSendRelationshipdata.setText("Sent " + d.length + " Relationship record(s)");
-                                                buttonSendRelationshipdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonSendRelationshipdata.setText("Failed to Send Relationship Data: Error " + response.code());
-                                                buttonSendRelationshipdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Relationship>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendRelationshipdata.setText("Failed to Send Relationship Data");
-                                            buttonSendRelationshipdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Relationship Data", Toast.LENGTH_LONG).show();
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation on a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-
-    //PUSH PREGNANCY
-    private void initializePregnancyReport() {
-        // Check internet availability and show a toast if unavailable
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show());
-            return;
-        }
-
-        // Move heavy operations to a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel
-            final PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
-            final List<Pregnancy> pregnancyList = new ArrayList<>();
-
-            try {
-                // GET MODIFIED DATA
-                pregnancyList.addAll(pregnancyViewModel.findToSync());
-
-                // Update the UI based on data fetched
-                runOnUiThread(() -> {
-                    buttonSendPregnancydata.setText("Pregnancy (" + pregnancyList.size() + ") to send");
-                    //buttonSendPregnancydata.setTextColor(Color.WHITE);
-
-                    if (pregnancyList.isEmpty()) {
-                        buttonSendPregnancydata.setVisibility(View.GONE);
-                    } else {
-                        buttonSendPregnancydata.setVisibility(View.VISIBLE);
-                    }
-
-                    // Set up the button click listener for sending data
-                    buttonSendPregnancydata.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Pregnancy> data = new DataWrapper<>(pregnancyList);
-
-                        // Move network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<Pregnancy>> c_callable = dao.sendPregnancydata(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Pregnancy>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Pregnancy>> call, @NonNull Response<DataWrapper<Pregnancy>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                Pregnancy[] d = data.getData().toArray(new Pregnancy[0]);
-
-                                                for (Pregnancy elem : d) {
-                                                    elem.complete = 0;  // Set the complete status
-                                                }
-                                                pregnancyViewModel.add(d);  // Add pregnancies to the ViewModel
-
-                                                buttonSendPregnancydata.setText("Sent " + d.length + " Pregnancy record(s)");
-                                                buttonSendPregnancydata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonSendPregnancydata.setText("Failed to Send Pregnancy Data: Error " + response.code());
-                                                buttonSendPregnancydata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Pregnancy>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendPregnancydata.setText("Failed to Send Pregnancy Data");
-                                            buttonSendPregnancydata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Pregnancy Data", Toast.LENGTH_LONG).show();
-                                            Log.e(TAG, t.getMessage());
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation on a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-
-    //PUSH PREGNANCY OUTCOME
-    private void initializePregnancyoutcomeReport() {
-        // Check internet availability and show a toast if unavailable
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show());
-            return;
-        }
-
-        // Move heavy operations to a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel
-            final PregnancyoutcomeViewModel pregnancyoutcomeViewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
-            final List<Pregnancyoutcome> pregnancyoutcomeList = new ArrayList<>();
-
-            try {
-                // GET MODIFIED DATA
-                pregnancyoutcomeList.addAll(pregnancyoutcomeViewModel.findToSync());
-
-                // Update the UI based on data fetched
-                runOnUiThread(() -> {
-                    buttonSendOutcomedata.setText("Pregnancy Outcome (" + pregnancyoutcomeList.size() + ") to send");
-                    //buttonSendOutcomedata.setTextColor(Color.WHITE);
-
-                    if (pregnancyoutcomeList.isEmpty()) {
-                        buttonSendOutcomedata.setVisibility(View.GONE);
-                    } else {
-                        buttonSendOutcomedata.setVisibility(View.VISIBLE);
-                    }
-
-                    // Set up the button click listener for sending data
-                    buttonSendOutcomedata.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Pregnancyoutcome> data = new DataWrapper<>(pregnancyoutcomeList);
-
-                        // Move network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<Pregnancyoutcome>> c_callable = dao.sendPregoutcomedata(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Pregnancyoutcome>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Pregnancyoutcome>> call, @NonNull Response<DataWrapper<Pregnancyoutcome>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                Pregnancyoutcome[] d = data.getData().toArray(new Pregnancyoutcome[0]);
-
-                                                for (Pregnancyoutcome elem : d) {
-                                                    elem.complete = 0;  // Set the complete status
-                                                }
-                                                pregnancyoutcomeViewModel.add(d);  // Add pregnancy outcomes to the ViewModel
-
-                                                buttonSendOutcomedata.setText("Sent " + d.length + " Pregnancy Outcome record(s)");
-                                                buttonSendOutcomedata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonSendOutcomedata.setText("Failed to Send Pregnancy Outcome Data: Error " + response.code());
-                                                buttonSendOutcomedata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Pregnancyoutcome>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendOutcomedata.setText("Failed to Send Pregnancy Outcome Data");
-                                            buttonSendOutcomedata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Pregnancy Outcome Data", Toast.LENGTH_LONG).show();
-                                            Log.e(TAG, t.getMessage());
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation on a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-
-
-    //PUSH OUTCOME
-    private void initializeOutcomeReport() {
-        // Check internet availability and show a toast if unavailable
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show());
-            return;
-        }
-
-        // Move heavy operations to a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel
-            final OutcomeViewModel outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
-            final List<Outcome> outcomeList = new ArrayList<>();
-
-            try {
-                // GET MODIFIED DATA
-                outcomeList.addAll(outcomeViewModel.findToSync());
-
-                // Update the UI based on data fetched
-                runOnUiThread(() -> {
-                    buttonSendOutcomesdata.setText("Outcome (" + outcomeList.size() + ") to send");
-                    //buttonSendOutcomesdata.setTextColor(Color.WHITE);
-
-                    // Handle button visibility
-                    if (outcomeList.isEmpty()) {
-                        buttonSendOutcomesdata.setVisibility(View.GONE);
-                    } else {
-                        buttonSendOutcomesdata.setVisibility(View.VISIBLE);
-                    }
-
-                    // Set up the button click listener for sending data
-                    buttonSendOutcomesdata.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Outcome> data = new DataWrapper<>(outcomeList);
-
-                        // Move network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                runOnUiThread(() -> progress.setMessage("Sending " + data.getData().size() + " record(s)..."));
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<Outcome>> c_callable = dao.sendOutcomedata(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Outcome>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Outcome>> call, Response<DataWrapper<Outcome>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                Outcome[] d = data.getData().toArray(new Outcome[0]);
-
-                                                for (Outcome elem : d) {
-                                                    elem.complete = 0;  // Set the complete status
-                                                }
-                                                outcomeViewModel.add(d);  // Add outcomes to the ViewModel
-
-                                                buttonSendOutcomesdata.setText("Sent " + d.length + " Outcome record(s)");
-                                                buttonSendOutcomesdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonSendOutcomesdata.setText("Failed to Send Outcome Data: Error " + response.code());
-                                                buttonSendOutcomesdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Outcome>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendOutcomesdata.setText("Failed to Send Outcome Data");
-                                            buttonSendOutcomesdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Outcome Data", Toast.LENGTH_LONG).show();
-                                            Log.e(TAG, t.getMessage());
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation on a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-
-    //PUSH Demographic
-    private void initializeDemographicReport() {
-        // Check internet availability and show a toast if unavailable
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show());
-            return;
-        }
-
-        // Move heavy operations to a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel
-            final DemographicViewModel demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
-            final List<Demographic> demographicList = new ArrayList<>();
-
-            try {
-                // GET MODIFIED DATA
-                demographicList.addAll(demographicViewModel.findToSync());
-
-                // Update the UI based on data fetched
-                runOnUiThread(() -> {
-                    buttonSendDemographicdata.setText("Demographic (" + demographicList.size() + ") to send");
-                    //buttonSendDemographicdata.setTextColor(Color.WHITE);
-
-                    // Handle button visibility
-                    if (demographicList.isEmpty()) {
-                        buttonSendDemographicdata.setVisibility(View.GONE);
-                    } else {
-                        buttonSendDemographicdata.setVisibility(View.VISIBLE);
-                    }
-
-                    // Set up the button click listener for sending data
-                    buttonSendDemographicdata.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Demographic> data = new DataWrapper<>(demographicList);
-
-                        // Move network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                runOnUiThread(() -> progress.setMessage("Sending " + data.getData().size() + " record(s)..."));
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<Demographic>> c_callable = dao.sendDemographicdata(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Demographic>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Demographic>> call, Response<DataWrapper<Demographic>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                Demographic[] d = data.getData().toArray(new Demographic[0]);
-
-                                                for (Demographic elem : d) {
-                                                    elem.complete = 0;  // Set the complete status
-                                                }
-                                                demographicViewModel.add(d);  // Add demographics to the ViewModel
-
-                                                buttonSendDemographicdata.setText("Sent " + d.length + " Demographic record(s)");
-                                                buttonSendDemographicdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonSendDemographicdata.setText("Failed to Send Demographic Data: Error " + response.code());
-                                                buttonSendDemographicdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Demographic>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendDemographicdata.setText("Failed to Send Demographic Data");
-                                            buttonSendDemographicdata.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Demographic Data", Toast.LENGTH_LONG).show();
-                                            Log.e(TAG, t.getMessage());
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation on a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-
-    //PUSH Death
-    private void initializeDeathReport() {
-        // Check for internet connectivity
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show());
-            return;
-        }
-
-        // Move heavy operations to a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel
-            final DeathViewModel deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
-            final List<Death> deathList = new ArrayList<>();
-
-            try {
-                // GET MODIFIED DATA
-                deathList.addAll(deathViewModel.findToSync());
-
-                // Update UI on the main thread
-                runOnUiThread(() -> {
-                    buttondth.setText("Death (" + deathList.size() + ") to send");
-                    //buttondth.setTextColor(Color.WHITE);
-
-                    // Handle button visibility
-                    if (deathList.isEmpty()) {
-                        buttondth.setVisibility(View.GONE);
-                    } else {
-                        buttondth.setVisibility(View.VISIBLE);
-                    }
-
-                    // Set up the button click listener for sending data
-                    buttondth.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Death> data = new DataWrapper<>(deathList);
-
-                        // Move network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                runOnUiThread(() -> progress.setMessage("Sending " + data.getData().size() + " record(s)..."));
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<Death>> c_callable = dao.sendDeathdata(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Death>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null) {
-                                                Death[] d = data.getData().toArray(new Death[0]);
-
-                                                for (Death elem : d) {
-                                                    elem.complete = 0;  // Set the complete status
-                                                }
-                                                deathViewModel.add(d);  // Add death records to the ViewModel
-
-                                                buttondth.setText("Sent " + d.length + " Death record(s)");
-                                                buttondth.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttondth.setText("Failed to Send Death Data: Error " + response.code());
-                                                buttondth.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Death>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttondth.setText("Failed to Send Death Data");
-                                            buttondth.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Death Data", Toast.LENGTH_LONG).show();
-                                            Log.e(TAG, t.getMessage());
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation on a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-
-    //PUSH Vpm
-    private void initializeVpmReport() {
-        // Check for internet connectivity
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show());
-            return;
-        }
-
-        // Move heavy operations to a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel
-            final VpmViewModel vpmViewModel = new ViewModelProvider(this).get(VpmViewModel.class);
-            final List<Vpm> vpmList = new ArrayList<>();
-
-            try {
-                // GET MODIFIED DATA
-                vpmList.addAll(vpmViewModel.retrieveToSync());
-
-                // Update UI on the main thread
-                runOnUiThread(() -> {
-                    buttonvpm.setText("Vpm(" + vpmList.size() + ") to send");
-                    //buttonvpm.setTextColor(Color.WHITE);
-
-                    // Handle button visibility
-                    if (vpmList.isEmpty()) {
-                        buttonvpm.setVisibility(View.GONE);
-                    } else {
-                        buttonvpm.setVisibility(View.VISIBLE);
-                    }
-
-                    // Set up the button click listener for sending data
-                    buttonvpm.setOnClickListener(v1 -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Vpm> data = new DataWrapper<>(vpmList);
-
-                        // Move network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                runOnUiThread(() -> progress.setMessage("Sending " + data.getData().size() + " record(s)..."));
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<Vpm>> c_callable = dao.sendVpmdata(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Vpm>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Vpm>> call, Response<DataWrapper<Vpm>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null) {
-                                                Vpm[] d = data.getData().toArray(new Vpm[0]);
-
-                                                for (Vpm elem : d) {
-                                                    elem.complete = 0;  // Set the complete status
-                                                }
-                                                vpmViewModel.add(d);  // Add Vpm records to the ViewModel
-
-                                                buttonvpm.setText("Sent " + d.length + " Vpm record(s)");
-                                                buttonvpm.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonvpm.setText("Failed to Send Vpm Data: Error " + response.code());
-                                                buttonvpm.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Vpm>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonvpm.setText("Failed to Send Vpm Data");
-                                            buttonvpm.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Vpm Data", Toast.LENGTH_LONG).show();
-                                            Log.e(TAG, t.getMessage());
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation on a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-
-    //PUSH HdssSociodemo
-    private void initializeSesReport() {
-        // Check for internet connectivity
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show());
-            return;
-        }
-
-        // Move heavy operations to a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel
-            final HdssSociodemoViewModel hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
-            final List<HdssSociodemo> hdssSociodemoList = new ArrayList<>();
-
-            try {
-                // GET MODIFIED DATA
-                hdssSociodemoList.addAll(hdssSociodemoViewModel.findToSync());
-
-                // Update UI on the main thread
-                runOnUiThread(() -> {
-                    buttonSendSocio.setText("Profiles[SES](" + hdssSociodemoList.size() + ") to send");
-                    //buttonSendSocio.setTextColor(Color.WHITE);
-
-                    // Handle button visibility
-                    if (hdssSociodemoList.isEmpty()) {
-                        buttonSendSocio.setVisibility(View.GONE);
-                    } else {
-                        buttonSendSocio.setVisibility(View.VISIBLE);
-                    }
-
-                    // Set up the button click listener for sending data
-                    buttonSendSocio.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<HdssSociodemo> data = new DataWrapper<>(hdssSociodemoList);
-
-                        // Move network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                runOnUiThread(() -> progress.setMessage("Sending " + data.getData().size() + " record(s)..."));
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<HdssSociodemo>> c_callable = dao.sendSociodata(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<HdssSociodemo>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<HdssSociodemo>> call, Response<DataWrapper<HdssSociodemo>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                HdssSociodemo[] d = data.getData().toArray(new HdssSociodemo[0]);
-
-                                                for (HdssSociodemo elem : d) {
-                                                    elem.complete = 0;  // Set the complete status
-                                                }
-                                                hdssSociodemoViewModel.add(d);  // Add profiles to the ViewModel
-
-                                                buttonSendSocio.setText("Sent " + d.length + " Profiles[SES] record(s)");
-                                                buttonSendSocio.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonSendSocio.setText("Failed to Send Profiles[SES] Data: Error " + response.code());
-                                                buttonSendSocio.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<HdssSociodemo>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendSocio.setText("Failed to Send Profiles[SES] Data");
-                                            buttonSendSocio.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Profiles[SES] Data", Toast.LENGTH_LONG).show();
-                                            Log.e(TAG, t.getMessage());
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation on a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-    //PUSH RESIDENCY
-    private void initializeResidencyReport() {
-        // Check internet availability and show a toast if unavailable
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show());
-            return;
-        }
-
-        // Move heavy operations to a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel
-            final ResidencyViewModel residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
-            final List<Residency> residencyList = new ArrayList<>();
-
-            try {
-                // GET MODIFIED DATA
-                residencyList.addAll(residencyViewModel.findToSync());
-
-                // Update UI on the main thread
-                runOnUiThread(() -> {
-                    buttonSendRes.setText("Residency (" + residencyList.size() + ") to send");
-                    //buttonSendRes.setTextColor(Color.WHITE);
-
-                    // Handle button visibility
-                    if (residencyList.isEmpty()) {
-                        buttonSendRes.setVisibility(View.GONE);
-                    } else {
-                        buttonSendRes.setVisibility(View.VISIBLE);
-                    }
-
-                    // Set up the button click listener for sending data
-                    buttonSendRes.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Residency> data = new DataWrapper<>(residencyList);
-
-                        // Move network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                runOnUiThread(() -> progress.setMessage("Sending " + data.getData().size() + " record(s)..."));
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<Residency>> c_callable = dao.sendResidencydata(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Residency>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Residency>> call, Response<DataWrapper<Residency>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                Residency[] d = data.getData().toArray(new Residency[0]);
-
-                                                for (Residency elem : d) {
-                                                    elem.complete = 0;  // Set the complete status
-                                                }
-                                                residencyViewModel.add(d);  // Add residencies to the ViewModel
-
-                                                buttonSendRes.setText("Sent " + d.length + " Residency record(s)");
-                                                buttonSendRes.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonSendRes.setText("Failed to Send Residency Data: Error " + response.code());
-                                                buttonSendRes.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Residency>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendRes.setText("Failed to Send Residency Data");
-                                            buttonSendRes.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Residency Data", Toast.LENGTH_LONG).show();
-                                            Log.e(TAG, t.getMessage());
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation on a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-
-    //    SEND INMIGRATION
-    private void initializeInmigrationReport() {
-        // Check internet availability and show a toast if unavailable
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show());
-            return;
-        }
-
-        // Move heavy operations to a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel
-            final InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
-            final List<Inmigration> inmigrationList = new ArrayList<>();
-
-            try {
-                // GET MODIFIED DATA
-                inmigrationList.addAll(inmigrationViewModel.findToSync());
-
-                // Update UI on the main thread
-                runOnUiThread(() -> {
-                    buttonSendImg.setText("Inmigration (" + inmigrationList.size() + ") to send");
-                    //buttonSendImg.setTextColor(Color.WHITE);
-
-                    // Handle button visibility
-                    if (inmigrationList.isEmpty()) {
-                        buttonSendImg.setVisibility(View.GONE);
-                    } else {
-                        buttonSendImg.setVisibility(View.VISIBLE);
-                    }
-
-                    // Set up the button click listener for sending data
-                    buttonSendImg.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Inmigration> data = new DataWrapper<>(inmigrationList);
-
-                        // Move network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                runOnUiThread(() -> progress.setMessage("Sending " + data.getData().size() + " record(s)..."));
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<Inmigration>> c_callable = dao.sendInmigrationdata(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Inmigration>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Inmigration>> call, Response<DataWrapper<Inmigration>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                Inmigration[] d = data.getData().toArray(new Inmigration[0]);
-
-                                                for (Inmigration elem : d) {
-                                                    elem.complete = 0;  // Set the complete status
-                                                }
-                                                inmigrationViewModel.add(d);  // Add inmigrations to the ViewModel
-
-                                                buttonSendImg.setText("Sent " + d.length + " Inmigration record(s)");
-                                                buttonSendImg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonSendImg.setText("Failed to Send Data: Error " + response.code());
-                                                buttonSendImg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Inmigration>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendImg.setText("Failed to Send Inmigration Data");
-                                            buttonSendImg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Inmigration Data", Toast.LENGTH_LONG).show();
-                                            Log.e(TAG, t.getMessage());
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation on a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-
-    //SEND OUTMIGRATION
-    private void initializeOutmigrationReport() {
-        // Check internet availability and show a toast if unavailable
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show());
-            return;
-        }
-
-        // Move heavy operations to a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel
-            final OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
-            final List<Outmigration> outmigrationList = new ArrayList<>();
-
-            try {
-                // GET MODIFIED DATA
-                outmigrationList.addAll(outmigrationViewModel.findToSync());
-
-                // Update UI on the main thread
-                runOnUiThread(() -> {
-                    buttonSendOmg.setText("Outmigration (" + outmigrationList.size() + ") to send");
-                    //buttonSendOmg.setTextColor(Color.WHITE);
-
-                    // Handle button visibility
-                    if (outmigrationList.isEmpty()) {
-                        buttonSendOmg.setVisibility(View.GONE);
-                    } else {
-                        buttonSendOmg.setVisibility(View.VISIBLE);
-                    }
-
-                    // Set up the button click listener for sending data
-                    buttonSendOmg.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Outmigration> data = new DataWrapper<>(outmigrationList);
-
-                        // Move network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                runOnUiThread(() -> progress.setMessage("Sending " + data.getData().size() + " record(s)..."));
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<Outmigration>> c_callable = dao.sendOutmigrationdata(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Outmigration>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Outmigration>> call, Response<DataWrapper<Outmigration>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null) {
-                                                Outmigration[] d = data.getData().toArray(new Outmigration[0]);
-
-                                                for (Outmigration elem : d) {
-                                                    elem.complete = 0;  // Set the complete status
-                                                }
-                                                outmigrationViewModel.add(d);  // Add outmigrations to the ViewModel
-
-                                                buttonSendOmg.setText("Sent " + d.length + " Outmigration record(s)");
-                                                buttonSendOmg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonSendOmg.setText("Failed to Send Data: Error " + response.code());
-                                                buttonSendOmg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Outmigration>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendOmg.setText("Failed to Send Outmigration Data");
-                                            buttonSendOmg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Outmigration Data", Toast.LENGTH_LONG).show();
-                                            Log.e(TAG, t.getMessage());
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation on a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-
-    //SEND AMENDMENT
-    private void initializeAmendmentReport() {
-        // Check internet availability and show a toast if unavailable
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show());
-            return;
-        }
-
-        // Fetch modified data in a background thread
-        new Thread(() -> {
-            // Initialize the ViewModel
-            final AmendmentViewModel amendmentViewModel = new ViewModelProvider(this).get(AmendmentViewModel.class);
-            final List<Amendment> amendmentList = new ArrayList<>();
-
-            try {
-                amendmentList.addAll(amendmentViewModel.findToSync());
-
-                // Update UI on the main thread
-                runOnUiThread(() -> {
-                    buttonSendAmend.setText("Amendment (" + amendmentList.size() + ") to send");
-                    //buttonSendAmend.setTextColor(Color.WHITE);
-
-                    // Handle button visibility
-                    buttonSendAmend.setVisibility(amendmentList.isEmpty() ? View.GONE : View.VISIBLE);
-
-                    // Set up the button click listener for sending data
-                    buttonSendAmend.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Amendment> data = new DataWrapper<>(amendmentList);
-
-                        // Move network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                runOnUiThread(() -> progress.setMessage("Sending " + data.getData().size() + " record(s)..."));
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<Amendment>> c_callable = dao.sendAmendment(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Amendment>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Amendment>> call, Response<DataWrapper<Amendment>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                Amendment[] d = data.getData().toArray(new Amendment[0]);
-
-                                                for (Amendment elem : d) {
-                                                    elem.complete = 0;  // Mark the record as complete
-                                                }
-                                                amendmentViewModel.add(d);  // Add the records back to the ViewModel
-
-                                                buttonSendAmend.setText("Sent " + d.length + " Amendment record(s)");
-                                                buttonSendAmend.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonSendAmend.setText("Failed to Send Data: Error " + response.code());
-                                                buttonSendAmend.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Amendment>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendAmend.setText("Failed to Send Amendment Data");
-                                            buttonSendAmend.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Amendment Data", Toast.LENGTH_LONG).show();
-                                            Log.e(TAG, t.getMessage());
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation on a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-
-
-    //SEND VACCINATION
-    private void initializeVaccinationReport() {
-        // Check internet availability and show a toast if unavailable
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show());
-            return;
-        }
-
-        // Initialize the ViewModel
-        final VaccinationViewModel vaccinationViewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
-        // Fetch modified data in a background thread
-        new Thread(() -> {
-            final List<Vaccination> vaccinationList = new ArrayList<>();
-
-            try {
-                vaccinationList.addAll(vaccinationViewModel.findToSync());
-
-                // Update UI on the main thread
-                runOnUiThread(() -> {
-                    buttonSendVac.setText("Vaccination (" + vaccinationList.size() + ") to send");
-                    //buttonSendVac.setTextColor(Color.WHITE);
-
-                    // Handle button visibility
-                    buttonSendVac.setVisibility(vaccinationList.isEmpty() ? View.GONE : View.VISIBLE);
-
-                    // Set up the button click listener for sending data
-                    buttonSendVac.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Vaccination> data = new DataWrapper<>(vaccinationList);
-
-                        // Move network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                runOnUiThread(() -> progress.setMessage("Sending " + data.getData().size() + " record(s)..."));
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<Vaccination>> c_callable = dao.sendVaccination(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Vaccination>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Vaccination>> call, Response<DataWrapper<Vaccination>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                Vaccination[] d = data.getData().toArray(new Vaccination[0]);
-
-                                                for (Vaccination elem : d) {
-                                                    elem.complete = 0;  // Mark the record as complete
-                                                }
-                                                vaccinationViewModel.add(d);  // Add the records back to the ViewModel
-
-                                                buttonSendVac.setText("Sent " + d.length + " Vaccination record(s)");
-                                                buttonSendVac.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                buttonSendVac.setText("Failed to Send Data: Error " + response.code());
-                                                buttonSendVac.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                                Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + response.code(), Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Vaccination>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendVac.setText("Failed to Send Vaccination Data");
-                                            buttonSendVac.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Vaccination Data", Toast.LENGTH_LONG).show();
-                                            Log.e(TAG, t.getMessage());
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation on a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-
-    //SEND DUPLICATES
-    private void initializeDuplicateReport() {
-        // Check internet availability and show a toast if unavailable
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show());
-            return;
-        }
-
-        // Initialize the ViewModel
-        final DuplicateViewModel duplicateViewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
-
-        // Fetch modified data in a background thread
-        new Thread(() -> {
-            final List<Duplicate> duplicateList = new ArrayList<>();
-
-            try {
-                duplicateList.addAll(duplicateViewModel.findToSync());
-
-                // Update UI on the main thread
-                runOnUiThread(() -> {
-                    buttonSendDup.setText("Duplicate (" + duplicateList.size() + ") to send");
-                    //buttonSendDup.setTextColor(Color.WHITE);
-
-                    // Manage button visibility
-                    buttonSendDup.setVisibility(duplicateList.isEmpty() ? View.GONE : View.VISIBLE);
-
-                    // Set up the button click listener for sending data
-                    buttonSendDup.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<Duplicate> data = new DataWrapper<>(duplicateList);
-
-                        // Move network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                runOnUiThread(() -> progress.setMessage("Sending " + data.getData().size() + " record(s)..."));
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<Duplicate>> c_callable = dao.sendDup(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<Duplicate>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<Duplicate>> call, Response<DataWrapper<Duplicate>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                Duplicate[] d = data.getData().toArray(new Duplicate[0]);
-
-                                                for (Duplicate elem : d) {
-                                                    elem.complete = 0;  // Mark as complete
-                                                }
-                                                duplicateViewModel.add(d);  // Add the updated records back to the ViewModel
-
-                                                buttonSendDup.setText("Sent " + d.length + " Duplicate record(s)");
-                                                buttonSendDup.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                handleErrorResponse(response.code());
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<Duplicate>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendDup.setText("Failed to Send Duplicate Data");
-                                            buttonSendDup.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Duplicate Data", Toast.LENGTH_LONG).show();
-                                            Log.e(TAG, t.getMessage());
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation on a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-    // Helper method to handle error responses
-    private void handleErrorResponse(int errorCode) {
-        progress.dismiss();
-        buttonSendDup.setText("Failed to Send Data: Error " + errorCode);
-        buttonSendDup.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-        Toast.makeText(PushActivity.this, "Server Error: Failed to send data: Error " + errorCode, Toast.LENGTH_LONG).show();
-    }
-
-
-
-    //SEND COMMUNITY REPORT
-    private void initializeCommunityReport() {
-        // Check internet availability and show a toast if unavailable
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_SHORT).show());
-            return;
-        }
-
-        // Initialize the ViewModel
-        final CommunityViewModel communityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
-
-        // Fetch modified data in a background thread
-        new Thread(() -> {
-            final List<CommunityReport> communityReportList = new ArrayList<>();
-
-            try {
-                communityReportList.addAll(communityViewModel.retrieveToSync());
-
-                // Update UI on the main thread
-                runOnUiThread(() -> {
-                    buttonSendcom.setText("Community Report (" + communityReportList.size() + ") to send");
-                    //buttonSendcom.setTextColor(Color.WHITE);
-
-                    // Manage button visibility
-                    buttonSendcom.setVisibility(communityReportList.isEmpty() ? View.GONE : View.VISIBLE);
-
-                    // Set up the button click listener for sending data
-                    buttonSendcom.setOnClickListener(v -> {
-                        progress.setMessage(getResources().getString(R.string.init_syncing));
-                        progress.show();
-
-                        // WRAP THE DATA
-                        final DataWrapper<CommunityReport> data = new DataWrapper<>(communityReportList);
-
-                        // Move network operation to a background thread
-                        new Thread(() -> {
-                            if (data.getData() != null && !data.getData().isEmpty()) {
-                                runOnUiThread(() -> progress.setMessage("Sending " + data.getData().size() + " record(s)..."));
-
-                                // Network call via Retrofit
-                                final Call<DataWrapper<CommunityReport>> c_callable = dao.sendCommunity(authorizationHeader, data);
-                                c_callable.enqueue(new Callback<DataWrapper<CommunityReport>>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<DataWrapper<CommunityReport>> call, Response<DataWrapper<CommunityReport>> response) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                                CommunityReport[] d = data.getData().toArray(new CommunityReport[0]);
-
-                                                for (CommunityReport elem : d) {
-                                                    elem.complete = 0;  // Mark as complete
-                                                }
-                                                communityViewModel.add(d);  // Add the updated records back to the ViewModel
-
-                                                buttonSendcom.setText("Sent " + d.length + " Community record(s)");
-                                                buttonSendcom.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                            } else {
-                                                // Handle server error using the existing method
-                                                handleErrorResponse(response.code());
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<DataWrapper<CommunityReport>> call, @NonNull Throwable t) {
-                                        runOnUiThread(() -> {
-                                            progress.dismiss();
-                                            buttonSendcom.setText("Failed to Send Community Report Data");
-                                            buttonSendcom.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                            Toast.makeText(PushActivity.this, "Failed to Send Community Report Data", Toast.LENGTH_LONG).show();
-                                            Log.e(TAG, t.getMessage());
-                                        });
-                                    }
-                                });
-                            } else {
-                                runOnUiThread(progress::dismiss);
-                            }
-                        }).start();  // Start the network operation on a background thread
-                    });
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-
-
-    //SEND REGISTRY
-    private void initializeRegistryReport() {
-        // Check internet availability and show a toast if unavailable
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_LONG).show());
-            return;
-        }
-
-        // Initialize the ViewModel
-        final RegistryViewModel registryViewModel = new ViewModelProvider(this).get(RegistryViewModel.class);
-
-        // Fetch modified data in a background thread
-        new Thread(() -> {
-            final List<Registry> registryList = new ArrayList<>();
-
-            try {
-                registryList.addAll(registryViewModel.findToSync());
-
-                // Update UI on the main thread
-                runOnUiThread(() -> {
-                    buttonSendreg.setText("Registry (" + registryList.size() + ") to send");
-                    //buttonSendreg.setTextColor(Color.WHITE);
-
-                    // Manage button visibility
-                    buttonSendreg.setVisibility(registryList.isEmpty() ? View.GONE : View.VISIBLE);
-                });
-
-                // Set up the button click listener for sending data
-                buttonSendreg.setOnClickListener(v -> {
-                    progress.setMessage(getResources().getString(R.string.init_syncing));
-                    progress.show();
-
-                    // WRAP THE DATA
-                    final DataWrapper<Registry> data = new DataWrapper<>(registryList);
-
-                    // Move network operation to a background thread
-                    new Thread(() -> {
-                        if (data.getData() != null && !data.getData().isEmpty()) {
-                            runOnUiThread(() -> progress.setMessage("Sending " + data.getData().size() + " record(s)..."));
-
-                            // Network call via Retrofit
-                            final Call<DataWrapper<Registry>> c_callable = dao.sendRegistry(authorizationHeader, data);
-                            c_callable.enqueue(new Callback<DataWrapper<Registry>>() {
-                                @Override
-                                public void onResponse(@NonNull Call<DataWrapper<Registry>> call, Response<DataWrapper<Registry>> response) {
-                                    runOnUiThread(() -> {
-                                        progress.dismiss();
-                                        if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                                            Registry[] d = data.getData().toArray(new Registry[0]);
-
-                                            for (Registry elem : d) {
-                                                elem.complete = 0;  // Set the complete status
-                                            }
-                                            registryViewModel.add(d);  // Add the updated records back to the ViewModel
-
-                                            buttonSendreg.setText("Sent " + d.length + " Registry record(s)");
-                                            buttonSendreg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-                                        } else {
-                                            // Handle server error using the existing method
-                                            handleErrorResponse(response.code());
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onFailure(@NonNull Call<DataWrapper<Registry>> call, @NonNull Throwable t) {
-                                    runOnUiThread(() -> {
-                                        progress.dismiss();
-                                        buttonSendreg.setText("Failed to Send Registry Data");
-                                        buttonSendreg.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-                                        Toast.makeText(PushActivity.this, "Failed to Send Registry Data", Toast.LENGTH_LONG).show();
-                                        Log.e(TAG, t.getMessage());
-                                    });
-                                }
-                            });
-                        } else {
-                            runOnUiThread(progress::dismiss);
-                        }
-                    }).start();  // Start the network operation on a background thread
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }).start();  // Start data fetching in a background thread
-    }
-
-
-
-    //SEND MORBIDITY DATA
-    private void initializeMorbidityReport() {
-        // Check internet connection on the main thread
-        if (!isInternetAvailable()) {
-            runOnUiThread(() -> Toast.makeText(this, "No internet connection available", Toast.LENGTH_LONG).show());
-            return;
-        }
-
-        // Move data retrieval to a background thread
-        new Thread(() -> {
-            MorbidityViewModel morbidityViewModel = new ViewModelProvider(this).get(MorbidityViewModel.class);
-            List<Morbidity> morbidityList = new ArrayList<>();
-
-            try {
-                morbidityList.addAll(morbidityViewModel.retrieveToSync());
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            // Update UI after fetching data
-            runOnUiThread(() -> {
-                updateUIForMorbidity(morbidityList);
-
-                buttonSendmor.setOnClickListener(v -> {
-                    if (!morbidityList.isEmpty()) {
-                        sendMorbidityData(morbidityList, morbidityViewModel);
-                    }
-                });
-            });
-        }).start();
-    }
-
-    private void updateUIForMorbidity(List<Morbidity> morbidityList) {
-        buttonSendmor.setText("Morbidity Report (" + morbidityList.size() + ") to send");
-        //buttonSendmor.setTextColor(Color.WHITE);
-        buttonSendmor.setVisibility(morbidityList.isEmpty() ? View.GONE : View.VISIBLE);
-    }
-
-    private void sendMorbidityData(List<Morbidity> morbidityList, MorbidityViewModel morbidityViewModel) {
-        progress.setMessage(getResources().getString(R.string.init_syncing));
-        progress.show();
-
-        DataWrapper<Morbidity> data = new DataWrapper<>(morbidityList);
-
-        if (data.getData() != null && !data.getData().isEmpty()) {
-            progress.setMessage("Sending " + data.getData().size() + " record(s)...");
-
-            Call<DataWrapper<Morbidity>> c_callable = dao.sendMorbidity(authorizationHeader, data);
-            c_callable.enqueue(new Callback<DataWrapper<Morbidity>>() {
-                @Override
-                public void onResponse(@NonNull Call<DataWrapper<Morbidity>> call, @NonNull Response<DataWrapper<Morbidity>> response) {
-                    runOnUiThread(() -> {
-                        progress.dismiss();
-                        if (response.isSuccessful() && response.body() != null && !response.body().getData().isEmpty()) {
-                            for (Morbidity elem : morbidityList) {
-                                elem.complete = 0;
-                            }
-                            morbidityViewModel.add(morbidityList.toArray(new Morbidity[0]));
-                            updateSendButtonUI(true, morbidityList.size());
-                        } else {
-                            updateSendButtonUI(false, response.code());
-                        }
-                    });
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<DataWrapper<Morbidity>> call, @NonNull Throwable t) {
-                    runOnUiThread(() -> {
-                        progress.dismiss();
-                        updateSendButtonUI(false, -1);
-                    });
-                }
-            });
-        } else {
+        // Dismiss progress dialog to prevent window leak
+        if (progress != null && progress.isShowing()) {
             progress.dismiss();
         }
+
+        // Remove all LiveData observers to prevent memory leaks
+        removeAllObservers();
+
+        // Clear screen on flag
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    private void updateSendButtonUI(boolean success, int recordCount) {
-        if (success) {
-            buttonSendmor.setText("Sent " + recordCount + " Morbidity record(s)");
-            buttonSendmor.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
-        } else {
-            buttonSendmor.setText("Failed to Send Morbidity Report Data");
-            buttonSendmor.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.Brunette));
-            Toast.makeText(PushActivity.this, "Failed to Send Morbidity Report Data", Toast.LENGTH_LONG).show();
+    /**
+     * Remove all LiveData observers to prevent memory leaks
+     */
+    private void removeAllObservers() {
+        if (locLiveData != null) locLiveData.removeObservers(this);
+        if (visitLiveData != null) visitLiveData.removeObservers(this);
+        if (listingLiveData != null) listingLiveData.removeObservers(this);
+        if (indLiveData != null) indLiveData.removeObservers(this);
+        if (hohLiveData != null) hohLiveData.removeObservers(this);
+        if (relLiveData != null) relLiveData.removeObservers(this);
+        if (pregLiveData != null) pregLiveData.removeObservers(this);
+        if (pregoutLiveData != null) pregoutLiveData.removeObservers(this);
+        if (outcomeLiveData != null) outcomeLiveData.removeObservers(this);
+        if (demLiveData != null) demLiveData.removeObservers(this);
+        if (dthLiveData != null) dthLiveData.removeObservers(this);
+        if (vpmLiveData != null) vpmLiveData.removeObservers(this);
+        if (sesLiveData != null) sesLiveData.removeObservers(this);
+        if (resLiveData != null) resLiveData.removeObservers(this);
+        if (imgLiveData != null) imgLiveData.removeObservers(this);
+        if (omgLiveData != null) omgLiveData.removeObservers(this);
+        if (amendLiveData != null) amendLiveData.removeObservers(this);
+        if (vacLiveData != null) vacLiveData.removeObservers(this);
+        if (dupLiveData != null) dupLiveData.removeObservers(this);
+        if (comLiveData != null) comLiveData.removeObservers(this);
+        if (regLiveData != null) regLiveData.removeObservers(this);
+        if (morLiveData != null) morLiveData.removeObservers(this);
+    }
+
+    private void initializeViewModels() {
+        listingViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
+        visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
+        locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
+        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+        socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+        relationshipViewModel = new ViewModelProvider(this).get(RelationshipViewModel.class);
+        pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
+        pregnancyoutcomeViewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
+        outcomeViewModel = new ViewModelProvider(this).get(OutcomeViewModel.class);
+        demographicViewModel = new ViewModelProvider(this).get(DemographicViewModel.class);
+        deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+        vpmViewModel = new ViewModelProvider(this).get(VpmViewModel.class);
+        hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
+        residencyViewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
+        inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
+        outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
+        amendmentViewModel = new ViewModelProvider(this).get(AmendmentViewModel.class);
+        vaccinationViewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
+        duplicateViewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
+        communityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
+        registryViewModel = new ViewModelProvider(this).get(RegistryViewModel.class);
+        morbidityViewModel = new ViewModelProvider(this).get(MorbidityViewModel.class);
+    }
+
+    private void performSync() {
+        if (isDestroyed.get()) return;
+
+        // Show progress
+        buttonSyncAll.setEnabled(false);
+        syncProgressBar.setVisibility(View.VISIBLE);
+        tvSyncStatus.setVisibility(View.VISIBLE);
+        tvSyncStatus.setText("Preparing to sync...");
+
+        new Thread(() -> {
+            try {
+                // Simulate sync process (replace with actual sync logic)
+                for (int i = 0; i <= 100; i += 10) {
+                    if (isDestroyed.get()) return; // Stop if activity destroyed
+
+                    final int progress = i;
+                    Thread.sleep(300);
+
+                    if (!isDestroyed.get()) {
+                        runOnUiThread(() -> {
+                            if (!isDestroyed.get()) {
+                                syncProgressBar.setProgress(progress);
+                                tvSyncStatus.setText("Syncing records... " + progress + "%");
+                            }
+                        });
+                    }
+                }
+
+                // Update last sync time
+                String currentTime = new SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.US)
+                        .format(Calendar.getInstance().getTime());
+
+                if (!isDestroyed.get()) {
+                    runOnUiThread(() -> {
+                        if (!isDestroyed.get()) {
+                            syncProgressBar.setVisibility(View.GONE);
+                            tvSyncStatus.setVisibility(View.GONE);
+                            buttonSyncAll.setEnabled(true);
+                            tvLastSyncTime.setText("Last sync: " + currentTime);
+                            Toast.makeText(this, "Sync completed successfully!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (!isDestroyed.get()) {
+                    runOnUiThread(() -> {
+                        if (!isDestroyed.get()) {
+                            syncProgressBar.setVisibility(View.GONE);
+                            tvSyncStatus.setVisibility(View.GONE);
+                            buttonSyncAll.setEnabled(true);
+                            Toast.makeText(this, "Sync failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
+    private void startBatchSync() {
+        if (authorizationHeader == null || authorizationHeader.isEmpty()) {
+            Toast.makeText(this, "Invalid credentials. Please login again.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (isSyncing.get()) {
+            Toast.makeText(this, "Sync already in progress", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        isSyncing.set(true);
+        progress.setMessage("Preparing to sync...");
+        progress.setCancelable(false);
+        progress.show();
+
+        syncOperationsCompleted = 0;
+        totalSyncOperations = 22; // Total number of data types to sync
+
+        // Start the sync chain
+        sendLocationData();
+    }
+
+    private void sendLocationData() {
+        if (isDestroyed.get()) {
+            onSyncError("Activity destroyed");
+            return;
+        }
+
+        new Thread(() -> {
+            try {
+                List<Locations> itemsToSync = locationViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Locations",
+                        (auth, data) -> dao.sendLocationdata(auth, data),
+                        sentData -> {
+                            Locations[] array = sentData.toArray(new Locations[0]);
+                            for (Locations elem : array) {
+                                elem.setComplete(0);
+                            }
+                            locationViewModel.add(array);
+                        },
+                        this::sendVisitData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Locations", e);
+                onSyncError("Error retrieving Locations: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendVisitData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Visit> itemsToSync = visitViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Visits",
+                        (auth, data) -> dao.sendVisitdata(auth, data),
+                        sentData -> {
+                            Visit[] array = sentData.toArray(new Visit[0]);
+                            for (Visit elem : array) {
+                                elem.complete = 0;
+                            }
+                            visitViewModel.add(array);
+                        },
+                        this::sendListingData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Visits", e);
+                onSyncError("Error retrieving Visits: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendListingData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Listing> itemsToSync = listingViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Listings",
+                        (auth, data) -> dao.sendListing(auth, data),
+                        sentData -> {
+                            Listing[] array = sentData.toArray(new Listing[0]);
+                            for (Listing elem : array) {
+                                elem.complete = 0;
+                            }
+                            listingViewModel.add(array);
+                        },
+                        this::sendIndividualData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Listings", e);
+                onSyncError("Error retrieving Listings: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendIndividualData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Individual> itemsToSync = individualViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Individuals",
+                        (auth, data) -> dao.sendIndividualdata(auth, data),
+                        sentData -> {
+                            Individual[] array = sentData.toArray(new Individual[0]);
+                            for (Individual elem : array) {
+                                elem.complete = 0;
+                            }
+                            individualViewModel.add(array);
+                        },
+                        this::sendSocialgroupData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Individuals", e);
+                onSyncError("Error retrieving Individuals: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendSocialgroupData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Socialgroup> itemsToSync = socialgroupViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Socialgroups",
+                        (auth, data) -> dao.sendSocialgroupdata(auth, data),
+                        sentData -> {
+                            Socialgroup[] array = sentData.toArray(new Socialgroup[0]);
+                            for (Socialgroup elem : array) {
+                                elem.complete = 0;
+                            }
+                            socialgroupViewModel.add(array);
+                        },
+                        this::sendRelationshipData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Socialgroups", e);
+                onSyncError("Error retrieving Socialgroups: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendRelationshipData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Relationship> itemsToSync = relationshipViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Relationships",
+                        (auth, data) -> dao.sendRelationshipdata(auth, data),
+                        sentData -> {
+                            Relationship[] array = sentData.toArray(new Relationship[0]);
+                            for (Relationship elem : array) {
+                                elem.complete = 0;
+                            }
+                            relationshipViewModel.add(array);
+                        },
+                        this::sendPregnancyData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Relationships", e);
+                onSyncError("Error retrieving Relationships: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendPregnancyData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Pregnancy> itemsToSync = pregnancyViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Pregnancies",
+                        (auth, data) -> dao.sendPregnancydata(auth, data),
+                        sentData -> {
+                            Pregnancy[] array = sentData.toArray(new Pregnancy[0]);
+                            for (Pregnancy elem : array) {
+                                elem.complete = 0;
+                            }
+                            pregnancyViewModel.add(array);
+                        },
+                        this::sendPregnancyOutcomeData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Pregnancies", e);
+                onSyncError("Error retrieving Pregnancies: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendPregnancyOutcomeData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Pregnancyoutcome> itemsToSync = pregnancyoutcomeViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Pregnancy Outcomes",
+                        (auth, data) -> dao.sendPregoutcomedata(auth, data),
+                        sentData -> {
+                            Pregnancyoutcome[] array = sentData.toArray(new Pregnancyoutcome[0]);
+                            for (Pregnancyoutcome elem : array) {
+                                elem.complete = 0;
+                            }
+                            pregnancyoutcomeViewModel.add(array);
+                        },
+                        this::sendOutcomeData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Pregnancy Outcomes", e);
+                onSyncError("Error retrieving Pregnancy Outcomes: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendOutcomeData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Outcome> itemsToSync = outcomeViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Outcomes",
+                        (auth, data) -> dao.sendOutcomedata(auth, data),
+                        sentData -> {
+                            Outcome[] array = sentData.toArray(new Outcome[0]);
+                            for (Outcome elem : array) {
+                                elem.complete = 0;
+                            }
+                            outcomeViewModel.add(array);
+                        },
+                        this::sendDemographicData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Outcomes", e);
+                onSyncError("Error retrieving Outcomes: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendDemographicData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Demographic> itemsToSync = demographicViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Demographics",
+                        (auth, data) -> dao.sendDemographicdata(auth, data),
+                        sentData -> {
+                            Demographic[] array = sentData.toArray(new Demographic[0]);
+                            for (Demographic elem : array) {
+                                elem.complete = 0;
+                            }
+                            demographicViewModel.add(array);
+                        },
+                        this::sendDeathData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Demographics", e);
+                onSyncError("Error retrieving Demographics: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendDeathData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Death> itemsToSync = deathViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Deaths",
+                        (auth, data) -> dao.sendDeathdata(auth, data),
+                        sentData -> {
+                            Death[] array = sentData.toArray(new Death[0]);
+                            for (Death elem : array) {
+                                elem.complete = 0;
+                            }
+                            deathViewModel.add(array);
+                        },
+                        this::sendVpmData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Deaths", e);
+                onSyncError("Error retrieving Deaths: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendVpmData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Vpm> itemsToSync = vpmViewModel.retrieveToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "VPM",
+                        (auth, data) -> dao.sendVpmdata(auth, data),
+                        sentData -> {
+                            Vpm[] array = sentData.toArray(new Vpm[0]);
+                            for (Vpm elem : array) {
+                                elem.complete = 0;
+                            }
+                            vpmViewModel.add(array);
+                        },
+                        this::sendSociodemoData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving VPM", e);
+                onSyncError("Error retrieving VPM: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendSociodemoData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<HdssSociodemo> itemsToSync = hdssSociodemoViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Sociodemographics",
+                        (auth, data) -> dao.sendSociodata(auth, data),
+                        sentData -> {
+                            HdssSociodemo[] array = sentData.toArray(new HdssSociodemo[0]);
+                            for (HdssSociodemo elem : array) {
+                                elem.complete = 0;
+                            }
+                            hdssSociodemoViewModel.add(array);
+                        },
+                        this::sendResidencyData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Sociodemographics", e);
+                onSyncError("Error retrieving Sociodemographics: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendResidencyData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Residency> itemsToSync = residencyViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Residencies",
+                        (auth, data) -> dao.sendResidencydata(auth, data),
+                        sentData -> {
+                            Residency[] array = sentData.toArray(new Residency[0]);
+                            for (Residency elem : array) {
+                                elem.complete = 0;
+                            }
+                            residencyViewModel.add(array);
+                        },
+                        this::sendInmigrationData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Residencies", e);
+                onSyncError("Error retrieving Residencies: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendInmigrationData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Inmigration> itemsToSync = inmigrationViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Inmigrations",
+                        (auth, data) -> dao.sendInmigrationdata(auth, data),
+                        sentData -> {
+                            Inmigration[] array = sentData.toArray(new Inmigration[0]);
+                            for (Inmigration elem : array) {
+                                elem.complete = 0;
+                            }
+                            inmigrationViewModel.add(array);
+                        },
+                        this::sendOutmigrationData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Inmigrations", e);
+                onSyncError("Error retrieving Inmigrations: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendOutmigrationData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Outmigration> itemsToSync = outmigrationViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Outmigrations",
+                        (auth, data) -> dao.sendOutmigrationdata(auth, data),
+                        sentData -> {
+                            Outmigration[] array = sentData.toArray(new Outmigration[0]);
+                            for (Outmigration elem : array) {
+                                elem.complete = 0;
+                            }
+                            outmigrationViewModel.add(array);
+                        },
+                        this::sendAmendmentData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Outmigrations", e);
+                onSyncError("Error retrieving Outmigrations: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendAmendmentData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Amendment> itemsToSync = amendmentViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Amendments",
+                        (auth, data) -> dao.sendAmendment(auth, data),
+                        sentData -> {
+                            Amendment[] array = sentData.toArray(new Amendment[0]);
+                            for (Amendment elem : array) {
+                                elem.complete = 0;
+                            }
+                            amendmentViewModel.add(array);
+                        },
+                        this::sendVaccinationData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Amendments", e);
+                onSyncError("Error retrieving Amendments: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendVaccinationData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Vaccination> itemsToSync = vaccinationViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Vaccinations",
+                        (auth, data) -> dao.sendVaccination(auth, data),
+                        sentData -> {
+                            Vaccination[] array = sentData.toArray(new Vaccination[0]);
+                            for (Vaccination elem : array) {
+                                elem.complete = 0;
+                            }
+                            vaccinationViewModel.add(array);
+                        },
+                        this::sendDuplicateData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Vaccinations", e);
+                onSyncError("Error retrieving Vaccinations: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendDuplicateData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Duplicate> itemsToSync = duplicateViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Duplicates",
+                        (auth, data) -> dao.sendDup(auth, data),
+                        sentData -> {
+                            Duplicate[] array = sentData.toArray(new Duplicate[0]);
+                            for (Duplicate elem : array) {
+                                elem.complete = 0;
+                            }
+                            duplicateViewModel.add(array);
+                        },
+                        this::sendCommunityData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Duplicates", e);
+                onSyncError("Error retrieving Duplicates: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendCommunityData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<CommunityReport> itemsToSync = communityViewModel.retrieveToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Community Reports",
+                        (auth, data) -> dao.sendCommunity(auth, data),
+                        sentData -> {
+                            CommunityReport[] array = sentData.toArray(new CommunityReport[0]);
+                            for (CommunityReport elem : array) {
+                                elem.complete = 0;
+                            }
+                            communityViewModel.add(array);
+                        },
+                        this::sendRegistryData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Community Reports", e);
+                onSyncError("Error retrieving Community Reports: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendRegistryData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Registry> itemsToSync = registryViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Registry",
+                        (auth, data) -> dao.sendRegistry(auth, data),
+                        sentData -> {
+                            Registry[] array = sentData.toArray(new Registry[0]);
+                            for (Registry elem : array) {
+                                elem.complete = 0;
+                            }
+                            registryViewModel.add(array);
+                        },
+                        this::sendMorbidityData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Registry", e);
+                onSyncError("Error retrieving Registry: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendMorbidityData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Morbidity> itemsToSync = morbidityViewModel.retrieveToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Morbidity",
+                        (auth, data) -> dao.sendMorbidity(auth, data),
+                        sentData -> {
+                            Morbidity[] array = sentData.toArray(new Morbidity[0]);
+                            for (Morbidity elem : array) {
+                                elem.complete = 0;
+                            }
+                            morbidityViewModel.add(array);
+                        },
+                        this::onOperationComplete
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Morbidity", e);
+                onSyncError("Error retrieving Morbidity: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    /**
+     * Generic method to send data in batches
+     * Uses List internally but converts to array for ViewModel compatibility
+     */
+    private <T> void sendDataInBatches(
+            List<T> allItems,
+            String dataType,
+            BiFunction<String, DataWrapper<T>, Call<DataWrapper<T>>> apiCallFunction,
+            Consumer<List<T>> updateFunction,
+            Runnable onComplete) {
+
+        if (isDestroyed.get()) return;
+
+        if (allItems == null || allItems.isEmpty()) {
+            Log.d(TAG, "No " + dataType + " records to sync");
+            handler.post(() -> {
+                if (!isDestroyed.get()) {
+                    onOperationComplete();
+                    onComplete.run();
+                }
+            });
+            return;
+        }
+
+        int totalBatches = (int) Math.ceil((double) allItems.size() / BATCH_SIZE);
+        Log.d(TAG, "Total " + dataType + " to sync: " + allItems.size() + " in " + totalBatches + " batches");
+
+        sendBatch(allItems, dataType, 0, totalBatches, apiCallFunction, updateFunction, onComplete);
+    }
+
+    /**
+     * Recursive method to send individual batches
+     */
+    private <T> void sendBatch(
+            List<T> allItems,
+            String dataType,
+            int currentBatch,
+            int totalBatches,
+            BiFunction<String, DataWrapper<T>, Call<DataWrapper<T>>> apiCallFunction,
+            Consumer<List<T>> updateFunction,
+            Runnable onComplete) {
+
+        if (isDestroyed.get()) return;
+
+        int fromIndex = currentBatch * BATCH_SIZE;
+
+        if (fromIndex >= allItems.size()) {
+            // All batches completed
+            Log.d(TAG, "All " + dataType + " batches sent successfully");
+            handler.post(() -> {
+                if (!isDestroyed.get()) {
+                    onOperationComplete();
+                    onComplete.run();
+                }
+            });
+            return;
+        }
+
+        int toIndex = Math.min(fromIndex + BATCH_SIZE, allItems.size());
+        List<T> batch = allItems.subList(fromIndex, toIndex);
+        int batchNumber = currentBatch + 1;
+
+        handler.post(() -> {
+            if (isDestroyed.get()) return;
+
+            progress.setMessage("Sending " + dataType + " batch " + batchNumber + " of " +
+                    totalBatches + " (" + batch.size() + " records)...");
+
+            DataWrapper<T> wrappedData = new DataWrapper<>(batch);
+            Call<DataWrapper<T>> call = apiCallFunction.apply(authorizationHeader, wrappedData);
+
+            call.enqueue(new Callback<DataWrapper<T>>() {
+                @Override
+                public void onResponse(@NonNull Call<DataWrapper<T>> call, @NonNull Response<DataWrapper<T>> response) {
+                    if (isDestroyed.get()) return;
+
+                    if (response.isSuccessful() && response.body() != null
+                            && response.body().getData() != null && !response.body().getData().isEmpty()) {
+
+                        List<T> sentDataList = wrappedData.getData();
+                        updateFunction.accept(sentDataList);
+
+                        Log.d(TAG, dataType + " batch " + batchNumber + "/" + totalBatches +
+                                " sent successfully (" + sentDataList.size() + " records)");
+
+                        handler.post(() -> {
+                            if (isDestroyed.get()) return;
+
+                            progress.setMessage("Sent " + dataType + " batch " + batchNumber + " of " +
+                                    totalBatches);
+
+                            // Send next batch after delay
+                            handler.postDelayed(() -> {
+                                        if (!isDestroyed.get()) {
+                                            sendBatch(allItems, dataType, currentBatch + 1, totalBatches,
+                                                    apiCallFunction, updateFunction, onComplete);
+                                        }
+                                    },
+                                    BATCH_DELAY_MS);
+                        });
+
+                    } else {
+                        Log.e(TAG, dataType + " batch " + batchNumber + " - Server error: " + response.code());
+                        onSyncError("Failed to send " + dataType + " batch " + batchNumber + ": Error " + response.code());
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<DataWrapper<T>> call, @NonNull Throwable t) {
+                    if (isDestroyed.get()) return;
+                    Log.e(TAG, dataType + " batch " + batchNumber + " send failed", t);
+                    onSyncError("Failed to send " + dataType + " batch " + batchNumber + ": " + t.getMessage());
+                }
+            });
+        });
+    }
+
+    private void onOperationComplete() {
+        if (isDestroyed.get()) return;
+
+        syncOperationsCompleted++;
+        Log.d(TAG, "Operation completed: " + syncOperationsCompleted + "/" + totalSyncOperations);
+
+        if (syncOperationsCompleted >= totalSyncOperations) {
+            onSyncSuccess();
         }
     }
 
+    private void onSyncSuccess() {
+        if (isDestroyed.get()) return;
 
+        runOnUiThread(() -> {
+            if (isDestroyed.get()) return;
+
+            isSyncing.set(false);
+            progress.dismiss();
+            saveLastSyncTime();
+            updateLastSyncTime();
+            buttonSyncAll.setText("Sync Completed Successfully");
+            buttonSyncAll.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+            Toast.makeText(this, "All data synced successfully!", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "=== SYNC SUCCESS ===");
+
+            // Reset button after 3 seconds
+            handler.postDelayed(() -> {
+                if (!isDestroyed.get()) {
+                    buttonSyncAll.setText("Sync All Data");
+                    buttonSyncAll.setTextColor(ContextCompat.getColor(PushActivity.this, android.R.color.white));
+                    buttonSyncAll.setEnabled(true);
+                }
+            }, 3000);
+        });
+    }
+
+    private void onSyncError(String errorMessage) {
+        if (isDestroyed.get()) return;
+
+        // Run UI updates on the main thread
+        runOnUiThread(() -> {
+            if (isDestroyed.get()) return;
+
+            isSyncing.set(false);
+            progress.dismiss();
+            syncOperationsCompleted = 0;
+            buttonSyncAll.setEnabled(true);
+            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+            Log.e(TAG, "Sync error: " + errorMessage);
+        });
+    }
+
+    private void updateLastSyncTime() {
+        if (tvLastSyncTime != null && !isDestroyed.get()) {
+            SharedPreferences prefs = getSharedPreferences("SyncDatePreferences", Context.MODE_PRIVATE);
+            long lastSyncMillis = prefs.getLong("lastSyncTime", 0);
+
+            if (lastSyncMillis == 0) {
+                tvLastSyncTime.setText("Last sync: Never");
+            } else {
+                String formattedTime = formatSyncTime(lastSyncMillis);
+                tvLastSyncTime.setText("Last sync: " + formattedTime);
+            }
+        }
+    }
+
+    private String formatSyncTime(long timeMillis) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a", Locale.getDefault());
+        return sdf.format(new Date(timeMillis));
+    }
+
+    private void saveLastSyncTime() {
+        SharedPreferences prefs = getSharedPreferences("SyncDatePreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong("lastSyncTime", System.currentTimeMillis());
+        editor.apply();
+    }
+
+    private void countStats() {
+        // Only initialize observers once
+        if (observersInitialized) {
+            return;
+        }
+        observersInitialized = true;
+
+        // Create LiveData instances
+        locLiveData = locationViewModel.sync();
+        listingLiveData = listingViewModel.sync();
+        visitLiveData = visitViewModel.sync();
+        indLiveData = individualViewModel.sync();
+        hohLiveData = socialgroupViewModel.sync();
+        relLiveData = relationshipViewModel.sync();
+        pregLiveData = pregnancyViewModel.sync();
+        pregoutLiveData = pregnancyoutcomeViewModel.sync();
+        outcomeLiveData = outcomeViewModel.sync();
+        demLiveData = demographicViewModel.sync();
+        dthLiveData = deathViewModel.sync();
+        vpmLiveData = vpmViewModel.sync();
+        sesLiveData = hdssSociodemoViewModel.sync();
+        resLiveData = residencyViewModel.sync();
+        imgLiveData = inmigrationViewModel.sync();
+        omgLiveData = outmigrationViewModel.sync();
+        amendLiveData = amendmentViewModel.sync();
+        vacLiveData = vaccinationViewModel.sync();
+        dupLiveData = duplicateViewModel.sync();
+        comLiveData = communityViewModel.sync();
+        regLiveData = registryViewModel.sync();
+        morLiveData = morbidityViewModel.sync();
+
+        // Observe all LiveData instances
+        locLiveData.observe(this, total -> {
+            loc = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        listingLiveData.observe(this, total -> {
+            list = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        visitLiveData.observe(this, total -> {
+            visit = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        indLiveData.observe(this, total -> {
+            ind = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        hohLiveData.observe(this, total -> {
+            hoh = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        relLiveData.observe(this, total -> {
+            rel = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        pregLiveData.observe(this, total -> {
+            preg = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        pregoutLiveData.observe(this, total -> {
+            pregout = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        outcomeLiveData.observe(this, total -> {
+            out = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        demLiveData.observe(this, total -> {
+            dem = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        dthLiveData.observe(this, total -> {
+            dth = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        vpmLiveData.observe(this, total -> {
+            vpm = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        sesLiveData.observe(this, total -> {
+            ses = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        resLiveData.observe(this, total -> {
+            res = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        imgLiveData.observe(this, total -> {
+            img = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        omgLiveData.observe(this, total -> {
+            omg = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        amendLiveData.observe(this, total -> {
+            amend = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        vacLiveData.observe(this, total -> {
+            vac = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        dupLiveData.observe(this, total -> {
+            dup = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        comLiveData.observe(this, total -> {
+            com = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        regLiveData.observe(this, total -> {
+            reg = total != null ? total : 0L;
+            updateCompleted();
+        });
+
+        morLiveData.observe(this, total -> {
+            mor = total != null ? total : 0L;
+            updateCompleted();
+        });
+    }
+
+    private void updateCompleted() {
+        if (isDestroyed.get() || totalRecords == null) return;
+
+        String statsText = "Locations: " + loc +
+                " | Listing: " + list +
+                " | Visit: " + visit +
+                " | Individual: " + ind +
+                " | Socialgroup: " + hoh +
+                " | Relationship: " + rel +
+                " | Pregnancy: " + preg +
+                " | PregOutcome: " + pregout +
+                " | Outcome: " + out +
+                " | Demographic: " + dem +
+                " | Death: " + dth +
+                " | VPM: " + vpm +
+                " | Sociodemo: " + ses +
+                " | Residency: " + res +
+                " | Inmigration: " + img +
+                " | Outmigration: " + omg +
+                " | Amendment: " + amend +
+                " | Vaccination: " + vac +
+                " | Duplicate: " + dup +
+                " | Community: " + com +
+                " | Registry: " + reg +
+                " | Morbidity: " + mor;
+        totalRecords.setText(statsText);
+    }
 }

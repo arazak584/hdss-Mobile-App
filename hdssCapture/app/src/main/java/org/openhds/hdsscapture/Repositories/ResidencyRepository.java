@@ -243,4 +243,8 @@ public class ResidencyRepository {
         return dao.getView(id);
     }
 
+    public LiveData<Long> sync() {
+        return dao.sync();
+    }
+
 }

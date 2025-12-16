@@ -92,4 +92,7 @@ public interface HdssSociodemoDao {
     List<CompletedForm> getCompletedForms();
     @Query("SELECT * FROM sociodemo where uuid=:id")
     LiveData<HdssSociodemo> getView(String id);
+
+    @Query("SELECT COUNT(*) FROM sociodemo WHERE complete= 1")
+    LiveData<Long> sync();
 }

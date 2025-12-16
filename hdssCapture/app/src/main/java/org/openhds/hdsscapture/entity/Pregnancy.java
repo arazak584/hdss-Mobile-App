@@ -31,7 +31,14 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "pregnancy",
-        indices = {@Index(value = {"individual_uuid","fw_uuid","complete"}, unique = false)})
+        indices = {
+                @Index(value = {"uuid"}, unique = true),
+                @Index(value = {"individual_uuid", "complete"}),
+                @Index(value = {"individual_uuid"}),
+                @Index(value = {"visit_uuid"}),
+                @Index(value = {"fw_uuid"}),
+                @Index(value = {"complete"})
+        })
 public class Pregnancy extends BaseObservable implements Parcelable {
 
     @SerializedName("uuid")

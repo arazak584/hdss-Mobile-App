@@ -82,4 +82,7 @@ public interface DemographicDao {
 
     @Query("SELECT * FROM demographic where individual_uuid=:id")
     LiveData<Demographic> getView(String id);
+
+    @Query("SELECT COUNT(*) FROM demographic WHERE complete= 1")
+    LiveData<Long> sync();
 }

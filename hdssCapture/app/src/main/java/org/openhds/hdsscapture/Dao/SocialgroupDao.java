@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -106,4 +107,7 @@ public interface SocialgroupDao {
 
     @Query("SELECT * FROM socialgroup WHERE insertDate > (SELECT startDate FROM round ORDER BY roundNumber DESC LIMIT 1) AND fw_uuid=:id order by insertDate DESC")
     List<Socialgroup> repo(String id);
+
+    @Query("SELECT COUNT(*) FROM socialgroup WHERE complete= 1")
+    LiveData<Long> sync();
 }

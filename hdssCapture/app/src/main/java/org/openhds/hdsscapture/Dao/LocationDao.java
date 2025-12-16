@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -107,5 +108,8 @@ public interface LocationDao {
 
     @Query("SELECT * FROM locations WHERE insertDate > (SELECT startDate FROM round ORDER BY roundNumber DESC LIMIT 1) AND fw_uuid=:id order by insertDate DESC")
     List<Locations> repo(String id);
+
+    @Query("SELECT COUNT(*) FROM locations WHERE complete= 1")
+    LiveData<Long> sync();
 
 }

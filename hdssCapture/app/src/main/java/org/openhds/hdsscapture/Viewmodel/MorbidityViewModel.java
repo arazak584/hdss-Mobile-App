@@ -67,4 +67,8 @@ public class MorbidityViewModel extends AndroidViewModel {
         morbidityRepository.create(s);
     }
 
+    public LiveData<Long> sync() {
+        return morbidityRepository.sync();
+    }
+
 }

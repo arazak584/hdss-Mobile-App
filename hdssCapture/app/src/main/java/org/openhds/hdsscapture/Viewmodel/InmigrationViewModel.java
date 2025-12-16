@@ -60,4 +60,8 @@ public class InmigrationViewModel extends AndroidViewModel {
     public void add(Inmigration data){ inmigrationRepository.create(data);}
 
     public void add(Inmigration... data){inmigrationRepository.create(data); }
+
+    public LiveData<Long> sync() {
+        return inmigrationRepository.sync();
+    }
 }

@@ -69,4 +69,8 @@ public class RelationshipViewModel extends AndroidViewModel {
         relationshipRepository.update(s, callback);
     }
 
+    public LiveData<Long> sync() {
+        return relationshipRepository.sync();
+    }
+
 }

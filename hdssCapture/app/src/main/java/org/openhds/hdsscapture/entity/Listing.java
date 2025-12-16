@@ -26,7 +26,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity(tableName = "listing",
-        indices = {@Index(value = {"compextId","compno","location_uuid","fw_uuid","complete"}, unique = false)})
+        indices = {
+                @Index(value = {"location_uuid"}, unique = true),
+                @Index(value = {"compno"}, unique = true),
+                @Index(value = {"compextId"}, unique = true),
+                @Index(value = {"compno", "complete"}),
+                @Index(value = {"fw_uuid"}),
+                @Index(value = {"complete"})
+        })
 public class Listing extends BaseObservable {
 
     @SerializedName("location_uuid")

@@ -249,4 +249,8 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.contact(e);
     }
 
+    public LiveData<Long> sync() {
+        return individualRepository.sync();
+    }
+
 }

@@ -128,4 +128,7 @@ public interface ResidencyDao {
     @Query("SELECT * FROM residency where uuid=:id")
     LiveData<Residency> getView(String id);
 
+    @Query("SELECT COUNT(*) FROM residency WHERE complete= 1")
+    LiveData<Long> sync();
+
 }

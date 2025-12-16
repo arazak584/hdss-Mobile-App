@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.core.util.Consumer;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.SocialgroupRepository;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -107,5 +108,8 @@ public class SocialgroupViewModel extends AndroidViewModel {
         socialgroupRepository.visited(s, callback);
     }
 
+    public LiveData<Long> sync() {
+        return socialgroupRepository.sync();
+    }
 
 }

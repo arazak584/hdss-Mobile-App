@@ -150,4 +150,8 @@ public class DeathRepository {
     public LiveData<Death> view(String id) {
         return dao.getView(id);
     }
+
+    public LiveData<Long> sync() {
+        return dao.sync();
+    }
 }

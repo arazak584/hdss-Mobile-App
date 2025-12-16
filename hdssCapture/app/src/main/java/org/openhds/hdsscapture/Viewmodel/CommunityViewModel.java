@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.CommunityRepository;
 import org.openhds.hdsscapture.Repositories.DeathRepository;
@@ -48,4 +49,8 @@ public class CommunityViewModel extends AndroidViewModel {
     public void add(CommunityReport data){ communityRepository.create(data);}
 
     public void add(CommunityReport... data){communityRepository.create(data);  }
+
+    public LiveData<Long> sync() {
+        return communityRepository.sync();
+    }
 }

@@ -26,7 +26,12 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "duplicate",
-        indices = {@Index(value = {"individual_uuid","fw_uuid","complete"}, unique = false)})
+        indices = {
+                @Index(value = {"individual_uuid"}, unique = true),
+                @Index(value = {"individual_uuid", "complete"}),
+                @Index(value = {"fw_uuid"}),
+                @Index(value = {"complete"})
+        })
 public class Duplicate extends BaseObservable {
 
     @Expose

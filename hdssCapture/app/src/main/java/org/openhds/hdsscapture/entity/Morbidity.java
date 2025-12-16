@@ -26,7 +26,14 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "morbidity",
-        indices = {@Index(value = {"individual_uuid","fw_uuid","complete","socialgroup_uuid"}, unique = false)})
+        indices = {
+                @Index(value = {"individual_uuid"}, unique = true),
+                @Index(value = {"uuid"}, unique = true),
+                @Index(value = {"individual_uuid", "complete"}),
+                @Index(value = {"socialgroup_uuid"}),
+                @Index(value = {"fw_uuid"}),
+                @Index(value = {"complete"})
+        })
 public class Morbidity extends BaseObservable {
 
     @Expose

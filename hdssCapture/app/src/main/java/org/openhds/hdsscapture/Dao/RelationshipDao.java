@@ -83,4 +83,7 @@ public interface RelationshipDao {
 
     @Query("SELECT * FROM relationship where uuid=:id")
     LiveData<Relationship> getView(String id);
+
+    @Query("SELECT COUNT(*) FROM relationship WHERE complete= 1")
+    LiveData<Long> sync();
 }

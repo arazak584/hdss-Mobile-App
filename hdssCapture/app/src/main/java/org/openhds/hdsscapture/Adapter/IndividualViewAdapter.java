@@ -167,7 +167,7 @@ public class IndividualViewAdapter extends RecyclerView.Adapter<IndividualViewAd
         holder.linearLayout.setOnClickListener(v -> {
             if (individualClickListener != null) {
                 individualClickListener.onIndividualClick(individual);
-                selectedUuid = individual.getUuid(); // ✅ set directly
+                selectedUuid = individual.getUuid(); //set directly
                 individualSharedViewModel.setSelectedIndividual(individual);
                 notifyDataSetChanged(); // update UI
             }

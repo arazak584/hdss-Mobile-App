@@ -91,4 +91,7 @@ public interface DeathDao {
     @Query("SELECT * FROM death where uuid=:id")
     LiveData<Death> getView(String id);
 
+    @Query("SELECT COUNT(*) FROM death WHERE complete= 1")
+    LiveData<Long> sync();
+
 }

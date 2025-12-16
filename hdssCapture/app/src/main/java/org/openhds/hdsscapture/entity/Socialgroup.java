@@ -28,7 +28,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity(tableName = "socialgroup",
-        indices = {@Index(value = {"uuid","extId","complete","fw_uuid"}, unique = false)})
+        indices = {
+                @Index(value = {"uuid"}, unique = true),
+                @Index(value = {"individual_uuid", "complete"}),
+                @Index(value = {"extId"}, unique = true),
+                @Index(value = {"individual_uuid"}),
+                @Index(value = {"visit_uuid"}),
+                @Index(value = {"fw_uuid"}),
+                @Index(value = {"complete"})
+        })
 public class Socialgroup extends BaseObservable implements Parcelable {
 
     @SerializedName("uuid")

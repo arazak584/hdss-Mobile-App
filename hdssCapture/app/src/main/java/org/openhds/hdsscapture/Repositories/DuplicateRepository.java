@@ -2,6 +2,8 @@ package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
+
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.DuplicateDao;
 import org.openhds.hdsscapture.entity.Duplicate;
@@ -69,6 +71,10 @@ public class DuplicateRepository {
         Future<List<Duplicate>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
+    }
+
+    public LiveData<Long> sync() {
+        return dao.sync();
     }
 
 

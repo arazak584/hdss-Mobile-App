@@ -1,7 +1,11 @@
 package org.openhds.hdsscapture.fragment;
 
+
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,65 +27,118 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.openhds.hdsscapture.Adapter.EndEventsAdapter;
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
 import org.openhds.hdsscapture.Dialog.MinorDialogFragment;
 import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
+import org.openhds.hdsscapture.odk.OdkFormAdapter;
 import org.openhds.hdsscapture.Dialog.PregnancyDialogFragment;
 import org.openhds.hdsscapture.Duplicate.DupFragment;
 import org.openhds.hdsscapture.OutcomeFragment.Birth3Fragment;
 import org.openhds.hdsscapture.OutcomeFragment.BirthExtraFragment;
 import org.openhds.hdsscapture.OutcomeFragment.BirthFragment;
 import org.openhds.hdsscapture.R;
-import org.openhds.hdsscapture.Viewmodel.*;
-import org.openhds.hdsscapture.entity.*;
+import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
+import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
+import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
+import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
+import org.openhds.hdsscapture.Viewmodel.DuplicateViewModel;
+import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
+import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
+import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
+import org.openhds.hdsscapture.Viewmodel.OdkViewModel;
+import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
+import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
+import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
+import org.openhds.hdsscapture.Viewmodel.RegistryViewModel;
+import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
+import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
+import org.openhds.hdsscapture.Viewmodel.SocialgroupViewModel;
+import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
+import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
 import org.openhds.hdsscapture.databinding.FragmentHouseMembersBinding;
+import org.openhds.hdsscapture.entity.Amendment;
+import org.openhds.hdsscapture.entity.Configsettings;
+import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Duplicate;
+import org.openhds.hdsscapture.entity.HdssSociodemo;
+import org.openhds.hdsscapture.entity.Hierarchy;
+import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Inmigration;
+import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Morbidity;
+import org.openhds.hdsscapture.entity.Pregnancy;
+import org.openhds.hdsscapture.entity.Pregnancyoutcome;
+import org.openhds.hdsscapture.entity.Registry;
+import org.openhds.hdsscapture.entity.Relationship;
+import org.openhds.hdsscapture.entity.Residency;
+import org.openhds.hdsscapture.entity.Socialgroup;
+import org.openhds.hdsscapture.entity.Vaccination;
+import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.subqueries.EndEvents;
+import org.openhds.hdsscapture.odk.OdkForm;
+import org.openhds.hdsscapture.odk.OdkUtilsPrefilledInstance;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link HouseMembersFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class HouseMembersFragment extends Fragment implements IndividualViewAdapter.IndividualClickListener {
 
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
-
-    // Core data
     private Locations locations;
     private Socialgroup socialgroup;
+    private FragmentHouseMembersBinding binding;
+    private Residency residency;
     private Individual individual;
-    private Locations currentLocation;
     private Hierarchy level6Data;
-
-    // UI Components - initialized lazily
+    //public static  Individual selectedIndividual;
     private View view;
+    private DeathViewModel deathViewModel;
+    private OutmigrationViewModel outmigrationViewModel;
+    private SocialgroupViewModel viewModel;
+    private RegistryViewModel registryViewModel;
+    private VisitViewModel visitViewModel;
+    private IndividualViewModel individualViewModel;
     private AppCompatButton finish;
+    private OdkViewModel odkViewModel;
+    private RecyclerView recyclerViewOdk;
     private IndividualViewAdapter adapter;
     private RecyclerView recyclerView;
-
-    // ViewModels - cached
-    private IndividualViewModel individualViewModel;
+    private Locations currentLocation;
     private IndividualSharedViewModel individualSharedViewModel;
-    private VisitViewModel visitViewModel;
-    private RegistryViewModel registryViewModel;
-    private DeathViewModel deathViewModel;
-    private SocialgroupViewModel viewModel;
 
-    // Background execution
     private ExecutorService backgroundExecutor;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
-
-    // Cache for config settings
-    private int hohAge = 0;
-    private int motherAge = 0;
-    private int fatherAge = 0;
 
     public HouseMembersFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     //* @param cluster_id  Parameter 1.
+     * @param locations    Parameter 2.
+     * @param socialgroup Parameter 3.
+     * @param individual Parameter 4.
+     * @return A new instance of fragment HouseMembersFragment.
+     */
+    // TODO: Rename and change types and number of parameters
     public static HouseMembersFragment newInstance(Locations locations, Socialgroup socialgroup, Individual individual) {
         HouseMembersFragment fragment = new HouseMembersFragment();
         Bundle args = new Bundle();
@@ -91,534 +149,888 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Extract arguments
         if (getArguments() != null) {
+            //this.cluster_id = getArguments().getParcelable(ARG_CLUSTER_IDS);
             this.socialgroup = getArguments().getParcelable(SOCIAL_ID);
             this.locations = getArguments().getParcelable(LOC_LOCATION_IDS);
             this.individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
-
-        // Initialize shared resources once
         individualSharedViewModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
-        backgroundExecutor = Executors.newSingleThreadExecutor();
 
-        // Load config settings once in background
-        loadConfigSettings();
+        // Initialize executor once
+        backgroundExecutor = Executors.newSingleThreadExecutor();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        //binding = FragmentHouseMembersBinding.inflate(inflater, container, false);
         view = inflater.inflate(R.layout.fragment_house_members, container, false);
+        //binding.setIndividual(individual);
 
-        // Initialize ViewModels
-        initializeViewModels();
-
-        // Get current location
         ClusterSharedViewModel clusterSharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
         currentLocation = clusterSharedViewModel.getCurrentSelectedLocation();
 
-        // Setup UI
-        setupRecyclerView();
-        setupButtons();
-        setupHouseholdInfo();
-
-        // Observe data after view is created
-        view.post(this::observeData);
-
-        // Background checks
-        performBackgroundChecks();
-
-        return view;
-    }
-
-    private void initializeViewModels() {
-        // Initialize only once and cache
-        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-        visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
-        registryViewModel = new ViewModelProvider(this).get(RegistryViewModel.class);
+        //Ended Events
         deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
+        outmigrationViewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
         viewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-    }
+        registryViewModel = new ViewModelProvider(this).get(RegistryViewModel.class);
+        visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
+        individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+        odkViewModel = new ViewModelProvider(this).get(OdkViewModel.class);
+        finish = view.findViewById(R.id.button_cpvisit);
+        updateButtonState();
+        recyclerViewOdk = view.findViewById(R.id.recyclerView_odk);
+        //grantStoragePermission();
+        //query();
 
-    private void setupRecyclerView() {
+        //final TextView hh = view.findViewById(R.id.textView_compextId);
+        TextView name = view.findViewById(R.id.textView_hh);
+        try {
+            Socialgroup data = viewModel.findhse(socialgroup.uuid);
+            if (data != null) {
+                name.setText(data.getGroupName() + " - " + data.getExtId());
+            }else{
+                name.setText("Loading...");
+            }
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         recyclerView = view.findViewById(R.id.recyclerView_household);
         adapter = new IndividualViewAdapter(this, locations, socialgroup, this, individualSharedViewModel);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
-    }
 
-    private void setupButtons() {
-        finish = view.findViewById(R.id.button_cpvisit);
-        updateButtonState();
+        // Use viewLifecycleOwner to avoid memory leaks
+        view.post(this::observeData);
 
-        // Search button
-        view.findViewById(R.id.search).setOnClickListener(v ->
-                SearchFragment.newInstance(locations, socialgroup)
-                        .show(getChildFragmentManager(), "SearchFragment")
-        );
+        final AppCompatButton sea = view.findViewById(R.id.search);
+        sea.setOnClickListener(v -> {
+            SearchFragment.newInstance(locations, socialgroup)
+                    .show(getChildFragmentManager(), "SearchFragment");
+        });
 
-        // Visit button
-        view.findViewById(R.id.button_visit).setOnClickListener(v ->
-                VisitFragment.newInstance(individual, locations, socialgroup)
-                        .show(getChildFragmentManager(), "VisitFragment")
-        );
-
-        // Event menu
-        view.findViewById(R.id.menu).setOnClickListener(this::showEventMenu);
-
-        // Setup all navigation buttons
-        setupNavigationButtons();
-    }
-
-    private void setupNavigationButtons() {
-        // Pregnancy buttons
-        view.findViewById(R.id.pregnancy).setOnClickListener(v ->
-                navigateToFragment(PregnancyFragment.newInstance(individual, locations, socialgroup))
-        );
-        view.findViewById(R.id.pregnancy2).setOnClickListener(v ->
-                navigateToFragment(PregnancyExtraFragment.newInstance(individual, locations, socialgroup))
-        );
-        view.findViewById(R.id.pregnancy3).setOnClickListener(v ->
-                navigateToFragment(Pregnancy3Fragment.newInstance(individual, locations, socialgroup))
-        );
-
-        // Outcome buttons
-        view.findViewById(R.id.outcome).setOnClickListener(v ->
-                navigateToFragment(BirthFragment.newInstance(individual, locations, socialgroup))
-        );
-        view.findViewById(R.id.outcome2).setOnClickListener(v ->
-                navigateToFragment(BirthExtraFragment.newInstance(individual, locations, socialgroup))
-        );
-        view.findViewById(R.id.outcome3).setOnClickListener(v ->
-                navigateToFragment(Birth3Fragment.newInstance(individual, locations, socialgroup))
-        );
-
-        // Other navigation buttons
-        view.findViewById(R.id.dup).setOnClickListener(v ->
-                navigateToFragment(DupFragment.newInstance(individual, null, locations, socialgroup))
-        );
-        view.findViewById(R.id.demographic).setOnClickListener(v ->
-                navigateToFragment(DemographicFragment.newInstance(individual, locations, socialgroup))
-        );
-        view.findViewById(R.id.registry).setOnClickListener(v ->
-                navigateToFragment(RegisterFragment.newInstance(locations, socialgroup, individual))
-        );
-        view.findViewById(R.id.death).setOnClickListener(v ->
-                navigateToFragment(DeathFragment.newInstance(individual, locations, socialgroup))
-        );
-        view.findViewById(R.id.omg).setOnClickListener(v ->
-                navigateToFragment(OutmigrationFragment.newInstance(individual, locations, socialgroup))
-        );
-        view.findViewById(R.id.amend).setOnClickListener(v ->
-                navigateToFragment(AmendmentFragment.newInstance(individual, locations, socialgroup))
-        );
-        view.findViewById(R.id.rel).setOnClickListener(v ->
-                navigateToFragment(RelationshipFragment.newInstance(individual, locations, socialgroup))
-        );
-        view.findViewById(R.id.hoh).setOnClickListener(v ->
-                navigateToFragment(SocialgroupFragment.newInstance(individual, locations, socialgroup))
-        );
-        view.findViewById(R.id.img).setOnClickListener(v ->
-                navigateToFragment(InmigrationFragment.newInstance(individual, locations, socialgroup))
-        );
-        view.findViewById(R.id.ses).setOnClickListener(v ->
-                navigateToFragment(SocioAFragment.newInstance(individual, locations, socialgroup))
-        );
-        view.findViewById(R.id.morbidity).setOnClickListener(v ->
-                navigateToFragment(MorbidityFragment.newInstance(individual, locations, socialgroup))
-        );
-        view.findViewById(R.id.vac).setOnClickListener(v ->
-                navigateToFragment(VaccinationFragment.newInstance(individual, locations, socialgroup))
-        );
-        view.findViewById(R.id.relhoh).setOnClickListener(v ->
-                navigateToFragment(ResidencyFragment.newInstance(individual, locations, socialgroup))
-        );
-    }
-
-    private void navigateToFragment(Fragment fragment) {
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_cluster, fragment)
-                .commit();
-    }
-
-    private void setupHouseholdInfo() {
-        TextView name = view.findViewById(R.id.textView_hh);
         TextView min = view.findViewById(R.id.minor);
-
-        backgroundExecutor.execute(() -> {
-            try {
-                Socialgroup data = viewModel.findhse(socialgroup.uuid);
-                Socialgroup minorData = viewModel.minor(socialgroup.uuid);
-                Visit visitData = visitViewModel.find(socialgroup.uuid);
-
-                mainHandler.post(() -> {
-                    if (!isAdded()) return;
-
-                    if (data != null) {
-                        name.setText(data.getGroupName() + " - " + data.getExtId());
-                    }
-
-                    if (minorData != null) {
-                        min.setText("Household Head is Minor");
-                        min.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.Red));
-                    }
-
-                    AppCompatButton searchBtn = view.findViewById(R.id.search);
-                    if (visitData != null) {
-                        searchBtn.setEnabled(true);
-                    } else {
-                        searchBtn.setEnabled(false);
-                        searchBtn.setText("Unvisited");
-                    }
-
-                    AppCompatButton hohBtn = view.findViewById(R.id.hoh);
-                    if (data != null) {
-                        hohBtn.setEnabled(true);
-                        hohBtn.setVisibility(View.VISIBLE);
-                        hohBtn.setText("Change Household Head");
-                    }
-                });
-            } catch (Exception e) {
-                Log.e("HouseMembersFragment", "Error loading household info", e);
+        try {
+            Socialgroup data = viewModel.minor(socialgroup.uuid);
+            if (data != null) {
+                min.setText("Household Head is Minor");
+                min.setTextColor(ContextCompat.getColorStateList(requireContext(), R.color.Red));
+            }else{
+                min.setText("");
             }
-        });
-    }
 
-    private void loadConfigSettings() {
-        backgroundExecutor.execute(() -> {
-            try {
-                ConfigViewModel configViewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
-                List<Configsettings> settings = configViewModel.findAll();
-                if (settings != null && !settings.isEmpty()) {
-                    hohAge = settings.get(0).hoh_age;
-                    motherAge = settings.get(0).mother_age;
-                    fatherAge = settings.get(0).father_age;
-                }
-            } catch (Exception e) {
-                Log.e("HouseMembersFragment", "Error loading config", e);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        final AppCompatButton cghoh = view.findViewById(R.id.hoh);
+        SocialgroupViewModel model = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+        try {
+            Socialgroup data = model.find(socialgroup.uuid);
+            if (data != null) {
+                cghoh.setEnabled(true);
+                cghoh.setVisibility(View.VISIBLE);
+                cghoh.setText("Change Household Head");
             }
-        });
-    }
 
-    private void performBackgroundChecks() {
-        backgroundExecutor.execute(() -> {
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        VisitViewModel vmodel = new ViewModelProvider(this).get(VisitViewModel.class);
+        try {
+            Visit data = vmodel.find(socialgroup.uuid);
+            if (data != null) {
+                sea.setEnabled(true);
+            }else{
+                sea.setEnabled(false);
+                sea.setText("Unvisited");
+
+            }
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        final AppCompatButton visit = view.findViewById(R.id.button_visit);
+        visit.setOnClickListener(v -> {
+            VisitFragment.newInstance(individual, locations, socialgroup)
+                    .show(getChildFragmentManager(), "VisitFragment");
+        });
+
+        final AppCompatButton preg = view.findViewById(R.id.pregnancy);
+        preg.setOnClickListener(v -> {
+            //final Pregnancy pregnancy = new Pregnancy();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    PregnancyFragment.newInstance(individual,locations, socialgroup)).commit();
+        });
+
+
+        final AppCompatButton preg2 = view.findViewById(R.id.pregnancy2);
+        preg2.setOnClickListener(v -> {
+            //final Pregnancy pregnancy = new Pregnancy();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    PregnancyExtraFragment.newInstance(individual,locations, socialgroup)).commit();
+        });
+
+        final AppCompatButton preg3 = view.findViewById(R.id.pregnancy3);
+        preg3.setOnClickListener(v -> {
+            //final Pregnancy pregnancy = new Pregnancy();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    Pregnancy3Fragment.newInstance(individual,locations, socialgroup)).commit();
+        });
+
+        final AppCompatButton dup = view.findViewById(R.id.dup);
+        dup.setOnClickListener(v -> {
+            //final Duplicate duplicate = new Duplicate();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    DupFragment.newInstance(individual,residency, locations, socialgroup)).commit();
+        });
+
+        final AppCompatButton demo = view.findViewById(R.id.demographic);
+        demo.setOnClickListener(v -> {
+            //final Death death = new Death();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    DemographicFragment.newInstance(individual,locations, socialgroup)).commit();
+        });
+
+        final AppCompatButton reg = view.findViewById(R.id.registry);
+        reg.setOnClickListener(v -> {
+            //final Death death = new Death();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    RegisterFragment.newInstance(locations, socialgroup,individual)).commit();
+        });
+
+        final AppCompatButton dth = view.findViewById(R.id.death);
+        dth.setOnClickListener(v -> {
+            //final Death death = new Death();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    DeathFragment.newInstance(individual,locations, socialgroup)).commit();
+        });
+
+
+        final AppCompatButton omg = view.findViewById(R.id.omg);
+        omg.setOnClickListener(v -> {
+            // final Outmigration outmigration = new Outmigration();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    OutmigrationFragment.newInstance(individual,locations, socialgroup)).commit();
+        });
+
+        final AppCompatButton outcome = view.findViewById(R.id.outcome);
+        outcome.setOnClickListener(v -> {
+            //final Pregnancyoutcome pregnancyoutcome = new Pregnancyoutcome();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    BirthFragment.newInstance(individual, locations, socialgroup)).commit();
+        });
+
+        final AppCompatButton outcome2 = view.findViewById(R.id.outcome2);
+        outcome2.setOnClickListener(v -> {
+            //final Pregnancyoutcome pregnancyoutcome = new Pregnancyoutcome();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    BirthExtraFragment.newInstance(individual, locations, socialgroup)).commit();
+        });
+
+        final AppCompatButton outcome3 = view.findViewById(R.id.outcome3);
+        outcome3.setOnClickListener(v -> {
+            //final Pregnancyoutcome pregnancyoutcome = new Pregnancyoutcome();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    Birth3Fragment.newInstance(individual, locations, socialgroup)).commit();
+        });
+
+        final AppCompatButton amend = view.findViewById(R.id.amend);
+        amend.setOnClickListener(v -> {
+            //final Amendment amendment = new Amendment();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    AmendmentFragment.newInstance(individual, locations, socialgroup)).commit();
+        });
+
+
+        final AppCompatButton rel = view.findViewById(R.id.rel);
+        rel.setOnClickListener(v -> {
+            //final Relationship relationship = new Relationship();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    RelationshipFragment.newInstance(individual, locations, socialgroup)).commit();
+        });
+
+        cghoh.setOnClickListener(v -> {
+            // final Socialgroup socialgroup1 = new Socialgroup();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    SocialgroupFragment.newInstance(individual, locations, socialgroup)).commit();
+        });
+
+        final AppCompatButton img = view.findViewById(R.id.img);
+        img.setOnClickListener(v -> {
+            //final Vaccination vaccination = new Vaccination();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    InmigrationFragment.newInstance(individual, locations, socialgroup)).commit();
+        });
+
+        final AppCompatButton ses = view.findViewById(R.id.ses);
+        ses.setOnClickListener(v -> {
+            //final HdssSociodemo hdssSociodemo = new HdssSociodemo();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    SocioAFragment.newInstance(individual, locations, socialgroup)).commit();
+        });
+
+        final AppCompatButton mor = view.findViewById(R.id.morbidity);
+        mor.setOnClickListener(v -> {
+            //final HdssSociodemo hdssSociodemo = new HdssSociodemo();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    MorbidityFragment.newInstance(individual, locations, socialgroup)).commit();
+        });
+
+
+        final AppCompatButton vac = view.findViewById(R.id.vac);
+        vac.setOnClickListener(v -> {
+            //final Vaccination vaccination = new Vaccination();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    VaccinationFragment.newInstance(individual, locations, socialgroup)).commit();
+        });
+
+        final AppCompatButton relhoh = view.findViewById(R.id.relhoh);
+        relhoh.setOnClickListener(v -> {
+            //final Residency residency1 = new Residency();
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    ResidencyFragment.newInstance(individual, locations, socialgroup)).commit();
+        });
+
+        PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+        executor.execute(() -> {
             try {
-                PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
                 List<Pregnancy> pregnancyList = pregnancyViewModel.retrievePregnancy(socialgroup.getExtId());
-                List<Individual> minorsList = individualViewModel.minors(currentLocation.compno, socialgroup.getExtId());
+                if (pregnancyList != null && !pregnancyList.isEmpty()) {
+                    handler.post(this::showPregnancyDialog);
+                }
 
-                mainHandler.post(() -> {
-                    if (!isAdded()) return;
+                List<Individual> individualList = individualViewModel.minors(currentLocation.compno,socialgroup.getExtId());
+                if (individualList != null && !individualList.isEmpty()) {
+                    handler.post(this::showMinorsDialog);
+                }
 
-                    if (pregnancyList != null && !pregnancyList.isEmpty()) {
-                        showPregnancyDialog();
-                    }
-                    if (minorsList != null && !minorsList.isEmpty()) {
-                        showMinorsDialog();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+
+        AppCompatButton event = view.findViewById(R.id.menu);
+        //imageView = view.findViewById(R.id.menu);
+        event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(getActivity(), v); // Use getActivity() to get the Context
+                popupMenu.getMenuInflater().inflate(R.menu.edit_event, popupMenu.getMenu());
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int itemId = item.getItemId();
+                        if (itemId == R.id.dth) {
+                            // open DialogFragment DthFragment
+                            DthAdapterFragment.newInstance(locations, socialgroup, individual)
+                                    .show(getChildFragmentManager(), "DthAdapterFragment");
+                        } else if (itemId == R.id.omg) {
+                            // open DialogFragment OmgFragment
+                            OmgAdapterFragment.newInstance(locations, socialgroup, individual)
+                                    .show(getChildFragmentManager(), "OmgAdapterFragment");
+                        }
+                        return true;
                     }
                 });
-            } catch (Exception e) {
-                Log.e("HouseMembersFragment", "Error in background checks", e);
+                popupMenu.show();
             }
         });
-    }
 
-    private void showEventMenu(View v) {
-        PopupMenu popupMenu = new PopupMenu(getActivity(), v);
-        popupMenu.getMenuInflater().inflate(R.menu.edit_event, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.dth) {
-                DthAdapterFragment.newInstance(locations, socialgroup, individual)
-                        .show(getChildFragmentManager(), "DthAdapterFragment");
-            } else if (itemId == R.id.omg) {
-                OmgAdapterFragment.newInstance(locations, socialgroup, individual)
-                        .show(getChildFragmentManager(), "OmgAdapterFragment");
-            }
-            return true;
-        });
-        popupMenu.show();
+
+        return view;
+
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        // Clear the selected individual when leaving this fragment
+        //individualSharedViewModel.setSelectedIndividual(null);
+        binding = null;
+    }
+
+
+    @Override
     public void onIndividualClick(Individual selectedIndividual) {
-        if (selectedIndividual == null) {
-            Toast.makeText(getContext(), "No individual selected", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        //HouseMembersFragment.selectedIndividual = selectedIndividual; // Always update the selectedLocation variable
 
-        individualSharedViewModel.setSelectedIndividual(selectedIndividual);
+        // Update the householdAdapter with the selected individual
+        if (selectedIndividual != null) {
+            individualSharedViewModel.setSelectedIndividual(selectedIndividual);
 
-        TextView person = view.findViewById(R.id.textView_person);
-        person.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
-
-        // Update UI in background
-        updateIndividualButtons(selectedIndividual);
-    }
-
-    private void updateIndividualButtons(Individual selectedIndividual) {
-        backgroundExecutor.execute(() -> {
+            ConfigViewModel viewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
+            List<Configsettings> configsettings = null;
             try {
-                // Fetch all data in background
-                Visit visitData = visitViewModel.find(socialgroup.uuid);
-                ButtonStateData stateData = fetchButtonStates(selectedIndividual);
-
-                mainHandler.post(() -> {
-                    if (!isAdded()) return;
-                    applyButtonStates(selectedIndividual, visitData, stateData);
-                });
-            } catch (Exception e) {
-                Log.e("HouseMembersFragment", "Error updating buttons", e);
+                configsettings = viewModel.findAll();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
             }
-        });
-    }
+            int hoh = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).hoh_age : 0;
+            int mage = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).mother_age : 0;
+            int fage = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).father_age : 0;
 
-    private ButtonStateData fetchButtonStates(Individual individual) throws Exception {
-        ButtonStateData data = new ButtonStateData();
+            TextView person = view.findViewById(R.id.textView_person);
+            person.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
+            //eventFormAdapter.formFactory(HouseMembersFragment.selectedIndividual);
+            AppCompatButton dup = view.findViewById(R.id.dup);
+            AppCompatButton preg = view.findViewById(R.id.pregnancy);
+            AppCompatButton dth = view.findViewById(R.id.death);
+            AppCompatButton omg = view.findViewById(R.id.omg);
+            AppCompatButton dem = view.findViewById(R.id.demographic);
+            AppCompatButton preg2 = view.findViewById(R.id.pregnancy2);
+            AppCompatButton preg3 = view.findViewById(R.id.pregnancy3);
+            AppCompatButton outcome = view.findViewById(R.id.outcome);
+            AppCompatButton outcome2 = view.findViewById(R.id.outcome2);
+            AppCompatButton outcome3 = view.findViewById(R.id.outcome3);
+            AppCompatButton amend = view.findViewById(R.id.amend);
+            AppCompatButton rel = view.findViewById(R.id.rel);
+            AppCompatButton choh = view.findViewById(R.id.hoh);
+            AppCompatButton ses = view.findViewById(R.id.ses);
+            AppCompatButton vac = view.findViewById(R.id.vac);
+            AppCompatButton relhoh = view.findViewById(R.id.relhoh);
+            AppCompatButton img = view.findViewById(R.id.img);
+            AppCompatButton mor = view.findViewById(R.id.morbidity);
+            AppCompatButton reg = view.findViewById(R.id.registry);
+            View id1 = view.findViewById(R.id.id1);
+            View id2 = view.findViewById(R.id.id2);
+            View id3 = view.findViewById(R.id.id3);
+            View id4 = view.findViewById(R.id.id4);
+            View id5 = view.findViewById(R.id.id5);
+            View id6 = view.findViewById(R.id.id6);
+            View id7 = view.findViewById(R.id.id7);
+            View id8 = view.findViewById(R.id.id8);
+            View id9 = view.findViewById(R.id.id9);
+            View id10 = view.findViewById(R.id.id10);
+            View id11 = view.findViewById(R.id.id11);
+            View id12 = view.findViewById(R.id.id12);
+            View id13 = view.findViewById(R.id.id13);
+            View id14 = view.findViewById(R.id.id14);
+            View id15 = view.findViewById(R.id.id15);
+            View id16 = view.findViewById(R.id.id16);
+            View id17 = view.findViewById(R.id.id17);
+            View id18 = view.findViewById(R.id.id18);
 
-        // Fetch all completion states
-        DuplicateViewModel dupVM = new ViewModelProvider(this).get(DuplicateViewModel.class);
-        data.duplicate = dupVM.find(individual.uuid);
+            VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
+            try {
+                Visit data = visitViewModel.find(socialgroup.uuid);
 
-        AmendmentViewModel amendVM = new ViewModelProvider(this).get(AmendmentViewModel.class);
-        data.amendment = amendVM.find(individual.uuid);
+                // Define default texts for each button
+                String TextDup = "Duplicate";
+                String TextPreg = "Pregnancy (1)";
+                String TextDth = "Death";
+                String TextOmg = "Outmigration";
+                String TextDem = "Demographic";
+                String Textpreg2 = "Pregnancy (2)";
+                String Textpreg3 = "Pregnancy (3)";
+                String TextOutcome = "Pregnancy Outcome (1)";
+                String TextOutcome2 = "Pregnancy Outcome (2)";
+                String TextOutcome3 = "Pregnancy Outcome (3)";
+                String TextAmend = "Amendment";
+                String TextRel = "Relationship";
+                String TextChoh = "Change Household Head";
+                String TextSes = "Socio-Economic Status";
+                String TextMor = "Morbidity Assessment";
+                String TextVac = "Vaccination";
+                String TextRelhoh = "Update Membership";
+                String TextImg = "Update Inmigration";
+                String TextReg = "Household Registry";
 
-        DemographicViewModel demoVM = new ViewModelProvider(this).get(DemographicViewModel.class);
-        data.demographic = demoVM.find(individual.uuid);
 
-        PregnancyViewModel pregVM = new ViewModelProvider(this).get(PregnancyViewModel.class);
-        data.pregnancy1 = pregVM.find(individual.uuid);
-        data.pregnancy2 = pregVM.finds(individual.uuid);
-        data.pregnancy3 = pregVM.find3(individual.uuid);
-        data.extraPreg2 = pregVM.findss(individual.uuid);
-        data.extraPreg3 = pregVM.finds3(individual.uuid);
-        data.outcomeCheck2 = pregVM.outcome2(individual.uuid);
-        data.outcomeCheck3 = pregVM.outcome3(individual.uuid);
+                // Disable all buttons if Visit data is null
+                boolean isVisitDataNull = (data == null);
+                setButtonEnabled(dup, !isVisitDataNull);
+                setButtonText(dup, !isVisitDataNull, TextDup);
+                setButtonEnabled(preg, !isVisitDataNull);
+                setButtonText(preg, !isVisitDataNull, TextPreg);
+                setButtonEnabled(dth, !isVisitDataNull);
+                setButtonText(dth, !isVisitDataNull, TextDth);
+                setButtonEnabled(omg, !isVisitDataNull);
+                setButtonText(omg, !isVisitDataNull, TextOmg);
+                setButtonEnabled(dem, !isVisitDataNull);
+                setButtonText(dem, !isVisitDataNull, TextDem);
+                setButtonEnabled(preg2, !isVisitDataNull);
+                setButtonText(preg2, !isVisitDataNull, Textpreg2);
+                setButtonEnabled(outcome, !isVisitDataNull);
+                setButtonText(outcome, !isVisitDataNull, TextOutcome);
+                setButtonEnabled(outcome2, !isVisitDataNull);
+                setButtonText(outcome2, !isVisitDataNull, TextOutcome2);
+                setButtonEnabled(amend, !isVisitDataNull);
+                setButtonText(amend, !isVisitDataNull, TextAmend);
+                setButtonEnabled(rel, !isVisitDataNull);
+                setButtonText(rel, !isVisitDataNull, TextRel);
+                setButtonEnabled(choh, !isVisitDataNull);
+                setButtonText(choh, !isVisitDataNull, TextChoh);
+                setButtonEnabled(ses, !isVisitDataNull);
+                setButtonText(ses, !isVisitDataNull, TextSes);
+                setButtonEnabled(vac, !isVisitDataNull);
+                setButtonText(vac, !isVisitDataNull, TextVac);
+                setButtonEnabled(relhoh, !isVisitDataNull);
+                setButtonText(relhoh, !isVisitDataNull, TextRelhoh);
+                setButtonEnabled(mor, !isVisitDataNull);
+                setButtonText(mor, !isVisitDataNull, TextMor);
+                setButtonEnabled(preg3, !isVisitDataNull);
+                setButtonText(preg3, !isVisitDataNull, Textpreg3);
+                setButtonEnabled(outcome3, !isVisitDataNull);
+                setButtonText(outcome3, !isVisitDataNull, TextOutcome3);
+                setButtonEnabled(reg, !isVisitDataNull);
+                setButtonText(reg, !isVisitDataNull, TextReg);
 
-        PregnancyoutcomeViewModel outcomeVM = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
-        data.outcome1 = outcomeVM.find1(individual.uuid);
-        data.outcome2 = outcomeVM.finds(individual.uuid);
-        data.outcome3 = outcomeVM.finds3(individual.uuid);
-
-        RelationshipViewModel relVM = new ViewModelProvider(this).get(RelationshipViewModel.class);
-        data.relationship = relVM.find(individual.uuid);
-
-        HdssSociodemoViewModel sesVM = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
-        data.sociodemo = sesVM.findses(socialgroup.uuid);
-
-        RegistryViewModel regVM = new ViewModelProvider(this).get(RegistryViewModel.class);
-        data.registry = regVM.finds(socialgroup.uuid);
-
-        MorbidityViewModel morbVM = new ViewModelProvider(this).get(MorbidityViewModel.class);
-        data.morbidity = morbVM.finds(individual.uuid);
-
-        SocialgroupViewModel sgVM = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-        data.socialgroup = sgVM.findhse(socialgroup.uuid);
-
-        ResidencyViewModel resVM = new ViewModelProvider(this).get(ResidencyViewModel.class);
-        data.residency = resVM.amend(individual.uuid);
-
-        VaccinationViewModel vacVM = new ViewModelProvider(this).get(VaccinationViewModel.class);
-        data.vaccination = vacVM.find(individual.uuid);
-
-        InmigrationViewModel imgVM = new ViewModelProvider(this).get(InmigrationViewModel.class);
-        data.inmigration = imgVM.find(individual.uuid, currentLocation.uuid);
-
-        return data;
-    }
-
-    private void applyButtonStates(Individual individual, Visit visitData, ButtonStateData stateData) {
-        // Get all buttons
-        AppCompatButton[] buttons = getButtons();
-        View[] dividers = getDividers();
-
-        boolean isVisited = visitData != null;
-
-        // Set enabled state for all buttons
-        for (AppCompatButton btn : buttons) {
-            setButtonEnabled(btn, isVisited);
-        }
-
-        // Apply completion colors
-        changeButtonColor(buttons[0], stateData.duplicate); // dup
-        changeButtonColor(buttons[1], stateData.amendment); // amend
-        changeButtonColor(buttons[2], stateData.demographic); // dem
-        changeButtonColor(buttons[3], stateData.pregnancy1); // preg
-        changeButtonColor(buttons[4], stateData.pregnancy2); // preg2
-        changeButtonColor(buttons[5], stateData.pregnancy3); // preg3
-        changeButtonColor(buttons[6], stateData.outcome1); // outcome
-        changeButtonColor(buttons[7], stateData.outcome2); // outcome2
-        changeButtonColor(buttons[8], stateData.outcome3); // outcome3
-        changeButtonColor(buttons[9], stateData.relationship); // rel
-        changeButtonColor(buttons[10], stateData.sociodemo); // ses
-        changeButtonColor(buttons[11], stateData.registry); // reg
-        changeButtonColor(buttons[12], stateData.morbidity); // mor
-        changeButtonColor(buttons[13], stateData.socialgroup); // choh
-        changeButtonColor(buttons[14], stateData.residency); // relhoh
-        changeButtonColor(buttons[15], stateData.vaccination); // vac
-        changeButtonColor(buttons[16], stateData.inmigration); // img
-
-        // Set visibility based on individual attributes
-        applyVisibilityRules(individual, buttons, dividers, stateData);
-    }
-
-    private AppCompatButton[] getButtons() {
-        return new AppCompatButton[] {
-                view.findViewById(R.id.dup),
-                view.findViewById(R.id.amend),
-                view.findViewById(R.id.demographic),
-                view.findViewById(R.id.pregnancy),
-                view.findViewById(R.id.pregnancy2),
-                view.findViewById(R.id.pregnancy3),
-                view.findViewById(R.id.outcome),
-                view.findViewById(R.id.outcome2),
-                view.findViewById(R.id.outcome3),
-                view.findViewById(R.id.rel),
-                view.findViewById(R.id.ses),
-                view.findViewById(R.id.registry),
-                view.findViewById(R.id.morbidity),
-                view.findViewById(R.id.hoh),
-                view.findViewById(R.id.relhoh),
-                view.findViewById(R.id.vac),
-                view.findViewById(R.id.img)
-        };
-    }
-
-    private View[] getDividers() {
-        return new View[] {
-                view.findViewById(R.id.id1), view.findViewById(R.id.id2),
-                view.findViewById(R.id.id3), view.findViewById(R.id.id4),
-                view.findViewById(R.id.id5), view.findViewById(R.id.id6),
-                view.findViewById(R.id.id7), view.findViewById(R.id.id8),
-                view.findViewById(R.id.id9), view.findViewById(R.id.id10),
-                view.findViewById(R.id.id11), view.findViewById(R.id.id12),
-                view.findViewById(R.id.id13), view.findViewById(R.id.id14),
-                view.findViewById(R.id.id15), view.findViewById(R.id.id16),
-                view.findViewById(R.id.id17), view.findViewById(R.id.id18)
-        };
-    }
-
-    private void applyVisibilityRules(Individual individual, AppCompatButton[] buttons,
-                                      View[] dividers, ButtonStateData stateData) {
-        // First, hide all conditional buttons and dividers by default
-        hideAll(buttons[3], buttons[4], buttons[5], buttons[6], buttons[7], buttons[8]); // All pregnancy & outcome buttons
-        hideAll(buttons[9], buttons[10], buttons[13], buttons[15], buttons[16]); // rel, ses, choh, vac, img
-        hideAll(dividers[4], dividers[5], dividers[6], dividers[7], dividers[8], dividers[9]); // Pregnancy dividers
-        hideAll(dividers[11], dividers[12], dividers[13], dividers[15], dividers[17]); // Other conditional dividers
-
-        // Show basic buttons if gender is set
-        if (individual.gender != null) {
-            setVisible(buttons[0], buttons[1], buttons[2], buttons[11], buttons[12], buttons[14]); // dup, amend, dem, reg, mor, relhoh
-            setVisible(dividers[0], dividers[1], dividers[2], dividers[3], dividers[10], dividers[14], dividers[16]);
-        }
-
-        // Death & outmigration buttons (always visible if gender is set)
-        AppCompatButton dth = view.findViewById(R.id.death);
-        AppCompatButton omg = view.findViewById(R.id.omg);
-        if (individual.gender != null && dth != null && omg != null) {
-            dth.setVisibility(View.VISIBLE);
-            omg.setVisibility(View.VISIBLE);
-        }
-
-        // Inmigration - show if data exists
-        if (stateData.inmigration != null) {
-            buttons[16].setVisibility(View.VISIBLE);
-            dividers[17].setVisibility(View.VISIBLE);
-        }
-
-        // Pregnancy & outcomes - ONLY for females aged motherAge to 55
-        if (individual.gender != null && individual.gender == 2 &&
-                individual.getAge() >= motherAge && individual.getAge() <= 55) {
-
-            setVisible(buttons[3], buttons[6]); // preg, outcome
-            setVisible(dividers[4], dividers[7]);
-
-            // Show extra pregnancy 2 if data exists
-            if (stateData.extraPreg2 != null) {
-                setVisible(buttons[4], dividers[5]); // preg2
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(requireContext(), "Error retrieving visit data", Toast.LENGTH_SHORT).show();
             }
 
-            // Show extra pregnancy 3 if data exists
-            if (stateData.extraPreg3 != null) {
-                setVisible(buttons[5], dividers[6]); // preg3
+            DuplicateViewModel dupViewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
+            try {
+                Duplicate data = dupViewModel.find(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(dup, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(dup, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
             }
 
-            // Show extra outcome 2 if pregnancy 2 exists
-            if (stateData.outcomeCheck2 != null) {
-                setVisible(buttons[7], dividers[8]); // outcome2
+            AmendmentViewModel a = new ViewModelProvider(this).get(AmendmentViewModel.class);
+            try {
+                Amendment data = a.find(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(amend, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(amend, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
             }
 
-            // Show extra outcome 3 if pregnancy 3 exists
-            if (stateData.outcomeCheck3 != null) {
-                setVisible(buttons[8], dividers[9]); // outcome3
+            DemographicViewModel b = new ViewModelProvider(this).get(DemographicViewModel.class);
+            try {
+                Demographic data = b.find(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(dem, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(dem, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
             }
+
+
+            PregnancyViewModel c = new ViewModelProvider(this).get(PregnancyViewModel.class);
+            try {
+                Pregnancy data = c.find(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(preg, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(preg, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            try {
+                Pregnancy data = c.finds(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(preg2, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(preg2, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            try {
+                Pregnancy data = c.find3(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(preg3, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(preg3, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            PregnancyoutcomeViewModel d = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
+            try {
+                Pregnancyoutcome data = d.find1(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(outcome, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(outcome, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            try {
+                Pregnancyoutcome data = d.finds(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(outcome2, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(outcome2, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            try {
+                Pregnancyoutcome data = d.finds3(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(outcome3, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(outcome3, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            RelationshipViewModel g = new ViewModelProvider(this).get(RelationshipViewModel.class);
+            try {
+                Relationship data = g.find(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(rel, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(rel, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            HdssSociodemoViewModel f = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
+            try {
+                HdssSociodemo data = f.findses(socialgroup.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(ses, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(ses, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            RegistryViewModel r = new ViewModelProvider(this).get(RegistryViewModel.class);
+            try {
+                Registry data = r.finds(socialgroup.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(reg, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(reg, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            MorbidityViewModel m = new ViewModelProvider(this).get(MorbidityViewModel.class);
+            try {
+                Morbidity data = m.finds(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(mor, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(mor, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            SocialgroupViewModel h = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+            try {
+                Socialgroup data = h.findhse(socialgroup.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(choh, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(choh, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            ResidencyViewModel i = new ViewModelProvider(this).get(ResidencyViewModel.class);
+            try {
+                Residency data = i.amend(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(relhoh, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(relhoh, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            VaccinationViewModel v = new ViewModelProvider(this).get(VaccinationViewModel.class);
+            try {
+                Vaccination data = v.find(selectedIndividual.uuid);
+                if (data != null) {
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(vac, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(vac, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+
+            if(selectedIndividual.gender!=null) {
+                dup.setVisibility(View.VISIBLE);
+                dem.setVisibility(View.VISIBLE);
+                omg.setVisibility(View.VISIBLE);
+                dth.setVisibility(View.VISIBLE);
+                amend.setVisibility(View.VISIBLE);
+                id11.setVisibility(View.VISIBLE);
+                relhoh.setVisibility(View.VISIBLE);
+                id17.setVisibility(View.VISIBLE);
+                id1.setVisibility(View.VISIBLE);
+                id2.setVisibility(View.VISIBLE);
+                id3.setVisibility(View.VISIBLE);
+                id4.setVisibility(View.VISIBLE);
+                id14.setVisibility(View.VISIBLE);
+                id9.setVisibility(View.VISIBLE);
+                mor.setVisibility(View.VISIBLE);
+                id15.setVisibility(View.VISIBLE);
+                reg.setVisibility(View.VISIBLE);
+
+            }
+
+            InmigrationViewModel imgViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
+            try {
+                Inmigration data = imgViewModel.find(selectedIndividual.uuid,currentLocation.uuid);
+                if (data != null) {
+                    String TextImg = "Update Inmigration";
+                    img.setVisibility(View.VISIBLE);
+                    id18.setVisibility(View.VISIBLE);
+                    boolean isComplete = data.complete != null && data.complete == 1;
+                    boolean isIncomplete = data.complete != null && data.complete == 0;
+                    changeDupButtonColor(img, isComplete, isIncomplete);
+                } else {
+                    changeDupButtonColor(img, false, false);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            //Extra Pregnancy Outcome
+            PregnancyoutcomeViewModel p = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
+            try {
+                Pregnancy data = c.outcome2(selectedIndividual.uuid);
+                if (data != null && selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2) {
+                    outcome2.setVisibility(View.VISIBLE);
+                    id9.setVisibility(View.VISIBLE);
+                } else {
+                    outcome2.setVisibility(View.GONE);
+                    id9.setVisibility(View.GONE);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            //Extra Pregnancy Outcome 3
+            try {
+                Pregnancy data = c.outcome3(selectedIndividual.uuid);
+                if (data != null && selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2) {
+                    outcome3.setVisibility(View.VISIBLE);
+                    id10.setVisibility(View.VISIBLE);
+                } else {
+                    outcome3.setVisibility(View.GONE);
+                    id10.setVisibility(View.GONE);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            //Extra Pregnancy
+            try {
+                Pregnancy data = c.findss(selectedIndividual.uuid);
+                if (data != null && selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2) {
+                    preg2.setVisibility(View.VISIBLE);
+                    id6.setVisibility(View.VISIBLE);
+                } else {
+                    preg2.setVisibility(View.GONE);
+                    id6.setVisibility(View.GONE);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+            //Extra Pregnancy 3
+            try {
+                Pregnancy data = c.finds3(selectedIndividual.uuid);
+                if (data != null && selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2) {
+                    preg3.setVisibility(View.VISIBLE);
+                    id7.setVisibility(View.VISIBLE);
+                } else {
+                    preg3.setVisibility(View.GONE);
+                    id7.setVisibility(View.GONE);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+            }
+
+
+            if (selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2){
+                preg.setVisibility(View.VISIBLE);
+                outcome.setVisibility(View.VISIBLE);
+                //rel.setVisibility(View.VISIBLE);
+                id5.setVisibility(View.VISIBLE);
+                id8.setVisibility(View.VISIBLE);
+            }else{
+                preg.setVisibility(View.GONE);
+                outcome.setVisibility(View.GONE);
+                //rel.setVisibility(View.GONE);
+                id5.setVisibility(View.GONE);
+                id8.setVisibility(View.GONE);
+            }
+            if (selectedIndividual.getAge() >= mage && selectedIndividual.gender==2){
+                rel.setVisibility(View.VISIBLE);
+                id12.setVisibility(View.VISIBLE);
+            }else{
+                rel.setVisibility(View.GONE);
+                id12.setVisibility(View.GONE);
+            }
+
+            if (selectedIndividual.getAge() >= hoh){
+                ses.setVisibility(View.VISIBLE);
+                choh.setVisibility(View.VISIBLE);
+                id14.setVisibility(View.VISIBLE);
+                id13.setVisibility(View.VISIBLE);
+            }else{
+                ses.setVisibility(View.GONE);
+                choh.setVisibility(View.GONE);
+                id14.setVisibility(View.GONE);
+                id13.setVisibility(View.GONE);
+            }
+
+
+            if (selectedIndividual.getAge() < 5){
+                vac.setVisibility(View.VISIBLE);
+                id16.setVisibility(View.VISIBLE);
+            }else{
+                vac.setVisibility(View.GONE);
+                id16.setVisibility(View.GONE);
+            }
+
+        } else {
+            Toast.makeText(getContext(), "No individual selected", Toast.LENGTH_SHORT).show();
         }
 
-        // Relationship - ONLY for females >= motherAge
-        if (individual.gender != null && individual.gender == 2 &&
-                individual.getAge() >= motherAge) {
-            setVisible(buttons[9], dividers[11]); // rel
-        }
 
-        // HOH & SES - age >= hohAge
-        if (individual.getAge() >= hohAge) {
-            setVisible(buttons[10], buttons[13]); // ses, choh
-            setVisible(dividers[12], dividers[13]);
-        }
 
-        // Vaccination - ONLY for children under 5
-        if (individual.getAge() < 5) {
-            setVisible(buttons[15], dividers[15]); // vac
-        }
-    }
-
-    private void hideAll(View... views) {
-        for (View v : views) {
-            if (v != null) v.setVisibility(View.GONE);
-        }
-    }
-
-    private void setVisible(View... views) {
-        for (View v : views) {
-            if (v != null) v.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void setGone(View... views) {
-        for (View v : views) {
-            if (v != null) v.setVisibility(View.GONE);
-        }
     }
 
     private void setButtonEnabled(AppCompatButton button, boolean isEnabled) {
         button.setEnabled(isEnabled);
+        // Set the visibility to visible regardless of the isEnabled state
         button.setVisibility(View.VISIBLE);
-        button.setText(isEnabled ? button.getText() : "Unvisited");
     }
 
-    private void changeButtonColor(AppCompatButton button, Object entity) {
-        if (entity == null) {
+    private void setButtonText(AppCompatButton button, boolean isEnabled, String defaultText) {
+        if (isEnabled) {
+            // Set the default text when the button is enabled
+            button.setText(defaultText);
+        } else {
+            // Set the text for unvisited state
+            button.setText("Unvisited");
+        }
+    }
+
+
+    private void changeDupButtonColor(AppCompatButton button, boolean isComplete, boolean isIncomplete) {
+        if (isComplete) {
+            // Change button color when there is data
+            //button.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.btnd_rone_incomp));
+            button.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.color_dg_start));
+        } else if (isIncomplete) {
+            // Change button color when there is no data
+            button.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.MediumBlue));
+            //button.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.btnd_rone_comp));
+        }
+        else {
+            // Change button color for other cases
+            //button.setBackground(ContextCompat.getDrawable(requireContext(), R.drawable.btnd_rone_btn));
             button.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.home));
-            return;
-        }
-
-        try {
-            Integer complete = (Integer) entity.getClass().getField("complete").get(entity);
-            if (complete != null && complete == 1) {
-                button.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.color_dg_start));
-            } else if (complete != null && complete == 0) {
-                button.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.MediumBlue));
-            }
-        } catch (Exception e) {
-            Log.e("HouseMembersFragment", "Error setting button color", e);
         }
     }
+
 
     private void showPregnancyDialog() {
         PregnancyDialogFragment.newInstance(locations, socialgroup)
@@ -631,67 +1043,83 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     }
 
     private void updateButtonState() {
-        if (!isAdded()) return;
+        if (getActivity() == null || !isAdded()) return; // Ensure fragment is still attached
 
-        backgroundExecutor.execute(() -> {
+        LayoutInflater inflater = getLayoutInflater();
+        View customToastView = inflater.inflate(R.layout.custom_toast, null);
+        TextView toastMessage = customToastView.findViewById(R.id.toast_message);
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler = new Handler(Looper.getMainLooper());
+
+        executor.execute(() -> {
             try {
-                long totalInd = individualViewModel.count(socialgroup.extId, currentLocation.compno);
-                long totalRegistry = registryViewModel.count(socialgroup.getUuid());
-                long totalVisit = visitViewModel.count(socialgroup.uuid);
-                long cntDead = deathViewModel.err(socialgroup.extId, currentLocation.compno);
-                long errMinors = individualViewModel.err(socialgroup.extId, currentLocation.compno);
-                long errsHOH = individualViewModel.errs(socialgroup.extId, currentLocation.compno);
 
-                mainHandler.post(() -> {
-                    if (!isAdded()) return;
+                // Perform database operations in the background
+                long totalInd = (individualViewModel != null) ? individualViewModel.count(socialgroup != null ? socialgroup.extId : "", currentLocation.compno != null ? currentLocation.compno : "") : 0;
+                long totalRegistry = (registryViewModel != null) ? registryViewModel.count(socialgroup != null ? socialgroup.getUuid() : "") : 0;
+                long totalVisit = (visitViewModel != null) ? visitViewModel.count(socialgroup != null ? socialgroup.uuid : "") : 0;
+                long cnt = (deathViewModel != null) ? deathViewModel.err(socialgroup != null ? socialgroup.extId : "", currentLocation.compno != null ? currentLocation.compno : "") : 0;
+                long err = (individualViewModel != null) ? individualViewModel.err(socialgroup != null ? socialgroup.extId : "", currentLocation.compno != null ? currentLocation.compno : "") : 0;
+                long errs = (individualViewModel != null) ? individualViewModel.errs(socialgroup != null ? socialgroup.extId : "", currentLocation.compno != null ? currentLocation.compno : "") : 0;
 
-                    LayoutInflater inflater = getLayoutInflater();
-                    View toastView = inflater.inflate(R.layout.custom_toast, null);
-                    TextView toastMsg = toastView.findViewById(R.id.toast_message);
+                handler.post(() -> {
+                    if (getActivity() == null || !isAdded()) return; // Ensure fragment is still attached
+                    Log.d("Count", "Count: " + totalInd +" : " + totalVisit + " : " + totalVisit);
 
-                    if (cntDead > 0) {
-                        showToast("Change Head of Household [HOH is Dead]", toastView, toastMsg);
-                    } else if (totalInd > 0 && totalVisit > 0 && totalRegistry <= 0) {
-                        showToast("Complete Household Registry Before Exit", toastView, toastMsg);
-                    } else if (errsHOH > 0) {
-                        showToast("Household Head is a Minor", toastView, toastMsg);
-                    } else if (errMinors > 0) {
-                        showToast("Only Minors Left in Household", toastView, toastMsg);
-                    } else {
-                        enableFinishButton();
+                    try {
+                        if (cnt > 0) {
+                            showToast("Change Head of Household [HOH is Dead]", customToastView, toastMessage);
+                        } else if (totalInd > 0 && totalVisit > 0 && totalRegistry <= 0) {
+                            showToast("Complete Household Registry Before Exit", customToastView, toastMessage);
+                        } else if (errs > 0) {
+                            showToast("Household Head is a Minor", customToastView, toastMessage);
+                        } else if (err > 0) {
+                            showToast("Only Minors Left in Household", customToastView, toastMessage);
+                        } else {
+                            enableFinishButton();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 });
             } catch (Exception e) {
-                Log.e("HouseMembersFragment", "Error updating button state", e);
+                e.printStackTrace();
+            } finally {
+                executor.shutdown();
             }
         });
     }
 
+    // Helper method to show a custom toast message
     private void showToast(String message, View customToastView, TextView toastMessage) {
-        if (!isAdded()) return;
+        if (getActivity() == null || !isAdded()) return; // Ensure fragment is still attached
 
         finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home));
         finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_border_lightgray));
         finish.setOnClickListener(v -> {
             toastMessage.setText(message);
-            Toast toast = new Toast(requireContext());
-            toast.setDuration(Toast.LENGTH_LONG);
-            toast.setView(customToastView);
-            toast.show();
+            Toast customToast = new Toast(requireContext());
+            customToast.setDuration(Toast.LENGTH_LONG);
+            customToast.setView(customToastView);
+            customToast.show();
         });
     }
 
+    // Helper method to enable the finish button with default functionality
     private void enableFinishButton() {
-        if (!isAdded()) return;
+        if (getActivity() == null || !isAdded()) return;
 
-        finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home));
-        finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
+        finish.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.home)); // Original color
+        finish.setTextColor(ContextCompat.getColor(requireContext(), R.color.white)); // Original text color
         finish.setEnabled(true);
-        finish.setOnClickListener(v ->
-                requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container_cluster, ClusterFragment.newInstance(level6Data, locations, socialgroup))
-                        .commit()
-        );
+        finish.setOnClickListener(v -> {
+            // Clear selected individual before navigating back
+            individualSharedViewModel.setSelectedIndividual(null);
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container_cluster, ClusterFragment.newInstance(level6Data, locations, socialgroup))
+                    .commit();
+        });
     }
 
     private void observeData() {
@@ -700,6 +1128,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                     .observe(getViewLifecycleOwner(), individuals -> {
                         if (individuals != null && !individuals.isEmpty()) {
                             adapter.setIndividualList(individuals);
+
+                            //Trigger button visibility logic
                             Individual selected = individualSharedViewModel.getCurrentSelectedIndividual();
                             if (selected != null) {
                                 onIndividualClick(selected);
@@ -712,63 +1142,23 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         }
     }
 
+    // Override the onBackPressed() method in the hosting activity
+    //@Override
     public void onBackPressed() {
         new AlertDialog.Builder(getActivity())
                 .setTitle(getString(R.string.exit_confirmation_title))
                 .setMessage(getString(R.string.exiting_lbl))
                 .setCancelable(false)
-                .setPositiveButton(getString(R.string.yes), (dialog, id) -> {
-                    try {
-                        getActivity().finish();
-                    } catch (Exception e) {
-                        Log.e("HouseMembersFragment", "Error finishing activity", e);
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        try{
+                            getActivity().finish();
+                        }
+                        catch(Exception e){}
                     }
                 })
                 .setNegativeButton(getString(R.string.no), null)
                 .show();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        // Clear references to prevent memory leaks
-        view = null;
-        finish = null;
-        adapter = null;
-        recyclerView = null;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // Shutdown executor to prevent memory leaks
-        if (backgroundExecutor != null && !backgroundExecutor.isShutdown()) {
-            backgroundExecutor.shutdown();
-        }
-    }
-
-    // Helper class to hold button state data
-    private static class ButtonStateData {
-        Duplicate duplicate;
-        Amendment amendment;
-        Demographic demographic;
-        Pregnancy pregnancy1;
-        Pregnancy pregnancy2;
-        Pregnancy pregnancy3;
-        Pregnancy extraPreg2;
-        Pregnancy extraPreg3;
-        Pregnancy outcomeCheck2;
-        Pregnancy outcomeCheck3;
-        Pregnancyoutcome outcome1;
-        Pregnancyoutcome outcome2;
-        Pregnancyoutcome outcome3;
-        Relationship relationship;
-        HdssSociodemo sociodemo;
-        Registry registry;
-        Morbidity morbidity;
-        Socialgroup socialgroup;
-        Residency residency;
-        Vaccination vaccination;
-        Inmigration inmigration;
-    }
 }

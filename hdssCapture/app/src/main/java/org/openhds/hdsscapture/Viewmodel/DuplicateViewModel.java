@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.DuplicateRepository;
 import org.openhds.hdsscapture.entity.Duplicate;
@@ -42,6 +43,10 @@ public class DuplicateViewModel extends AndroidViewModel {
 
     public void add(Duplicate... data){
         duplicateRepository.create(data);
+    }
+
+    public LiveData<Long> sync() {
+        return duplicateRepository.sync();
     }
 
 }

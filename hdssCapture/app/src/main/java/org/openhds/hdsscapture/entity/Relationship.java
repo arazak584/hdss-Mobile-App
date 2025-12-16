@@ -30,7 +30,17 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "relationship",
-indices = {@Index(value = {"individualA_uuid", "individualB_uuid","fw_uuid","complete"}, unique = false)})
+        indices = {
+                @Index(value = {"uuid"}, unique = true),
+                @Index(value = {"individualA_uuid", "complete"}),
+                @Index(value = {"individualA_uuid"}),
+                @Index(value = {"individualB_uuid"}),
+                @Index(value = {"visit_uuid"}),
+                @Index(value = {"location_uuid"}),
+                @Index(value = {"locationB_uuid"}),
+                @Index(value = {"fw_uuid"}),
+                @Index(value = {"complete"})
+        })
 public class Relationship extends BaseObservable implements Parcelable {
 
     @SerializedName("uuid")

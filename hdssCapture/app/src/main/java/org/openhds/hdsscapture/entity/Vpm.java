@@ -28,7 +28,13 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "vpm",
-indices = {@Index(value = {"individual_uuid", "compno", "fw_uuid","complete"}, unique = false)})
+        indices = {
+                @Index(value = {"uuid"}, unique = true),
+                @Index(value = {"individual_uuid"}),
+                @Index(value = {"compno"}),
+                @Index(value = {"fw_uuid"}),
+                @Index(value = {"complete"})
+        })
 public class Vpm extends BaseObservable implements Parcelable {
 
     @Expose

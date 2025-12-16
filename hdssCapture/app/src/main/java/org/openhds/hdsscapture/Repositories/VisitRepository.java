@@ -2,6 +2,8 @@ package org.openhds.hdsscapture.Repositories;
 
 import android.app.Application;
 
+import androidx.lifecycle.LiveData;
+
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.VisitDao;
 import org.openhds.hdsscapture.entity.Visit;
@@ -59,11 +61,10 @@ public class VisitRepository {
         return future.get();
     }
 
-//    public long countLocs(Date startDate, Date endDate) throws ExecutionException, InterruptedException {
-//        Callable<Long> callable = () -> dao.countLocs(startDate, endDate);
-//        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
-//        return future.get();
-//    }
+
+    public LiveData<Long> sync() {
+        return dao.sync();
+    }
 
 
 }

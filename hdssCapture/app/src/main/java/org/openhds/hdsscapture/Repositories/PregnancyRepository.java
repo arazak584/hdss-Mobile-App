@@ -214,4 +214,8 @@ public class PregnancyRepository {
 
         return future.get();
     }
+
+    public LiveData<Long> sync() {
+        return dao.sync();
+    }
 }

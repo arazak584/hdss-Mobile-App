@@ -88,4 +88,8 @@ public class OutmigrationViewModel extends AndroidViewModel {
         outmigrationRepository.update(s, callback);
     }
     //public void add(Death... data){     deathRepository.create(data);  }
+
+    public LiveData<Long> sync() {
+        return outmigrationRepository.sync();
+    }
 }

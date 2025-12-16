@@ -80,4 +80,7 @@ public interface MorbidityDao {
 
     @Query("SELECT * FROM morbidity where uuid=:id")
     LiveData<Morbidity> getView(String id);
+
+    @Query("SELECT COUNT(*) FROM morbidity WHERE complete= 1")
+    LiveData<Long> sync();
 }

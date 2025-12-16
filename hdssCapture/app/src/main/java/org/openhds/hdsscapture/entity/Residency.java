@@ -29,7 +29,17 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "residency",
-indices = {@Index(value = {"individual_uuid","location_uuid","socialgroup_uuid","fw_uuid","complete"}, unique = false)})
+        indices = {
+                @Index(value = {"uuid"}, unique = true),  // Primary lookups
+                @Index(value = {"individual_uuid"}),  // Find all residencies for an individual
+                @Index(value = {"individual_uuid", "complete"}),  // Find complete/incomplete residencies for an individual
+                @Index(value = {"location_uuid"}),  // Find all residencies at a location
+                @Index(value = {"socialgroup_uuid"}),  // Find all residencies in a household
+                @Index(value = {"fw_uuid"}),  // Fieldworker queries
+                @Index(value = {"complete"}),  // Filter by completion status
+                @Index(value = {"individual_uuid", "location_uuid"}),  // Find individual's residency at specific location
+                @Index(value = {"individual_uuid", "socialgroup_uuid"})  // Find individual's residency in specific household
+        })
 public class Residency extends BaseObservable implements Parcelable {
 
     @Expose

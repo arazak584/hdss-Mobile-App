@@ -84,4 +84,8 @@ public class DeathViewModel extends AndroidViewModel {
     public void add(Death data){ deathRepository.create(data);}
 
     public void add(Death... data){     deathRepository.create(data);  }
+
+    public LiveData<Long> sync() {
+        return deathRepository.sync();
+    }
 }

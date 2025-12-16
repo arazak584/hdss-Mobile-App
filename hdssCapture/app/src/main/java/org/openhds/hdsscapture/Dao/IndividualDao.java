@@ -368,6 +368,9 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual where uuid=:id")
     LiveData<Individual> getView(String id);
 
+    @Query("SELECT COUNT(*) FROM individual WHERE complete= 1")
+    LiveData<Long> sync();
+
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Individual> individuals);

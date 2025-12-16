@@ -50,4 +50,7 @@ public interface AmendmentDao {
 
     @Query("SELECT * FROM amendment where uuid=:id")
     LiveData<Amendment> getView(String id);
+
+    @Query("SELECT COUNT(*) FROM amendment WHERE complete= 1")
+    LiveData<Long> sync();
 }

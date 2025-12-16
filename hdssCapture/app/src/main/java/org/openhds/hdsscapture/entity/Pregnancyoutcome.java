@@ -29,7 +29,16 @@ import java.util.Date;
 import java.util.Locale;
 
 @Entity(tableName = "pregnancyoutcome",
-indices = {@Index(value = {"mother_uuid", "father_uuid","fw_uuid","complete"}, unique = false)})
+        indices = {
+                @Index(value = {"uuid"}, unique = true),
+                @Index(value = {"mother_uuid", "complete"}),
+                @Index(value = {"mother_uuid"}),
+                @Index(value = {"father_uuid"}),
+                @Index(value = {"visit_uuid"}),
+                @Index(value = {"location"}),
+                @Index(value = {"fw_uuid"}),
+                @Index(value = {"complete"})
+        })
 public class Pregnancyoutcome extends BaseObservable implements Parcelable {
 
     @SerializedName("uuid")

@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -52,4 +53,7 @@ public interface CommunityDao {
 
     @Query("SELECT * FROM community WHERE community=:id ")
     List<CommunityReport> fw(String id);
+
+    @Query("SELECT COUNT(*) FROM community WHERE complete= 1")
+    LiveData<Long> sync();
 }

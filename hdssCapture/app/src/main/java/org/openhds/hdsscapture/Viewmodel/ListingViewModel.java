@@ -69,6 +69,9 @@ public class ListingViewModel extends AndroidViewModel {
         listingRepository.deleteByCompno(compno, onComplete);
     }
 
+    public LiveData<Long> sync() {
+        return listingRepository.sync();
+    }
 
 
 }

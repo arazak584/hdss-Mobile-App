@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.core.util.Consumer;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.LocationRepository;
 import org.openhds.hdsscapture.entity.Locations;
@@ -106,5 +107,9 @@ public class LocationViewModel extends AndroidViewModel {
 
     public void update(LocationAmendment s, Consumer<Integer> callback) {
         locationRepository.update(s, callback);
+    }
+
+    public LiveData<Long> sync() {
+        return locationRepository.sync();
     }
 }

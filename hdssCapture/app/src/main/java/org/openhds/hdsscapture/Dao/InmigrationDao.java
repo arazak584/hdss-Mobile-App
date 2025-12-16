@@ -58,4 +58,7 @@ public interface InmigrationDao {
 
     @Query("SELECT * FROM inmigration where uuid=:id AND residency_uuid != :ids LIMIT 1")
     Inmigration dup(String id,String ids);
+
+    @Query("SELECT COUNT(*) FROM inmigration WHERE complete= 1")
+    LiveData<Long> sync();
 }

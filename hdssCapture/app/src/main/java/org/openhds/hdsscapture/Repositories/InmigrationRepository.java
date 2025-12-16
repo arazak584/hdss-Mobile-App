@@ -99,4 +99,8 @@ public class InmigrationRepository {
         return dao.getView(id);
     }
 
+    public LiveData<Long> sync() {
+        return dao.sync();
+    }
+
 }

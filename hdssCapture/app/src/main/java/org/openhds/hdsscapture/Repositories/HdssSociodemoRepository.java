@@ -115,4 +115,8 @@ public class HdssSociodemoRepository {
     public LiveData<HdssSociodemo> view(String id) {
         return dao.getView(id);
     }
+
+    public LiveData<Long> sync() {
+        return dao.sync();
+    }
 }

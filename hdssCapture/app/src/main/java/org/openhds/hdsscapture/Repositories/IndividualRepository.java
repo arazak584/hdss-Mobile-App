@@ -507,5 +507,8 @@ public class IndividualRepository {
         return allIndividuals;
     }
 
+    public LiveData<Long> sync() {
+        return dao.sync();
+    }
 
 }

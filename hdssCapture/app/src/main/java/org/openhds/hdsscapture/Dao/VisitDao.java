@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -43,10 +44,9 @@ public interface VisitDao {
     @Query("SELECT COUNT(*) FROM visit WHERE socialgroup_uuid = :id")
     long count(String id);
 
+    @Query("SELECT COUNT(*) FROM visit WHERE complete= 1")
+    LiveData<Long> sync();
 
-//    @Query("SELECT COUNT(*) FROM visit a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
-//            " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username GROUP BY a.location_uuid")
-//    long countLocs(Date startDate, Date endDate, String username);
 
 
 

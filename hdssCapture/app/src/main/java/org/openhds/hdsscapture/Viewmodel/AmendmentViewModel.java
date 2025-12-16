@@ -47,4 +47,8 @@ public class AmendmentViewModel extends AndroidViewModel {
         amendmentRepository.create(data);
     }
 
+    public LiveData<Long> sync() {
+        return amendmentRepository.sync();
+    }
+
 }

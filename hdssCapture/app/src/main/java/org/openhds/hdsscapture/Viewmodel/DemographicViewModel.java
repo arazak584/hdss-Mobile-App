@@ -61,4 +61,8 @@ public class DemographicViewModel extends AndroidViewModel {
     public void add(Demographic... data){
         demographicRepository.create(data);
     }
+
+    public LiveData<Long> sync() {
+        return demographicRepository.sync();
+    }
 }

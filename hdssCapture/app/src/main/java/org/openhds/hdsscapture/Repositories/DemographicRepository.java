@@ -98,4 +98,8 @@ public class DemographicRepository {
     public LiveData<Demographic> view(String id) {
         return dao.getView(id);
     }
+
+    public LiveData<Long> sync() {
+        return dao.sync();
+    }
 }

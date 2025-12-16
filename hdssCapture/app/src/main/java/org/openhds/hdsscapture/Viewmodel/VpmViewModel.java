@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import org.openhds.hdsscapture.Repositories.DeathRepository;
 import org.openhds.hdsscapture.Repositories.VpmRepository;
@@ -46,4 +47,8 @@ public class VpmViewModel extends AndroidViewModel {
     public void add(Vpm data){vpmRepository.create(data);}
 
     public void add(Vpm... data){vpmRepository.create(data);  }
+
+    public LiveData<Long> sync() {
+        return vpmRepository.sync();
+    }
 }

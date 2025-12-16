@@ -153,4 +153,8 @@ public class OutmigrationRepository {
     public LiveData<Outmigration> view(String id) {
         return dao.getView(id);
     }
+
+    public LiveData<Long> sync() {
+        return dao.sync();
+    }
 }

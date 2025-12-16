@@ -296,42 +296,6 @@ public class BirthAFragment extends Fragment {
                     }
 
 
-//                    if (finalData.outcomeDate!=null && finalData.conceptionDate!=null) {
-//                        final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-//                        Date outcomeDate = finalData.outcomeDate;
-//                        Date recordedDate = finalData.conceptionDate;
-//
-//                        Calendar startCalendar = Calendar.getInstance();
-//                        startCalendar.setTime(recordedDate);
-//
-//                        Calendar endCalendar = Calendar.getInstance();
-//                        endCalendar.setTime(outcomeDate);
-//
-//                        int yearDiff = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
-//                        int monthDiff = endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
-//                        int dayDiff = endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH);
-//
-//                        if (dayDiff < 0) {
-//                            monthDiff--;
-//                        }
-//
-//                        // Calculate the total difference in months
-//                        int totalDiffMonths = yearDiff * 12 + monthDiff;
-//
-//                        if (totalDiffMonths <= 5 && (inf.type == 1 || inf.type == 2)) {
-//                            // Display message for Live Birth or Still Birth
-//                            Toast.makeText(getActivity(), "Outcome cannot be Live Birth or Still Birth for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
-//                            return;
-//                        } else if (totalDiffMonths > 5 && inf.type == 3) {
-//                            // Display message for Miscarriage
-//                            Toast.makeText(getActivity(), "Outcome cannot be Miscarriage for " + totalDiffMonths + " Months Pregnancy", Toast.LENGTH_LONG).show();
-//                            return;
-//                        }
-//
-//
-//                    }
-
-
                     inf.complete = 1;
                     if (inf.type != 1) {
                         inf.childuuid = null;

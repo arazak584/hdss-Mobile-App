@@ -110,5 +110,9 @@ public class ListingRepository {
         return dao.getView(id);
     }
 
+    public LiveData<Long> sync() {
+        return dao.sync();
+    }
+
 
 }

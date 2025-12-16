@@ -110,4 +110,8 @@ public class RelationshipRepository {
     public LiveData<Relationship> view(String id) {
         return dao.getView(id);
     }
+
+    public LiveData<Long> sync() {
+        return dao.sync();
+    }
 }

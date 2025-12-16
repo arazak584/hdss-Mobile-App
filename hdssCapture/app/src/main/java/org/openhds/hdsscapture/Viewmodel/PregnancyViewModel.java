@@ -112,4 +112,8 @@ public class PregnancyViewModel extends AndroidViewModel {
     public void add(Pregnancy... data){
         pregnancyRepository.create(data);
     }
+
+    public LiveData<Long> sync() {
+        return pregnancyRepository.sync();
+    }
 }

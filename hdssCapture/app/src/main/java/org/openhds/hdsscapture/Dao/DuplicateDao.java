@@ -1,5 +1,6 @@
 package org.openhds.hdsscapture.Dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -28,7 +29,7 @@ public interface DuplicateDao {
     @Query("DELETE FROM duplicate")
     void deleteAll();
 
-    @Query("SELECT * FROM duplicate WHERE complete !=0")
+    @Query("SELECT * FROM duplicate WHERE complete IN (1,2)")
     List<Duplicate> retrieveSync();
 
 //    @Query("SELECT * FROM duplicate WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
@@ -45,5 +46,8 @@ public interface DuplicateDao {
 
     @Query("SELECT a.*,b.compno as dup_uuid,b.hohID as dup1_uuid FROM duplicate a inner join individual as b on a.individual_uuid=b.uuid ")
     List<Duplicate> repo();
+
+    @Query("SELECT COUNT(*) FROM duplicate WHERE complete= 1")
+    LiveData<Long> sync();
 
 }
