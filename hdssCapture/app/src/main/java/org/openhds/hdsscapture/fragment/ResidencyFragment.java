@@ -49,7 +49,7 @@ import java.util.concurrent.Executors;
  * Use the {@link ResidencyFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ResidencyFragment extends Fragment {
+public class ResidencyFragment extends KeyboardFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";

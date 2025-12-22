@@ -883,6 +883,13 @@
     <string name="residency_information">Residency Information</string>
     <string name="migration_information">Migration Information</string>
     <string name="demographic_information">Demographic Information</string>
+    <string name="date_of_birth_age">Date of Birth</string>
+    <string name="date_of_death">Date of Death</string>
+    <string name="cause_of_death">Cause of Death</string>
+    <string name="death_place">Place of Death</string>
+    <string name="respondent_information">Respondent Information</string>
+    <string name="validation">Validation</string>
+    <string name="hidden_information">Information</string>
 
 
 </resources>

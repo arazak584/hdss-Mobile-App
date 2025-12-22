@@ -65,7 +65,7 @@ import java.util.concurrent.Executors;
  * Use the {@link InmigrationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class InmigrationFragment extends Fragment {
+public class InmigrationFragment extends KeyboardFragment {
 
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";

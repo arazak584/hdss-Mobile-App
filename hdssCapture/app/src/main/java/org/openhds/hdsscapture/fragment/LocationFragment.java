@@ -66,7 +66,7 @@ import java.util.regex.Pattern;
  * Use the {@link LocationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LocationFragment extends DialogFragment {
+public class LocationFragment extends KeyboardFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_CLUSTER_IDS = "ARG_CLUSTER_IDS";

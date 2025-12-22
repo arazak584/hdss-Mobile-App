@@ -42,7 +42,7 @@ import java.util.concurrent.ExecutionException;
  * Use the {@link SocioAFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SocioAFragment extends Fragment {
+public class SocioAFragment extends KeyboardFragment {
 
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";

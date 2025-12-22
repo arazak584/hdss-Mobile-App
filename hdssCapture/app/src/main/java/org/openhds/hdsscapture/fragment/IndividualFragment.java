@@ -27,6 +27,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.FatherDialogFragment;
@@ -82,7 +84,7 @@ import java.util.concurrent.Executors;
  * Use the {@link IndividualFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class IndividualFragment extends Fragment {
+public class IndividualFragment extends KeyboardFragment {
 
     //private Button showDialogButton;
 
@@ -231,140 +233,9 @@ public class IndividualFragment extends Fragment {
         });
 
         updateVisibilityBasedOnAge();
-        // Set up the FragmentResultListener
-//        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-//            if (bundle.containsKey((IndividualFragment.DATE_BUNDLES.DOB.getBundleKey()))) {
-//                final String result = bundle.getString(IndividualFragment.DATE_BUNDLES.DOB.getBundleKey());
-//                binding.dob.setText(result);
-//
-//                // Update individual DOB and visibility
-//                if (binding.getIndividual() != null) {
-//                    binding.getIndividual().setDob(result); // Assuming setDob exists
-//                    updateVisibilityBasedOnAge();
-//                }
-//            }
-//        });
 
         //CHOOSING THE DATE
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            // We use a String here, but any type that can be put in a Bundle is supported
-            if (bundle.containsKey((IndividualFragment.DATE_BUNDLES.INSERTDATE.getBundleKey()))) {
-                final String result = bundle.getString(IndividualFragment.DATE_BUNDLES.INSERTDATE.getBundleKey());
-                binding.individualInsertDate.setText(result);
-
-            }
-
-            if (bundle.containsKey((IndividualFragment.DATE_BUNDLES.DOB.getBundleKey()))) {
-                final String result = bundle.getString(IndividualFragment.DATE_BUNDLES.DOB.getBundleKey());
-                binding.dob.setText(result);
-
-                // Update individual DOB and visibility
-                if (binding.getIndividual() != null) {
-                    binding.getIndividual().setDob(result); // Assuming setDob exists
-                    updateVisibilityBasedOnAge();
-                }
-            }
-
-//            if (bundle.containsKey((IndividualFragment.DATE_BUNDLES.DOB.getBundleKey()))) {
-//                final String result = bundle.getString(IndividualFragment.DATE_BUNDLES.DOB.getBundleKey());
-//                binding.dob.setText(result);
-//
-//                if (binding.getIndividual().dob != null) {
-//                    final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
-//                        binding.individAge.setText(String.valueOf(estimatedAge));
-//                        binding.individAge.setTextColor(Color.MAGENTA);
-//
-//                    binding.demoPhone.setVisibility(estimatedAge > 11 ? View.VISIBLE : View.GONE);
-//                    binding.ynPhone.setVisibility(estimatedAge > 11 ? View.VISIBLE : View.GONE);
-//                    binding.occupation.setVisibility(estimatedAge > 11 ? View.VISIBLE : View.GONE);
-//                    binding.ynOccupation.setVisibility(estimatedAge > 11 ? View.VISIBLE : View.GONE);
-//                    binding.marital.setVisibility(estimatedAge > 11 ? View.VISIBLE : View.GONE);
-//                    binding.ynMarital.setVisibility(estimatedAge > 11 ? View.VISIBLE : View.GONE);
-//
-//                    binding.dob.setError(null);
-//                }
-//            }
-
-            if (bundle.containsKey((IndividualFragment.DATE_BUNDLES.IMGDATE.getBundleKey()))) {
-                final String result = bundle.getString(IndividualFragment.DATE_BUNDLES.IMGDATE.getBundleKey());
-                binding.imgDate.setText(result);
-            }
-
-            if (bundle.containsKey((IndividualFragment.DATE_BUNDLES.STARTDATE.getBundleKey()))) {
-                final String result = bundle.getString(IndividualFragment.DATE_BUNDLES.STARTDATE.getBundleKey());
-                binding.editTextStartDate.setText(result);
-            }
-
-        });
-
-        binding.buttonIndividualInsertDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(IndividualFragment.DATE_BUNDLES.INSERTDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.buttonResidencyStartDate.setOnClickListener(v -> {
-            if (!TextUtils.isEmpty(binding.editTextStartDate.getText())) {
-                // If Date is not empty, parse the date and use it as the initial date
-                String currentDate = binding.editTextStartDate.getText().toString();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-                try {
-                    Date date = sdf.parse(currentDate);
-                    Calendar selectedDate = Calendar.getInstance();
-                    selectedDate.setTime(date);
-
-                    // Create DatePickerFragment with the parsed date
-                    DialogFragment newFragment = new DatePickerFragment(IndividualFragment.DATE_BUNDLES.STARTDATE.getBundleKey(), selectedDate);
-                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                final Calendar c = Calendar.getInstance();
-                DialogFragment newFragment = new DatePickerFragment(IndividualFragment.DATE_BUNDLES.STARTDATE.getBundleKey(), c);
-                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-            }
-        });
-
-        binding.buttonImgImgDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(IndividualFragment.DATE_BUNDLES.IMGDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-
-        binding.buttonIndividualDob.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            final String curbrthdat = binding.dob.getText().toString();
-            if(curbrthdat!=null){
-                final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                try {
-                    c.setTime(Objects.requireNonNull(f.parse(curbrthdat)));
-                } catch (ParseException e) {
-                }
-            }
-            if (!TextUtils.isEmpty(binding.dob.getText())) {
-                // If Date is not empty, parse the date and use it as the initial date
-                String currentDate = binding.dob.getText().toString();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-                try {
-                    Date date = sdf.parse(currentDate);
-                    Calendar selectedDate = Calendar.getInstance();
-                    selectedDate.setTime(date);
-
-                    // Create DatePickerFragment with the parsed date
-                    DialogFragment newFragment = new DatePickerFragment(IndividualFragment.DATE_BUNDLES.DOB.getBundleKey(), selectedDate);
-                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                DialogFragment newFragment = new DatePickerFragment(IndividualFragment.DATE_BUNDLES.DOB.getBundleKey(), c);
-                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-            }
-        });
+        setupDatePickers();
 
         Spinner mySpinner = binding.getRoot().findViewById(R.id.migtype);
         mySpinner.setEnabled(false);
@@ -1478,531 +1349,6 @@ public class IndividualFragment extends Fragment {
         }
     }
 
-//    private void save(boolean save, boolean close, ResidencyViewModel viewModel,  IndividualViewModel individualViewModel,InmigrationViewModel inmigrationViewModel,DemographicViewModel demographicViewModel) {
-//
-//        if (save) {
-//            Individual finalData = binding.getIndividual();
-//            Residency Data = binding.getResidency();
-//            Inmigration img = binding.getInmigration();
-//            Demographic demo = binding.getDemographic();
-//            boolean sdate = false;
-//            boolean isOmg = false;
-//            boolean dthdate = false;
-//            boolean imgdate = false;
-//            boolean omgdate = false;
-//
-//            final boolean validateOnComplete = true;//finalData.complete == 1;
-//            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.INDIVIDUALLAYOUT, validateOnComplete, false);
-//
-//            boolean missedout = false;
-//
-//            if (img.migType!=null && img.migType==2){
-//                if (img.reason!=null && img.reason==19) {
-//                    missedout = true;
-//                    Toast.makeText(getActivity(), "Reason cannot be missed out for Internal Inmigration", Toast.LENGTH_LONG).show();
-//                    return;
-//                }
-//            }
-//
-//            try {
-//                if (!binding.dob.getText().toString().trim().isEmpty()) {
-//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-//                    Date currentDate = new Date();
-//                    Date stdate = f.parse(binding.dob.getText().toString().trim());
-//                    if (stdate.after(currentDate)) {
-//                        binding.dob.setError("Date of Birth Cannot Be a Future Date");
-//                        Toast.makeText(getActivity(), "Date of Birth Cannot Be a Future Date", Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
-//                    // clear error if validation passes
-//                    binding.dob.setError(null);
-//                }
-//            } catch (ParseException e) {
-//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-//                e.printStackTrace();
-//            }
-//
-//            boolean agedif = false;
-//            boolean modif = false;
-//
-//            if (!binding.fathers.fathersAge.getText().toString().trim().isEmpty() && !binding.individAge.getText().toString().trim().isEmpty()) {
-//                int fAgeValue = Integer.parseInt(binding.fathers.fathersAge.getText().toString().trim());
-//                int individidAgeValue = Integer.parseInt(binding.individAge.getText().toString().trim());
-//                if (fAgeValue - individidAgeValue < 10) {
-//                    agedif = true;
-//                    binding.fathers.fathersAge.setError("Father selected is too young to be the father of this Individual");
-//                    Toast.makeText(getActivity(), "Father selected is too young to be the father of this Individual", Toast.LENGTH_LONG).show();
-//                    return;
-//                }
-//            }
-//
-//            if (!binding.mothers.mothersAge.getText().toString().trim().isEmpty() && !binding.individAge.getText().toString().trim().isEmpty()) {
-//                int mthgeValue = Integer.parseInt(binding.mothers.mothersAge.getText().toString().trim());
-//                int individidAge = Integer.parseInt(binding.individAge.getText().toString().trim());
-//                if (mthgeValue - individidAge < 10) {
-//                    modif = true;
-//                    binding.mothers.mothersAge.setError("Mother selected is too young to be the mother of this Individual");
-//                    Toast.makeText(getActivity(), "Mother selected is too young to be the mother of this Individual", Toast.LENGTH_LONG).show();
-//                    return;
-//                }
-//            }
-//
-//
-//            boolean gh = false;
-//
-//            if (!binding.ghanacard.getText().toString().trim().isEmpty()) {
-//                String input = binding.ghanacard.getText().toString().trim();
-//                String regex = "[A-Z]{3}-\\d{9}-\\d";
-//
-//                if (!input.matches(regex)) {
-//                    gh = true;
-//                    Toast.makeText(getActivity(), "Ghana Card Number or format is incorrect", Toast.LENGTH_LONG).show();
-//                    binding.ghanacard.setError("Format Should Be GHA-XXXXXXXXX-X");
-//                    return;
-//                }
-//            }
-//
-//            // Individual Name Validation
-//            boolean hasError = false;
-//            String firstName = binding.individualFirstName.getText().toString();
-//            String lastName = binding.individualLastName.getText().toString();
-//            // Validate First Name
-//            if (firstName.trim().length() != firstName.length()) {
-//                // Leading or trailing spaces not allowed
-//                binding.individualFirstName.setError("Spaces are not allowed before or after the Name");
-//                Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
-//                hasError = true;
-//            } else if (!firstName.matches("^[a-zA-Z]+([ '-][a-zA-Z]+)*$")) {
-//                // Only letters, hyphens, and single spaces allowed
-//                binding.individualFirstName.setError("Only letters, hyphens, and single spaces are allowed in the Name");
-//                Toast.makeText(getContext(), "Only letters, hyphens, and single spaces are allowed in the Name", Toast.LENGTH_LONG).show();
-//                hasError = true;
-//            } else {
-//                // Valid name
-//                binding.individualFirstName.setError(null);
-//            }
-//
-//            // Validate Last Name
-//            if (lastName.startsWith(" ") || lastName.endsWith(" ")) {
-//                binding.individualLastName.setError("Spaces are not allowed before or after the Name");
-//                Toast.makeText(getContext(), "Spaces are not allowed before or after the Name", Toast.LENGTH_LONG).show();
-//                hasError = true;
-//            }
-//            else if (!lastName.matches("^[a-zA-Z]+([ '-][a-zA-Z]+)*$")) {
-//                binding.individualLastName.setError("Only letters, hyphens, and single spaces are allowed in the Name");
-//                Toast.makeText(getContext(), "Only letters, hyphens, and single spaces are allowed in the Name", Toast.LENGTH_LONG).show();
-//                hasError = true;
-//            }
-//            else {
-//                binding.individualLastName.setError(null);
-//            }
-//
-//            // Stop execution if any errors exist
-//            if (hasError) {
-//                return;
-//            }
-//
-//
-//
-//            //Date Validations
-//            try {
-//                if (!binding.dob.getText().toString().trim().isEmpty() && !binding.editTextStartDate.getText().toString().trim().isEmpty()) {
-//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-//                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
-//                    Date edate = f.parse(binding.dob.getText().toString().trim());
-//                    if (edate.after(stdate)) {
-//                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Date of Birth");
-//                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Date of Birth", Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
-//                    // clear error if validation passes
-//                    binding.editTextStartDate.setError(null);
-//                }
-//            } catch (ParseException e) {
-//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-//                e.printStackTrace();
-//            }
-//
-//            try {
-//                if (!binding.earliest.getText().toString().trim().isEmpty() && !binding.editTextStartDate.getText().toString().trim().isEmpty()) {
-//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-//                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
-//                    Date edate = f.parse(binding.earliest.getText().toString().trim());
-//                    if (edate.after(stdate) && binding.getInmigration().reason!=null) {
-//                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Earliest Date");
-//                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Earliest Date", Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
-//                    // clear error if validation passes
-//                    binding.editTextStartDate.setError(null);
-//                }
-//            } catch (ParseException e) {
-//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-//                e.printStackTrace();
-//            }
-//
-//            try {
-//                if (!binding.omgg.oldStartDate.getText().toString().trim().isEmpty() && !binding.editTextStartDate.getText().toString().trim().isEmpty()) {
-//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-//                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
-//                    Date edate = f.parse(binding.omgg.oldStartDate.getText().toString().trim());
-//
-//                    Calendar calendar = Calendar.getInstance();
-//                    calendar.setTime(edate);
-//                    calendar.add(Calendar.DAY_OF_MONTH, 3);
-//                    Date minStartDate = calendar.getTime();
-//
-//                    if (stdate.before(minStartDate)) {
-//                        binding.editTextStartDate.setError("Start Date must be at least three days after the previous start date " + f.format(minStartDate));
-//                        Toast.makeText(getActivity(), "Start Date must be at least three days after the previous start date " + f.format(minStartDate), Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
-//
-//                    // Clear error if validation passes
-//                    binding.editTextStartDate.setError(null);
-//                }
-//            } catch (ParseException e) {
-//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-//                e.printStackTrace();
-//            }
-//
-//            try {
-//                if (!binding.editTextStartDate.getText().toString().trim().isEmpty() && !binding.res.resEndDate.getText().toString().trim().isEmpty()) {
-//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-//                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
-//                    Date edate = f.parse(binding.res.resEndDate.getText().toString().trim());
-//                    String formattedDate = f.format(edate);
-//                    if (edate.after(stdate)) {
-//                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Or Equal to " + formattedDate);
-//                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Or Equal to " + formattedDate, Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
-//
-//                    if (edate.equals(stdate)) {
-//                        binding.editTextStartDate.setError("Start Date Cannot Be Less than Or Equal to " + formattedDate);
-//                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Or Equal to " + formattedDate, Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
-//                    // clear error if validation passes
-//                    binding.editTextStartDate.setError(null);
-//                }
-//            } catch (ParseException e) {
-//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-//                e.printStackTrace();
-//            }
-//
-//            try {
-//                if (!binding.editTextStartDate.getText().toString().trim().isEmpty()) {
-//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-//                    //Date currentDate = new Date();
-//                    Date currentDate = f.parse(f.format(new Date()));
-//                    Date stdate = f.parse(binding.editTextStartDate.getText().toString().trim());
-//                    if (stdate.after(currentDate)) {
-//                        binding.editTextStartDate.setError("Start Date Cannot Be a Future Date");
-//                        Toast.makeText(getActivity(), "Start Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
-//                    if (stdate.equals(currentDate)) {
-//                        String errorMessage = getString(R.string.startdateerr);
-//                        binding.editTextStartDate.setError(errorMessage);
-//                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
-//                    // clear error if validation passes
-//                    binding.editTextStartDate.setError(null);
-//                }
-//            } catch (ParseException e) {
-//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-//                e.printStackTrace();
-//            }
-//
-//            boolean compyrs = false;
-//            if (!binding.compYrs.getText().toString().trim().isEmpty()) {
-//                int yrs = Integer.parseInt(binding.compYrs.getText().toString().trim());
-//                if (yrs < 0 || yrs > 6) {
-//                    compyrs = true;
-//                    binding.compYrs.setError("Cannot be less than 1 or More than 6");
-//                    Toast.makeText(getActivity(), "Cannot be less than 1 or More than 6", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//            }
-//
-//            boolean ph = false;
-//            if (!binding.phone1.getText().toString().trim().isEmpty()) {
-//                String input = binding.phone1.getText().toString().trim();
-//                String regex = "[0-9]{10}";
-//
-//                if (!input.matches(regex)) {
-//                    ph = true;
-//                    Toast.makeText(getActivity(), "Phone Number is incorrect", Toast.LENGTH_LONG).show();
-//                    binding.phone1.setError("Phone Number is incorrect");
-//                    return;
-//                }
-//            }
-//
-//            //Validate the number of months the individual moved in
-//            try {
-//                String hlngStr = binding.howLng.getText().toString().trim();
-//                String imgDateStr = binding.editTextStartDate.getText().toString().trim();
-//
-//                if (!hlngStr.isEmpty() && !imgDateStr.isEmpty()) {
-//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US); // adjust to your date format
-//                    Date insertDate = binding.getInmigration().insertDate;  // e.g., 2025-05-17
-//                    Date imgDate = f.parse(imgDateStr);                    // e.g., 03/15/2024
-//                    int hlng = Integer.parseInt(hlngStr);                  // expected number of months
-//
-//                    Calendar startCal = Calendar.getInstance();
-//                    startCal.setTime(imgDate);
-//
-//                    Calendar endCal = Calendar.getInstance();
-//                    endCal.setTime(insertDate);
-//
-//                    int yearDiff = endCal.get(Calendar.YEAR) - startCal.get(Calendar.YEAR);
-//                    int monthDiff = endCal.get(Calendar.MONTH) - startCal.get(Calendar.MONTH);
-//                    int totalMonths = yearDiff * 12 + monthDiff;
-//
-//                    // Adjust if insertDate day-of-month is before imgDate day-of-month
-//                    if (endCal.get(Calendar.DAY_OF_MONTH) < startCal.get(Calendar.DAY_OF_MONTH)) {
-//                        totalMonths--;
-//                    }
-//
-//                    Log.d("Inmigration", "IMG MONTHS: " + totalMonths);
-//
-//                    if (hlng != totalMonths) {
-//                        Calendar suggestedDateCal = Calendar.getInstance();
-//                        suggestedDateCal.setTime(insertDate);
-//                        suggestedDateCal.add(Calendar.MONTH, -hlng);
-//                        String suggestedDate = f.format(suggestedDateCal.getTime());
-//
-//                        binding.howLng.setError("Mismatch. Suggested Date: " + suggestedDate+ " (" + totalMonths + " Months)");
-//                        Toast.makeText(getActivity(), "Mismatch. Suggested Date: " + suggestedDate+ " (" + totalMonths + " Months)", Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
-//
-//                    binding.howLng.setError(null);
-//                    binding.editTextStartDate.setError(null);
-//                }
-//            } catch (ParseException e) {
-//                Toast.makeText(getActivity(), "Invalid date format", Toast.LENGTH_LONG).show();
-//                e.printStackTrace();
-//            }
-//
-//            if (hasErrors) {
-//                Toast.makeText(requireContext(), R.string.incompletenotsaved, Toast.LENGTH_LONG).show();
-//                return;
-//            }
-//
-//            Date end = new Date(); // Get the current date and time
-//            // Create a Calendar instance and set it to the current date and time
-//            Calendar cal = Calendar.getInstance();
-//            cal.setTime(end);
-//            // Extract the hour, minute, and second components
-//            int hh = cal.get(Calendar.HOUR_OF_DAY);
-//            int mm = cal.get(Calendar.MINUTE);
-//            int ss = cal.get(Calendar.SECOND);
-//            // Format the components into a string with leading zeros
-//            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
-//
-//            if (finalData.sttime !=null && finalData.edtime==null){
-//                finalData.edtime = endtime;
-//            }
-//            if (Data.sttime !=null && Data.edtime==null){
-//                Data.edtime = endtime;
-//            }
-//            if (img.sttime !=null && img.edtime==null){
-//                img.edtime = endtime;
-//            }
-//
-//            finalData.phone1 = binding.getDemographic().phone1;
-//            finalData.compno = compno;
-//            finalData.endType = Data.endType;
-//            finalData.hohID = socialgroup.extId;
-//
-//            if(binding.getResidency().img != null){
-//                img.residency_uuid = Data.uuid;
-//                img.recordedDate = Data.startDate;
-//                img.complete=1;
-//                inmigrationViewModel.add(img);
-//            }
-//
-//            finalData.complete=1;
-//            Data.complete=1;
-//            demo.complete=1;
-//
-//            final Intent i = getActivity().getIntent();
-//            final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
-//
-//            //Generate Outmigration for previous active episode
-//            OutmigrationViewModel omgModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
-//            try {
-//                Outmigration data = omgModel.createOmg(individual.uuid, cmpuuid);
-////                if (data != null && !binding.omgg.oldLoc.getText().toString().trim().equals(binding.currentLoc.getText().toString().trim()))
-//                if (data != null) {
-//
-//                    Outmigration omg = new Outmigration();
-//
-//                    String uuid = UUID.randomUUID().toString();
-//                    String uuidString = uuid.replaceAll("-", "");
-//
-//                    // Subtract one day from the recordedDate
-//                    Date recordedDate = binding.getInmigration().recordedDate;
-//                    Calendar calendar = Calendar.getInstance();
-//                    calendar.setTime(recordedDate);
-//                    calendar.add(Calendar.DAY_OF_MONTH, -1);
-//
-//                    omg.recordedDate = calendar.getTime();
-//                    omg.uuid = uuidString;
-//                    omg.individual_uuid = finalData.uuid;
-//                    omg.insertDate = new Date();
-//                    omg.destination = binding.getInmigration().origin;
-//                    omg.reason = binding.getInmigration().reason;
-//                    omg.reason_oth = binding.getInmigration().reason_oth;
-//                    omg.residency_uuid = binding.getOmgg().old_residency;
-//                    omg.fw_uuid = fieldworkerData.fw_uuid;
-//                    omg.complete = 1;
-//                    omg.edit = 1;
-//                    omg.visit_uuid = binding.getInmigration().visit_uuid;
-//                    omg.socialgroup_uuid = binding.getOmgg().socialgroup_uuid;
-//                    omg.location_uuid = binding.getOmgg().loc;
-//
-//                    omgModel.add(omg);
-//                }
-//            } catch (ExecutionException e) {
-//                e.printStackTrace();
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//
-//            ExecutorService executor = Executors.newSingleThreadExecutor();
-//            executor.execute(() -> {
-//
-//                //Update The Househead for the new household
-//                SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
-//                try {
-//                    Socialgroup data = socialgroupViewModel.find(socialgroup.uuid);
-//                    if (data !=null && "UNK".equals(data.groupName)) {
-//
-//                        SocialgroupAmendment socialgroupAmendment = new SocialgroupAmendment();
-//                        socialgroupAmendment.individual_uuid = finalData.uuid;
-//                        socialgroupAmendment.groupName = finalData.getFirstName() + ' ' + finalData.getLastName();
-//                        socialgroupAmendment.uuid = socialgroup.uuid;
-//                        socialgroupAmendment.complete =1;
-//                        //Toast.makeText(requireContext(), "Successfully Amended Household Head", Toast.LENGTH_LONG).show();
-//
-//                        socialgroupViewModel.update(socialgroupAmendment, result ->
-//                                new Handler(Looper.getMainLooper()).post(() -> {
-//                                    if (result > 0) {
-//                                        Log.d("IndividualFragment", "Socialgroup Update successful!");
-//                                    } else {
-//                                        Log.d("IndividualFragment", "Socialgroup Update Failed!");
-//                                    }
-//                                })
-//                        );
-//                    }
-//
-//                } catch (Exception e) {
-//                    Log.e("IndividualFragment", "Error in update", e);
-//                    e.printStackTrace();
-//                }
-//
-//                //Update Previous Residency if It is Active
-//                try {
-//                    Residency data = viewModel.fetchs(individual.uuid, cmpuuid);
-//                    if (data != null) {
-//                        ResidencyAmendment residencyAmendment = new ResidencyAmendment();
-//                        Date recordedDate = binding.getInmigration().recordedDate;
-//                        Calendar calendar = Calendar.getInstance();
-//                        calendar.setTime(recordedDate);
-//                        calendar.add(Calendar.DAY_OF_MONTH, -1);
-//                        residencyAmendment.endType = 2;
-//                        residencyAmendment.endDate = calendar.getTime();
-//                        residencyAmendment.uuid = binding.getOmgg().old_residency;
-//                        residencyAmendment.complete = 1;
-//
-//                        viewModel.update(residencyAmendment, result ->
-//                                new Handler(Looper.getMainLooper()).post(() -> {
-//                                    if (result > 0) {
-//                                        Log.d("IndividualFragment", "Omg Update successful!");
-//                                    } else {
-//                                        Log.d("IndividualFragment", "Omg Update Failed!");
-//                                    }
-//                                })
-//                        );
-//
-//                    }
-//
-//                } catch (Exception e) {
-//                    Log.e("IndividualFragment", "Error in update", e);
-//                    e.printStackTrace();
-//                }
-//
-//                //Update Fake Individual's Residency that was used to create the socialgroup
-//                try {
-//                    Residency datas = viewModel.unk(socialgroup.uuid);
-//                    if (datas != null) {
-//                        ResidencyAmendment residencyAmendment = new ResidencyAmendment();
-//                        residencyAmendment.endType = 2;
-//                        residencyAmendment.endDate = new Date();
-//                        residencyAmendment.uuid = datas.uuid;
-//                        residencyAmendment.complete = 2;
-//
-//                        viewModel.update(residencyAmendment, result ->
-//                                new Handler(Looper.getMainLooper()).post(() -> {
-//                                    if (result > 0) {
-//                                        Log.d("IndividualFragment", "Fake Update successful!");
-//                                    } else {
-//                                        Log.d("IndividualFragment", "Fake Update Failed!");
-//                                    }
-//                                })
-//                        );
-//                    }
-//                } catch (Exception e) {
-//                    Log.e("IndividualFragment", "Error in update", e);
-//                    e.printStackTrace();
-//                }
-//
-//                //Update Fake Individual's Residency that was used to create the socialgroup
-//                try {
-//                    Individual datas = individualViewModel.unk(socialgroup.extId);
-//                    if (datas != null) {
-//                        IndividualEnd endInd = new IndividualEnd();
-//                        endInd.endType = 2;
-//                        endInd.uuid = datas.uuid;
-//                        endInd.complete = 2;
-//
-//                        individualViewModel.dthupdate(endInd, result ->
-//                                new Handler(Looper.getMainLooper()).post(() -> {
-//                                    if (result > 0) {
-//                                        Log.d("IndividualFragment", "Res Update successful!");
-//                                    } else {
-//                                        Log.d("IndividualFragment", "Res Update Failed!");
-//                                    }
-//                                })
-//                        );
-//                    }
-//                } catch (ExecutionException e) {
-//                    e.printStackTrace();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//
-//
-//
-//            });
-//
-//            executor.shutdown();
-//
-//            viewModel.add(Data);
-//            individualViewModel.add(finalData);
-//            demographicViewModel.add(demo);
-//
-//            }
-//        if (close)  {
-//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-//                    HouseMembersFragment.newInstance(locations, socialgroup,individual)).commit();
-//        }
-//
-//    }
 
     @Override
     public void onDestroyView() {
@@ -2090,6 +1436,62 @@ public class IndividualFragment extends Fragment {
         public String toString() {
             return bundleKey;
         }
+    }
+
+    private void setupDatePickers() {
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            handleDateResult(bundle, IndividualFragment.DATE_BUNDLES.DOB, binding.dob);
+            handleDateResult(bundle, DATE_BUNDLES.STARTDATE, binding.editTextStartDate);
+        });
+
+        binding.buttonIndividualDob.setEndIconOnClickListener(v ->
+                showDatePicker(IndividualFragment.DATE_BUNDLES.DOB, binding.dob));
+
+        binding.buttonResidencyStartDate.setEndIconOnClickListener(v ->
+                showDatePicker(DATE_BUNDLES.STARTDATE, binding.editTextStartDate));
+
+    }
+
+    private void handleDateResult(Bundle bundle, IndividualFragment.DATE_BUNDLES dateType, TextInputEditText editText) {
+        if (bundle.containsKey(dateType.getBundleKey())) {
+            String result = bundle.getString(dateType.getBundleKey());
+            editText.setText(result);
+
+            // Handle DOB-specific logic
+            if (dateType == IndividualFragment.DATE_BUNDLES.DOB) {
+                if (binding.getIndividual() != null) {
+                    binding.getIndividual().setDob(result);
+                    updateVisibilityBasedOnAge();
+                }
+            }
+        }
+    }
+
+    private void showDatePicker(IndividualFragment.DATE_BUNDLES dateType, TextInputEditText editText) {
+        Calendar calendar = parseCurrentDate(editText.getText().toString());
+        DialogFragment datePickerFragment = new DatePickerFragment(
+                dateType.getBundleKey(),
+                calendar
+        );
+        datePickerFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+    }
+
+    private Calendar parseCurrentDate(String dateString) {
+        Calendar calendar = Calendar.getInstance();
+
+        if (!TextUtils.isEmpty(dateString)) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            try {
+                Date date = sdf.parse(dateString);
+                if (date != null) {
+                    calendar.setTime(date);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return calendar;
     }
 
     public void denoInfo(View view) {

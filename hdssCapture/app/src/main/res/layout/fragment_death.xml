@@ -5,648 +5,810 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="death"
             type="org.openhds.hdsscapture.entity.Death" />
-
         <variable
             name="individual"
             type="org.openhds.hdsscapture.entity.Individual" />
-
         <variable
             name="res"
             type="org.openhds.hdsscapture.entity.Residency" />
-
         <variable
             name="eventname"
             type="String" />
-
     </data>
 
     <LinearLayout
-        android:id="@+id/MAIN_LAYOUT"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="15dp"
-        tools:context=".fragment.DeathFragment">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/death"
-            android:textAllCaps="true"
-            android:textColor="@color/colorPrimary"
-            android:textSize="30sp"
-            android:textStyle="bold" />
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_margin="5dp"
-            android:background="@color/colorPrimaryDark" />
-
-            <TextView
-                android:id="@+id/ind"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:textAlignment="center"/>
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/txt_comment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:text="@={death.comment}"
-            android:textColor="@color/purple_700"
-            android:gravity="start"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
-
+            android:layout_weight="1"
+            android:fillViewport="true">
 
             <LinearLayout
+                android:id="@+id/MAIN_LAYOUT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="8dp"
+                tools:context=".fragment.DeathFragment">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/death"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
 
-                    <com.google.android.material.textfield.TextInputLayout
+                <TextView
+                    android:id="@+id/ind"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@={death.comment}"
+                    android:textColor="@color/purple_700"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <!-- HIDDEN INFORMATION CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:gravity="start"
-                        android:hint="@string/fw"
-                        android:padding="5dp"
-                        android:text="@string/fw"
-                        android:visibility="gone">
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dth_fw"
+                        <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPersonName"
-                            android:text="@={death.fw_uuid}" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:text="@string/hidden_information"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-                    <Button
-                        android:id="@+id/button_death_insertDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/visitDate"
-                        android:visibility="gone"
-                        app:icon="@drawable/ic_baseline_calendar_month_24"
-                        tools:ignore="DuplicateSpeakableTextCheck" />
-
-                    <TextView
-                        android:id="@+id/dth_insertDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autofillHints=""
-                        android:ems="10"
-                        android:minHeight="30dp"
-                        android:text="@={death.insertDate}"
-                        android:textSize="20sp"
-                        android:visibility="gone"
-                        tools:ignore="TextContrastCheck" />
-
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="@string/ind_extid"
-                        android:padding="5dp"
-                        android:text="@string/ind_extid"
-                        android:visibility="gone">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dth_extid"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-                            android:inputType="textPersonName"
-                            android:text="@={death.extId}" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:text="@string/gender"
-                        android:textColor="@color/black"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/dth_gender"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autofillHints=""
-                        android:ems="10"
-                        android:minHeight="30dp"
-                        android:text="@={death.gender}"
-                        android:textSize="20sp"
-                        android:visibility="gone"
-                        tools:ignore="TextContrastCheck" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="@string/uuid"
-                        android:padding="5dp"
-                        android:text="@string/uuid"
-                        android:visibility="gone">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dth_individual_uuid"
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
-                            android:inputType="textPersonName"
-                            android:text="@={death.uuid}" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:gravity="start"
+                            android:hint="@string/fw"
+                            android:padding="5dp"
+                            android:text="@string/fw"
+                            android:visibility="gone">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="@string/earliest"
-                        android:padding="5dp"
-                        android:text="@string/earliest">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dth_fw"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPersonName"
+                                android:text="@={death.fw_uuid}" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/earliest"
+                        <Button
+                            android:id="@+id/button_death_insertDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/visitDate"
+                            android:visibility="gone"
+                            app:icon="@drawable/ic_baseline_calendar_month_24"
+                            tools:ignore="DuplicateSpeakableTextCheck" />
+
+                        <TextView
+                            android:id="@+id/dth_insertDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autofillHints=""
+                            android:ems="10"
+                            android:minHeight="30dp"
+                            android:text="@={death.insertDate}"
+                            android:textSize="20sp"
+                            android:visibility="gone"
+                            tools:ignore="TextContrastCheck" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/ind_extid"
+                            android:padding="5dp"
+                            android:text="@string/ind_extid"
+                            android:visibility="gone">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dth_extid"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName"
+                                android:text="@={death.extId}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:text="@string/gender"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/dth_gender"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autofillHints=""
+                            android:ems="10"
+                            android:minHeight="30dp"
+                            android:text="@={death.gender}"
+                            android:textSize="20sp"
+                            android:visibility="gone"
+                            tools:ignore="TextContrastCheck" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/uuid"
+                            android:padding="5dp"
+                            android:text="@string/uuid"
+                            android:visibility="gone">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dth_individual_uuid"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName"
+                                android:text="@={death.uuid}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/location_select"
+                            android:padding="5dp"
+                            android:text="@string/location_select"
+                            android:visibility="gone">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dth_location_extid"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName"
+                                android:text="@={death.compno}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/visitid"
+                            android:padding="5dp"
+                            android:text="@string/visitid"
+                            android:visibility="gone">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dth_visitDeath_uuid"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName"
+                                android:text="@={death.visit_uuid}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/firstname"
+                            android:padding="5dp"
+                            android:text="@string/firstname"
+                            android:visibility="gone">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dth_firstName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName"
+                                android:text="@={death.firstName}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/lastname"
+                            android:padding="5dp"
+                            android:text="@string/lastname"
+                            android:visibility="gone">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dth_lastName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName"
+                                android:text="@={death.lastName}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/householdhead"
+                            android:padding="5dp"
+                            android:text="@string/householdhead"
+                            android:visibility="gone">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dth_househead"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPersonName|textCapCharacters"
+                                android:text="@={death.househead}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
-                            android:inputType="textPersonName" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:gravity="start"
+                            android:hint="@string/compoundName"
+                            android:padding="5dp"
+                            android:text="@string/compoundName"
+                            android:visibility="gone">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="@string/location_select"
-                        android:padding="5dp"
-                        android:text="@string/location_select"
-                        android:visibility="gone">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dth_compname"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPersonName|textCapCharacters"
+                                android:text="@={death.compname}" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dth_location_extid"
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
-                            android:inputType="textPersonName"
-                            android:text="@={death.compno}" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:gravity="start"
+                            android:hint="@string/village"
+                            android:padding="5dp"
+                            android:text="@string/village"
+                            android:visibility="gone">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="@string/visitid"
-                        android:padding="5dp"
-                        android:text="@string/visitid"
-                        android:visibility="gone">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dth_village"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPersonName|textCapCharacters"
+                                android:text="@={death.villname}" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dth_visitDeath_uuid"
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
-                            android:inputType="textPersonName"
-                            android:text="@={death.visit_uuid}" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:gravity="start"
+                            android:hint="@string/villcode"
+                            android:padding="5dp"
+                            android:text="@string/villcode"
+                            android:visibility="gone">
 
-                    <com.google.android.material.textfield.TextInputLayout
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dth_phone1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPersonName|textCapCharacters"
+                                android:text="@={death.villcode}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- BASIC INFORMATION CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="@string/firstname"
-                        android:padding="5dp"
-                        android:text="@string/firstname"
-                        android:visibility="gone">
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dth_firstName"
+                        <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-                            android:inputType="textPersonName"
-                            android:text="@={death.firstName}" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:text="@string/basic_information"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="@string/lastname"
-                        android:padding="5dp"
-                        android:text="@string/lastname"
-                        android:visibility="gone">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dth_lastName"
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-                            android:inputType="textPersonName"
-                            android:text="@={death.lastName}" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:gravity="start"
+                            android:hint="@string/earliest"
+                            android:padding="5dp"
+                            android:text="@string/earliest">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="@string/actual_dob"
-                        android:padding="5dp"
-                        android:text="@string/actual_dob"
-                        android:visibility="visible">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/earliest"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dob"
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-                            android:inputType="textPersonName"
-                            android:text="@={death.dob}" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:gravity="start"
+                            android:hint="@string/actual_dob"
+                            android:padding="5dp"
+                            android:text="@string/actual_dob"
+                            android:visibility="visible">
 
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dob"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName"
+                                android:text="@={death.dob}" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="@string/startdate"
-                        android:padding="5dp"
-                        android:text="@string/startdate"
-                        android:visibility="visible">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dth_dob"
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-                            android:inputType="textPersonName"
-                            android:text="@={res.startDate}" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:gravity="start"
+                            android:hint="@string/startdate"
+                            android:padding="5dp"
+                            android:text="@string/startdate"
+                            android:visibility="visible">
 
-                    <Button
-                        android:id="@+id/button_death_dod"
-                        android:layout_width="300dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/dod"
-                        style="@style/SupervisorButton"
-                        android:layout_gravity="center"
-                        app:icon="@drawable/ic_baseline_calendar_month_24"
-                        tools:ignore="DuplicateSpeakableTextCheck" />
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dth_dob"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName"
+                                android:text="@={res.startDate}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                    <com.google.android.material.textfield.TextInputLayout
+                <!-- DATE OF DEATH CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="@string/dod"
-                        android:padding="5dp"
-                        android:text="@string/dod">
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dth_deathDate"
+                        <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-                            android:inputType="textPersonName"
-                            android:text="@={death.deathDate}" />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:text="@string/date_of_death"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="@string/estimated_dod" />
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/button_death_dod"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:endIconMode="custom"
+                            app:endIconDrawable="@drawable/ic_baseline_calendar_month_24"
+                            app:endIconTint="@color/colorPrimary"
+                            android:hint="@string/actual_dob">
 
-                    <RadioGroup
-                        android:id="@+id/estimate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onCheckedChanged="@{death::setEstimated_dod}"
-                        android:orientation="horizontal">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/dth_deathDate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={death.deathDate}"
+                                android:enabled="false"
+                                android:inputType="textPersonName"/>
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <RadioButton
-                            android:id="@+id/est_one"
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/estimated_dod"
+                            android:textColor="@color/black" />
+
+                        <RadioGroup
+                            android:id="@+id/estimate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="@{death.estimated_dod==1}"
-                            android:tag="1"
-                            android:text="@string/estimate_1" />
+                            android:onCheckedChanged="@{death::setEstimated_dod}"
+                            android:orientation="horizontal">
 
-                        <RadioButton
-                            android:id="@+id/est_two"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="@{death.estimated_dod==2}"
-                            android:tag="2"
-                            android:text="@string/estimate_2" />
-
-
-                    </RadioGroup>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:text="@string/causeofdeath"
-                        android:textColor="@color/black" />
-
-                    <org.openhds.searchSpinner.SearchableSpinner
-                        android:id="@+id/dth_deathCause"
-                        selection="@{death.deathCause}"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:minHeight="48dp"
-                        android:onItemSelected="@{death::setDeathCause}"
-                        android:padding="20dp"
-                        android:spinnerMode="dialog" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        goneUnless="@{death.deathCause==77}"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="@string/attend_you_other"
-                        android:padding="5dp"
-                        android:text="@string/attend_you_other">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dth_cause_oth"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textPersonName|textCapCharacters"
-                            android:text="@={death.deathCause_oth}" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:text="@string/deathplace"
-                        android:textColor="@color/black" />
-
-                    <org.openhds.searchSpinner.SearchableSpinner
-                        android:id="@+id/dth_deathPlace"
-                        selection="@{death.deathPlace}"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:minHeight="48dp"
-                        android:onItemSelected="@{death::setDeathPlace}"
-                        android:padding="20dp"
-                        android:spinnerMode="dialog" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        goneUnless="@{death.deathPlace==77}"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="@string/attend_you_other"
-                        android:padding="5dp"
-                        android:text="@string/attend_you_other">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dth_place_oth"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textPersonName|textCapCharacters"
-                            android:text="@={death.deathPlace_oth}" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="@string/respondent_name"
-                        android:padding="5dp"
-                        android:text="@string/respondent_name">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dth_respondent"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textPersonName|textCapCharacters"
-                            android:text="@={death.respondent}" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:hint="@string/householdhead"
-                        android:padding="5dp"
-                        android:text="@string/householdhead"
-                        android:visibility="gone">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dth_househead"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textPersonName|textCapCharacters"
-                            android:text="@={death.househead}" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:gravity="start"
-                        android:hint="@string/compoundName"
-                        android:padding="5dp"
-                        android:text="@string/compoundName"
-                        android:visibility="gone">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dth_compname"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textPersonName|textCapCharacters"
-                            android:text="@={death.compname}" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:gravity="start"
-                        android:hint="@string/village"
-                        android:padding="5dp"
-                        android:text="@string/village"
-                        android:visibility="gone">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dth_village"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textPersonName|textCapCharacters"
-                            android:text="@={death.villname}" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:gravity="start"
-                        android:hint="@string/villcode"
-                        android:padding="5dp"
-                        android:text="@string/villcode"
-                        android:visibility="gone">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/dth_phone1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textPersonName|textCapCharacters"
-                            android:text="@={death.villcode}" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <TableLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="16dp">
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <RadioGroup
+                            <RadioButton
+                                android:id="@+id/est_one"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:onCheckedChanged="@{death::setEdit}"
-                                android:orientation="horizontal">
+                                android:checked="@{death.estimated_dod==1}"
+                                android:tag="1"
+                                android:text="@string/estimate_1" />
 
-                                <TextView
-                                    android:id="@+id/edit"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/wrongdeath"
-                                    android:textAlignment="gravity"
-                                    android:visibility="gone" />
+                            <RadioButton
+                                android:id="@+id/est_two"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{death.estimated_dod==2}"
+                                android:tag="2"
+                                android:text="@string/estimate_2" />
+                        </RadioGroup>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                                <RadioButton
-                                    android:id="@+id/yn"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="@{death.edit==2}"
-                                    android:tag="2"
-                                    android:text="@string/yes"
-                                    android:visibility="gone" />
+                <!-- CAUSE OF DEATH CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@android:color/white">
 
-                                <RadioButton
-                                    android:id="@+id/no"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="@{death.edit==1}"
-                                    android:tag="1"
-                                    android:text="@string/no"
-                                    android:visibility="gone" />
-
-                                <RadioButton
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="@{death.edit==0}"
-                                    android:tag="0"
-                                    android:visibility="gone" />
-
-                            </RadioGroup>
-
-                        </TableRow>
-                    </TableLayout>
-
-                    <TextView
-                        android:visibility="gone"
-                        android:id="@+id/resolve"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="@string/query_reslve" />
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                    <RadioGroup
-                        android:visibility="gone"
-                        android:id="@+id/status"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/cause_of_death"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:text="@string/causeofdeath"
+                            android:textColor="@color/black" />
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            android:id="@+id/dth_deathCause"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:minHeight="48dp"
+                            android:onItemSelected="@{death::setDeathCause}"
+                            android:padding="20dp"
+                            android:selection="@{death.deathCause}"
+                            android:spinnerMode="dialog" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/attend_you_other"
+                            android:padding="5dp"
+                            android:text="@string/attend_you_other"
+                            goneUnless="@{death.deathCause==77}">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dth_cause_oth"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPersonName|textCapCharacters"
+                                android:text="@={death.deathCause_oth}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- DEATH PLACE CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:onCheckedChanged="@{death::setStatus}"
-                        android:orientation="horizontal">
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                        <RadioButton
-                            android:id="@+id/no_3"
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/death_place"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:text="@string/deathplace"
+                            android:textColor="@color/black" />
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            android:id="@+id/dth_deathPlace"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:minHeight="48dp"
+                            android:onItemSelected="@{death::setDeathPlace}"
+                            android:padding="20dp"
+                            android:selection="@{death.deathPlace}"
+                            android:spinnerMode="dialog" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/attend_you_other"
+                            android:padding="5dp"
+                            android:text="@string/attend_you_other"
+                            goneUnless="@{death.deathPlace==77}">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dth_place_oth"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPersonName|textCapCharacters"
+                                android:text="@={death.deathPlace_oth}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- RESPONDENT INFORMATION CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/respondent_information"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/respondent_name"
+                            android:padding="5dp"
+                            android:text="@string/respondent_name">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/dth_respondent"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPersonName|textCapCharacters"
+                                android:text="@={death.respondent}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- VALIDATION CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:cardUseCompatPadding="true"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/validation"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <TableLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="16dp">
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <RadioGroup
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:onCheckedChanged="@{death::setEdit}"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/edit"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:text="@string/wrongdeath"
+                                        android:textAlignment="gravity"
+                                        android:visibility="gone" />
+
+                                    <RadioButton
+                                        android:id="@+id/yn"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:checked="@{death.edit==2}"
+                                        android:tag="2"
+                                        android:text="@string/yes"
+                                        android:visibility="gone" />
+
+                                    <RadioButton
+                                        android:id="@+id/no"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:checked="@{death.edit==1}"
+                                        android:tag="1"
+                                        android:text="@string/no"
+                                        android:visibility="gone" />
+
+                                    <RadioButton
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:checked="@{death.edit==0}"
+                                        android:tag="0"
+                                        android:visibility="gone" />
+                                </RadioGroup>
+                            </TableRow>
+                        </TableLayout>
+
+                        <TextView
+                            android:id="@+id/resolve"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/query_reslve"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <RadioGroup
+                            android:id="@+id/status"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="@{death.status==3}"
-                            android:tag="3"
-                            android:text="@string/yes" />
+                            android:onCheckedChanged="@{death::setStatus}"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
-                        <RadioButton
-                            android:id="@+id/no_2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="@{death.status==2}"
-                            android:tag="2"
-                            android:text="@string/no" />
+                            <RadioButton
+                                android:id="@+id/no_3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{death.status==3}"
+                                android:tag="3"
+                                android:text="@string/yes" />
 
-                        <RadioButton
-                            android:visibility="invisible"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="@{death.status==0}"
-                            android:tag="0"/>
-                    </RadioGroup>
+                            <RadioButton
+                                android:id="@+id/no_2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{death.status==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
 
+                            <RadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{death.status==0}"
+                                android:tag="0"
+                                android:visibility="invisible" />
+                        </RadioGroup>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                </LinearLayout>
             </LinearLayout>
-
         </ScrollView>
 
+        <!-- ACTION BUTTONS (FIXED AT BOTTOM) -->
         <LinearLayout
             android:id="@+id/linearLayout_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@android:color/white"
+            android:elevation="4dp">
 
             <Button
                 android:id="@+id/buttonSaveClose"
@@ -654,8 +816,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                style="@style/SupervisorButton"
-                android:text="@string/savecontinuedata" />
+                android:text="@string/savecontinuedata"
+                style="@style/SupervisorButton" />
 
             <Button
                 android:id="@+id/buttonClose"
@@ -663,12 +825,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                style="@style/CloseButton"
-                android:text="@string/closedata" />
-
+                android:text="@string/closedata"
+                style="@style/CloseButton" />
         </LinearLayout>
+
     </LinearLayout>
-
-
-
 </layout>

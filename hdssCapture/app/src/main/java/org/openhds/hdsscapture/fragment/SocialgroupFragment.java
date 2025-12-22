@@ -37,7 +37,7 @@ import java.util.concurrent.ExecutionException;
  * Use the {@link SocialgroupFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SocialgroupFragment extends Fragment {
+public class SocialgroupFragment extends KeyboardFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";

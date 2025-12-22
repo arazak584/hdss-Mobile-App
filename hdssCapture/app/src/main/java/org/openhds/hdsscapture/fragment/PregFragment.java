@@ -48,7 +48,7 @@ import java.util.concurrent.ExecutionException;
  * Use the {@link PregFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PregFragment extends DialogFragment {
+public class PregFragment extends KeyboardFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";

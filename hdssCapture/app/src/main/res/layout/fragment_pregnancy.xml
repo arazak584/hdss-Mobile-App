@@ -231,6 +231,7 @@
                             app:endIconDrawable="@drawable/ic_baseline_calendar_month_24"
                             app:endIconTint="@color/colorPrimary"
                             android:hint="@string/expectedDelivery">
+
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/expectedDelivery"
                                 android:layout_width="match_parent"
@@ -1034,6 +1035,7 @@
                             app:endIconMode="custom"
                             app:endIconDrawable="@drawable/ic_calendar"
                             app:endIconTint="@color/colorPrimary">
+
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/editText_outcomeDate"
                                 android:layout_width="match_parent"

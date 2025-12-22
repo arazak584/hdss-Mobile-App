@@ -56,7 +56,7 @@ import java.util.concurrent.Executors;
  * Use the {@link DemographicFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DemographicFragment extends DialogFragment {
+public class DemographicFragment extends KeyboardFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";

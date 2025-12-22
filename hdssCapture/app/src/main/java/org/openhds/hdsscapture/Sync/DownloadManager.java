@@ -293,6 +293,7 @@ public class DownloadManager extends Worker {
                                     newPregnancy.outcome = existingPregnancy.outcome;
                                     newPregnancy.id = existingPregnancy.id;
                                     newPregnancy.complete = 0;
+                                    newPregnancy.pregnancyOrder = existingPregnancy.pregnancyOrder;
                                     // Save the updated pregnancy data
                                     pregnancyDao.create(newPregnancy);
                                     Log.d(TAG, "Updated and saved Pregnancy record with UUID: " + newPregnancy.uuid);
@@ -561,7 +562,6 @@ public class DownloadManager extends Worker {
                                             newPregnancy.location = existingPregnancy.location;
                                             newPregnancy.id = existingPregnancy.id;
                                             newPregnancy.complete = 0;
-                                            newPregnancy.extra = existingPregnancy.extra;
 
                                         // Save updated/new record
                                         pregnancyDao.create(newPregnancy);

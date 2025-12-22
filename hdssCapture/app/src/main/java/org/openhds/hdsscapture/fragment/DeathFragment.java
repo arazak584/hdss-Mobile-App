@@ -20,6 +20,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
@@ -69,7 +71,7 @@ import java.util.concurrent.Executors;
  * Use the {@link DeathFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DeathFragment extends DialogFragment {
+public class DeathFragment extends KeyboardFragment {
 
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
@@ -136,36 +138,7 @@ public class DeathFragment extends DialogFragment {
         selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
         //CHOOSING THE DATE
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-                    if (bundle.containsKey((DeathFragment.DATE_BUNDLES.DEATHDATE.getBundleKey()))) {
-                        final String result = bundle.getString(DeathFragment.DATE_BUNDLES.DEATHDATE.getBundleKey());
-                        binding.dthDeathDate.setText(result);
-                    }
-                });
-
-        binding.buttonDeathDod.setOnClickListener(v -> {
-            if (!TextUtils.isEmpty(binding.dthDeathDate.getText())) {
-                // If replDob is not empty, parse the date and use it as the initial date
-                String currentDate = binding.dthDeathDate.getText().toString();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-                try {
-                    Date date = sdf.parse(currentDate);
-                    Calendar selectedDate = Calendar.getInstance();
-                    selectedDate.setTime(date);
-
-                    // Create DatePickerFragment with the parsed date
-                    DialogFragment newFragment = new DatePickerFragment(DeathFragment.DATE_BUNDLES.DEATHDATE.getBundleKey(), selectedDate);
-                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                final Calendar c = Calendar.getInstance();
-                DialogFragment newFragment = new DatePickerFragment(DeathFragment.DATE_BUNDLES.DEATHDATE.getBundleKey(), c);
-                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-            }
-        });
+        setupDatePickers();
 
         ConfigViewModel configViewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
         List<Configsettings> configsettings = null;
@@ -541,5 +514,51 @@ public class DeathFragment extends DialogFragment {
         public String toString() {
             return bundleKey;
         }
+    }
+
+    private void setupDatePickers() {
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            handleDateResult(bundle, DATE_BUNDLES.DEATHDATE, binding.dthDeathDate);
+
+        });
+
+        binding.buttonDeathDod.setEndIconOnClickListener(v ->
+                showDatePicker(DeathFragment.DATE_BUNDLES.DEATHDATE, binding.dthDeathDate));
+
+
+    }
+
+    private void handleDateResult(Bundle bundle, DeathFragment.DATE_BUNDLES dateType, TextInputEditText editText) {
+        if (bundle.containsKey(dateType.getBundleKey())) {
+            String result = bundle.getString(dateType.getBundleKey());
+            editText.setText(result);
+        }
+    }
+
+    private void showDatePicker(DeathFragment.DATE_BUNDLES dateType, TextInputEditText editText) {
+        Calendar calendar = parseCurrentDate(editText.getText().toString());
+        DialogFragment datePickerFragment = new DatePickerFragment(
+                dateType.getBundleKey(),
+                calendar
+        );
+        datePickerFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+    }
+
+    private Calendar parseCurrentDate(String dateString) {
+        Calendar calendar = Calendar.getInstance();
+
+        if (!TextUtils.isEmpty(dateString)) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            try {
+                Date date = sdf.parse(dateString);
+                if (date != null) {
+                    calendar.setTime(date);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return calendar;
     }
 }
