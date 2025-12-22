@@ -80,7 +80,7 @@ import java.util.concurrent.Executors;
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
         Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class, Duplicate.class,
         ApiUrl.class, Configsettings.class, OdkForm.class, Vpm.class, CommunityReport.class, Morbidity.class, HierarchyLevel.class, Registry.class
-        }, version = 2 , exportSchema = true)
+        }, version = 1 , exportSchema = true)
 
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -164,7 +164,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                 AppDatabase.class, "hdss")
                                 .addCallback(sRoomDatabaseCallback)
-                                .addMigrations(MIGRATION_1_2)
+                                //.addMigrations(MIGRATION_1_2)
                                 .fallbackToDestructiveMigrationOnDowngrade()
                                 .build();
             }

@@ -176,6 +176,9 @@ public class Individual extends BaseObservable implements Parcelable {
     @Expose
     public String phone1;
 
+    public Integer deleted=0;
+    public Date deletedDate;
+
     public Individual() {
     }
 
@@ -216,6 +219,8 @@ public class Individual extends BaseObservable implements Parcelable {
 
     @Ignore
     private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    @Ignore
+    private transient final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
     public String getSttime() {
         return sttime;
@@ -231,6 +236,26 @@ public class Individual extends BaseObservable implements Parcelable {
 
     public void setEdtime(String edtime) {
         this.edtime = edtime;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
+    }
+
+    public String getDeletedDate() {
+        return deletedDate == null ? null : g.format(deletedDate);
+    }
+
+    public void setDeletedDate(String deletedDate) {
+        try {
+            if (deletedDate == null || deletedDate.isEmpty()) {
+                this.deletedDate = null;
+            } else {
+                this.deletedDate = g.parse(deletedDate);
+            }
+        } catch (ParseException e) {
+            System.out.println("Date parsing error: " + e.getMessage());
+        }
     }
 
     @Bindable

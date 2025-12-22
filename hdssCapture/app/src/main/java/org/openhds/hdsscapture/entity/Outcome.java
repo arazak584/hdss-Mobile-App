@@ -31,10 +31,6 @@ import java.util.Locale;
                 @Index(value = {"uuid"}, unique = true),
                 @Index(value = {"childuuid"}),
                 @Index(value = {"mother_uuid"}),
-                @Index(value = {"father_uuid"}),
-                @Index(value = {"residency_uuid"}),
-                @Index(value = {"individual_uuid"}),
-                @Index(value = {"location"}),
                 @Index(value = {"complete"})
         })
 public class Outcome extends BaseObservable {
@@ -50,34 +46,7 @@ public class Outcome extends BaseObservable {
     public String childuuid;
 
     @Expose
-    public Integer child_idx;
-
-    @Expose
-    public Integer vis_number;
-
-    @Expose
-    public String child_screen;
-
-    @Expose
     public String mother_uuid;
-
-    @Expose
-    public String individual_uuid;
-
-    @Expose
-    public String residency_uuid;
-
-    @Expose
-    public String firstName;
-
-    @Expose
-    public String lastName;
-
-    @Expose
-    public String father_uuid;
-
-    @Expose
-    public String extId;
 
     @Expose
     public String preg_uuid;
@@ -86,19 +55,7 @@ public class Outcome extends BaseObservable {
     public Integer type;
 
     @Expose
-    public Integer gender;
-
-    @Expose
-    public Date dob;
-
-    @Expose
-    public Date insertDate;
-
-    @Expose
     public Integer complete;
-
-    @Expose
-    public Integer rltn_head;
 
     @Expose
     public Integer chd_weight;//Was the child weighed at birth?
@@ -108,41 +65,13 @@ public class Outcome extends BaseObservable {
     public String weig_hcard;//Record weight in kilograms from Health Card
 
     @Expose
-    public String location;
-    @Expose
-    public Integer chd_num;
+    public Integer outcomeNumber;
 
     public Outcome(){}
 
     @Ignore
     private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 
-    @Bindable
-    public String getDob() {
-        if (dob == null) return null;
-        return f.format(dob);
-    }
-
-    public void setDob(String dob) {
-        try {
-            this.dob = f.parse(dob);
-        } catch (ParseException e) {
-            System.out.println("Dob error " + e.getMessage());
-        }
-    }
-
-    public String getInsertDate() {
-        if (insertDate == null) return null;
-        return f.format(insertDate);
-    }
-
-    public void setInsertDate(String insertDate) {
-        try {
-            this.insertDate = f.parse(insertDate);
-        } catch (ParseException e) {
-            System.out.println("Visit Date Error " + e.getMessage());
-        }
-    }
 
     @NotNull
     public String getUuid() {
@@ -219,14 +148,6 @@ public class Outcome extends BaseObservable {
         this.weig_hcard = weig_hcard;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     //SPINNERS ENTITY
     public void setType(AdapterView<?> parent, View view, int position, long id) {
 
@@ -241,39 +162,6 @@ public class Outcome extends BaseObservable {
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
             notifyPropertyChanged(BR._all);
-        }
-
-    }
-
-    //SPINNERS ENTITY Gender
-    public void setGenders(AdapterView<?> parent, View view, int position, long id) {
-
-        if (position != parent.getSelectedItemPosition()) {
-            parent.setSelection(position);
-        }
-        if (position == 0) {
-            gender = AppConstants.NOSELECT;
-        } else {
-            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            gender = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-            ((TextView) parent.getChildAt(0)).setTextSize(20);
-        }
-
-    }
-
-    public void setRltn_head(AdapterView<?> parent, View view, int position, long id) {
-
-        if (position != parent.getSelectedItemPosition()) {
-            parent.setSelection(position);
-        }
-        if (position == 0) {
-            rltn_head = AppConstants.NOSELECT;
-        } else {
-            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            rltn_head = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-            ((TextView) parent.getChildAt(0)).setTextSize(20);
         }
 
     }

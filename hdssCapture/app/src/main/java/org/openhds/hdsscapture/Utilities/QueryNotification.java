@@ -96,7 +96,7 @@ public class QueryNotification {
             long ind = individualViewModel.cnt();
             long inds = individualViewModel.cnts();
             long indss = individualViewModel.cntss();
-            long out = outcomeViewModel.cnt(fw);
+            //long out = outcomeViewModel.cnt(fw);
 
             if (totalOut > 0) {
                 createAndShowNotification(
@@ -168,16 +168,16 @@ public class QueryNotification {
                         QUERY_CHANNEL_ID
                 );
             }
-            if (out > 0) {
-                createAndShowNotification(
-                        getApplicationContext(),
-                        "Query",
-                        "Outcome Error (Pregnancy Outcome incomplete)",
-                        createNotificationIntent(),
-                        1018,
-                        QUERY_CHANNEL_ID
-                );
-            }
+//            if (out > 0) {
+//                createAndShowNotification(
+//                        getApplicationContext(),
+//                        "Query",
+//                        "Outcome Error (Pregnancy Outcome incomplete)",
+//                        createNotificationIntent(),
+//                        1018,
+//                        QUERY_CHANNEL_ID
+//                );
+//            }
 
         }
 

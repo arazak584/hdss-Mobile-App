@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
-            name="pregoutcome1"
+            name="outcome"
             type="org.openhds.hdsscapture.entity.Outcome" />
 
         <variable
-            name="pregoutcome"
+            name="individual"
+            type="org.openhds.hdsscapture.entity.Individual" />
+
+        <variable
+            name="residency"
+            type="org.openhds.hdsscapture.entity.Residency" />
+
+        <variable
+            name="pregnancyoutcome"
             type="org.openhds.hdsscapture.entity.Pregnancyoutcome" />
+
 
     </data>
 
@@ -26,7 +36,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="10dp"
-            android:text="Child-1"
+            android:text="@string/birth_outcome"
             android:textAllCaps="true"
             android:textColor="@color/colorPrimary"
             android:textSize="30sp"
@@ -46,6 +56,37 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="Select Outcome Number"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            app:startIconDrawable="@drawable/ic_person"
+            app:startIconTint="@color/primary">
+
+            <AutoCompleteTextView
+                android:id="@+id/outcomeNumberDropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/gestationWks"
+            android:layout_marginBottom="12dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/gestationWks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={pregnancyoutcome.gestationWks}"
+                android:enabled="false"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="start"
             android:padding="5dp"
             android:hint="@string/motherid"
@@ -57,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:text="@={pregoutcome1.mother_uuid}"
+                android:text="@={outcome.mother_uuid}"
                 android:inputType="textPersonName|textCapCharacters"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -74,54 +115,11 @@
                 android:id="@+id/preg_father"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome.father_uuid}"
+                android:text="@={individual.father_uuid}"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="textPersonName|textCapCharacters"/>
         </com.google.android.material.textfield.TextInputLayout>
-
-        <RadioGroup
-            android:visibility="gone"
-            android:id="@+id/outcomes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onCheckedChanged="@{pregoutcome::setNumberofBirths}"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/outcome_one"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{pregoutcome.numberofBirths==1}"
-                android:tag="1"
-                android:text="@string/text_1" />
-
-            <RadioButton
-                android:id="@+id/FETUS_CT_PERES_two"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{pregoutcome.numberofBirths==2}"
-                android:tag="2"
-                android:text="@string/text_2" />
-
-            <RadioButton
-                android:id="@+id/FETUS_CT_PERES_three"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{pregoutcome.numberofBirths==3}"
-                android:tag="3"
-                android:text="@string/text_3" />
-
-            <RadioButton
-                android:id="@+id/FETUS_CT_PERES_free"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{pregoutcome.numberofBirths==4}"
-                android:tag="4"
-                android:text="@string/text_4" />
-
-
-        </RadioGroup>
 
         <com.google.android.material.textfield.TextInputLayout
             android:visibility="gone"
@@ -136,7 +134,7 @@
                 android:id="@+id/out1_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome1.uuid}"
+                android:text="@={outcome.uuid}"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="textPersonName"/>
@@ -155,7 +153,7 @@
                 android:id="@+id/preg1_uuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{pregoutcome1.preg_uuid}"
+                android:text="@{outcome.preg_uuid}"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="textPersonName"/>
@@ -174,7 +172,7 @@
                 android:id="@+id/out1_preguuid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{pregoutcome1.mother_uuid}"
+                android:text="@{outcome.mother_uuid}"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="textPersonName"/>
@@ -191,12 +189,12 @@
 
         <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/out1_type"
-            selection="@{pregoutcome1.type}"
+            selection="@{outcome.type}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:minHeight="48dp"
-            android:onItemSelected="@{pregoutcome1::setType}"
+            android:onItemSelected="@{outcome::setType}"
             android:padding="15dp"
             android:spinnerMode="dialog" />
 
@@ -213,7 +211,7 @@
                 android:id="@+id/out1_child_extid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome1.childuuid}"
+                android:text="@={outcome.childuuid}"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="textPersonName"/>
@@ -221,7 +219,7 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            goneUnless="@{pregoutcome1.type==1}"
+            goneUnless="@{outcome.type==1}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -236,7 +234,7 @@
                 android:id="@+id/individual1_extid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome1.extId}"
+                android:text="@={individual.extId}"
                 android:inputType="textPersonName"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -253,14 +251,14 @@
                 android:id="@+id/individual1_mother"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome1.individual_uuid}"
+                android:text="@={residency.individual_uuid}"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:inputType="textPersonName|textCapCharacters"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            goneUnless="@{pregoutcome1.type==1}"
+            goneUnless="@{outcome.type==1}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -272,13 +270,13 @@
                 android:id="@+id/individual1_firstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome1.firstName}"
+                android:text="@={individual.firstName}"
                 android:required="true"
                 android:inputType="textPersonName|textCapCharacters"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            goneUnless="@{pregoutcome1.type==1}"
+            goneUnless="@{outcome.type==1}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -290,13 +288,13 @@
                 android:id="@+id/individual1_lastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome1.lastName}"
+                android:text="@={individual.lastName}"
                 android:required="true"
                 android:inputType="textPersonName|textCapCharacters"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            goneUnless="@{pregoutcome1.type==1}"
+            goneUnless="@{outcome.type==1}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -306,19 +304,19 @@
 
         <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/gender"
-            goneUnless="@{pregoutcome1.type==1}"
-            selection="@{pregoutcome1.gender}"
+            goneUnless="@{outcome.type==1}"
+            selection="@{individual.gender}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:minHeight="48dp"
-            android:onItemSelected="@{pregoutcome1::setGenders}"
+            android:onItemSelected="@{individual::setGenders}"
             android:padding="10dp"
             android:required="true"
             android:spinnerMode="dialog" />
 
         <TextView
-            goneUnless="@{pregoutcome1.type==1}"
+            goneUnless="@{outcome.type==1}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -328,19 +326,19 @@
 
         <org.openhds.searchSpinner.SearchableSpinner
             android:id="@+id/rltn_head"
-            goneUnless="@{pregoutcome1.type==1}"
-            selection="@{pregoutcome1.rltn_head}"
+            goneUnless="@{outcome.type==1}"
+            selection="@{residency.rltn_head}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:minHeight="48dp"
-            android:onItemSelected="@{pregoutcome1::setRltn_head}"
+            android:onItemSelected="@{residency::setRltn_head}"
             android:padding="10dp"
             android:spinnerMode="dialog" />
 
 
         <TextView
-            goneUnless="@{pregoutcome1.type==1}"
+            goneUnless="@{outcome.type==1}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -349,18 +347,18 @@
             android:text="@string/chd_weight"/>
 
         <org.openhds.searchSpinner.SearchableSpinner
-            goneUnless="@{pregoutcome1.type==1}"
+            goneUnless="@{outcome.type==1}"
             android:id="@+id/chd_weight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:spinnerMode="dialog"
-            selection="@{pregoutcome1.chd_weight}"
-            android:onItemSelected="@{pregoutcome1::setChd_weight}"
+            selection="@{outcome.chd_weight}"
+            android:onItemSelected="@{outcome::setChd_weight}"
             android:padding="10dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            goneUnless="@{pregoutcome1.chd_weight==1}"
+            goneUnless="@{outcome.chd_weight==1}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -372,12 +370,12 @@
                 android:id="@+id/weig_hcard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={pregoutcome1.weig_hcard}"
+                android:text="@={outcome.weig_hcard}"
                 android:inputType="numberDecimal"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            goneUnless="@{pregoutcome1.type==1}"
+            goneUnless="@{outcome.type==1}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -386,45 +384,48 @@
             android:text="@string/chd_size"/>
 
         <org.openhds.searchSpinner.SearchableSpinner
-            goneUnless="@{pregoutcome1.type==1}"
+            goneUnless="@{outcome.type==1}"
             android:id="@+id/chd_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:spinnerMode="dialog"
-            selection="@{pregoutcome1.chd_size}"
-            android:onItemSelected="@{pregoutcome1::setChd_size}"
+            selection="@{outcome.chd_size}"
+            android:onItemSelected="@{outcome::setChd_size}"
             android:padding="10dp"/>
 
     </LinearLayout>
     </ScrollView>
 
+        <!-- Action Buttons -->
         <LinearLayout
-            android:id="@+id/linearLayout_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:spacing="8dp">
 
-            <Button
-                android:id="@+id/buttonSaveClose"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                style="@style/SupervisorButton"
-                android:text="@string/next" />
-
-
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonClose"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
-                style="@style/CloseButton"
-                android:text="@string/previous" />
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Cancel"
+                android:layout_marginEnd="8dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:strokeColor="@color/primary"
+                app:rippleColor="@color/primary" />
 
-
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonSaveClose"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="@string/save"
+                android:textSize="14sp"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                app:icon="@drawable/ic_check"
+                app:elevation="4dp"
+                style="@style/Widget.MaterialComponents.Button" />
         </LinearLayout>
 
     </LinearLayout>

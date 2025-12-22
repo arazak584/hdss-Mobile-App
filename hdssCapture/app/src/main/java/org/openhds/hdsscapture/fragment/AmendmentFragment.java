@@ -22,6 +22,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.FatherDialogFragment;
@@ -130,15 +132,8 @@ public class AmendmentFragment extends DialogFragment {
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
         ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
 
-        //CHOOSING THE DATE
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            // We use a String here, but any type that can be put in a Bundle is supported
-            if (bundle.containsKey((AmendmentFragment.DATE_BUNDLES.DOB.getBundleKey()))) {
-                final String result = bundle.getString(AmendmentFragment.DATE_BUNDLES.DOB.getBundleKey());
-                binding.replDob.setText(result);
-            }
-
-        });
+        //Date Picker
+        setupDatePickers();
 
         // Find the button view
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_individual_mother);
@@ -168,6 +163,7 @@ public class AmendmentFragment extends DialogFragment {
                         .show(getChildFragmentManager(), "MotherDialogFragment");
             }
         });
+
         // Set a click listener on the button for father
         showDialogButton1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -190,31 +186,6 @@ public class AmendmentFragment extends DialogFragment {
                 // Show the dialog fragment
                 FatherDialogFragment.newInstance(locations,socialgroup)
                         .show(getChildFragmentManager(), "FatherDialogFragment");
-            }
-        });
-
-        binding.buttonReplDob.setOnClickListener(v -> {
-            if (!TextUtils.isEmpty(binding.replDob.getText())) {
-                // If replDob is not empty, parse the date and use it as the initial date
-                String currentDate = binding.replDob.getText().toString();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-                try {
-                    Date date = sdf.parse(currentDate);
-                    Calendar selectedDate = Calendar.getInstance();
-                    selectedDate.setTime(date);
-
-                    // Create DatePickerFragment with the parsed date
-                    DialogFragment newFragment = new DatePickerFragment(AmendmentFragment.DATE_BUNDLES.DOB.getBundleKey(), selectedDate);
-                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            } else {
-
-                final Calendar c = Calendar.getInstance();
-                DialogFragment newFragment = new DatePickerFragment(AmendmentFragment.DATE_BUNDLES.DOB.getBundleKey(), c);
-                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
             }
         });
 
@@ -616,6 +587,50 @@ public class AmendmentFragment extends DialogFragment {
         public String toString() {
             return bundleKey;
         }
+    }
+
+    private void setupDatePickers() {
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            handleDateResult(bundle, DATE_BUNDLES.DOB, binding.replDob);
+        });
+
+        binding.buttonReplDob.setEndIconOnClickListener(v ->
+                showDatePicker(DATE_BUNDLES.DOB, binding.replDob));
+
+    }
+
+    private void handleDateResult(Bundle bundle, DATE_BUNDLES dateType, TextInputEditText editText) {
+        if (bundle.containsKey(dateType.getBundleKey())) {
+            String result = bundle.getString(dateType.getBundleKey());
+            editText.setText(result);
+        }
+    }
+
+    private void showDatePicker(DATE_BUNDLES dateType, TextInputEditText editText) {
+        Calendar calendar = parseCurrentDate(editText.getText().toString());
+        DialogFragment datePickerFragment = new DatePickerFragment(
+                dateType.getBundleKey(),
+                calendar
+        );
+        datePickerFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+    }
+
+    private Calendar parseCurrentDate(String dateString) {
+        Calendar calendar = Calendar.getInstance();
+
+        if (!TextUtils.isEmpty(dateString)) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            try {
+                Date date = sdf.parse(dateString);
+                if (date != null) {
+                    calendar.setTime(date);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return calendar;
     }
 
 

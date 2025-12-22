@@ -45,6 +45,15 @@ public class DuplicateRepository {
         return future.get();
     }
 
+    public Duplicate getId(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Duplicate> callable = () -> dao.getId(id);
+
+        Future<Duplicate> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public Duplicate finds(String id) throws ExecutionException, InterruptedException {
 
         Callable<Duplicate> callable = () -> dao.finds(id);

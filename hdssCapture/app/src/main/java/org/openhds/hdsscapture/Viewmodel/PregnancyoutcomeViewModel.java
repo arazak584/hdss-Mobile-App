@@ -115,6 +115,10 @@ public class PregnancyoutcomeViewModel extends AndroidViewModel {
         return pregnancyoutcomeRepository.retrieveOutcome(id);
     }
 
+    public Pregnancyoutcome getId(String id) throws ExecutionException, InterruptedException {
+        return pregnancyoutcomeRepository.getId(id);
+    }
+
     public LiveData<Pregnancyoutcome> getView(String id) {
         return pregnancyoutcomeRepository.view(id);
     }

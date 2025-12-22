@@ -136,6 +136,15 @@ public class PregnancyRepository {
         return future.get();
     }
 
+    public List<Pregnancy> retrieve(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Pregnancy>> callable = () -> dao.retrieve(id);
+
+        Future<List<Pregnancy>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public List<Pregnancy> retrievePreg(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Pregnancy>> callable = () -> dao.retrievePreg(id);

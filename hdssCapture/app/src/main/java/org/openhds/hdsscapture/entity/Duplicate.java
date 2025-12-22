@@ -40,6 +40,9 @@ public class Duplicate extends BaseObservable {
     public String individual_uuid;
 
     @Expose
+    public String uuid;
+
+    @Expose
     public Date insertDate;
 
     @Expose

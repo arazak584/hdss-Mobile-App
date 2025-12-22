@@ -9,6 +9,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -170,6 +171,8 @@ public class Pregnancyoutcome extends BaseObservable implements Parcelable {
     public String supervisor;
     @Expose
     public Date approveDate;
+    @Expose
+    public Integer gestationWks;
 
     public Pregnancyoutcome(){}
 
@@ -179,6 +182,26 @@ public class Pregnancyoutcome extends BaseObservable implements Parcelable {
 
     @Ignore
     private transient final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+
+    //Calculate gestation Age
+    public void calculateGestationAge() {
+        if (conceptionDate == null || outcomeDate == null) {
+            gestationWks = null;
+            return;
+        }
+
+        long diffMillis = outcomeDate.getTime() - conceptionDate.getTime();
+
+        if (diffMillis < 0) {
+            // OutcomeDate earlier than LMP (invalid)
+            gestationWks = null;
+            return;
+        }
+
+        long totalDays = diffMillis / (1000 * 60 * 60 * 24);
+
+        gestationWks = (int) (totalDays / 7);
+    }
 
     public void setStatus(RadioGroup view, int checkedId) {
         if (checkedId != view.getCheckedRadioButtonId()) {
@@ -305,10 +328,15 @@ public class Pregnancyoutcome extends BaseObservable implements Parcelable {
 
     public void setOutcomeDate(String outcomeDate) {
         try {
-            this.outcomeDate = f.parse(outcomeDate);
-
+            if (outcomeDate == null || outcomeDate.isEmpty()) {
+                this.outcomeDate = null;
+            } else {
+                this.outcomeDate = f.parse(outcomeDate);
+            }
+            calculateGestationAge();
+            notifyPropertyChanged(BR._all);
         } catch (ParseException e) {
-            System.out.println("Outcome Date Error " + e.getMessage());
+            System.out.println("Date parsing error: " + e.getMessage());
         }
     }
 
@@ -326,18 +354,30 @@ public class Pregnancyoutcome extends BaseObservable implements Parcelable {
         }
     }
 
-
-
-    public void setNumberofBirths(RadioGroup view, int checkedId) {
-        if (checkedId != view.getCheckedRadioButtonId()) {
-            view.check(checkedId);
-        }
-        if (view.findViewById(checkedId) != null) {
-            final String TAG = "" + view.findViewById(checkedId).getTag();
-            numberofBirths = Integer.parseInt(TAG);
-            patternSkipper(view);
-        }
+    @Bindable
+    public String getNumberofBirths() {
+        return numberofBirths == null ? "" : String.valueOf(numberofBirths);
     }
+
+    public void setNumberofBirths(String numberofBirths) {
+        if (numberofBirths == null) this.numberofBirths = null;
+        else
+            try {
+                this.numberofBirths = Integer.valueOf(numberofBirths);
+            } catch (NumberFormatException e) {
+            }
+    }
+
+//    public void setNumberofBirths(RadioGroup view, int checkedId) {
+//        if (checkedId != view.getCheckedRadioButtonId()) {
+//            view.check(checkedId);
+//        }
+//        if (view.findViewById(checkedId) != null) {
+//            final String TAG = "" + view.findViewById(checkedId).getTag();
+//            numberofBirths = Integer.parseInt(TAG);
+//            patternSkipper(view);
+//        }
+//    }
 
     public Integer getB_place() {
         return b_place;
@@ -531,6 +571,18 @@ public class Pregnancyoutcome extends BaseObservable implements Parcelable {
         this.location = location;
     }
 
+//    public Integer getNumberOfLiveBirths() {
+//        return numberOfLiveBirths;
+//    }
+//
+//    public void setNumberOfLiveBirths(Integer numberOfLiveBirths) {
+//        this.numberOfLiveBirths = numberOfLiveBirths;
+//    }
+
+    public Integer getNumberOfLiveBirthsValue() {
+        return numberOfLiveBirths;
+    }
+
     public String getNumberOfLiveBirths() {
         return numberOfLiveBirths == null ? "" : String.valueOf(numberOfLiveBirths);
     }
@@ -538,6 +590,17 @@ public class Pregnancyoutcome extends BaseObservable implements Parcelable {
     public void setNumberOfLiveBirths(String numberOfLiveBirths) {
         try {
             this.numberOfLiveBirths = (numberOfLiveBirths == null) ? null : Integer.valueOf(numberOfLiveBirths);
+        } catch (NumberFormatException e) {
+        }
+    }
+
+    public String getGestationWks() {
+        return gestationWks == null ? "" : String.valueOf(gestationWks);
+    }
+
+    public void setGestationWks(String gestationWks) {
+        try {
+            this.gestationWks = (gestationWks == null) ? null : Integer.valueOf(gestationWks);
         } catch (NumberFormatException e) {
         }
     }
@@ -1026,6 +1089,8 @@ public class Pregnancyoutcome extends BaseObservable implements Parcelable {
             if(id1006== null || id1006!=1){
                 id1007 = null;
             }
+
+            calculateGestationAge();
 
             notifyPropertyChanged(BR._all);
         }

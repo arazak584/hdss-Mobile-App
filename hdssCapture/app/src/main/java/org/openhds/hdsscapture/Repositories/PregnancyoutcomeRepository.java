@@ -188,6 +188,15 @@ public class PregnancyoutcomeRepository {
         return future.get();
     }
 
+    public Pregnancyoutcome getId(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Pregnancyoutcome> callable = () -> dao.getId(id);
+
+        Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public LiveData<Pregnancyoutcome> view(String id) {
         return dao.getView(id);
     }

@@ -71,9 +71,10 @@ public interface PregnancyDao {
     @Query("SELECT * FROM pregnancy where uuid=:id AND complete!=1")
     Pregnancy ins(String id);
 
+    @Query("SELECT * FROM pregnancy WHERE individual_uuid = :id ")
+    List<Pregnancy> retrieve(String id);
 
-
-    @Query("SELECT a.uuid, b.firstName, b.lastName, a.insertDate,b.hohID, b.extId as visit_uuid,a.recordedDate " +
+    @Query("SELECT a.uuid, b.firstName, b.lastName, a.insertDate,b.hohID, b.extId as visit_uuid,a.recordedDate,pregnancyOrder " +
             " FROM pregnancy as a INNER JOIN individual as b ON a.individual_uuid = b.uuid " +
             " WHERE a.insertDate >= (SELECT r.startDate from round r ORDER BY r.roundNumber DESC limit 1) AND (a.outcome IS NULL OR a.outcome != 2) AND b.hohID = :id ")
     List<Pregnancy> retrievePreg(String id);
@@ -111,7 +112,7 @@ public interface PregnancyDao {
             " WHERE a.formcompldate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
-    @Query("SELECT a.uuid,b.firstName as sttime,b.lastName as edtime,b.extId as bnet_loc_other,b.compno as visit_uuid,a.approveDate,a.comment,a.fw_uuid,a.supervisor FROM pregnancy a INNER JOIN individual b on a.individual_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 order by a.insertDate DESC")
+    @Query("SELECT a.uuid,b.firstName as sttime,b.lastName as edtime,b.extId as bnet_loc_other,pregnancyOrder,b.compno as visit_uuid,a.approveDate,a.comment,a.fw_uuid,a.supervisor FROM pregnancy a INNER JOIN individual b on a.individual_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 order by a.insertDate DESC")
     List<Pregnancy> reject(String id);
 
     @Query("SELECT COUNT(*) FROM pregnancy WHERE status=2 AND fw_uuid = :uuid ")

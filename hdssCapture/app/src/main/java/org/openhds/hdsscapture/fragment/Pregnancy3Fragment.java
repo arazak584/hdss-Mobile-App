@@ -19,7 +19,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
-import org.openhds.hdsscapture.OutcomeFragment.Birth3Fragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.DatePickerFragment;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
@@ -117,14 +116,14 @@ public class Pregnancy3Fragment extends DialogFragment {
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
         ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
 
-        final TextView ex = binding.getRoot().findViewById(R.id.ext);
-        final Spinner extra = binding.getRoot().findViewById(R.id.extra);
+//        final TextView ex = binding.getRoot().findViewById(R.id.ext);
+//        final Spinner extra = binding.getRoot().findViewById(R.id.extra);
         final TextView title = binding.getRoot().findViewById(R.id.preg);
 
         title.setText("Pregnancy Observation 3");
 
-        ex.setVisibility(View.GONE);
-        extra.setVisibility(View.GONE);
+//        ex.setVisibility(View.GONE);
+//        extra.setVisibility(View.GONE);
 
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
@@ -243,7 +242,7 @@ public class Pregnancy3Fragment extends DialogFragment {
             Pregnancy data = viewModel.find3(selectedIndividual.uuid);
             if (data != null) {
                 binding.setPregnancy(data);
-                binding.extra.setEnabled(false);
+                //binding.extra.setEnabled(false);
 
                 if(data.status!=null && data.status==2){
                     cmt.setVisibility(View.VISIBLE);
@@ -269,11 +268,11 @@ public class Pregnancy3Fragment extends DialogFragment {
 
                 // Fetch the last record before the current one
                 Pregnancy previousPregnancy = viewModel.lastpregs(selectedIndividual.uuid, data.recordedDate);
-                if (previousPregnancy != null) {
-                    binding.setPreg(previousPregnancy);
-                } else {
-                    binding.lastPreg.setVisibility(View.GONE);
-                }
+//                if (previousPregnancy != null) {
+//                    binding.setPreg(previousPregnancy);
+//                } else {
+//                    binding.lastPreg.setVisibility(View.GONE);
+//                }
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 binding.getPregnancy().setFormcompldate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
@@ -289,11 +288,11 @@ public class Pregnancy3Fragment extends DialogFragment {
 
                 // Fetch the last record before the current one
                 Pregnancy previousPregnancy = viewModel.lastpregs(selectedIndividual.uuid, data.recordedDate);
-                if (previousPregnancy != null) {
-                    binding.setPreg(previousPregnancy);
-                } else {
-                    binding.lastPreg.setVisibility(View.GONE);
-                }
+//                if (previousPregnancy != null) {
+//                    binding.setPreg(previousPregnancy);
+//                } else {
+//                    binding.lastPreg.setVisibility(View.GONE);
+//                }
 
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
@@ -320,7 +319,7 @@ public class Pregnancy3Fragment extends DialogFragment {
                 binding.getPregnancy().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                 binding.getPregnancy().setFormcompldate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
                 binding.firstPreg.setEnabled(false);
-                binding.extra.setEnabled(false);
+                //binding.extra.setEnabled(false);
             }
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
@@ -354,7 +353,7 @@ public class Pregnancy3Fragment extends DialogFragment {
         loadCodeData(binding.ttinjection, "complete");
         loadCodeData(binding.slpBednet, "complete");
         loadCodeData(binding.firstPreg, "complete");
-        loadCodeData(binding.outcometype, "complete");
+        //loadCodeData(binding.outcometype, "complete");
         loadCodeData(binding.whyNo, "notdel");
         loadCodeData(binding.attendYou, "assist");
         loadCodeData(binding.ownBnet, "complete");
@@ -364,7 +363,7 @@ public class Pregnancy3Fragment extends DialogFragment {
         loadCodeData(binding.healthfacility, "complete");
         loadCodeData(binding.medicineforpregnancy, "complete");
         loadCodeData(binding.medicineforpregnancy, "complete");
-        loadCodeData(binding.extra, "complete");
+        //loadCodeData(binding.extra, "complete");
         loadCodeData(binding.pregReady, "more_chd");
         loadCodeData(binding.familyPlan, "complete");
         loadCodeData(binding.planMethod, "fam_plan_method");
@@ -546,27 +545,27 @@ public class Pregnancy3Fragment extends DialogFragment {
                 e.printStackTrace();
             }
 
-            try {
-                if (!binding.lastPreg.getText().toString().trim().isEmpty() && !binding.editTextRecordedDate.getText().toString().trim().isEmpty()
-                        && !binding.uuidPreg.getText().toString().trim().isEmpty() && !binding.uuid.getText().toString().trim().isEmpty()) {
-                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date stdate = f.parse(binding.lastPreg.getText().toString().trim());
-                    Date edate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
-                    String uuid = binding.uuid.getText().toString().trim();
-                    String uuidPreg = binding.uuidPreg.getText().toString().trim();
-                    String formattedDate = f.format(stdate);
-                    if (edate.before(stdate) && !uuid.equals(uuidPreg)) {
-                        binding.editTextRecordedDate.setError("Pregnancy with a later Date exist " + formattedDate);
-                        Toast.makeText(getActivity(), "Pregnancy with a later Date exist " + formattedDate, Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    // clear error if validation passes
-                    binding.editTextRecordedDate.setError(null);
-                }
-            } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
+//            try {
+//                if (!binding.lastPreg.getText().toString().trim().isEmpty() && !binding.editTextRecordedDate.getText().toString().trim().isEmpty()
+//                        && !binding.uuidPreg.getText().toString().trim().isEmpty() && !binding.uuid.getText().toString().trim().isEmpty()) {
+//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                    Date stdate = f.parse(binding.lastPreg.getText().toString().trim());
+//                    Date edate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
+//                    String uuid = binding.uuid.getText().toString().trim();
+//                    String uuidPreg = binding.uuidPreg.getText().toString().trim();
+//                    String formattedDate = f.format(stdate);
+//                    if (edate.before(stdate) && !uuid.equals(uuidPreg)) {
+//                        binding.editTextRecordedDate.setError("Pregnancy with a later Date exist " + formattedDate);
+//                        Toast.makeText(getActivity(), "Pregnancy with a later Date exist " + formattedDate, Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    // clear error if validation passes
+//                    binding.editTextRecordedDate.setError(null);
+//                }
+//            } catch (ParseException e) {
+//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
 
             try {
                 if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextRecordedDate.getText().toString().trim().isEmpty()) {
@@ -642,13 +641,13 @@ public class Pregnancy3Fragment extends DialogFragment {
             viewModel.add(finalData);
             Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_LONG).show();
         }
-        if (save && binding.getPregnancy().outcome==1) {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    Birth3Fragment.newInstance(individual,locations, socialgroup)).commit();
-        }else {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseMembersFragment.newInstance(locations, socialgroup, individual)).commit();
-        }
+//        if (save && binding.getPregnancy().outcome==1) {
+//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                    Birth3Fragment.newInstance(individual,locations, socialgroup)).commit();
+//        }else {
+//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                    HouseMembersFragment.newInstance(locations, socialgroup, individual)).commit();
+//        }
     }
 
     @Override

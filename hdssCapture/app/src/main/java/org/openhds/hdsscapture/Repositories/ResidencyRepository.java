@@ -106,6 +106,15 @@ public class ResidencyRepository {
         return future.get();
     }
 
+    public Residency getUuid(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Residency> callable = () -> dao.getUuid(id);
+
+        Future<Residency> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public Residency findDth(String id,String locid) throws ExecutionException, InterruptedException {
 
         Callable<Residency> callable = () -> dao.findDth(id, locid);

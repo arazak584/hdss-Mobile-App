@@ -47,39 +47,39 @@ public class OutcomeRepository {
         return future.get();
     }
 
-    public List<Outcome> error(String id) throws ExecutionException, InterruptedException {
-        Callable<List<Outcome>> callable = () -> dao.error(id);
-        Future<List<Outcome>> future = Executors.newSingleThreadExecutor().submit(callable);
-        return future.get();
-    }
+//    public List<Outcome> error(String id) throws ExecutionException, InterruptedException {
+//        Callable<List<Outcome>> callable = () -> dao.error(id);
+//        Future<List<Outcome>> future = Executors.newSingleThreadExecutor().submit(callable);
+//        return future.get();
+//    }
 
-    public long cnt(String id) throws ExecutionException, InterruptedException {
-        Callable<Long> callable = () -> dao.cnt(id);
-        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
-        return future.get();
-    }
-
-    public Outcome find(String id,String locid) throws ExecutionException, InterruptedException {
-        Callable<Outcome> callable = () -> dao.find(id,locid);
-        Future<Outcome> future = Executors.newSingleThreadExecutor().submit(callable);
-        return future.get();
-    }
-
-    public LiveData<Outcome> view1(String id) {
-        return dao.getView1(id);
-    }
-
-    public LiveData<Outcome> view2(String id) {
-        return dao.getView2(id);
-    }
-
-    public LiveData<Outcome> view3(String id) {
-        return dao.getView3(id);
-    }
-
-    public LiveData<Outcome> view4(String id) {
-        return dao.getView4(id);
-    }
+//    public long cnt(String id) throws ExecutionException, InterruptedException {
+//        Callable<Long> callable = () -> dao.cnt(id);
+//        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
+//        return future.get();
+//    }
+//
+//    public Outcome find(String id,String locid) throws ExecutionException, InterruptedException {
+//        Callable<Outcome> callable = () -> dao.find(id,locid);
+//        Future<Outcome> future = Executors.newSingleThreadExecutor().submit(callable);
+//        return future.get();
+//    }
+//
+//    public LiveData<Outcome> view1(String id) {
+//        return dao.getView1(id);
+//    }
+//
+//    public LiveData<Outcome> view2(String id) {
+//        return dao.getView2(id);
+//    }
+//
+//    public LiveData<Outcome> view3(String id) {
+//        return dao.getView3(id);
+//    }
+//
+//    public LiveData<Outcome> view4(String id) {
+//        return dao.getView4(id);
+//    }
 
     public LiveData<Outcome> view(String id) {
         return dao.getView(id);
@@ -87,5 +87,23 @@ public class OutcomeRepository {
 
     public LiveData<Long> sync() {
         return dao.sync();
+    }
+
+    public Outcome getByOutcomeIdAndNumber(String id,Integer outcomeNumber) throws ExecutionException, InterruptedException {
+
+        Callable<Outcome> callable = () -> dao.getByOutcomeIdAndNumber(id,outcomeNumber);
+
+        Future<Outcome> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public Outcome getUuid(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Outcome> callable = () -> dao.getUuid(id);
+
+        Future<Outcome> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
     }
 }

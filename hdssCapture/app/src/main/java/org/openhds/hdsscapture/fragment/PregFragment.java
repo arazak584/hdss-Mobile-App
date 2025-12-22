@@ -239,11 +239,11 @@ public class PregFragment extends DialogFragment {
 
                 // Fetch the last record before the current one
                 Pregnancy previousPregnancy = viewModel.lastpregs(data.individual_uuid, data.recordedDate);
-                if (previousPregnancy != null) {
-                    binding.setPreg(previousPregnancy);
-                } else {
-                    binding.lastPreg.setVisibility(View.GONE);
-                }
+//                if (previousPregnancy != null) {
+//                    binding.setPreg(previousPregnancy);
+//                } else {
+//                    binding.lastPreg.setVisibility(View.GONE);
+//                }
             }
 
         } catch (ExecutionException | InterruptedException e) {
@@ -289,7 +289,7 @@ public class PregFragment extends DialogFragment {
         loadCodeData(binding.ttinjection, "complete");
         loadCodeData(binding.slpBednet, "complete");
         loadCodeData(binding.firstPreg, "complete");
-        loadCodeData(binding.outcometype, "complete");
+        //loadCodeData(binding.outcometype, "complete");
         loadCodeData(binding.whyNo, "notdel");
         loadCodeData(binding.attendYou, "assist");
         loadCodeData(binding.ownBnet, "complete");
@@ -482,27 +482,27 @@ public class PregFragment extends DialogFragment {
                 e.printStackTrace();
             }
 
-            try {
-                if (!binding.lastPreg.getText().toString().trim().isEmpty() && !binding.editTextRecordedDate.getText().toString().trim().isEmpty()
-                        && !binding.uuidPreg.getText().toString().trim().isEmpty() && !binding.uuid.getText().toString().trim().isEmpty()) {
-                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date stdate = f.parse(binding.lastPreg.getText().toString().trim());
-                    Date edate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
-                    String uuid = binding.uuid.getText().toString().trim();
-                    String uuidPreg = binding.uuidPreg.getText().toString().trim();
-                    String formattedDate = f.format(stdate);
-                    if (edate.before(stdate) && !uuid.equals(uuidPreg)) {
-                        binding.editTextRecordedDate.setError("Pregnancy with a later Date exist " + formattedDate);
-                        Toast.makeText(getActivity(), "Pregnancy with a later Date exist " + formattedDate, Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    // clear error if validation passes
-                    binding.editTextRecordedDate.setError(null);
-                }
-            } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
+//            try {
+//                if (!binding.lastPreg.getText().toString().trim().isEmpty() && !binding.editTextRecordedDate.getText().toString().trim().isEmpty()
+//                        && !binding.uuidPreg.getText().toString().trim().isEmpty() && !binding.uuid.getText().toString().trim().isEmpty()) {
+//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                    Date stdate = f.parse(binding.lastPreg.getText().toString().trim());
+//                    Date edate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
+//                    String uuid = binding.uuid.getText().toString().trim();
+//                    String uuidPreg = binding.uuidPreg.getText().toString().trim();
+//                    String formattedDate = f.format(stdate);
+//                    if (edate.before(stdate) && !uuid.equals(uuidPreg)) {
+//                        binding.editTextRecordedDate.setError("Pregnancy with a later Date exist " + formattedDate);
+//                        Toast.makeText(getActivity(), "Pregnancy with a later Date exist " + formattedDate, Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    // clear error if validation passes
+//                    binding.editTextRecordedDate.setError(null);
+//                }
+//            } catch (ParseException e) {
+//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
 
             try {
                 if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextRecordedDate.getText().toString().trim().isEmpty()) {

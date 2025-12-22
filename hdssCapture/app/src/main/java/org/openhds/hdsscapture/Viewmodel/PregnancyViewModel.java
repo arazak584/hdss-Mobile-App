@@ -70,6 +70,11 @@ public class PregnancyViewModel extends AndroidViewModel {
     public List<Pregnancy> retrievePreg(String id) throws ExecutionException, InterruptedException {
         return pregnancyRepository.retrievePreg(id);
     }
+
+    public List<Pregnancy> findAllByIndividual(String id) throws ExecutionException, InterruptedException {
+        return pregnancyRepository.retrieve(id);
+    }
+
     public Pregnancy findss(String id) throws ExecutionException, InterruptedException {
         return pregnancyRepository.findss(id);
     }

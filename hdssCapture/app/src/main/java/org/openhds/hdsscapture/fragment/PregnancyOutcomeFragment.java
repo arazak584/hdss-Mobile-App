@@ -1,10 +1,12 @@
-package org.openhds.hdsscapture.OutcomeFragment;
+package org.openhds.hdsscapture.fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,20 +20,24 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.Activity.LoginActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.Dialog.FatherOutcomeDialogFragment;
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.Utilities.DatePickerFragment;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
+import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.VisitViewModel;
-import org.openhds.hdsscapture.databinding.FragmentBirthBinding;
+import org.openhds.hdsscapture.databinding.FragmentPregnancyOutcomeBinding;
 import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
@@ -41,9 +47,8 @@ import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
-import org.openhds.hdsscapture.Utilities.DatePickerFragment;
-import org.openhds.hdsscapture.fragment.HouseMembersFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,26 +62,31 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link Birth3Fragment#newInstance} factory method to
+ * Use the {@link PregnancyOutcomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Birth3Fragment extends Fragment {
+public class PregnancyOutcomeFragment extends KeyboardFragment {
 
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private final String TAG = "OUTCOME.TAG";
+    public static final String PREGNANCY = "PREGNANCY";
     private String fw;
 
     private Locations locations;
     private Socialgroup socialgroup;
     private Individual individual;
-    private FragmentBirthBinding binding;
+    private FragmentPregnancyOutcomeBinding binding;
     private ProgressDialog progressDialog;
     private Locations selectedLocation;
+    private PregnancyoutcomeViewModel viewModel;
     private Individual selectedIndividual;
+    private Pregnancy pregnancy;
+    private int pregnancyNumber;
+    private Pregnancyoutcome pregnancyoutcome;
 
-    public Birth3Fragment() {
+    public PregnancyOutcomeFragment() {
         // Required empty public constructor
     }
 
@@ -85,17 +95,19 @@ public class Birth3Fragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param locations Parameter 1.
-     * @param socialgroup Parameter 3.
-     * @param individual Parameter 4.
+     * @param socialgroup Parameter 2.
+     * @param individual Parameter 3.
+     * @param pregnancy Parameter 4.
      * @return A new instance of fragment BirthFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static Birth3Fragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup) {
-        Birth3Fragment fragment = new Birth3Fragment();
+    public static PregnancyOutcomeFragment newInstance(Individual individual, Locations locations, Socialgroup socialgroup, Pregnancy pregnancy) {
+        PregnancyOutcomeFragment fragment = new PregnancyOutcomeFragment();
         Bundle args = new Bundle();
         args.putParcelable(LOC_LOCATION_IDS, locations);
         args.putParcelable(SOCIAL_ID, socialgroup);
         args.putParcelable(INDIVIDUAL_ID, individual);
+        args.putParcelable(PREGNANCY, pregnancy);
         fragment.setArguments(args);
         return fragment;
     }
@@ -107,6 +119,7 @@ public class Birth3Fragment extends Fragment {
             locations = getArguments().getParcelable(LOC_LOCATION_IDS);
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
+            pregnancy = getArguments().getParcelable(PREGNANCY);
         }
     }
 
@@ -115,7 +128,7 @@ public class Birth3Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_birth, container, false);
-        binding = FragmentBirthBinding.inflate(inflater, container, false);
+        binding = FragmentPregnancyOutcomeBinding.inflate(inflater, container, false);
 
         IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
         selectedIndividual = sharedModel.getCurrentSelectedIndividual();
@@ -126,12 +139,13 @@ public class Birth3Fragment extends Fragment {
         ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
         selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
-        final Intent intent = getActivity().getIntent();
-        final Round roundData = intent.getParcelableExtra(HierarchyActivity.ROUND_DATA);
-        final TextView title = binding.getRoot().findViewById(R.id.preg);
-        title.setText("Pregnancy Outcome 3");
-
         Button showDialogButtons = binding.getRoot().findViewById(R.id.button_outcome_father);
+
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
+
+        //Date Selection
+        //setupDatePickers();
 
         // Set a click listener on the button for mother
         showDialogButtons.setOnClickListener(new View.OnClickListener() {
@@ -158,33 +172,6 @@ public class Birth3Fragment extends Fragment {
             }
         });
 
-        //CHOOSING THE DATE
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            // We use a String here, but any type that can be put in a Bundle is supported
-            if (bundle.containsKey((Birth3Fragment.DATE_BUNDLES.RECORDDATE.getBundleKey()))) {
-                final String result = bundle.getString(Birth3Fragment.DATE_BUNDLES.RECORDDATE.getBundleKey());
-                binding.editTextOutcomeDate.setText(result);
-            }
-
-            if (bundle.containsKey((Birth3Fragment.DATE_BUNDLES.CONCEPTION.getBundleKey()))) {
-                final String result = bundle.getString(Birth3Fragment.DATE_BUNDLES.CONCEPTION.getBundleKey());
-                binding.editTextConception.setText(result);
-            }
-
-        });
-
-        binding.buttonOutcomeStartDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(Birth3Fragment.DATE_BUNDLES.RECORDDATE.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.buttonOutcomeConception.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(Birth3Fragment.DATE_BUNDLES.CONCEPTION.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
         // Retrieve fw_uuid from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
         fw = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
@@ -192,9 +179,9 @@ public class Birth3Fragment extends Fragment {
         final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
 
         PregnancyViewModel pregnancyViewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
-        PregnancyoutcomeViewModel viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
+        viewModel = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
         try {
-            Pregnancyoutcome data = viewModel.find3(selectedIndividual.uuid, selectedLocation.compno);
+            Pregnancyoutcome data = viewModel.getId(pregnancy.uuid);
             if (data != null) {
                 binding.setPregoutcome(data);
                 binding.buttonOutcomeConception.setEnabled(false);
@@ -211,62 +198,22 @@ public class Birth3Fragment extends Fragment {
                 }else{
                     cmt.setVisibility(View.GONE);
                 }
+                    data.outcomeDate = pregnancy.outcome_date;
+                    data.conceptionDate = pregnancy.recordedDate;
+                    data.rec_anc = pregnancy.anteNatalClinic;
+                    data.month_pg = pregnancy.first_rec;
+                    data.who_anc = pregnancy.attend_you;
+                    data.num_anc = pregnancy.anc_visits;
+                    data.pregnancy_uuid = pregnancy.uuid;
 
-                Pregnancy dts = pregnancyViewModel.out3(selectedIndividual.uuid);
-                if (dts != null){
-                    data.outcomeDate = dts.outcome_date;
-                    data.conceptionDate = dts.recordedDate;
-                    data.rec_anc = dts.anteNatalClinic;
-                    data.month_pg = dts.first_rec;
-                    data.who_anc = dts.attend_you;
-                    data.num_anc = dts.anc_visits;
-                    data.pregnancy_uuid = dts.uuid;
-                }
-
-                // Fetch the last record before the current one
-                Pregnancyoutcome previousOutcome = viewModel.lastpregs(selectedIndividual.uuid, data.outcomeDate);
-                if (previousOutcome != null) {
-                    binding.setPreg(previousOutcome);
-                } else {
-                    binding.lastPreg.setVisibility(View.GONE);
-                }
             } else {
                 data = new Pregnancyoutcome();
-
-                Pregnancy dts = pregnancyViewModel.out3(selectedIndividual.uuid);
-                if (dts != null){
-                    data.outcomeDate = dts.outcome_date;
-                    data.conceptionDate = dts.recordedDate;
-                    data.rec_anc = dts.anteNatalClinic;
-                    data.month_pg = dts.first_rec;
-                    data.who_anc = dts.attend_you;
-                    data.num_anc = dts.anc_visits;
-                    data.pregnancy_uuid = dts.uuid;
-
-                    binding.recAnc.setEnabled(false);
-                    binding.monthPg.setEnabled(false);
-                    binding.whoAnc.setEnabled(false);
-                    binding.numAnc.setEnabled(false);
-                    binding.preguuid.setEnabled(false);
-                }
-                if(data.pregnancy_uuid ==null){
-                    Toast.makeText(getContext(), "Kindly Pick the Pregnancy Before you pick the Outcome", Toast.LENGTH_LONG).show();
-                }
 
                 VisitViewModel visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
                 Visit dta = visitViewModel.find(socialgroup.uuid);
                 if (dta != null){
                     data.visit_uuid = dta.uuid;
                 }
-
-                // Fetch the last record before the current one
-                Pregnancyoutcome previousOutcome = viewModel.lastpregs(selectedIndividual.uuid, data.outcomeDate);
-                if (previousOutcome != null) {
-                    binding.setPreg(previousOutcome);
-                } else {
-                    binding.lastPreg.setVisibility(View.GONE);
-                }
-
                 final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
@@ -275,8 +222,18 @@ public class Birth3Fragment extends Fragment {
                 data.mother_uuid = selectedIndividual.getUuid();
                 //data.complete = 1;
                 data.location = selectedLocation.uuid;
-                data.extra = 2;
-                data.id = 3;
+                data.outcomeDate = pregnancy.outcome_date;
+                data.conceptionDate = pregnancy.recordedDate;
+                data.rec_anc = pregnancy.anteNatalClinic;
+                data.month_pg = pregnancy.first_rec;
+                data.who_anc = pregnancy.attend_you;
+                data.num_anc = pregnancy.anc_visits;
+                data.pregnancy_uuid = pregnancy.uuid;
+                binding.recAnc.setEnabled(false);
+                binding.monthPg.setEnabled(false);
+                binding.whoAnc.setEnabled(false);
+                binding.numAnc.setEnabled(false);
+                binding.preguuid.setEnabled(false);
 
                 Date currentDate = new Date(); // Get the current date and time
                 // Create a Calendar instance and set it to the current date and time
@@ -298,16 +255,6 @@ public class Birth3Fragment extends Fragment {
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-
-//        try {
-//            Pregnancyoutcome datas = viewModel.findpreg(selectedIndividual.uuid);
-//            if (datas != null) {
-//                binding.setPreg(datas);
-//
-//            }
-//        } catch (ExecutionException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
 
         ConfigViewModel configViewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
         List<Configsettings> configsettings = null;
@@ -334,11 +281,17 @@ public class Birth3Fragment extends Fragment {
         loadCodeData(binding.howDel, codeBookViewModel, "howdel");
         loadCodeData(binding.whereAnc, codeBookViewModel, "birthPlace");
         loadCodeData(binding.whoAnc, codeBookViewModel, "assist");
-        loadCodeData(binding.father, codeBookViewModel, "complete");
+        //loadCodeData(binding.father, codeBookViewModel, "complete");
         loadCodeData(binding.id1006, codeBookViewModel, "more_chd");
         loadCodeData(binding.id1007, codeBookViewModel, "preg_chd");
         loadCodeData(binding.id1008, codeBookViewModel, "complete");
         loadCodeData(binding.id1009, codeBookViewModel, "fam_plan_method");
+        loadCodeData(binding.firstNb, codeBookViewModel, "complete");
+        loadCodeData(binding.id1001, codeBookViewModel, "complete");
+        loadCodeData(binding.id1002, codeBookViewModel, "how_lng");
+        loadCodeData(binding.id1003, codeBookViewModel, "complete");
+        loadCodeData(binding.id1004, codeBookViewModel, "complete");
+        loadCodeData(binding.id1005, codeBookViewModel, "feed_chd");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
@@ -526,20 +479,38 @@ public class Birth3Fragment extends Fragment {
             finalData.mother_uuid = selectedIndividual.getUuid();
             finalData.visit_uuid = binding.getPregoutcome().visit_uuid;
             finalData.uuid = binding.getPregoutcome().uuid;
-            //finalData.complete=1;
-            viewModel.add(finalData);
 
+
+            IndividualViewModel iview = new ViewModelProvider(this).get(IndividualViewModel.class);
+            try {
+
+                Individual visitedData = iview.visited(selectedIndividual.uuid);
+                if (visitedData != null) {
+                    IndividualVisited visited = new IndividualVisited();
+                    visited.uuid = finalData.mother_uuid;
+                    visited.complete = 1;
+                    iview.visited(visited);
+                }
+
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            finalData.complete =1;
+            viewModel.add(finalData);
             //Toast.makeText(requireActivity(), R.string.completesaved, Toast.LENGTH_SHORT).show();
 
         }
-        Integer lb = binding.getPregoutcome().numberofBirths;
 
         if (save) {
+            pregnancyoutcome = binding.getPregoutcome();
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    Birth3AFragment.newInstance(individual, locations, socialgroup)).commit();
+                    OutcomeFragment.newInstance(individual, locations, socialgroup, pregnancyoutcome, pregnancy, 1)).commit();
         }else {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseMembersFragment.newInstance(locations, socialgroup,individual)).commit();
+                    PregnancyFragment.newInstance(individual, locations, socialgroup, pregnancyNumber)).commit();
         }
 
     }
@@ -601,5 +572,53 @@ public class Birth3Fragment extends Fragment {
         public String toString() {
             return bundleKey;
         }
+    }
+
+    private void setupDatePickers() {
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            handleDateResult(bundle, DATE_BUNDLES.DOB, binding.editTextOutcomeDate);
+            handleDateResult(bundle, PregnancyOutcomeFragment.DATE_BUNDLES.RECORDDATE, binding.editTextConception);
+        });
+
+        binding.buttonOutcomeStartDate.setEndIconOnClickListener(v ->
+                showDatePicker(DATE_BUNDLES.DOB, binding.editTextOutcomeDate));
+
+        binding.buttonOutcomeConception.setEndIconOnClickListener(v ->
+                showDatePicker(PregnancyOutcomeFragment.DATE_BUNDLES.RECORDDATE, binding.editTextConception));
+
+    }
+
+    private void handleDateResult(Bundle bundle, PregnancyOutcomeFragment.DATE_BUNDLES dateType, TextInputEditText editText) {
+        if (bundle.containsKey(dateType.getBundleKey())) {
+            String result = bundle.getString(dateType.getBundleKey());
+            editText.setText(result);
+        }
+    }
+
+    private void showDatePicker(PregnancyOutcomeFragment.DATE_BUNDLES dateType, TextInputEditText editText) {
+        Calendar calendar = parseCurrentDate(editText.getText().toString());
+        DialogFragment datePickerFragment = new DatePickerFragment(
+                dateType.getBundleKey(),
+                calendar
+        );
+        datePickerFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+    }
+
+    private Calendar parseCurrentDate(String dateString) {
+        Calendar calendar = Calendar.getInstance();
+
+        if (!TextUtils.isEmpty(dateString)) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            try {
+                Date date = sdf.parse(dateString);
+                if (date != null) {
+                    calendar.setTime(date);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return calendar;
     }
 }

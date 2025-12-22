@@ -38,6 +38,10 @@ public class ResidencyViewModel extends AndroidViewModel {
         return residencyRepository.findRes(id, locid);
     }
 
+    public Residency getUuid(String id) throws ExecutionException, InterruptedException {
+        return residencyRepository.getUuid(id);
+    }
+
     public Residency findDth(String id,String locid) throws ExecutionException, InterruptedException {
         return residencyRepository.findDth(id, locid);
     }

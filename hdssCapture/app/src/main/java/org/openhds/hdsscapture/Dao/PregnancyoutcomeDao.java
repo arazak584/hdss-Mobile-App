@@ -124,4 +124,7 @@ PregnancyoutcomeDao {
 
     @Query("SELECT COUNT(*) FROM pregnancyoutcome WHERE complete= 1")
     LiveData<Long> sync();
+
+    @Query("SELECT * FROM pregnancyoutcome WHERE pregnancy_uuid=:id")
+    Pregnancyoutcome getId(String id);
 }

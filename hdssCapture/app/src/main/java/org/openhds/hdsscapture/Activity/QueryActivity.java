@@ -146,7 +146,7 @@ public class QueryActivity extends AppCompatActivity {
         addDeathQueries(list);
         addMinorHohQueries(list);
         addUnknownHohQueries(list);
-        addOutcomeErrorQueries(list);
+        //addOutcomeErrorQueries(list);
         addNotUpdatedHohQueries(list);
 
         return list;
@@ -280,23 +280,23 @@ public class QueryActivity extends AppCompatActivity {
         }
     }
 
-    private void addOutcomeErrorQueries(List<Queries> list) {
-        try {
-            List<Outcome> errors = outcomeViewModel.error(username);
-            int index = list.size() + 1;
-
-            for (Outcome e : errors) {
-                Queries q = new Queries();
-                q.name = index + ". Compno: " + e.childuuid;
-                q.extid = "PermID: " + e.extId + " - " + e.firstName + " " + e.lastName;
-                q.error = "Outcome Error (Pregnancy Outcome incomplete)";
-                q.index = index++;
-                list.add(q);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private void addOutcomeErrorQueries(List<Queries> list) {
+//        try {
+//            List<Outcome> errors = outcomeViewModel.error(username);
+//            int index = list.size() + 1;
+//
+//            for (Outcome e : errors) {
+//                Queries q = new Queries();
+//                q.name = index + ". Compno: " + e.childuuid;
+//                q.extid = "PermID: " + e.extId + " - " + e.firstName + " " + e.lastName;
+//                q.error = "Outcome Error (Pregnancy Outcome incomplete)";
+//                q.index = index++;
+//                list.add(q);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void addNotUpdatedHohQueries(List<Queries> list) {
         try {

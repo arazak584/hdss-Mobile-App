@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="true">HDSS CAPTURE</string>
-    <string name="versions">2025.10.01</string>
+    <string name="versions">2026.01.01</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>
@@ -131,7 +131,7 @@
     <string name="gender">Gender of Individual</string>
     <string name="tribe">Ethnicity of Individual</string>
     <string name="tribe_other">Other ethnicity specified</string>
-    <string name="save">Save</string>
+    <string name="save">SAVE RECORD</string>
     <string name="individualOLD">Individual</string>
     <string name="occupations">Occupation</string>
     <string name="religion">Select Religion</string>
@@ -871,6 +871,18 @@
     <string name="cog_ss"> [Do/does] [you/he/she] have difficulty remembering or concentrating?</string>
     <string name="sc_ss">[Do/does] [you/he/she] have difficulty with self-care, such as washing all over or dressing?</string>
     <string name="com_ss"> Using [your/his/her] usual language, [do/does] [you/he/she] have difficulty communicating, for example understanding or being understood?</string>
+    <string name="original">Select Individual to keep</string>
+    <string name="option_yes">Yes</string>
+    <string name="option_no">No</string>
+    <string name="birth_outcome">Outcome</string>
+    <string name="gestationWks">Gestation Age In Weeks</string>
+    <string name="basic_information">Basic Information</string>
+    <string name="identification">IDENTIFICATION</string>
+    <string name="date_of_birth_gender"><![CDATA[Date of Birth & Gender]]></string>
+    <string name="parents_information">Parents Information</string>
+    <string name="residency_information">Residency Information</string>
+    <string name="migration_information">Migration Information</string>
+    <string name="demographic_information">Demographic Information</string>
 
 
 </resources>

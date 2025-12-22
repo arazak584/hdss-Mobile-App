@@ -138,11 +138,37 @@ public class DupFragment extends DialogFragment {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
         fw = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
 
+        Button showDialog = binding.getRoot().findViewById(R.id.button_original);
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_dup);
         Button showDialogButton1 = binding.getRoot().findViewById(R.id.button1_dup);
         Button showDialogButton2 = binding.getRoot().findViewById(R.id.button2_dup);
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
         ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
+
+        // Set a click listener on the button for partner
+        showDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progressDialog = new ProgressDialog(requireContext());
+                progressDialog.setMessage("Loading Individuals...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+
+                // Simulate long operation
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                }, 500);
+
+
+                // Show the dialog fragment
+                OriginalDialogFragment.newInstance(individual, residency, locations,socialgroup)
+                        .show(getChildFragmentManager(), "OriginalDialogFragment");
+            }
+        });
 
         // Set a click listener on the button for partner
         showDialogButton.setOnClickListener(new View.OnClickListener() {
@@ -227,10 +253,10 @@ public class DupFragment extends DialogFragment {
             Duplicate data = viewModel.find(selectedIndividual.uuid);
             if (data != null) {
                 binding.setDup(data);
-                binding.fname.setEnabled(false);
-                binding.lname.setEnabled(false);
-                binding.dupFname.setEnabled(false);
-                binding.dupLname.setEnabled(false);
+                //binding.fname.setEnabled(false);
+                //binding.lname.setEnabled(false);
+                //binding.dupFname.setEnabled(false);
+                //binding.dupLname.setEnabled(false);
 
                 if(data.status!=null && data.status==2){
                     cmt.setVisibility(View.VISIBLE);
@@ -245,16 +271,16 @@ public class DupFragment extends DialogFragment {
                 data = new Duplicate();
 
                 data.fw_uuid = fw;
-                data.individual_uuid = selectedIndividual.getUuid();
-                data.fname = selectedIndividual.getFirstName();
-                data.lname = selectedIndividual.getLastName();
-                data.dob = selectedIndividual.dob;
-                data.compno = selectedLocation.getCompno();
-
-                binding.fname.setEnabled(false);
-                binding.lname.setEnabled(false);
-                binding.dupFname.setEnabled(false);
-                binding.dupLname.setEnabled(false);
+                data.uuid = selectedIndividual.getUuid();
+//                data.fname = selectedIndividual.getFirstName();
+//                data.lname = selectedIndividual.getLastName();
+//                data.dob = selectedIndividual.dob;
+//                data.compno = selectedLocation.getCompno();
+//
+//                binding.fname.setEnabled(false);
+//                binding.lname.setEnabled(false);
+//                binding.dupFname.setEnabled(false);
+//                binding.dupLname.setEnabled(false);
 
                 binding.setDup(data);
                 binding.getDup().setInsertDate(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));

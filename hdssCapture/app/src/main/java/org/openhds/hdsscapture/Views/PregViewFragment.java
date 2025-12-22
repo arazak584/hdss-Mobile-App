@@ -217,23 +217,23 @@ public class PregViewFragment extends Fragment {
         viewModel.getView(pregnancy.uuid).observe(getViewLifecycleOwner(), data -> {
             if (data != null) {
                 binding.setPregnancy(data);
-                binding.outcometype.setEnabled(false);
+                //binding.outcometype.setEnabled(false);
 
 
                 // Fetch the last record before the current one
-                try {
-                    Pregnancy previousPregnancy = viewModel.lastpregs(data.individual_uuid, data.recordedDate);
-                    if (previousPregnancy != null) {
-                        binding.setPreg(previousPregnancy);
-                    } else {
-                        binding.lastPreg.setVisibility(View.GONE);
-                    }
-                } catch (ExecutionException | InterruptedException e) {
-                    // Handle exceptions properly
-                    e.printStackTrace();
-                    // Optionally, show an error message to the user
-                    Toast.makeText(getContext(), "Error fetching previous pregnancy data", Toast.LENGTH_SHORT).show();
-                }
+//                try {
+//                    Pregnancy previousPregnancy = viewModel.lastpregs(data.individual_uuid, data.recordedDate);
+//                    if (previousPregnancy != null) {
+//                        binding.setPreg(previousPregnancy);
+//                    } else {
+//                        binding.lastPreg.setVisibility(View.GONE);
+//                    }
+//                } catch (ExecutionException | InterruptedException e) {
+//                    // Handle exceptions properly
+//                    e.printStackTrace();
+//                    // Optionally, show an error message to the user
+//                    Toast.makeText(getContext(), "Error fetching previous pregnancy data", Toast.LENGTH_SHORT).show();
+//                }
 
                 if (data.status != null && data.status == 2) {
                     cmt.setVisibility(View.VISIBLE);
@@ -275,7 +275,7 @@ public class PregViewFragment extends Fragment {
         loadCodeData(binding.ttinjection, "complete");
         loadCodeData(binding.slpBednet, "complete");
         loadCodeData(binding.firstPreg, "complete");
-        loadCodeData(binding.outcometype, "complete");
+        //loadCodeData(binding.outcometype, "complete");
         loadCodeData(binding.whyNo, "notdel");
         loadCodeData(binding.attendYou, "assist");
         loadCodeData(binding.ownBnet, "complete");
@@ -285,7 +285,7 @@ public class PregViewFragment extends Fragment {
         loadCodeData(binding.healthfacility, "complete");
         loadCodeData(binding.medicineforpregnancy, "complete");
         loadCodeData(binding.medicineforpregnancy, "complete");
-        loadCodeData(binding.extra, "complete");
+        //loadCodeData(binding.extra, "complete");
         loadCodeData(binding.pregReady, "more_chd");
         loadCodeData(binding.familyPlan, "complete");
         loadCodeData(binding.planMethod, "fam_plan_method");

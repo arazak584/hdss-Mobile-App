@@ -174,6 +174,11 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     @Expose
     public String plan_method_oth;//Other Method, Specify
 
+    @SerializedName("pregnancyOrder")
+    @Expose
+    @ColumnInfo(name = "pregnancyOrder")
+    public int pregnancyOrder=1;
+
     public Pregnancy(){}
 
 
@@ -183,6 +188,18 @@ public class Pregnancy extends BaseObservable implements Parcelable {
 
     @Ignore
     private transient final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+
+    private void calculateEddIfNeeded() {
+        // Only calculate if recordedDate exists and anteNatalClinic is 2 or 3 (No ANC)
+        if (recordedDate != null && anteNatalClinic != null && (anteNatalClinic == 2 || anteNatalClinic == 3)) {
+            // Add 9 months to conception date (LMP) to get expected delivery date
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.setTime(recordedDate);
+            cal.add(java.util.Calendar.MONTH, 9);
+            this.expectedDeliveryDate = cal.getTime();
+            //notifyPropertyChanged(BR._all);
+        }
+    }
 
     public void setStatus(RadioGroup view, int checkedId) {
         if (checkedId != view.getCheckedRadioButtonId()) {
@@ -323,17 +340,24 @@ public class Pregnancy extends BaseObservable implements Parcelable {
         }
     }
 
+    @Bindable
     public String getOutcome_date() {
-        if (outcome_date == null) return null;
+        if (outcome_date == null) return "";  // Return empty string, not null
         return f.format(outcome_date);
     }
 
     public void setOutcome_date(String outcome_date) {
-        try {
-            this.outcome_date = f.parse(outcome_date);
-        } catch (ParseException e) {
-            System.out.println("Outcome Date Error " + e.getMessage());
+        if (outcome_date == null || outcome_date.trim().isEmpty()) {
+            this.outcome_date = null;
+        } else {
+            try {
+                this.outcome_date = f.parse(outcome_date.trim());
+            } catch (ParseException e) {
+                System.out.println("Outcome Date Error: " + e.getMessage());
+                this.outcome_date = null;
+            }
         }
+        notifyPropertyChanged(BR.outcome_date);  // CRITICAL: Notify binding
     }
 
     public Integer getOutcome() {
@@ -351,16 +375,16 @@ public class Pregnancy extends BaseObservable implements Parcelable {
 
     public void setRecordedDate(String recordedDate) {
         try {
-            Date newRecordedDate = f.parse(recordedDate);
-            Calendar calendar = Calendar.getInstance(Locale.US);
-            calendar.setTime(newRecordedDate);
-            calendar.add(Calendar.MONTH, 9);
-            // Update the recordedDate field
-            this.expectedDeliveryDate = calendar.getTime();
+            if (recordedDate == null || recordedDate.isEmpty()) {
+                this.recordedDate = null;
+            } else {
+                this.recordedDate = f.parse(recordedDate);
+            }
+            calculateEddIfNeeded();
+            notifyPropertyChanged(BR._all);
 
-            this.recordedDate = newRecordedDate;
         } catch (ParseException e) {
-            // Handle the ParseException
+            System.out.println("Date parsing error: " + e.getMessage());
         }
     }
 
@@ -384,6 +408,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
 
     public void setAnteNatalClinic(Integer anteNatalClinic) {
         this.anteNatalClinic = anteNatalClinic;
+
     }
 
     public Integer getAttend_you() {
@@ -690,6 +715,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
             anteNatalClinic = kv.codeValue;
             ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
             ((TextView) parent.getChildAt(0)).setTextSize(20);
+            calculateEddIfNeeded();
         }
         patternSkipper(view);
 
@@ -894,22 +920,18 @@ public class Pregnancy extends BaseObservable implements Parcelable {
 
     }
 
-    //SPINNERS ENTITY
-    public void setOutcome(AdapterView<?> parent, View view, int position, long id) {
-
-        if (position != parent.getSelectedItemPosition()) {
-            parent.setSelection(position);
+    public void setOutcome(RadioGroup view, int checkedId) {
+        if (checkedId != view.getCheckedRadioButtonId()) {
+            view.check(checkedId);
         }
-        if (position == 0) {
-            outcome = AppConstants.NOSELECT;
-        } else {
-            final KeyValuePair kv = (KeyValuePair) parent.getItemAtPosition(position);
-            outcome = kv.codeValue;
-            ((TextView) parent.getChildAt(0)).setTextColor(Color.MAGENTA);
-            ((TextView) parent.getChildAt(0)).setTextSize(20);
+        if (view.findViewById(checkedId) != null) {
+            final String TAG = "" + view.findViewById(checkedId).getTag();
+            outcome = Integer.parseInt(TAG);
+            patternSkipper(view);
         }
-        patternSkipper(view);
     }
+
+    //SPINNERS ENTITY
 
     public void setPreg_ready(AdapterView<?> parent, View view, int position, long id) {
 

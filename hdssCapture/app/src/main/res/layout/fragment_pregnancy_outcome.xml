@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
-            name="pregnancy"
-            type="org.openhds.hdsscapture.entity.Pregnancy" />
+            name="pregoutcome"
+            type="org.openhds.hdsscapture.entity.Pregnancyoutcome" />
         <variable
             name="eventname"
             type="String" />
     </data>
 
     <LinearLayout
-        android:id="@+id/PREGNANCY_LAYOUT"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="5dp"
-        tools:context=".fragment.PregnancyFragment">
+        tools:context=".fragment.PregnancyOutcomeFragment">
 
         <TextView
             android:id="@+id/preg"
@@ -27,8 +25,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="10dp"
+            android:text="@string/pregoutcome"
             android:textAllCaps="true"
-            android:text="@string/pregobs"
             android:textColor="@color/colorPrimary"
             android:textSize="30sp"
             android:textStyle="bold" />
@@ -49,7 +47,7 @@
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:text="@={pregnancy.comment}"
+            android:text="@={pregoutcome.comment}"
             android:textColor="@color/purple_700"
             android:gravity="start"/>
 
@@ -60,6 +58,7 @@
             android:background="@color/colorPrimaryDark" />
 
         <ScrollView
+            android:id="@+id/OUTCOME_LAYOUT"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
@@ -67,76 +66,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <!-- Hidden Fields Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:cardElevation="4dp"
-                    app:strokeColor="@color/primary"
-                    app:strokeWidth="2dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/fw">
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/fw"
-                                android:text="@={pregnancy.fw_uuid}"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="textPersonName"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/uuid">
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/uuid"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@={pregnancy.uuid}"
-                                android:inputType="textPersonName"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/ind_uuid">
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/extid"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@={pregnancy.individual_uuid}"
-                                android:inputType="textPersonName"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/visitid">
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/preg_visitid"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@={pregnancy.visit_uuid}"
-                                android:inputType="textPersonName"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                android:orientation="vertical"
+                android:padding="8dp">
 
                 <!-- Basic Information Card -->
                 <com.google.android.material.card.MaterialCardView
@@ -182,31 +113,153 @@
                             android:layout_height="wrap_content"
                             android:hint="@string/earliest">
                             <androidx.appcompat.widget.AppCompatEditText
-                                android:focusable="false"
-                                android:focusableInTouchMode="false"
                                 android:id="@+id/earliest"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/preguuid">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/preguuid"
+                                android:text="@={pregoutcome.pregnancy_uuid}"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
                                 android:inputType="textPersonName"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Select Pregnancy Number"
-                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                            app:startIconDrawable="@drawable/ic_person"
-                            app:startIconTint="@color/primary">
-                            <AutoCompleteTextView
-                                android:id="@+id/pregnancyNumberDropdown"
+                            android:hint="@string/motherid">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/preg_mother"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:focusable="false"
-                                android:inputType="none" />
+                                android:focusableInTouchMode="false"
+                                android:text="@={pregoutcome.mother_uuid}"
+                                android:inputType="textPersonName|textCapCharacters"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <Button
+                            android:id="@+id/button_outcome_father"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/father_extid"
+                            style="@style/SupervisorButton"
+                            app:icon="@drawable/ic_baseline_person_24" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/fatherid">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/preg_father"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={pregoutcome.father_uuid}"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName|textCapCharacters"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Birth Details Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <View
+                                android:layout_width="4dp"
+                                android:layout_height="24dp"
+                                android:background="@color/primary"
+                                android:layout_marginEnd="12dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Birth Details"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/primary" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:text="@string/childeverborn"
+                            android:paddingBottom="4dp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/outcomes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/childeverborn">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_outcomes"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={pregoutcome.numberofBirths}"
+                                android:inputType="number" />
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/button_preg_startDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/numberOfLiveBirths">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/numberOfLiveBirths"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={pregoutcome.numberOfLiveBirths}"
+                                android:inputType="number"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/gestationWks">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/gestationWks"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={pregoutcome.gestationWks}"
+                                android:enabled="false"
+                                android:inputType="number"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/button_outcome_conception"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:endIconMode="custom"
@@ -216,28 +269,180 @@
                             <com.google.android.material.textfield.TextInputEditText
                                 android:focusable="false"
                                 android:focusableInTouchMode="false"
-                                android:id="@+id/editText_recordedDate"
+                                android:id="@+id/editText_conception"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@={pregnancy.recordedDate}"
+                                android:text="@={pregoutcome.conceptionDate}"
                                 android:inputType="textPersonName"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/button_preg_expectDate"
+                            android:id="@+id/button_outcome_startDate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:endIconMode="custom"
-                            app:endIconDrawable="@drawable/ic_baseline_calendar_month_24"
+                            app:endIconDrawable="@drawable/ic_calendar"
                             app:endIconTint="@color/colorPrimary"
-                            android:hint="@string/expectedDelivery">
+                            android:hint="@string/outcomeDate">
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/expectedDelivery"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:id="@+id/editText_outcomeDate"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@={pregnancy.expectedDeliveryDate}"
-                                android:enabled="false"
+                                android:text="@={pregoutcome.outcomeDate}"
                                 android:inputType="textPersonName"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Delivery Information Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <View
+                                android:layout_width="4dp"
+                                android:layout_height="24dp"
+                                android:background="@color/primary"
+                                android:layout_marginEnd="12dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Delivery Information"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/primary" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:text="@string/birthplace"/>
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            android:id="@+id/birthplace"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            selection="@{pregoutcome.b_place}"
+                            android:onItemSelected="@{pregoutcome::setB_place}"
+                            android:gravity="left"
+                            android:spinnerMode="dialog"
+                            android:padding="10dp"/>
+
+                        <TextView
+                            goneUnless="@{pregoutcome.b_place==5 || pregoutcome.b_place==4 || pregoutcome.b_place==6 }"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:text="@string/not_del"/>
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            goneUnless="@{pregoutcome.b_place==5 || pregoutcome.b_place==4 || pregoutcome.b_place==6 }"
+                            android:id="@+id/not_del"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:spinnerMode="dialog"
+                            selection="@{pregoutcome.not_del}"
+                            android:onItemSelected="@{pregoutcome::setNot_del}"
+                            android:padding="10dp"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            goneUnless="@{pregoutcome.not_del==77}"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/attend_you_other">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/not_del_other"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={pregoutcome.not_del_other}"
+                                android:inputType="textPersonName|textCapCharacters"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:text="@string/ass_del"/>
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            android:id="@+id/ass_del"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:spinnerMode="dialog"
+                            selection="@{pregoutcome.ass_del}"
+                            android:onItemSelected="@{pregoutcome::setAss_del}"
+                            android:padding="10dp"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            goneUnless="@{pregoutcome.ass_del==77}"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/attend_you_other">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/ass_del_other"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={pregoutcome.ass_del_other}"
+                                android:inputType="textPersonName|textCapCharacters"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:text="@string/how_del"/>
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            android:id="@+id/how_del"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:spinnerMode="dialog"
+                            selection="@{pregoutcome.how_del}"
+                            android:onItemSelected="@{pregoutcome::setHow_del}"
+                            android:padding="10dp"/>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            goneUnless="@{pregoutcome.how_del==77}"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/attend_you_other">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/how_del_other"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={pregoutcome.how_del_other}"
+                                android:inputType="textPersonName|textCapCharacters"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
@@ -287,333 +492,72 @@
                             android:layout_height="wrap_content"
                             android:padding="5dp"
                             android:textColor="@color/black"
-                            android:text="@string/anteNatalClinic"/>
+                            android:text="@string/rec_anc"/>
 
                         <org.openhds.searchSpinner.SearchableSpinner
-                            android:id="@+id/anteNatalClinic"
+                            android:id="@+id/rec_anc"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            selection="@{pregnancy.anteNatalClinic}"
-                            android:onItemSelected="@{pregnancy::setAnteNatalClinic}"
                             android:gravity="left"
                             android:spinnerMode="dialog"
-                            android:padding="15dp"/>
+                            selection="@{pregoutcome.rec_anc}"
+                            android:onItemSelected="@{pregoutcome::setRec_anc}"
+                            android:padding="10dp"/>
 
                         <TextView
-                            goneUnless="@{pregnancy.anteNatalClinic==2}"
+                            goneUnless="@{pregoutcome.rec_anc==2}"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
                             android:textColor="@color/black"
-                            android:text="@string/why_no"/>
+                            android:text="@string/why_no_anc"/>
 
                         <org.openhds.searchSpinner.SearchableSpinner
-                            goneUnless="@{pregnancy.anteNatalClinic==2}"
-                            android:id="@+id/why_no"
+                            goneUnless="@{pregoutcome.rec_anc==2}"
+                            android:id="@+id/why_no_anc"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            selection="@{pregnancy.why_no}"
-                            android:onItemSelected="@{pregnancy::setWhy_no}"
                             android:gravity="left"
                             android:spinnerMode="dialog"
-                            android:padding="15dp"/>
+                            selection="@{pregoutcome.why_no_anc}"
+                            android:onItemSelected="@{pregoutcome::setWhy_no_anc}"
+                            android:padding="10dp"/>
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            goneUnless="@{pregnancy.why_no==77}"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/attend_you_other">
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/why_no_other"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@={pregnancy.why_no_other}"
-                                android:inputType="textPersonName|textCapCharacters"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- ANC Details Card (shown when attending clinic) -->
-                <com.google.android.material.card.MaterialCardView
-                    goneUnless="@{pregnancy.anteNatalClinic==1}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:cardElevation="4dp"
-                    app:strokeColor="@color/primary"
-                    app:strokeWidth="2dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
+                        <!-- ANC Details (when received ANC) -->
                         <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="16dp"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <View
-                                android:layout_width="4dp"
-                                android:layout_height="24dp"
-                                android:background="@color/primary"
-                                android:layout_marginEnd="12dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/anc"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/primary" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:text="@string/ageOfPregFromPregNotes" />
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/ageOfPregFromPregNotes">
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/ageOfPregFromPregNotes"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@={pregnancy.ageOfPregFromPregNotes}"
-                                android:inputType="number"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:text="@string/estimatedAgeOfPreg" />
-
-                        <EditText
-                            android:id="@+id/estimatedAgeOfPreg"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:ems="10"
-                            android:inputType="number"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-                            android:text="@={pregnancy.estimatedAgeOfPreg}" />
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/button_lastClinicVisitDate"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/lastClinicVisitDate"
-                            app:endIconMode="custom"
-                            app:endIconDrawable="@drawable/ic_calendar"
-                            app:endIconTint="@color/colorPrimary">
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/editText_lastClinicVisitDate"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@={pregnancy.lastClinicVisitDate}"
-                                android:inputType="none"
-                                android:focusable="false"
-                                android:clickable="false" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:textColor="@color/black"
-                            android:text="@string/attend_you"/>
-
-                        <org.openhds.searchSpinner.SearchableSpinner
-                            android:id="@+id/attend_you"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            selection="@{pregnancy.attend_you}"
-                            android:onItemSelected="@{pregnancy::setAttend_you}"
-                            android:gravity="left"
-                            android:spinnerMode="dialog"
-                            android:padding="20dp"/>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            goneUnless="@{pregnancy.attend_you==77}"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/attend_you_other">
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/attend_you_other"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@={pregnancy.attend_you_other}"
-                                android:inputType="textPersonName|textCapCharacters"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:textColor="@color/black"
-                            android:text="@string/ttinjection"/>
-
-                        <org.openhds.searchSpinner.SearchableSpinner
-                            android:id="@+id/ttinjection"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            selection="@{pregnancy.ttinjection}"
-                            android:onItemSelected="@{pregnancy::setTtinjection}"
-                            android:gravity="left"
-                            android:spinnerMode="dialog"
-                            android:padding="20dp"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:text="@string/first_rec" />
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/first_rec">
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/first_rec"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@={pregnancy.first_rec}"
-                                android:inputType="number"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:text="@string/anc_visits" />
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/anc_visits">
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/anc_visits"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@={pregnancy.anc_visits}"
-                                android:inputType="number"/>
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Bednet Information Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:cardElevation="4dp"
-                    app:strokeColor="@color/primary"
-                    app:strokeWidth="2dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="16dp"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <View
-                                android:layout_width="4dp"
-                                android:layout_height="24dp"
-                                android:background="@color/primary"
-                                android:layout_marginEnd="12dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Bednet Usage"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/primary" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:textColor="@color/black"
-                            android:text="@string/own_bnet"/>
-
-                        <org.openhds.searchSpinner.SearchableSpinner
-                            android:id="@+id/own_bnet"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            selection="@{pregnancy.own_bnet}"
-                            android:onItemSelected="@{pregnancy::setOwn_bnet}"
-                            android:gravity="left"
-                            android:spinnerMode="dialog"
-                            android:padding="15dp"/>
-
-                        <LinearLayout
-                            goneUnless="@{pregnancy.own_bnet==1}"
+                            goneUnless="@{pregoutcome.rec_anc==1}"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
                             android:layout_marginTop="8dp">
-
-                            <com.google.android.material.textfield.TextInputLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/how_many">
-                                <androidx.appcompat.widget.AppCompatEditText
-                                    android:id="@+id/how_many"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="@={pregnancy.how_many}"
-                                    android:inputType="number"/>
-                            </com.google.android.material.textfield.TextInputLayout>
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:padding="5dp"
                                 android:textColor="@color/black"
-                                android:text="@string/bnet_sou"/>
+                                android:text="@string/where_anc"/>
 
                             <org.openhds.searchSpinner.SearchableSpinner
-                                android:id="@+id/bnet_sou"
+                                android:id="@+id/where_anc"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                selection="@{pregnancy.bnet_sou}"
-                                android:onItemSelected="@{pregnancy::setBnet_sou}"
                                 android:gravity="left"
                                 android:spinnerMode="dialog"
-                                android:padding="20dp"/>
+                                selection="@{pregoutcome.where_anc}"
+                                android:onItemSelected="@{pregoutcome::setWhere_anc}"
+                                android:padding="10dp"/>
 
                             <com.google.android.material.textfield.TextInputLayout
-                                goneUnless="@{pregnancy.bnet_sou==77}"
+                                goneUnless="@{pregoutcome.where_anc==77}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/attend_you_other">
                                 <androidx.appcompat.widget.AppCompatEditText
-                                    android:id="@+id/bnet_sou_other"
+                                    android:id="@+id/where_anc_Other"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@={pregnancy.bnet_sou_other}"
+                                    android:text="@={pregoutcome.where_anc_Other}"
                                     android:inputType="textPersonName|textCapCharacters"/>
                             </com.google.android.material.textfield.TextInputLayout>
 
@@ -622,29 +566,47 @@
                                 android:layout_height="wrap_content"
                                 android:padding="5dp"
                                 android:textColor="@color/black"
-                                android:text="@string/bnet_loc"/>
+                                android:text="@string/who_anc"/>
 
                             <org.openhds.searchSpinner.SearchableSpinner
-                                android:id="@+id/bnet_loc"
+                                android:id="@+id/who_anc"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                selection="@{pregnancy.bnet_loc}"
-                                android:onItemSelected="@{pregnancy::setBnet_loc}"
                                 android:gravity="left"
                                 android:spinnerMode="dialog"
-                                android:padding="20dp"/>
+                                selection="@{pregoutcome.who_anc}"
+                                android:onItemSelected="@{pregoutcome::setWho_anc}"
+                                android:padding="10dp"/>
 
-                            <com.google.android.material.textfield.TextInputLayout
-                                goneUnless="@{pregnancy.bnet_loc==77}"
+                            <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="@string/attend_you_other">
+                                android:textColor="@color/black"
+                                android:text="@string/month_pg"
+                                android:paddingTop="8dp" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/month_pg">
                                 <androidx.appcompat.widget.AppCompatEditText
-                                    android:id="@+id/bnet_loc_other"
+                                    android:id="@+id/month_pg"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="@={pregnancy.bnet_loc_other}"
-                                    android:inputType="textCapCharacters"/>
+                                    android:text="@={pregoutcome.month_pg}"
+                                    android:inputType="number"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/num_anc">
+                                <androidx.appcompat.widget.AppCompatEditText
+                                    android:id="@+id/num_anc"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@={pregoutcome.num_anc}"
+                                    android:inputType="number"/>
                             </com.google.android.material.textfield.TextInputLayout>
 
                             <TextView
@@ -652,44 +614,67 @@
                                 android:layout_height="wrap_content"
                                 android:padding="5dp"
                                 android:textColor="@color/black"
-                                android:text="@string/slp_bednet"/>
+                                android:text="@string/rec_ipt"/>
 
                             <org.openhds.searchSpinner.SearchableSpinner
-                                android:id="@+id/slp_bednet"
+                                android:id="@+id/rec_ipt"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                selection="@{pregnancy.slp_bednet}"
-                                android:onItemSelected="@{pregnancy::setSlp_bednet}"
                                 android:gravity="left"
                                 android:spinnerMode="dialog"
-                                android:padding="20dp"/>
+                                selection="@{pregoutcome.rec_ipt}"
+                                android:onItemSelected="@{pregoutcome::setRec_ipt}"
+                                android:padding="10dp"/>
 
                             <TextView
-                                goneUnless="@{pregnancy.slp_bednet==1}"
+                                goneUnless="@{pregoutcome.rec_ipt==1}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:padding="5dp"
                                 android:textColor="@color/black"
-                                android:text="@string/trt_bednet"/>
+                                android:text="@string/first_recs"
+                                android:paddingTop="8dp" />
 
-                            <org.openhds.searchSpinner.SearchableSpinner
-                                goneUnless="@{pregnancy.slp_bednet==1}"
-                                android:id="@+id/trt_bednet"
+                            <com.google.android.material.textfield.TextInputLayout
+                                goneUnless="@{pregoutcome.rec_ipt==1}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                selection="@{pregnancy.trt_bednet}"
-                                android:onItemSelected="@{pregnancy::setTrt_bednet}"
-                                android:gravity="left"
-                                android:spinnerMode="dialog"
-                                android:padding="20dp"/>
+                                android:hint="@string/first_recs">
+                                <androidx.appcompat.widget.AppCompatEditText
+                                    android:id="@+id/first_rec"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@={pregoutcome.first_rec}"
+                                    android:inputType="number"/>
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView
+                                goneUnless="@{pregoutcome.rec_ipt==1}"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:text="@string/many_ipt" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                goneUnless="@{pregoutcome.rec_ipt==1}"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/many_ipt">
+                                <androidx.appcompat.widget.AppCompatEditText
+                                    android:id="@+id/many_ipt"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="@={pregoutcome.many_ipt}"
+                                    android:inputType="number"/>
+                            </com.google.android.material.textfield.TextInputLayout>
 
                         </LinearLayout>
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Health Facility & Medication Card -->
+                <!-- Newborn Care Card (shown if live births > 0) -->
                 <com.google.android.material.card.MaterialCardView
+                    goneUnless="@{pregoutcome.numberOfLiveBirthsValue > 0}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -721,7 +706,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Health Facility &amp; Medication"
+                                android:text="Newborn Care"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
                                 android:textColor="@color/primary" />
@@ -732,106 +717,162 @@
                             android:layout_height="wrap_content"
                             android:padding="5dp"
                             android:textColor="@color/black"
-                            android:text="@string/healthfacility"/>
+                            android:text="@string/first_nb"/>
 
                         <org.openhds.searchSpinner.SearchableSpinner
-                            android:id="@+id/healthfacility"
+                            android:id="@+id/first_nb"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            selection="@{pregnancy.healthfacility}"
-                            android:onItemSelected="@{pregnancy::setHealthfacility}"
                             android:gravity="left"
                             android:spinnerMode="dialog"
-                            android:padding="20dp"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:textColor="@color/black"
-                            android:text="@string/medicineforpregnancy"/>
-
-                        <org.openhds.searchSpinner.SearchableSpinner
-                            android:id="@+id/medicineforpregnancy"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            selection="@{pregnancy.medicineforpregnancy}"
-                            android:onItemSelected="@{pregnancy::setMedicineforpregnancy}"
-                            android:gravity="left"
-                            android:spinnerMode="dialog"
-                            android:padding="20dp"/>
-
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Pregnancy History Card -->
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:cardElevation="4dp"
-                    app:strokeColor="@color/primary"
-                    app:strokeWidth="2dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardBackgroundColor="@android:color/white">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="16dp"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <View
-                                android:layout_width="4dp"
-                                android:layout_height="24dp"
-                                android:background="@color/primary"
-                                android:layout_marginEnd="12dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Pregnancy History"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/primary" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:textColor="@color/black"
-                            android:text="@string/first_preg"/>
-
-                        <org.openhds.searchSpinner.SearchableSpinner
-                            android:id="@+id/first_preg"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            selection="@{pregnancy.first_preg}"
-                            android:onItemSelected="@{pregnancy::setFirst_preg}"
-                            android:gravity="left"
-                            android:spinnerMode="dialog"
-                            android:padding="20dp"/>
+                            selection="@{pregoutcome.first_nb}"
+                            android:onItemSelected="@{pregoutcome::setFirst_nb}"
+                            android:padding="10dp"/>
 
                         <com.google.android.material.textfield.TextInputLayout
-                            goneUnless="@{pregnancy.first_preg==2}"
+                            goneUnless="@{pregoutcome.first_nb==2}"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/pregnancyNumber">
+                            android:hint="@string/l_birth">
                             <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/pregnancyNumber"
+                                android:id="@+id/l_birth"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@={pregnancy.pregnancyNumber}"
+                                android:text="@={pregoutcome.l_birth}"
                                 android:inputType="number"/>
                         </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Breastfeeding Card (shown if live births > 0) -->
+                <com.google.android.material.card.MaterialCardView
+                    goneUnless="@{pregoutcome.numberOfLiveBirthsValue > 0}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <View
+                                android:layout_width="4dp"
+                                android:layout_height="24dp"
+                                android:background="@color/primary"
+                                android:layout_marginEnd="12dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/breastfeed"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/primary" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:text="@string/id1001"/>
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            android:id="@+id/id1001"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            selection="@{pregoutcome.id1001}"
+                            android:onItemSelected="@{pregoutcome::setId1001}"
+                            android:gravity="left"
+                            android:spinnerMode="dialog"
+                            android:padding="15dp"/>
+
+                        <TextView
+                            goneUnless="@{pregoutcome.id1001==1}"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:text="@string/id1002"/>
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            goneUnless="@{pregoutcome.id1001==1}"
+                            android:id="@+id/id1002"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            selection="@{pregoutcome.id1002}"
+                            android:onItemSelected="@{pregoutcome::setId1002}"
+                            android:gravity="left"
+                            android:spinnerMode="dialog"
+                            android:padding="15dp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:text="@string/id1003"/>
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            android:id="@+id/id1003"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            selection="@{pregoutcome.id1003}"
+                            android:onItemSelected="@{pregoutcome::setId1003}"
+                            android:gravity="left"
+                            android:spinnerMode="dialog"
+                            android:padding="15dp"/>
+
+                        <TextView
+                            goneUnless="@{pregoutcome.id1001==1}"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:text="@string/id1004"/>
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            goneUnless="@{pregoutcome.id1001==1}"
+                            android:id="@+id/id1004"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            selection="@{pregoutcome.id1004}"
+                            android:onItemSelected="@{pregoutcome::setId1004}"
+                            android:gravity="left"
+                            android:spinnerMode="dialog"
+                            android:padding="15dp"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:text="@string/id1005"/>
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            android:id="@+id/id1005"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            selection="@{pregoutcome.id1005}"
+                            android:onItemSelected="@{pregoutcome::setId1005}"
+                            android:gravity="left"
+                            android:spinnerMode="dialog"
+                            android:padding="15dp"/>
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
@@ -880,14 +921,33 @@
                             android:layout_height="wrap_content"
                             android:padding="5dp"
                             android:textColor="@color/black"
-                            android:text="@string/preg_ready"/>
+                            android:text="@string/id1006"/>
 
                         <org.openhds.searchSpinner.SearchableSpinner
-                            android:id="@+id/preg_ready"
+                            android:id="@+id/id1006"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            selection="@{pregnancy.preg_ready}"
-                            android:onItemSelected="@{pregnancy::setPreg_ready}"
+                            selection="@{pregoutcome.id1006}"
+                            android:onItemSelected="@{pregoutcome::setId1006}"
+                            android:gravity="left"
+                            android:spinnerMode="dialog"
+                            android:padding="15dp"/>
+
+                        <TextView
+                            goneUnless="@{pregoutcome.id1006==1}"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:textColor="@color/black"
+                            android:text="@string/id1007"/>
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            goneUnless="@{pregoutcome.id1006==1}"
+                            android:id="@+id/id1007"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            selection="@{pregoutcome.id1007}"
+                            android:onItemSelected="@{pregoutcome::setId1007}"
                             android:gravity="left"
                             android:spinnerMode="dialog"
                             android:padding="15dp"/>
@@ -897,55 +957,41 @@
                             android:layout_height="wrap_content"
                             android:padding="5dp"
                             android:textColor="@color/black"
-                            android:text="@string/family_plan"/>
+                            android:text="@string/id1008"/>
 
                         <org.openhds.searchSpinner.SearchableSpinner
-                            android:id="@+id/family_plan"
+                            android:id="@+id/id1008"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            selection="@{pregnancy.family_plan}"
-                            android:onItemSelected="@{pregnancy::setFamily_plan}"
+                            selection="@{pregoutcome.id1008}"
+                            android:onItemSelected="@{pregoutcome::setId1008}"
                             android:gravity="left"
                             android:spinnerMode="dialog"
                             android:padding="15dp"/>
 
                         <TextView
-                            goneUnless="@{pregnancy.family_plan==1}"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
                             android:textColor="@color/black"
-                            android:text="@string/plan_method"/>
+                            android:text="@string/id1009"/>
 
                         <org.openhds.searchSpinner.SearchableSpinner
-                            goneUnless="@{pregnancy.family_plan==1}"
-                            android:id="@+id/plan_method"
+                            android:id="@+id/id1009"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            selection="@{pregnancy.plan_method}"
-                            android:onItemSelected="@{pregnancy::setPlan_method}"
+                            selection="@{pregoutcome.id1009}"
+                            android:onItemSelected="@{pregoutcome::setId1009}"
                             android:gravity="left"
                             android:spinnerMode="dialog"
                             android:padding="15dp"/>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            goneUnless="@{pregnancy.plan_method==77}"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/plan_method_oth">
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/plan_method_oth"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:inputType="textPersonName"
-                                android:text="@={pregnancy.plan_method_oth}" />
-                        </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Pregnancy Outcome Card -->
+                <!-- Hidden Fields Card -->
                 <com.google.android.material.card.MaterialCardView
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
@@ -961,181 +1007,116 @@
                         android:orientation="vertical"
                         android:padding="16dp">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="16dp"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <View
-                                android:layout_width="4dp"
-                                android:layout_height="24dp"
-                                android:background="@color/primary"
-                                android:layout_marginEnd="12dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Pregnancy Outcome"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/primary" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:textColor="@color/black"
-                            android:text="@string/outcome"/>
-
-                        <RadioGroup
-                            android:id="@+id/outcome"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:onCheckedChanged="@{pregnancy::setOutcome}"
-                            android:orientation="vertical"
-                            android:paddingBottom="12dp">
-
-                            <RadioButton
-                                android:id="@+id/outcome_yes"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="8dp"
-                                android:checked="@{pregnancy.outcome==1}"
-                                android:tag="1"
-                                android:text="@string/option_yes" />
-
-                            <RadioButton
-                                android:id="@+id/outcome_no"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="8dp"
-                                android:checked="@{pregnancy.outcome==2}"
-                                android:tag="2"
-                                android:text="@string/option_no" />
-
-                            <RadioButton
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:checked="@{pregnancy.outcome==0}"
-                                android:tag="0"
-                                android:visibility="gone"/>
-
-                        </RadioGroup>
-
                         <com.google.android.material.textfield.TextInputLayout
-                            goneUnless="@{pregnancy.outcome==1}"
-                            android:id="@+id/button_pregnancy_outcome"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/outcomeDate"
-                            app:endIconMode="custom"
-                            app:endIconDrawable="@drawable/ic_calendar"
-                            app:endIconTint="@color/colorPrimary">
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/editText_outcomeDate"
+                            android:hint="@string/fw">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/fw"
+                                android:text="@={pregoutcome.fw_uuid}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@={pregnancy.outcome_date}"
-                                android:inputType="none"
-                                android:focusable="false"
-                                android:focusableInTouchMode="false"/>
+                                android:inputType="textPersonName"/>
                         </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/uuid">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/uuid"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@{pregoutcome.uuid}"
+                                android:inputType="textPersonName"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/visitid">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/visitid"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={pregoutcome.visit_uuid}"
+                                android:inputType="textPersonName"/>
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:id="@+id/resolve"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/Red"
+                            android:text="@string/query_reslve" />
+
+                        <RadioGroup
+                            android:id="@+id/status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{pregoutcome::setStatus}"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/no_3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{pregoutcome.status==3}"
+                                android:tag="3"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/no_2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{pregoutcome.status==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                            <RadioButton
+                                android:visibility="invisible"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{pregoutcome.status==0}"
+                                android:tag="0"/>
+                        </RadioGroup>
 
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
-
-                <!-- Hidden Admin Fields -->
-                <TextView
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/form_complete"/>
-
-                <org.openhds.searchSpinner.SearchableSpinner
-                    android:visibility="gone"
-                    android:id="@+id/individual_complete"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    selection="@{pregnancy.complete}"
-                    android:onItemSelected="@{pregnancy::setComplete}"
-                    android:gravity="left"
-                    android:spinnerMode="dialog"
-                    android:padding="15dp"/>
-
-                <TextView
-                    android:visibility="gone"
-                    android:id="@+id/resolve"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="@string/query_reslve" />
-
-                <RadioGroup
-                    android:visibility="gone"
-                    android:id="@+id/status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onCheckedChanged="@{pregnancy::setStatus}"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/no_3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="@{pregnancy.status==3}"
-                        android:tag="3"
-                        android:text="@string/yes" />
-
-                    <RadioButton
-                        android:id="@+id/no_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="@{pregnancy.status==2}"
-                        android:tag="2"
-                        android:text="@string/no" />
-
-                    <RadioButton
-                        android:visibility="invisible"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="@{pregnancy.status==0}"
-                        android:tag="0"/>
-                </RadioGroup>
 
             </LinearLayout>
 
         </ScrollView>
 
+        <!-- Action Buttons -->
         <LinearLayout
-            android:id="@+id/linearLayout_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="8dp">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonSaveClose"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_height="48dp"
                 android:layout_weight="1"
-                style="@style/SupervisorButton"
-                android:text="@string/saveclosedata" />
+                android:text="@string/save"
+                android:layout_marginEnd="8dp"
+                style="@style/Widget.MaterialComponents.Button"
+                app:icon="@drawable/ic_check"
+                app:elevation="4dp"
+                app:strokeColor="@color/primary"
+                app:rippleColor="@color/primary" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/buttonClose"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_height="48dp"
                 android:layout_weight="1"
-                style="@style/CloseButton"
-                android:text="@string/closedata" />
-
+                android:text="@string/cancel"
+                android:textSize="14sp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                 />
         </LinearLayout>
 
     </LinearLayout>

@@ -733,29 +733,26 @@
                 android:textSize="20sp"
                 tools:ignore="TextContrastCheck" />
 
-            <Button
+            <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{amendment.yn_dob==1}"
                 android:id="@+id/button_repl_Dob"
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/actual_dob"
-                tools:ignore="DuplicateSpeakableTextCheck"
-                app:icon="@drawable/ic_baseline_calendar_month_24"
-                style="@style/SupervisorButton"/>
-
-            <TextView
-                goneUnless="@{amendment.yn_dob==1}"
-                android:id="@+id/repl_dob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={amendment.repl_dob}"
-                android:autofillHints=""
-                android:ems="10"
-                android:minHeight="30dp"
-                android:required="true"
-                android:textSize="20sp"
-                tools:ignore="TextContrastCheck" />
+                android:hint="@string/actual_dob"
+                android:layout_marginBottom="12dp"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/ic_calendar"
+                app:endIconTint="@color/colorPrimary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/repl_dob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={amendment.repl_dob}"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:clickable="false" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <TextView
