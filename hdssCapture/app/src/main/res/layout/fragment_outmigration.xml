@@ -434,6 +434,7 @@
                     app:strokeColor="@color/primary"
                     app:strokeWidth="2dp"
                     app:cardUseCompatPadding="true"
+                    android:id="@+id/vcard"
                     android:visibility="gone">
 
                     <LinearLayout
@@ -473,7 +474,7 @@
                                         android:gravity="center_vertical"
                                         android:text="@string/wrongomg"
                                         android:textAlignment="gravity"
-                                        android:visibility="gone" />
+                                        android:visibility="gone"/>
 
                                     <RadioButton
                                         android:id="@+id/yn"
@@ -482,7 +483,7 @@
                                         android:checked="@{outmigration.edit==2}"
                                         android:tag="2"
                                         android:text="@string/yes"
-                                        android:visibility="gone" />
+                                        android:visibility="gone"/>
 
                                     <RadioButton
                                         android:id="@+id/no"
@@ -491,7 +492,7 @@
                                         android:checked="@{outmigration.edit==1}"
                                         android:tag="1"
                                         android:text="@string/no"
-                                        android:visibility="gone" />
+                                        android:visibility="gone"/>
 
                                     <RadioButton
                                         android:layout_width="wrap_content"

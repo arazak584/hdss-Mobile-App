@@ -511,4 +511,16 @@ public class IndividualRepository {
         return dao.sync();
     }
 
+    public LiveData<Long> hh(String id) {
+        return dao.hh(id);
+    }
+
+    public LiveData<Long> isHeadInCompound(String id,String ids) {
+        return dao.isHeadInCompound(id,ids);
+    }
+
+    public LiveData<Long> isActiveHouseholdHead(String id) {
+        return dao.isActiveHouseholdHead(id);
+    }
+
 }

@@ -145,7 +145,8 @@ public class ResidencyFragment extends KeyboardFragment {
 
 
         // Find the button view
-
+        Spinner mySpinner = (Spinner) binding.getRoot().findViewById(R.id.endtype);
+        mySpinner.setEnabled(false);
 
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         try {

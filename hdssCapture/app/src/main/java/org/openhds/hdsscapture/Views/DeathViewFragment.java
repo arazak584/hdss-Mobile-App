@@ -10,7 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatEditText;
@@ -18,6 +21,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
@@ -133,10 +137,34 @@ public class DeathViewFragment extends KeyboardFragment {
             e.printStackTrace();
         }
 
+        TextView text = binding.getRoot().findViewById(R.id.edit);
+        RadioButton yn = binding.getRoot().findViewById(R.id.yn);
+        RadioButton no = binding.getRoot().findViewById(R.id.no);
+        MaterialCardView vc = binding.getRoot().findViewById(R.id.vcard);
+
+        final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
+        final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
+        final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
+
         DeathViewModel viewModel = new ViewModelProvider(this).get(DeathViewModel.class);
         ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         viewModel.getView(death.uuid).observe(getViewLifecycleOwner(), data -> {
             binding.setDeath(data);
+
+            vc.setVisibility(View.VISIBLE);
+            text.setVisibility(View.VISIBLE);
+            yn.setVisibility(View.VISIBLE);
+            no.setVisibility(View.VISIBLE);
+
+            if(data.status!=null && data.status==2){
+                cmt.setVisibility(View.VISIBLE);
+                rsv.setVisibility(View.VISIBLE);
+                rsvd.setVisibility(View.VISIBLE);
+            }else{
+                cmt.setVisibility(View.GONE);
+                rsv.setVisibility(View.GONE);
+                rsvd.setVisibility(View.GONE);
+            }
 
             try {
             Residency dataRes = resModel.restore(data.individual_uuid);
@@ -251,7 +279,7 @@ public class DeathViewFragment extends KeyboardFragment {
                 try {
                     // Second block - visited update (with different variable name)
                     Relationship reldata = relModel.finds(binding.getDeath().individual_uuid);
-                    if (reldata != null) {
+                    if (reldata != null && binding.getDeath().edit==1) {
                         RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
                         relationshipUpdate.endType = 2;
                         relationshipUpdate.endDate = binding.getDeath().deathDate;
@@ -273,10 +301,35 @@ public class DeathViewFragment extends KeyboardFragment {
                     e.printStackTrace();
                 }
 
+                //Restore widowed
+                try {
+                    Relationship data = relModel.finds(binding.getDeath().individual_uuid);
+                    if (data != null && binding.getDeath().edit==2){
+                        RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
+                        relationshipUpdate.endType = 1;
+                        relationshipUpdate.endDate = null;
+                        relationshipUpdate.individualA_uuid = binding.getDeath().individual_uuid;
+                        relationshipUpdate.complete = 1;
+
+                        relModel.update(relationshipUpdate, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("DeathFragment", "Relationship Update successful (widowed)!");
+                                    } else {
+                                        Log.d("DeathFragment", "Relationship Update Failed (widowed)!");
+                                    }
+                                })
+                        );
+                    }
+                } catch (Exception e) {
+                    Log.e("DeathFragment", "Error in update", e);
+                    e.printStackTrace();
+                }
+
                 //Set Relationship to Dead
                 try {
                     Relationship dthdata = relModel.find(binding.getDeath().individual_uuid);
-                    if (dthdata != null && !binding.dthDeathDate.getText().toString().trim().isEmpty()) {
+                    if (dthdata != null  && binding.getDeath().edit==1) {
 
                         RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
                         relationshipUpdate.endType = 4;
@@ -300,10 +353,35 @@ public class DeathViewFragment extends KeyboardFragment {
                     e.printStackTrace();
                 }
 
+                //Restore Death
+                try {
+                    Relationship data = relModel.find(binding.getDeath().individual_uuid);
+                    if (data != null   && binding.getDeath().edit==2){
+                        RelationshipUpdate relationshipUpdate = new RelationshipUpdate();
+                        relationshipUpdate.endType = 1;
+                        relationshipUpdate.endDate = null;
+                        relationshipUpdate.individualA_uuid = binding.getDeath().individual_uuid;
+                        relationshipUpdate.complete = 1;
+
+                        relModel.update(relationshipUpdate, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("DeathFragment", "Relationship Restore Update successful (dead)!");
+                                    } else {
+                                        Log.d("DeathFragment", "Relationship Restore Update Failed (dead)!");
+                                    }
+                                })
+                        );
+                    }
+                } catch (Exception e) {
+                    Log.e("DeathFragment", "Error in update", e);
+                    e.printStackTrace();
+                }
+
                 //End Residency In residency entity
                 try {
                     Residency resdata = resModel.restore(binding.getDeath().individual_uuid);
-                    if (resdata != null) {
+                    if (resdata != null  && binding.getDeath().edit==1) {
                         ResidencyAmendment residencyAmendment = new ResidencyAmendment();
                         residencyAmendment.endType = 3;
                         residencyAmendment.endDate = binding.getDeath().deathDate;
@@ -327,11 +405,41 @@ public class DeathViewFragment extends KeyboardFragment {
                     e.printStackTrace();
                 }
 
+                //Restore Residency In residency entity
+                try {
+                    Residency data = resModel.restore(binding.getDeath().individual_uuid);
+                    if (data != null && binding.getDeath().edit == 2){
+
+                        ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+                        residencyAmendment.endType = 1;
+                        residencyAmendment.endDate = null;
+                        residencyAmendment.uuid = binding.getDeath().residency_uuid;
+                        residencyAmendment.complete = 1;
+                        residencyAmendment.hohID = data.hohID;
+
+                        resModel.update(residencyAmendment, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("DeathFragment", "Residency Restore Update successful (dead)!");
+                                    } else {
+                                        Log.d("DeathFragment", "Residency Restore Update Failed (dead)!");
+                                    }
+                                })
+                        );
+
+                    }
+
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
 
                 //End Residency In individual entity
                 try {
                     Individual inddata = individualViewModel.find(binding.getDeath().individual_uuid);
-                    if (inddata != null) {
+                    if (inddata != null  && binding.getDeath().edit==1) {
                         IndividualEnd endInd = new IndividualEnd();
                         endInd.endType = 3;
                         endInd.uuid = binding.getDeath().individual_uuid;
@@ -354,13 +462,38 @@ public class DeathViewFragment extends KeyboardFragment {
                     e.printStackTrace();
                 }
 
+                //Restore Residency In individual entity
+                try {
+                    Individual data = individualViewModel.restore(binding.getDeath().individual_uuid);
+                    if (data != null && binding.getDeath().edit == 2) {
+                        IndividualEnd endInd = new IndividualEnd();
+                        endInd.endType = 1;
+                        endInd.uuid = binding.getDeath().individual_uuid;
+                        endInd.complete = 1;
+
+                        individualViewModel.dthupdate(endInd, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("DeathFragment", "Individual Restore Update successful (dead)!");
+                                    } else {
+                                        Log.d("DeathFragment", "Individual Restore Update Failed (dead)!");
+                                    }
+                                })
+                        );
+                    }
+
+                } catch (Exception e) {
+                    Log.e("DeathFragment", "Error in update", e);
+                    e.printStackTrace();
+                }
+
 
             });
 
             executor.shutdown();
 
 
-            finalData.complete = 1;
+            finalData.complete = binding.getDeath().edit;
             viewModel.add(finalData);
 
         }

@@ -43,7 +43,7 @@ public interface DeathDao {
 //            "deathCause,deathCause_oth,deathPlace,deathPlace_oth,a.fw_uuid,a.edit,supervisor,approveDate FROM death a INNER JOIN individual b on a.individual_uuid=b.uuid where individual_uuid=:id")
 //    Death retrieve(String id);
 
-    @Query("SELECT * FROM death WHERE complete!=0")
+    @Query("SELECT * FROM death WHERE complete IN (1,2)")
     List<Death> retrieveToSync();
 
 //    @Query("SELECT * FROM death WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
@@ -86,7 +86,7 @@ public interface DeathDao {
     @Query("SELECT * FROM death where uuid=:id AND complete!=1")
     Death ins(String id);
 
-    @Query("SELECT uuid, 'Death' AS formType, insertDate, firstName || ' ' || lastName as fullName FROM death WHERE complete = 1 ORDER BY insertDate DESC")
+    @Query("SELECT uuid, 'Death' AS formType, insertDate, firstName || ' ' || lastName as fullName FROM death WHERE complete = 1 OR edit = 1 ORDER BY insertDate DESC")
     List<CompletedForm> getCompletedForms();
     @Query("SELECT * FROM death where uuid=:id")
     LiveData<Death> getView(String id);

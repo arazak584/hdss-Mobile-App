@@ -402,6 +402,7 @@ public class DeathFragment extends KeyboardFragment {
                         residencyAmendment.endDate = binding.getDeath().deathDate;
                         residencyAmendment.uuid = binding.getDeath().residency_uuid;
                         residencyAmendment.complete = 1;
+                        residencyAmendment.hohID = socialgroup.extId;
 
                         resModel.update(residencyAmendment, result ->
                                 new Handler(Looper.getMainLooper()).post(() -> {

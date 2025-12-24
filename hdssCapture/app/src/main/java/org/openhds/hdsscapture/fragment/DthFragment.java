@@ -21,6 +21,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
@@ -159,6 +160,7 @@ public class DthFragment extends KeyboardFragment {
         TextView text = binding.getRoot().findViewById(R.id.edit);
         RadioButton yn = binding.getRoot().findViewById(R.id.yn);
         RadioButton no = binding.getRoot().findViewById(R.id.no);
+        MaterialCardView vc = binding.getRoot().findViewById(R.id.vcard);
 
         final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
         final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
@@ -169,6 +171,7 @@ public class DthFragment extends KeyboardFragment {
             Death data = viewModel.retrieve(individual.uuid);
             if (data != null) {
                 binding.setDeath(data);
+                vc.setVisibility(View.VISIBLE);
                 text.setVisibility(View.VISIBLE);
                 yn.setVisibility(View.VISIBLE);
                 no.setVisibility(View.VISIBLE);
@@ -469,6 +472,7 @@ public class DthFragment extends KeyboardFragment {
                         residencyAmendment.endDate = binding.getDeath().deathDate;
                         residencyAmendment.uuid = binding.getDeath().residency_uuid;
                         residencyAmendment.complete = 1;
+                        residencyAmendment.hohID = resdata.hohID;
 
                         resModel.update(residencyAmendment, result ->
                                 new Handler(Looper.getMainLooper()).post(() -> {
@@ -487,32 +491,6 @@ public class DthFragment extends KeyboardFragment {
                     e.printStackTrace();
                 }
 
-                //Update Residency
-                try {
-                    Residency data = resModel.restore(individual.uuid);
-                    if (data != null && binding.getDeath().edit != null && binding.getDeath().edit == 1) {
-                        ResidencyAmendment residencyAmendment = new ResidencyAmendment();
-                        residencyAmendment.endType = 3;
-                        residencyAmendment.endDate = binding.getDeath().deathDate;
-                        residencyAmendment.uuid = binding.getDeath().residency_uuid;
-                        residencyAmendment.complete = 1;
-
-                        resModel.update(residencyAmendment, result ->
-                                new Handler(Looper.getMainLooper()).post(() -> {
-                                    if (result > 0) {
-                                        Log.d("DeathFragment", "Residency Update successful (dead)!");
-                                    } else {
-                                        Log.d("DeathFragment", "Residency Update Failed (dead)!");
-                                    }
-                                })
-                        );
-
-                    }
-
-                } catch (Exception e) {
-                    Log.e("DeathFragment", "Error in update", e);
-                    e.printStackTrace();
-                }
 
                 //Restore Residency In residency entity
                 try {
@@ -524,6 +502,7 @@ public class DthFragment extends KeyboardFragment {
                         residencyAmendment.endDate = null;
                         residencyAmendment.uuid = binding.getDeath().residency_uuid;
                         residencyAmendment.complete = 1;
+                        residencyAmendment.hohID = data.hohID;
 
                         resModel.update(residencyAmendment, result ->
                                 new Handler(Looper.getMainLooper()).post(() -> {

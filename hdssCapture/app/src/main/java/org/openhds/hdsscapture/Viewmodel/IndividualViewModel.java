@@ -253,4 +253,15 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.sync();
     }
 
+    public LiveData<Long> hh(String id) {
+        return individualRepository.hh(id);
+    }
+
+    public LiveData<Long> isHeadInCompound(String id,String ids) {
+        return individualRepository.isHeadInCompound(id,ids);
+    }
+
+    public LiveData<Long> isActiveHouseholdHead(String id) {
+        return individualRepository.isActiveHouseholdHead(id);
+    }
 }

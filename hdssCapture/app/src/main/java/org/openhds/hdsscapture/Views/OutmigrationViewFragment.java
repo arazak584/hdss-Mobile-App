@@ -9,7 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatEditText;
@@ -17,6 +20,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.openhds.hdsscapture.AppConstants;
@@ -121,10 +125,35 @@ public class OutmigrationViewFragment extends KeyboardFragment {
             e.printStackTrace();
         }
 
+        final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
+        final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
+        final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
+
+        TextView text = binding.getRoot().findViewById(R.id.edit);
+        RadioButton yn = binding.getRoot().findViewById(R.id.yn);
+        RadioButton no = binding.getRoot().findViewById(R.id.no);
+        MaterialCardView vc = binding.getRoot().findViewById(R.id.vcard);
+
         ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         OutmigrationViewModel viewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
         viewModel.getView(outmigration.uuid).observe(getViewLifecycleOwner(), data -> {
             binding.setOutmigration(data);
+
+            vc.setVisibility(View.VISIBLE);
+            text.setVisibility(View.VISIBLE);
+            yn.setVisibility(View.VISIBLE);
+            no.setVisibility(View.VISIBLE);
+            data.edit = 1;
+
+            if(data.status!=null && data.status==2){
+                cmt.setVisibility(View.VISIBLE);
+                rsv.setVisibility(View.VISIBLE);
+                rsvd.setVisibility(View.VISIBLE);
+            }else{
+                cmt.setVisibility(View.GONE);
+                rsv.setVisibility(View.GONE);
+                rsvd.setVisibility(View.GONE);
+            }
 
             try {
                 Residency dataRes = resModel.updateres(data.uuid);
@@ -204,7 +233,7 @@ public class OutmigrationViewFragment extends KeyboardFragment {
                 e.printStackTrace();
             }
 
-            finalData.complete = 1;
+            finalData.complete = binding.getOutmigration().edit;
 
             ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
             IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
@@ -216,12 +245,14 @@ public class OutmigrationViewFragment extends KeyboardFragment {
                 //End Residency In residency entity
                 try {
                     Residency data = resModel.updateres(binding.getOutmigration().residency_uuid);
-                    if (data != null) {
+                    //Integer edt = binding.getOutmigration().edit;
+                    if (data != null && binding.getOutmigration().edit==1) {
                         ResidencyAmendment residencyAmendment = new ResidencyAmendment();
                         residencyAmendment.endType = 2;
                         residencyAmendment.endDate = binding.getOutmigration().recordedDate;
                         residencyAmendment.uuid = binding.getOutmigration().residency_uuid;
                         residencyAmendment.complete = 1;
+                        residencyAmendment.hohID = data.hohID;
 
                         resModel.update(residencyAmendment, result ->
                                 new Handler(Looper.getMainLooper()).post(() -> {
@@ -239,10 +270,37 @@ public class OutmigrationViewFragment extends KeyboardFragment {
                     e.printStackTrace();
                 }
 
+                //Restore Residency In residency entity
+                try {
+                    Residency data = resModel.updateres(binding.getOutmigration().residency_uuid);
+                    if (data != null && binding.getOutmigration().edit==2) {
+                        ResidencyAmendment residencyAmendment = new ResidencyAmendment();
+                        residencyAmendment.endType = 1;
+                        residencyAmendment.endDate = null;
+                        residencyAmendment.uuid = binding.getOutmigration().residency_uuid;
+                        residencyAmendment.complete = 1;
+                        residencyAmendment.hohID = data.hohID;
+
+                        resModel.update(residencyAmendment, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("OmgFragment", "Residency Restore successful!");
+                                    } else {
+                                        Log.d("OmgFragment", "Residency Restore Failed!");
+                                    }
+                                })
+                        );
+                    }
+
+                } catch (Exception e) {
+                    Log.e("OmgFragment", "Error in update", e);
+                    e.printStackTrace();
+                }
+
                 //End Residency In individual entity
                 try {
                     Individual data = individualViewModel.find(binding.getOutmigration().individual_uuid);
-                    if (data != null) {
+                    if (data != null && binding.getOutmigration().edit==1) {
                         IndividualEnd endInd = new IndividualEnd();
                         endInd.endType = 2;
                         endInd.uuid = binding.getOutmigration().individual_uuid;
@@ -265,6 +323,30 @@ public class OutmigrationViewFragment extends KeyboardFragment {
                 }
 
 
+                //Restore Residency In individual entity
+                try {
+                    Individual data = individualViewModel.find(binding.getOutmigration().individual_uuid);
+                    if (data != null && binding.getOutmigration().edit==2) {
+                        IndividualEnd endInd = new IndividualEnd();
+                        endInd.endType = 1;
+                        endInd.uuid = binding.getOutmigration().individual_uuid;
+                        endInd.complete = 1;
+
+                        individualViewModel.dthupdate(endInd, result ->
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (result > 0) {
+                                        Log.d("OmgFragment", "Individual Update successful!");
+                                    } else {
+                                        Log.d("OmgFragment", "Individual Update Failed!");
+                                    }
+                                })
+                        );
+                    }
+
+                } catch (Exception e) {
+                    Log.e("OmgFragment", "Error in update", e);
+                    e.printStackTrace();
+                }
 
 
             });

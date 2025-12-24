@@ -14,4 +14,5 @@ public class ResidencyAmendment {
     public Date endDate;
     public Integer endType;
     public Integer complete;
+    public String hohID;
 }

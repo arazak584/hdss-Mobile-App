@@ -39,7 +39,7 @@ public interface OutmigrationDao {
             " where b.residency_uuid IS NULL AND a.individual_uuid=:id and a.location_uuid!=:locid and endType=1")
     Outmigration createOmg(String id, String locid);
 
-    @Query("SELECT * FROM outmigration WHERE complete!=0")
+    @Query("SELECT * FROM outmigration WHERE complete IN (1,2)")
     List<Outmigration> retrieveomgToSync();
 
 //    @Query("SELECT * FROM outmigration WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
@@ -73,7 +73,7 @@ public interface OutmigrationDao {
     @Query("SELECT * FROM outmigration where uuid=:id AND complete!=1 ")
     Outmigration ins(String id);
 
-    @Query("SELECT a.uuid, 'Outmigration' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM outmigration as a inner join individual as b ON a.individual_uuid=b.uuid WHERE a.complete = 1 AND a.location_uuid is not null ORDER BY a.insertDate DESC")
+    @Query("SELECT a.uuid, 'Outmigration' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM outmigration as a inner join individual as b ON a.individual_uuid=b.uuid WHERE (a.complete = 1  OR a.edit = 1) AND a.location_uuid is not null ORDER BY a.insertDate DESC")
     List<CompletedForm> getCompletedForms();
 
     @Query("SELECT * FROM outmigration where uuid=:id")

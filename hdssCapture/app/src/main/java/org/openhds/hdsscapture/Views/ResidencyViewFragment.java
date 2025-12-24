@@ -105,6 +105,9 @@ public class ResidencyViewFragment extends KeyboardFragment {
         // Setup keyboard hiding for all views in the layout
         setupKeyboardHiding(binding.getRoot());
 
+        Spinner mySpinner = (Spinner) binding.getRoot().findViewById(R.id.endtype);
+        mySpinner.setEnabled(false);
+
         IndividualViewModel ind = new ViewModelProvider(this).get(IndividualViewModel.class);
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         viewModel.getView(residency.uuid).observe(getViewLifecycleOwner(), data -> {

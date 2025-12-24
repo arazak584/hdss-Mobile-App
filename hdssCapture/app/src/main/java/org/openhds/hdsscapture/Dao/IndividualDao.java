@@ -344,6 +344,15 @@ public interface IndividualDao {
     @Query("SELECT COUNT(*) FROM individual WHERE complete= 1")
     LiveData<Long> sync();
 
+    @Query("SELECT COUNT(*) FROM individual WHERE endType=1 AND hohID = :uuid ")
+    LiveData<Long> hh(String uuid);
+
+    @Query("SELECT COUNT(*) FROM individual WHERE uuid = :individualUuid AND endType = 1 AND compno = :compno")
+    LiveData<Long> isHeadInCompound(String individualUuid, String compno);
+
+    @Query("SELECT COUNT(*) FROM individual WHERE uuid = :individualUuid AND endType = 1")
+    LiveData<Long> isActiveHouseholdHead(String individualUuid);
+
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Individual> individuals);

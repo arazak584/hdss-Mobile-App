@@ -21,6 +21,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
@@ -150,12 +151,14 @@ public class OmgFragment extends KeyboardFragment {
         TextView text = binding.getRoot().findViewById(R.id.edit);
         RadioButton yn = binding.getRoot().findViewById(R.id.yn);
         RadioButton no = binding.getRoot().findViewById(R.id.no);
+        MaterialCardView vc = binding.getRoot().findViewById(R.id.vcard);
         OutmigrationViewModel viewModel = new ViewModelProvider(this).get(OutmigrationViewModel.class);
         try {
             Outmigration data = viewModel.find(individual.uuid, selectedLocation.uuid);
             if (data != null) {
                 binding.setOutmigration(data);
                 ind.setText(individual.firstName + " " + individual.lastName);
+                vc.setVisibility(View.VISIBLE);
                 text.setVisibility(View.VISIBLE);
                 yn.setVisibility(View.VISIBLE);
                 no.setVisibility(View.VISIBLE);
@@ -262,6 +265,7 @@ public class OmgFragment extends KeyboardFragment {
                         residencyAmendment.endDate = binding.getOutmigration().recordedDate;
                         residencyAmendment.uuid = binding.getOutmigration().residency_uuid;
                         residencyAmendment.complete = 1;
+                        residencyAmendment.hohID = socialgroup.extId;
 
                         resModel.update(residencyAmendment, result ->
                                 new Handler(Looper.getMainLooper()).post(() -> {
@@ -288,6 +292,7 @@ public class OmgFragment extends KeyboardFragment {
                         residencyAmendment.endDate = null;
                         residencyAmendment.uuid = binding.getOutmigration().residency_uuid;
                         residencyAmendment.complete = 1;
+                        residencyAmendment.hohID = socialgroup.extId;
 
                         resModel.update(residencyAmendment, result ->
                                 new Handler(Looper.getMainLooper()).post(() -> {

@@ -298,6 +298,7 @@ public class OutmigrationFragment extends KeyboardFragment {
                         residencyAmendment.endDate = binding.getOutmigration().recordedDate;
                         residencyAmendment.uuid = binding.getOutmigration().residency_uuid;
                         residencyAmendment.complete = 1;
+                        residencyAmendment.hohID = socialgroup.extId;
 
                         resModel.update(residencyAmendment, result ->
                                 new Handler(Looper.getMainLooper()).post(() -> {

@@ -177,6 +177,12 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         recyclerViewOdk = view.findViewById(R.id.recyclerView_odk);
         //grantStoragePermission();
         //query();
+        
+        if (socialgroup != null) {
+
+            // Observe household head count
+            checkHouseholdHead();
+        }
 
         //final TextView hh = view.findViewById(R.id.textView_compextId);
         TextView name = view.findViewById(R.id.textView_hh);
@@ -930,6 +936,74 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                         }
                     });
         }
+    }
+
+    private void checkHouseholdHead() {
+        if (socialgroup != null && socialgroup.getIndividual_uuid() != null) {
+
+            // Method 1: Check if the individual_uuid from socialgroup is active
+            individualViewModel.isActiveHouseholdHead(socialgroup.getIndividual_uuid())
+                    .observe(getViewLifecycleOwner(), activeCount -> {
+                        if (activeCount != null && activeCount == 0) {
+                            // The individual_uuid does not exist or is not active (endType != 1)
+                            showNoHeadNotification("not_active");
+                        } else if (activeCount > 0 && locations != null) {
+                            // Individual exists and is active, now check if they live in this compound
+                            checkIfHeadLivesInCompound();
+                        }
+                    });
+        }
+    }
+
+    private void checkIfHeadLivesInCompound() {
+        if (socialgroup != null && socialgroup.getIndividual_uuid() != null
+                && locations != null && locations.getCompno() != null) {
+
+            individualViewModel.isHeadInCompound(
+                    socialgroup.getIndividual_uuid(),
+                    locations.getCompno()
+            ).observe(getViewLifecycleOwner(), count -> {
+                if (count != null && count == 0) {
+                    // Head exists and is active but doesn't live in this compound
+                    showNoHeadNotification("wrong_compound");
+                }
+            });
+        }
+    }
+
+    // Enhanced notification method with different messages
+    private void showNoHeadNotification(String reason) {
+        String message;
+
+        switch (reason) {
+            case "not_active":
+                message = "The assigned household head is not an active member! " +
+                        "They may have migrated, died, or been removed. " +
+                        "Kindly assign a new household head.";
+                break;
+            case "wrong_compound":
+                message = "The current household head does not live in this Household/Compound! " +
+                        "Kindly assign a household head who resides here.";
+                break;
+            default:
+                message = "No valid household head found. Kindly assign a household head.";
+        }
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Invalid Household Head")
+                .setMessage(message)
+                .setPositiveButton("Assign Head", (dialog, which) -> {
+                    // Navigate to assign head screen
+                    requireActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.container_cluster,
+                                    SocialgroupFragment.newInstance(individual, locations, socialgroup))
+                            .addToBackStack(null)
+                            .commit();
+                })
+                .setNegativeButton("Later", null)
+                .setCancelable(false) // Prevent dismissing without action
+                .show();
     }
 
     // Override the onBackPressed() method in the hosting activity
