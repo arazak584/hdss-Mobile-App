@@ -37,6 +37,7 @@ import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
+import org.openhds.hdsscapture.fragment.KeyboardFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,7 +54,7 @@ import java.util.concurrent.Executors;
  * Use the {@link AmendmentViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AmendmentViewFragment extends DialogFragment {
+public class AmendmentViewFragment extends KeyboardFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
@@ -111,6 +112,9 @@ public class AmendmentViewFragment extends DialogFragment {
         // Inflate the layout for this fragment
         binding = FragmentAmendmentBinding.inflate(inflater, container, false);
         //binding.setIndividual(individual);
+
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
@@ -187,7 +191,6 @@ public class AmendmentViewFragment extends DialogFragment {
 
 
         //Codebook
-        loadCodeData(binding.amendComplete, "submit");
         loadCodeData(binding.amendGender, "gender");
         loadCodeData(binding.replGender, "gender");
 

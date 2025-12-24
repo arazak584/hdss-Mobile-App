@@ -285,36 +285,39 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
 
-                <Button
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/button_individual_Dob"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/actual_dob"
-                    tools:ignore="DuplicateSpeakableTextCheck"
-                    style="@style/SupervisorButton"
-                    android:layout_gravity="center"
-                    app:icon="@drawable/ic_baseline_calendar_month_24" />
-
-                <TextView
-                    android:id="@+id/dob"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@={individual.dob}"
-                    android:autofillHints=""
-                    android:ems="10"
-                    android:minHeight="30dp"
-                    android:required="true"
-                    android:textSize="20sp"
-                    tools:ignore="TextContrastCheck" />
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/ic_baseline_calendar_month_24"
+                    app:endIconTint="@color/colorPrimary"
+                    android:hint="@string/actual_dob">
 
-                <EditText
-                    android:id="@+id/individ_age"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/dob"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={individual.dob}"
+                        android:enabled="false"
+                        android:inputType="textPersonName"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:inputType="number" />
+                    android:layout_height="wrap_content"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/ic_baseline_calendar_month_24"
+                    app:endIconTint="@color/colorPrimary"
+                    android:hint="@string/age">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/individ_age"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:inputType="number"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <TextView

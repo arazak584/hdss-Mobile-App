@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
+import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.Dao.ApiDao;
 import org.openhds.hdsscapture.R;
@@ -42,6 +43,7 @@ import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
+import org.openhds.hdsscapture.Viewmodel.QueriesViewModel;
 import org.openhds.hdsscapture.Viewmodel.RegistryViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
@@ -64,6 +66,7 @@ import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
+import org.openhds.hdsscapture.entity.ServerQueries;
 import org.openhds.hdsscapture.entity.Registry;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
@@ -74,7 +77,6 @@ import org.openhds.hdsscapture.entity.Vpm;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -132,9 +134,11 @@ public class PushActivity extends AppCompatActivity {
     private CommunityViewModel communityViewModel;
     private RegistryViewModel registryViewModel;
     private MorbidityViewModel morbidityViewModel;
+    private QueriesViewModel queriesViewModel;
     private TextView tvSyncStatus, tvLastSyncTime, totalRecords;
     private LinearProgressIndicator syncProgressBar;
     private ExecutorService syncExecutor;
+    private String username;
 
     // Count Completed - Flag to track if observers are set up
     private boolean observersInitialized = false;
@@ -189,6 +193,9 @@ public class PushActivity extends AppCompatActivity {
         handler = new Handler(Looper.getMainLooper());
         syncExecutor = Executors.newSingleThreadExecutor();
 
+        SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        username = sharedPreferences.getString(LoginActivity.FW_USERNAME_KEY, null);
+
         // Initialize single sync button
         buttonSyncAll = findViewById(R.id.btnSync);
         syncProgressBar = findViewById(R.id.syncProgressBar);
@@ -217,12 +224,11 @@ public class PushActivity extends AppCompatActivity {
         // Set up sync button
         buttonSyncAll.setOnClickListener(v -> {
             if (isSyncing.get()) {
-                Toast.makeText(this, "Sync already in progress", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Sync already in progress", Toast.LENGTH_LONG).show();
                 return;
             }
 
             if (isInternetAvailable()) {
-                performSync();
                 startBatchSync();
             } else {
                 Toast.makeText(this, "No internet connection available", Toast.LENGTH_LONG).show();
@@ -309,86 +315,38 @@ public class PushActivity extends AppCompatActivity {
         communityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
         registryViewModel = new ViewModelProvider(this).get(RegistryViewModel.class);
         morbidityViewModel = new ViewModelProvider(this).get(MorbidityViewModel.class);
-    }
-
-    private void performSync() {
-        if (isDestroyed.get()) return;
-
-        // Show progress
-        buttonSyncAll.setEnabled(false);
-        syncProgressBar.setVisibility(View.VISIBLE);
-        tvSyncStatus.setVisibility(View.VISIBLE);
-        tvSyncStatus.setText("Preparing to sync...");
-
-        new Thread(() -> {
-            try {
-                // Simulate sync process (replace with actual sync logic)
-                for (int i = 0; i <= 100; i += 10) {
-                    if (isDestroyed.get()) return; // Stop if activity destroyed
-
-                    final int progress = i;
-                    Thread.sleep(300);
-
-                    if (!isDestroyed.get()) {
-                        runOnUiThread(() -> {
-                            if (!isDestroyed.get()) {
-                                syncProgressBar.setProgress(progress);
-                                tvSyncStatus.setText("Syncing records... " + progress + "%");
-                            }
-                        });
-                    }
-                }
-
-                // Update last sync time
-                String currentTime = new SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.US)
-                        .format(Calendar.getInstance().getTime());
-
-                if (!isDestroyed.get()) {
-                    runOnUiThread(() -> {
-                        if (!isDestroyed.get()) {
-                            syncProgressBar.setVisibility(View.GONE);
-                            tvSyncStatus.setVisibility(View.GONE);
-                            buttonSyncAll.setEnabled(true);
-                            tvLastSyncTime.setText("Last sync: " + currentTime);
-                            Toast.makeText(this, "Sync completed successfully!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                if (!isDestroyed.get()) {
-                    runOnUiThread(() -> {
-                        if (!isDestroyed.get()) {
-                            syncProgressBar.setVisibility(View.GONE);
-                            tvSyncStatus.setVisibility(View.GONE);
-                            buttonSyncAll.setEnabled(true);
-                            Toast.makeText(this, "Sync failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        }).start();
+        queriesViewModel = new ViewModelProvider(this).get(QueriesViewModel.class);
     }
 
     private void startBatchSync() {
         if (authorizationHeader == null || authorizationHeader.isEmpty()) {
-            Toast.makeText(this, "Invalid credentials. Please login again.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Invalid credentials. Please login again.", Toast.LENGTH_LONG).show();
             return;
         }
 
         if (isSyncing.get()) {
-            Toast.makeText(this, "Sync already in progress", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Sync already in progress", Toast.LENGTH_LONG).show();
             return;
         }
 
         isSyncing.set(true);
-        progress.setMessage("Preparing to sync...");
-        progress.setCancelable(false);
-        progress.show();
+
+        // Show progress UI properly
+        buttonSyncAll.setEnabled(false);
+        syncProgressBar.setVisibility(View.VISIBLE);
+        syncProgressBar.setIndeterminate(true);  // Use indeterminate progress
+        tvSyncStatus.setVisibility(View.VISIBLE);
+        tvSyncStatus.setText("Preparing to sync...");
+
+        // Show the ProgressDialog
+        if (progress != null && !progress.isShowing()) {
+            progress.setMessage("Preparing to sync...");
+            progress.setCancelable(false);
+            progress.show();
+        }
 
         syncOperationsCompleted = 0;
-        totalSyncOperations = 22; // Total number of data types to sync
+        totalSyncOperations = 23; // Total number of data types to sync
 
         // Start the sync chain
         sendLocationData();
@@ -960,13 +918,86 @@ public class PushActivity extends AppCompatActivity {
                             }
                             morbidityViewModel.add(array);
                         },
-                        this::onOperationComplete
+                        () -> downloadUserQueries(username)
+                        //this::onOperationComplete
                 );
             } catch (ExecutionException | InterruptedException e) {
                 Log.e(TAG, "Error retrieving Morbidity", e);
                 onSyncError("Error retrieving Morbidity: " + e.getMessage());
             }
         }).start();
+    }
+
+    private void downloadUserQueries(String username) {
+        if (isDestroyed.get()) {
+            onSyncError("Activity destroyed");
+            return;
+        }
+
+        Log.d(TAG, "userName: " + username);
+
+        // Delete all existing queries first
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            queriesViewModel.deleteAll();
+            Log.d(TAG, "Deleted all existing queries");
+
+            // Small delay to ensure deletion completes
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Log.e(TAG, "Thread interrupted", e);
+            }
+
+            // Then download new queries
+            handler.post(() -> {
+                if (isDestroyed.get()) return;
+
+                Call<DataWrapper<ServerQueries>> itemCall = dao.getQueries(authorizationHeader, username);
+
+                itemCall.enqueue(new Callback<DataWrapper<ServerQueries>>() {
+                    @Override
+                    public void onResponse(Call<DataWrapper<ServerQueries>> call, Response<DataWrapper<ServerQueries>> response) {
+                        if (isDestroyed.get()) return;
+
+                        Log.d(TAG, "=== Queries RESPONSE ===");
+                        Log.d(TAG, "Response Code: " + response.code());
+                        Log.d(TAG, "Response isSuccessful: " + response.isSuccessful());
+
+                        if (response.isSuccessful() && response.body() != null) {
+                            List<ServerQueries> itemList = response.body().getData();
+                            Log.d(TAG, "Queries list size: " + (itemList != null ? itemList.size() : "null"));
+
+                            if (itemList != null && !itemList.isEmpty()) {
+                                ServerQueries[] items = itemList.toArray(new ServerQueries[0]);
+                                queriesViewModel.add(items);
+                                Log.d(TAG, "Added " + items.length + " Queries to database");
+                            } else {
+                                Log.d(TAG, "No Queries returned from server");
+                            }
+
+                            // ✅ FIXED: Call onOperationComplete after success
+                            handler.post(() -> {
+                                if (!isDestroyed.get()) {
+                                    onOperationComplete();
+                                }
+                            });
+
+                        } else {
+                            Log.e(TAG, "Queries response not successful");
+                            handleErrorResponse(response.code(), "Queries");
+                            onSyncError("Queries download failed: Error " + response.code());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<DataWrapper<ServerQueries>> call, Throwable t) {
+                        if (isDestroyed.get()) return;
+                        Log.e(TAG, "Queries sync failed", t);
+                        onSyncError("Queries download error: " + t.getMessage());
+                    }
+                });
+            });
+        });
     }
 
     /**
@@ -998,6 +1029,93 @@ public class PushActivity extends AppCompatActivity {
 
         sendBatch(allItems, dataType, 0, totalBatches, apiCallFunction, updateFunction, onComplete);
     }
+
+//    /**
+//     * Recursive method to send individual batches
+//     */
+//    private <T> void sendBatch(
+//            List<T> allItems,
+//            String dataType,
+//            int currentBatch,
+//            int totalBatches,
+//            BiFunction<String, DataWrapper<T>, Call<DataWrapper<T>>> apiCallFunction,
+//            Consumer<List<T>> updateFunction,
+//            Runnable onComplete) {
+//
+//        if (isDestroyed.get()) return;
+//
+//        int fromIndex = currentBatch * BATCH_SIZE;
+//
+//        if (fromIndex >= allItems.size()) {
+//            // All batches completed
+//            Log.d(TAG, "All " + dataType + " batches sent successfully");
+//            handler.post(() -> {
+//                if (!isDestroyed.get()) {
+//                    onOperationComplete();
+//                    onComplete.run();
+//                }
+//            });
+//            return;
+//        }
+//
+//        int toIndex = Math.min(fromIndex + BATCH_SIZE, allItems.size());
+//        List<T> batch = allItems.subList(fromIndex, toIndex);
+//        int batchNumber = currentBatch + 1;
+//
+//        handler.post(() -> {
+//            if (isDestroyed.get()) return;
+//
+//            tvSyncStatus.setText("Sending " + dataType + " (" + batchNumber + "/" +
+//                    totalBatches + ") - " + batch.size() + " records");
+//
+//            DataWrapper<T> wrappedData = new DataWrapper<>(batch);
+//            Call<DataWrapper<T>> call = apiCallFunction.apply(authorizationHeader, wrappedData);
+//
+//            call.enqueue(new Callback<DataWrapper<T>>() {
+//                @Override
+//                public void onResponse(@NonNull Call<DataWrapper<T>> call, @NonNull Response<DataWrapper<T>> response) {
+//                    if (isDestroyed.get()) return;
+//
+//                    if (response.isSuccessful() && response.body() != null
+//                            && response.body().getData() != null && !response.body().getData().isEmpty()) {
+//
+//                        List<T> sentDataList = wrappedData.getData();
+//                        updateFunction.accept(sentDataList);
+//
+//                        Log.d(TAG, dataType + " batch " + batchNumber + "/" + totalBatches +
+//                                " sent successfully (" + sentDataList.size() + " records)");
+//
+//                        handler.post(() -> {
+//                            if (isDestroyed.get()) return;
+//
+//                            progress.setMessage("Sent " + dataType + " batch " + batchNumber + " of " +
+//                                    totalBatches);
+//
+//                            // Send next batch after delay
+//                            handler.postDelayed(() -> {
+//                                        if (!isDestroyed.get()) {
+//                                            sendBatch(allItems, dataType, currentBatch + 1, totalBatches,
+//                                                    apiCallFunction, updateFunction, onComplete);
+//                                        }
+//                                    },
+//                                    BATCH_DELAY_MS);
+//                        });
+//
+//                    } else {
+//                        Log.e(TAG, dataType + " batch " + batchNumber + " - Server error: " + response.code());
+//                        onSyncError("Failed to send " + dataType + " batch " + batchNumber + ": Error " + response.code());
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(@NonNull Call<DataWrapper<T>> call, @NonNull Throwable t) {
+//                    if (isDestroyed.get()) return;
+//                    Log.e(TAG, dataType + " batch " + batchNumber + " send failed", t);
+//                    onSyncError("Failed to send " + dataType + " batch " + batchNumber + ": " + t.getMessage());
+//                }
+//            });
+//        });
+//    }
 
     /**
      * Recursive method to send individual batches
@@ -1034,8 +1152,16 @@ public class PushActivity extends AppCompatActivity {
         handler.post(() -> {
             if (isDestroyed.get()) return;
 
-            progress.setMessage("Sending " + dataType + " batch " + batchNumber + " of " +
-                    totalBatches + " (" + batch.size() + " records)...");
+            // Update BOTH progress indicators
+            String statusMessage = "Sending " + dataType + " (" + batchNumber + "/" +
+                    totalBatches + ") - " + batch.size() + " records";
+
+            tvSyncStatus.setText(statusMessage);
+
+            // Update ProgressDialog message
+            if (progress != null && progress.isShowing()) {
+                progress.setMessage(statusMessage);
+            }
 
             DataWrapper<T> wrappedData = new DataWrapper<>(batch);
             Call<DataWrapper<T>> call = apiCallFunction.apply(authorizationHeader, wrappedData);
@@ -1054,21 +1180,14 @@ public class PushActivity extends AppCompatActivity {
                         Log.d(TAG, dataType + " batch " + batchNumber + "/" + totalBatches +
                                 " sent successfully (" + sentDataList.size() + " records)");
 
-                        handler.post(() -> {
-                            if (isDestroyed.get()) return;
-
-                            progress.setMessage("Sent " + dataType + " batch " + batchNumber + " of " +
-                                    totalBatches);
-
-                            // Send next batch after delay
-                            handler.postDelayed(() -> {
-                                        if (!isDestroyed.get()) {
-                                            sendBatch(allItems, dataType, currentBatch + 1, totalBatches,
-                                                    apiCallFunction, updateFunction, onComplete);
-                                        }
-                                    },
-                                    BATCH_DELAY_MS);
-                        });
+                        // Send next batch after delay
+                        handler.postDelayed(() -> {
+                                    if (!isDestroyed.get()) {
+                                        sendBatch(allItems, dataType, currentBatch + 1, totalBatches,
+                                                apiCallFunction, updateFunction, onComplete);
+                                    }
+                                },
+                                BATCH_DELAY_MS);
 
                     } else {
                         Log.e(TAG, dataType + " batch " + batchNumber + " - Server error: " + response.code());
@@ -1104,11 +1223,24 @@ public class PushActivity extends AppCompatActivity {
             if (isDestroyed.get()) return;
 
             isSyncing.set(false);
-            progress.dismiss();
+
+            // Dismiss ProgressDialog
+            if (progress != null && progress.isShowing()) {
+                progress.dismiss();
+            }
+
+            // Update UI to show success
+            syncProgressBar.setVisibility(View.GONE);
+            tvSyncStatus.setVisibility(View.VISIBLE);
+            tvSyncStatus.setText("Sync completed successfully!");
+            tvSyncStatus.setTextColor(ContextCompat.getColor(this, R.color.LimeGreen));
+
             saveLastSyncTime();
             updateLastSyncTime();
+
             buttonSyncAll.setText("Sync Completed Successfully");
             buttonSyncAll.setTextColor(ContextCompat.getColor(PushActivity.this, R.color.LimeGreen));
+
             Toast.makeText(this, "All data synced successfully!", Toast.LENGTH_LONG).show();
             Log.d(TAG, "=== SYNC SUCCESS ===");
 
@@ -1118,6 +1250,7 @@ public class PushActivity extends AppCompatActivity {
                     buttonSyncAll.setText("Sync All Data");
                     buttonSyncAll.setTextColor(ContextCompat.getColor(PushActivity.this, android.R.color.white));
                     buttonSyncAll.setEnabled(true);
+                    tvSyncStatus.setVisibility(View.GONE);
                 }
             }, 3000);
         });
@@ -1126,17 +1259,56 @@ public class PushActivity extends AppCompatActivity {
     private void onSyncError(String errorMessage) {
         if (isDestroyed.get()) return;
 
-        // Run UI updates on the main thread
         runOnUiThread(() -> {
             if (isDestroyed.get()) return;
 
             isSyncing.set(false);
-            progress.dismiss();
+
+            // Dismiss ProgressDialog
+            if (progress != null && progress.isShowing()) {
+                progress.dismiss();
+            }
+
+            // Update UI to show error
+            syncProgressBar.setVisibility(View.GONE);
+            tvSyncStatus.setVisibility(View.VISIBLE);
+            tvSyncStatus.setText("Sync failed!");
+            tvSyncStatus.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark));
+
             syncOperationsCompleted = 0;
             buttonSyncAll.setEnabled(true);
+
             Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
             Log.e(TAG, "Sync error: " + errorMessage);
+
+            // Reset status text after 3 seconds
+            handler.postDelayed(() -> {
+                if (!isDestroyed.get()) {
+                    tvSyncStatus.setVisibility(View.GONE);
+                }
+            }, 3000);
         });
+    }
+
+    private void handleErrorResponse(int responseCode, String dataType) {
+        String errorMessage;
+        switch (responseCode) {
+            case 401:
+                errorMessage = "Authentication failed. Please login again.";
+                break;
+            case 403:
+                errorMessage = "Access forbidden for " + dataType;
+                break;
+            case 404:
+                errorMessage = dataType + " endpoint not found";
+                break;
+            case 500:
+                errorMessage = "Server error while processing " + dataType;
+                break;
+            default:
+                errorMessage = "Error " + responseCode + " while syncing " + dataType;
+        }
+        Log.e(TAG, errorMessage);
     }
 
     private void updateLastSyncTime() {

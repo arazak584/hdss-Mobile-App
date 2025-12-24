@@ -14,6 +14,7 @@ import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
@@ -218,13 +219,13 @@ public interface IndividualDao {
     @Query("SELECT b.uuid, b.firstName, b.lastName, a.insertDate, a.socialgroup_uuid, b.extId " +
             "FROM death as a " +
             "INNER JOIN individual as b ON a.individual_uuid = b.uuid " +
-            "WHERE (a.edit IS NULL OR a.edit != 2) AND endType = 3 AND b.compno = :id GROUP BY b.extId")
+            "WHERE (a.edit IS NULL OR a.edit = 1) AND endType = 3 AND b.compno = :id GROUP BY b.extId")
     List<Individual> retrieveDth(String id);
 
     @Query("SELECT b.uuid,b.firstName,b.lastName,a.insertDate,b.hohID socialgroup_uuid,b.extId,location_uuid,residency_uuid" +
             " FROM outmigration as a " +
             "INNER JOIN individual as b on a.individual_uuid=b.uuid " +
-            "WHERE (a.edit IS NULL OR a.edit != 2) AND endType =2 AND compno =:loc ORDER BY a.recordedDate DESC LIMIT 1")
+            "WHERE (a.edit IS NULL OR a.edit = 1) AND endType =2 AND compno =:loc ORDER BY a.recordedDate DESC LIMIT 1")
     List<Individual> retrieveOmg(String loc);
 
     //(a.edit IS NULL OR a.edit = 1)
@@ -249,30 +250,9 @@ public interface IndividualDao {
 //    List<Individual> err();
 
     @Query("SELECT a.* FROM individual as a INNER JOIN socialgroup b on a.hohID=b.extId " +
-            " WHERE firstName!='FAKE' and groupName='UNK' and endType=1 " +
+            " WHERE firstName!='FAKE' and groupName='UNK' and endType=1 AND b.fw_uuid =:id" +
             " GROUP BY b.extId")
-    List<Individual> err();
-
-//    @Query("SELECT * FROM individual as a " + "INNER JOIN residency as b ON a.uuid = b.individual_uuid " +
-//            " INNER JOIN locations c on b.location_uuid=c.uuid " +
-//            " WHERE firstName!='FAKE' and " +
-//            " date('now', '-14 years') <= date(strftime('%Y-%m-%d', a.dob/1000, 'unixepoch')) order by dob")
-//    List<Individual> errors();
-
-//    @Query("SELECT a.*,c.compextId,d.extId as houseExtId,groupName as lastName FROM individual AS a INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
-//            " INNER JOIN locations c on b.location_uuid=c.uuid " +
-//            " INNER JOIN socialgroup d on b.socialgroup_uuid = d.uuid " +
-//            "WHERE a.firstName != 'FAKE' AND b.endType = 1 " +
-//            "AND b.socialgroup_uuid IN ( " +
-//            "    SELECT b2.socialgroup_uuid " +
-//            "    FROM individual AS a2 " +
-//            "    INNER JOIN residency AS b2 ON a2.uuid = b2.individual_uuid " +
-//            "    WHERE b2.endType = 1 " +
-//            "    GROUP BY b2.socialgroup_uuid " +
-//            "    HAVING MAX(STRFTIME('%Y', 'now') - STRFTIME('%Y', DATE(a2.dob/1000, 'unixepoch'))) < 14" +
-//            ") GROUP BY socialgroup_uuid " +
-//            "ORDER BY c.compextId")
-//    List<Individual> errors();
+    List<Individual> errz(String id);
 
     @Query("SELECT a.* FROM individual AS a WHERE a.firstName != 'FAKE' AND endType = 1 " +
             "AND hohID IN ( " +
@@ -297,8 +277,8 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual Where uuid=:id and complete IS NULL ")
     Individual visited(String id);
 
-    @Query("SELECT * FROM individual WHERE firstName!='FAKE' AND substr(extId, 1, 4) = 'null' ")
-    List<Individual> nulls();
+    @Query("SELECT * FROM individual WHERE firstName!='FAKE' AND substr(extId, 1, 4) = 'null' AND fw_uuid= :id ")
+    List<Individual> nulls(String id);
 
     @Query("SELECT a.uuid,b.compno as hohID,a.compno,a.firstName || ' ' || a.lastName as firstName,b.firstName || ' ' || b.lastName as  lastName FROM individual as a INNER JOIN individual b ON a.mother_uuid=b.uuid WHERE " +
             " STRFTIME('%Y', 'now') - STRFTIME('%Y', DATE(a.dob/1000, 'unixepoch')) < (SELECT hoh_age from config) AND a.endType=1 AND b.endType=1" +
@@ -307,13 +287,6 @@ public interface IndividualDao {
 
     @Query("SELECT COUNT(*) FROM individual WHERE hohID = :id AND compno = :ids AND endType=1 AND firstName!='FAKE'")
     long count(String id,String ids);
-
-//    @Query("SELECT COUNT(hohID) FROM individual AS a WHERE a.firstName != 'FAKE' AND endType = 1 AND hohID= :id AND compno= :ids " +
-//            "AND hohID IN ( " +
-//            "    SELECT hohID FROM individual WHERE endType = 1 GROUP BY hohID " +
-//            "    HAVING MAX(STRFTIME('%Y', 'now') - STRFTIME('%Y', DATE(dob/1000, 'unixepoch'))) < (SELECT hoh_age from config)" +
-//            ") GROUP BY hohID ")
-//    long err(String id, String ids);
 
     @Query("SELECT COUNT(hohID) FROM individual AS a WHERE a.firstName != 'FAKE' AND a.endType = 1 AND a.hohID = :id AND a.compno = :ids " +
             "AND a.hohID IN ( " +

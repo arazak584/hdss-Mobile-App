@@ -32,6 +32,7 @@ import org.openhds.hdsscapture.Dao.OutcomeDao;
 import org.openhds.hdsscapture.Dao.OutmigrationDao;
 import org.openhds.hdsscapture.Dao.PregnancyDao;
 import org.openhds.hdsscapture.Dao.PregnancyoutcomeDao;
+import org.openhds.hdsscapture.Dao.QueriesDao;
 import org.openhds.hdsscapture.Dao.RegistryDao;
 import org.openhds.hdsscapture.Dao.RelationshipDao;
 import org.openhds.hdsscapture.Dao.ResidencyDao;
@@ -62,6 +63,7 @@ import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
+import org.openhds.hdsscapture.entity.ServerQueries;
 import org.openhds.hdsscapture.entity.Registry;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
@@ -79,8 +81,8 @@ import java.util.concurrent.Executors;
         Relationship.class, Locations.class, Residency.class, Pregnancyoutcome.class, Individual.class, Round.class, Demographic.class,
         Visit.class, Outmigration.class, Death.class, Socialgroup.class, Pregnancy.class, CodeBook.class, Hierarchy.class,
         Fieldworker.class, Inmigration.class, HdssSociodemo.class, Outcome.class, Listing.class, Amendment.class, Vaccination.class, Duplicate.class,
-        ApiUrl.class, Configsettings.class, OdkForm.class, Vpm.class, CommunityReport.class, Morbidity.class, HierarchyLevel.class, Registry.class
-        }, version = 1 , exportSchema = true)
+        ApiUrl.class, Configsettings.class, OdkForm.class, Vpm.class, CommunityReport.class, Morbidity.class, HierarchyLevel.class, Registry.class,
+        ServerQueries.class}, version = 1 , exportSchema = true)
 
 @TypeConverters({Converter.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -115,6 +117,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract MorbidityDao morbidityDao();
     public abstract HierarchyLevelDao hierarchyLevelDao();
     public abstract RegistryDao registryDao();
+    public abstract QueriesDao queriesDao();
 
     //Migrate to another version when a variable is added to and entity.
     // If the version of the database is 2 you upgrade to 3 then set the MIGRATION_2_3 which means version 2 to 3
@@ -214,6 +217,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 morbidityDao().deleteAll();
                 hierarchyLevelDao().deleteAll();
                 registryDao().deleteAll();
+                queriesDao().deleteAll();
                 // Perform any other necessary cleanup or initialization
 
                 // Invoke the callback when all entities are reset

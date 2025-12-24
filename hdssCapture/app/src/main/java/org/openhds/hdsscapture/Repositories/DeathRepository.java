@@ -87,9 +87,9 @@ public class DeathRepository {
         return future.get();
     }
 
-    public List<Death> error() throws ExecutionException, InterruptedException {
+    public List<Death> error(String id) throws ExecutionException, InterruptedException {
 
-        Callable<List<Death>> callable = () -> dao.error();
+        Callable<List<Death>> callable = () -> dao.error(id);
 
         Future<List<Death>> future = Executors.newSingleThreadExecutor().submit(callable);
 

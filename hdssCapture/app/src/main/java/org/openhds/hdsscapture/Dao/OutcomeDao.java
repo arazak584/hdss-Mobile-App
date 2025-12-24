@@ -37,8 +37,8 @@ OutcomeDao {
 //            "WHERE b.uuid is NULL and endType=1 AND d.fw_uuid= :id ")
 //    long cnt(String id);
 
-    @Query("SELECT * FROM outcome where preg_uuid=:id")
-    LiveData<Outcome> getView(String id);
+    @Query("SELECT * FROM outcome where preg_uuid=:id AND outcomeNumber = :outcomeNumber LIMIT 1")
+    LiveData<Outcome> getView(String id, int outcomeNumber);
 
     @Query("SELECT * FROM outcome where childuuid=:id")
     Outcome getUuid(String id);

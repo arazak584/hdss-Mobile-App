@@ -95,6 +95,9 @@ public class SocioZFragment extends KeyboardFragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
+
         final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
         final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
         final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);

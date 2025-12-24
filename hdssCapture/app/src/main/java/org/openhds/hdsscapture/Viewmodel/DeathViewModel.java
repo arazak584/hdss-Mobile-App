@@ -47,8 +47,8 @@ public class DeathViewModel extends AndroidViewModel {
         return deathRepository.end(id);
     }
 
-    public List<Death> error() throws ExecutionException, InterruptedException {
-        return deathRepository.error();
+    public List<Death> error(String id) throws ExecutionException, InterruptedException {
+        return deathRepository.error(id);
     }
 
     public long count(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {

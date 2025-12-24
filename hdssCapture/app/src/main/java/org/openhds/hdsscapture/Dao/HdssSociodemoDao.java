@@ -80,8 +80,8 @@ public interface HdssSociodemoDao {
 
     @Query("SELECT a.*,groupName as visit_uuid,b.extId as form_comments_txt,c.compno as id0021 FROM sociodemo as a INNER JOIN socialgroup as b ON a.socialgroup_uuid=b.uuid " +
             " INNER JOIN locations as c on a.location_uuid=c.uuid " +
-            " where a.form_comments_yn IS NULL GROUP BY a.socialgroup_uuid")
-    List<HdssSociodemo> error();
+            " where a.form_comments_yn IS NULL AND a.fw_uuid= :id GROUP BY a.socialgroup_uuid")
+    List<HdssSociodemo> error(String id);
 
     @Query("SELECT COUNT(*) FROM sociodemo as a INNER JOIN socialgroup as b ON a.socialgroup_uuid=b.uuid " +
             " INNER JOIN locations as c on a.location_uuid=c.uuid " +

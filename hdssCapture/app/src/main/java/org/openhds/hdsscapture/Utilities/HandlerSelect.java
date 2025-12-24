@@ -80,7 +80,6 @@ public class HandlerSelect {
         }
     }
 
-
     public static void colorLayouts(Context context, ViewGroup vg) {
         Resources res = context.getResources();
         Drawable drawable = ResourcesCompat.getDrawable(res, R.drawable.border_shape, null);
@@ -96,9 +95,13 @@ public class HandlerSelect {
                 if (v instanceof TextView) {
                     ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f);
 
-                    if (!(v instanceof RadioButton) && ((TextView) v).getMaxEms() <= 0 && !((TextView) v).getTypeface().isBold()) {
+                    if (!(v instanceof RadioButton)
+                            && ((TextView) v).getMaxEms() <= 0
+                            && !((TextView) v).getTypeface().isBold()
+                            && ((TextView) v).getText().toString().trim().isEmpty()) {
                         v.setBackground(drawable);
-                    } else if (((TextView) v).getTypeface().isBold()) {
+                    }
+                    else if (((TextView) v).getTypeface().isBold()) {
                         //((TextView) v).setTextColor(Color.BLACK);
                         v.setBackgroundColor(Color.TRANSPARENT);
                         v.setPadding(5, 5, 5, 5);
@@ -109,7 +112,7 @@ public class HandlerSelect {
                         v.setLayoutParams(params);
 
                     } else {
-                        ((TextView) v).setTextColor(Color.MAGENTA);
+                        //((TextView) v).setTextColor(Color.BLACK);
                         ((TextView) v).setMinHeight(50);
                     }
                 }

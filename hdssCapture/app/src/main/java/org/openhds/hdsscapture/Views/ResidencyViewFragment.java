@@ -39,6 +39,7 @@ import org.openhds.hdsscapture.entity.subentity.IndividualResidency;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import org.openhds.hdsscapture.fragment.HouseMembersFragment;
+import org.openhds.hdsscapture.fragment.KeyboardFragment;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,7 +53,7 @@ import java.util.concurrent.Executors;
  * Use the {@link ResidencyViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ResidencyViewFragment extends Fragment {
+public class ResidencyViewFragment extends KeyboardFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
@@ -100,6 +101,9 @@ public class ResidencyViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentMembershipBinding.inflate(inflater, container, false);
+
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
 
         IndividualViewModel ind = new ViewModelProvider(this).get(IndividualViewModel.class);
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);

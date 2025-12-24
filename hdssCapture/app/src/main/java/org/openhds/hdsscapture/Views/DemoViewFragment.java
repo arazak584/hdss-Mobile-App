@@ -31,6 +31,7 @@ import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.subentity.IndividualPhone;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
+import org.openhds.hdsscapture.fragment.KeyboardFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ import java.util.concurrent.ExecutionException;
  * Use the {@link DemoViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DemoViewFragment extends Fragment {
+public class DemoViewFragment extends KeyboardFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
@@ -94,6 +95,9 @@ public class DemoViewFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentDemographicBinding.inflate(inflater, container, false);
         binding.setDemographic(demographic);
+
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);

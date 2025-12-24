@@ -111,6 +111,10 @@ public class ResidencyViewModel extends AndroidViewModel {
         return residencyRepository.view(id);
     }
 
+    public LiveData<Residency> getViews(String id) {
+        return residencyRepository.getViews(id);
+    }
+
     public void add(Residency data){ residencyRepository.create(data);}
 
     public void add(Residency... data){

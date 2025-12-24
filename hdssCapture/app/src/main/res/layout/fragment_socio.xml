@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -64,15 +65,6 @@
                                 android:textColor="@color/black"
                                 android:text="@string/Instruct_socio" />
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:padding="10dp"
-                                android:text="Basic Information"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="30sp"
-                                android:textStyle="bold" />
 
                             <TextView
                                 android:visibility="gone"
@@ -101,6 +93,33 @@
                                     android:layout_height="wrap_content"
                                     android:inputType="textPersonName"/>
                             </com.google.android.material.textfield.TextInputLayout>
+
+                            <!-- BASIC INFORMATION CARD -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="16dp"
+                                app:cardElevation="4dp"
+                                app:strokeColor="@color/primary"
+                                app:strokeWidth="2dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardBackgroundColor="@android:color/white">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:padding="12dp">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/basic_information"
+                                        android:textColor="@color/colorPrimary"
+                                        android:textSize="18sp"
+                                        android:textStyle="bold"
+                                        android:layout_marginBottom="8dp" />
+
 
                             <com.google.android.material.textfield.TextInputLayout
                                 android:layout_width="match_parent"
@@ -323,10 +342,35 @@
                                         tools:ignore="Autofill,LabelFor" />
                                 </LinearLayout>
 
+                            </LinearLayout>
+                            </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <!-- HOUSEHOLD INFORMATION CARD -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="16dp"
+                                app:cardElevation="4dp"
+                                app:strokeColor="@color/primary"
+                                app:strokeWidth="2dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardBackgroundColor="@android:color/white">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:textColor="@color/black"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginBottom="8dp"
                                     android:text="@string/size_hh" />
 
                                 <TextView
@@ -413,50 +457,37 @@
                                     android:textSize="20sp"
                                     android:textColor="@color/black"
                                     tools:ignore="Autofill,LabelFor" />
+
                             </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <!-- NHIS INFORMATION CARD -->
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="16dp"
+                                app:cardElevation="4dp"
+                                app:strokeColor="@color/primary"
+                                app:strokeWidth="2dp"
+                                app:cardCornerRadius="12dp"
+                                app:cardBackgroundColor="@android:color/white">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:padding="12dp">
 
-                                <!--                                <TextView-->
-                                <!--                                    android:layout_width="match_parent"-->
-                                <!--                                    android:layout_height="wrap_content"-->
-                                <!--                                    android:gravity="start"-->
-                                <!--                                    android:padding="5dp"-->
-                                <!--                                    android:textColor="@color/black"-->
-                                <!--                                    android:text="@string/id0001"/>-->
 
-                                <!--                                <org.openhds.hdsscapture.SearchableSpinner-->
-                                <!--                                    android:id="@+id/id0001"-->
-                                <!--                                    android:layout_width="match_parent"-->
-                                <!--                                    android:layout_height="wrap_content"-->
-                                <!--                                    selection="@{sociodemo.id0001}"-->
-                                <!--                                    android:onItemSelected="@{sociodemo::setId0001}"-->
-                                <!--                                    android:gravity="left"-->
-                                <!--                                    android:spinnerMode="dialog"-->
-                                <!--                                    android:padding="15dp"/>-->
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="@string/nhis" />
 
-                                <!--                                <TextView-->
-                                <!--                                    goneUnless="@{sociodemo.id0001==1 || sociodemo.id0001==2}"-->
-                                <!--                                    android:layout_width="match_parent"-->
-                                <!--                                    android:layout_height="wrap_content"-->
-                                <!--                                    android:gravity="start"-->
-                                <!--                                    android:padding="5dp"-->
-                                <!--                                    android:textColor="@color/black"-->
-                                <!--                                    android:text="@string/id0002"/>-->
-
-                                <!--                                <org.openhds.hdsscapture.SearchableSpinner-->
-                                <!--                                    goneUnless="@{sociodemo.id0001==1 || sociodemo.id0001==2}"-->
-                                <!--                                    android:id="@+id/id0002"-->
-                                <!--                                    android:layout_width="match_parent"-->
-                                <!--                                    android:layout_height="wrap_content"-->
-                                <!--                                    selection="@{sociodemo.id0002}"-->
-                                <!--                                    android:onItemSelected="@{sociodemo::setId0002}"-->
-                                <!--                                    android:gravity="left"-->
-                                <!--                                    android:spinnerMode="dialog"-->
-                                <!--                                    android:padding="15dp"/>-->
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -516,41 +547,17 @@
                                     android:spinnerMode="dialog"
                                     android:padding="15dp"/>
                             </LinearLayout>
+                            </com.google.android.material.card.MaterialCardView>
 
 
-<!--                            <include-->
-<!--                                android:id="@+id/sociob"-->
-<!--                                layout="@layout/fragment_socio_b"-->
-<!--                                bind:sociodemo="@{sociodemo}" />-->
+                            </LinearLayout>
 
-<!--                            <include-->
-<!--                                android:id="@+id/socioc"-->
-<!--                                layout="@layout/fragment_socio_c"-->
-<!--                                bind:sociodemo="@{sociodemo}" />-->
 
-<!--                            <include-->
-<!--                                android:id="@+id/sociod"-->
-<!--                                layout="@layout/fragment_socio_d"-->
-<!--                                bind:sociodemo="@{sociodemo}" />-->
 
-<!--                            <include-->
-<!--                                android:id="@+id/socioe"-->
-<!--                                layout="@layout/fragment_socio_e"-->
-<!--                                bind:sociodemo="@{sociodemo}" />-->
 
-<!--                            <include-->
-<!--                                android:id="@+id/sociof"-->
-<!--                                layout="@layout/fragment_socio_f"-->
-<!--                                bind:sociodemo="@{sociodemo}" />-->
 
-<!--                            <include-->
-<!--                                android:id="@+id/sociog"-->
-<!--                                layout="@layout/fragment_socio_g"-->
-<!--                                bind:sociodemo="@{sociodemo}" />-->
 
                         </LinearLayout>
-                    </LinearLayout>
-
 
 <!--                <include-->
 <!--                    android:id="@+id/socioz"-->

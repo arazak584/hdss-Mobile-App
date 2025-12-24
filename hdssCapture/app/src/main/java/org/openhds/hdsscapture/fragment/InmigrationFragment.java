@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
@@ -120,6 +121,9 @@ public class InmigrationFragment extends KeyboardFragment {
         //return inflater.inflate(R.layout.fragment_inmigration, container, false);
         binding = FragmentInmigrationBinding.inflate(inflater, container, false);
 
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
+
         IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
         selectedIndividual = sharedModel.getCurrentSelectedIndividual();
 
@@ -133,36 +137,7 @@ public class InmigrationFragment extends KeyboardFragment {
         selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
         //CHOOSING THE DATE
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            if (bundle.containsKey((InmigrationFragment.DATE_BUNDLES.DATE.getBundleKey()))) {
-                final String result = bundle.getString(InmigrationFragment.DATE_BUNDLES.DATE.getBundleKey());
-                binding.imgDate.setText(result);
-            }
-        });
-
-        binding.buttonImgImgDate.setOnClickListener(v -> {
-            if (!TextUtils.isEmpty(binding.imgDate.getText())) {
-                // If Date is not empty, parse the date and use it as the initial date
-                String currentDate = binding.imgDate.getText().toString();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-                try {
-                    Date date = sdf.parse(currentDate);
-                    Calendar selectedDate = Calendar.getInstance();
-                    selectedDate.setTime(date);
-
-                    // Create DatePickerFragment with the parsed date
-                    DialogFragment newFragment = new DatePickerFragment(InmigrationFragment.DATE_BUNDLES.DATE.getBundleKey(), selectedDate);
-                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                final Calendar c = Calendar.getInstance();
-                DialogFragment newFragment = new DatePickerFragment(InmigrationFragment.DATE_BUNDLES.DATE.getBundleKey(), c);
-                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-            }
-        });
+        setupDatePickers();
 
         InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
@@ -570,5 +545,49 @@ public class InmigrationFragment extends KeyboardFragment {
         public String toString() {
             return bundleKey;
         }
+    }
+
+    private void setupDatePickers() {
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            handleDateResult(bundle, DATE_BUNDLES.DATE, binding.imgDate);
+        });
+
+        binding.buttonImgImgDate.setEndIconOnClickListener(v ->
+                showDatePicker(DATE_BUNDLES.DATE, binding.imgDate));
+
+    }
+
+    private void handleDateResult(Bundle bundle, InmigrationFragment.DATE_BUNDLES dateType, TextInputEditText editText) {
+        if (bundle.containsKey(dateType.getBundleKey())) {
+            String result = bundle.getString(dateType.getBundleKey());
+            editText.setText(result);
+        }
+    }
+
+    private void showDatePicker(InmigrationFragment.DATE_BUNDLES dateType, TextInputEditText editText) {
+        Calendar calendar = parseCurrentDate(editText.getText().toString());
+        DialogFragment datePickerFragment = new DatePickerFragment(
+                dateType.getBundleKey(),
+                calendar
+        );
+        datePickerFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+    }
+
+    private Calendar parseCurrentDate(String dateString) {
+        Calendar calendar = Calendar.getInstance();
+
+        if (!TextUtils.isEmpty(dateString)) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            try {
+                Date date = sdf.parse(dateString);
+                if (date != null) {
+                    calendar.setTime(date);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return calendar;
     }
 }

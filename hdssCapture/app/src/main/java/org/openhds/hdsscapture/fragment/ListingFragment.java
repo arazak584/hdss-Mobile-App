@@ -141,6 +141,9 @@ public class ListingFragment extends KeyboardFragment {
         selectedLocation = sharedViewModel.getCurrentSelectedLocation();
         compno = selectedLocation != null ? selectedLocation.getCompno() : null;
 
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
+
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_change_cluster);
         // Set a click listener on the button for mother
         showDialogButton.setOnClickListener(new View.OnClickListener() {

@@ -5,538 +5,689 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="demographic"
             type="org.openhds.hdsscapture.entity.Demographic" />
-
         <variable
             name="individual"
             type="org.openhds.hdsscapture.entity.Individual" />
-
-
     </data>
 
-
     <LinearLayout
-        android:id="@+id/DEMOGRAPHIC_LAYOUT"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:context=".fragment.DemographicFragment">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="Demographic"
-            android:textAllCaps="true"
-            android:textColor="@color/colorPrimary"
-            android:textSize="30sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/stopwatchTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="00:00:00"
-            android:textSize="24sp"/>
-
-
-        <TextView
-            android:id="@+id/ind"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textAlignment="center"/>
-
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/txt_comment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:text="@={demographic.comment}"
-            android:textColor="@color/purple_700"
-            android:gravity="start"/>
-
-<!--        <com.google.android.material.textfield.TextInputLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:gravity="start"-->
-<!--            android:padding="5dp"-->
-<!--            android:hint="@string/comment"-->
-<!--            android:text="@string/comment">-->
-
-<!--            <androidx.appcompat.widget.AppCompatEditText-->
-<!--                android:visibility="gone"-->
-<!--                android:id="@+id/txt_comment"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:focusable="false"-->
-<!--                android:focusableInTouchMode="false"-->
-<!--                android:text="@={demographic.comment}"-->
-<!--                android:inputType="text"/>-->
-<!--        </com.google.android.material.textfield.TextInputLayout>-->
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_margin="5dp"
-            android:background="@color/colorPrimaryDark" />
-
-
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:fillViewport="true">
 
             <LinearLayout
+                android:id="@+id/DEMOGRAPHIC_LAYOUT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="8dp"
+                tools:context=".fragment.DemographicFragment">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:visibility="gone"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/fw"
-                    android:text="@string/fw">
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="Demographic"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
 
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/demo_fw"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={demographic.fw_uuid}"
-                        android:inputType="textPersonName"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <Button
-                    android:visibility="gone"
-                    android:id="@+id/button_demo_insertDate"
+                <TextView
+                    android:id="@+id/ind"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/visitDate"
-                    tools:ignore="DuplicateSpeakableTextCheck"
-                    app:icon="@drawable/ic_baseline_calendar_month_24" />
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
 
-
-
-                <Button
-                    android:visibility="gone"
-                    android:id="@+id/startPauseButton"
+                <TextView
+                    android:id="@+id/stopwatchTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="15dp"
-                    android:text="Start"
-                    android:textSize="18sp"/>
-
+                    android:text="00:00:00"
+                    android:textSize="24sp"
+                    android:visibility="gone" />
 
                 <TextView
-                    android:visibility="visible"
-                    android:id="@+id/demo_insertDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints=""
-                    android:ems="10"
-                    android:text="@={demographic.insertDate}"
-                    android:minHeight="30dp"
-                    android:textSize="20sp"
-                    tools:ignore="TextContrastCheck" />
-
-                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txt_comment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/age"
-                    android:text="@string/age">
+                    android:text="@={demographic.comment}"
+                    android:textColor="@color/purple_700"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/age"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:inputType="textPersonName"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <com.google.android.material.textfield.TextInputLayout
+                <!-- HIDDEN FIELDS CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:inputType="text"
-                    android:hint="@string/ind_extid"
-                    android:text="@string/ind_extid">
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true">
 
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/demographic_extid"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={demographic.individual_uuid}"
-                        android:inputType="textPersonName"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                <TextView
-                    goneUnless="@{individual.age>11}"
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/hidden_information"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/fw"
+                            android:padding="5dp"
+                            android:text="@string/fw"
+                            android:visibility="gone">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/demo_fw"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPersonName"
+                                android:text="@={demographic.fw_uuid}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <Button
+                            android:id="@+id/button_demo_insertDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/visitDate"
+                            android:visibility="gone"
+                            app:icon="@drawable/ic_baseline_calendar_month_24"
+                            tools:ignore="DuplicateSpeakableTextCheck" />
+
+                        <Button
+                            android:id="@+id/startPauseButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="15dp"
+                            android:text="Start"
+                            android:textSize="18sp"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/demo_insertDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autofillHints=""
+                            android:ems="10"
+                            android:minHeight="30dp"
+                            android:text="@={demographic.insertDate}"
+                            android:textSize="20sp"
+                            android:visibility="visible"
+                            tools:ignore="TextContrastCheck" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/ind_extid"
+                            android:inputType="text"
+                            android:padding="5dp"
+                            android:text="@string/ind_extid"
+                            android:visibility="gone">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/demographic_extid"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPersonName"
+                                android:text="@={demographic.individual_uuid}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- BASIC INFORMATION CARD -->
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/own_phone"/>
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardUseCompatPadding="true">
 
-                <org.openhds.searchSpinner.SearchableSpinner
-                    goneUnless="@{individual.age>11}"
-                    android:id="@+id/demo_phone"
-                    selection="@{demographic.phone}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:minHeight="48dp"
-                    android:onItemSelected="@{demographic::setPhone}"
-                    android:padding="15dp"
-                    android:spinnerMode="dialog"
-                    android:focusable="true"
-                    android:textColor="#000301" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    goneUnless="@{demographic.phone==1}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/phone"
-                    android:text="@string/phone">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/phone1"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={demographic.phone1}"
-                        android:inputType="textPersonName"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                <TextView
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/basic_information"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/age"
+                            android:padding="5dp"
+                            android:text="@string/age">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/age"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- PHONE INFORMATION CARD -->
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/tribe"/>
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardUseCompatPadding="true"
+                    goneUnless="@{individual.age>11}">
 
-                <org.openhds.searchSpinner.SearchableSpinner
-                    android:id="@+id/tribe"
-                    selection="@{demographic.tribe}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:minHeight="48dp"
-                    android:onItemSelected="@{demographic::setTribes}"
-                    android:padding="10dp" />
-
-
-                <TextView
-                    goneUnless="@{demographic.tribe==1}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/akan_specify"/>
-
-                <Spinner
-                    goneUnless="@{demographic.tribe==1}"
-                    android:id="@+id/akan"
-                    selection="@{demographic.akan_tribe}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:minHeight="48dp"
-                    android:onItemSelected="@{demographic::setAkan_tribe}"
-                    android:padding="15dp"
-                    android:spinnerMode="dialog"/>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    goneUnless="@{demographic.tribe==77}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/attend_you_other"
-                    android:text="@string/attend_you_other">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/tribe_oth"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={demographic.tribe_oth}"
-                        android:inputType="textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/phone_information"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-                <TextView
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:text="@string/own_phone"
+                            android:textColor="@color/black" />
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            android:id="@+id/demo_phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="true"
+                            android:gravity="left"
+                            android:minHeight="48dp"
+                            android:onItemSelected="@{demographic::setPhone}"
+                            android:padding="15dp"
+                            selection="@{demographic.phone}"
+                            android:spinnerMode="dialog"
+                            android:textColor="#000301" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/phone"
+                            android:padding="5dp"
+                            android:text="@string/phone"
+                            goneUnless="@{demographic.phone==1}">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/phone1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPersonName"
+                                android:text="@={demographic.phone1}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- CULTURAL INFORMATION CARD -->
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/religion"/>
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardUseCompatPadding="true">
 
-                <Spinner
-                    android:id="@+id/religion"
-                    selection="@{demographic.religion}"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/cultural_information"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:text="@string/tribe"
+                            android:textColor="@color/black" />
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            android:id="@+id/tribe"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:minHeight="48dp"
+                            android:onItemSelected="@{demographic::setTribes}"
+                            android:padding="10dp"
+                            selection="@{demographic.tribe}" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:text="@string/akan_specify"
+                            android:textColor="@color/black"
+                            goneUnless="@{demographic.tribe==1}" />
+
+                        <Spinner
+                            android:id="@+id/akan"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:minHeight="48dp"
+                            android:onItemSelected="@{demographic::setAkan_tribe}"
+                            android:padding="15dp"
+                            selection="@{demographic.akan_tribe}"
+                            android:spinnerMode="dialog"
+                            goneUnless="@{demographic.tribe==1}" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/attend_you_other"
+                            android:padding="5dp"
+                            android:text="@string/attend_you_other"
+                            goneUnless="@{demographic.tribe==77}">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/tribe_oth"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textCapCharacters"
+                                android:text="@={demographic.tribe_oth}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:text="@string/religion"
+                            android:textColor="@color/black" />
+
+                        <Spinner
+                            android:id="@+id/religion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:minHeight="48dp"
+                            android:onItemSelected="@{demographic::setReligions}"
+                            android:padding="15dp"
+                            selection="@{demographic.religion}"
+                            android:spinnerMode="dialog" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            goneUnless="@{demographic.religion==1}">
+
+                            <ImageButton
+                                android:id="@+id/deno_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:backgroundTint="@color/white"
+                                android:onClick="denoInfo"
+                                android:src="@android:drawable/ic_dialog_info" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:padding="5dp"
+                                android:text="@string/denomination_specify"
+                                android:textColor="@color/black" />
+                        </LinearLayout>
+
+                        <Spinner
+                            android:id="@+id/denomination"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:minHeight="48dp"
+                            android:onItemSelected="@{demographic::setDenomination}"
+                            android:padding="15dp"
+                            selection="@{demographic.denomination}"
+                            android:spinnerMode="dialog"
+                            goneUnless="@{demographic.religion==1}" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            goneUnless="@{demographic.religion==77}">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="start"
+                                android:hint="@string/attend_you_other"
+                                android:padding="5dp"
+                                android:text="@string/attend_you_other"
+                                goneUnless="@{demographic.religion==77}">
+
+                                <androidx.appcompat.widget.AppCompatEditText
+                                    android:id="@+id/religion_oth"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="textCapCharacters"
+                                    android:text="@={demographic.religion_oth}" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- EDUCATION CARD -->
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:minHeight="48dp"
-                    android:onItemSelected="@{demographic::setReligions}"
-                    android:padding="15dp"
-                    android:spinnerMode="dialog"/>
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardUseCompatPadding="true">
 
-            <LinearLayout
-                goneUnless="@{demographic.religion==1}"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                <ImageButton
-                    android:id="@+id/deno_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:src="@android:drawable/ic_dialog_info"
-                    android:backgroundTint="@color/white"
-                    android:onClick="denoInfo" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/education"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-                <TextView
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:text="@string/education"
+                            android:textColor="@color/black" />
+
+                        <Spinner
+                            android:id="@+id/education"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:minHeight="48dp"
+                            android:onItemSelected="@{demographic::setEducations}"
+                            android:padding="15dp"
+                            selection="@{demographic.education}"
+                            android:spinnerMode="dialog" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/comp_yrs"
+                            android:padding="5dp"
+                            android:text="@string/comp_yrs"
+                            goneUnless="@{demographic.education!=1 &amp; demographic.education!=6}">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/comp_yrs"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="number"
+                                android:text="@={demographic.comp_yrs}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- OCCUPATION AND MARITAL STATUS CARD -->
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/denomination_specify"/>
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardUseCompatPadding="true"
+                    goneUnless="@{individual.age>11}">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/occupation_marital_status"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:text="@string/occupations"
+                            android:textColor="@color/black" />
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            android:id="@+id/occupation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:minHeight="48dp"
+                            android:onItemSelected="@{demographic::setOccupations}"
+                            android:padding="15dp"
+                            selection="@{demographic.occupation}"
+                            android:spinnerMode="dialog"
+                            android:textColor="#000301" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/attend_you_other"
+                            android:padding="5dp"
+                            android:text="@string/attend_you_other"
+                            goneUnless="@{demographic.occupation==77}">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/occupation_oth"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textCapCharacters"
+                                android:text="@={demographic.occupation_oth}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:text="@string/marital"
+                            android:textColor="@color/black" />
+
+                        <Spinner
+                            android:id="@+id/marital"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:onItemSelected="@{demographic::setMaritals}"
+                            android:padding="15dp"
+                            selection="@{demographic.marital}"
+                            android:spinnerMode="dialog" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- VALIDATION CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardUseCompatPadding="true"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/validation"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:id="@+id/resolve"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/query_reslve"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <RadioGroup
+                            android:id="@+id/status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{demographic::setStatus}"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <RadioButton
+                                android:id="@+id/no_3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{demographic.status==3}"
+                                android:tag="3"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/no_2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{demographic.status==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                            <RadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{demographic.status==0}"
+                                android:tag="0"
+                                android:visibility="invisible" />
+                        </RadioGroup>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:text="@string/form_complete"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <Spinner
+                            android:id="@+id/demo_complete"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:onItemSelected="@{demographic::setComplete}"
+                            android:padding="15dp"
+                            selection="@{demographic.complete}"
+                            android:spinnerMode="dialog"
+                            android:visibility="gone" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
-
-                <Spinner
-                    goneUnless="@{demographic.religion==1}"
-                    android:id="@+id/denomination"
-                    selection="@{demographic.denomination}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:minHeight="48dp"
-                    android:onItemSelected="@{demographic::setDenomination}"
-                    android:padding="15dp"
-                    android:spinnerMode="dialog"/>
-
-            <LinearLayout
-                goneUnless="@{demographic.religion==77}"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    goneUnless="@{demographic.religion==77}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/attend_you_other"
-                    android:text="@string/attend_you_other">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/religion_oth"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={demographic.religion_oth}"
-                        android:inputType="textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/education"/>
-
-                <Spinner
-                    android:id="@+id/education"
-                    selection="@{demographic.education}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:minHeight="48dp"
-                    android:onItemSelected="@{demographic::setEducations}"
-                    android:padding="15dp"
-                    android:spinnerMode="dialog" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    goneUnless="@{demographic.education!=1 &amp; demographic.education!=6}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/comp_yrs"
-                    android:text="@string/comp_yrs">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/comp_yrs"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={demographic.comp_yrs}"
-                        android:inputType="number"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    goneUnless="@{individual.age>11}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/occupations"/>
-
-                <org.openhds.searchSpinner.SearchableSpinner
-                    goneUnless="@{individual.age>11}"
-                    android:id="@+id/occupation"
-                    selection="@{demographic.occupation}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:minHeight="48dp"
-                    android:onItemSelected="@{demographic::setOccupations}"
-                    android:padding="15dp"
-                    android:spinnerMode="dialog"
-                    android:textColor="#000301" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    goneUnless="@{demographic.occupation==77}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:hint="@string/attend_you_other"
-                    android:text="@string/attend_you_other">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/occupation_oth"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@={demographic.occupation_oth}"
-                        android:inputType="textCapCharacters"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    goneUnless="@{individual.age>11}"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/marital"/>
-
-                <Spinner
-                    goneUnless="@{individual.age>11}"
-                    android:id="@+id/marital"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    selection="@{demographic.marital}"
-                    android:onItemSelected="@{demographic::setMaritals}"
-                    android:gravity="left"
-                    android:spinnerMode="dialog"
-                    android:padding="15dp"/>
-
-                <TextView
-                    android:visibility="gone"
-                    android:id="@+id/resolve"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="@string/query_reslve" />
-
-                <RadioGroup
-                    android:visibility="gone"
-                    android:id="@+id/status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onCheckedChanged="@{demographic::setStatus}"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/no_3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="@{demographic.status==3}"
-                        android:tag="3"
-                        android:text="@string/yes" />
-
-                    <RadioButton
-                        android:id="@+id/no_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="@{demographic.status==2}"
-                        android:tag="2"
-                        android:text="@string/no" />
-
-                    <RadioButton
-                        android:visibility="invisible"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="@{demographic.status==0}"
-                        android:tag="0"/>
-                </RadioGroup>
-
-
-                <TextView
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/form_complete"/>
-
-                <Spinner
-                    android:visibility="gone"
-                    android:id="@+id/demo_complete"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    selection="@{demographic.complete}"
-                    android:onItemSelected="@{demographic::setComplete}"
-                    android:gravity="left"
-                    android:spinnerMode="dialog"
-                    android:padding="15dp"/>
-
-
-            </LinearLayout>
-
         </ScrollView>
 
+        <!-- ACTION BUTTONS (FIXED AT BOTTOM) -->
         <LinearLayout
             android:id="@+id/linearLayout_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@android:color/white"
+            android:elevation="4dp">
 
             <Button
                 android:id="@+id/buttonSaveClose"
@@ -544,8 +695,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                style="@style/SupervisorButton"
-                android:text="@string/saveclosedata" />
+                android:text="@string/save"
+                style="@style/SupervisorButton" />
 
             <Button
                 android:id="@+id/buttonClose"
@@ -553,11 +704,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                style="@style/CloseButton"
-                android:text="@string/closedata" />
-
+                android:text="@string/closedata"
+                style="@style/CloseButton" />
         </LinearLayout>
 
     </LinearLayout>
-
 </layout>

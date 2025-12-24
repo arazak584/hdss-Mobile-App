@@ -252,6 +252,10 @@ public class ResidencyRepository {
         return dao.getView(id);
     }
 
+    public LiveData<Residency> getViews(String id) {
+        return dao.getViews(id);
+    }
+
     public LiveData<Long> sync() {
         return dao.sync();
     }

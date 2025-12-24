@@ -58,8 +58,8 @@ public class LocationViewModel extends AndroidViewModel {
         return locationRepository.findToSync();
     }
 
-    public List<Locations> retrieveAll(String id) throws ExecutionException, InterruptedException {
-        return locationRepository.retrieveAll(id);
+    public List<Locations> retrieveAll() throws ExecutionException, InterruptedException {
+        return locationRepository.retrieveAll();
     }
 
     public List<Locations> filter(String id) throws ExecutionException, InterruptedException {
@@ -111,5 +111,40 @@ public class LocationViewModel extends AndroidViewModel {
 
     public LiveData<Long> sync() {
         return locationRepository.sync();
+    }
+
+    // Get all village names for autocomplete
+    public List<String> getAllVillageNames() throws ExecutionException, InterruptedException {
+        return locationRepository.getAllVillageNames();
+    }
+
+    // Get all compno for autocomplete
+    public List<String> getAllCompno() throws ExecutionException, InterruptedException {
+        return locationRepository.getAllCompno();
+    }
+
+    // Filter by village name
+    public List<Locations> filterByVillageName(String villageName) throws ExecutionException, InterruptedException {
+        return locationRepository.filterByVillageName("%" + villageName + "%");
+    }
+
+    // Filter by compno
+    public List<Locations> filterByCompno(String compno) throws ExecutionException, InterruptedException {
+        return locationRepository.filterByCompno("%" + compno + "%");
+    }
+
+    // Filter by both
+    public List<Locations> filterByVillageAndCompno(String villageName, String compno) throws ExecutionException, InterruptedException {
+        return locationRepository.filterByVillageAndCompno("%" + villageName + "%", "%" + compno + "%");
+    }
+
+    // Search village names for autocomplete
+    public List<String> searchVillageNames(String query) throws ExecutionException, InterruptedException {
+        return locationRepository.searchVillageNames(query.toUpperCase());
+    }
+
+    // Search compno for autocomplete
+    public List<String> searchCompno(String query) throws ExecutionException, InterruptedException {
+        return locationRepository.searchCompno(query.toUpperCase());
     }
 }

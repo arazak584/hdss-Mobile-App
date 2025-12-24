@@ -87,9 +87,9 @@ public class CompletedFormsAdapter extends RecyclerView.Adapter<CompletedFormsAd
                 case "vaccination":
                     fragment = VaccinationViewFragment.newInstance(form.uuid);
                     break;
-//                case "pregnancy outcome":
-//                    fragment = BirthViewFragment.newInstance(form.uuid);
-//                    break;
+                case "pregnancy outcome":
+                    fragment = PregnancyOutcomeViewFragment.newInstance(form.uuid);
+                    break;
                 default:
                     Log.d("CompletedFormsAdapter", "Unknown form type: " + form.formType);
                     break;

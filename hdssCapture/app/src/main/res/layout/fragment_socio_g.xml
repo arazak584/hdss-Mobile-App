@@ -1,345 +1,438 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="sociodemo"
             type="org.openhds.hdsscapture.entity.HdssSociodemo" />
-
     </data>
 
     <LinearLayout
-        android:id="@+id/MAIN_LAYOUT"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/txt_comment"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:text="@={sociodemo.comment}"
-            android:textColor="@color/purple_700"
-            android:gravity="start"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:padding="5dp"
-            android:hint="@string/household_select"
-            android:text="@string/household_select">
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:id="@+id/household"
-                android:text="@={sociodemo.socialgroup_uuid}"
+            <LinearLayout
+                android:id="@+id/MAIN_LAYOUT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="vertical"
+                android:padding="8dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="@string/health_behave" />
+                <!-- HEADER SECTION -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/health_behavior"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="@string/SMOKE_OECOCCUR_SOCIO" />
+                <!-- HIDDEN INFORMATION CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true">
 
-        <RadioGroup
-            android:id="@+id/SMOKE_OECOCCUR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onCheckedChanged="@{sociodemo::setSmoke_oecoccur}"
-            android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-            <RadioButton
-                android:id="@+id/SMOKE_OECOCCUR_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.smoke_oecoccur==1}"
-                android:tag="1"
-                android:text="@string/yes" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/hidden_information"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-            <RadioButton
-                android:id="@+id/SMOKE_OECOCCUR_0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.smoke_oecoccur==2}"
-                android:tag="2"
-                android:text="@string/no" />
+                        <TextView
+                            android:id="@+id/txt_comment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={sociodemo.comment}"
+                            android:textColor="@color/purple_700"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:gravity="start" />
 
-            <RadioButton
-                android:visibility="invisible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.smoke_oecoccur==0}"
-                android:tag="0"/>
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:hint="@string/household_select"
+                            android:text="@string/household_select">
 
-        </RadioGroup>
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/household"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName"
+                                android:text="@={sociodemo.socialgroup_uuid}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-        <LinearLayout
-            goneUnless="@{sociodemo.smoke_oecoccur==1}"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                <!-- SMOKING BEHAVIOR CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@android:color/white">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="@string/SMOKE_IN_OECDOSFRQ_SOCIO" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-            <org.openhds.searchSpinner.SearchableSpinner
-                android:id="@+id/SMOKE_IN_OECDOSFRQ"
-                selection="@{sociodemo.smoke_in_oecdosfrq}"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:spinnerMode="dialog"
-                android:padding="5dp"
-                android:onItemSelected="@{sociodemo::setSmoke_in_oecdosfrq}" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/smoking_behavior"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-        </LinearLayout>
+                        <!-- Personal Smoking -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/SMOKE_OECOCCUR_SOCIO"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="4dp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="@string/SMOKE_HHOLD_OECOCCUR_SOCIO" />
+                        <RadioGroup
+                            android:id="@+id/SMOKE_OECOCCUR"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setSmoke_oecoccur}"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp">
 
-        <RadioGroup
-            android:id="@+id/SMOKE_HHOLD_OECOCCUR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onCheckedChanged="@{sociodemo::setSmoke_hhold_oecoccur}"
-            android:orientation="horizontal">
+                            <RadioButton
+                                android:id="@+id/SMOKE_OECOCCUR_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.smoke_oecoccur==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
 
-            <RadioButton
-                android:id="@+id/SMOKE_HHOLD_OECOCCUR_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.smoke_hhold_oecoccur==1}"
-                android:tag="1"
-                android:text="@string/yes" />
+                            <RadioButton
+                                android:id="@+id/SMOKE_OECOCCUR_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.smoke_oecoccur==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
 
-            <RadioButton
-                android:id="@+id/SMOKE_HHOLD_OECOCCUR_0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.smoke_hhold_oecoccur==2}"
-                android:tag="2"
-                android:text="@string/no" />
+                            <RadioButton
+                                android:visibility="invisible"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.smoke_oecoccur==0}"
+                                android:tag="0"/>
+                        </RadioGroup>
 
-            <RadioButton
-                android:visibility="invisible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.smoke_hhold_oecoccur==0}"
-                android:tag="0"/>
+                        <!-- Smoking Frequency (Conditional) -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:goneUnless="@{sociodemo.smoke_oecoccur==1}"
+                            android:layout_marginBottom="12dp">
 
-        </RadioGroup>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/SMOKE_IN_OECDOSFRQ_SOCIO"
+                                android:textColor="@color/black"
+                                android:layout_marginBottom="4dp" />
 
-        <LinearLayout
-            goneUnless="@{sociodemo.smoke_hhold_oecoccur==1}"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                            <org.openhds.searchSpinner.SearchableSpinner
+                                android:id="@+id/SMOKE_IN_OECDOSFRQ"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:onItemSelected="@{sociodemo::setSmoke_in_oecdosfrq}"
+                                android:spinnerMode="dialog"
+                                app:selection="@{sociodemo.smoke_in_oecdosfrq}" />
+                        </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="@string/SMOKE_HHOLD_IN_OECDOSFRQ_SOCIO" />
+                        <!-- Household Smoking -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/SMOKE_HHOLD_OECOCCUR_SOCIO"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="4dp" />
 
-            <org.openhds.searchSpinner.SearchableSpinner
-                android:id="@+id/SMOKE_HHOLD_IN_OECDOSFRQ"
-                selection="@{sociodemo.smoke_hhold_in_oecdosfrq}"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:spinnerMode="dialog"
-                android:padding="5dp"
-                android:onItemSelected="@{sociodemo::setSmoke_hhold_in_oecdosfrq}" />
+                        <RadioGroup
+                            android:id="@+id/SMOKE_HHOLD_OECOCCUR"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setSmoke_hhold_oecoccur}"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp">
 
-        </LinearLayout>
+                            <RadioButton
+                                android:id="@+id/SMOKE_HHOLD_OECOCCUR_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.smoke_hhold_oecoccur==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="@string/CHEW_OECOCCUR_SOCIO" />
+                            <RadioButton
+                                android:id="@+id/SMOKE_HHOLD_OECOCCUR_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.smoke_hhold_oecoccur==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
 
-        <RadioGroup
-            android:id="@+id/CHEW_OECOCCUR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onCheckedChanged="@{sociodemo::setChew_oecoccur}"
-            android:orientation="horizontal">
+                            <RadioButton
+                                android:visibility="invisible"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.smoke_hhold_oecoccur==0}"
+                                android:tag="0"/>
+                        </RadioGroup>
 
-            <RadioButton
-                android:id="@+id/CHEW_OECOCCUR_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.chew_oecoccur==1}"
-                android:tag="1"
-                android:text="@string/yes" />
+                        <!-- Household Smoking Frequency (Conditional) -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:goneUnless="@{sociodemo.smoke_hhold_oecoccur==1}">
 
-            <RadioButton
-                android:id="@+id/CHEW_OECOCCUR_0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.chew_oecoccur==2}"
-                android:tag="2"
-                android:text="@string/no" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/SMOKE_HHOLD_IN_OECDOSFRQ_SOCIO"
+                                android:textColor="@color/black"
+                                android:layout_marginBottom="4dp" />
 
-            <RadioButton
-                android:visibility="invisible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.chew_oecoccur==0}"
-                android:tag="0"/>
+                            <org.openhds.searchSpinner.SearchableSpinner
+                                android:id="@+id/SMOKE_HHOLD_IN_OECDOSFRQ"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:onItemSelected="@{sociodemo::setSmoke_hhold_in_oecdosfrq}"
+                                android:spinnerMode="dialog"
+                                app:selection="@{sociodemo.smoke_hhold_in_oecdosfrq}" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-        </RadioGroup>
+                <!-- SUBSTANCE USE CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@android:color/white">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="@string/CHEW_BNUT_OECOCCUR_SOCIO" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-        <RadioGroup
-            android:id="@+id/CHEW_BNUT_OECOCCUR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onCheckedChanged="@{sociodemo::setChew_bnut_oecoccur}"
-            android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/substance_use"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-            <RadioButton
-                android:id="@+id/CHEW_BNUT_OECOCCUR_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.chew_bnut_oecoccur==1}"
-                android:tag="1"
-                android:text="@string/yes" />
+                        <!-- Tobacco Chewing -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/CHEW_OECOCCUR_SOCIO"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="4dp" />
 
-            <RadioButton
-                android:id="@+id/CHEW_BNUT_OECOCCUR_0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.chew_bnut_oecoccur==2}"
-                android:tag="2"
-                android:text="@string/no" />
+                        <RadioGroup
+                            android:id="@+id/CHEW_OECOCCUR"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setChew_oecoccur}"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp">
 
-            <RadioButton
-                android:visibility="invisible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.chew_bnut_oecoccur==0}"
-                android:tag="0"/>
+                            <RadioButton
+                                android:id="@+id/CHEW_OECOCCUR_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.chew_oecoccur==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
 
+                            <RadioButton
+                                android:id="@+id/CHEW_OECOCCUR_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.chew_oecoccur==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
 
-        </RadioGroup>
+                            <RadioButton
+                                android:visibility="invisible"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.chew_oecoccur==0}"
+                                android:tag="0"/>
+                        </RadioGroup>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="@string/DRINK_OECOCCUR_SOCIO" />
+                        <!-- Betel Nut Chewing -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/CHEW_BNUT_OECOCCUR_SOCIO"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="4dp" />
 
-        <RadioGroup
-            android:id="@+id/DRINK_OECOCCUR"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onCheckedChanged="@{sociodemo::setDrink_oecoccur}"
-            android:orientation="horizontal">
+                        <RadioGroup
+                            android:id="@+id/CHEW_BNUT_OECOCCUR"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setChew_bnut_oecoccur}"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp">
 
-            <RadioButton
-                android:id="@+id/DRINK_OECOCCUR_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.drink_oecoccur==1}"
-                android:tag="1"
-                android:text="@string/yes" />
+                            <RadioButton
+                                android:id="@+id/CHEW_BNUT_OECOCCUR_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.chew_bnut_oecoccur==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
 
-            <RadioButton
-                android:id="@+id/DRINK_OECOCCUR_0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.drink_oecoccur==2}"
-                android:tag="2"
-                android:text="@string/no" />
+                            <RadioButton
+                                android:id="@+id/CHEW_BNUT_OECOCCUR_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.chew_bnut_oecoccur==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
 
-            <RadioButton
-                android:id="@+id/DRINK_OECOCCUR_7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.drink_oecoccur==7}"
-                android:tag="7"
-                android:text="@string/text_na1" />
+                            <RadioButton
+                                android:visibility="invisible"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.chew_bnut_oecoccur==0}"
+                                android:tag="0"/>
+                        </RadioGroup>
 
-            <RadioButton
-                android:visibility="invisible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.drink_oecoccur==0}"
-                android:tag="0"/>
+                        <!-- Alcohol Consumption -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/DRINK_OECOCCUR_SOCIO"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="4dp" />
 
-        </RadioGroup>
+                        <RadioGroup
+                            android:id="@+id/DRINK_OECOCCUR"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setDrink_oecoccur}"
+                            android:orientation="horizontal">
 
-    </LinearLayout>
-    </ScrollView>
+                            <RadioButton
+                                android:id="@+id/DRINK_OECOCCUR_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.drink_oecoccur==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
 
+                            <RadioButton
+                                android:id="@+id/DRINK_OECOCCUR_0"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.drink_oecoccur==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                            <RadioButton
+                                android:id="@+id/DRINK_OECOCCUR_7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.drink_oecoccur==7}"
+                                android:tag="7"
+                                android:text="@string/text_na1" />
+
+                            <RadioButton
+                                android:visibility="invisible"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.drink_oecoccur==0}"
+                                android:tag="0"/>
+                        </RadioGroup>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- ACTION BUTTONS -->
         <LinearLayout
             android:id="@+id/linearLayout_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@android:color/white"
+            android:elevation="4dp">
 
             <Button
                 android:id="@+id/buttonSaveClose"
+                style="@style/SupervisorButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                style="@style/SupervisorButton"
                 android:text="@string/next" />
 
             <Button
                 android:id="@+id/buttonClose"
+                style="@style/CloseButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                style="@style/CloseButton"
                 android:text="@string/previous" />
-
-
-
         </LinearLayout>
-
     </LinearLayout>
-
 </layout>

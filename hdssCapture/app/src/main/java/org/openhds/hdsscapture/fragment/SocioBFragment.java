@@ -86,6 +86,9 @@ public class SocioBFragment extends KeyboardFragment {
         //return inflater.inflate(R.layout.fragment_socio_b, container, false);
         binding = FragmentSocioBBinding.inflate(inflater, container, false);
 
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
+
         HdssSociodemoViewModel viewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
         final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
         try {

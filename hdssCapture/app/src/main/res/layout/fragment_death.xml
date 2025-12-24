@@ -485,7 +485,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onCheckedChanged="@{death::setEstimated_dod}"
-                            android:orientation="horizontal">
+                            android:orientation="vertical">
 
                             <RadioButton
                                 android:id="@+id/est_one"
@@ -548,7 +548,7 @@
                             android:minHeight="48dp"
                             android:onItemSelected="@{death::setDeathCause}"
                             android:padding="20dp"
-                            android:selection="@{death.deathCause}"
+                            selection="@{death.deathCause}"
                             android:spinnerMode="dialog" />
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -612,7 +612,7 @@
                             android:minHeight="48dp"
                             android:onItemSelected="@{death::setDeathPlace}"
                             android:padding="20dp"
-                            android:selection="@{death.deathPlace}"
+                            selection="@{death.deathPlace}"
                             android:spinnerMode="dialog" />
 
                         <com.google.android.material.textfield.TextInputLayout

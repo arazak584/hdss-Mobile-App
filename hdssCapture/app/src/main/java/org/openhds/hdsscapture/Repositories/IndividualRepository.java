@@ -435,18 +435,18 @@ public class IndividualRepository {
         return future.get();
     }
 
-    public List<Individual> nulls() throws ExecutionException, InterruptedException {
+    public List<Individual> nulls(String id) throws ExecutionException, InterruptedException {
 
-        Callable<List<Individual>> callable = () -> dao.nulls();
+        Callable<List<Individual>> callable = () -> dao.nulls(id);
 
         Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
     }
 
-    public List<Individual> err() throws ExecutionException, InterruptedException {
+    public List<Individual> errz(String id) throws ExecutionException, InterruptedException {
 
-        Callable<List<Individual>> callable = () -> dao.err();
+        Callable<List<Individual>> callable = () -> dao.errz(id);
 
         Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
 

@@ -103,9 +103,9 @@ public class HdssSociodemoRepository {
         return future.get();
     }
 
-    public List<HdssSociodemo> error() throws ExecutionException, InterruptedException {
+    public List<HdssSociodemo> error(String id) throws ExecutionException, InterruptedException {
 
-        Callable<List<HdssSociodemo>> callable = () -> dao.error();
+        Callable<List<HdssSociodemo>> callable = () -> dao.error(id);
 
         Future<List<HdssSociodemo>> future = Executors.newSingleThreadExecutor().submit(callable);
 

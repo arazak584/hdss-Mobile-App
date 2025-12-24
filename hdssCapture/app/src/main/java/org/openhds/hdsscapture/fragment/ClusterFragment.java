@@ -199,10 +199,14 @@ public class ClusterFragment extends Fragment implements LocationAdapter.Locatio
 
         final AppCompatButton add_location = view.findViewById(R.id.button_new_location);
         add_location.setOnClickListener(v -> {
-            final Locations locations = new Locations();
-            LocationFragment.newInstance(level6Data, locations)
-                    .show(getChildFragmentManager(), "LocationFragment");
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    LocationFragment.newInstance(level5Data, locations)).commit();
         });
+//        add_location.setOnClickListener(v -> {
+//            final Locations locations = new Locations();
+//            LocationFragment.newInstance(level6Data, locations)
+//                    .show(getChildFragmentManager(), "LocationFragment");
+//        });
 
         final AppCompatButton add_com = view.findViewById(R.id.button_new_community);
         add_com.setOnClickListener(v -> {

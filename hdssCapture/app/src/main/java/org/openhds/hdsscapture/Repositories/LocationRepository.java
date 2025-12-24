@@ -93,9 +93,9 @@ public class LocationRepository {
         return future.get();
     }
 
-    public List<Locations> retrieveAll(String id) throws ExecutionException, InterruptedException {
+    public List<Locations> retrieveAll() throws ExecutionException, InterruptedException {
 
-        Callable<List<Locations>> callable = () -> dao.retrieveAll(id);
+        Callable<List<Locations>> callable = () -> dao.retrieveAll();
 
         Future<List<Locations>> future = Executors.newSingleThreadExecutor().submit(callable);
 
@@ -195,6 +195,55 @@ public class LocationRepository {
 
     public LiveData<Long> sync() {
         return dao.sync();
+    }
+
+    // Get all village names for autocomplete
+    public List<String> getAllVillageNames() throws ExecutionException, InterruptedException {
+        Callable<List<String>> callable = () -> dao.getAllVillageNames();
+        Future<List<String>> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    // Get all compno for autocomplete
+    public List<String> getAllCompno() throws ExecutionException, InterruptedException {
+        Callable<List<String>> callable = () -> dao.getAllCompno();
+        Future<List<String>> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    // Filter by village name
+    public List<Locations> filterByVillageName(String villageName) throws ExecutionException, InterruptedException {
+        Callable<List<Locations>> callable = () -> dao.filterByVillageName(villageName);
+        Future<List<Locations>> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    // Filter by compno
+    public List<Locations> filterByCompno(String compno) throws ExecutionException, InterruptedException {
+        Callable<List<Locations>> callable = () -> dao.filterByCompno(compno);
+        Future<List<Locations>> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    // Filter by both
+    public List<Locations> filterByVillageAndCompno(String villageName, String compno) throws ExecutionException, InterruptedException {
+        Callable<List<Locations>> callable = () -> dao.filterByVillageAndCompno(villageName, compno);
+        Future<List<Locations>> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    // Search village names for autocomplete
+    public List<String> searchVillageNames(String query) throws ExecutionException, InterruptedException {
+        Callable<List<String>> callable = () -> dao.searchVillageNames(query);
+        Future<List<String>> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
+
+    // Search compno for autocomplete
+    public List<String> searchCompno(String query) throws ExecutionException, InterruptedException {
+        Callable<List<String>> callable = () -> dao.searchCompno(query);
+        Future<List<String>> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
     }
 
 }

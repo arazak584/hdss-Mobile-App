@@ -81,8 +81,8 @@ public class OutcomeRepository {
 //        return dao.getView4(id);
 //    }
 
-    public LiveData<Outcome> view(String id) {
-        return dao.getView(id);
+    public LiveData<Outcome> view(String id,Integer outcomeNumber) {
+        return dao.getView(id,outcomeNumber);
     }
 
     public LiveData<Long> sync() {

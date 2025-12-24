@@ -60,8 +60,8 @@ public class HdssSociodemoViewModel extends AndroidViewModel {
         return hdssSociodemoRepository.cnt();
     }
 
-    public List<HdssSociodemo> error() throws ExecutionException, InterruptedException {
-        return hdssSociodemoRepository.error();
+    public List<HdssSociodemo> error(String id) throws ExecutionException, InterruptedException {
+        return hdssSociodemoRepository.error(id);
     }
 
     public LiveData<HdssSociodemo> getView(String id) {

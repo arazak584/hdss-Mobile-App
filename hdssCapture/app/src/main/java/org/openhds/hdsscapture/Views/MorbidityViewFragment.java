@@ -22,6 +22,7 @@ import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
 import org.openhds.hdsscapture.databinding.FragmentMorbidityBinding;
 import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
+import org.openhds.hdsscapture.fragment.KeyboardFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ import java.util.concurrent.ExecutionException;
  * Use the {@link MorbidityViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MorbidityViewFragment extends Fragment {
+public class MorbidityViewFragment extends KeyboardFragment {
 
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
 
@@ -78,6 +79,9 @@ public class MorbidityViewFragment extends Fragment {
         //return inflater.inflate(R.layout.fragment_morbidity, container, false);
         binding = FragmentMorbidityBinding.inflate(inflater, container, false);
         binding.setMorbidity(morbidity);
+
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
 
         final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
         final TextView rsv = binding.getRoot().findViewById(R.id.resolve);

@@ -133,6 +133,8 @@ public class LocationFragment extends KeyboardFragment {
         // Initialize the LocationManager
         locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
 
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
 
         // Get a reference to the progress bar view
         progressBar = binding.getRoot().findViewById(R.id.progress_bar);

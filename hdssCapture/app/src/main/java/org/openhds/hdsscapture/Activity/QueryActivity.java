@@ -37,12 +37,14 @@ public class QueryActivity extends AppCompatActivity {
     private ListingViewModel listingViewModel;
     private HdssSociodemoViewModel hdssSociodemoViewModel;
     private PregnancyoutcomeViewModel pregnancyoutcomeViewModel;
+    private QueriesViewModel queriesViewModel;
 
     private ProgressDialog progress;
     private RecyclerView recyclerView;
     private QueryAdapter errorAdapter;
     private SearchView searchView;
     private String username;
+    private String fwname;
     private Handler handler;
 
     // Reusable date formatter to avoid creating multiple instances
@@ -68,6 +70,7 @@ public class QueryActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
         username = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
+        fwname = sharedPreferences.getString(LoginActivity.FW_USERNAME_KEY, null);
 
         initializeViewModels();
 
@@ -107,6 +110,7 @@ public class QueryActivity extends AppCompatActivity {
         listingViewModel = provider.get(ListingViewModel.class);
         hdssSociodemoViewModel = provider.get(HdssSociodemoViewModel.class);
         pregnancyoutcomeViewModel = provider.get(PregnancyoutcomeViewModel.class);
+        queriesViewModel = provider.get(QueriesViewModel.class);
     }
 
     private void generateQueries() {
@@ -144,10 +148,11 @@ public class QueryActivity extends AppCompatActivity {
         addSocioEconomicQueries(list);
         addListingQueries(list);
         addDeathQueries(list);
-        addMinorHohQueries(list);
+        //addMinorHohQueries(list);
         addUnknownHohQueries(list);
         //addOutcomeErrorQueries(list);
-        addNotUpdatedHohQueries(list);
+        //addNotUpdatedHohQueries(list);
+        addServerQueries(list);
 
         return list;
     }
@@ -172,7 +177,7 @@ public class QueryActivity extends AppCompatActivity {
 
     private void addNullIdQueries(List<Queries> list) {
         try {
-            List<Individual> nulls = individualViewModel.nulls();
+            List<Individual> nulls = individualViewModel.nulls(username);
             int index = list.size() + 1;
 
             for (Individual e : nulls) {
@@ -191,7 +196,7 @@ public class QueryActivity extends AppCompatActivity {
 
     private void addSocioEconomicQueries(List<Queries> list) {
         try {
-            List<HdssSociodemo> errors = hdssSociodemoViewModel.error();
+            List<HdssSociodemo> errors = hdssSociodemoViewModel.error(username);
             int index = list.size() + 1;
 
             for (HdssSociodemo e : errors) {
@@ -228,7 +233,7 @@ public class QueryActivity extends AppCompatActivity {
 
     private void addDeathQueries(List<Queries> list) {
         try {
-            List<Death> errors = deathViewModel.error();
+            List<Death> errors = deathViewModel.error(username);
             int index = list.size() + 1;
 
             for (Death e : errors) {
@@ -244,27 +249,27 @@ public class QueryActivity extends AppCompatActivity {
         }
     }
 
-    private void addMinorHohQueries(List<Queries> list) {
-        try {
-            List<Individual> errors = individualViewModel.error();
-            int index = list.size() + 1;
-
-            for (Individual e : errors) {
-                Queries q = new Queries();
-                q.name = index + ". Household ID: " + e.getHohID();
-                q.extid = e.compno + " - " + e.firstName + " " + e.lastName;
-                q.error = "Household Head is a Minor";
-                q.index = index++;
-                list.add(q);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    private void addMinorHohQueries(List<Queries> list) {
+//        try {
+//            List<Individual> errors = individualViewModel.error();
+//            int index = list.size() + 1;
+//
+//            for (Individual e : errors) {
+//                Queries q = new Queries();
+//                q.name = index + ". Household ID: " + e.getHohID();
+//                q.extid = e.compno + " - " + e.firstName + " " + e.lastName;
+//                q.error = "Household Head is a Minor";
+//                q.index = index++;
+//                list.add(q);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void addUnknownHohQueries(List<Queries> list) {
         try {
-            List<Individual> errors = individualViewModel.err();
+            List<Individual> errors = individualViewModel.errz(username);
             int index = list.size() + 1;
 
             for (Individual e : errors) {
@@ -298,18 +303,36 @@ public class QueryActivity extends AppCompatActivity {
 //        }
 //    }
 
-    private void addNotUpdatedHohQueries(List<Queries> list) {
+//    private void addNotUpdatedHohQueries(List<Queries> list) {
+//        try {
+//            List<Individual> errors = individualViewModel.errors();
+//            int index = list.size() + 1;
+//
+//            for (Individual e : errors) {
+//                Queries q = new Queries();
+//                q.name = index + ". Household ID: " + e.getHohID();
+//                q.extid = "Compno: " + e.compno + " - " + e.firstName + " " + e.lastName;
+//                q.error = "Head of Household Not Updated";
+//                q.index = index++;
+//                list.add(q);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    private void addServerQueries(List<Queries> list) {
         try {
-            List<Individual> errors = individualViewModel.errors();
+            List<ServerQueries> errors = queriesViewModel.findByFw(fwname);
             int index = list.size() + 1;
 
-            for (Individual e : errors) {
-                Queries q = new Queries();
-                q.name = index + ". Household ID: " + e.getHohID();
-                q.extid = "Compno: " + e.compno + " - " + e.firstName + " " + e.lastName;
-                q.error = "Head of Household Not Updated";
-                q.index = index++;
-                list.add(q);
+            for (ServerQueries e : errors) {
+                Queries r = new Queries();
+                r.name = index + ". Compno: " + e.compno + " | HHID: " + e.householdId;
+                r.extid = "PermID: " + e.permId + " - " + e.fullName;
+                r.error = e.error;
+                r.index = index++;
+                list.add(r);
             }
         } catch (Exception e) {
             e.printStackTrace();

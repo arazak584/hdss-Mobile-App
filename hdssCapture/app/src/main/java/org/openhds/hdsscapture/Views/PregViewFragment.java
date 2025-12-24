@@ -20,6 +20,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
@@ -37,6 +39,8 @@ import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.subentity.OutcomeUpdate;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import org.openhds.hdsscapture.Utilities.DatePickerFragment;
+import org.openhds.hdsscapture.fragment.KeyboardFragment;
+import org.openhds.hdsscapture.fragment.PregnancyFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,7 +58,7 @@ import java.util.concurrent.Executors;
  * Use the {@link PregViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PregViewFragment extends Fragment {
+public class PregViewFragment extends KeyboardFragment {
 
     private final String TAG = "PREGNANCY.TAG";
     private static final String PREGNANCY_ID = "PREGNANCY_ID";
@@ -102,109 +106,12 @@ public class PregViewFragment extends Fragment {
         binding = FragmentPregnancyBinding.inflate(inflater, container, false);
         binding.setPregnancy(pregnancy);
 
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
+
 
         //CHOOSING THE DATE
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            // We use a String here, but any type that can be put in a Bundle is supported
-//             if (bundle.containsKey((PregViewFragment.DATE_BUNDLES.RECORDDATE.getBundleKey()))) {
-//                final String result = bundle.getString(PregViewFragment.DATE_BUNDLES.RECORDDATE.getBundleKey());
-//                binding.editTextRecordedDate.setText(result);
-//            }
-//
-//            if (bundle.containsKey((PregViewFragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey()))) {
-//                final String result = bundle.getString(PregViewFragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey());
-//                binding.editTextOutcomeDate.setText(result);
-//            }
-
-            if (bundle.containsKey((PregViewFragment.DATE_BUNDLES.CLINICDATE.getBundleKey()))) {
-                final String result = bundle.getString(PregViewFragment.DATE_BUNDLES.CLINICDATE.getBundleKey());
-                binding.editTextLastClinicVisitDate.setText(result);
-            }
-
-            if (bundle.containsKey((PregViewFragment.DATE_BUNDLES.EXPECTDATE.getBundleKey()))) {
-                final String result = bundle.getString(PregViewFragment.DATE_BUNDLES.EXPECTDATE.getBundleKey());
-                binding.expectedDelivery.setText(result);
-            }
-
-        });
-
-        binding.buttonPregStartDate.setOnClickListener(v -> {
-            if (!TextUtils.isEmpty(binding.editTextRecordedDate.getText())) {
-                // If Date is not empty, parse the date and use it as the initial date
-                String currentDate = binding.editTextRecordedDate.getText().toString();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-                try {
-                    Date date = sdf.parse(currentDate);
-                    Calendar selectedDate = Calendar.getInstance();
-                    selectedDate.setTime(date);
-
-                    // Create DatePickerFragment with the parsed date
-                    DialogFragment newFragment = new DatePickerFragment(PregViewFragment.DATE_BUNDLES.RECORDDATE.getBundleKey(), selectedDate);
-                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                final Calendar c = Calendar.getInstance();
-                DialogFragment newFragment = new DatePickerFragment(PregViewFragment.DATE_BUNDLES.RECORDDATE.getBundleKey(), c);
-                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-            }
-        });
-
-        binding.buttonPregnancyOutcome.setOnClickListener(v -> {
-            if (!TextUtils.isEmpty(binding.editTextOutcomeDate.getText())) {
-                // If Date is not empty, parse the date and use it as the initial date
-                String currentDate = binding.editTextOutcomeDate.getText().toString();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-                try {
-                    Date date = sdf.parse(currentDate);
-                    Calendar selectedDate = Calendar.getInstance();
-                    selectedDate.setTime(date);
-
-                    // Create DatePickerFragment with the parsed date
-                    DialogFragment newFragment = new DatePickerFragment(PregViewFragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey(), selectedDate);
-                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                final Calendar c = Calendar.getInstance();
-                DialogFragment newFragment = new DatePickerFragment(PregViewFragment.DATE_BUNDLES.OUTCOMEDATE.getBundleKey(), c);
-                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-            }
-        });
-
-        binding.buttonLastClinicVisitDate.setOnClickListener(v -> {
-            if (!TextUtils.isEmpty(binding.editTextLastClinicVisitDate.getText())) {
-                // If Date is not empty, parse the date and use it as the initial date
-                String currentDate = binding.editTextLastClinicVisitDate.getText().toString();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-                try {
-                    Date date = sdf.parse(currentDate);
-                    Calendar selectedDate = Calendar.getInstance();
-                    selectedDate.setTime(date);
-
-                    // Create DatePickerFragment with the parsed date
-                    DialogFragment newFragment = new DatePickerFragment(PregViewFragment.DATE_BUNDLES.CLINICDATE.getBundleKey(), selectedDate);
-                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                final Calendar c = Calendar.getInstance();
-                DialogFragment newFragment = new DatePickerFragment(PregViewFragment.DATE_BUNDLES.CLINICDATE.getBundleKey(), c);
-                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-            }
-        });
-
-        binding.buttonPregExpectDate.setOnClickListener(v -> {
-                final Calendar c = Calendar.getInstance();
-                DialogFragment newFragment = new DatePickerFragment(PregViewFragment.DATE_BUNDLES.EXPECTDATE.getBundleKey(), c);
-                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
+        setupDatePickers();
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
@@ -642,5 +549,60 @@ public class PregViewFragment extends Fragment {
         public String toString() {
             return bundleKey;
         }
+    }
+
+    private void setupDatePickers() {
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            //handleDateResult(bundle, PregViewFragment.DATE_BUNDLES.OUTCOMEDATE, binding.editTextOutcomeDate);
+            //handleDateResult(bundle, PregViewFragment.DATE_BUNDLES.RECORDDATE, binding.editTextRecordedDate);
+            handleDateResult(bundle, PregViewFragment.DATE_BUNDLES.EXPECTDATE, binding.expectedDelivery);
+            handleDateResult(bundle, PregViewFragment.DATE_BUNDLES.CLINICDATE, binding.editTextLastClinicVisitDate);
+        });
+
+//        binding.buttonPregnancyOutcome.setEndIconOnClickListener(v ->
+//                showDatePicker(PregViewFragment.DATE_BUNDLES.OUTCOMEDATE, binding.editTextOutcomeDate));
+
+//        binding.buttonPregStartDate.setEndIconOnClickListener(v ->
+//                showDatePicker(PregViewFragment.DATE_BUNDLES.RECORDDATE, binding.editTextRecordedDate));
+
+        binding.buttonPregExpectDate.setEndIconOnClickListener(v ->
+                showDatePicker(PregViewFragment.DATE_BUNDLES.EXPECTDATE, binding.expectedDelivery));
+
+        binding.buttonLastClinicVisitDate.setEndIconOnClickListener(v ->
+                showDatePicker(PregViewFragment.DATE_BUNDLES.CLINICDATE, binding.editTextLastClinicVisitDate));
+    }
+
+    private void handleDateResult(Bundle bundle, PregViewFragment.DATE_BUNDLES dateType, TextInputEditText editText) {
+        if (bundle.containsKey(dateType.getBundleKey())) {
+            String result = bundle.getString(dateType.getBundleKey());
+            editText.setText(result);
+        }
+    }
+
+    private void showDatePicker(PregViewFragment.DATE_BUNDLES dateType, TextInputEditText editText) {
+        Calendar calendar = parseCurrentDate(editText.getText().toString());
+        DialogFragment datePickerFragment = new DatePickerFragment(
+                dateType.getBundleKey(),
+                calendar
+        );
+        datePickerFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+    }
+
+    private Calendar parseCurrentDate(String dateString) {
+        Calendar calendar = Calendar.getInstance();
+
+        if (!TextUtils.isEmpty(dateString)) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            try {
+                Date date = sdf.parse(dateString);
+                if (date != null) {
+                    calendar.setTime(date);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return calendar;
     }
 }

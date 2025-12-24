@@ -1,208 +1,308 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="sociodemo"
             type="org.openhds.hdsscapture.entity.HdssSociodemo" />
-
     </data>
 
     <LinearLayout
-        android:id="@+id/MAIN_LAYOUT"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/txt_comment"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:text="@={sociodemo.comment}"
-            android:textColor="@color/purple_700"
-            android:gravity="start"
-            android:justificationMode="inter_word"
-            android:textAlignment="viewStart"
-            android:lineSpacingExtra="2dp"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:padding="5dp"
-            android:hint="@string/household_select"
-            android:text="@string/household_select">
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:id="@+id/household"
-                android:text="@={sociodemo.socialgroup_uuid}"
+            <LinearLayout
+                android:id="@+id/MAIN_LAYOUT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="vertical"
+                android:padding="8dp">
 
-        <TextView
-            android:id="@+id/MNH03_FORM_COMMENTS_YN_PROC"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="@string/text_CONYN_COVAL_YN" />
+                <!-- HEADER SECTION -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/form_comments_verification"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
 
-        <RadioGroup
-            android:id="@+id/MNH03_FORM_COMMENTS_YN"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:onCheckedChanged="@{sociodemo::setMnh03_form_comments_yn}"
-            android:orientation="horizontal">
+                <!-- HIDDEN INFORMATION CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true">
 
-            <RadioButton
-                android:id="@+id/MNH03_FORM_COMMENTS_Y"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.form_comments_yn==1}"
-                android:tag="1"
-                android:text="@string/yes" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-            <RadioButton
-                android:id="@+id/MNH03_FORM_COMMENTS_N"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.form_comments_yn==2}"
-                android:tag="2"
-                android:text="@string/no" />
-        </RadioGroup>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/hidden_information"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-        <LinearLayout
-            goneUnless="@{sociodemo.form_comments_yn==1}"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/txt_comment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={sociodemo.comment}"
+                            android:textColor="@color/purple_700"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:gravity="start"
+                            android:justificationMode="inter_word"
+                            android:textAlignment="viewStart"
+                            android:lineSpacingExtra="2dp"/>
 
-            <EditText
-                android:id="@+id/MNH03_FORM_COMMENTS_TXT"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:autofillHints=""
-                android:ems="10"
-                android:gravity="start|top"
-                android:hint="@string/text_CONYN_COVAL"
-                android:inputType="textMultiLine"
-                android:text="@={sociodemo.form_comments_txt}"
-                tools:ignore="TextContrastCheck" />
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:hint="@string/household_select"
+                            android:text="@string/household_select">
 
-        </LinearLayout>
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/household"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName"
+                                android:text="@={sociodemo.socialgroup_uuid}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/resolve"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="@string/query_reslve" />
+                <!-- FORM COMMENTS CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@android:color/white">
 
-        <RadioGroup
-            android:visibility="gone"
-            android:id="@+id/status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onCheckedChanged="@{sociodemo::setStatus}"
-            android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-            <RadioButton
-                android:id="@+id/no_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.status==3}"
-                android:tag="3"
-                android:text="@string/yes" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/form_comments_section"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-            <RadioButton
-                android:id="@+id/no_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.status==2}"
-                android:tag="2"
-                android:text="@string/no" />
+                        <!-- Comments Question -->
+                        <TextView
+                            android:id="@+id/MNH03_FORM_COMMENTS_YN_PROC"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_CONYN_COVAL_YN"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="4dp" />
 
-            <RadioButton
-                android:visibility="invisible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="@{sociodemo.status==0}"
-                android:tag="0"/>
-        </RadioGroup>
+                        <RadioGroup
+                            android:id="@+id/MNH03_FORM_COMMENTS_YN"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setMnh03_form_comments_yn}"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp">
 
-        <TextView
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:padding="5dp"
-            android:textColor="@color/black"
-            android:text="@string/form_complete"/>
+                            <RadioButton
+                                android:id="@+id/MNH03_FORM_COMMENTS_Y"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.form_comments_yn==1}"
+                                android:tag="1"
+                                android:text="@string/yes" />
 
-        <Spinner
-            android:visibility="gone"
-            android:id="@+id/socio_complete"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            selection="@{sociodemo.complete}"
-            android:onItemSelected="@{sociodemo::setComplete}"
-            android:gravity="left"
-            android:textColor="#000301"
-            android:padding="15dp"/>
+                            <RadioButton
+                                android:id="@+id/MNH03_FORM_COMMENTS_N"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.form_comments_yn==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+                        </RadioGroup>
 
-    </LinearLayout>
-    </ScrollView>
+                        <!-- Comments Text Input (Conditional) -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:goneUnless="@{sociodemo.form_comments_yn==1}">
 
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_CONYN_COVAL"
+                                android:textColor="@color/black"
+                                android:layout_marginBottom="4dp" />
+
+                            <EditText
+                                android:id="@+id/MNH03_FORM_COMMENTS_TXT"
+                                android:layout_width="match_parent"
+                                android:layout_height="100dp"
+                                android:ems="10"
+                                android:gravity="start|top"
+                                android:hint="@string/comments_hint"
+                                android:inputType="textMultiLine"
+                                android:text="@={sociodemo.form_comments_txt}"
+                                android:minHeight="100dp"
+                                tools:ignore="TextContrastCheck" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- VERIFICATION & COMPLETION CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:visibility="gone"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/verification_completion"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <!-- Query Resolution -->
+                        <TextView
+                            android:id="@+id/resolve"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/query_reslve"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="4dp" />
+
+                        <RadioGroup
+                            android:id="@+id/status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{sociodemo::setStatus}"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp">
+
+                            <RadioButton
+                                android:id="@+id/no_3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.status==3}"
+                                android:tag="3"
+                                android:text="@string/yes" />
+
+                            <RadioButton
+                                android:id="@+id/no_2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.status==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
+
+                            <RadioButton
+                                android:visibility="invisible"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{sociodemo.status==0}"
+                                android:tag="0"/>
+                        </RadioGroup>
+
+                        <!-- Form Completion -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/form_complete"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="4dp" />
+
+                        <Spinner
+                            android:id="@+id/socio_complete"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:gravity="left"
+                            android:onItemSelected="@{sociodemo::setComplete}"
+                            android:padding="8dp"
+                            android:textColor="#000301"
+                            app:selection="@{sociodemo.complete}" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- ACTION BUTTONS -->
         <LinearLayout
             android:id="@+id/linearLayout_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@android:color/white"
+            android:elevation="4dp">
 
             <Button
                 android:id="@+id/buttonSaveClose"
+                style="@style/SupervisorButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                style="@style/SupervisorButton"
                 android:text="@string/save" />
 
             <Button
                 android:id="@+id/buttonClose"
+                style="@style/CloseButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                style="@style/CloseButton"
                 android:text="@string/previous" />
-
-
-
         </LinearLayout>
-
     </LinearLayout>
-
 </layout>

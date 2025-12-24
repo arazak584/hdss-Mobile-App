@@ -107,6 +107,9 @@ public class ResidencyFragment extends KeyboardFragment {
         binding = FragmentMembershipBinding.inflate(inflater, container, false);
         Button showDialogButton = binding.getRoot().findViewById(R.id.button_change_hh);
 
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
+
         IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
         selectedIndividual = sharedModel.getCurrentSelectedIndividual();
 

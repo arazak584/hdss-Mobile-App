@@ -1,6 +1,7 @@
 package org.openhds.hdsscapture.Views;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Repositories.VaccinationRepository;
@@ -24,6 +27,7 @@ import org.openhds.hdsscapture.databinding.FragmentVaccinationBinding;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import org.openhds.hdsscapture.Utilities.DatePickerFragment;
+import org.openhds.hdsscapture.fragment.KeyboardFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,7 +43,7 @@ import java.util.concurrent.ExecutionException;
  * Use the {@link VaccinationViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class VaccinationViewFragment extends Fragment {
+public class VaccinationViewFragment extends KeyboardFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
@@ -56,7 +60,7 @@ public class VaccinationViewFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment VaccinationFragment.
+     * @return A new instance of fragment VaccinationViewFragment.
      */
     // TODO: Rename and change types and number of parameters
     public static VaccinationViewFragment newInstance(String uuid) {
@@ -86,317 +90,11 @@ public class VaccinationViewFragment extends Fragment {
         binding = FragmentVaccinationBinding.inflate(inflater, container, false);
         binding.setVaccination(vaccination);
 
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
+
         //CHOOSING THE DATE
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            // We use a String here, but any type that can be put in a Bundle is supported
-            if (bundle.containsKey((DATE_BUNDLES.BCG.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.BCG.getBundleKey());
-                binding.bcg.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.OPV0.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.OPV0.getBundleKey());
-                binding.opv0.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.OPV1.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.OPV1.getBundleKey());
-                binding.opv1.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.OPV2.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.OPV2.getBundleKey());
-                binding.opv2.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.OPV3.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.OPV3.getBundleKey());
-                binding.opv3.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.DEPT1.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.DEPT1.getBundleKey());
-                binding.DPTHepBHib1.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.DEPT2.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.DEPT2.getBundleKey());
-                binding.DPTHepBHib2.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.DEPT3.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.DEPT3.getBundleKey());
-                binding.DPTHepBHib3.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.PNEUMO1.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.PNEUMO1.getBundleKey());
-                binding.pneumo1.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.PNEUMO2.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.PNEUMO2.getBundleKey());
-                binding.pneumo2.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.PNEUMO3.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.PNEUMO3.getBundleKey());
-                binding.pneumo3.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.ROTA1.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.ROTA1.getBundleKey());
-                binding.rota1.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.ROTA2.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.ROTA2.getBundleKey());
-                binding.rota2.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.ROTA3.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.ROTA3.getBundleKey());
-                binding.rota3.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.IPV.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.IPV.getBundleKey());
-                binding.ipv.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.VITAMIN6.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.VITAMIN6.getBundleKey());
-                binding.vitaminA6.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.VITAMIN12.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.VITAMIN12.getBundleKey());
-                binding.vitaminA12.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.VITAMIN18.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.VITAMIN18.getBundleKey());
-                binding.vitaminA18.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.RTSS1.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.RTSS1.getBundleKey());
-                binding.rtss6.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.RTSS2.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.RTSS2.getBundleKey());
-                binding.rtss7.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.RTSS4.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.RTSS4.getBundleKey());
-                binding.rtss9.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.RTSS3.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.RTSS3.getBundleKey());
-                binding.rtss18.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.MEASLES1.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.MEASLES1.getBundleKey());
-                binding.measles1.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.MEASLES2.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.MEASLES2.getBundleKey());
-                binding.measles2.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.YF.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.YF.getBundleKey());
-                binding.yellowFever.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.MENA.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.MENA.getBundleKey());
-                binding.menA.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.ITN.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.ITN.getBundleKey());
-                binding.itn.setText(result);
-            }
-
-            if (bundle.containsKey((DATE_BUNDLES.ADMIT.getBundleKey()))) {
-                final String result = bundle.getString(DATE_BUNDLES.ADMIT.getBundleKey());
-                binding.admitDate.setText(result);
-            }
-        });
-
-        binding.btnBcg.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.BCG.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnOpv0.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.OPV0.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnOpv1.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.OPV1.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnOpv2.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.OPV2.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnOpv3.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.OPV3.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnDPTHepBHib1.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.DEPT1.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnDPTHepBHib2.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.DEPT2.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnDPTHepBHib3.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.DEPT3.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnPneumo1.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.PNEUMO1.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnPneumo2.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.PNEUMO2.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnPneumo3.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.PNEUMO3.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnRota1.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.ROTA1.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnRota2.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.ROTA2.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnRota3.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.ROTA3.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnIpv.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.IPV.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnVitaminA6.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.VITAMIN6.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnVitaminA12.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.VITAMIN12.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnVitaminA18.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.VITAMIN18.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnRtss6.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.RTSS1.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnRtss7.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.RTSS2.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnRtss9.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.RTSS4.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnRtss18.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.RTSS3.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnMeasles1.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.MEASLES1.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnMeasles2.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.MEASLES2.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnYellow.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.YF.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnMenA.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.MENA.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnItn.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.ITN.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
-
-        binding.btnAdmitDate.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            DialogFragment newFragment = new DatePickerFragment(DATE_BUNDLES.ADMIT.getBundleKey(), c);
-            newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-        });
+        setupDatePickers();
 
         final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
         final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
@@ -971,5 +669,158 @@ public class VaccinationViewFragment extends Fragment {
         public String toString() {
             return bundleKey;
         }
+    }
+
+    private void setupDatePickers() {
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            // Handle all date results using the helper method
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.BCG, binding.bcg);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.OPV0, binding.opv0);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.OPV1, binding.opv1);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.OPV2, binding.opv2);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.OPV3, binding.opv3);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.DEPT1, binding.DPTHepBHib1);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.DEPT2, binding.DPTHepBHib2);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.DEPT3, binding.DPTHepBHib3);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.PNEUMO1, binding.pneumo1);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.PNEUMO2, binding.pneumo2);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.PNEUMO3, binding.pneumo3);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.ROTA1, binding.rota1);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.ROTA2, binding.rota2);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.ROTA3, binding.rota3);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.IPV, binding.ipv);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.VITAMIN6, binding.vitaminA6);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.VITAMIN12, binding.vitaminA12);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.VITAMIN18, binding.vitaminA18);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.RTSS1, binding.rtss6);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.RTSS2, binding.rtss7);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.RTSS4, binding.rtss9);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.RTSS3, binding.rtss18);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.MEASLES1, binding.measles1);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.MEASLES2, binding.measles2);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.YF, binding.yellowFever);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.MENA, binding.menA);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.ITN, binding.itn);
+            handleDateResult(bundle, VaccinationViewFragment.DATE_BUNDLES.ADMIT, binding.admitDate);
+        });
+
+        // Set up click listeners for all date pickers using helper method
+        binding.btnBcg.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.BCG, binding.bcg));
+
+        binding.btnOpv0.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.OPV0, binding.opv0));
+
+        binding.btnOpv1.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.OPV1, binding.opv1));
+
+        binding.btnOpv2.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.OPV2, binding.opv2));
+
+        binding.btnOpv3.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.OPV3, binding.opv3));
+
+        binding.btnDPTHepBHib1.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.DEPT1, binding.DPTHepBHib1));
+
+        binding.btnDPTHepBHib2.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.DEPT2, binding.DPTHepBHib2));
+
+        binding.btnDPTHepBHib3.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.DEPT3, binding.DPTHepBHib3));
+
+        binding.btnPneumo1.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.PNEUMO1, binding.pneumo1));
+
+        binding.btnPneumo2.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.PNEUMO2, binding.pneumo2));
+
+        binding.btnPneumo3.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.PNEUMO3, binding.pneumo3));
+
+        binding.btnRota1.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.ROTA1, binding.rota1));
+
+        binding.btnRota2.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.ROTA2, binding.rota2));
+
+        binding.btnRota3.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.ROTA3, binding.rota3));
+
+        binding.btnIpv.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.IPV, binding.ipv));
+
+        binding.btnVitaminA6.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.VITAMIN6, binding.vitaminA6));
+
+        binding.btnVitaminA12.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.VITAMIN12, binding.vitaminA12));
+
+        binding.btnVitaminA18.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.VITAMIN18, binding.vitaminA18));
+
+        binding.btnRtss6.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.RTSS1, binding.rtss6));
+
+        binding.btnRtss7.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.RTSS2, binding.rtss7));
+
+        binding.btnRtss9.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.RTSS4, binding.rtss9));
+
+        binding.btnRtss18.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.RTSS3, binding.rtss18));
+
+        binding.btnMeasles1.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.MEASLES1, binding.measles1));
+
+        binding.btnMeasles2.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.MEASLES2, binding.measles2));
+
+        binding.btnYellow.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.YF, binding.yellowFever));
+
+        binding.btnMenA.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.MENA, binding.menA));
+
+        binding.btnItn.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.ITN, binding.itn));
+
+        binding.btnAdmitDate.setEndIconOnClickListener(v ->
+                showDatePicker(VaccinationViewFragment.DATE_BUNDLES.ADMIT, binding.admitDate));
+    }
+
+    private void handleDateResult(Bundle bundle, VaccinationViewFragment.DATE_BUNDLES dateType, TextInputEditText editText) {
+        if (bundle.containsKey(dateType.getBundleKey())) {
+            String result = bundle.getString(dateType.getBundleKey());
+            editText.setText(result);
+        }
+    }
+
+    private void showDatePicker(VaccinationViewFragment.DATE_BUNDLES dateType, TextInputEditText editText) {
+        Calendar calendar = parseCurrentDate(editText.getText().toString());
+        DialogFragment datePickerFragment = new DatePickerFragment(
+                dateType.getBundleKey(),
+                calendar
+        );
+        datePickerFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+    }
+
+    private Calendar parseCurrentDate(String dateString) {
+        Calendar calendar = Calendar.getInstance();
+
+        if (!TextUtils.isEmpty(dateString)) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            try {
+                Date date = sdf.parse(dateString);
+                if (date != null) {
+                    calendar.setTime(date);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return calendar;
     }
 }

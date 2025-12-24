@@ -890,6 +890,47 @@
     <string name="respondent_information">Respondent Information</string>
     <string name="validation">Validation</string>
     <string name="hidden_information">Information</string>
+    <string name="amend_dob">Amended Date of Birth</string>
+    <string name="original_dob">Original Date of Birth</string>
+    <string name="amended_info">Amended Information</string>
+    <string name="omg_information">Outmigration Information</string>
+    <string name="phone_information">Contact Information</string>
+    <string name="occupation_marital_status">Other Demographic</string>
+    <string name="cultural_information">Cultural Information</string>
+    <string name="reason_for_outmigration">Reason for Migration</string>
+    <string name="outmigration_date">Outmigration Date</string>
+    <string name="partner_information">Husbands Information</string>
+    <string name="relationship_details">Relationship Details</string>
+    <string name="marriage_details">Marriage Details</string>
+    <string name="polygamy_details">Polygamy Details</string>
+    <string name="marriageendDate">Date of End of Relationship/Marriage</string>
+    <string name="health_card_information">Health Information</string>
+    <string name="bed_net_information">Bed Net Information</string>
+    <string name="health_assessment">Health Assessment</string>
+    <string name="feeding_information">Feeding Information</string>
+    <string name="nhis_information">NHIS Information</string>
+    <string name="vaccination_dates">Vaccine Dates</string>
+    <string name="sociodemographic_info">Socio-Demographic Information</string>
+    <string name="household_amenities_assets">Household Assets</string>
+    <string name="basic_amenities">Basic Amenities</string>
+    <string name="mobile_communication">Mobile Communication</string>
+    <string name="household_items">Household Items</string>
+    <string name="item_hh">Household Item Ownership</string>
+    <string name="housing">Household Housing</string>
+    <string name="form_comments_verification">End of Interview</string>
+    <string name="form_comments_section">Comments from interviewer/interviewee</string>
+    <string name="verification_completion">Query Resolution</string>
+    <string name="comments_hint">Any Comments?</string>
+    <string name="health_behavior">Health Behaviour</string>
+    <string name="smoking_behavior">Smoking Behaviour</string>
+    <string name="substance_use">Substance Use</string>
+    <string name="partner_occupation">Partner\'s Occupation</string>
+    <string name="occupation_marital"><![CDATA[Occupation & Marital Status]]></string>
+    <string name="cooking_location">Cooking Location</string>
+    <string name="cooking_exposure">Cooking Exposure</string>
+    <string name="stove_type">Stove Type</string>
+    <string name="stove_fuel_types">Stove Fuel Types</string>
+    <string name="land_use">Land Use</string>
 
 
 </resources>

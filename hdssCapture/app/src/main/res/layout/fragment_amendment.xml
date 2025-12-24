@@ -187,9 +187,36 @@
                     android:inputType="textPersonName"/>
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- BASIC INFORMATION CARD -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="4dp"
+                app:strokeColor="@color/primary"
+                app:strokeWidth="2dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="@android:color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/parents_information" />
+
             <Button
                 android:id="@+id/button_individual_mother"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/mother_extid"
@@ -235,7 +262,7 @@
 
             <Button
                 android:id="@+id/button_individual_father"
-                android:layout_width="300dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/father_extid"
                 tools:ignore="DuplicateSpeakableTextCheck"
@@ -267,20 +294,35 @@
                 layout="@layout/fragment_individual_father"
                 bind:father="@{father}" />
 
+            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ORIGINAL INFORMATION CARD -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="4dp"
+                app:strokeColor="@color/primary"
+                app:strokeWidth="2dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="@android:color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="15dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"
                 android:text="@string/amendment_info" />
 
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/fragment_horizontal_margin">
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -295,7 +337,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:onCheckedChanged="@{amendment::setYn_firstName}"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <RadioButton
                             android:id="@+id/yn_firstName_1_1"
@@ -313,26 +355,8 @@
                             android:tag="2"
                             android:text="@string/no" />
 
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="@{amendment.yn_firstName==0}"
-                            android:tag="0"
-                            android:visibility="invisible" />
 
                     </RadioGroup>
-
-                </TableRow>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_margin="5dp"
-                    android:background="@color/color_text_green" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -347,7 +371,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:onCheckedChanged="@{amendment::setYn_lastName}"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <RadioButton
                             android:id="@+id/yn_lastname_2_1"
@@ -365,24 +389,9 @@
                             android:tag="2"
                             android:text="@string/no" />
 
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="@{amendment.yn_lastName==0}"
-                            android:tag="0"
-                            android:visibility="invisible" />
+
                     </RadioGroup>
-                </TableRow>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_margin="5dp"
-                    android:background="@color/color_text_green" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -397,7 +406,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:onCheckedChanged="@{amendment::setYn_otherName}"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <RadioButton
                             android:id="@+id/other_name_3_1"
@@ -415,23 +424,8 @@
                             android:tag="2"
                             android:text="@string/no" />
 
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="@{amendment.yn_otherName==0}"
-                            android:tag="0"
-                            android:visibility="invisible" />
                     </RadioGroup>
-                </TableRow>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_margin="5dp"
-                    android:background="@color/color_text_green" />
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -446,7 +440,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:onCheckedChanged="@{amendment::setYn_gender}"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <RadioButton
                             android:id="@+id/gender_4_1"
@@ -464,23 +458,7 @@
                             android:tag="2"
                             android:text="@string/no" />
 
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="@{amendment.yn_gender==0}"
-                            android:tag="0"
-                            android:visibility="invisible" />
                     </RadioGroup>
-                </TableRow>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_margin="5dp"
-                    android:background="@color/color_text_green" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -495,7 +473,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:onCheckedChanged="@{amendment::setYn_dob}"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <RadioButton
                             android:id="@+id/dob_5_1"
@@ -513,24 +491,8 @@
                             android:tag="2"
                             android:text="@string/no" />
 
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="@{amendment.yn_dob==0}"
-                            android:tag="0"
-                            android:visibility="invisible" />
                     </RadioGroup>
 
-                </TableRow>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_margin="5dp"
-                    android:background="@color/color_text_green" />
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -545,7 +507,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:onCheckedChanged="@{amendment::setYn_ghanacard}"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
                         <RadioButton
                             android:id="@+id/ghanacard_5_1"
@@ -562,17 +524,38 @@
                             android:checked="@{amendment.yn_ghanacard==2}"
                             android:tag="2"
                             android:text="@string/no" />
-
-                        <RadioButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="@{amendment.yn_ghanacard==0}"
-                            android:tag="0"
-                            android:visibility="invisible" />
+                        
                     </RadioGroup>
 
-                </TableRow>
-            </TableLayout>
+            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ORIGINAL INFORMATION CARD -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardElevation="4dp"
+                app:strokeColor="@color/primary"
+                app:strokeWidth="2dp"
+                app:cardCornerRadius="12dp"
+                app:cardBackgroundColor="@android:color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/amended_info" />
+
 
             <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{amendment.yn_firstName==1}"
@@ -720,25 +703,34 @@
                 android:padding="10dp"
                 android:spinnerMode="dialog" />
 
-            <TextView
+
+            <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{amendment.yn_dob==1}"
                 android:id="@+id/amend_dob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={amendment.orig_dob}"
-                android:autofillHints=""
-                android:ems="10"
-                android:minHeight="30dp"
-                android:required="true"
-                android:textSize="20sp"
-                tools:ignore="TextContrastCheck" />
+                android:hint="@string/original_dob"
+                android:layout_marginBottom="12dp"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/ic_calendar"
+                app:endIconTint="@color/colorPrimary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/orig_dob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={amendment.orig_dob}"
+                    android:inputType="none"
+                    android:focusable="false"
+                    android:clickable="false" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 goneUnless="@{amendment.yn_dob==1}"
                 android:id="@+id/button_repl_Dob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/actual_dob"
+                android:hint="@string/amend_dob"
                 android:layout_marginBottom="12dp"
                 app:endIconMode="custom"
                 app:endIconDrawable="@drawable/ic_calendar"
@@ -755,28 +747,11 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <TextView
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:padding="5dp"
-                android:textColor="@color/black"
-                android:text="@string/form_complete"/>
+            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-            <Spinner
-                android:visibility="gone"
-                android:id="@+id/amend_complete"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                selection="@{amendment.complete}"
-                android:onItemSelected="@{amendment::setComplete}"
-                android:gravity="left"
-                android:textColor="#000301"
-                android:padding="15dp"/>
 
         </LinearLayout>
-
         <LinearLayout
             android:id="@+id/OTHER_LAYOUT"
             android:layout_width="match_parent"
@@ -817,7 +792,7 @@
                     android:inputType="textPersonName|textCapCharacters"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-    </LinearLayout>
+        </LinearLayout>
 
 
     </LinearLayout>

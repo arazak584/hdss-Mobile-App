@@ -45,8 +45,8 @@ public class OutcomeViewModel extends AndroidViewModel {
 //        return outcomeRepository.view4(id);
 //    }
 
-    public LiveData<Outcome> getView(String id) {
-        return outcomeRepository.view(id);
+    public LiveData<Outcome> getView(String id,Integer outcomeNumber) {
+        return outcomeRepository.view(id,outcomeNumber);
     }
 
 //    public List<Outcome> error(String id) throws ExecutionException, InterruptedException {

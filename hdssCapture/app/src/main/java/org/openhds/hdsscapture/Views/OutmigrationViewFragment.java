@@ -17,6 +17,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Repositories.OutmigrationRepository;
@@ -35,6 +37,8 @@ import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import org.openhds.hdsscapture.Utilities.DatePickerFragment;
+import org.openhds.hdsscapture.fragment.KeyboardFragment;
+import org.openhds.hdsscapture.fragment.OutmigrationFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,7 +56,7 @@ import java.util.concurrent.Executors;
  * Use the {@link OutmigrationViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OutmigrationViewFragment extends DialogFragment {
+public class OutmigrationViewFragment extends KeyboardFragment {
 
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private final String TAG = "OMG.TAG";
@@ -96,37 +100,11 @@ public class OutmigrationViewFragment extends DialogFragment {
         // Inflate the layout for this fragment
         binding = FragmentOutmigrationBinding.inflate(inflater, container, false);
 
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
+
         //CHOOSING THE DATE
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            if (bundle.containsKey((OutmigrationViewFragment.DATE_BUNDLES.DATE.getBundleKey()))) {
-                final String result = bundle.getString(OutmigrationViewFragment.DATE_BUNDLES.DATE.getBundleKey());
-                binding.omgDate.setText(result);
-            }
-        });
-
-        binding.buttonOmgImgDate.setOnClickListener(v -> {
-            if (!TextUtils.isEmpty(binding.omgDate.getText())) {
-                // If Date is not empty, parse the date and use it as the initial date
-                String currentDate = binding.omgDate.getText().toString();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-                try {
-                    Date date = sdf.parse(currentDate);
-                    Calendar selectedDate = Calendar.getInstance();
-                    selectedDate.setTime(date);
-
-                    // Create DatePickerFragment with the parsed date
-                    DialogFragment newFragment = new DatePickerFragment(OutmigrationViewFragment.DATE_BUNDLES.DATE.getBundleKey(), selectedDate);
-                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                final Calendar c = Calendar.getInstance();
-                DialogFragment newFragment = new DatePickerFragment(OutmigrationViewFragment.DATE_BUNDLES.DATE.getBundleKey(), c);
-                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-            }
-        });
+        setupDatePickers();
 
         ConfigViewModel configViewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
         List<Configsettings> configsettings = null;
@@ -355,5 +333,49 @@ public class OutmigrationViewFragment extends DialogFragment {
         public String toString() {
             return bundleKey;
         }
+    }
+
+    private void setupDatePickers() {
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            handleDateResult(bundle, OutmigrationViewFragment.DATE_BUNDLES.DATE, binding.omgDate);
+        });
+
+        binding.buttonOmgImgDate.setEndIconOnClickListener(v ->
+                showDatePicker(OutmigrationViewFragment.DATE_BUNDLES.DATE, binding.omgDate));
+
+    }
+
+    private void handleDateResult(Bundle bundle, OutmigrationViewFragment.DATE_BUNDLES dateType, TextInputEditText editText) {
+        if (bundle.containsKey(dateType.getBundleKey())) {
+            String result = bundle.getString(dateType.getBundleKey());
+            editText.setText(result);
+        }
+    }
+
+    private void showDatePicker(OutmigrationViewFragment.DATE_BUNDLES dateType, TextInputEditText editText) {
+        Calendar calendar = parseCurrentDate(editText.getText().toString());
+        DialogFragment datePickerFragment = new DatePickerFragment(
+                dateType.getBundleKey(),
+                calendar
+        );
+        datePickerFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+    }
+
+    private Calendar parseCurrentDate(String dateString) {
+        Calendar calendar = Calendar.getInstance();
+
+        if (!TextUtils.isEmpty(dateString)) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            try {
+                Date date = sdf.parse(dateString);
+                if (date != null) {
+                    calendar.setTime(date);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return calendar;
     }
 }

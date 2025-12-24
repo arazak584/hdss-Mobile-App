@@ -8,416 +8,555 @@
         <variable
             name="outmigration"
             type="org.openhds.hdsscapture.entity.Outmigration" />
-
         <variable
             name="individual"
             type="org.openhds.hdsscapture.entity.Individual" />
-
         <variable
             name="eventname"
             type="String" />
-
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="15dp"
-        tools:context=".fragment.OutmigrationFragment">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/outmigration"
-            android:textAllCaps="true"
-            android:textColor="@color/colorPrimary"
-            android:textSize="30sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/ind"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textAlignment="center"/>
-
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/txt_comment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:text="@={outmigration.comment}"
-            android:textColor="@color/purple_700"
-            android:gravity="start"/>
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:layout_margin="5dp"
-            android:background="@color/colorPrimaryDark" />
-
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <ScrollView
-            android:id="@+id/MAIN_LAYOUT"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:fillViewport="true">
 
             <LinearLayout
+                android:id="@+id/MAIN_LAYOUT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="8dp"
+                tools:context=".fragment.OutmigrationFragment">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/outmigration"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:visibility="gone"
+                <TextView
+                    android:id="@+id/ind"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txt_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="@={outmigration.comment}"
+                    android:textColor="@color/purple_700"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <!-- HIDDEN INFORMATION CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="2dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardUseCompatPadding="true"
+                    android:visibility="gone">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:hint="@string/fw"
-                        android:text="@string/fw">
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/omg_fw"
+                        <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@={outmigration.fw_uuid}"
-                            android:inputType="textPersonName"/>
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:text="@string/hidden_information"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-                    <Button
-                        android:visibility="gone"
-                        android:id="@+id/button_omg_insertDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/visitDate"
-                        tools:ignore="DuplicateSpeakableTextCheck"
-                        app:icon="@drawable/ic_baseline_calendar_month_24" />
-
-                    <TextView
-                        android:visibility="gone"
-                        android:id="@+id/omg_insertDate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autofillHints=""
-                        android:ems="10"
-                        android:text="@={outmigration.insertDate}"
-                        android:minHeight="30dp"
-                        android:textSize="20sp"
-                        tools:ignore="TextContrastCheck" />
-
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:inputType="text"
-                        android:hint="@string/uuid"
-                        android:text="@string/ind_extid">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/omg_uuid"
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@={outmigration.uuid}"
-                            android:inputType="textPersonName"/>
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:gravity="start"
+                            android:hint="@string/fw"
+                            android:padding="5dp"
+                            android:text="@string/fw"
+                            android:visibility="gone">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:hint="@string/resuuid"
-                        android:text="@string/resuuid">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/omg_fw"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPersonName"
+                                android:text="@={outmigration.fw_uuid}" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/res_uuid"
+                        <Button
+                            android:id="@+id/button_omg_insertDate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@={outmigration.residency_uuid}"
-                            android:inputType="textPersonName"/>
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:text="@string/visitDate"
+                            android:visibility="gone"
+                            app:icon="@drawable/ic_baseline_calendar_month_24"
+                            tools:ignore="DuplicateSpeakableTextCheck" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:hint="@string/ind_extid"
-                        android:text="@string/ind_extid">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/omg_extid"
+                        <TextView
+                            android:id="@+id/omg_insertDate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@={outmigration.individual_uuid}"
-                            android:inputType="textPersonName"/>
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:autofillHints=""
+                            android:ems="10"
+                            android:minHeight="30dp"
+                            android:text="@={outmigration.insertDate}"
+                            android:textSize="20sp"
+                            android:visibility="gone"
+                            tools:ignore="TextContrastCheck" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:visibility="gone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:hint="@string/visitid"
-                        android:text="@string/household_select">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/omg_visitid"
-                            android:text="@={outmigration.visit_uuid}"
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPersonName"/>
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:gravity="start"
+                            android:hint="@string/uuid"
+                            android:inputType="text"
+                            android:padding="5dp"
+                            android:text="@string/ind_extid"
+                            android:visibility="gone">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:hint="@string/earliest"
-                        android:text="@string/earliest">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/omg_uuid"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPersonName"
+                                android:text="@={outmigration.uuid}" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-                            android:id="@+id/earliest"
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPersonName"/>
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:gravity="start"
+                            android:hint="@string/resuuid"
+                            android:padding="5dp"
+                            android:text="@string/resuuid"
+                            android:visibility="gone">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:hint="@string/startdate"
-                        android:text="@string/startdate">
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/res_uuid"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPersonName"
+                                android:text="@={outmigration.residency_uuid}" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-                            android:id="@+id/startdate"
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@={outmigration.startDate}"
-                            android:inputType="textPersonName"/>
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:gravity="start"
+                            android:hint="@string/ind_extid"
+                            android:padding="5dp"
+                            android:text="@string/ind_extid"
+                            android:visibility="gone">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:textColor="@color/black"
-                        android:text="@string/destination"/>
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/omg_extid"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPersonName"
+                                android:text="@={outmigration.individual_uuid}" />
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                    <org.openhds.searchSpinner.SearchableSpinner
-                        android:id="@+id/destination"
-                        selection="@{outmigration.destination}"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:minHeight="48dp"
-                        android:onItemSelected="@{outmigration::setDestination}"
-                        android:padding="20dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="#000301" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:textColor="@color/black"
-                        android:text="@string/reason_out"/>
-
-                    <org.openhds.searchSpinner.SearchableSpinner
-                        android:id="@+id/reason_out"
-                        selection="@{outmigration.reason}"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:minHeight="48dp"
-                        android:onItemSelected="@{outmigration::setReason}"
-                        android:padding="20dp"
-                        android:spinnerMode="dialog"
-                        android:textColor="#000301" />
-
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        goneUnless="@{outmigration.reason==77}"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:hint="@string/attend_you_other"
-                        android:text="@string/attend_you_other">
-
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:id="@+id/other_reason"
+                        <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@={outmigration.reason_oth}"
-                            android:inputType="textCapCharacters"/>
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:gravity="start"
+                            android:hint="@string/visitid"
+                            android:padding="5dp"
+                            android:text="@string/household_select"
+                            android:visibility="gone">
 
-                    <Button
-                        android:id="@+id/button_omg_imgDate"
-                        android:layout_width="300dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/outdate"
-                        tools:ignore="DuplicateSpeakableTextCheck"
-                        style="@style/SupervisorButton"
-                        android:layout_gravity="center"
-                        app:icon="@drawable/ic_baseline_calendar_month_24" />
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/omg_visitid"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPersonName"
+                                android:text="@={outmigration.visit_uuid}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                    <com.google.android.material.textfield.TextInputLayout
+                <!-- BASIC INFORMATION CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:padding="5dp"
-                        android:hint="@string/outdate"
-                        android:text="@string/outdate">
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                        <androidx.appcompat.widget.AppCompatEditText
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-                            android:id="@+id/omg_date"
+                        <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@={outmigration.recordedDate}"
-                            />
-                    </com.google.android.material.textfield.TextInputLayout>
+                            android:text="@string/basic_information"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-                    <TableLayout
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/earliest"
+                            android:padding="5dp"
+                            android:text="@string/earliest">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/earliest"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:hint="@string/startdate"
+                            android:padding="5dp"
+                            android:text="@string/startdate">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/startdate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName"
+                                android:text="@={outmigration.startDate}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- DESTINATION CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingTop="16dp">
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-                        <TableRow
+                        <TextView
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:text="@string/destination"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-                            <RadioGroup
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:text="@string/destination"
+                            android:textColor="@color/black" />
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            android:id="@+id/destination"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:minHeight="48dp"
+                            android:onItemSelected="@{outmigration::setDestination}"
+                            android:padding="20dp"
+                            selection="@{outmigration.destination}"
+                            android:spinnerMode="dialog"
+                            android:textColor="#000301" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- REASON FOR OUTMIGRATION CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/reason_for_outmigration"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:text="@string/reason_out"
+                            android:textColor="@color/black" />
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            android:id="@+id/reason_out"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="left"
+                            android:minHeight="48dp"
+                            android:onItemSelected="@{outmigration::setReason}"
+                            android:padding="20dp"
+                            selection="@{outmigration.reason}"
+                            android:spinnerMode="dialog"
+                            android:textColor="#000301" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:hint="@string/attend_you_other"
+                            android:text="@string/attend_you_other"
+                            goneUnless="@{outmigration.reason==77}">
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/other_reason"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textCapCharacters"
+                                android:text="@={outmigration.reason_oth}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- OUTMIGRATION DATE CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/outmigration_date"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/button_omg_imgDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:endIconMode="custom"
+                            app:endIconDrawable="@drawable/ic_baseline_calendar_month_24"
+                            app:endIconTint="@color/colorPrimary"
+                            android:hint="@string/outdate"
+                            android:text="@string/outdate">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/omg_date"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:inputType="textPersonName"
+                                android:text="@={outmigration.recordedDate}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- VALIDATION CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardUseCompatPadding="true"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/validation"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <TableLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="16dp">
+
+                            <TableRow
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <RadioGroup
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:onCheckedChanged="@{outmigration::setEdit}"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/edit"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:text="@string/wrongomg"
+                                        android:textAlignment="gravity"
+                                        android:visibility="gone" />
+
+                                    <RadioButton
+                                        android:id="@+id/yn"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:checked="@{outmigration.edit==2}"
+                                        android:tag="2"
+                                        android:text="@string/yes"
+                                        android:visibility="gone" />
+
+                                    <RadioButton
+                                        android:id="@+id/no"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:checked="@{outmigration.edit==1}"
+                                        android:tag="1"
+                                        android:text="@string/no"
+                                        android:visibility="gone" />
+
+                                    <RadioButton
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:checked="@{outmigration.edit==0}"
+                                        android:tag="0"
+                                        android:visibility="gone" />
+                                </RadioGroup>
+                            </TableRow>
+                        </TableLayout>
+
+                        <TextView
+                            android:id="@+id/resolve"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/query_reslve"
+                            android:textColor="@color/black"
+                            android:visibility="gone" />
+
+                        <RadioGroup
+                            android:id="@+id/status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:onCheckedChanged="@{outmigration::setStatus}"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <RadioButton
+                                android:id="@+id/no_3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:onCheckedChanged="@{outmigration::setEdit}"
-                                android:orientation="horizontal">
+                                android:checked="@{outmigration.status==3}"
+                                android:tag="3"
+                                android:text="@string/yes" />
 
-                                <TextView
-                                    android:visibility="gone"
-                                    android:id="@+id/edit"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_vertical"
-                                    android:text="@string/wrongomg"
-                                    android:textAlignment="gravity" />
+                            <RadioButton
+                                android:id="@+id/no_2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{outmigration.status==2}"
+                                android:tag="2"
+                                android:text="@string/no" />
 
-                                <RadioButton
-                                    android:visibility="gone"
-                                    android:id="@+id/yn"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="@{outmigration.edit==2}"
-                                    android:tag="2"
-                                    android:text="@string/yes" />
+                            <RadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="@{outmigration.status==0}"
+                                android:tag="0"
+                                android:visibility="invisible" />
+                        </RadioGroup>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                                <RadioButton
-                                    android:visibility="gone"
-                                    android:id="@+id/no"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="@{outmigration.edit==1}"
-                                    android:tag="1"
-                                    android:text="@string/no" />
-
-                                <RadioButton
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:checked="@{outmigration.edit==0}"
-                                    android:tag="0"
-                                    android:visibility="gone" />
-
-                            </RadioGroup>
-
-                        </TableRow>
-                    </TableLayout>
-
-                    <TextView
-                        android:visibility="gone"
-                        android:id="@+id/resolve"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="@string/query_reslve" />
-
-                    <RadioGroup
-                        android:visibility="gone"
-                        android:id="@+id/status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:onCheckedChanged="@{outmigration::setStatus}"
-                        android:orientation="horizontal">
-
-                        <RadioButton
-                            android:id="@+id/no_3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="@{outmigration.status==3}"
-                            android:tag="3"
-                            android:text="@string/yes" />
-
-                        <RadioButton
-                            android:id="@+id/no_2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="@{outmigration.status==2}"
-                            android:tag="2"
-                            android:text="@string/no" />
-
-                        <RadioButton
-                            android:visibility="invisible"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="@{outmigration.status==0}"
-                            android:tag="0"/>
-                    </RadioGroup>
-
-
-                </LinearLayout>
             </LinearLayout>
-
-
-
         </ScrollView>
 
+        <!-- ACTION BUTTONS (FIXED AT BOTTOM) -->
         <LinearLayout
             android:id="@+id/linearLayout_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@android:color/white"
+            android:elevation="4dp">
 
             <Button
                 android:id="@+id/buttonSaveClose"
@@ -425,8 +564,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                style="@style/SupervisorButton"
-                android:text="@string/savecontinuedata" />
+                android:text="@string/save"
+                style="@style/SupervisorButton" />
 
             <Button
                 android:id="@+id/buttonClose"
@@ -434,14 +573,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                style="@style/CloseButton"
-                android:text="@string/closedata" />
-
+                android:text="@string/closedata"
+                style="@style/CloseButton" />
         </LinearLayout>
 
-
     </LinearLayout>
-
-
-
 </layout>

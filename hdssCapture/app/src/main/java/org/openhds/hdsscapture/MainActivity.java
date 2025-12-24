@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handlePullAccess() {
-        if (status == 2) {
+        if (status == 1 || status == 2) {
             startActivity(new Intent(this, PullActivity.class));
         } else {
             showAccessDenied();

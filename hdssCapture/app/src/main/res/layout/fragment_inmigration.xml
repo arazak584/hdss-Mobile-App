@@ -299,25 +299,18 @@
                         android:text="@={inmigration.why_int}"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Button
-                    android:id="@+id/button_img_imgDate"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/migration_date"
-                    tools:ignore="DuplicateSpeakableTextCheck"
-                    style="@style/SupervisorButton"
-                    android:layout_gravity="center"
-                    app:icon="@drawable/ic_baseline_calendar_month_24" />
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/button_img_imgDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/ic_baseline_calendar_month_24"
+                    app:endIconTint="@color/colorPrimary"
                     android:hint="@string/migration_date"
                     android:text="@string/migration_date">
 
-                    <androidx.appcompat.widget.AppCompatEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:id="@+id/img_date"

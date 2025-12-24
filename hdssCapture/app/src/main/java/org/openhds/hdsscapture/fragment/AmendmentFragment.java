@@ -132,6 +132,9 @@ public class AmendmentFragment extends KeyboardFragment {
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
         ind.setText(selectedIndividual.firstName + " " + selectedIndividual.lastName);
 
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
+
         //Date Picker
         setupDatePickers();
 
@@ -222,6 +225,7 @@ public class AmendmentFragment extends KeyboardFragment {
                 data.orig_dob = selectedIndividual.dob;
                 data.orig_gender = selectedIndividual.getGender();
                 data.individual_uuid = selectedIndividual.getUuid();
+                data.repl_dob  = selectedIndividual.dob;
 
                 Individual datae = individualViewModel.mother(selectedIndividual.uuid);
                 if (datae!=null){
@@ -300,7 +304,6 @@ public class AmendmentFragment extends KeyboardFragment {
         }
 
         //Codebook
-        loadCodeData(binding.amendComplete, "submit");
         loadCodeData(binding.amendGender, "gender");
         loadCodeData(binding.replGender, "gender");
 

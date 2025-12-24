@@ -160,6 +160,9 @@ public class IndividualFragment extends KeyboardFragment {
         binding = FragmentIndividualBinding.inflate(inflater, container, false);
         binding.setIndividual(individual);
 
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
+
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
         final Hierarchy level6Data = i.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);

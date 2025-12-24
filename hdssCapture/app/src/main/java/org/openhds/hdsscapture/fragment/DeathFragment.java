@@ -137,6 +137,9 @@ public class DeathFragment extends KeyboardFragment {
         ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
         selectedLocation = sharedViewModel.getCurrentSelectedLocation();
 
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
+
         //CHOOSING THE DATE
         setupDatePickers();
 
@@ -200,6 +203,7 @@ public class DeathFragment extends KeyboardFragment {
                 data.villname = level6Data.getName();
                 data.villcode = level6Data.getExtId();
                 data.complete = 1;
+                data.edit = 1;
                 //data.edit = null;
                 //data.visit_uuid = dts.uuid;
                 data.househead = socialgroup.getGroupName();

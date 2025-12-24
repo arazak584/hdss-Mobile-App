@@ -61,8 +61,40 @@ public interface LocationDao {
 //    @Query("SELECT * FROM Locations WHERE insertDate > 1748121600000")
 //    List<Locations> retrieveToSync();
 
-    @Query("SELECT * FROM Locations a INNER JOIN locationhierarchy b ON a.locationLevel_uuid=b.uuid WHERE fw_name=:id")
-    List<Locations> retrieveAll(String id);
+//    @Query("SELECT * FROM Locations a INNER JOIN locationhierarchy b ON a.locationLevel_uuid=b.uuid WHERE fw_name=:id")
+//    List<Locations> retrieveAll(String id);
+
+    @Query("SELECT * FROM Locations a INNER JOIN locationhierarchy b ON a.locationLevel_uuid=b.uuid")
+    List<Locations> retrieveAll();
+
+    // Get all unique village names for autocomplete
+    // Get all unique village names for autocomplete
+    @Query("SELECT DISTINCT b.name FROM Locations a INNER JOIN locationhierarchy b ON a.locationLevel_uuid=b.uuid WHERE b.name IS NOT NULL ORDER BY b.name ASC")
+    List<String> getAllVillageNames();
+
+    // Get all compno for autocomplete
+    @Query("SELECT DISTINCT compno FROM Locations WHERE compno IS NOT NULL ORDER BY compno ASC")
+    List<String> getAllCompno();
+
+    // Filter by village name
+    @Query("SELECT a.* FROM Locations a INNER JOIN locationhierarchy b ON a.locationLevel_uuid=b.uuid WHERE b.name LIKE :villageName")
+    List<Locations> filterByVillageName(String villageName);
+
+    // Filter by compno
+    @Query("SELECT * FROM Locations WHERE compno LIKE :compno")
+    List<Locations> filterByCompno(String compno);
+
+    // Filter by both village name and compno
+    @Query("SELECT a.* FROM Locations a INNER JOIN locationhierarchy b ON a.locationLevel_uuid=b.uuid WHERE b.name LIKE :villageName AND a.compno LIKE :compno")
+    List<Locations> filterByVillageAndCompno(String villageName, String compno);
+
+    // Search village names for autocomplete (starts with query)
+    @Query("SELECT DISTINCT b.name FROM Locations a INNER JOIN locationhierarchy b ON a.locationLevel_uuid=b.uuid WHERE b.name LIKE :query || '%' AND b.name IS NOT NULL ORDER BY b.name ASC LIMIT 10")
+    List<String> searchVillageNames(String query);
+
+    // Search compno for autocomplete (starts with query)
+    @Query("SELECT DISTINCT compno FROM Locations WHERE compno LIKE :query || '%' AND compno IS NOT NULL ORDER BY compno ASC LIMIT 10")
+    List<String> searchCompno(String query);
 
     @Query("SELECT * FROM Locations WHERE locationLevel_uuid=:id order by compno")
     List<Locations> retrieveByClusterId(String id);

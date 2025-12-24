@@ -180,12 +180,12 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.errors();
     }
 
-    public List<Individual> nulls() throws ExecutionException, InterruptedException {
-        return individualRepository.nulls();
+    public List<Individual> nulls(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.nulls(id);
     }
 
-    public List<Individual> err() throws ExecutionException, InterruptedException {
-        return individualRepository.err();
+    public List<Individual> errz(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.errz(id);
     }
 
     public List<Individual> repo() throws ExecutionException, InterruptedException {

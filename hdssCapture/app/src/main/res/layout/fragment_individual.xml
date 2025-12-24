@@ -287,7 +287,7 @@
                         android:minHeight="48dp"
                         android:onItemSelected="@{individual::setOther}"
                         android:padding="15dp"
-                        android:selection="@{individual.other}"
+                        selection="@{individual.other}"
                         android:spinnerMode="dialog" />
 
                     <TextView
@@ -350,7 +350,7 @@
                         android:minHeight="48dp"
                         android:onItemSelected="@{individual::setGh}"
                         android:padding="15dp"
-                        android:selection="@{individual.gh}"
+                        selection="@{individual.gh}"
                         android:spinnerMode="dialog" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -450,7 +450,7 @@
                         android:onItemSelected="@{individual::setDobAspects}"
                         android:padding="10dp"
                         android:required="true"
-                        android:selection="@{individual.dobAspect}"
+                        selection="@{individual.dobAspect}"
                         android:spinnerMode="dialog" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -509,7 +509,7 @@
                         android:onItemSelected="@{individual::setGenders}"
                         android:padding="10dp"
                         android:required="true"
-                        android:selection="@{individual.gender}"
+                        selection="@{individual.gender}"
                         android:spinnerMode="dialog" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -558,7 +558,7 @@
                         android:minHeight="48dp"
                         android:onItemSelected="@{individual::setMother}"
                         android:padding="15dp"
-                        android:selection="@{individual.mother}"
+                        selection="@{individual.mother}"
                         android:spinnerMode="dialog"
                         android:visibility="gone" />
 
@@ -624,7 +624,7 @@
                         android:minHeight="48dp"
                         android:onItemSelected="@{individual::setFather}"
                         android:padding="15dp"
-                        android:selection="@{individual.father}"
+                        selection="@{individual.father}"
                         android:spinnerMode="dialog"
                         android:visibility="gone" />
 
@@ -755,7 +755,7 @@
                         android:gravity="left"
                         android:onItemSelected="@{residency::setRltn_head}"
                         android:padding="10dp"
-                        android:selection="@{residency.rltn_head}"
+                        selection="@{residency.rltn_head}"
                         android:spinnerMode="dialog" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -837,7 +837,7 @@
                         android:minHeight="48dp"
                         android:onItemSelected="@{inmigration::setMigType}"
                         android:padding="20dp"
-                        android:selection="@{inmigration.migType}"
+                        selection="@{inmigration.migType}"
                         android:spinnerMode="dialog" />
 
                     <TextView
@@ -857,7 +857,7 @@
                         android:minHeight="48dp"
                         android:onItemSelected="@{inmigration::setOrigin}"
                         android:padding="20dp"
-                        android:selection="@{inmigration.origin}"
+                        selection="@{inmigration.origin}"
                         android:spinnerMode="dialog"
                         goneUnless="@{residency.img==1}" />
 
@@ -877,7 +877,7 @@
                         android:gravity="left"
                         android:onItemSelected="@{inmigration::setReason}"
                         android:padding="10dp"
-                        android:selection="@{inmigration.reason}"
+                        selection="@{inmigration.reason}"
                         android:spinnerMode="dialog"
                         goneUnless="@{residency.img==1}" />
 
@@ -1005,7 +1005,7 @@
                             android:minHeight="48dp"
                             android:onItemSelected="@{inmigration::setFarm}"
                             android:padding="20dp"
-                            android:selection="@{inmigration.farm}"
+                            selection="@{inmigration.farm}"
                             android:spinnerMode="dialog" />
 
                         <com.google.android.material.textfield.TextInputLayout
@@ -1041,7 +1041,7 @@
                             android:minHeight="48dp"
                             android:onItemSelected="@{inmigration::setFood_yn}"
                             android:padding="20dp"
-                            android:selection="@{inmigration.food_yn}"
+                            selection="@{inmigration.food_yn}"
                             android:spinnerMode="dialog" />
 
                         <TextView
@@ -1061,7 +1061,7 @@
                             android:minHeight="48dp"
                             android:onItemSelected="@{inmigration::setFood_crops}"
                             android:padding="20dp"
-                            android:selection="@{inmigration.food_crops}"
+                            selection="@{inmigration.food_crops}"
                             android:spinnerMode="dialog"
                             goneUnless="@{inmigration.food_yn==1}" />
 
@@ -1081,7 +1081,7 @@
                             android:minHeight="48dp"
                             android:onItemSelected="@{inmigration::setCash_yn}"
                             android:padding="20dp"
-                            android:selection="@{inmigration.cash_yn}"
+                            selection="@{inmigration.cash_yn}"
                             android:spinnerMode="dialog" />
 
                         <TextView
@@ -1101,7 +1101,7 @@
                             android:minHeight="48dp"
                             android:onItemSelected="@{inmigration::setCash_crops}"
                             android:padding="20dp"
-                            android:selection="@{inmigration.cash_crops}"
+                            selection="@{inmigration.cash_crops}"
                             android:spinnerMode="dialog"
                             goneUnless="@{inmigration.cash_yn==1}" />
 
@@ -1121,7 +1121,7 @@
                             android:minHeight="48dp"
                             android:onItemSelected="@{inmigration::setLivestock_yn}"
                             android:padding="20dp"
-                            android:selection="@{inmigration.livestock_yn}"
+                            selection="@{inmigration.livestock_yn}"
                             android:spinnerMode="dialog" />
 
                         <TextView
@@ -1141,7 +1141,7 @@
                             android:minHeight="48dp"
                             android:onItemSelected="@{inmigration::setLivestock}"
                             android:padding="20dp"
-                            android:selection="@{inmigration.livestock}"
+                            selection="@{inmigration.livestock}"
                             android:spinnerMode="dialog"
                             goneUnless="@{inmigration.livestock_yn==1}" />
 
@@ -1210,7 +1210,7 @@
                         android:minHeight="48dp"
                         android:onItemSelected="@{demographic::setPhone}"
                         android:padding="15dp"
-                        android:selection="@{demographic.phone}"
+                        selection="@{demographic.phone}"
                         android:spinnerMode="dialog"
                         android:textColor="#000301"
                         android:visibility="gone" />
@@ -1248,7 +1248,7 @@
                         android:minHeight="48dp"
                         android:onItemSelected="@{demographic::setTribes}"
                         android:padding="10dp"
-                        android:selection="@{demographic.tribe}" />
+                        selection="@{demographic.tribe}" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -1267,7 +1267,7 @@
                         android:minHeight="48dp"
                         android:onItemSelected="@{demographic::setAkan_tribe}"
                         android:padding="15dp"
-                        android:selection="@{demographic.akan_tribe}"
+                        selection="@{demographic.akan_tribe}"
                         android:spinnerMode="dialog"
                         goneUnless="@{demographic.tribe==1}" />
 
@@ -1304,7 +1304,7 @@
                         android:minHeight="48dp"
                         android:onItemSelected="@{demographic::setReligions}"
                         android:padding="15dp"
-                        android:selection="@{demographic.religion}"
+                        selection="@{demographic.religion}"
                         android:spinnerMode="dialog" />
 
                     <LinearLayout
@@ -1338,7 +1338,7 @@
                         android:minHeight="48dp"
                         android:onItemSelected="@{demographic::setDenomination}"
                         android:padding="15dp"
-                        android:selection="@{demographic.denomination}"
+                        selection="@{demographic.denomination}"
                         android:spinnerMode="dialog"
                         goneUnless="@{demographic.religion==1}" />
 
@@ -1382,7 +1382,7 @@
                         android:minHeight="48dp"
                         android:onItemSelected="@{demographic::setEducations}"
                         android:padding="15dp"
-                        android:selection="@{demographic.education}"
+                        selection="@{demographic.education}"
                         android:spinnerMode="dialog" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -1421,7 +1421,7 @@
                         android:minHeight="48dp"
                         android:onItemSelected="@{demographic::setOccupations}"
                         android:padding="15dp"
-                        android:selection="@{demographic.occupation}"
+                        selection="@{demographic.occupation}"
                         android:spinnerMode="dialog"
                         android:textColor="#000301"
                         android:visibility="gone" />
@@ -1461,7 +1461,7 @@
                         android:gravity="left"
                         android:onItemSelected="@{demographic::setMaritals}"
                         android:padding="15dp"
-                        android:selection="@{demographic.marital}"
+                        selection="@{demographic.marital}"
                         android:spinnerMode="dialog"
                         android:visibility="gone" />
 

@@ -59,6 +59,7 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.LocationAmendment;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import org.openhds.hdsscapture.fragment.ClusterFragment;
+import org.openhds.hdsscapture.fragment.KeyboardFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +74,7 @@ import java.util.regex.Pattern;
  * Use the {@link ListingViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListingViewFragment extends Fragment {
+public class ListingViewFragment extends KeyboardFragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
@@ -129,6 +130,9 @@ public class ListingViewFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentListingBinding.inflate(inflater, container, false);
+
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
 
         // Initialize the LocationManager
         locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);

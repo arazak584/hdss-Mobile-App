@@ -1,178 +1,271 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="sociodemo"
             type="org.openhds.hdsscapture.entity.HdssSociodemo" />
-
     </data>
 
     <LinearLayout
-        android:id="@+id/MAIN_LAYOUT"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/txt_comment"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:text="@={sociodemo.comment}"
-            android:textColor="@color/purple_700"
-            android:gravity="start"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:padding="5dp"
-            android:hint="@string/household_select"
-            android:text="@string/household_select">
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:id="@+id/household"
-                android:text="@={sociodemo.socialgroup_uuid}"
+            <LinearLayout
+                android:id="@+id/MAIN_LAYOUT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:orientation="vertical"
+                android:padding="8dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="@string/occupation" />
+                <!-- HEADER SECTION -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/occupation_marital"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="@string/JOB_SCORRES_SOCIO" />
+                <!-- HIDDEN INFORMATION CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true">
 
-        <org.openhds.searchSpinner.SearchableSpinner
-            android:id="@+id/JOB_SCORRES"
-            selection="@{sociodemo.job_scorres}"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:spinnerMode="dialog"
-            android:padding="5dp"
-            android:onItemSelected="@{sociodemo::setJob_scorres}" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
 
-        <LinearLayout
-            goneUnless="@{sociodemo.job_scorres==77}"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/hidden_information"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="@string/item_other_text" />
+                        <TextView
+                            android:id="@+id/txt_comment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={sociodemo.comment}"
+                            android:textColor="@color/purple_700"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:gravity="start" />
 
-            <EditText
-                android:id="@+id/JOB_OTHR_SPFY_SCORRES"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:ems="10"
-                android:inputType="text"
-                android:text="@={sociodemo.job_othr_spfy_scorres}"
-                tools:ignore="Autofill,LabelFor" />
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="start"
+                            android:padding="5dp"
+                            android:hint="@string/household_select"
+                            android:text="@string/household_select">
 
-        </LinearLayout>
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/household"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:inputType="textPersonName"
+                                android:text="@={sociodemo.socialgroup_uuid}" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- OCCUPATION CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/occupation"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
+
+                        <!-- Occupation Type -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/JOB_SCORRES_SOCIO"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="4dp" />
+
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            android:id="@+id/JOB_SCORRES"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:onItemSelected="@{sociodemo::setJob_scorres}"
+                            android:spinnerMode="dialog"
+                            app:selection="@{sociodemo.job_scorres}"
+                            android:layout_marginBottom="8dp" />
+
+                        <!-- Other Occupation Specification (Conditional) -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:goneUnless="@{sociodemo.job_scorres==77}">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/item_other_text"
+                                android:textColor="@color/black"
+                                android:layout_marginBottom="4dp" />
+
+                            <EditText
+                                android:id="@+id/JOB_OTHR_SPFY_SCORRES"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:ems="10"
+                                android:inputType="text"
+                                android:text="@={sociodemo.job_othr_spfy_scorres}"
+                                tools:ignore="Autofill,LabelFor" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- PARTNER OCCUPATION CARD -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardBackgroundColor="@android:color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/partner_occupation"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="8dp" />
 
 
-        <TextView
-            goneUnless="@{sociodemo.marital_scorres==1}"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:textColor="@color/black"
-            android:text="@string/PTR_SCORRES_SOCIO" />
+                        <!-- Partner Occupation (Conditional - Only for married) -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/PTR_SCORRES_SOCIO"
+                            android:textColor="@color/black"
+                            android:layout_marginBottom="4dp"
+                            app:goneUnless="@{sociodemo.marital_scorres==1}" />
 
-        <org.openhds.searchSpinner.SearchableSpinner
-            goneUnless="@{sociodemo.marital_scorres==1}"
-            android:id="@+id/PTR_SCORRES"
-            selection="@{sociodemo.ptr_scorres}"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:spinnerMode="dialog"
-            android:padding="5dp"
-            android:onItemSelected="@{sociodemo::setPtr_scorres}" />
+                        <org.openhds.searchSpinner.SearchableSpinner
+                            android:id="@+id/PTR_SCORRES"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:onItemSelected="@{sociodemo::setPtr_scorres}"
+                            android:spinnerMode="dialog"
+                            app:selection="@{sociodemo.ptr_scorres}"
+                            android:layout_marginBottom="8dp"
+                            app:goneUnless="@{sociodemo.marital_scorres==1}" />
 
-        <LinearLayout
-            goneUnless="@{sociodemo.ptr_scorres==77}"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+                        <!-- Other Partner Occupation Specification (Conditional) -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:goneUnless="@{sociodemo.ptr_scorres==77}">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="@string/item_other_text" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/item_other_text"
+                                android:textColor="@color/black"
+                                android:layout_marginBottom="4dp" />
 
-            <EditText
-                android:id="@+id/PTR_OTHR_SPFY_SCORRES"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:ems="10"
-                android:inputType="text"
-                android:text="@={sociodemo.ptr_othr_spfy_scorres}"
-                tools:ignore="Autofill,LabelFor" />
+                            <EditText
+                                android:id="@+id/PTR_OTHR_SPFY_SCORRES"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:ems="10"
+                                android:inputType="text"
+                                android:text="@={sociodemo.ptr_othr_spfy_scorres}"
+                                tools:ignore="Autofill,LabelFor" />
+                        </LinearLayout>
 
-        </LinearLayout>
-    </LinearLayout>
-    </ScrollView>
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- ACTION BUTTONS -->
         <LinearLayout
             android:id="@+id/linearLayout_save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:background="@android:color/white"
+            android:elevation="4dp">
 
             <Button
                 android:id="@+id/buttonSaveClose"
+                style="@style/SupervisorButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                style="@style/SupervisorButton"
                 android:text="@string/next" />
 
             <Button
                 android:id="@+id/buttonClose"
+                style="@style/CloseButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
-                style="@style/CloseButton"
                 android:text="@string/previous" />
-
-
-
         </LinearLayout>
-
-
     </LinearLayout>
-
 </layout>

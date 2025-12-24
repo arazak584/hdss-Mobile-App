@@ -25,6 +25,7 @@ import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import org.openhds.hdsscapture.fragment.HouseMembersFragment;
+import org.openhds.hdsscapture.fragment.KeyboardFragment;
 import org.openhds.hdsscapture.fragment.SocioBFragment;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ import java.util.concurrent.ExecutionException;
  * Use the {@link SocioAViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SocioAViewFragment extends Fragment {
+public class SocioAViewFragment extends KeyboardFragment {
 
     private static final String SOCIAL_ID = "SOCIAL_ID";
 
@@ -81,6 +82,9 @@ public class SocioAViewFragment extends Fragment {
         // Inflate the layout for this fragment
         //return inflater.inflate(R.layout.fragment_socio_b, container, false);
         binding = FragmentSocioBinding.inflate(inflater, container, false);
+
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
 
         HdssSociodemoViewModel viewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
         final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);

@@ -111,6 +111,9 @@ public class PregFragment extends KeyboardFragment {
         final TextView ind = binding.getRoot().findViewById(R.id.ind);
         //ind.setText(individual.firstName + " " + individual.lastName);
 
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
+
         //CHOOSING THE DATE
         getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
             // We use a String here, but any type that can be put in a Bundle is supported

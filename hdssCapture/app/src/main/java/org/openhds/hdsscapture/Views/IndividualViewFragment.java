@@ -16,6 +16,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Repositories.IndividualRepository;
@@ -29,6 +31,8 @@ import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import org.openhds.hdsscapture.Utilities.DatePickerFragment;
+import org.openhds.hdsscapture.fragment.IndividualFragment;
+import org.openhds.hdsscapture.fragment.KeyboardFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,7 +49,7 @@ import java.util.concurrent.ExecutionException;
  * Use the {@link IndividualViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class IndividualViewFragment extends DialogFragment {
+public class IndividualViewFragment extends KeyboardFragment {
 
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
     private final String TAG = "INDIVIDUAL.TAG";
@@ -91,70 +95,16 @@ public class IndividualViewFragment extends DialogFragment {
 
         final Intent i = getActivity().getIntent();
 
-
+// Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
 
         //CHOOSING THE DATE
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
-            // We use a String here, but any type that can be put in a Bundle is supported
-            if (bundle.containsKey((IndividualViewFragment.DATE_BUNDLES.INSERTDATE.getBundleKey()))) {
-                final String result = bundle.getString(IndividualViewFragment.DATE_BUNDLES.INSERTDATE.getBundleKey());
-                binding.individualInsertDate.setText(result);
-
-            }
-
-            if (bundle.containsKey((IndividualViewFragment.DATE_BUNDLES.DOB.getBundleKey()))) {
-                final String result = bundle.getString(IndividualViewFragment.DATE_BUNDLES.DOB.getBundleKey());
-                binding.dob.setText(result);
-
-                // Update individual DOB and visibility
-                if (binding.getIndividual() != null) {
-                    binding.getIndividual().setDob(result); // Assuming setDob exists
-                    updateVisibilityBasedOnAge();
-                }
-            }
-
-
-        });
-        updateVisibilityBasedOnAge();
-
-        binding.buttonIndividualDob.setOnClickListener(v -> {
-            final Calendar c = Calendar.getInstance();
-            final String curbrthdat = binding.dob.getText().toString();
-            if(curbrthdat!=null){
-                final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                try {
-                    c.setTime(Objects.requireNonNull(f.parse(curbrthdat)));
-                } catch (ParseException e) {
-                }
-            }
-            if (!TextUtils.isEmpty(binding.dob.getText())) {
-                // If Date is not empty, parse the date and use it as the initial date
-                String currentDate = binding.dob.getText().toString();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-                try {
-                    Date date = sdf.parse(currentDate);
-                    Calendar selectedDate = Calendar.getInstance();
-                    selectedDate.setTime(date);
-
-                    // Create DatePickerFragment with the parsed date
-                    DialogFragment newFragment = new DatePickerFragment(IndividualViewFragment.DATE_BUNDLES.DOB.getBundleKey(), selectedDate);
-                    newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                DialogFragment newFragment = new DatePickerFragment(IndividualViewFragment.DATE_BUNDLES.DOB.getBundleKey(), c);
-                newFragment.show(requireActivity().getSupportFragmentManager(), TAG);
-            }
-        });
-
-
+        setupDatePickers();
 
         ResidencyViewModel resModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         IndividualViewModel viewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
         viewModel.getView(individual.uuid).observe(getViewLifecycleOwner(), data -> {
-            binding.setIndividual(data);
+        binding.setIndividual(data);
 
             try {
                 Residency dataRes = resModel.views(data.uuid);
@@ -452,5 +402,58 @@ public class IndividualViewFragment extends DialogFragment {
         public String toString() {
             return bundleKey;
         }
+    }
+
+    private void setupDatePickers() {
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, (requestKey, bundle) -> {
+            handleDateResult(bundle, IndividualViewFragment.DATE_BUNDLES.DOB, binding.dob);
+        });
+
+        binding.buttonIndividualDob.setEndIconOnClickListener(v ->
+                showDatePicker(IndividualViewFragment.DATE_BUNDLES.DOB, binding.dob));
+
+
+    }
+
+    private void handleDateResult(Bundle bundle, IndividualViewFragment.DATE_BUNDLES dateType, TextInputEditText editText) {
+        if (bundle.containsKey(dateType.getBundleKey())) {
+            String result = bundle.getString(dateType.getBundleKey());
+            editText.setText(result);
+
+            // Handle DOB-specific logic
+            if (dateType == IndividualViewFragment.DATE_BUNDLES.DOB) {
+                if (binding.getIndividual() != null) {
+                    binding.getIndividual().setDob(result);
+                    updateVisibilityBasedOnAge();
+                }
+            }
+        }
+    }
+
+    private void showDatePicker(IndividualViewFragment.DATE_BUNDLES dateType, TextInputEditText editText) {
+        Calendar calendar = parseCurrentDate(editText.getText().toString());
+        DialogFragment datePickerFragment = new DatePickerFragment(
+                dateType.getBundleKey(),
+                calendar
+        );
+        datePickerFragment.show(requireActivity().getSupportFragmentManager(), TAG);
+    }
+
+    private Calendar parseCurrentDate(String dateString) {
+        Calendar calendar = Calendar.getInstance();
+
+        if (!TextUtils.isEmpty(dateString)) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+            try {
+                Date date = sdf.parse(dateString);
+                if (date != null) {
+                    calendar.setTime(date);
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return calendar;
     }
 }

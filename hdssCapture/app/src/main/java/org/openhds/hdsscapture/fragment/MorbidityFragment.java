@@ -106,6 +106,9 @@ public class MorbidityFragment extends KeyboardFragment {
         binding = FragmentMorbidityBinding.inflate(inflater, container, false);
         binding.setMorbidity(morbidity);
 
+        // Setup keyboard hiding for all views in the layout
+        setupKeyboardHiding(binding.getRoot());
+
         IndividualSharedViewModel sharedModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
         selectedIndividual = sharedModel.getCurrentSelectedIndividual();
 

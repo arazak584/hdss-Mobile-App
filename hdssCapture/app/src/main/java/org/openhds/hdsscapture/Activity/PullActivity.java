@@ -61,6 +61,7 @@ import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyLevelViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
 import org.openhds.hdsscapture.Viewmodel.OdkViewModel;
+import org.openhds.hdsscapture.Viewmodel.QueriesViewModel;
 import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
 import org.openhds.hdsscapture.entity.CodeBook;
 import org.openhds.hdsscapture.entity.CommunityReport;
@@ -76,6 +77,7 @@ import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Round;
+import org.openhds.hdsscapture.entity.ServerQueries;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.odk.OdkForm;
@@ -124,6 +126,7 @@ public class PullActivity extends AppCompatActivity {
     private TextView statusTextView;
     private ProgressBar progressBar;
     private AppCompatButton complete;
+    private String fwname;
 
     public boolean isInternetAvailable() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -251,6 +254,9 @@ public class PullActivity extends AppCompatActivity {
             OtherDownloadSummary progressDialogFragment = new OtherDownloadSummary();
             progressDialogFragment.show(getSupportFragmentManager(), "OtherDownloadSummary");
         });
+
+        SharedPreferences sharedPreferences = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        fwname = sharedPreferences.getString(LoginActivity.FW_USERNAME_KEY, null);
 
         appDatabase = AppDatabase.getDatabase(this);
         locationDao = appDatabase.locationDao();
@@ -524,14 +530,23 @@ public class PullActivity extends AppCompatActivity {
                                                     HierarchyLevel[] hie = response.body().getData().toArray(new HierarchyLevel[0]);
                                                     hieViewModel.add(hie);
 
-                                                    //Sync ODK EXTRA
-                                                    final OdkViewModel odkViewModel = new ViewModelProvider(PullActivity.this).get(OdkViewModel.class);
-                                                    Call<DataWrapper<OdkForm>> c_callable = dao.getOdk(authorizationHeader);
-                                                    c_callable.enqueue(new Callback<DataWrapper<OdkForm>>() {
+                                            //Sync ODK EXTRA
+                                            final OdkViewModel odkViewModel = new ViewModelProvider(PullActivity.this).get(OdkViewModel.class);
+                                            Call<DataWrapper<OdkForm>> c_callable = dao.getOdk(authorizationHeader);
+                                            c_callable.enqueue(new Callback<DataWrapper<OdkForm>>() {
+                                            @Override
+                                            public void onResponse(Call<DataWrapper<OdkForm>> call, Response<DataWrapper<OdkForm>> response) {
+                                            OdkForm[] odk = response.body().getData().toArray(new OdkForm[0]);
+                                            odkViewModel.add(odk);
+
+                                                //Sync Server Queries
+                                                final QueriesViewModel queriesViewModel = new ViewModelProvider(PullActivity.this).get(QueriesViewModel.class);
+                                                Call<DataWrapper<ServerQueries>> c_callable = dao.getQueries(authorizationHeader, fwname);
+                                                c_callable.enqueue(new Callback<DataWrapper<ServerQueries>>() {
                                                     @Override
-                                                    public void onResponse(Call<DataWrapper<OdkForm>> call, Response<DataWrapper<OdkForm>> response) {
-                                                    OdkForm[] odk = response.body().getData().toArray(new OdkForm[0]);
-                                                    odkViewModel.add(odk);
+                                                    public void onResponse(Call<DataWrapper<ServerQueries>> call, Response<DataWrapper<ServerQueries>> response) {
+                                                        ServerQueries[] query = response.body().getData().toArray(new ServerQueries[0]);
+                                                        queriesViewModel.add(query);
 
                                             //Sync Settings
                                             textView_SyncHierarchyData.setText("Updating Settings...");
@@ -572,6 +587,15 @@ public class PullActivity extends AppCompatActivity {
                                             });
                                         }
 
+                                                    @Override
+                                                    public void onFailure(Call<DataWrapper<ServerQueries>> call, Throwable t) {
+                                                        progres.dismiss();
+                                                        progressBar.setProgress(0);
+                                                        textView_SyncHierarchyData.setText("Queries Sync Error!");
+                                                        textView_SyncHierarchyData.setTextColor(Color.RED);
+                                                    }
+                                                });
+                                            }
                                                         @Override
                                                         public void onFailure(Call<DataWrapper<OdkForm>> call, Throwable t) {
                                                             progres.dismiss();
@@ -580,7 +604,7 @@ public class PullActivity extends AppCompatActivity {
                                                             textView_SyncHierarchyData.setTextColor(Color.RED);
                                                         }
                                                     });
-                                                        }
+                                                   }
 
                                                         @Override
                                                         public void onFailure(Call<DataWrapper<HierarchyLevel>> call, Throwable t) {
