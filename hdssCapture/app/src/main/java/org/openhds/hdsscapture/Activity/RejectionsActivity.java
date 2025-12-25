@@ -510,6 +510,7 @@ public class RejectionsActivity extends AppCompatActivity {
                                                             item.outcome = exist.outcome;
                                                             item.id = exist.id;
                                                             item.complete = 0;
+                                                            item.pregnancyOrder = exist.pregnancyOrder;
                                                             toAdd.add(item);
                                                         }
                                                     }

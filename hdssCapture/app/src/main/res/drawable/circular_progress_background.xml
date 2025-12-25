@@ -1,14 +1,14 @@
-<!-- res/drawable/circular_progress_background.xml -->
-<shape android:innerRadiusRatio="2.5"
-    android:shape="ring"
-    android:thicknessRatio="15.0"
-    android:useLevel="false"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <size
-        android:height="200dp"
-        android:width="200dp" />
-
-    <solid android:color="#CCCCCC" /> <!-- Set the background color to gray -->
-
-</shape>
+<?xml version="1.0" encoding="utf-8"?>
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromDegrees="-90"
+    android:toDegrees="270"
+    android:pivotX="50%"
+    android:pivotY="50%">
+    <shape
+        android:innerRadiusRatio="2.5"
+        android:shape="ring"
+        android:thickness="8dp"
+        android:useLevel="true">
+        <solid android:color="#E5E7EB" />
+    </shape>
+</rotate>

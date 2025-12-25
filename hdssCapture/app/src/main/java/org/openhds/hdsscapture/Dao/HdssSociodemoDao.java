@@ -85,8 +85,8 @@ public interface HdssSociodemoDao {
 
     @Query("SELECT COUNT(*) FROM sociodemo as a INNER JOIN socialgroup as b ON a.socialgroup_uuid=b.uuid " +
             " INNER JOIN locations as c on a.location_uuid=c.uuid " +
-            " where a.form_comments_yn IS NULL GROUP BY a.socialgroup_uuid")
-    long cnt();
+            " where a.form_comments_yn IS NULL AND a.fw_uuid= :id GROUP BY a.socialgroup_uuid")
+    long cnt(String id);
 
     @Query("SELECT a.uuid, 'SES' AS formType, a.insertDate, extId || ' - ' || groupName as fullName FROM sociodemo as a inner join socialgroup as b ON a.socialgroup_uuid=b.uuid WHERE a.complete = 1 ORDER BY a.insertDate DESC")
     List<CompletedForm> getCompletedForms();

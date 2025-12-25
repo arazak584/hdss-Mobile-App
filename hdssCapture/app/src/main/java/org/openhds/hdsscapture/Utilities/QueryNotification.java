@@ -35,9 +35,12 @@ import org.openhds.hdsscapture.Viewmodel.OutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
+import org.openhds.hdsscapture.Viewmodel.QueriesViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
+import org.openhds.hdsscapture.entity.ServerQueries;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -54,8 +57,10 @@ public class QueryNotification {
         private final OutcomeViewModel outcomeViewModel;
         private final PregnancyoutcomeViewModel pregnancyoutcomeViewModel;
         private final HdssSociodemoViewModel hdssSociodemoViewModel;
+        private final QueriesViewModel queriesViewModel;
 
         private final String fw;
+        private String fwname;
 
         public NotificationWorker(@NonNull Context context, @NonNull WorkerParameters params) {
             super(context, params);
@@ -65,6 +70,7 @@ public class QueryNotification {
             // Retrieve fw_uuid from SharedPreferences
             SharedPreferences sharedPreferences = context.getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
             fw = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
+            fwname = sharedPreferences.getString(LoginActivity.FW_USERNAME_KEY, null);
 
             Log.d("Notification", "Fw-worker "+ fw);
 
@@ -74,6 +80,7 @@ public class QueryNotification {
             pregnancyoutcomeViewModel = factory.create(PregnancyoutcomeViewModel.class);
             outcomeViewModel = factory.create(OutcomeViewModel.class);
             hdssSociodemoViewModel = factory.create(HdssSociodemoViewModel.class);
+            queriesViewModel = factory.create(QueriesViewModel.class);
         }
 
         @NonNull
@@ -91,11 +98,12 @@ public class QueryNotification {
         private void checkAndNotify() throws ExecutionException, InterruptedException {
             long totalOut = pregnancyoutcomeViewModel.cnt(fw);
             long listing = listingViewModel.cnt();
-            long totalses = hdssSociodemoViewModel.cnt();
+            long totalses = hdssSociodemoViewModel.cnt(fw);
             long totalDth = deathViewModel.cnt();
             long ind = individualViewModel.cnt();
             long inds = individualViewModel.cnts();
             long indss = individualViewModel.cntss();
+            List<ServerQueries> qis = queriesViewModel.findByFw(fwname);
             //long out = outcomeViewModel.cnt(fw);
 
             if (totalOut > 0) {
@@ -158,16 +166,34 @@ public class QueryNotification {
                         QUERY_CHANNEL_ID
                 );
             }
-            if (indss > 0) {
-                createAndShowNotification(
-                        getApplicationContext(),
-                        "Query",
-                        "Only Minors Left in Household",
-                        createNotificationIntent(),
-                        1017,
-                        QUERY_CHANNEL_ID
-                );
+//            if (indss > 0) {
+//                createAndShowNotification(
+//                        getApplicationContext(),
+//                        "Query",
+//                        "Only Minors Left in Household",
+//                        createNotificationIntent(),
+//                        1017,
+//                        QUERY_CHANNEL_ID
+//                );
+//            }
+            // Create notifications for each ServerQuery with its error message
+            if (qis != null && !qis.isEmpty()) {
+                int notificationId = 1018; // Starting ID for ServerQueries notifications
+                for (ServerQueries query : qis) {
+                    String errorMessage = query.getError(); // Default Message
+                    if (errorMessage != null && !errorMessage.isEmpty()) {
+                        createAndShowNotification(
+                                getApplicationContext(),
+                                "Query",
+                                errorMessage,
+                                createNotificationIntent(),
+                                notificationId++,
+                                QUERY_CHANNEL_ID
+                        );
+                    }
+                }
             }
+
 //            if (out > 0) {
 //                createAndShowNotification(
 //                        getApplicationContext(),

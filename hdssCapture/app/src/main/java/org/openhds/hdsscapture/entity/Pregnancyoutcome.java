@@ -579,6 +579,7 @@ public class Pregnancyoutcome extends BaseObservable implements Parcelable {
 //        this.numberOfLiveBirths = numberOfLiveBirths;
 //    }
 
+    @Bindable
     public Integer getNumberOfLiveBirthsValue() {
         return numberOfLiveBirths;
     }
@@ -590,7 +591,10 @@ public class Pregnancyoutcome extends BaseObservable implements Parcelable {
     public void setNumberOfLiveBirths(String numberOfLiveBirths) {
         try {
             this.numberOfLiveBirths = (numberOfLiveBirths == null) ? null : Integer.valueOf(numberOfLiveBirths);
+            //notifyPropertyChanged(BR.numberOfLiveBirthsValue);
+            notifyPropertyChanged(BR._all);
         } catch (NumberFormatException e) {
+
         }
     }
 

@@ -48,7 +48,7 @@ public interface OutmigrationDao {
     @Query("SELECT * FROM outmigration a INNER JOIN residency b on a.residency_uuid=b.uuid WHERE a.individual_uuid=:id AND b.location_uuid=:locid")
     Outmigration find(String id,String locid);
 
-    @Query("SELECT * FROM outmigration WHERE individual_uuid=:id AND location_uuid=:locid AND edit IS NULL")
+    @Query("SELECT * FROM outmigration WHERE individual_uuid=:id AND location_uuid=:locid AND edit=1")
     Outmigration edit(String id,String locid);
 
     @Query("SELECT * FROM outmigration WHERE individual_uuid=:id AND visit_uuid=:res")
@@ -58,7 +58,7 @@ public interface OutmigrationDao {
     Outmigration findLast(String id);
 
     @Query("SELECT COUNT(*) FROM outmigration a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
-            " WHERE date(insertDate/1000,'unixepoch') BETWEEN date(:startDate/1000,'unixepoch') AND date(:endDate/1000,'unixepoch') AND b.username = :username AND edit!=2")
+            " WHERE date(insertDate/1000,'unixepoch') BETWEEN date(:startDate/1000,'unixepoch') AND date(:endDate/1000,'unixepoch') AND b.username = :username AND edit=1")
     long count(Date startDate, Date endDate, String username);
 
     @Query("SELECT a.uuid,a.insertDate,a.residency_uuid,b.firstName as visit_uuid,b.lastName as location_uuid FROM outmigration as a inner join individual as b on a.individual_uuid=b.uuid WHERE socialgroup_uuid=:id")

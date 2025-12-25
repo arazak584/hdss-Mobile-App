@@ -28,6 +28,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.card.MaterialCardView;
+
 import org.openhds.hdsscapture.Activity.*;
 import org.openhds.hdsscapture.Views.ViewActivity;
 import org.openhds.hdsscapture.Dao.ApiDao;
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String PREFS_LAST_SYNC = "lastSyncDatetime";
 
     // UI Components
-    private Button send, reject;
+    private TextView reject;
     private TextView wks;
     private ProgressDialog progress;
 
@@ -170,29 +172,37 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupUIComponents() {
         wks = findViewById(R.id.textInMiddle);
-        send = findViewById(R.id.btnpush);
+        //send = findViewById(R.id.btnpush);
         reject = findViewById(R.id.btnReject);
 
         Fieldworker fieldworkerDatas = getIntent().getParcelableExtra(LoginActivity.FIELDWORKER_DATAS);
 
         setupButton(R.id.button_settings, v -> syncAllSettings());
-        setupButton(R.id.btnupdate, v -> startActivityWithData(HierarchyActivity.class, fieldworkerDatas));
-        setupButton(R.id.btnMap, v -> startActivityWithData(MapActivity.class, fieldworkerDatas));
-        setupButton(R.id.btnpush, v -> handlePushAccess());
-        setupButton(R.id.btnpull, v -> handlePullAccess());
-        setupButton(R.id.btnreport, v -> startActivityWithData(ReportActivity.class, fieldworkerDatas));
-        setupButton(R.id.btnquerry, v -> startActivityWithData(QueryActivity.class, fieldworkerDatas));
-        setupButton(R.id.btnloc, v -> startActivityWithData(ViewActivity.class, fieldworkerDatas));
-        setupButton(R.id.btnSchedule, v -> startActivity(new Intent(this, RemainderActivity.class)));
+        setupButtons(R.id.btnDataCapture, v -> startActivityWithData(HierarchyActivity.class, fieldworkerDatas));
+        setupButtons(R.id.btnSiteMap, v -> startActivityWithData(MapActivity.class, fieldworkerDatas));
+        setupButtons(R.id.btnSyncData, v -> handlePushAccess());
+        setupButtons(R.id.btnDownload, v -> handlePullAccess());
+        setupButtons(R.id.btnReports, v -> startActivityWithData(ReportActivity.class, fieldworkerDatas));
+        setupButtons(R.id.btnQueries, v -> startActivityWithData(QueryActivity.class, fieldworkerDatas));
+        setupButtons(R.id.btnViews, v -> startActivityWithData(ViewActivity.class, fieldworkerDatas));
+        setupButtons(R.id.btnWorkSchedule, v -> startActivity(new Intent(this, RemainderActivity.class)));
         setupButton(R.id.btninfo, v -> handleInfoAccess());
         setupButton(R.id.button_url, v -> openUrl("https://github.com/arn-techsystem/openAB/releases/download/v2023.0.1/app-debug.apk"));
         setupButton(R.id.button_resetDatabase, v -> handleDatabaseReset());
+        setupButtons(R.id.btnLastCompounds, v -> lastCompoundAccess());
 
-        reject.setOnClickListener(v -> startActivityWithData(RejectionsActivity.class, fieldworkerDatas));
+        setupButtons(R.id.btnRejections,v -> startActivityWithData(RejectionsActivity.class, fieldworkerDatas));
     }
 
     private void setupButton(int buttonId, View.OnClickListener listener) {
         Button button = findViewById(buttonId);
+        if (button != null) {
+            button.setOnClickListener(listener);
+        }
+    }
+
+    private void setupButtons(int buttonId, View.OnClickListener listener) {
+        MaterialCardView button = findViewById(buttonId);
         if (button != null) {
             button.setOnClickListener(listener);
         }
@@ -215,6 +225,14 @@ public class MainActivity extends AppCompatActivity {
     private void handlePullAccess() {
         if (status == 1 || status == 2) {
             startActivity(new Intent(this, PullActivity.class));
+        } else {
+            showAccessDenied();
+        }
+    }
+
+    private void lastCompoundAccess() {
+        if (status == 2) {
+            startActivity(new Intent(this, CompoundActivity.class));
         } else {
             showAccessDenied();
         }

@@ -30,8 +30,11 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.Vpm;
+import org.openhds.hdsscapture.entity.subentity.AvailableCompnoDTO;
 import org.openhds.hdsscapture.odk.OdkForm;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
+
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -195,5 +198,9 @@ public interface ApiDao {
 
     @GET("/api/queries")
     Call<DataWrapper<ServerQueries>> getQueries(@Header("Authorization") String authorizationHeader, @Query("fw") String fw);
+
+
+    @GET("/api/compno/available")
+    Call<List<AvailableCompnoDTO>> getAvailableCompounds(@Header("Authorization") String authorizationHeader,@Query("prefix") String prefix);
 
 }

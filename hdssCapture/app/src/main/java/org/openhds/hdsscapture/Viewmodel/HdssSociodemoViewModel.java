@@ -56,8 +56,8 @@ public class HdssSociodemoViewModel extends AndroidViewModel {
         return hdssSociodemoRepository.rej(uuid);
     }
 
-    public long cnt() throws ExecutionException, InterruptedException {
-        return hdssSociodemoRepository.cnt();
+    public long cnt(String id) throws ExecutionException, InterruptedException {
+        return hdssSociodemoRepository.cnt(id);
     }
 
     public List<HdssSociodemo> error(String id) throws ExecutionException, InterruptedException {

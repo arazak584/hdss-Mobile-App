@@ -97,8 +97,8 @@ public class HdssSociodemoRepository {
         return future.get();
     }
 
-    public long cnt() throws ExecutionException, InterruptedException {
-        Callable<Long> callable = () -> dao.cnt();
+    public long cnt(String id) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.cnt(id);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }

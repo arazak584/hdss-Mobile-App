@@ -56,7 +56,7 @@ public interface DeathDao {
     List<Death> error(String id);
 
     @Query("SELECT COUNT(*) FROM death a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
-            " WHERE a.insertDate BETWEEN :startDate AND :endDate AND b.username = :username AND a.edit!=2")
+            " WHERE a.insertDate BETWEEN :startDate AND :endDate AND b.username = :username AND a.edit=1")
     long count(Date startDate, Date endDate, String username);
 
     @Query("SELECT * FROM death WHERE insertDate > (SELECT startDate FROM round LIMIT 1) AND complete IS NOT NULL order by insertDate DESC")
@@ -74,13 +74,13 @@ public interface DeathDao {
     @Query("SELECT COUNT(*) FROM death as a INNER JOIN socialgroup as b ON a.individual_uuid=b.individual_uuid " +
             " INNER JOIN residency as c on b.uuid=c.socialgroup_uuid " +
             " INNER JOIN individual as d on c.individual_uuid=d.uuid " +
-            "where c.endType=1 and a.firstName!='Still' AND d.firstName!='FAKE' AND a.edit!=2 GROUP BY a.individual_uuid")
+            "where c.endType=1 and a.firstName!='Still' AND d.firstName!='FAKE' AND a.edit=1 GROUP BY a.individual_uuid")
     long cnt();
 
     @Query("SELECT COUNT(DISTINCT d.uuid) FROM death as a INNER JOIN socialgroup as b ON a.individual_uuid=b.individual_uuid " +
             " INNER JOIN residency as c on b.uuid=c.socialgroup_uuid " +
             " INNER JOIN individual as d on c.individual_uuid=d.uuid " +
-            "where c.endType=1 and a.firstName!='Still' AND d.firstName!='FAKE' AND a.edit!=2 AND d.hohID = :id AND d.compno = :ids ")
+            "where c.endType=1 and a.firstName!='Still' AND d.firstName!='FAKE' AND a.edit=1 AND d.hohID = :id AND d.compno = :ids ")
     long err(String id, String ids);
 
     @Query("SELECT * FROM death where uuid=:id AND complete!=1")

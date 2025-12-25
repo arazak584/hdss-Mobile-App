@@ -268,13 +268,97 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
 
         // Get location manager for updates
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
 
-        // Get last known location
-        Location lastKnown = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (lastKnown != null) {
-            userLocation = new GeoPoint(lastKnown.getLatitude(), lastKnown.getLongitude());
+        // Request updates from both GPS and Network providers for better reliability
+        if (locationManager != null) {
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
+            }
+            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, this);
+            }
         }
+
+        // Get last known location from multiple sources
+        updateUserLocationFromLastKnown();
+
+        // Check location status after a delay
+        map.postDelayed(() -> {
+            GeoPoint loc = getCurrentLocation();
+            if (loc != null) {
+                Toast.makeText(this, "GPS location acquired", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Waiting for GPS signal...", Toast.LENGTH_LONG).show();
+            }
+        }, 3000);
+    }
+
+    private void updateUserLocationFromLastKnown() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        if (locationManager != null) {
+            Location lastKnownGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            Location lastKnownNetwork = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+            // Use the most recent location
+            Location bestLocation = null;
+            if (lastKnownGPS != null && lastKnownNetwork != null) {
+                bestLocation = lastKnownGPS.getTime() > lastKnownNetwork.getTime() ? lastKnownGPS : lastKnownNetwork;
+            } else if (lastKnownGPS != null) {
+                bestLocation = lastKnownGPS;
+            } else if (lastKnownNetwork != null) {
+                bestLocation = lastKnownNetwork;
+            }
+
+            if (bestLocation != null) {
+                userLocation = new GeoPoint(bestLocation.getLatitude(), bestLocation.getLongitude());
+            }
+        }
+    }
+
+    /**
+     * Get current location from multiple sources (most reliable method)
+     */
+    private GeoPoint getCurrentLocation() {
+        // Priority 1: Try myLocationOverlay (most reliable)
+        if (myLocationOverlay != null && myLocationOverlay.getMyLocation() != null) {
+            GeoPoint loc = myLocationOverlay.getMyLocation();
+            // Update userLocation for consistency
+            userLocation = loc;
+            return loc;
+        }
+
+        // Priority 2: Use stored userLocation
+        if (userLocation != null) {
+            return userLocation;
+        }
+
+        // Priority 3: Try getting last known location from LocationManager
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (locationManager != null) {
+                Location lastKnownGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                Location lastKnownNetwork = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+                // Use GPS if available, otherwise network
+                Location bestLocation = null;
+                if (lastKnownGPS != null && lastKnownNetwork != null) {
+                    bestLocation = lastKnownGPS.getTime() > lastKnownNetwork.getTime() ? lastKnownGPS : lastKnownNetwork;
+                } else if (lastKnownGPS != null) {
+                    bestLocation = lastKnownGPS;
+                } else if (lastKnownNetwork != null) {
+                    bestLocation = lastKnownNetwork;
+                }
+
+                if (bestLocation != null) {
+                    userLocation = new GeoPoint(bestLocation.getLatitude(), bestLocation.getLongitude());
+                    return userLocation;
+                }
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -283,23 +367,31 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         if (requestCode == LOCATION_PERMISSION_REQUEST) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setupLocationTracking();
+            } else {
+                Toast.makeText(this, "Location permission is required for navigation", Toast.LENGTH_LONG).show();
             }
         }
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        userLocation = new GeoPoint(location.getLatitude(), location.getLongitude());
+        if (location != null) {
+            userLocation = new GeoPoint(location.getLatitude(), location.getLongitude());
+        }
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {}
 
     @Override
-    public void onProviderEnabled(String provider) {}
+    public void onProviderEnabled(String provider) {
+        Toast.makeText(this, provider + " enabled", Toast.LENGTH_SHORT).show();
+    }
 
     @Override
-    public void onProviderDisabled(String provider) {}
+    public void onProviderDisabled(String provider) {
+        Toast.makeText(this, provider + " disabled. Please enable it for navigation.", Toast.LENGTH_SHORT).show();
+    }
 
     private void loadLocations(String villageName, String compno) {
         executor.submit(() -> {
@@ -380,8 +472,14 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     }
 
     private void showRouteDialog(Locations location, GeoPoint destination) {
-        if (userLocation == null) {
-            Toast.makeText(this, "Current location not available. Please enable GPS.", Toast.LENGTH_SHORT).show();
+        GeoPoint currentLocation = getCurrentLocation();
+
+        if (currentLocation == null) {
+            new AlertDialog.Builder(this)
+                    .setTitle("GPS Not Ready")
+                    .setMessage("Current location is not available yet. Please ensure GPS is enabled and wait for a GPS fix.\n\nTry again in a few moments.")
+                    .setPositiveButton("OK", null)
+                    .show();
             return;
         }
 
@@ -394,8 +492,10 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     }
 
     private void getAndDisplayRoute(GeoPoint destination) {
-        if (userLocation == null) {
-            Toast.makeText(this, "Current location not available", Toast.LENGTH_SHORT).show();
+        GeoPoint currentLocation = getCurrentLocation();
+
+        if (currentLocation == null) {
+            Toast.makeText(this, "Current location not available. Please wait for GPS.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -405,24 +505,28 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
         // Show loading message
         Toast.makeText(this, "Calculating route...", Toast.LENGTH_SHORT).show();
 
-        routingHelper.getRoute(userLocation, destination, new OSRMRoutingHelper.RoutingCallback() {
+        routingHelper.getRoute(currentLocation, destination, new OSRMRoutingHelper.RoutingCallback() {
             @Override
             public void onRoutingSuccess(List<GeoPoint> routePoints, double distanceKm, double durationMinutes) {
-                // Draw route on map
-                currentRoute = OSRMRoutingHelper.drawRouteOnMap(map, routePoints);
+                runOnUiThread(() -> {
+                    // Draw route on map
+                    currentRoute = OSRMRoutingHelper.drawRouteOnMap(map, routePoints);
 
-                // Display route information
-                String info = String.format("Distance: %.2f km\nEst. Time: %.0f min", distanceKm, durationMinutes);
-                routeInfoText.setText(info);
-                routeInfoText.setVisibility(View.VISIBLE);
-                clearRouteButton.setVisibility(View.VISIBLE);
+                    // Display route information
+                    String info = String.format("Distance: %.2f km\nEst. Time: %.0f min", distanceKm, durationMinutes);
+                    routeInfoText.setText(info);
+                    routeInfoText.setVisibility(View.VISIBLE);
+                    clearRouteButton.setVisibility(View.VISIBLE);
 
-                Toast.makeText(MapActivity.this, "Route calculated successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MapActivity.this, "Route calculated successfully", Toast.LENGTH_SHORT).show();
+                });
             }
 
             @Override
             public void onRoutingFailure(String error) {
-                Toast.makeText(MapActivity.this, "Failed to calculate route: " + error, Toast.LENGTH_LONG).show();
+                runOnUiThread(() -> {
+                    Toast.makeText(MapActivity.this, "Failed to calculate route: " + error, Toast.LENGTH_LONG).show();
+                });
             }
         });
     }
@@ -452,6 +556,18 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
     protected void onResume() {
         super.onResume();
         map.onResume();
+
+        // Resume location updates
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (locationManager != null) {
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
+                }
+                if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 10, this);
+                }
+            }
+        }
     }
 
     @Override
