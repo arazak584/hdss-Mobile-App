@@ -13,16 +13,37 @@
         android:orientation="vertical"
         android:padding="12dp">
 
-        <TextView
-            android:id="@+id/form_name"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:text="Form Name" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/form_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:text="Form Name" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/open_form_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Open Form"
+                android:textColor="@color/white"
+                android:background="@color/DarkBlue"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp" />
+
+        </LinearLayout>
 
         <TextView
+            android:visibility="gone"
             android:id="@+id/form_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,18 +51,6 @@
             android:textSize="14sp"
             android:textColor="@android:color/darker_gray"
             android:text="Form Description" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/open_form_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_gravity="end"
-            android:text="Open Form"
-            android:textColor="@color/white"
-            android:background="@color/DarkBlue"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp" />
 
     </LinearLayout>
 

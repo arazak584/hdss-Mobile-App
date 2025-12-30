@@ -97,7 +97,7 @@ public class OdkFormAdapter extends RecyclerView.Adapter<OdkFormAdapter.FormView
             }
 
             formDescText.setText(desc.toString());
-            formDescText.setVisibility(desc.length() > 0 ? View.VISIBLE : View.GONE);
+            //formDescText.setVisibility(desc.length() > 0 ? View.VISIBLE : View.GONE);
 
             openFormButton.setOnClickListener(v -> {
                 if (listener != null) {

@@ -548,6 +548,7 @@
                 tools:ignore="ImageContrastCheck" />
 
             <androidx.appcompat.widget.AppCompatButton
+                android:visibility="gone"
                 android:id="@+id/menu"
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
