@@ -92,8 +92,11 @@ public interface IndividualDao {
     @Query("SELECT uuid,extId,firstName,lastName,dob,gender,compno,ghanacard,otherName,phone1,hohID from individual WHERE endType=1 and firstName!='FAKE' and hohID=:id order by dob")
     List<Individual> retrieveByLocationId(String id);
 
-    @Query("SELECT uuid, extId, firstName, lastName, dob, gender, compno, ghanacard, otherName, phone1, hohID,complete FROM individual WHERE endType=1 AND firstName!='FAKE' AND hohID=:id AND (deleted IS NULL OR deleted = 0) ORDER BY dob")
-    LiveData<List<Individual>> retrieveByHouseId(String id);
+    @Query("SELECT uuid, extId, firstName, lastName, dob, gender, compno, ghanacard, otherName, phone1, hohID,complete FROM individual WHERE endType=1 AND firstName!='FAKE' AND hohID=:id AND compno= :ids AND (deleted IS NULL OR deleted = 0) ORDER BY dob")
+    LiveData<List<Individual>> retrieveByHouseId(String id,String ids);
+
+    @Query("SELECT * FROM individual WHERE endType=1 AND firstName!='FAKE' AND hohID=:id AND compno= :ids AND (deleted IS NULL OR deleted = 0) ORDER BY dob")
+    List<Individual> getHouseholdMembersSync(String id,String ids);
 
     @Query("SELECT * from individual WHERE endType=2 and firstName!='FAKE' and compno=:id order by dob")
     List<Individual> retrieveReturn(String id);
@@ -228,14 +231,6 @@ public interface IndividualDao {
             "WHERE (a.edit IS NULL OR a.edit = 1) AND endType =2 AND compno =:loc ORDER BY a.recordedDate DESC LIMIT 1")
     List<Individual> retrieveOmg(String loc);
 
-    //(a.edit IS NULL OR a.edit = 1)
-    //a.edit NOT IN (2)
-//    @Query("SELECT a.*,d.compextId,b.extId as houseExtId FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
-//            " INNER JOIN residency c on b.uuid=c.socialgroup_uuid INNER JOIN locations d " +
-//            " ON c.location_uuid=d.uuid " +
-//            " WHERE firstName!='FAKE' and groupName!='UNK' and c.endType=1 and " +
-//            " strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) < (SELECT hoh_age from config) GROUP BY b.extId order by dob")
-//    List<Individual> error();
 
     @Query("SELECT a.* FROM individual as a " + "INNER JOIN socialgroup as b ON a.uuid = b.individual_uuid " +
             " WHERE firstName!='FAKE' and endType=1 and " +

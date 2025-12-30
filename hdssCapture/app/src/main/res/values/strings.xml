@@ -933,4 +933,41 @@
     <string name="land_use">Land Use</string>
 
 
+    <!-- ODK Form Loading -->
+    <string name="odk_problem_lbl">ODK Problem</string>
+    <string name="warning_lbl">Warning</string>
+    <string name="permissions_sync_storage_title_lbl">Storage Permissions</string>
+    <string name="storage_access_title_lbl">Storage Access Required</string>
+
+    <!-- ODK Errors -->
+    <string name="odk_form_load_error_odk_not_installed_lbl">ODK Collect is not installed. Please install ODK Collect from the Play Store to use forms.</string>
+    <string name="odk_form_load_error_provider_lbl">Cannot access ODK Collect data provider. Please ensure ODK Collect is properly installed.</string>
+    <string name="odk_form_load_error_form_not_found_lbl">The requested form was not found in ODK Collect. Please download the form first.</string>
+    <string name="odk_form_load_error_folder_permissions_lbl">Permission denied to access ODK folders. Please grant the required permissions.</string>
+    <string name="odk_form_load_error_saving_prefilled_xml_lbl">Failed to create prefilled form instance. Please try again.</string>
+    <string name="odk_form_load_error_saving_instance_form_lbl">Failed to save form instance to ODK Collect.</string>
+
+    <!-- Permission Messages -->
+    <string name="odk_form_load_permission_request_readphonestate_denied_lbl">Phone state permission is required to identify the device. Please grant this permission to continue.</string>
+    <string name="odk_form_load_permission_request_readwrite_denied_lbl">Storage read/write permissions are required to access ODK forms. Please grant these permissions.</string>
+    <string name="odk_form_load_permission_storage_denied_lbl">Storage access was denied. ODK forms cannot be loaded without storage permissions.</string>
+    <string name="odk_form_load_permission_request_manage_all_title_lbl">Storage Access Required</string>
+    <string name="odk_form_load_permission_request_manage_all_info_lbl">On Android 11 and above, you need to grant access to manage all files. This is required to preload data into ODK forms. Tap OK to continue to settings.</string>
+    <string name="odk_form_load_permission_request_android_dir_info_lbl">Please grant access to the ODK folder to enable form data preloading. Select the ODK folder in the next screen.</string>
+
+    <!-- Unfinished Form Dialog -->
+    <string name="odk_unfinished_dialog_msg">You have an unfinished form. What would you like to do?</string>
+    <string name="odk_unfinished_button_delete">Delete</string>
+    <string name="odk_unfinished_button_change">Edit Form</string>
+    <string name="odk_unfinished_button_save">Save for Later</string>
+    <string name="odk_unfinished_form_saved">Form saved for later</string>
+
+    <string name="select_folder_instructions">Please select the exact folder:\n\n%1$s</string>
+    <string name="select_folder_btn">Select Folder</string>
+    <string name="error_lbl">Error</string>
+    <string name="error_opening_file_manager">Error opening file manager</string>
+    <string name="incorrect_folder_selected">Incorrect Folder Selected</string>
+    <string name="folder_selection_instruction">Please select the exact folder:\n\n%1$s\n\nYou selected: %2$s</string>
+    <string name="try_again_btn">Try Again</string>
+
 </resources>

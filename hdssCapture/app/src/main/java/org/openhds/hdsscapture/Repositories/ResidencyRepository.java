@@ -14,6 +14,7 @@ import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
+import org.openhds.hdsscapture.entity.subentity.ResidencyRelationshipUpdate;
 import org.openhds.hdsscapture.entity.subentity.ResidencyUpdate;
 import org.openhds.hdsscapture.entity.subentity.ResidencyUpdateEndDate;
 
@@ -59,6 +60,13 @@ public class ResidencyRepository {
         });
     }
 
+    public void update(ResidencyRelationshipUpdate s, Consumer<Integer> callback) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int result = dao.update(s);
+            new Handler(Looper.getMainLooper()).post(() -> callback.accept(result));
+        });
+    }
+
     public void updates(ResidencyUpdate s, Consumer<Integer> callback) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             int result = dao.updates(s);
@@ -91,6 +99,15 @@ public class ResidencyRepository {
     public List<Residency> find(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Residency>> callable = () -> dao.find(id);
+
+        Future<List<Residency>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Residency> findResidenciesBySocialgroup(String id,String ids) throws ExecutionException, InterruptedException {
+
+        Callable<List<Residency>> callable = () -> dao.findResidenciesBySocialgroup(id,ids);
 
         Future<List<Residency>> future = Executors.newSingleThreadExecutor().submit(callable);
 

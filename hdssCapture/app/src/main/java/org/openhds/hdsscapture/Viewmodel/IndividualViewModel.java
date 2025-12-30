@@ -45,12 +45,16 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.retrieveByLocationId(id);
     }
 
-    public LiveData<List<Individual>> retrieveByHouseId(String id) {
-        return individualRepository.retrieveByHouseId(id); // No throws, no Executor
+    public LiveData<List<Individual>> retrieveByHouseId(String id,String ids) {
+        return individualRepository.retrieveByHouseId(id,ids); // No throws, no Executor
     }
 
     public List<Individual> retrieveReturn(String id) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveReturn(id);
+    }
+
+    public List<Individual> getHouseholdMembersSync(String id,String ids) throws ExecutionException, InterruptedException {
+        return individualRepository.getHouseholdMembersSync(id,ids);
     }
 
     public List<Individual> retrieveChild(String id) throws ExecutionException, InterruptedException {

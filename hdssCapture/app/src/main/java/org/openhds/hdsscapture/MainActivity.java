@@ -5,7 +5,6 @@ import static org.openhds.hdsscapture.AppConstants.*;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -371,7 +370,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void syncOdk(ViewModelProvider provider, Runnable onSuccess) {
-        OdkViewModel viewModel = provider.get(OdkViewModel.class);
+        OdkFormViewModel viewModel = provider.get(OdkFormViewModel.class);
         dao.getOdk(authorizationHeader).enqueue(new SimpleCallback<OdkForm>("ODK") {
             @Override
             public void onSuccess(DataWrapper<OdkForm> data) {

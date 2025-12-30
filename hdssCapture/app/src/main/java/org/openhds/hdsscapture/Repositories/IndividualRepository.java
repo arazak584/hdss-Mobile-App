@@ -178,13 +178,22 @@ public class IndividualRepository {
         return future.get();
     }
 
-    public LiveData<List<Individual>> retrieveByHouseId(String id) {
-        return dao.retrieveByHouseId(id); // No Future or Callable needed
+    public LiveData<List<Individual>> retrieveByHouseId(String id,String ids) {
+        return dao.retrieveByHouseId(id,ids); // No Future or Callable needed
     }
 
     public List<Individual> retrieveReturn(String id) throws ExecutionException, InterruptedException {
 
         Callable<List<Individual>> callable = () -> dao.retrieveReturn(id);
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public List<Individual> getHouseholdMembersSync(String id,String ids) throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.getHouseholdMembersSync(id,ids);
 
         Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
 

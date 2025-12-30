@@ -460,8 +460,6 @@
                         android:inputType="textPersonName"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -471,26 +469,6 @@
 
 
                 </LinearLayout>
-
-                <TextView
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/form_complete"/>
-
-                <org.openhds.searchSpinner.SearchableSpinner
-                    android:visibility="gone"
-                    android:id="@+id/membership_complete"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    selection="@{residency.complete}"
-                    android:onItemSelected="@{residency::setComplete}"
-                    android:gravity="left"
-                    android:textColor="#000301"
-                    android:padding="15dp"/>
 
 
             </LinearLayout>

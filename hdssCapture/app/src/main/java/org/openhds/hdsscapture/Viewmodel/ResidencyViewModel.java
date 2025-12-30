@@ -13,6 +13,7 @@ import org.openhds.hdsscapture.entity.Outcome;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
+import org.openhds.hdsscapture.entity.subentity.ResidencyRelationshipUpdate;
 import org.openhds.hdsscapture.entity.subentity.ResidencyUpdate;
 import org.openhds.hdsscapture.entity.subentity.ResidencyUpdateEndDate;
 
@@ -32,6 +33,10 @@ public class ResidencyViewModel extends AndroidViewModel {
 
     public List<Residency> find(String id) throws ExecutionException, InterruptedException {
         return residencyRepository.find(id);
+    }
+
+    public List<Residency> findResidenciesBySocialgroup(String id,String ids) throws ExecutionException, InterruptedException {
+        return residencyRepository.findResidenciesBySocialgroup(id, ids);
     }
 
     public Residency findRes(String id,String locid) throws ExecutionException, InterruptedException {
@@ -126,6 +131,10 @@ public class ResidencyViewModel extends AndroidViewModel {
 //    }
 
     public void update(ResidencyAmendment s, Consumer<Integer> callback) {
+        residencyRepository.update(s, callback);
+    }
+
+    public void update(ResidencyRelationshipUpdate s, Consumer<Integer> callback) {
         residencyRepository.update(s, callback);
     }
 

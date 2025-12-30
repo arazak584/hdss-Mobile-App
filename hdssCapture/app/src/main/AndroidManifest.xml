@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission
         android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
         tools:ignore="ProtectedPermissions" />
@@ -36,17 +37,6 @@
 
         <provider android:authorities="org.odk.collect.android.provider.odk.forms" />
         <provider android:authorities="org.odk.collect.android.provider.odk.instances" />
-
-        <intent>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent>
-        <intent>
-            <action android:name="android.intent.action.EDIT" />
-
-            <data android:mimeType="vnd.android.cursor.item/vnd.odk.form" />
-        </intent>
     </queries>
 
     <application
@@ -67,9 +57,6 @@
         <activity
             android:name=".Activity.CompoundActivity"
             android:exported="false" />
-        <activity
-            android:name=".Activity.KeyboardActivity"
-            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -81,9 +68,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity
-            android:name=".Activity.ODKCsvActivity"
-            android:exported="false" />
         <activity
             android:name=".Sync.SyncActivity"
             android:exported="false"

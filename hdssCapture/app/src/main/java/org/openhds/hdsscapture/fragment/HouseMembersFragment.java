@@ -3,6 +3,8 @@ package org.openhds.hdsscapture.fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -24,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
+import org.openhds.hdsscapture.Adapter.OdkFormAdapter;
 import org.openhds.hdsscapture.Dialog.MinorDialogFragment;
 import org.openhds.hdsscapture.Dialog.PregnancyDialogFragment;
 import org.openhds.hdsscapture.Duplicate.DupFragment;
@@ -39,10 +42,9 @@ import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
-import org.openhds.hdsscapture.Viewmodel.OdkViewModel;
+import org.openhds.hdsscapture.Viewmodel.OdkFormViewModel;
 import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
-import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
 import org.openhds.hdsscapture.Viewmodel.RegistryViewModel;
 import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.ResidencyViewModel;
@@ -61,16 +63,26 @@ import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Pregnancy;
-import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Registry;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
+import org.openhds.hdsscapture.odk.FormUtilities;
+import org.openhds.hdsscapture.odk.OdkForm;
+import org.openhds.hdsscapture.odk.listener.OdkFormResultListener;
+import org.openhds.hdsscapture.odk.model.FilledForm;
+import org.openhds.hdsscapture.odk.model.OdkFormLoadData;
+import org.openhds.hdsscapture.odk.model.RepeatGroupType;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -101,8 +113,10 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private VisitViewModel visitViewModel;
     private IndividualViewModel individualViewModel;
     private AppCompatButton finish;
-    private OdkViewModel odkViewModel;
     private RecyclerView recyclerViewOdk;
+    private OdkFormViewModel odkFormViewModel;
+    private OdkFormAdapter odkFormAdapter;
+    private FormUtilities formUtilities;
     private IndividualViewAdapter adapter;
     private RecyclerView recyclerView;
     private Locations currentLocation;
@@ -148,6 +162,40 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             this.individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
         individualSharedViewModel = new ViewModelProvider(requireActivity()).get(IndividualSharedViewModel.class);
+        odkFormViewModel = new ViewModelProvider(this).get(OdkFormViewModel.class);
+
+        // Initialize FormUtilities with result listener
+        formUtilities = new FormUtilities(this, new OdkFormResultListener() {
+            @Override
+            public void onFormFinalized(OdkFormLoadData loadData, Uri contentUri, String formId,
+                                        String instanceUri, String metaInstanceName, Date lastUpdatedDate) {
+                Toast.makeText(requireContext(), "Form completed successfully!", Toast.LENGTH_SHORT).show();
+                // You can save the form result to your database here
+                Log.d("ODK", "Form finalized: " + formId + ", instance: " + metaInstanceName);
+            }
+
+            @Override
+            public void onFormUnFinalized(OdkFormLoadData loadData, Uri contentUri, String formId,
+                                          String instanceUri, String metaInstanceName, Date lastUpdatedDate) {
+                Toast.makeText(requireContext(), "Form saved for later", Toast.LENGTH_SHORT).show();
+                Log.d("ODK", "Form unfinalized: " + formId);
+            }
+
+            @Override
+            public void onDeleteForm(OdkFormLoadData loadData, Uri contentUri, String instanceUri) {
+                Toast.makeText(requireContext(), "Form deleted", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFormLoadError(OdkFormLoadData loadData, Object result) {
+                Log.e("ODK", "Form load error for: " + loadData.formId);
+            }
+
+            @Override
+            public void onFormInstanceNotFound(OdkFormLoadData loadData, Uri contentUri) {
+                Toast.makeText(requireContext(), "Form instance not found", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // Initialize executor once
         backgroundExecutor = Executors.newSingleThreadExecutor();
@@ -171,12 +219,13 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         registryViewModel = new ViewModelProvider(this).get(RegistryViewModel.class);
         visitViewModel = new ViewModelProvider(this).get(VisitViewModel.class);
         individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-        odkViewModel = new ViewModelProvider(this).get(OdkViewModel.class);
         finish = view.findViewById(R.id.button_cpvisit);
         updateButtonState();
         recyclerViewOdk = view.findViewById(R.id.recyclerView_odk);
         //grantStoragePermission();
         //query();
+        // Setup ODK Forms RecyclerView
+        setupOdkFormsRecyclerView();
         
         if (socialgroup != null) {
 
@@ -435,6 +484,19 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         binding = null;
     }
 
+    //method to setup ODK forms
+    private void setupOdkFormsRecyclerView() {
+        recyclerViewOdk = view.findViewById(R.id.recyclerView_odk);
+        recyclerViewOdk.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        odkFormAdapter = new OdkFormAdapter(this::launchOdkForm);
+        recyclerViewOdk.setAdapter(odkFormAdapter);
+        recyclerViewOdk.addItemDecoration(new DividerItemDecoration(requireContext(), RecyclerView.VERTICAL));
+
+        // Initially hide the recycler view
+        recyclerViewOdk.setVisibility(View.GONE);
+    }
+
 
     @Override
     public void onIndividualClick(Individual selectedIndividual) {
@@ -443,6 +505,9 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         // Update the householdAdapter with the selected individual
         if (selectedIndividual != null) {
             individualSharedViewModel.setSelectedIndividual(selectedIndividual);
+
+            // Load ODK forms applicable to this individual
+            loadApplicableOdkForms(selectedIndividual);
 
             ConfigViewModel viewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
             List<Configsettings> configsettings = null;
@@ -920,7 +985,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
     private void observeData() {
         if (socialgroup != null) {
-            individualViewModel.retrieveByHouseId(socialgroup.getExtId())
+            individualViewModel.retrieveByHouseId(socialgroup.getExtId(), currentLocation.compno)
                     .observe(getViewLifecycleOwner(), individuals -> {
                         if (individuals != null && !individuals.isEmpty()) {
                             adapter.setIndividualList(individuals);
@@ -1003,6 +1068,202 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 })
                 .setNegativeButton("Later", null)
                 .setCancelable(false) // Prevent dismissing without action
+                .show();
+    }
+
+    //ODK FORM ADD ONS
+    //Method to load applicable forms based on individual's age and gender
+    private void loadApplicableOdkForms(Individual individual) {
+        if (individual == null) {
+            recyclerViewOdk.setVisibility(View.GONE);
+            return;
+        }
+
+        Integer gender = individual.gender;
+        Integer age = individual.getAge();
+
+        odkFormViewModel.getFormsForIndividual(gender, age)
+                .observe(getViewLifecycleOwner(), forms -> {
+                    if (forms != null && !forms.isEmpty()) {
+                        // Filter forms that match criteria and are enabled
+                        List<OdkForm> availableForms = new ArrayList<>();
+                        for (OdkForm form : forms) {
+                            if (form.enabled != null && form.enabled == 1) {
+                                availableForms.add(form);
+                            }
+                        }
+
+                        if (!availableForms.isEmpty()) {
+                            odkFormAdapter.setFormList(availableForms);
+                            recyclerViewOdk.setVisibility(View.VISIBLE);
+                        } else {
+                            recyclerViewOdk.setVisibility(View.GONE);
+                        }
+                    } else {
+                        recyclerViewOdk.setVisibility(View.GONE);
+                    }
+                });
+    }
+
+    //method to launch ODK form
+    private void launchOdkForm(OdkForm form) {
+        Individual selectedIndividual = individualSharedViewModel.getCurrentSelectedIndividual();
+
+        if (selectedIndividual == null) {
+            Toast.makeText(requireContext(), "No individual selected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Check if ODK Collect is installed
+        if (formUtilities.getOdkStorageType() ==
+                org.openhds.hdsscapture.odk.storage.access.OdkStorageType.NO_ODK_INSTALLED) {
+            showInstallOdkDialog();
+            return;
+        }
+
+        try {
+            // Create preloaded data with basic individual/location/household info
+            FilledForm preloadedData = FormUtilities.createPreloadedData(
+                    selectedIndividual, locations, socialgroup);
+
+            // Set form name
+            preloadedData.setFormName(form.formID);
+
+            // Add timestamp and device ID
+            preloadedData.put("start", formUtilities.getStartTimestamp());
+            preloadedData.put("deviceid", formUtilities.getDeviceId());
+
+            // Add household members for repeat groups if needed
+            // Load all household members in background
+            backgroundExecutor.execute(() -> {
+                try {
+                    // Get all household members
+                    List<Individual> allMembers = individualViewModel.getHouseholdMembersSync(
+                            socialgroup.getExtId(), currentLocation.compno);
+
+                    // Filter by status if needed
+                    List<Individual> residentMembers = filterResidentMembers(allMembers);
+                    List<Individual> deadMembers = filterDeadMembers(allMembers);
+                    List<Individual> outmigMembers = filterOutmigMembers(allMembers);
+
+                    // Add members to preloaded data
+                    preloadedData.setHouseholdMembers(allMembers);
+                    preloadedData.setResidentMembers(residentMembers);
+                    preloadedData.setDeadMembers(deadMembers);
+                    preloadedData.setOutmigMembers(outmigMembers);
+
+                    // Configure repeat groups based on form type
+                    configureRepeatGroups(preloadedData, form);
+
+                    // Launch form on main thread
+                    mainHandler.post(() -> {
+                        OdkFormLoadData loadData = new OdkFormLoadData(form, preloadedData);
+                        formUtilities.loadForm(loadData);
+                    });
+
+                } catch (Exception e) {
+                    Log.e("HouseMembersFragment", "Error loading members", e);
+                    mainHandler.post(() ->
+                            Toast.makeText(requireContext(),
+                                    "Error loading household members", Toast.LENGTH_SHORT).show()
+                    );
+                }
+            });
+
+        } catch (Exception e) {
+            Log.e("HouseMembersFragment", "Error launching ODK form", e);
+            Toast.makeText(requireContext(),
+                    "Error launching form: " + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Configure repeat groups based on form requirements
+     */
+    private void configureRepeatGroups(FilledForm preloadedData, OdkForm form) {
+        // Example: If form has a "household_roster" repeat group for all members
+        if (form.formID.contains("roster") || form.formID.contains("household")) {
+            Map<String, String> memberMapping = new HashMap<>();
+            memberMapping.put("member_id", "Member.uuid");
+            memberMapping.put("member_name", "Member.firstName");
+            memberMapping.put("member_gender", "Member.gender");
+            memberMapping.put("member_age", "Member.age");
+
+            List<Map<String, String>> mappingList = new ArrayList<>();
+            mappingList.add(memberMapping);
+
+            preloadedData.addRepeatGroup("household_roster",
+                    RepeatGroupType.ALL_MEMBERS,
+                    mappingList);
+        }
+
+        // Example: Pregnancy form might need resident females only
+        if (form.formID.contains("pregnancy")) {
+            Map<String, String> femaleMapping = new HashMap<>();
+            femaleMapping.put("woman_id", "Member.uuid");
+            femaleMapping.put("woman_name", "Member.firstName");
+            femaleMapping.put("woman_age", "Member.age");
+
+            List<Map<String, String>> mappingList = new ArrayList<>();
+            mappingList.add(femaleMapping);
+
+            preloadedData.addRepeatGroup("eligible_women",
+                    RepeatGroupType.RESIDENT_MEMBERS,
+                    mappingList);
+        }
+
+        // Add more configurations based on your forms
+    }
+
+    /**
+     * Filter members by residency status
+     */
+    private List<Individual> filterResidentMembers(List<Individual> allMembers) {
+        List<Individual> residents = new ArrayList<>();
+        for (Individual member : allMembers) {
+            // Assuming you have an endType field: 1 = resident, 2 = outmigrated, 3 = dead
+            if (member.endType == null || member.endType == 1) {
+                residents.add(member);
+            }
+        }
+        return residents;
+    }
+
+    private List<Individual> filterDeadMembers(List<Individual> allMembers) {
+        List<Individual> outmig = new ArrayList<>();
+        for (Individual member : allMembers) {
+            if (member.endType != null && member.endType == 2) {
+                outmig.add(member);
+            }
+        }
+        return outmig;
+    }
+
+    private List<Individual> filterOutmigMembers(List<Individual> allMembers) {
+        List<Individual> dead = new ArrayList<>();
+        for (Individual member : allMembers) {
+            if (member.endType != null && member.endType == 3) {
+                dead.add(member);
+            }
+        }
+        return dead;
+    }
+
+    private void showInstallOdkDialog() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("ODK Collect Not Installed")
+                .setMessage("ODK Collect must be installed to open forms. Would you like to install it?")
+                .setPositiveButton("Install", (dialog, which) -> {
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("market://details?id=org.odk.collect.android")));
+                    } catch (Exception e) {
+                        startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("https://play.google.com/store/apps/details?id=org.odk.collect.android")));
+                    }
+                })
+                .setNegativeButton("Cancel", null)
                 .show();
     }
 

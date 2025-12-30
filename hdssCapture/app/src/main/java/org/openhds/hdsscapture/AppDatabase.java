@@ -27,7 +27,7 @@ import org.openhds.hdsscapture.Dao.InmigrationDao;
 import org.openhds.hdsscapture.Dao.ListingDao;
 import org.openhds.hdsscapture.Dao.LocationDao;
 import org.openhds.hdsscapture.Dao.MorbidityDao;
-import org.openhds.hdsscapture.Dao.OdkDao;
+import org.openhds.hdsscapture.Dao.OdkFormDao;
 import org.openhds.hdsscapture.Dao.OutcomeDao;
 import org.openhds.hdsscapture.Dao.OutmigrationDao;
 import org.openhds.hdsscapture.Dao.PregnancyDao;
@@ -111,7 +111,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract DuplicateDao duplicateDao();
     public abstract ApiUrlDao apiUrlDao();
     public abstract ConfigDao configDao();
-    public abstract OdkDao odkDao();
+    public abstract OdkFormDao odkDao();
     public abstract VpmDao vpmDao();
     public abstract CommunityDao communityDao();
     public abstract MorbidityDao morbidityDao();

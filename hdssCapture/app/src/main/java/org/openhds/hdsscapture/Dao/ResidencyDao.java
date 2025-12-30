@@ -16,6 +16,7 @@ import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Registry;
 import org.openhds.hdsscapture.entity.Residency;
 import org.openhds.hdsscapture.entity.subentity.ResidencyAmendment;
+import org.openhds.hdsscapture.entity.subentity.ResidencyRelationshipUpdate;
 import org.openhds.hdsscapture.entity.subentity.ResidencyUpdate;
 import org.openhds.hdsscapture.entity.subentity.ResidencyUpdateEndDate;
 
@@ -43,6 +44,9 @@ public interface ResidencyDao {
 
     @Update(entity = Residency.class)
     int update(ResidencyAmendment s);
+
+    @Update(entity = Residency.class)
+    int update(ResidencyRelationshipUpdate s);
 
     @Update(entity = Residency.class)
     int updates(ResidencyUpdate s);
@@ -79,6 +83,9 @@ public interface ResidencyDao {
 
     @Query("SELECT * FROM residency WHERE complete IN (1,2)")
     List<Residency> retrieveToSync();
+
+    @Query("SELECT * FROM residency WHERE location_uuid =:id AND socialgroup_uuid =:ids AND endType=1")
+    List<Residency> findResidenciesBySocialgroup(String id,String ids);
 
 //    @Query("SELECT * FROM residency WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 AND complete!=2")
 //    List<Residency> retrieveToSync();

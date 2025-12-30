@@ -39,7 +39,7 @@ import org.openhds.hdsscapture.Dao.DemographicDao;
 import org.openhds.hdsscapture.Dao.HdssSociodemoDao;
 import org.openhds.hdsscapture.Dao.IndividualDao;
 import org.openhds.hdsscapture.Dao.LocationDao;
-import org.openhds.hdsscapture.Dao.OdkDao;
+import org.openhds.hdsscapture.Dao.OdkFormDao;
 import org.openhds.hdsscapture.Dao.PregnancyDao;
 import org.openhds.hdsscapture.Dao.RelationshipDao;
 import org.openhds.hdsscapture.Dao.ResidencyDao;
@@ -60,7 +60,7 @@ import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.FieldworkerViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyLevelViewModel;
 import org.openhds.hdsscapture.Viewmodel.HierarchyViewModel;
-import org.openhds.hdsscapture.Viewmodel.OdkViewModel;
+import org.openhds.hdsscapture.Viewmodel.OdkFormViewModel;
 import org.openhds.hdsscapture.Viewmodel.QueriesViewModel;
 import org.openhds.hdsscapture.Viewmodel.RoundViewModel;
 import org.openhds.hdsscapture.entity.CodeBook;
@@ -120,7 +120,7 @@ public class PullActivity extends AppCompatActivity {
     private DemographicDao demographicDao;
     private VaccinationDao vaccinationDao;
     private HdssSociodemoDao hdssSociodemoDao;
-    private OdkDao odkDao;
+    private OdkFormDao odkDao;
     AppDatabase appDatabase;
     private Button downloadAllButton;
     private TextView statusTextView;
@@ -531,7 +531,7 @@ public class PullActivity extends AppCompatActivity {
                                                     hieViewModel.add(hie);
 
                                             //Sync ODK EXTRA
-                                            final OdkViewModel odkViewModel = new ViewModelProvider(PullActivity.this).get(OdkViewModel.class);
+                                            final OdkFormViewModel odkViewModel = new ViewModelProvider(PullActivity.this).get(OdkFormViewModel.class);
                                             Call<DataWrapper<OdkForm>> c_callable = dao.getOdk(authorizationHeader);
                                             c_callable.enqueue(new Callback<DataWrapper<OdkForm>>() {
                                             @Override

@@ -128,7 +128,6 @@ public class HoHFragment extends Fragment {
 
         //LOAD SPINNERS
         loadCodeData(binding.selectGroupType, "groupType");
-        loadCodeData(binding.residencyComplete, "submit");
 
 
         binding.buttonSaveClose.setOnClickListener(v -> {
