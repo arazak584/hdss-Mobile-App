@@ -666,8 +666,9 @@ public class OdkFormLoadTask {
                                              String formId, String formVersion) {
         ContentValues values = new ContentValues();
         values.put(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH, targetFile.getAbsolutePath());
-        values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, displayName);
+
         values.put(InstanceProviderAPI.InstanceColumns.JR_FORM_ID, formId);
+        values.put(InstanceProviderAPI.InstanceColumns.STATUS, InstanceProviderAPI.STATUS_INCOMPLETE);
 
         if (formVersion != null) {
             values.put(InstanceProviderAPI.InstanceColumns.JR_VERSION, formVersion);
@@ -678,6 +679,23 @@ public class OdkFormLoadTask {
         Log.d(TAG, "Inserted instance, URI: " + odkContentUri);
         return odkContentUri != null;
     }
+
+//    private boolean insertNewOdkFormInstance(File targetFile, String displayName,
+//                                             String formId, String formVersion) {
+//        ContentValues values = new ContentValues();
+//        values.put(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH, targetFile.getAbsolutePath());
+//        values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, displayName);
+//        values.put(InstanceProviderAPI.InstanceColumns.JR_FORM_ID, formId);
+//
+//        if (formVersion != null) {
+//            values.put(InstanceProviderAPI.InstanceColumns.JR_VERSION, formVersion);
+//        }
+//
+//        odkContentUri = resolver.insert(InstanceProviderAPI.InstanceColumns.CONTENT_URI, values);
+//
+//        Log.d(TAG, "Inserted instance, URI: " + odkContentUri);
+//        return odkContentUri != null;
+//    }
 
     /**
      * Insert instance using SAF
@@ -697,7 +715,7 @@ public class OdkFormLoadTask {
 
         ContentValues values = new ContentValues();
         values.put(InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH, instanceFilePath);
-        values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, displayName);
+        //values.put(InstanceProviderAPI.InstanceColumns.DISPLAY_NAME, displayName);
         values.put(InstanceProviderAPI.InstanceColumns.JR_FORM_ID, formId);
 
         if (formVersion != null) {

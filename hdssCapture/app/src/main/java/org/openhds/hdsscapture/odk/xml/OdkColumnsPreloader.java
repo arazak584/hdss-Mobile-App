@@ -76,6 +76,50 @@ public class OdkColumnsPreloader {
     /**
      * Core method to generate preloaded XML
      */
+//    private String executeGeneratePreloadedXml(String jrFormId, String formVersion,
+//                                               InputStream xmlInputStream) {
+//        StringBuilder sbuilder = new StringBuilder();
+//
+//        try {
+//            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+//            DocumentBuilder builder = factory.newDocumentBuilder();
+//            Document doc = builder.parse(xmlInputStream);
+//
+//            // Read special variables with jr:preloadParams="start"
+//            readSpecialVariables(doc);
+//
+//            String mainTag = jrFormId;
+//            formVersion = formVersion == null ? "" : " version=\"" + formVersion + "\"";
+//            Node node = doc.getElementsByTagName(mainTag).item(0);
+//
+//            // Fallback to "data" tag if form ID tag not found
+//            if (node == null) {
+//                mainTag = "data";
+//                node = doc.getElementsByTagName(mainTag).item(0);
+//            }
+//
+//            if (node != null) {
+//                Log.d(TAG, "Processing main node: " + node.getNodeName());
+//                sbuilder.append("<" + mainTag + " id=\"" + jrFormId + "\"" + formVersion + ">\r\n");
+//
+//                processNodeChildren(node, sbuilder);
+//
+//                Log.d(TAG, "XML generation complete");
+//            } else {
+//                Log.e(TAG, "ODK main tag not found: " + jrFormId);
+//            }
+//
+//        } catch (IOException e) {
+//            Log.e(TAG, "IO error parsing XML", e);
+//        } catch (ParserConfigurationException e) {
+//            Log.e(TAG, "Parser configuration error", e);
+//        } catch (SAXException e) {
+//            Log.e(TAG, "SAX parsing error", e);
+//        }
+//
+//        return sbuilder.toString();
+//    }
+
     private String executeGeneratePreloadedXml(String jrFormId, String formVersion,
                                                InputStream xmlInputStream) {
         StringBuilder sbuilder = new StringBuilder();
@@ -87,6 +131,10 @@ public class OdkColumnsPreloader {
 
             // Read special variables with jr:preloadParams="start"
             readSpecialVariables(doc);
+
+            // Read instance_name calculation from form
+            String instanceNameCalculation = readInstanceNameCalculation(doc);
+            Log.d(TAG, "Instance name calculation: " + instanceNameCalculation);
 
             String mainTag = jrFormId;
             formVersion = formVersion == null ? "" : " version=\"" + formVersion + "\"";
@@ -100,6 +148,7 @@ public class OdkColumnsPreloader {
 
             if (node != null) {
                 Log.d(TAG, "Processing main node: " + node.getNodeName());
+                sbuilder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n");
                 sbuilder.append("<" + mainTag + " id=\"" + jrFormId + "\"" + formVersion + ">\r\n");
 
                 processNodeChildren(node, sbuilder);
@@ -118,6 +167,37 @@ public class OdkColumnsPreloader {
         }
 
         return sbuilder.toString();
+    }
+
+    /**
+     * Read instance_name calculation from form
+     * This is defined in the form's <bind> section
+     */
+    private String readInstanceNameCalculation(Document doc) {
+        NodeList binds = doc.getElementsByTagName("bind");
+
+        for (int i = 0; i < binds.getLength(); i++) {
+            Node bindNode = binds.item(i);
+            NamedNodeMap attrs = bindNode.getAttributes();
+
+            Node nodesetNode = attrs.getNamedItem("nodeset");
+            if (nodesetNode != null) {
+                String nodeset = nodesetNode.getNodeValue();
+
+                // Check if this bind is for meta/instanceName
+                if (nodeset.contains("meta/instanceName") ||
+                        nodeset.contains("instanceName") ||
+                        nodeset.endsWith("/instance_name")) {
+
+                    Node calculateNode = attrs.getNamedItem("calculate");
+                    if (calculateNode != null) {
+                        return calculateNode.getNodeValue();
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -146,9 +226,57 @@ public class OdkColumnsPreloader {
     /**
      * Process node children recursively
      */
+//    private void processNodeChildren(Node node, StringBuilder sbuilder) {
+//        NodeList childElements = node.getChildNodes();
+//        List<String> params = filledForm.getVariables();
+//
+//        for (int i = 0; i < childElements.getLength(); i++) {
+//            Node n = childElements.item(i);
+//
+//            if (n.getNodeType() == Node.ELEMENT_NODE) {
+//                String name = n.getNodeName();
+//
+//                // Check if this is a variable we need to preload
+//                if (params.contains(name)) {
+//                    handlePreloadedVariable(n, name, sbuilder);
+//                }
+//                // Check for special timestamp variables
+//                else if (preloadedStartVariables.contains(name)) {
+//                    sbuilder.append("<" + name + ">" + formUtilities.getStartTimestamp() + "</" + name + ">\r\n");
+//                    Log.d(TAG, "Added start timestamp for: " + name);
+//                }
+//                // Check for device ID
+//                else if (name.equalsIgnoreCase("deviceId")) {
+//                    String deviceId = formUtilities.getDeviceId();
+//                    sbuilder.append(deviceId == null ? "<" + name + " />" : "<" + name + ">" + deviceId + "</" + name + ">\r\n");
+//                    Log.d(TAG, "Added device ID: " + deviceId);
+//                }
+//                // Check for repeat count variables
+//                else if (isRepeatCountVar(name)) {
+//                    // ODK auto-fills repeat count, leave as default
+//                    Log.d(TAG, "Skipping repeat count variable: " + name);
+//                }
+//                // Handle other elements
+//                else {
+//                    if (!n.hasChildNodes()) {
+//                        sbuilder.append("<" + name + " />\r\n");
+//                    } else {
+//                        if (!isRepeatGroup(n)) {
+//                            sbuilder.append("<" + name + ">\r\n");
+//                            processNodeChildren(n, sbuilder);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        sbuilder.append("</" + node.getNodeName() + ">\r\n");
+//    }
+
     private void processNodeChildren(Node node, StringBuilder sbuilder) {
         NodeList childElements = node.getChildNodes();
         List<String> params = filledForm.getVariables();
+        boolean hasMetaSection = false;
 
         for (int i = 0; i < childElements.getLength(); i++) {
             Node n = childElements.item(i);
@@ -156,8 +284,13 @@ public class OdkColumnsPreloader {
             if (n.getNodeType() == Node.ELEMENT_NODE) {
                 String name = n.getNodeName();
 
+                // Check if this is the meta section
+                if (name.equals("meta")) {
+                    hasMetaSection = true;
+                    processMeta(n, sbuilder);
+                }
                 // Check if this is a variable we need to preload
-                if (params.contains(name)) {
+                else if (params.contains(name)) {
                     handlePreloadedVariable(n, name, sbuilder);
                 }
                 // Check for special timestamp variables
@@ -191,6 +324,46 @@ public class OdkColumnsPreloader {
         }
 
         sbuilder.append("</" + node.getNodeName() + ">\r\n");
+    }
+
+    /**
+     * Process the meta section - this is where instanceName lives
+     */
+    private void processMeta(Node metaNode, StringBuilder sbuilder) {
+        sbuilder.append("<meta>\r\n");
+
+        NodeList metaChildren = metaNode.getChildNodes();
+
+        for (int i = 0; i < metaChildren.getLength(); i++) {
+            Node child = metaChildren.item(i);
+
+            if (child.getNodeType() == Node.ELEMENT_NODE) {
+                String name = child.getNodeName();
+
+                // Handle instanceID
+                if (name.equals("instanceID")) {
+                    String instanceId = "uuid:" + java.util.UUID.randomUUID().toString();
+                    sbuilder.append("<instanceID>" + instanceId + "</instanceID>\r\n");
+                    Log.d(TAG, "Generated instanceID: " + instanceId);
+                }
+                // Handle instanceName - leave empty, ODK will calculate it
+                else if (name.equals("instanceName")) {
+                    sbuilder.append("<instanceName />\r\n");
+                    Log.d(TAG, "Added empty instanceName (ODK will calculate)");
+                }
+                // Handle other meta fields
+                else {
+                    // Check if it's a special variable
+                    if (preloadedStartVariables.contains(name)) {
+                        sbuilder.append("<" + name + ">" + formUtilities.getStartTimestamp() + "</" + name + ">\r\n");
+                    } else {
+                        sbuilder.append("<" + name + " />\r\n");
+                    }
+                }
+            }
+        }
+
+        sbuilder.append("</meta>\r\n");
     }
 
     /**
