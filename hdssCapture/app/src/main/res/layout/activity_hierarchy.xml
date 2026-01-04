@@ -360,6 +360,7 @@
                                     tools:ignore="DuplicateSpeakableTextCheck" />
 
                                 <RadioButton
+                                    android:visibility="gone"
                                     android:id="@+id/Enumerate"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"

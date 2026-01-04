@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.Adapter.IndividualViewAdapter;
 import org.openhds.hdsscapture.Adapter.OdkFormAdapter;
 import org.openhds.hdsscapture.Dialog.MinorDialogFragment;
@@ -66,6 +67,7 @@ import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Registry;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Residency;
+import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Visit;
@@ -112,6 +114,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private RegistryViewModel registryViewModel;
     private VisitViewModel visitViewModel;
     private IndividualViewModel individualViewModel;
+    private Round roundData;
     private AppCompatButton finish;
     private RecyclerView recyclerViewOdk;
     private OdkFormViewModel odkFormViewModel;
@@ -209,6 +212,9 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         view = inflater.inflate(R.layout.fragment_house_members, container, false);
         //binding.setIndividual(individual);
 
+        final Intent i = getActivity().getIntent();
+        roundData = i.getParcelableExtra(HierarchyActivity.ROUND_DATA);
+
         ClusterSharedViewModel clusterSharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
         currentLocation = clusterSharedViewModel.getCurrentSelectedLocation();
 
@@ -227,11 +233,10 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         // Setup ODK Forms RecyclerView
         setupOdkFormsRecyclerView();
         
-        if (socialgroup != null) {
-
-            // Observe household head count
-            checkHouseholdHead();
-        }
+//        if (socialgroup != null) {
+//            // Observe household head count
+//            checkHouseholdHead();
+//        }
 
         //final TextView hh = view.findViewById(R.id.textView_compextId);
         TextView name = view.findViewById(R.id.textView_hh);
@@ -239,6 +244,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             Socialgroup data = viewModel.findhse(socialgroup.uuid);
             if (data != null) {
                 name.setText(data.getGroupName() + " - " + data.getExtId());
+                checkHouseholdHead();
             }else{
                 name.setText("Loading...");
             }
@@ -773,7 +779,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             }
 
 
-            if(selectedIndividual.gender!=null) {
+            if(selectedIndividual.gender!=null && roundData!=null && roundData.roundNumber>0) {
                 dup.setVisibility(View.VISIBLE);
                 dem.setVisibility(View.VISIBLE);
                 omg.setVisibility(View.VISIBLE);
@@ -790,6 +796,25 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 mor.setVisibility(View.VISIBLE);
                 id15.setVisibility(View.VISIBLE);
                 reg.setVisibility(View.VISIBLE);
+
+            }else{
+
+                dup.setVisibility(View.GONE);
+                dem.setVisibility(View.VISIBLE);
+                id4.setVisibility(View.VISIBLE);
+                omg.setVisibility(View.GONE);
+                dth.setVisibility(View.GONE);
+                amend.setVisibility(View.VISIBLE);
+                id11.setVisibility(View.VISIBLE);
+                relhoh.setVisibility(View.VISIBLE);
+                id17.setVisibility(View.VISIBLE);
+                id1.setVisibility(View.GONE);
+                id2.setVisibility(View.GONE);
+                id3.setVisibility(View.GONE);
+                id14.setVisibility(View.GONE);
+                mor.setVisibility(View.GONE);
+                id15.setVisibility(View.GONE);
+                reg.setVisibility(View.GONE);
 
             }
 
@@ -812,7 +837,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             }
 
 
-            if (selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2){
+            if (selectedIndividual.getAge() >= mage && selectedIndividual.getAge()<= 55 && selectedIndividual.gender==2  && roundData!=null && roundData.roundNumber>0){
                 preg.setVisibility(View.VISIBLE);
                 //rel.setVisibility(View.VISIBLE);
                 id5.setVisibility(View.VISIBLE);
@@ -821,7 +846,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 //rel.setVisibility(View.GONE);
                 id5.setVisibility(View.GONE);
             }
-            if (selectedIndividual.getAge() >= mage && selectedIndividual.gender==2){
+            if (selectedIndividual.getAge() >= mage && selectedIndividual.gender==2  && roundData!=null && roundData.roundNumber>0){
                 rel.setVisibility(View.VISIBLE);
                 id12.setVisibility(View.VISIBLE);
             }else{
@@ -829,11 +854,16 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 id12.setVisibility(View.GONE);
             }
 
-            if (selectedIndividual.getAge() >= hoh){
+            if (selectedIndividual.getAge() >= hoh  && roundData!=null && roundData.roundNumber>0){
                 ses.setVisibility(View.VISIBLE);
                 choh.setVisibility(View.VISIBLE);
                 id14.setVisibility(View.VISIBLE);
                 id13.setVisibility(View.VISIBLE);
+            }else if (selectedIndividual.getAge() >= hoh  && roundData!=null && roundData.roundNumber==0){
+                ses.setVisibility(View.GONE);
+                choh.setVisibility(View.VISIBLE);
+                id14.setVisibility(View.VISIBLE);
+                id13.setVisibility(View.GONE);
             }else{
                 ses.setVisibility(View.GONE);
                 choh.setVisibility(View.GONE);
@@ -842,7 +872,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             }
 
 
-            if (selectedIndividual.getAge() < 5){
+            if (selectedIndividual.getAge() < 5  && roundData!=null && roundData.roundNumber>0){
                 vac.setVisibility(View.VISIBLE);
                 id16.setVisibility(View.VISIBLE);
             }else{
@@ -931,7 +961,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                     try {
                         if (cnt > 0) {
                             showToast("Change Head of Household [HOH is Dead]", customToastView, toastMessage);
-                        } else if (totalInd > 0 && totalVisit > 0 && totalRegistry <= 0) {
+                        } else if (totalInd > 0 && totalVisit > 0 && totalRegistry <= 0 && roundData!=null && roundData.roundNumber>0) {
                             showToast("Complete Household Registry Before Exit", customToastView, toastMessage);
                         } else if (errs > 0) {
                             showToast("Household Head is a Minor", customToastView, toastMessage);

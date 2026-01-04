@@ -59,6 +59,7 @@ import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Residency;
+import org.openhds.hdsscapture.entity.Round;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subentity.IndividualEnd;
@@ -104,6 +105,7 @@ public class IndividualFragment extends KeyboardFragment {
     private FragmentIndividualBinding binding;
     private ProgressDialog progressDialog;
     private String compno, cmpuuid, cmpextid, locname;
+    private Round roundData;
 
     private void showDialogInfo(String message, String codeFragment) {
         SimpleDialog simpleDialog = SimpleDialog.newInstance(message, codeFragment);
@@ -151,6 +153,20 @@ public class IndividualFragment extends KeyboardFragment {
             socialgroup = getArguments().getParcelable(SOCIAL_ID);
             individual = getArguments().getParcelable(INDIVIDUAL_ID);
         }
+
+        //Initialize objects if they're null
+        if (individual == null) {
+            individual = new Individual();
+        }
+        if (locations == null) {
+            locations = new Locations();
+        }
+        if (socialgroup == null) {
+            socialgroup = new Socialgroup();
+        }
+        if (residency == null) {
+            residency = new Residency();
+        }
     }
 
     @Override
@@ -166,6 +182,10 @@ public class IndividualFragment extends KeyboardFragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
         final Hierarchy level6Data = i.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
+
+        roundData = i.getParcelableExtra(HierarchyActivity.ROUND_DATA);
+        Spinner mySpinner = binding.getRoot().findViewById(R.id.migtype);
+        Spinner stType = binding.getRoot().findViewById(R.id.startType);
 
         ClusterSharedViewModel sharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
         Locations selectedLocation = sharedViewModel.getCurrentSelectedLocation();
@@ -240,9 +260,6 @@ public class IndividualFragment extends KeyboardFragment {
         //CHOOSING THE DATE
         setupDatePickers();
 
-        Spinner mySpinner = binding.getRoot().findViewById(R.id.migtype);
-        mySpinner.setEnabled(false);
-
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
         IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
         InmigrationViewModel inmigrationViewModel = new ViewModelProvider(this).get(InmigrationViewModel.class);
@@ -253,17 +270,7 @@ public class IndividualFragment extends KeyboardFragment {
                 binding.setIndividual(data);
                 binding.individualExtid.setEnabled(false);
 
-                Log.d("Individual", "Individual Complete Status: " + data.complete);
-
-                String indid = data.getExtId();
-                if (indid.length() != 12) {
-                    String id = UniqueIDGen.generateUniqueId(individualViewModel, cmpextid);
-                    binding.getIndividual().extId = id;
-
-                }else{
-                    data.extId = data.getExtId();
-                }
-                //data.hohID = socialgroup.getExtId();
+                mySpinner.setEnabled(false);
 
                 if (binding.getIndividual().dob != null) {
                     final int estimatedAge = Calculators.getAge(binding.getIndividual().dob);
@@ -278,31 +285,20 @@ public class IndividualFragment extends KeyboardFragment {
                 if (data.otherName != null && individual.other==null) {
                     data.other=1;
                 }
-//                if (data.ghanacard != null && data.ghanacard !="") {
-//                    binding.ghanacard.setEnabled(false);
-//                }
-//                if (data.otherName != null && data.otherName !="") {
-//                    binding.individualNickName.setEnabled(false);
-//                }
-//                if (data.firstName != null) {
-//                    binding.individualFirstName.setEnabled(false);
-//                    binding.individualLastName.setEnabled(false);
-//                    //binding.buttonIndividualDob.setVisibility(View.GONE);
-//                    binding.dobAspect.setEnabled(false);
-//                    binding.gender.setEnabled(false);
-//                    binding.buttonIndividualDob.setEnabled(false);
-//                }
 
             }else{
-                    data = new Individual();
 
-                    String uuid = UUID.randomUUID().toString();
-                    String uuidString = uuid.replaceAll("-", "");
+                data = new Individual();
+
+                mySpinner.setEnabled(false);
+
+                String uuid = UUID.randomUUID().toString();
+                String uuidString = uuid.replaceAll("-", "");
                     // Set the ID of the Fieldworker object
-                    data.uuid = uuidString;
-                    data.fw_uuid = fieldworkerData.getFw_uuid();
-                    data.village = level6Data.getName();
-                    data.hohID = socialgroup.getExtId();
+                data.uuid = uuidString;
+                data.fw_uuid = fieldworkerData.getFw_uuid();
+                data.village = level6Data.getName();
+                data.hohID = socialgroup.getExtId();
 
                 Date currentDate = new Date(); // Get the current date and time
                 Calendar cal = Calendar.getInstance();
@@ -384,27 +380,42 @@ public class IndividualFragment extends KeyboardFragment {
         }
 
         try {
+            Log.d("Residency", "Residency initialized: ");
             Residency data = viewModel.findRes(individual.uuid,cmpuuid);
 
             if (data != null) {
                 binding.setResidency(data);
                 data.hohID = socialgroup.extId;
                 binding.buttonResidencyStartDate.setEnabled(false);
+                stType.setEnabled(false);
 
             } else {
                 data = new Residency();
+
+                Log.d("Residency", "New Residency initialized");
+
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.uuid = uuidString;
-                data.startType = 1;
                 data.endType = 1;
                 data.location_uuid = cmpuuid;
                 data.socialgroup_uuid = socialgroup.uuid;
                 data.complete = 1;
                 data.individual_uuid = binding.getIndividual().uuid;
                 data.hohID = socialgroup.extId;
-                data.img = 1;
+
+                //When IMG=1 then it automatically assumes it's inmigration otherwise Outcome or Enumeration
+                if(roundData != null && roundData.roundNumber==0){
+                    Log.d("Residency", "Residency Round Number: " + roundData.roundNumber);
+                    data.startType = 3;
+                    data.img = null;
+                    stType.setEnabled(false);
+                }else{
+                    data.startType = 1;
+                    data.img = 1;
+                    stType.setEnabled(false);
+                }
 
                 Date currentDate = new Date(); // Get the current date and time
                 Calendar cal = Calendar.getInstance();
@@ -603,6 +614,7 @@ public class IndividualFragment extends KeyboardFragment {
         loadCodeData(binding.marital, "marital");
         loadCodeData(binding.akan, "akan");
         loadCodeData(binding.denomination, "denomination");
+        loadCodeData(binding.startType, "startType");
 
 //        binding.buttonSaveClose.setOnClickListener(v -> {
 //
@@ -1021,7 +1033,7 @@ public class IndividualFragment extends KeyboardFragment {
                         Toast.makeText(getActivity(), "Start Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
                         return;
                     }
-                    if (stdate.equals(currentDate)) {
+                    if (stdate.equals(currentDate)  && roundData!=null && roundData.roundNumber>0) {
                         String errorMessage = getString(R.string.startdateerr);
                         binding.editTextStartDate.setError(errorMessage);
                         Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();

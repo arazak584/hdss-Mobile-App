@@ -128,6 +128,9 @@ public class LocationFragment extends KeyboardFragment {
 
 
         binding = FragmentLocationBinding.inflate(inflater, container, false);
+        if (locations == null) {
+            locations = new Locations();
+        }
         binding.setLocations(locations);
 
         // Initialize the LocationManager

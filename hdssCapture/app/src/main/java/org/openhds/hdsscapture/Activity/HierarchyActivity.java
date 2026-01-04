@@ -26,7 +26,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
-import org.openhds.hdsscapture.Baseline.BaselineActivity;
 import org.openhds.hdsscapture.Duplicate.DuplicateActivity;
 import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
@@ -433,18 +432,18 @@ public class HierarchyActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        final Button base = findViewById(R.id.btn_baseline);
-        base.setOnClickListener(v -> {
-            if (!validateSelection()) return;
-            if (!validateUsername(usrname, fieldworkerViewModel)) return;
-
-            Intent intent = new Intent(HierarchyActivity.this, BaselineActivity.class);
-            intent.putExtra(ROUND_DATA, roundData);
-            intent.putExtra(LEVEL5_DATA, level5Data);
-            intent.putExtra(LEVEL6_DATA, level6Data);
-            intent.putExtra(FIELDWORKER_DATA, fieldworkerData);
-            startActivity(intent);
-        });
+//        final Button base = findViewById(R.id.btn_baseline);
+//        base.setOnClickListener(v -> {
+//            if (!validateSelection()) return;
+//            if (!validateUsername(usrname, fieldworkerViewModel)) return;
+//
+//            Intent intent = new Intent(HierarchyActivity.this, BaselineActivity.class);
+//            intent.putExtra(ROUND_DATA, roundData);
+//            intent.putExtra(LEVEL5_DATA, level5Data);
+//            intent.putExtra(LEVEL6_DATA, level6Data);
+//            intent.putExtra(FIELDWORKER_DATA, fieldworkerData);
+//            startActivity(intent);
+//        });
 
         final Button dups = findViewById(R.id.btn_dup);
         dups.setOnClickListener(v -> {

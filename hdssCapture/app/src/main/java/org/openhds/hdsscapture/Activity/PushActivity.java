@@ -372,37 +372,11 @@ public class PushActivity extends AppCompatActivity {
                             }
                             locationViewModel.add(array);
                         },
-                        this::sendVisitData
+                        this::sendListingData
                 );
             } catch (ExecutionException | InterruptedException e) {
                 Log.e(TAG, "Error retrieving Locations", e);
                 onSyncError("Error retrieving Locations: " + e.getMessage());
-            }
-        }).start();
-    }
-
-    private void sendVisitData() {
-        if (isDestroyed.get()) return;
-
-        new Thread(() -> {
-            try {
-                List<Visit> itemsToSync = visitViewModel.findToSync();
-                sendDataInBatches(
-                        itemsToSync,
-                        "Visits",
-                        (auth, data) -> dao.sendVisitdata(auth, data),
-                        sentData -> {
-                            Visit[] array = sentData.toArray(new Visit[0]);
-                            for (Visit elem : array) {
-                                elem.complete = 0;
-                            }
-                            visitViewModel.add(array);
-                        },
-                        this::sendListingData
-                );
-            } catch (ExecutionException | InterruptedException e) {
-                Log.e(TAG, "Error retrieving Visits", e);
-                onSyncError("Error retrieving Visits: " + e.getMessage());
             }
         }).start();
     }
@@ -476,11 +450,37 @@ public class PushActivity extends AppCompatActivity {
                             }
                             socialgroupViewModel.add(array);
                         },
-                        this::sendRelationshipData
+                        this::sendVisitData
                 );
             } catch (ExecutionException | InterruptedException e) {
                 Log.e(TAG, "Error retrieving Socialgroups", e);
                 onSyncError("Error retrieving Socialgroups: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void sendVisitData() {
+        if (isDestroyed.get()) return;
+
+        new Thread(() -> {
+            try {
+                List<Visit> itemsToSync = visitViewModel.findToSync();
+                sendDataInBatches(
+                        itemsToSync,
+                        "Visits",
+                        (auth, data) -> dao.sendVisitdata(auth, data),
+                        sentData -> {
+                            Visit[] array = sentData.toArray(new Visit[0]);
+                            for (Visit elem : array) {
+                                elem.complete = 0;
+                            }
+                            visitViewModel.add(array);
+                        },
+                        this::sendRelationshipData
+                );
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "Error retrieving Visits", e);
+                onSyncError("Error retrieving Visits: " + e.getMessage());
             }
         }).start();
     }

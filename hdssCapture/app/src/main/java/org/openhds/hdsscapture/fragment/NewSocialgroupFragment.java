@@ -174,9 +174,9 @@ public class NewSocialgroupFragment extends DialogFragment {
             binding.getSocialgroup().complete = 2;
         }
 
-        if(residency.complete==null){
-            binding.getResidency().complete = 2;
-        }
+//        if(residency.complete==null){
+//            binding.getResidency().complete = 2;
+//        }
 
         if(individual.insertDate==null){
             binding.getIndividual().insertDate = new Date();
@@ -256,9 +256,9 @@ public class NewSocialgroupFragment extends DialogFragment {
             binding.getResidency().rltn_head = 1;
         }
 
-        if(individual.complete==null){
-            binding.getIndividual().complete = 2;
-        }
+//        if(individual.complete==null){
+//            binding.getIndividual().complete = 2;
+//        }
 
         if(socialgroup.groupName==null){
             binding.getSocialgroup().groupName = "UNK";

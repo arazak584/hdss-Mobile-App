@@ -711,7 +711,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="start"
                         android:hint="@string/uuid"
-                        android:padding="5dp"
                         android:text="@string/uuid"
                         android:visibility="gone">
 
@@ -757,11 +756,30 @@
                         android:padding="10dp"
                         selection="@{residency.rltn_head}"
                         android:spinnerMode="dialog" />
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:padding="5dp"
+                        android:text="@string/starttype" />
+
+                    <org.openhds.searchSpinner.SearchableSpinner
+                        android:id="@+id/startType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="left"
+                        android:onItemSelected="@{residency::setStartType}"
+                        android:padding="10dp"
+                        selection="@{residency.startType}"
+                        android:spinnerMode="dialog" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- MIGRATION INFORMATION CARD -->
             <com.google.android.material.card.MaterialCardView
+                goneUnless="@{residency.img==1}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"

@@ -106,7 +106,9 @@ public class ResidencyViewFragment extends KeyboardFragment {
         setupKeyboardHiding(binding.getRoot());
 
         Spinner mySpinner = (Spinner) binding.getRoot().findViewById(R.id.endtype);
+        Spinner stType = (Spinner) binding.getRoot().findViewById(R.id.startType);
         mySpinner.setEnabled(false);
+        stType.setEnabled(false);
 
         IndividualViewModel ind = new ViewModelProvider(this).get(IndividualViewModel.class);
         ResidencyViewModel viewModel = new ViewModelProvider(this).get(ResidencyViewModel.class);
@@ -122,6 +124,7 @@ public class ResidencyViewFragment extends KeyboardFragment {
 
         loadCodeData(binding.endtype,  "endType");
         loadCodeData(binding.rltnHead,  "rltnhead");
+        loadCodeData(binding.startType, "startType");
 
         binding.buttonSaveClose.setOnClickListener(v -> {
 
