@@ -57,6 +57,7 @@ import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.Configsettings;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Duplicate;
+import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Hierarchy;
 import org.openhds.hdsscapture.entity.Individual;
@@ -125,6 +126,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private Locations currentLocation;
     private IndividualSharedViewModel individualSharedViewModel;
     private int pregnancyNumber;
+    private Fieldworker fieldworkerData;
 
     private ExecutorService backgroundExecutor;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -217,6 +219,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
         ClusterSharedViewModel clusterSharedViewModel = new ViewModelProvider(requireActivity()).get(ClusterSharedViewModel.class);
         currentLocation = clusterSharedViewModel.getCurrentSelectedLocation();
+
+        fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
         //Ended Events
         deathViewModel = new ViewModelProvider(this).get(DeathViewModel.class);
@@ -1154,7 +1158,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         try {
             // Create preloaded data with basic individual/location/household info
             FilledForm preloadedData = FormUtilities.createPreloadedData(
-                    selectedIndividual, locations, socialgroup);
+                    selectedIndividual, locations, socialgroup, fieldworkerData);
 
             // Set form name
             preloadedData.setFormName(form.formID);

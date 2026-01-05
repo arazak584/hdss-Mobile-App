@@ -119,6 +119,7 @@ public class Duplicate extends BaseObservable {
     public String supervisor;
     @Expose
     public Date approveDate;
+    public Date updatedAt;
 
     public Duplicate(){}
 
@@ -126,6 +127,20 @@ public class Duplicate extends BaseObservable {
     private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
     @Ignore
     private transient final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+
+    @Bindable
+    public String getUpdatedAt() {
+        if (updatedAt == null) return "";
+        return g.format(updatedAt);
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        try {
+            this.updatedAt = f.parse(updatedAt);
+        } catch (ParseException e) {
+            System.out.println("updatedAt Date Error " + e.getMessage());
+        }
+    }
 
     public void setStatus(RadioGroup view, int checkedId) {
         if (checkedId != view.getCheckedRadioButtonId()) {

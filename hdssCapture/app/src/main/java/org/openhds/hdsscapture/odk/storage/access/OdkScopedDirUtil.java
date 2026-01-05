@@ -25,9 +25,9 @@ public class OdkScopedDirUtil {
     public static final String ODK_SHARED_FOLDER_URI = "primary:odk";
     public static final String ODK_SCOPED_FOLDER_URI = "primary:Android/data/org.odk.collect.android/files";
 
-    public static String PRIMARY_ANDROID_DOC_ID = "primary:Android/data/org.odk.collect.android/files";
-    // This will be set dynamically based on ODK storage type
-    //public static String PRIMARY_ANDROID_DOC_ID = ODK_SCOPED_FOLDER_URI;
+    // CHANGED: No longer initialize with a default value
+    // This will be set by FormUtilities before use
+    public static String PRIMARY_ANDROID_DOC_ID = null;
 
     private Context mContext;
     private ContentResolver contentResolver;
@@ -39,9 +39,23 @@ public class OdkScopedDirUtil {
         this.contentResolver = mContext.getContentResolver();
         this.odkStorageType = odkStorageType;
 
-        PRIMARY_ANDROID_DOC_ID = odkStorageType==OdkStorageType.ODK_SHARED_FOLDER ? ODK_SHARED_FOLDER_URI : ODK_SCOPED_FOLDER_URI;
+        // Only set if not already set by FormUtilities
+        // This ensures FormUtilities' setting takes precedence
+        if (PRIMARY_ANDROID_DOC_ID == null) {
+            PRIMARY_ANDROID_DOC_ID = odkStorageType == OdkStorageType.ODK_SHARED_FOLDER ?
+                    ODK_SHARED_FOLDER_URI : ODK_SCOPED_FOLDER_URI;
+            Log.d(TAG, "Constructor set PRIMARY_ANDROID_DOC_ID to: " + PRIMARY_ANDROID_DOC_ID);
+        } else {
+            Log.d(TAG, "PRIMARY_ANDROID_DOC_ID already set to: " + PRIMARY_ANDROID_DOC_ID);
+        }
 
-        this.odkDirectoryUri = DocumentsContract.buildTreeDocumentUri(EXTERNAL_STORAGE_PROVIDER_AUTHORITY, PRIMARY_ANDROID_DOC_ID);
+        this.odkDirectoryUri = DocumentsContract.buildTreeDocumentUri(
+                EXTERNAL_STORAGE_PROVIDER_AUTHORITY, PRIMARY_ANDROID_DOC_ID);
+
+        Log.d(TAG, "OdkScopedDirUtil initialized:");
+        Log.d(TAG, "  Storage Type: " + odkStorageType);
+        Log.d(TAG, "  Document ID: " + PRIMARY_ANDROID_DOC_ID);
+        Log.d(TAG, "  Directory URI: " + odkDirectoryUri);
     }
 
     public Context getContext() {
@@ -57,6 +71,7 @@ public class OdkScopedDirUtil {
      */
     public OdkFormObject findBlankForm(String formName) {
         Log.d(TAG, "Searching for form: " + formName);
+        Log.d(TAG, "Using PRIMARY_ANDROID_DOC_ID: " + PRIMARY_ANDROID_DOC_ID);
 
         Uri odkFilesUri = odkDirectoryUri;
         XDocumentFile odkFilesDocFile = XDocumentFile.fromUri(mContext, odkFilesUri);

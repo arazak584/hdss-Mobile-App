@@ -99,7 +99,7 @@ public class HierarchyActivity extends AppCompatActivity {
         // Setup other components
         setupLoginAndRound();
         setupButtons();
-        setupConfiguration();
+        //setupConfiguration();
 
 
     }
@@ -509,51 +509,51 @@ public class HierarchyActivity extends AppCompatActivity {
         return true;
     }
 
-    private void setupConfiguration() {
-        ConfigViewModel viewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
-        List<Configsettings> configsettings = null;
-        try {
-            configsettings = viewModel.findAll();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        boolean upda = configsettings != null && !configsettings.isEmpty() && configsettings.get(0).updates;
-        boolean enu = configsettings != null && !configsettings.isEmpty() && configsettings.get(0).enumeration;
-
-        RadioGroup radioGroup = findViewById(R.id.task);
-        RadioButton btnUpdate = findViewById(R.id.Update);
-        RadioButton btnEnumerate = findViewById(R.id.Enumerate);
-        Button start = findViewById(R.id.btn_location);
-        Button base = findViewById(R.id.btn_baseline);
-
-        btnUpdate.setEnabled(false);
-        btnEnumerate.setEnabled(false);
-
-        if (upda) {
-            start.setVisibility(View.VISIBLE);
-            btnUpdate.setEnabled(true);
-            if (btnUpdate.isEnabled()) {
-                btnUpdate.setChecked(true);
-                Log.d("RadioButton", "Update RadioButton is enabled and checked");
-            }
-        } else {
-            start.setVisibility(View.GONE);
-            btnUpdate.setEnabled(false);
-        }
-
-        if (enu) {
-            base.setVisibility(View.VISIBLE);
-            btnEnumerate.setEnabled(true);
-            if (btnEnumerate.isEnabled()) {
-                btnEnumerate.setChecked(true);
-                Log.d("RadioButton", "Enumerate RadioButton is enabled and checked");
-            }
-        } else {
-            base.setVisibility(View.GONE);
-            btnEnumerate.setEnabled(false);
-        }
-    }
+//    private void setupConfiguration() {
+//        ConfigViewModel viewModel = new ViewModelProvider(this).get(ConfigViewModel.class);
+//        List<Configsettings> configsettings = null;
+//        try {
+//            configsettings = viewModel.findAll();
+//        } catch (ExecutionException | InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//        boolean upda = configsettings != null && !configsettings.isEmpty() && configsettings.get(0).updates;
+//        boolean enu = configsettings != null && !configsettings.isEmpty() && configsettings.get(0).enumeration;
+//
+//        RadioGroup radioGroup = findViewById(R.id.task);
+//        RadioButton btnUpdate = findViewById(R.id.Update);
+//        RadioButton btnEnumerate = findViewById(R.id.Enumerate);
+//        Button start = findViewById(R.id.btn_location);
+//        Button base = findViewById(R.id.btn_baseline);
+//
+//        btnUpdate.setEnabled(false);
+//        btnEnumerate.setEnabled(false);
+//
+//        if (upda) {
+//            start.setVisibility(View.VISIBLE);
+//            btnUpdate.setEnabled(true);
+//            if (btnUpdate.isEnabled()) {
+//                btnUpdate.setChecked(true);
+//                Log.d("RadioButton", "Update RadioButton is enabled and checked");
+//            }
+//        } else {
+//            start.setVisibility(View.GONE);
+//            btnUpdate.setEnabled(false);
+//        }
+//
+//        if (enu) {
+//            base.setVisibility(View.VISIBLE);
+//            btnEnumerate.setEnabled(true);
+//            if (btnEnumerate.isEnabled()) {
+//                btnEnumerate.setChecked(true);
+//                Log.d("RadioButton", "Enumerate RadioButton is enabled and checked");
+//            }
+//        } else {
+//            base.setVisibility(View.GONE);
+//            btnEnumerate.setEnabled(false);
+//        }
+//    }
 
     private void showErrorToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();

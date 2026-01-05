@@ -118,6 +118,7 @@ public class Relationship extends BaseObservable implements Parcelable {
     public String location_uuid;
     @Expose
     public String locationB_uuid;
+    public Date updatedAt;
 
     public Relationship(){}
 
@@ -126,6 +127,20 @@ public class Relationship extends BaseObservable implements Parcelable {
 
     @Ignore
     private transient final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+
+    @Bindable
+    public String getUpdatedAt() {
+        if (updatedAt == null) return "";
+        return g.format(updatedAt);
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        try {
+            this.updatedAt = f.parse(updatedAt);
+        } catch (ParseException e) {
+            System.out.println("updatedAt Date Error " + e.getMessage());
+        }
+    }
 
     public void setStatus(RadioGroup view, int checkedId) {
         if (checkedId != view.getCheckedRadioButtonId()) {

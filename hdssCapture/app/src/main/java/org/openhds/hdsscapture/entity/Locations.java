@@ -26,6 +26,7 @@ import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 @Entity(tableName = "locations",
         indices = {
@@ -139,6 +140,7 @@ public class Locations extends BaseObservable implements Parcelable {
     public String edtime;
     @Expose
     public boolean selected;
+    public Date updatedAt;
 
     public Locations(){}
 
@@ -152,6 +154,22 @@ public class Locations extends BaseObservable implements Parcelable {
 
     @Ignore
     private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+    @Ignore
+    private transient final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+
+    @Bindable
+    public String getUpdatedAt() {
+        if (updatedAt == null) return "";
+        return g.format(updatedAt);
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        try {
+            this.updatedAt = f.parse(updatedAt);
+        } catch (ParseException e) {
+            System.out.println("updatedAt Date Error " + e.getMessage());
+        }
+    }
 
     @Bindable
     public String getInsertDate() {

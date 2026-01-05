@@ -35,6 +35,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import org.openhds.hdsscapture.R;
+import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Socialgroup;
@@ -184,30 +185,349 @@ public class FormUtilities {
     }
 
     /**
+     * Set the correct PRIMARY_ANDROID_DOC_ID based on storage type
+     * Call this BEFORE any permission requests or OdkScopedDirUtil creation
+     */
+    private void updatePrimaryAndroidDocId() {
+        String oldValue = OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID;
+
+        if (odkStorageType == OdkStorageType.ODK_SHARED_FOLDER) {
+            OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID = OdkScopedDirUtil.ODK_SHARED_FOLDER_URI;
+        } else {
+            OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID = OdkScopedDirUtil.ODK_SCOPED_FOLDER_URI;
+        }
+
+        Log.d(TAG, "updatePrimaryAndroidDocId:");
+        Log.d(TAG, "  Storage Type: " + odkStorageType);
+        Log.d(TAG, "  Old Doc ID: " + oldValue);
+        Log.d(TAG, "  New Doc ID: " + OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
+    }
+
+    /**
      * Determine ODK Collect version and storage type
      */
     private void retrieveOdkStorageType() {
-        final int odk_v_1_26_0 = 3713;
-        final int odk_v_2021_2 = 4242;
+        final int odk_v_1_26_0 = 3713;  // First scoped storage version
+        final int odk_v_2021_2 = 4242;  // Projects introduced
         String versionName = "NONE";
+        int versionCode = 0;
 
         try {
             PackageInfo packageInfo = mContext.getPackageManager()
                     .getPackageInfo("org.odk.collect.android", 0);
             versionName = packageInfo.versionName;
+            versionCode = packageInfo.versionCode;
 
-            if (packageInfo.versionCode < odk_v_1_26_0) {
+            Log.d(TAG, "ODK Collect found: version " + versionName + " (code: " + versionCode + ")");
+
+            // Determine storage type based on version
+            if (versionCode < odk_v_1_26_0) {
                 odkStorageType = OdkStorageType.ODK_SHARED_FOLDER;
-            } else if (packageInfo.versionCode < odk_v_2021_2) {
+                Log.d(TAG, "Using ODK_SHARED_FOLDER (old ODK version)");
+            } else if (versionCode < odk_v_2021_2) {
                 odkStorageType = OdkStorageType.ODK_SCOPED_FOLDER_NO_PROJECTS;
+                Log.d(TAG, "Using ODK_SCOPED_FOLDER_NO_PROJECTS");
             } else {
                 odkStorageType = OdkStorageType.ODK_SCOPED_FOLDER_PROJECTS;
+                Log.d(TAG, "Using ODK_SCOPED_FOLDER_PROJECTS");
             }
+
+            // VERIFY on Android 10- by checking actual folders
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                OdkStorageType detectedType = detectActualOdkFolder();
+                if (detectedType != OdkStorageType.NO_ODK_INSTALLED && detectedType != odkStorageType) {
+                    Log.w(TAG, "Version suggests " + odkStorageType + " but folder check found " + detectedType);
+                    Log.w(TAG, "Using detected type: " + detectedType);
+                    odkStorageType = detectedType;
+                }
+            }
+
         } catch (PackageManager.NameNotFoundException e) {
             odkStorageType = OdkStorageType.NO_ODK_INSTALLED;
+            Log.e(TAG, "ODK Collect not installed");
         }
 
-        Log.d(TAG, "ODK Storage Type: " + odkStorageType + ", ODK v" + versionName);
+        Log.d(TAG, "Final ODK Storage Type: " + odkStorageType + ", ODK v" + versionName);
+
+        // CRITICAL: Set PRIMARY_ANDROID_DOC_ID immediately after detection
+        updatePrimaryAndroidDocId();
+    }
+
+    /**
+     * Check which ODK folder actually exists (Android 10- only)
+     */
+    public OdkStorageType detectActualOdkFolder() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            return odkStorageType;
+        }
+
+        Log.d(TAG, "=== Detecting actual ODK folder ===");
+
+        // Check for /odk folder (old ODK)
+        File odkSharedFolder = new File(Environment.getExternalStorageDirectory(), "odk");
+        if (odkSharedFolder.exists() && odkSharedFolder.isDirectory() && odkSharedFolder.canRead()) {
+            File formsDir = new File(odkSharedFolder, "forms");
+            File instancesDir = new File(odkSharedFolder, "instances");
+
+            if (formsDir.exists() || instancesDir.exists()) {
+                Log.d(TAG, "Found VALID /odk folder");
+                return OdkStorageType.ODK_SHARED_FOLDER;
+            }
+        }
+
+        // Check for scoped folder
+        File odkScopedFolder = new File(Environment.getExternalStorageDirectory(),
+                "Android/data/org.odk.collect.android/files");
+        if (odkScopedFolder.exists() && odkScopedFolder.isDirectory() && odkScopedFolder.canRead()) {
+            File projectsFolder = new File(odkScopedFolder, "projects");
+            if (projectsFolder.exists()) {
+                Log.d(TAG, "Found scoped folder WITH projects");
+                return OdkStorageType.ODK_SCOPED_FOLDER_PROJECTS;
+            } else {
+                Log.d(TAG, "Found scoped folder WITHOUT projects");
+                return OdkStorageType.ODK_SCOPED_FOLDER_NO_PROJECTS;
+            }
+        }
+
+        Log.w(TAG, "No ODK folder found");
+        return OdkStorageType.NO_ODK_INSTALLED;
+    }
+
+    /**
+     * Request permissions for ODK folders
+     */
+    private void requestPermissionsForOdkFolders() {
+        if (odkStorageType == OdkStorageType.NO_ODK_INSTALLED) {
+            showErrorDialog(R.string.odk_form_load_error_odk_not_installed_lbl);
+            return;
+        }
+
+        // CRITICAL: Ensure PRIMARY_ANDROID_DOC_ID is set correctly BEFORE requesting permissions
+        updatePrimaryAndroidDocId();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Log.d(TAG, "=== Android 11+ Permission Request ===");
+            Log.d(TAG, "Storage Type: " + odkStorageType);
+            Log.d(TAG, "Document ID: " + OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
+
+            requestAccessAndroidDir();
+        } else {
+            Log.d(TAG, "Android 10 or below - requesting READ/WRITE permissions");
+            OnPermissionRequestListener readWriteGrantListener = granted -> {
+                if (granted) {
+                    // Verify detection with actual folder check
+                    OdkStorageType actualType = detectActualOdkFolder();
+                    if (actualType != odkStorageType && actualType != OdkStorageType.NO_ODK_INSTALLED) {
+                        Log.w(TAG, "Correcting storage type from " + odkStorageType + " to " + actualType);
+                        odkStorageType = actualType;
+                        updatePrimaryAndroidDocId();
+                    }
+
+                    callExecuteCurrentLoadTask();
+                } else {
+                    showPermissionDeniedDialog(R.string.odk_form_load_permission_request_readwrite_denied_lbl);
+                }
+            };
+
+            requestPermissionsForReadAndWriteFiles(readWriteGrantListener);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void requestAccessAndroidDir() {
+        // CRITICAL: Do NOT change PRIMARY_ANDROID_DOC_ID here - it's already set!
+        Log.d(TAG, "=== requestAccessAndroidDir ===");
+        Log.d(TAG, "Storage Type: " + odkStorageType);
+        Log.d(TAG, "Document ID: " + OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && hasSAFPermissionToAndroidDir()) {
+            Log.d(TAG, "Permission already granted, initializing OdkScopedDirUtil");
+            this.odkScopedDirUtil = new OdkScopedDirUtil(mContext, odkStorageType);
+            callExecuteCurrentLoadTask();
+        } else {
+            Log.d(TAG, "Permission not granted, showing dialog");
+
+            String folderPath = odkStorageType == OdkStorageType.ODK_SHARED_FOLDER ?
+                    "odk" : "Android → data → org.odk.collect.android → files";
+
+            String message = mContext.getString(R.string.odk_form_load_permission_request_android_dir_info_lbl) +
+                    "\n\n" + mContext.getString(R.string.select_folder_instructions, folderPath);
+
+            runOnUiThread(() -> {
+                new AlertDialog.Builder(mContext)
+                        .setTitle(R.string.odk_form_load_permission_request_manage_all_title_lbl)
+                        .setMessage(message)
+                        .setPositiveButton(R.string.select_folder_btn, (dialog, which) -> {
+                            executeRequestAccessAndroidDir();
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .setCancelable(false)
+                        .show();
+            });
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.Q)
+    private void executeRequestAccessAndroidDir() {
+        Log.d(TAG, "=== executeRequestAccessAndroidDir START ===");
+        Log.d(TAG, "Storage Type: " + odkStorageType);
+        Log.d(TAG, "Document ID: " + OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
+
+        try {
+            Intent intent = getPrimaryVolume().createOpenDocumentTreeIntent();
+
+            try {
+                Uri uri = DocumentsContract.buildDocumentUri(
+                        OdkScopedDirUtil.EXTERNAL_STORAGE_PROVIDER_AUTHORITY,
+                        OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
+
+                Log.d(TAG, "Target URI: " + uri);
+                intent.putExtra("android.provider.extra.INITIAL_URI", uri);
+            } catch (Exception e) {
+                Log.w(TAG, "Could not set initial URI", e);
+            }
+
+            Log.d(TAG, "Launching file picker...");
+            this.requestAccessAndroidDirLauncher.launch(intent);
+
+        } catch (Exception e) {
+            Log.e(TAG, "ERROR in executeRequestAccessAndroidDir", e);
+            e.printStackTrace();
+
+            runOnUiThread(() -> {
+                new AlertDialog.Builder(mContext)
+                        .setTitle(R.string.error_lbl)
+                        .setMessage(mContext.getString(R.string.error_opening_file_manager) +
+                                "\n\n" + e.getMessage())
+                        .setPositiveButton(android.R.string.ok, null)
+                        .show();
+            });
+        }
+
+        Log.d(TAG, "=== executeRequestAccessAndroidDir END ===");
+    }
+
+    private void onRequestAccessAndroidDirResult(ActivityResult result) {
+        Log.d(TAG, "=== onRequestAccessAndroidDirResult START ===");
+        Log.d(TAG, "Result code: " + result.getResultCode());
+        Log.d(TAG, "Expected storage type: " + odkStorageType);
+        Log.d(TAG, "Expected doc ID: " + OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
+
+        if (result.getResultCode() == Activity.RESULT_OK) {
+            if (result.getData() == null || result.getData().getData() == null) {
+                Log.e(TAG, "Result data is null!");
+                showPermissionDeniedDialog(R.string.odk_form_load_permission_storage_denied_lbl);
+                return;
+            }
+
+            Uri directoryUri = result.getData().getData();
+            Log.d(TAG, "Selected URI: " + directoryUri);
+
+            try {
+                // Take persistable permission
+                mContext.getContentResolver().takePersistableUriPermission(
+                        directoryUri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+                Log.d(TAG, "Persistable URI permission taken successfully");
+
+                // Extract document ID
+                String selectedDocId = DocumentsContract.getTreeDocumentId(directoryUri);
+                Log.d(TAG, "Selected Document ID: " + selectedDocId);
+                Log.d(TAG, "Expected Document ID: " + OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
+
+                // Validate selection
+                boolean isCorrectFolder = false;
+
+                if (selectedDocId.equals(OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID)) {
+                    isCorrectFolder = true;
+                    Log.d(TAG, "✓ Exact match");
+                } else if (OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID.startsWith(selectedDocId + "/")) {
+                    isCorrectFolder = true;
+                    Log.d(TAG, "✓ Parent folder selected");
+                } else if (selectedDocId.startsWith(OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID + "/")) {
+                    isCorrectFolder = true;
+                    Log.d(TAG, "✓ Child folder selected");
+                } else {
+                    // User selected wrong folder - try to auto-correct
+                    Log.w(TAG, "✗ Folder mismatch - attempting auto-correction");
+
+                    if (selectedDocId.equals("primary:odk") &&
+                            odkStorageType != OdkStorageType.ODK_SHARED_FOLDER) {
+                        Log.w(TAG, "User selected /odk, correcting storage type");
+                        odkStorageType = OdkStorageType.ODK_SHARED_FOLDER;
+                        updatePrimaryAndroidDocId();
+                        isCorrectFolder = true;
+                    } else if (selectedDocId.startsWith("primary:Android/data/org.odk.collect.android") &&
+                            odkStorageType == OdkStorageType.ODK_SHARED_FOLDER) {
+                        Log.w(TAG, "User selected scoped storage, correcting storage type");
+                        odkStorageType = OdkStorageType.ODK_SCOPED_FOLDER_NO_PROJECTS;
+                        updatePrimaryAndroidDocId();
+                        isCorrectFolder = true;
+                    }
+                }
+
+                if (isCorrectFolder) {
+                    Log.d(TAG, "Permission verified, initializing OdkScopedDirUtil");
+                    this.odkScopedDirUtil = new OdkScopedDirUtil(mContext, odkStorageType);
+
+                    if (this.odkScopedDirUtil != null) {
+                        Log.d(TAG, "✓ OdkScopedDirUtil initialized successfully");
+                        callExecuteCurrentLoadTask();
+                    } else {
+                        Log.e(TAG, "✗ OdkScopedDirUtil initialization failed");
+                        showPermissionDeniedDialog(R.string.odk_form_load_permission_storage_denied_lbl);
+                    }
+                } else {
+                    Log.e(TAG, "Wrong folder selected");
+
+                    String expectedPath = odkStorageType == OdkStorageType.ODK_SHARED_FOLDER ?
+                            "odk" : "Android → data → org.odk.collect.android → files";
+
+                    runOnUiThread(() -> {
+                        new AlertDialog.Builder(mContext)
+                                .setTitle("Incorrect Folder")
+                                .setMessage("Expected: " + expectedPath + "\n\n" +
+                                        "Selected: " + selectedDocId + "\n\n" +
+                                        "Please select the correct folder.")
+                                .setPositiveButton("Try Again", (dialog, which) -> {
+                                    executeRequestAccessAndroidDir();
+                                })
+                                .setNegativeButton("Cancel", null)
+                                .show();
+                    });
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error handling permission", e);
+                e.printStackTrace();
+                showPermissionDeniedDialog(R.string.odk_form_load_permission_storage_denied_lbl);
+            }
+        } else {
+            Log.d(TAG, "User cancelled or error occurred");
+            showPermissionDeniedDialog(R.string.odk_form_load_permission_storage_denied_lbl);
+        }
+
+        Log.d(TAG, "=== onRequestAccessAndroidDirResult END ===");
+    }
+
+    private boolean hasSAFPermissionToAndroidDir() {
+        Uri treeUri = DocumentsContract.buildTreeDocumentUri(
+                OdkScopedDirUtil.EXTERNAL_STORAGE_PROVIDER_AUTHORITY,
+                OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
+
+        Log.d(TAG, "Checking permission for: " + treeUri);
+
+        for (UriPermission permission : mContext.getContentResolver().getPersistedUriPermissions()) {
+            Log.d(TAG, "  Checking against: " + permission.getUri());
+
+            if (permission.getUri().equals(treeUri) && permission.isReadPermission()) {
+                Log.d(TAG, "  ✓ Permission found!");
+                return true;
+            }
+        }
+
+        Log.d(TAG, "  ✗ Permission not found");
+        return false;
     }
 
     public OdkStorageType getOdkStorageType() {
@@ -218,7 +538,7 @@ public class FormUtilities {
      * Create preloaded data from app entities
      */
     public static FilledForm createPreloadedData(Individual individual, Locations location,
-                                                 Socialgroup socialgroup) {
+                                                 Socialgroup socialgroup, Fieldworker fieldworker) {
         FilledForm filledForm = new FilledForm();
 
         if (individual != null) {
@@ -243,6 +563,13 @@ public class FormUtilities {
             filledForm.put("socialgroupId", socialgroup.uuid);
             filledForm.put("socialgroupExtId", socialgroup.extId);
             filledForm.put("householdName", socialgroup.getGroupName());
+        }
+
+        // Fieldworker data
+        if (fieldworker != null) {
+            filledForm.put("fieldworkerUuid", fieldworker.fw_uuid);
+            filledForm.put("fieldworkerExtId", fieldworker.username);
+            filledForm.put("fieldworkerName", fieldworker.getFirstName() + " " + fieldworker.getLastName());
         }
 
         return filledForm;
@@ -334,133 +661,6 @@ public class FormUtilities {
     }
 
 
-    // Replace the requestPermissionsForOdkFolders method in your FormUtilities.java
-
-    private void requestPermissionsForOdkFolders() {
-        if (odkStorageType == OdkStorageType.NO_ODK_INSTALLED) {
-            showErrorDialog(R.string.odk_form_load_error_odk_not_installed_lbl);
-            return;
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            // Android 11+
-            Log.d(TAG, "Android 11+, Storage Type: " + odkStorageType);
-
-            if (odkStorageType == OdkStorageType.ODK_SHARED_FOLDER) {
-                // For ODK shared folder (/odk), we need SAF access, NOT MANAGE_EXTERNAL_STORAGE
-                Log.d(TAG, "ODK Shared Folder - requesting SAF access");
-                OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID = OdkScopedDirUtil.ODK_SHARED_FOLDER_URI;
-                requestAccessAndroidDir();
-            }
-            else if (odkStorageType == OdkStorageType.ODK_SCOPED_FOLDER_NO_PROJECTS ||
-                    odkStorageType == OdkStorageType.ODK_SCOPED_FOLDER_PROJECTS) {
-                // For newer ODK versions with scoped storage
-                Log.d(TAG, "ODK Scoped Folder - requesting SAF access");
-                OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID = OdkScopedDirUtil.ODK_SCOPED_FOLDER_URI;
-                requestAccessAndroidDir();
-            }
-        } else {
-            // Android 10 and below - use READ/WRITE_EXTERNAL_STORAGE
-            Log.d(TAG, "Android 10 or below - requesting READ/WRITE permissions");
-            OnPermissionRequestListener readWriteGrantListener = granted -> {
-                if (granted) {
-                    callExecuteCurrentLoadTask();
-                } else {
-                    showPermissionDeniedDialog(R.string.odk_form_load_permission_request_readwrite_denied_lbl);
-                }
-            };
-
-            requestPermissionsForReadAndWriteFiles(readWriteGrantListener);
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    private void requestAccessAndroidDir() {
-        // Ensure the correct document ID is set based on storage type
-        if (odkStorageType == OdkStorageType.ODK_SHARED_FOLDER) {
-            OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID = OdkScopedDirUtil.ODK_SHARED_FOLDER_URI;
-            Log.d(TAG, "Set to ODK_SHARED_FOLDER_URI: " + OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
-        } else {
-            OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID = OdkScopedDirUtil.ODK_SCOPED_FOLDER_URI;
-            Log.d(TAG, "Set to ODK_SCOPED_FOLDER_URI: " + OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
-        }
-
-        Log.d(TAG, "=== requestAccessAndroidDir ===");
-        Log.d(TAG, "Storage Type: " + odkStorageType);
-        Log.d(TAG, "Document ID: " + OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && hasSAFPermissionToAndroidDir()) {
-            Log.d(TAG, "Permission already granted, initializing OdkScopedDirUtil");
-            this.odkScopedDirUtil = new OdkScopedDirUtil(mContext, odkStorageType);
-            callExecuteCurrentLoadTask();
-        } else {
-            Log.d(TAG, "Permission not granted, showing dialog");
-
-            // Show custom dialog with clear instructions
-            String folderPath = odkStorageType == OdkStorageType.ODK_SHARED_FOLDER ?
-                    "odk" : "Android → data → org.odk.collect.android → files";
-
-            String message = mContext.getString(R.string.odk_form_load_permission_request_android_dir_info_lbl) +
-                    "\n\n" + mContext.getString(R.string.select_folder_instructions, folderPath);
-
-            runOnUiThread(() -> {
-                new AlertDialog.Builder(mContext)
-                        .setTitle(R.string.odk_form_load_permission_request_manage_all_title_lbl)
-                        .setMessage(message)
-                        .setPositiveButton(R.string.select_folder_btn, (dialog, which) -> {
-                            executeRequestAccessAndroidDir();
-                        })
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .setCancelable(false)
-                        .show();
-            });
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.Q)
-    private void executeRequestAccessAndroidDir() {
-        Log.d(TAG, "=== executeRequestAccessAndroidDir START ===");
-        Log.d(TAG, "Storage Type: " + odkStorageType);
-        Log.d(TAG, "Document ID: " + OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
-
-        try {
-            // Create the intent to open folder picker
-            Intent intent = getPrimaryVolume().createOpenDocumentTreeIntent();
-
-            // Try to set initial location
-            try {
-                Uri uri = DocumentsContract.buildDocumentUri(
-                        OdkScopedDirUtil.EXTERNAL_STORAGE_PROVIDER_AUTHORITY,
-                        OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
-
-                Log.d(TAG, "Target URI: " + uri);
-
-                // Use the old constant for compatibility
-                intent.putExtra("android.provider.extra.INITIAL_URI", uri);
-            } catch (Exception e) {
-                Log.w(TAG, "Could not set initial URI", e);
-                // Continue anyway - user will just start at root
-            }
-
-            Log.d(TAG, "Launching file picker...");
-            this.requestAccessAndroidDirLauncher.launch(intent);
-
-        } catch (Exception e) {
-            Log.e(TAG, "ERROR in executeRequestAccessAndroidDir", e);
-            e.printStackTrace();
-
-            runOnUiThread(() -> {
-                new AlertDialog.Builder(mContext)
-                        .setTitle(R.string.error_lbl)
-                        .setMessage(mContext.getString(R.string.error_opening_file_manager) +
-                                "\n\n" + e.getMessage())
-                        .setPositiveButton(android.R.string.ok, null)
-                        .show();
-            });
-        }
-
-        Log.d(TAG, "=== executeRequestAccessAndroidDir END ===");
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private StorageVolume getPrimaryVolume() {
@@ -496,158 +696,12 @@ public class FormUtilities {
         }
     }
 
-
-//    @RequiresApi(api = Build.VERSION_CODES.Q)
-//    private void executeRequestAccessAndroidDir() {
-//        Uri uri = DocumentsContract.buildDocumentUri(
-//                OdkScopedDirUtil.EXTERNAL_STORAGE_PROVIDER_AUTHORITY,
-//                OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
-//        Intent intent = getPrimaryVolume().createOpenDocumentTreeIntent();
-//        intent.putExtra("android.provider.extra.INITIAL_URI", uri);
-//        this.requestAccessAndroidDirLauncher.launch(intent);
-//    }
-
-
-
     private void onRequestManageAllActivityResult(int resultCode) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
             callExecuteCurrentLoadTask();
         } else {
             showPermissionDeniedDialog(R.string.odk_form_load_permission_storage_denied_lbl);
         }
-    }
-
-    private void onRequestAccessAndroidDirResult(ActivityResult result) {
-        Log.d(TAG, "=== onRequestAccessAndroidDirResult START ===");
-        Log.d(TAG, "Result code: " + result.getResultCode());
-
-        if (result.getResultCode() == Activity.RESULT_OK) {
-            if (result.getData() == null) {
-                Log.e(TAG, "Result data is null!");
-                showPermissionDeniedDialog(R.string.odk_form_load_permission_storage_denied_lbl);
-                return;
-            }
-
-            Uri directoryUri = result.getData().getData();
-            Log.d(TAG, "Selected URI: " + directoryUri);
-
-            if (directoryUri == null) {
-                Log.e(TAG, "Directory URI is null!");
-                showPermissionDeniedDialog(R.string.odk_form_load_permission_storage_denied_lbl);
-                return;
-            }
-
-            try {
-                // Take persistable permission
-                mContext.getContentResolver().takePersistableUriPermission(
-                        directoryUri,
-                        Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-
-                Log.d(TAG, "Persistable URI permission taken successfully");
-
-                // Log all persisted permissions for debugging
-                Log.d(TAG, "=== All Persisted Permissions ===");
-                for (UriPermission permission : mContext.getContentResolver().getPersistedUriPermissions()) {
-                    Log.d(TAG, "Permission URI: " + permission.getUri() +
-                            " (read: " + permission.isReadPermission() +
-                            ", write: " + permission.isWritePermission() + ")");
-                }
-
-                // Check what we're expecting
-                Uri expectedTreeUri = DocumentsContract.buildTreeDocumentUri(
-                        OdkScopedDirUtil.EXTERNAL_STORAGE_PROVIDER_AUTHORITY,
-                        OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
-                Log.d(TAG, "Expected URI: " + expectedTreeUri);
-                Log.d(TAG, "Received URI: " + directoryUri);
-
-                // More flexible permission check - check if the selected URI is for the right folder
-                boolean hasPermission = false;
-
-                // Extract the document ID from the selected URI
-                String selectedDocId = DocumentsContract.getTreeDocumentId(directoryUri);
-                Log.d(TAG, "Selected Document ID: " + selectedDocId);
-                Log.d(TAG, "Expected Document ID: " + OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
-
-                // Check if it matches or is a parent/child of the expected path
-                if (selectedDocId != null &&
-                        (selectedDocId.equals(OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID) ||
-                                selectedDocId.startsWith(OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID + "/") ||
-                                OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID.startsWith(selectedDocId + "/"))) {
-                    hasPermission = true;
-                    Log.d(TAG, "Permission check PASSED (document ID match)");
-                } else {
-                    // Fallback: check using the standard method
-                    hasPermission = hasSAFPermissionToAndroidDir();
-                    Log.d(TAG, "Permission check via hasSAFPermissionToAndroidDir: " + hasPermission);
-                }
-
-                if (hasPermission) {
-                    Log.d(TAG, "Permission verified, initializing OdkScopedDirUtil...");
-                    this.odkScopedDirUtil = new OdkScopedDirUtil(mContext, odkStorageType);
-
-                    if (this.odkScopedDirUtil != null) {
-                        Log.d(TAG, "OdkScopedDirUtil initialized successfully");
-                        callExecuteCurrentLoadTask();
-                    } else {
-                        Log.e(TAG, "OdkScopedDirUtil initialization returned null!");
-                        showPermissionDeniedDialog(R.string.odk_form_load_permission_storage_denied_lbl);
-                    }
-                } else {
-                    Log.e(TAG, "Permission check FAILED!");
-
-                    // Show detailed error to user
-                    String expectedPath = odkStorageType == OdkStorageType.ODK_SHARED_FOLDER ?
-                            "odk" : "Android/data/org.odk.collect.android/files";
-
-                    runOnUiThread(() -> {
-                        new AlertDialog.Builder(mContext)
-                                .setTitle("Incorrect Folder Selected")
-                                .setMessage("Please select the exact folder:\n\n" + expectedPath +
-                                        "\n\nSelected: " + selectedDocId)
-                                .setPositiveButton("Try Again", (dialog, which) -> {
-                                    executeRequestAccessAndroidDir();
-                                })
-                                .setNegativeButton("Cancel", null)
-                                .show();
-                    });
-                }
-            } catch (SecurityException e) {
-                Log.e(TAG, "SecurityException when taking persistable permission", e);
-                showPermissionDeniedDialog(R.string.odk_form_load_permission_storage_denied_lbl);
-            } catch (Exception e) {
-                Log.e(TAG, "Unexpected error in permission handling", e);
-                e.printStackTrace();
-                showPermissionDeniedDialog(R.string.odk_form_load_permission_storage_denied_lbl);
-            }
-        } else if (result.getResultCode() == Activity.RESULT_CANCELED) {
-            Log.d(TAG, "User cancelled folder selection");
-            showPermissionDeniedDialog(R.string.odk_form_load_permission_storage_denied_lbl);
-        } else {
-            Log.e(TAG, "Unexpected result code: " + result.getResultCode());
-            showPermissionDeniedDialog(R.string.odk_form_load_permission_storage_denied_lbl);
-        }
-
-        Log.d(TAG, "=== onRequestAccessAndroidDirResult END ===");
-    }
-
-    private boolean hasSAFPermissionToAndroidDir() {
-        Uri treeUri = DocumentsContract.buildTreeDocumentUri(
-                OdkScopedDirUtil.EXTERNAL_STORAGE_PROVIDER_AUTHORITY,
-                OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
-
-        Log.d(TAG, "Checking permission for URI: " + treeUri);
-
-        for (UriPermission uriPermission : mContext.getContentResolver().getPersistedUriPermissions()) {
-            Log.d(TAG, "Checking against: " + uriPermission.getUri());
-
-            if (uriPermission.getUri().equals(treeUri) && uriPermission.isReadPermission()) {
-                Log.d(TAG, "Permission found and granted!");
-                return true;
-            }
-        }
-
-        Log.d(TAG, "Permission not found");
-        return false;
     }
 
 
@@ -675,6 +729,75 @@ public class FormUtilities {
     }
 
     // Utility methods
+
+    /**
+     * Comprehensive ODK environment diagnostics
+     * Call this to debug ODK detection issues
+     */
+    public void diagnoseOdkEnvironment() {
+        Log.d(TAG, "=== ODK ENVIRONMENT DIAGNOSTICS ===");
+
+        // 1. Check ODK Collect installation
+        try {
+            PackageInfo packageInfo = mContext.getPackageManager()
+                    .getPackageInfo("org.odk.collect.android", 0);
+            Log.d(TAG, "ODK Collect: INSTALLED");
+            Log.d(TAG, "  Version Name: " + packageInfo.versionName);
+            Log.d(TAG, "  Version Code: " + packageInfo.versionCode);
+
+            // Determine what version code means
+            int versionCode = packageInfo.versionCode;
+            if (versionCode < 3713) {
+                Log.d(TAG, "  Storage Type: ODK_SHARED_FOLDER (/odk)");
+            } else if (versionCode < 4242) {
+                Log.d(TAG, "  Storage Type: ODK_SCOPED_FOLDER_NO_PROJECTS");
+            } else {
+                Log.d(TAG, "  Storage Type: ODK_SCOPED_FOLDER_PROJECTS");
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, "ODK Collect: NOT INSTALLED");
+        }
+
+        // 2. Check Android version
+        Log.d(TAG, "Android Version: " + Build.VERSION.SDK_INT);
+        Log.d(TAG, "Android " + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ? "11+" : "10 or below"));
+
+        // 3. Check folder existence (only on Android 10-)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            File odkShared = new File(Environment.getExternalStorageDirectory(), "odk");
+            Log.d(TAG, "/odk folder exists: " + odkShared.exists());
+            if (odkShared.exists()) {
+                Log.d(TAG, "  Can read: " + odkShared.canRead());
+                Log.d(TAG, "  Is directory: " + odkShared.isDirectory());
+            }
+
+            File odkScoped = new File(Environment.getExternalStorageDirectory(),
+                    "Android/data/org.odk.collect.android/files");
+            Log.d(TAG, "Android/data/... folder exists: " + odkScoped.exists());
+            if (odkScoped.exists()) {
+                Log.d(TAG, "  Can read: " + odkScoped.canRead());
+                Log.d(TAG, "  Is directory: " + odkScoped.isDirectory());
+            }
+        } else {
+            Log.d(TAG, "Android 11+ - Cannot check folder existence without permission");
+        }
+
+        // 4. Current detection result
+        Log.d(TAG, "Current odkStorageType: " + odkStorageType);
+        Log.d(TAG, "PRIMARY_ANDROID_DOC_ID: " + OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
+
+        // 5. Check existing permissions
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            Log.d(TAG, "=== Persisted URI Permissions ===");
+            for (UriPermission permission : mContext.getContentResolver().getPersistedUriPermissions()) {
+                Log.d(TAG, "  URI: " + permission.getUri());
+                Log.d(TAG, "    Read: " + permission.isReadPermission());
+                Log.d(TAG, "    Write: " + permission.isWritePermission());
+            }
+        }
+
+        Log.d(TAG, "=================================");
+    }
 
     public String getStartTimestamp() {
         TimeZone tz = TimeZone.getDefault();

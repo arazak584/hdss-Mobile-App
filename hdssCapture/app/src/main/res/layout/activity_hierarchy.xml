@@ -337,42 +337,6 @@
                 android:inputType="textPersonName|textCapCharacters"
                 android:background="@drawable/txtbox_rone_wbevel"/>
 
-                    <TableLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TableRow
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <RadioGroup
-                                android:id="@+id/task"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <RadioButton
-                                    android:id="@+id/Update"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:tag="1"
-                                    android:text="Update"
-                                    tools:ignore="DuplicateSpeakableTextCheck" />
-
-                                <RadioButton
-                                    android:visibility="gone"
-                                    android:id="@+id/Enumerate"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:tag="2"
-                                    android:text="@string/enumeration"
-                                    tools:ignore="DuplicateSpeakableTextCheck" />
-
-                            </RadioGroup>
-                        </TableRow>
-
-                    </TableLayout>
-
 
         <LinearLayout
             android:id="@+id/up"
@@ -382,7 +346,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/btn_location"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
@@ -394,31 +358,6 @@
                 android:text="Update"
                 style="@style/SecondaryButton"
                 android:textSize="18sp" />
-
-            <Button
-                android:visibility="gone"
-                android:id="@+id/btn_baseline"
-                android:layout_width="180dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="10dp"
-                android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:text="Enumeration"
-                style="@style/SecondaryButton"
-                />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ups"
-            android:padding="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_dup"
@@ -433,8 +372,8 @@
                 style="@style/SupervisorButton"/>
 
 
-
         </LinearLayout>
+
 
         </LinearLayout>
 

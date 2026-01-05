@@ -524,6 +524,7 @@ public class HdssSociodemo extends BaseObservable {
     public Integer  id0019_1;
     @Expose
     public String  id0021;
+    public Date updatedAt;
 
     public HdssSociodemo() {
     }
@@ -539,6 +540,20 @@ public class HdssSociodemo extends BaseObservable {
 
     @Ignore
     private transient final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+
+    @Bindable
+    public String getUpdatedAt() {
+        if (updatedAt == null) return "";
+        return g.format(updatedAt);
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        try {
+            this.updatedAt = f.parse(updatedAt);
+        } catch (ParseException e) {
+            System.out.println("updatedAt Date Error " + e.getMessage());
+        }
+    }
 
     public void setStatus(RadioGroup view, int checkedId) {
         if (checkedId != view.getCheckedRadioButtonId()) {

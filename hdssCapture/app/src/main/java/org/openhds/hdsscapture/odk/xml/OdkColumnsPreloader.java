@@ -38,7 +38,6 @@ public class OdkColumnsPreloader {
     private Set<String> preloadedStartVariables;
 
     // Prefixes for special variables
-    private final String householdPrefix = "Household.";
     private final String memberPrefix = "Member.";
     private final String repeatGroupAttribute = "jr:template";
 
@@ -330,9 +329,12 @@ public class OdkColumnsPreloader {
      * Process the meta section - this is where instanceName lives
      */
     private void processMeta(Node metaNode, StringBuilder sbuilder) {
+        Log.d(TAG, "Processing meta section");
         sbuilder.append("<meta>\r\n");
 
         NodeList metaChildren = metaNode.getChildNodes();
+        boolean hasInstanceID = false;
+        boolean hasInstanceName = false;
 
         for (int i = 0; i < metaChildren.getLength(); i++) {
             Node child = metaChildren.item(i);
@@ -343,24 +345,40 @@ public class OdkColumnsPreloader {
                 // Handle instanceID
                 if (name.equals("instanceID")) {
                     String instanceId = "uuid:" + java.util.UUID.randomUUID().toString();
-                    sbuilder.append("<instanceID>" + instanceId + "</instanceID>\r\n");
+                    sbuilder.append("<instanceID>").append(instanceId).append("</instanceID>\r\n");
                     Log.d(TAG, "Generated instanceID: " + instanceId);
+                    hasInstanceID = true;
                 }
                 // Handle instanceName - leave empty, ODK will calculate it
                 else if (name.equals("instanceName")) {
                     sbuilder.append("<instanceName />\r\n");
                     Log.d(TAG, "Added empty instanceName (ODK will calculate)");
+                    hasInstanceName = true;
                 }
                 // Handle other meta fields
                 else {
                     // Check if it's a special variable
                     if (preloadedStartVariables.contains(name)) {
-                        sbuilder.append("<" + name + ">" + formUtilities.getStartTimestamp() + "</" + name + ">\r\n");
+                        sbuilder.append("<").append(name).append(">")
+                                .append(formUtilities.getStartTimestamp())
+                                .append("</").append(name).append(">\r\n");
                     } else {
-                        sbuilder.append("<" + name + " />\r\n");
+                        sbuilder.append("<").append(name).append(" />\r\n");
                     }
                 }
             }
+        }
+
+        // Ensure required meta fields exist
+        if (!hasInstanceID) {
+            String instanceId = "uuid:" + java.util.UUID.randomUUID().toString();
+            sbuilder.append("<instanceID>").append(instanceId).append("</instanceID>\r\n");
+            Log.d(TAG, "Added missing instanceID: " + instanceId);
+        }
+
+        if (!hasInstanceName) {
+            sbuilder.append("<instanceName />\r\n");
+            Log.d(TAG, "Added missing instanceName");
         }
 
         sbuilder.append("</meta>\r\n");

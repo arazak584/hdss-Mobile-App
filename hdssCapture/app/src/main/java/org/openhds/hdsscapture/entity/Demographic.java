@@ -111,6 +111,7 @@ public class Demographic extends BaseObservable implements Parcelable {
     public Integer akan_tribe;
     @Expose
     public String location_uuid;
+    public Date updatedAt;
 
     public Demographic(){}
 

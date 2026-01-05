@@ -178,6 +178,7 @@ public class Individual extends BaseObservable implements Parcelable {
 
     public Integer deleted=0;
     public Date deletedDate;
+    public Date updatedAt;
 
     public Individual() {
     }
@@ -221,6 +222,20 @@ public class Individual extends BaseObservable implements Parcelable {
     private transient final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
     @Ignore
     private transient final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+
+    @Bindable
+    public String getUpdatedAt() {
+        if (updatedAt == null) return "";
+        return g.format(updatedAt);
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        try {
+            this.updatedAt = f.parse(updatedAt);
+        } catch (ParseException e) {
+            System.out.println("updatedAt Date Error " + e.getMessage());
+        }
+    }
 
     public String getSttime() {
         return sttime;

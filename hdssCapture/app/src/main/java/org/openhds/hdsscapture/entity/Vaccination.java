@@ -7,6 +7,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -249,6 +250,7 @@ public class Vaccination extends BaseObservable {
     public String supervisor;
     @Expose
     public Date approveDate;
+    public Date updatedAt;
 
     public Vaccination(){}
 
@@ -258,6 +260,20 @@ public class Vaccination extends BaseObservable {
 
     @Ignore
     private transient final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+
+    @Bindable
+    public String getUpdatedAt() {
+        if (updatedAt == null) return "";
+        return g.format(updatedAt);
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        try {
+            this.updatedAt = f.parse(updatedAt);
+        } catch (ParseException e) {
+            System.out.println("updatedAt Date Error " + e.getMessage());
+        }
+    }
 
     public void setStatus(RadioGroup view, int checkedId) {
         if (checkedId != view.getCheckedRadioButtonId()) {

@@ -173,6 +173,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
     public Integer plan_method;//If YES, which of the following methods of family planning did you use to delay or prevent getting pregnant?
     @Expose
     public String plan_method_oth;//Other Method, Specify
+    public Date updatedAt;
 
     @SerializedName("pregnancyOrder")
     @Expose
@@ -188,6 +189,20 @@ public class Pregnancy extends BaseObservable implements Parcelable {
 
     @Ignore
     private transient final SimpleDateFormat g = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+
+    @Bindable
+    public String getUpdatedAt() {
+        if (updatedAt == null) return "";
+        return g.format(updatedAt);
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        try {
+            this.updatedAt = f.parse(updatedAt);
+        } catch (ParseException e) {
+            System.out.println("updatedAt Date Error " + e.getMessage());
+        }
+    }
 
     private void calculateEddIfNeeded() {
         // Only calculate if recordedDate exists and anteNatalClinic is 2 or 3 (No ANC)
