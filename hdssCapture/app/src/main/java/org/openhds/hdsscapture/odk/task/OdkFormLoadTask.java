@@ -114,67 +114,6 @@ public class OdkFormLoadTask {
         }
     }
 
-//    private OdkFormLoadResult loadNewForm() {
-//        // Step 1: Query ODK's Forms Provider to get form metadata
-//        String jrFormId = null;
-//        String jrFormName = null;
-//        String formFilePath = null;
-//        String formAbsoluteFilePath = null;
-//        String formVersion = null;
-//
-//        Cursor cursor = null;
-//        try {
-//            cursor = getCursorForFormsProvider(filledForm.getFormName());
-//        } catch (Exception e) {
-//            Log.e(TAG, "Error querying forms provider", e);
-//
-//            // Retry once (HDS Explorer pattern)
-//            if (e.getMessage() != null && e.getMessage().contains("on a null object reference")) {
-//                try {
-//                    cursor = getCursorForFormsProvider(filledForm.getFormName());
-//                } catch (Exception ex) {
-//                    ex.printStackTrace();
-//                    return new OdkFormLoadResult(OdkFormLoadResult.Status.ERROR_PROVIDER_NA);
-//                }
-//            } else {
-//                e.printStackTrace();
-//                return new OdkFormLoadResult(OdkFormLoadResult.Status.ERROR_PROVIDER_NA);
-//            }
-//        }
-//
-//        // Parse cursor results
-//        if (cursor != null && cursor.moveToNext()) {
-//            int formIdIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.JR_FORM_ID);
-//            int formNameIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.DISPLAY_NAME);
-//            int formPathIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.FORM_FILE_PATH);
-//            int formVersionIndex = cursor.getColumnIndex(FormsProviderAPI.FormsColumns.JR_VERSION);
-//
-//            jrFormId = cursor.getString(formIdIndex);
-//            jrFormName = cursor.getString(formNameIndex);
-//            formFilePath = cursor.getString(formPathIndex);
-//            formVersion = cursor.getString(formVersionIndex);
-//            cursor.close();
-//        } else {
-//            if (cursor != null) cursor.close();
-//            Log.e(TAG, "Form not found in ODK provider");
-//            return new OdkFormLoadResult(OdkFormLoadResult.Status.ERROR_FORM_NOT_FOUND);
-//        }
-//
-//        if (jrFormId == null || formFilePath == null) {
-//            Log.e(TAG, "Form ID or path is null");
-//            return new OdkFormLoadResult(OdkFormLoadResult.Status.ERROR_FORM_NOT_FOUND);
-//        }
-//
-//        Log.d(TAG, "Found form: id=" + jrFormId + ", version=" + formVersion + ", path=" + formFilePath);
-//
-//        // Step 2: Handle different storage types based on Android version
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-//            return loadFormAndroid11Plus(jrFormId, jrFormName, formFilePath, formVersion);
-//        } else {
-//            return loadFormAndroid10Minus(jrFormId, jrFormName, formFilePath, formVersion);
-//        }
-//    }
-
 
     private OdkFormLoadResult loadNewForm() {
         // Step 1: Query ODK's Forms Provider to get form metadata
@@ -524,19 +463,6 @@ public class OdkFormLoadTask {
                 new String[]{name + "%"},
                 FormsProviderAPI.FormsColumns.DATE + " DESC");  // Order by date descending
     }
-
-//    private Cursor getCursorForFormsProvider(String name) {
-//        return resolver.query(FormsProviderAPI.FormsColumns.CONTENT_URI,
-//                new String[]{
-//                        FormsProviderAPI.FormsColumns.JR_FORM_ID,
-//                        FormsProviderAPI.FormsColumns.DISPLAY_NAME,
-//                        FormsProviderAPI.FormsColumns.FORM_FILE_PATH,
-//                        FormsProviderAPI.FormsColumns.JR_VERSION
-//                },
-//                FormsProviderAPI.FormsColumns.JR_FORM_ID + " like ?",
-//                new String[]{name + "%"},
-//                null);
-//    }
 
     private SearchFormResult findOdkFormOnScopedDir(String formFileName) {
         File formsDir = getOdkScopedStorageFormsDir();

@@ -101,6 +101,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private static final String LOC_LOCATION_IDS = "LOC_LOCATION_IDS";
     private static final String SOCIAL_ID = "SOCIAL_ID";
     private static final String INDIVIDUAL_ID = "INDIVIDUAL_ID";
+    private final String TAG = "TAG";
     private Locations locations;
     private Socialgroup socialgroup;
     private FragmentHouseMembersBinding binding;
@@ -130,6 +131,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
     private ExecutorService backgroundExecutor;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
+    private AlertDialog loadingDialog;
 
     public HouseMembersFragment() {
         // Required empty public constructor
@@ -1139,7 +1141,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 });
     }
 
-    //method to launch ODK form
+    //Launch ODK form - with existing form detection
     private void launchOdkForm(OdkForm form) {
         Individual selectedIndividual = individualSharedViewModel.getCurrentSelectedIndividual();
 
@@ -1155,10 +1157,142 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             return;
         }
 
+        // STEP 1: Check for existing incomplete forms for this individual
+        checkAndLaunchForm(selectedIndividual, form);
+    }
+
+    /**
+     * Check for existing forms before creating new one
+     */
+    private void checkAndLaunchForm(Individual individual, OdkForm form) {
+        // Show loading indicator
+        showLoadingDialog("Checking for existing forms...");
+
+        backgroundExecutor.execute(() -> {
+            try {
+                // Check if an existing form exists for this individual
+                FormUtilities.ExistingFormInfo existingForm =
+                        formUtilities.findExistingForm(individual.uuid, form.formID);
+
+                mainHandler.post(() -> {
+                    dismissLoadingDialog();
+
+                    if (existingForm != null) {
+                        // Found existing form - ask user what to do
+                        showExistingFormDialog(individual, form, existingForm);
+                    } else {
+                        // No existing form - create new one
+                        Log.d(TAG, "No existing form found, creating new one");
+                        createNewOdkForm(individual, form);
+                    }
+                });
+
+            } catch (Exception e) {
+                Log.e(TAG, "Error checking for existing form", e);
+                mainHandler.post(() -> {
+                    dismissLoadingDialog();
+                    Toast.makeText(requireContext(),
+                            "Error checking forms: " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+    }
+
+    /**
+     * Show dialog when existing form is found
+     */
+    private void showExistingFormDialog(Individual individual, OdkForm form,
+                                        FormUtilities.ExistingFormInfo existingForm) {
+        String message = String.format(
+                "An incomplete form already exists for %s %s.\n\nWhat would you like to do?",
+                individual.firstName,
+                individual.lastName
+        );
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Existing Form Found")
+                .setMessage(message)
+                .setPositiveButton("Continue Editing", (dialog, which) -> {
+                    Log.d(TAG, "User chose to continue editing existing form");
+                    reopenExistingForm(individual, form, existingForm);
+                })
+                .setNegativeButton("Create New", (dialog, which) -> {
+                    Log.d(TAG, "User chose to create new form, deleting old one");
+                    deleteAndCreateNew(individual, form, existingForm);
+                })
+                .setNeutralButton("Cancel", (dialog, which) -> {
+                    Log.d(TAG, "User cancelled form launch");
+                })
+                .setCancelable(false)
+                .show();
+    }
+
+    /**
+     * Reopen existing form for editing
+     */
+    private void reopenExistingForm(Individual individual, OdkForm form,
+                                    FormUtilities.ExistingFormInfo existingForm) {
         try {
+            // Create minimal load data for reopening
+            OdkFormLoadData loadData = new OdkFormLoadData();
+            loadData.formId = form.formID;
+            loadData.formInstanceUri = existingForm.instancePath;
+
+            Log.d(TAG, "Reopening form: " + existingForm.contentUri);
+
+            // Use the loadExistingForm method
+            formUtilities.loadExistingForm(
+                    loadData,
+                    existingForm.contentUri.toString(),
+                    existingForm.instancePath,
+                    null // Or pass your formResultListener if you have one
+            );
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error reopening form", e);
+            Toast.makeText(requireContext(),
+                    "Error reopening form: " + e.getMessage(),
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Delete existing form and create new one
+     */
+    private void deleteAndCreateNew(Individual individual, OdkForm form,
+                                    FormUtilities.ExistingFormInfo existingForm) {
+        try {
+            // Delete the old form instance
+            int deleted = requireContext().getContentResolver().delete(
+                    existingForm.contentUri,
+                    null,
+                    null
+            );
+
+            Log.d(TAG, "Deleted " + deleted + " form(s)");
+
+            // Now create new form
+            createNewOdkForm(individual, form);
+
+        } catch (Exception e) {
+            Log.e(TAG, "Error deleting old form", e);
+            Toast.makeText(requireContext(),
+                    "Error deleting old form: " + e.getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Create new ODK form with preloaded data
+     */
+    private void createNewOdkForm(Individual individual, OdkForm form) {
+        try {
+            Log.d(TAG, "Creating new form for: " + individual.firstName + " " + individual.lastName);
+
             // Create preloaded data with basic individual/location/household info
             FilledForm preloadedData = FormUtilities.createPreloadedData(
-                    selectedIndividual, locations, socialgroup, fieldworkerData);
+                    individual, locations, socialgroup, fieldworkerData);
 
             // Set form name
             preloadedData.setFormName(form.formID);
@@ -1167,8 +1301,9 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             preloadedData.put("start", formUtilities.getStartTimestamp());
             preloadedData.put("deviceid", formUtilities.getDeviceId());
 
-            // Add household members for repeat groups if needed
-            // Load all household members in background
+            // Load household members in background
+            showLoadingDialog("Loading household members...");
+
             backgroundExecutor.execute(() -> {
                 try {
                     // Get all household members
@@ -1191,27 +1326,110 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
                     // Launch form on main thread
                     mainHandler.post(() -> {
+                        dismissLoadingDialog();
+
+                        Log.d(TAG, "Launching new form with " + allMembers.size() + " household members");
+
                         OdkFormLoadData loadData = new OdkFormLoadData(form, preloadedData);
                         formUtilities.loadForm(loadData);
                     });
 
                 } catch (Exception e) {
-                    Log.e("HouseMembersFragment", "Error loading members", e);
-                    mainHandler.post(() ->
-                            Toast.makeText(requireContext(),
-                                    "Error loading household members", Toast.LENGTH_SHORT).show()
-                    );
+                    Log.e(TAG, "Error loading members", e);
+                    mainHandler.post(() -> {
+                        dismissLoadingDialog();
+                        Toast.makeText(requireContext(),
+                                "Error loading household members", Toast.LENGTH_SHORT).show();
+                    });
                 }
             });
 
         } catch (Exception e) {
-            Log.e("HouseMembersFragment", "Error launching ODK form", e);
+            Log.e(TAG, "Error creating ODK form", e);
             Toast.makeText(requireContext(),
                     "Error launching form: " + e.getMessage(),
                     Toast.LENGTH_LONG).show();
         }
     }
 
+
+
+    //Working version for new form only
+//    private void launchOdkForm(OdkForm form) {
+//        Individual selectedIndividual = individualSharedViewModel.getCurrentSelectedIndividual();
+//
+//        if (selectedIndividual == null) {
+//            Toast.makeText(requireContext(), "No individual selected", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        // Check if ODK Collect is installed
+//        if (formUtilities.getOdkStorageType() ==
+//                org.openhds.hdsscapture.odk.storage.access.OdkStorageType.NO_ODK_INSTALLED) {
+//            showInstallOdkDialog();
+//            return;
+//        }
+//
+//        try {
+//            // Create preloaded data with basic individual/location/household info
+//            FilledForm preloadedData = FormUtilities.createPreloadedData(
+//                    selectedIndividual, locations, socialgroup, fieldworkerData);
+//
+//            // Set form name
+//            preloadedData.setFormName(form.formID);
+//
+//            // Add timestamp and device ID
+//            preloadedData.put("start", formUtilities.getStartTimestamp());
+//            preloadedData.put("deviceid", formUtilities.getDeviceId());
+//
+//            // Add household members for repeat groups if needed
+//            // Load all household members in background
+//            backgroundExecutor.execute(() -> {
+//                try {
+//                    // Get all household members
+//                    List<Individual> allMembers = individualViewModel.getHouseholdMembersSync(
+//                            socialgroup.getExtId(), currentLocation.compno);
+//
+//                    // Filter by status if needed
+//                    List<Individual> residentMembers = filterResidentMembers(allMembers);
+//                    List<Individual> deadMembers = filterDeadMembers(allMembers);
+//                    List<Individual> outmigMembers = filterOutmigMembers(allMembers);
+//
+//                    // Add members to preloaded data
+//                    preloadedData.setHouseholdMembers(allMembers);
+//                    preloadedData.setResidentMembers(residentMembers);
+//                    preloadedData.setDeadMembers(deadMembers);
+//                    preloadedData.setOutmigMembers(outmigMembers);
+//
+//                    // Configure repeat groups based on form type
+//                    configureRepeatGroups(preloadedData, form);
+//
+//                    // Launch form on main thread
+//                    mainHandler.post(() -> {
+//                        OdkFormLoadData loadData = new OdkFormLoadData(form, preloadedData);
+//                        formUtilities.loadForm(loadData);
+//                    });
+//
+//                } catch (Exception e) {
+//                    Log.e("HouseMembersFragment", "Error loading members", e);
+//                    mainHandler.post(() ->
+//                            Toast.makeText(requireContext(),
+//                                    "Error loading household members", Toast.LENGTH_SHORT).show()
+//                    );
+//                }
+//            });
+//
+//        } catch (Exception e) {
+//            Log.e("HouseMembersFragment", "Error launching ODK form", e);
+//            Toast.makeText(requireContext(),
+//                    "Error launching form: " + e.getMessage(),
+//                    Toast.LENGTH_LONG).show();
+//        }
+//    }
+
+    /**
+     * Configure repeat groups based on form requirements
+     */
     /**
      * Configure repeat groups based on form requirements
      */
@@ -1246,8 +1464,6 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                     RepeatGroupType.RESIDENT_MEMBERS,
                     mappingList);
         }
-
-        // Add more configurations based on your forms
     }
 
     /**
@@ -1265,16 +1481,6 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     }
 
     private List<Individual> filterDeadMembers(List<Individual> allMembers) {
-        List<Individual> outmig = new ArrayList<>();
-        for (Individual member : allMembers) {
-            if (member.endType != null && member.endType == 2) {
-                outmig.add(member);
-            }
-        }
-        return outmig;
-    }
-
-    private List<Individual> filterOutmigMembers(List<Individual> allMembers) {
         List<Individual> dead = new ArrayList<>();
         for (Individual member : allMembers) {
             if (member.endType != null && member.endType == 3) {
@@ -1282,6 +1488,16 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
             }
         }
         return dead;
+    }
+
+    private List<Individual> filterOutmigMembers(List<Individual> allMembers) {
+        List<Individual> outmig = new ArrayList<>();
+        for (Individual member : allMembers) {
+            if (member.endType != null && member.endType == 2) {
+                outmig.add(member);
+            }
+        }
+        return outmig;
     }
 
     private void showInstallOdkDialog() {
@@ -1299,6 +1515,23 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
+    }
+
+    private void showLoadingDialog(String message) {
+        dismissLoadingDialog(); // Dismiss any existing dialog
+
+        loadingDialog = new AlertDialog.Builder(requireContext())
+                .setTitle("Please Wait")
+                .setMessage(message)
+                .setCancelable(false)
+                .create();
+        loadingDialog.show();
+    }
+
+    private void dismissLoadingDialog() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+        }
     }
 
     // Override the onBackPressed() method in the hosting activity

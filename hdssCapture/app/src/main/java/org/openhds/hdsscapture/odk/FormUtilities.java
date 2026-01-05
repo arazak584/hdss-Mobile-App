@@ -608,10 +608,11 @@ public class FormUtilities {
     }
 
     /**
-     * Reopen an existing form instance
+     * Reopen an existing form instance for editing
+     * This prevents duplicate forms for the same individual
      */
-    public void loadForm(OdkFormLoadData loadData, String contentUriAsString,
-                         String instanceXmlUri, final OdkFormResultListener listener) {
+    public void loadExistingForm(OdkFormLoadData loadData, String contentUriAsString,
+                                 String instanceXmlUri, final OdkFormResultListener listener) {
         this.formId = loadData.formId;
         this.formLoadData = loadData;
         this.contentUri = Uri.parse(contentUriAsString);
@@ -649,8 +650,123 @@ public class FormUtilities {
         requestPermissionsForReadingPhoneState(readPhoneStateGrantListener);
     }
 
-    // Permission handling methods
+    /**
+     * Check if an existing form exists for this individual
+     * Returns the ContentUri if found, null otherwise
+     */
+    public ExistingFormInfo findExistingForm(String individualUuid, String formId) {
+        try {
+            // Query ODK's instances database for matching forms
+            Cursor cursor = mContext.getContentResolver().query(
+                    InstanceProviderAPI.InstanceColumns.CONTENT_URI,
+                    new String[]{
+                            InstanceProviderAPI.InstanceColumns._ID,
+                            InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH,
+                            InstanceProviderAPI.InstanceColumns.STATUS,
+                            InstanceProviderAPI.InstanceColumns.DISPLAY_NAME
+                    },
+                    InstanceProviderAPI.InstanceColumns.JR_FORM_ID + " LIKE ? AND " +
+                            InstanceProviderAPI.InstanceColumns.STATUS + " = ?",
+                    new String[]{formId + "%", InstanceProviderAPI.STATUS_INCOMPLETE},
+                    InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + " DESC"
+            );
 
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    String instancePath = cursor.getString(cursor.getColumnIndex(
+                            InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
+
+                    // Read the XML file to check if it matches this individual
+                    if (isFormForIndividual(instancePath, individualUuid)) {
+                        long id = cursor.getLong(cursor.getColumnIndex(
+                                InstanceProviderAPI.InstanceColumns._ID));
+                        Uri contentUri = Uri.withAppendedPath(
+                                InstanceProviderAPI.InstanceColumns.CONTENT_URI,
+                                String.valueOf(id));
+
+                        String displayName = cursor.getString(cursor.getColumnIndex(
+                                InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
+
+                        cursor.close();
+                        return new ExistingFormInfo(contentUri, instancePath, displayName);
+                    }
+                } while (cursor.moveToNext());
+
+                cursor.close();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error checking for existing form", e);
+        }
+
+        return null;
+    }
+
+    /**
+     * Check if XML file contains data for specific individual
+     */
+    private boolean isFormForIndividual(String instancePath, String individualUuid) {
+        try {
+            InputStream inputStream = openInstanceInputStream(instancePath);
+            if (inputStream == null) return false;
+
+            // Parse XML and look for individualId tag
+            String xmlContent = convertStreamToString(inputStream);
+            inputStream.close();
+
+            return xmlContent.contains("<individualId>" + individualUuid + "</individualId>");
+        } catch (Exception e) {
+            Log.e(TAG, "Error reading instance file", e);
+            return false;
+        }
+    }
+
+    /**
+     * Helper to convert InputStream to String
+     */
+    private String convertStreamToString(InputStream is) throws Exception {
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
+
+    /**
+     * Helper class to store existing form info
+     */
+    public static class ExistingFormInfo {
+        public Uri contentUri;
+        public String instancePath;
+        public String displayName;
+
+        public ExistingFormInfo(Uri contentUri, String instancePath, String displayName) {
+            this.contentUri = contentUri;
+            this.instancePath = instancePath;
+            this.displayName = displayName;
+        }
+    }
+
+    /**
+     * Open instance file for reading (handles both File API and SAF)
+     */
+    public InputStream openInstanceInputStream(String instanceFileUri) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // SAF
+            try {
+                Uri uri = Uri.parse(instanceFileUri);
+                return mContext.getContentResolver().openInputStream(uri);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            // File API
+            try {
+                return new java.io.FileInputStream(instanceFileUri);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    // Permission handling methods
     private void requestPermissionsForReadingPhoneState(OnPermissionRequestListener listener) {
         if (isPermissionGranted(Manifest.permission.READ_PHONE_STATE)) {
             requestPermissionsForOdkFolders();
@@ -729,75 +845,6 @@ public class FormUtilities {
     }
 
     // Utility methods
-
-    /**
-     * Comprehensive ODK environment diagnostics
-     * Call this to debug ODK detection issues
-     */
-    public void diagnoseOdkEnvironment() {
-        Log.d(TAG, "=== ODK ENVIRONMENT DIAGNOSTICS ===");
-
-        // 1. Check ODK Collect installation
-        try {
-            PackageInfo packageInfo = mContext.getPackageManager()
-                    .getPackageInfo("org.odk.collect.android", 0);
-            Log.d(TAG, "ODK Collect: INSTALLED");
-            Log.d(TAG, "  Version Name: " + packageInfo.versionName);
-            Log.d(TAG, "  Version Code: " + packageInfo.versionCode);
-
-            // Determine what version code means
-            int versionCode = packageInfo.versionCode;
-            if (versionCode < 3713) {
-                Log.d(TAG, "  Storage Type: ODK_SHARED_FOLDER (/odk)");
-            } else if (versionCode < 4242) {
-                Log.d(TAG, "  Storage Type: ODK_SCOPED_FOLDER_NO_PROJECTS");
-            } else {
-                Log.d(TAG, "  Storage Type: ODK_SCOPED_FOLDER_PROJECTS");
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, "ODK Collect: NOT INSTALLED");
-        }
-
-        // 2. Check Android version
-        Log.d(TAG, "Android Version: " + Build.VERSION.SDK_INT);
-        Log.d(TAG, "Android " + (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ? "11+" : "10 or below"));
-
-        // 3. Check folder existence (only on Android 10-)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            File odkShared = new File(Environment.getExternalStorageDirectory(), "odk");
-            Log.d(TAG, "/odk folder exists: " + odkShared.exists());
-            if (odkShared.exists()) {
-                Log.d(TAG, "  Can read: " + odkShared.canRead());
-                Log.d(TAG, "  Is directory: " + odkShared.isDirectory());
-            }
-
-            File odkScoped = new File(Environment.getExternalStorageDirectory(),
-                    "Android/data/org.odk.collect.android/files");
-            Log.d(TAG, "Android/data/... folder exists: " + odkScoped.exists());
-            if (odkScoped.exists()) {
-                Log.d(TAG, "  Can read: " + odkScoped.canRead());
-                Log.d(TAG, "  Is directory: " + odkScoped.isDirectory());
-            }
-        } else {
-            Log.d(TAG, "Android 11+ - Cannot check folder existence without permission");
-        }
-
-        // 4. Current detection result
-        Log.d(TAG, "Current odkStorageType: " + odkStorageType);
-        Log.d(TAG, "PRIMARY_ANDROID_DOC_ID: " + OdkScopedDirUtil.PRIMARY_ANDROID_DOC_ID);
-
-        // 5. Check existing permissions
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Log.d(TAG, "=== Persisted URI Permissions ===");
-            for (UriPermission permission : mContext.getContentResolver().getPersistedUriPermissions()) {
-                Log.d(TAG, "  URI: " + permission.getUri());
-                Log.d(TAG, "    Read: " + permission.isReadPermission());
-                Log.d(TAG, "    Write: " + permission.isWritePermission());
-            }
-        }
-
-        Log.d(TAG, "=================================");
-    }
 
     public String getStartTimestamp() {
         TimeZone tz = TimeZone.getDefault();

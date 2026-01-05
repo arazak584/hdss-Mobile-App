@@ -969,5 +969,11 @@
     <string name="incorrect_folder_selected">Incorrect Folder Selected</string>
     <string name="folder_selection_instruction">Please select the exact folder:\n\n%1$s\n\nYou selected: %2$s</string>
     <string name="try_again_btn">Try Again</string>
+    <string name="existing_form_title">Existing Form Found</string>
+    <string name="existing_form_message">An incomplete form already exists for %1$s %2$s.\n\nWhat would you like to do?</string>
+    <string name="continue_editing">Continue Editing</string>
+    <string name="create_new">Create New</string>
+    <string name="loading_members">Loading household members...</string>
+    <string name="checking_forms">Checking for existing forms...</string>
 
 </resources>
