@@ -58,8 +58,8 @@ public class LocationViewModel extends AndroidViewModel {
         return locationRepository.findToSync();
     }
 
-    public List<Locations> retrieveAll() throws ExecutionException, InterruptedException {
-        return locationRepository.retrieveAll();
+    public List<Locations> retrieveAll(String id) throws ExecutionException, InterruptedException {
+        return locationRepository.retrieveAll(id);
     }
 
     public List<Locations> filter(String id) throws ExecutionException, InterruptedException {

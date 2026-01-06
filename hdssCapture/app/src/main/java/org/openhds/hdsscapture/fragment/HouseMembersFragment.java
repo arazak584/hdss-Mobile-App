@@ -1109,6 +1109,9 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
 
     //ODK FORM ADD ONS
     //Method to load applicable forms based on individual's age and gender
+    /**
+     * Method to load applicable forms based on individual's age and gender
+     */
     private void loadApplicableOdkForms(Individual individual) {
         if (individual == null) {
             recyclerViewOdk.setVisibility(View.GONE);
@@ -1121,7 +1124,6 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
         odkFormViewModel.getFormsForIndividual(gender, age)
                 .observe(getViewLifecycleOwner(), forms -> {
                     if (forms != null && !forms.isEmpty()) {
-                        // Filter forms that match criteria and are enabled
                         List<OdkForm> availableForms = new ArrayList<>();
                         for (OdkForm form : forms) {
                             if (form.enabled != null && form.enabled == 1) {
@@ -1141,7 +1143,9 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 });
     }
 
-    //Launch ODK form - with existing form detection
+    /**
+     * Launch ODK form - with existing form detection
+     */
     private void launchOdkForm(OdkForm form) {
         Individual selectedIndividual = individualSharedViewModel.getCurrentSelectedIndividual();
 
@@ -1234,19 +1238,26 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     private void reopenExistingForm(Individual individual, OdkForm form,
                                     FormUtilities.ExistingFormInfo existingForm) {
         try {
-            // Create minimal load data for reopening
-            OdkFormLoadData loadData = new OdkFormLoadData();
-            loadData.formId = form.formID;
-            loadData.formInstanceUri = existingForm.instancePath;
+            Log.d(TAG, "=== Reopening Existing Form ===");
+            Log.d(TAG, "  Individual: " + individual.firstName + " " + individual.lastName);
+            Log.d(TAG, "  Form ID: " + form.formID);
+            Log.d(TAG, "  Content URI: " + existingForm.contentUri);
+            Log.d(TAG, "  Instance Path: " + existingForm.instancePath);
 
-            Log.d(TAG, "Reopening form: " + existingForm.contentUri);
+            // Create load data for existing form
+            OdkFormLoadData loadData = OdkFormLoadData.forExistingForm(form, existingForm.instancePath);
+
+            //Set this flag to prevent the unfinalized dialog
+            loadData.skipUnfinalizedCheck = true;
+
+            Log.d(TAG, "  Skip Unfinalized Check: " + loadData.skipUnfinalizedCheck);
 
             // Use the loadExistingForm method
             formUtilities.loadExistingForm(
                     loadData,
                     existingForm.contentUri.toString(),
                     existingForm.instancePath,
-                    null // Or pass your formResultListener if you have one
+                    null // Or pass your formResultListener if needed
             );
 
         } catch (Exception e) {
@@ -1288,11 +1299,18 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
      */
     private void createNewOdkForm(Individual individual, OdkForm form) {
         try {
-            Log.d(TAG, "Creating new form for: " + individual.firstName + " " + individual.lastName);
+            Log.d(TAG, "=== Creating New Form ===");
+            Log.d(TAG, "  Individual UUID: " + individual.uuid);
+            Log.d(TAG, "  Individual Name: " + individual.firstName + " " + individual.lastName);
+            Log.d(TAG, "  Form ID: " + form.formID);
 
             // Create preloaded data with basic individual/location/household info
             FilledForm preloadedData = FormUtilities.createPreloadedData(
                     individual, locations, socialgroup, fieldworkerData);
+
+            // CRITICAL: Ensure individualId is set
+            Log.d(TAG, "  Setting individualId: " + individual.uuid);
+            preloadedData.put("individualId", individual.uuid);
 
             // Set form name
             preloadedData.setFormName(form.formID);
@@ -1430,11 +1448,8 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
     /**
      * Configure repeat groups based on form requirements
      */
-    /**
-     * Configure repeat groups based on form requirements
-     */
     private void configureRepeatGroups(FilledForm preloadedData, OdkForm form) {
-        // Example: If form has a "household_roster" repeat group for all members
+        //If form has a "household_roster" repeat group for all members
         if (form.formID.contains("roster") || form.formID.contains("household")) {
             Map<String, String> memberMapping = new HashMap<>();
             memberMapping.put("member_id", "Member.uuid");

@@ -49,10 +49,11 @@ public interface VaccinationDao {
             " WHERE insertDate BETWEEN :startDate AND :endDate AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
-    @Query("SELECT a.individual_uuid,b.firstName as sttime,b.lastName as edtime,b.extId as socialgroup_uuid,b.compno as visit_uuid,a.approveDate,a.comment,a.fw_uuid,a.supervisor FROM vaccination a INNER JOIN individual b on a.individual_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 order by a.insertDate DESC")
+    @Query("SELECT a.individual_uuid,b.firstName as sttime,b.lastName as edtime,b.extId as socialgroup_uuid,b.compno as visit_uuid,a.approveDate,a.comment,a.fw_uuid,a.supervisor FROM vaccination a INNER JOIN individual b on a.individual_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 " +
+            " AND a.insertDate >= (SELECT startDate from round ORDER BY roundNumber DESC limit 1) order by a.insertDate DESC")
     List<Vaccination> reject(String id);
 
-    @Query("SELECT COUNT(*) FROM vaccination WHERE status=2 AND fw_uuid = :uuid ")
+    @Query("SELECT COUNT(*) FROM vaccination WHERE status=2 AND fw_uuid = :uuid AND insertDate >= (SELECT startDate from round ORDER BY roundNumber DESC limit 1)")
     long rej(String uuid);
 
     @Query("SELECT a.uuid, 'Vaccination' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM vaccination as a inner join individual as b ON a.individual_uuid=b.uuid WHERE a.complete = 1 ORDER BY a.insertDate DESC")

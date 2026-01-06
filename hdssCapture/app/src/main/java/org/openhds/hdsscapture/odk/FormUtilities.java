@@ -656,6 +656,8 @@ public class FormUtilities {
      */
     public ExistingFormInfo findExistingForm(String individualUuid, String formId) {
         try {
+            Log.d(TAG, "Searching for existing form - Individual: " + individualUuid + ", Form: " + formId);
+
             // Query ODK's instances database for matching forms
             Cursor cursor = mContext.getContentResolver().query(
                     InstanceProviderAPI.InstanceColumns.CONTENT_URI,
@@ -663,11 +665,12 @@ public class FormUtilities {
                             InstanceProviderAPI.InstanceColumns._ID,
                             InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH,
                             InstanceProviderAPI.InstanceColumns.STATUS,
-                            InstanceProviderAPI.InstanceColumns.DISPLAY_NAME
+                            InstanceProviderAPI.InstanceColumns.DISPLAY_NAME,
+                            InstanceProviderAPI.InstanceColumns.JR_FORM_ID
                     },
-                    InstanceProviderAPI.InstanceColumns.JR_FORM_ID + " LIKE ? AND " +
+                    InstanceProviderAPI.InstanceColumns.JR_FORM_ID + " = ? AND " +
                             InstanceProviderAPI.InstanceColumns.STATUS + " = ?",
-                    new String[]{formId + "%", InstanceProviderAPI.STATUS_INCOMPLETE},
+                    new String[]{formId, InstanceProviderAPI.STATUS_INCOMPLETE},
                     InstanceProviderAPI.InstanceColumns.LAST_STATUS_CHANGE_DATE + " DESC"
             );
 
@@ -675,6 +678,8 @@ public class FormUtilities {
                 do {
                     String instancePath = cursor.getString(cursor.getColumnIndex(
                             InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
+
+                    Log.d(TAG, "Checking instance: " + instancePath);
 
                     // Read the XML file to check if it matches this individual
                     if (isFormForIndividual(instancePath, individualUuid)) {
@@ -687,6 +692,7 @@ public class FormUtilities {
                         String displayName = cursor.getString(cursor.getColumnIndex(
                                 InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
 
+                        Log.d(TAG, "✓ Found matching form for individual");
                         cursor.close();
                         return new ExistingFormInfo(contentUri, instancePath, displayName);
                     }
@@ -694,6 +700,8 @@ public class FormUtilities {
 
                 cursor.close();
             }
+
+            Log.d(TAG, "✗ No existing form found");
         } catch (Exception e) {
             Log.e(TAG, "Error checking for existing form", e);
         }
@@ -707,15 +715,31 @@ public class FormUtilities {
     private boolean isFormForIndividual(String instancePath, String individualUuid) {
         try {
             InputStream inputStream = openInstanceInputStream(instancePath);
-            if (inputStream == null) return false;
+            if (inputStream == null) {
+                Log.w(TAG, "Could not open instance file: " + instancePath);
+                return false;
+            }
 
             // Parse XML and look for individualId tag
             String xmlContent = convertStreamToString(inputStream);
             inputStream.close();
 
-            return xmlContent.contains("<individualId>" + individualUuid + "</individualId>");
+            // Check for different possible tag formats
+            boolean hasIndividualId =
+                    xmlContent.contains("<individualId>" + individualUuid + "</individualId>") ||
+                            xmlContent.contains("<individualId>" + individualUuid + " </individualId>") ||
+                            xmlContent.contains("<individual_id>" + individualUuid + "</individual_id>") ||
+                            xmlContent.contains("<individualExtId>" + individualUuid + "</individualExtId>");
+
+            if (hasIndividualId) {
+                Log.d(TAG, "✓ Form matches individual: " + individualUuid);
+            } else {
+                Log.d(TAG, "✗ Form does NOT match individual: " + individualUuid);
+            }
+
+            return hasIndividualId;
         } catch (Exception e) {
-            Log.e(TAG, "Error reading instance file", e);
+            Log.e(TAG, "Error reading instance file: " + instancePath, e);
             return false;
         }
     }

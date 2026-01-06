@@ -406,7 +406,7 @@ public class MapActivity extends AppCompatActivity implements LocationListener {
                 } else if (compno != null) {
                     locations = locationViewModel.filterByCompno(compno);
                 } else {
-                    locations = locationViewModel.retrieveAll();
+                    locations = locationViewModel.retrieveAll(fieldworkerDatas.username);
                 }
 
                 final List<Locations> finalLocations = locations;

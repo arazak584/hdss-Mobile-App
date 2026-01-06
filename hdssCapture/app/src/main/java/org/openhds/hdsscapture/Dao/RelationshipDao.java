@@ -72,10 +72,11 @@ public interface RelationshipDao {
             " WHERE (a.insertDate BETWEEN :startDate AND :endDate OR a.formcompldate BETWEEN :startDate AND :endDate) AND b.username = :username")
     long count(Date startDate, Date endDate, String username);
 
-    @Query("SELECT a.individualA_uuid,a.uuid,b.firstName as sttime,b.lastName as edtime,b.extId as individualB_uuid,b.compno as visit_uuid,a.approveDate,a.comment,a.fw_uuid,a.supervisor FROM relationship a INNER JOIN individual b on a.individualA_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 order by a.insertDate DESC")
+    @Query("SELECT a.individualA_uuid,a.uuid,b.firstName as sttime,b.lastName as edtime,b.extId as individualB_uuid,b.compno as visit_uuid,a.approveDate,a.comment,a.fw_uuid,a.supervisor FROM relationship a INNER JOIN individual b on a.individualA_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 " +
+            " AND a.insertDate >= (SELECT startDate from round ORDER BY roundNumber DESC limit 1) order by a.insertDate DESC")
     List<Relationship> reject(String id);
 
-    @Query("SELECT COUNT(*) FROM relationship WHERE status=2 AND fw_uuid = :uuid ")
+    @Query("SELECT COUNT(*) FROM relationship WHERE status=2 AND fw_uuid = :uuid AND insertDate >= (SELECT startDate from round ORDER BY roundNumber DESC limit 1)")
     long rej(String uuid);
 
     @Query("SELECT a.uuid, 'Relationship' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM relationship as a inner join individual as b ON a.individualA_uuid=b.uuid WHERE a.complete = 1 ORDER BY a.insertDate DESC")

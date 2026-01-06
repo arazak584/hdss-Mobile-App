@@ -59,7 +59,8 @@ public class SimpleDialog extends DialogFragment {
         String codeFragment = getArguments().getString(CODE_FRAGMENT);
 
         if (codeFragment != null) {
-            WebView webView = new WebView(getContext());
+            //WebView webView = new WebView(getContext());
+            WebView webView = new WebView(requireContext());
             webView.loadUrl(getArguments().getString(CODE_FRAGMENT));
             webView.getSettings().setLoadWithOverviewMode(true);
             webView.getSettings().setUseWideViewPort(true);

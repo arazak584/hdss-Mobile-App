@@ -71,10 +71,11 @@ public interface DemographicDao {
     @Query("SELECT * FROM demographic where individual_uuid='7bfeb156db724f56808cb87551a16cd7'")
     List<Demographic> error();
 
-    @Query("SELECT a.individual_uuid,b.firstName as sttime,b.lastName as edtime,b.extId as occupation_oth,b.compno as visit_uuid,a.approveDate,a.comment,a.fw_uuid,a.supervisor FROM demographic a INNER JOIN individual b on a.individual_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2 order by a.insertDate DESC")
+    @Query("SELECT a.individual_uuid,b.firstName as sttime,b.lastName as edtime,b.extId as occupation_oth,b.compno as visit_uuid,a.approveDate,a.comment,a.fw_uuid,a.supervisor FROM demographic a INNER JOIN individual b on a.individual_uuid=b.uuid WHERE a.fw_uuid=:id AND status=2" +
+            " AND a.insertDate >= (SELECT startDate from round ORDER BY roundNumber DESC limit 1) order by a.insertDate DESC")
     List<Demographic> reject(String id);
 
-    @Query("SELECT COUNT(*) FROM demographic WHERE status=2 AND fw_uuid = :uuid ")
+    @Query("SELECT COUNT(*) FROM demographic WHERE status=2 AND fw_uuid = :uuid AND insertDate >= (SELECT startDate from round ORDER BY roundNumber DESC limit 1)")
     long rej(String uuid);
 
     @Query("SELECT a.individual_uuid as uuid, 'Demographic' AS formType, a.insertDate, b.firstName || ' ' || b.lastName as fullName FROM demographic as a inner join individual as b ON a.individual_uuid=b.uuid WHERE a.complete = 1")

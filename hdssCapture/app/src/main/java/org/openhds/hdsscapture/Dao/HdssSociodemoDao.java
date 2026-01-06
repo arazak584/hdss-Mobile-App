@@ -63,7 +63,7 @@ public interface HdssSociodemoDao {
     @Query("SELECT a.socialgroup_uuid,b.extId as sttime,b.groupName as edtime,c.compno as visit_uuid" +
             ",a.approveDate,a.comment,a.fw_uuid,a.supervisor FROM sociodemo a INNER JOIN socialgroup b on a.socialgroup_uuid=b.uuid " +
             "INNER JOIN locations c on a.location_uuid=c.uuid " +
-            "WHERE a.fw_uuid=:id AND a.status=2 order by a.insertDate DESC")
+            "WHERE a.fw_uuid=:id AND a.status=2 AND a.insertDate >= (SELECT startDate from round ORDER BY roundNumber DESC limit 1) order by a.insertDate DESC")
     List<HdssSociodemo> reject(String id);
 
     @Query("SELECT COUNT(*) FROM sociodemo a INNER JOIN fieldworker b on a.fw_uuid=b.fw_uuid" +
@@ -75,7 +75,7 @@ public interface HdssSociodemoDao {
             " formcompldate >= (SELECT startDate FROM round ORDER BY roundNumber DESC LIMIT 1)")
     long counts(Date startDate, Date endDate, String username);
 
-    @Query("SELECT COUNT(*) FROM sociodemo WHERE status=2 AND fw_uuid = :uuid ")
+    @Query("SELECT COUNT(*) FROM sociodemo WHERE status=2 AND fw_uuid = :uuid AND insertDate >= (SELECT startDate from round ORDER BY roundNumber DESC limit 1)")
     long rej(String uuid);
 
     @Query("SELECT a.*,groupName as visit_uuid,b.extId as form_comments_txt,c.compno as id0021 FROM sociodemo as a INNER JOIN socialgroup as b ON a.socialgroup_uuid=b.uuid " +

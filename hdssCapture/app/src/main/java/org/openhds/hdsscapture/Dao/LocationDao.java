@@ -64,8 +64,8 @@ public interface LocationDao {
 //    @Query("SELECT * FROM Locations a INNER JOIN locationhierarchy b ON a.locationLevel_uuid=b.uuid WHERE fw_name=:id")
 //    List<Locations> retrieveAll(String id);
 
-    @Query("SELECT * FROM Locations a INNER JOIN locationhierarchy b ON a.locationLevel_uuid=b.uuid")
-    List<Locations> retrieveAll();
+    @Query("SELECT * FROM Locations a INNER JOIN locationhierarchy b ON a.locationLevel_uuid=b.uuid Where fw_name =:id")
+    List<Locations> retrieveAll(String id);
 
     // Get all unique village names for autocomplete
     // Get all unique village names for autocomplete
