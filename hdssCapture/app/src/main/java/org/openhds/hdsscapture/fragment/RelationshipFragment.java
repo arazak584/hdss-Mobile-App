@@ -26,6 +26,7 @@ import org.openhds.hdsscapture.Dialog.RelationshipDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.DatePickerFragment;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Utilities.UniqueUUIDGenerator;
 import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
@@ -196,8 +197,8 @@ public class RelationshipFragment extends KeyboardFragment {
 
 
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.uuid = uuidString;
-
+                //data.uuid = uuidString;
+                data.uuid = UniqueUUIDGenerator.generate(getContext());
                 data.individualA_uuid = selectedIndividual.getUuid();
                 data.dob = selectedIndividual.dob;
                 data.location_uuid = selectedLocation.getUuid();

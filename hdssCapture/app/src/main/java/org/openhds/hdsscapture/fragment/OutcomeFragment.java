@@ -19,6 +19,7 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Utilities.UniqueIDGen;
+import org.openhds.hdsscapture.Utilities.UniqueUUIDGenerator;
 import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
@@ -214,7 +215,8 @@ public class OutcomeFragment extends KeyboardFragment {
                 Log.d("Outcome", "Creating new outcome " + currentOutcomeNumber);
 
                 String uuid = UUID.randomUUID().toString();
-                data.uuid = uuid.replaceAll("-", "");
+                //data.uuid = uuid.replaceAll("-", "");
+                data.uuid = UniqueUUIDGenerator.generate(getContext());
                 data.preg_uuid = pregnancyoutcome.uuid;
                 data.complete = 1;
                 data.outcomeNumber = currentOutcomeNumber;
@@ -264,7 +266,8 @@ public class OutcomeFragment extends KeyboardFragment {
      */
     private Individual createNewBaby() {
         Individual baby = new Individual();
-        baby.uuid = UUID.randomUUID().toString().replace("-", "");
+        //baby.uuid = UUID.randomUUID().toString().replace("-", "");
+        baby.uuid = UniqueUUIDGenerator.generate(getContext());
         baby.fw_uuid = pregnancyoutcome.getFw_uuid();
         baby.complete = 1;
         baby.dob = pregnancyoutcome.outcomeDate;
@@ -286,7 +289,8 @@ public class OutcomeFragment extends KeyboardFragment {
      */
     private Residency createNewBabyResidency() {
         Residency baby = new Residency();
-        baby.uuid = UUID.randomUUID().toString().replace("-", "");
+        //baby.uuid = UUID.randomUUID().toString().replace("-", "");
+        baby.uuid = UniqueUUIDGenerator.generate(getContext());
         baby.fw_uuid = pregnancyoutcome.getFw_uuid();
         baby.complete = 1;
         baby.startDate = pregnancyoutcome.outcomeDate;

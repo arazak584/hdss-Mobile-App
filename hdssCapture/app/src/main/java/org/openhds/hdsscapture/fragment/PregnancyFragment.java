@@ -26,6 +26,7 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.DatePickerFragment;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Utilities.UniqueUUIDGenerator;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
@@ -324,7 +325,8 @@ public class PregnancyFragment extends KeyboardFragment {
         Pregnancy data = new Pregnancy();
 
         String uuid = UUID.randomUUID().toString();
-        data.uuid = uuid.replaceAll("-", "");
+        //data.uuid = uuid.replaceAll("-", "");
+        data.uuid = UniqueUUIDGenerator.generate(getContext());
         data.complete = 1;
         data.individual_uuid = selectedIndividual.getUuid();
 

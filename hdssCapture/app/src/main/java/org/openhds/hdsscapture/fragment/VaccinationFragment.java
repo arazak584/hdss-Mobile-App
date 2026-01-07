@@ -23,6 +23,7 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.DatePickerFragment;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Utilities.UniqueUUIDGenerator;
 import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
@@ -423,7 +424,8 @@ public class VaccinationFragment extends KeyboardFragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.uuid = uuidString;
+                //data.uuid = uuidString;
+                data.uuid = UniqueUUIDGenerator.generate(getContext());
                 data.individual_uuid = selectedIndividual.uuid;
                 data.location_uuid = selectedLocation.uuid;
                 data.socialgroup_uuid = socialgroup.uuid;

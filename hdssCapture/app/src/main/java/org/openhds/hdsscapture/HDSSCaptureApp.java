@@ -13,6 +13,7 @@ import androidx.work.Configuration;
 import org.openhds.hdsscapture.Sync.BackgroundSyncManager;
 import org.openhds.hdsscapture.Utilities.QueryNotification;
 import org.openhds.hdsscapture.Utilities.RejectionNotification;
+import org.openhds.hdsscapture.Utilities.UniqueUUIDGenerator;
 
 import java.util.concurrent.TimeUnit;
 
@@ -24,7 +25,7 @@ public class HDSSCaptureApp extends Application implements Configuration.Provide
     @Override
     public void onCreate() {
         super.onCreate();
-
+        UniqueUUIDGenerator.init(this);
 
         if (!isInitialized) {
             initializeNotifications();

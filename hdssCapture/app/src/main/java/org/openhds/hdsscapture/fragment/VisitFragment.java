@@ -25,6 +25,7 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Utilities.UniqueIDGen;
+import org.openhds.hdsscapture.Utilities.UniqueUUIDGenerator;
 import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
@@ -204,7 +205,8 @@ public class VisitFragment extends DialogFragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
 
-                data.uuid = uuidString;
+                //data.uuid = uuidString;
+                data.uuid = UniqueUUIDGenerator.generate(getContext());
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.location_uuid = cmpuuid;
                 data.roundNumber = roundData.getRoundNumber();

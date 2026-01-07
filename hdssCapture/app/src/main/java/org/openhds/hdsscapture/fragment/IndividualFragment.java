@@ -39,6 +39,7 @@ import org.openhds.hdsscapture.Utilities.DatePickerFragment;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Utilities.SimpleDialog;
 import org.openhds.hdsscapture.Utilities.UniqueIDGen;
+import org.openhds.hdsscapture.Utilities.UniqueUUIDGenerator;
 import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
@@ -295,7 +296,8 @@ public class IndividualFragment extends KeyboardFragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
                     // Set the ID of the Fieldworker object
-                data.uuid = uuidString;
+                //data.uuid = uuidString;
+                data.uuid = UniqueUUIDGenerator.generate(getContext());
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.village = level6Data.getName();
                 data.hohID = socialgroup.getExtId();
@@ -397,7 +399,8 @@ public class IndividualFragment extends KeyboardFragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.uuid = uuidString;
+                //data.uuid = uuidString;
+                data.uuid = UniqueUUIDGenerator.generate(getContext());
                 data.endType = 1;
                 data.location_uuid = cmpuuid;
                 data.socialgroup_uuid = socialgroup.uuid;

@@ -20,6 +20,7 @@ import org.openhds.hdsscapture.Utilities.Calculators;
 import org.openhds.hdsscapture.Utilities.DatePickerFragment;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
 import org.openhds.hdsscapture.Utilities.UniqueIDGen;
+import org.openhds.hdsscapture.Utilities.UniqueUUIDGenerator;
 import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualViewModel;
@@ -131,7 +132,8 @@ public class NewSocialgroupFragment extends DialogFragment {
         // Generate a UUID
         if(individual.uuid == null) {
             String uuid = UUID.randomUUID().toString();
-            String uuidString = uuid.replaceAll("-", "");
+            //String uuidString = uuid.replaceAll("-", "");
+            String uuidString = UniqueUUIDGenerator.generate(getContext());
             // Set the ID of the Fieldworker object
             binding.getIndividual().uuid = uuidString;
             binding.getSocialgroup().individual_uuid = uuidString;
@@ -142,13 +144,14 @@ public class NewSocialgroupFragment extends DialogFragment {
             String uuid = UUID.randomUUID().toString();
             String resuuidString = uuid.replaceAll("-", "");
             // Set the ID of the Fieldworker object
-            binding.getResidency().uuid = resuuidString;
+            binding.getResidency().uuid = UniqueUUIDGenerator.generate(getContext());;
         }
 
         if(socialgroup.uuid == null) {
             String uuid = UUID.randomUUID().toString();
-            String suuidString = uuid.replaceAll("-", "");
+            //String suuidString = uuid.replaceAll("-", "");
             // Set the ID of the Fieldworker object
+            String suuidString = UniqueUUIDGenerator.generate(getContext());
             binding.getSocialgroup().uuid = suuidString;
             binding.getResidency().socialgroup_uuid = suuidString;
         }

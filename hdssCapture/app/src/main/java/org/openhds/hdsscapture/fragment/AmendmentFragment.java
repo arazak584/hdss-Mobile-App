@@ -31,6 +31,7 @@ import org.openhds.hdsscapture.Dialog.MotherDialogFragment;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.DatePickerFragment;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Utilities.UniqueUUIDGenerator;
 import org.openhds.hdsscapture.Viewmodel.AmendmentViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.IndividualSharedViewModel;
@@ -217,7 +218,8 @@ public class AmendmentFragment extends KeyboardFragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
                 data.fw_uuid = fieldworkerData.getFw_uuid();
-                data.uuid = uuidString;
+                //data.uuid = uuidString;
+                data.uuid = UniqueUUIDGenerator.generate(getContext());
                 data.orig_firstName = selectedIndividual.getFirstName();
                 data.orig_lastName = selectedIndividual.getLastName();
                 data.orig_otherName = selectedIndividual.getOtherName();

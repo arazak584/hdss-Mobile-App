@@ -17,6 +17,7 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Utilities.UniqueUUIDGenerator;
 import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
@@ -131,7 +132,8 @@ public class SocioAFragment extends KeyboardFragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
 
-                data.uuid = uuidString;
+                //data.uuid = uuidString;
+                data.uuid = UniqueUUIDGenerator.generate(getContext());
                 data.individual_uuid = selectedIndividual.getUuid();
                 data.location_uuid = selectedLocation.getUuid();
                 data.socialgroup_uuid = socialgroup.getUuid();

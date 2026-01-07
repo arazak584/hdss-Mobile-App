@@ -27,6 +27,7 @@ import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.DatePickerFragment;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Utilities.UniqueUUIDGenerator;
 import org.openhds.hdsscapture.Viewmodel.ClusterSharedViewModel;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
@@ -174,7 +175,8 @@ public class OutmigrationFragment extends KeyboardFragment {
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
 
-                data.uuid=uuidString;
+                //data.uuid=uuidString;
+                data.uuid = UniqueUUIDGenerator.generate(getContext());
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.individual_uuid = selectedIndividual.getUuid();
                 data.complete = 1;

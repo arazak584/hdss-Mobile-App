@@ -40,6 +40,7 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Utilities.UniqueUUIDGenerator;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.CommunityViewModel;
 import org.openhds.hdsscapture.databinding.FragmentCommunityBinding;
@@ -140,7 +141,8 @@ public class CommunityFragment extends DialogFragment {
 
                 String uuid = UUID.randomUUID().toString();
                 String uuidString = uuid.replaceAll("-", "");
-                data.uuid = uuid;
+                //data.uuid = uuid;
+                data.uuid = UniqueUUIDGenerator.generate(getContext());
                 data.fw_uuid = fieldworkerData.getFw_uuid();
                 data.community = level5Data.getName();
                 binding.setCommunity(data);

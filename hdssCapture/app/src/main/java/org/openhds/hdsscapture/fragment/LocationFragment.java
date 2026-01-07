@@ -40,6 +40,7 @@ import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Utilities.HandlerSelect;
+import org.openhds.hdsscapture.Utilities.UniqueUUIDGenerator;
 import org.openhds.hdsscapture.Viewmodel.CodeBookViewModel;
 import org.openhds.hdsscapture.Viewmodel.ConfigViewModel;
 import org.openhds.hdsscapture.Viewmodel.LocationViewModel;
@@ -220,10 +221,13 @@ public class LocationFragment extends KeyboardFragment {
 
         // Generate a UUID
         if(locations.uuid == null) {
-            String uuid = UUID.randomUUID().toString();
-            String uuidString = uuid.toString().replaceAll("-", "");
-            // Set the ID of the Fieldworker object
-            binding.getLocations().uuid = uuidString;
+//            String uuid = UUID.randomUUID().toString();
+//            String uuidString = uuid.toString().replaceAll("-", "");
+//            // Set the ID of the Fieldworker object
+//            binding.getLocations().uuid = uuidString;
+
+            // Set the ID of the Location object
+            binding.getLocations().uuid = UniqueUUIDGenerator.generate(getContext());
             }
 
         if (binding.getLocations().complete == null) {

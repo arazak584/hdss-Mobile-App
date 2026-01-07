@@ -60,13 +60,14 @@
                     app:backgroundTint="#FF0000" />
 
                 <androidx.appcompat.widget.AppCompatEditText
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:id="@+id/location_uuid"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/location_uuid"
                     android:text="@={locations.uuid}"
                     android:inputType="text"
+                    android:enabled="false"
                     app:backgroundTint="#FF0000" />
 
                 <Button
