@@ -81,7 +81,7 @@ public interface ResidencyDao {
     @Query("SELECT * FROM residency WHERE uuid=:id ")
     Residency updateres(String id);
 
-    @Query("SELECT * FROM residency WHERE complete IN (1,2)")
+    @Query("SELECT * FROM residency WHERE complete IN (1)")
     List<Residency> retrieveToSync();
 
     @Query("SELECT * FROM residency WHERE location_uuid =:id AND socialgroup_uuid =:ids AND endType=1")
