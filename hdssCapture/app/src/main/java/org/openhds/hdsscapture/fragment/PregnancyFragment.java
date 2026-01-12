@@ -306,11 +306,11 @@ public class PregnancyFragment extends KeyboardFragment {
         binding.setPregnancy(pregnancy);
         currentPregnancyNumber = pregnancyNumber;
 
-        // CRITICAL FIX FOR outcome_date: Force UI update after binding
+        //Force UI update after binding
         binding.executePendingBindings();
 
         // Update UI state
-        setFieldsEnabled(true);
+        //setFieldsEnabled(true);
 
         // Update dropdown to show current selection
         pregnancyNumberDropdown.setText("Pregnancy " + currentPregnancyNumber, false);
@@ -387,17 +387,17 @@ public class PregnancyFragment extends KeyboardFragment {
         }
     }
 
-    private void setFieldsEnabled(boolean enabled) {
-        binding.editTextRecordedDate.setEnabled(enabled);
-        binding.editTextLastClinicVisitDate.setEnabled(enabled);
-        binding.expectedDelivery.setEnabled(enabled);
-        binding.editTextOutcomeDate.setEnabled(enabled);
-
-        // Enable/disable radio buttons and other inputs as needed
-        for (int i = 0; i < binding.outcome.getChildCount(); i++) {
-            binding.outcome.getChildAt(i).setEnabled(enabled);
-        }
-    }
+//    private void setFieldsEnabled(boolean enabled) {
+//        binding.editTextRecordedDate.setEnabled(enabled);
+//        binding.editTextLastClinicVisitDate.setEnabled(enabled);
+//        binding.expectedDelivery.setEnabled(enabled);
+//        binding.editTextOutcomeDate.setEnabled(enabled);
+//
+//        // Enable/disable radio buttons and other inputs as needed
+////        for (int i = 0; i < binding.outcome.getChildCount(); i++) {
+////            binding.outcome.getChildAt(i).setEnabled(enabled);
+////        }
+//    }
 
     private void initializeConfigSettings() {
         ConfigViewModel configViewModel = new ViewModelProvider(this).get(ConfigViewModel.class);

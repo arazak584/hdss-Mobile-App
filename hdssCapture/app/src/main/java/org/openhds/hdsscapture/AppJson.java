@@ -26,9 +26,20 @@ public class AppJson {
 
     private final Context context;
     private Retrofit retrofit;
+    private final Gson gson;
+
+//    private AppJson(Context context) {
+//        this.context = context.getApplicationContext();
+//        refreshRetrofit();
+//    }
 
     private AppJson(Context context) {
         this.context = context.getApplicationContext();
+        // Create Gson once with your desired date format
+        this.gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .setLenient()
+                .create();
         refreshRetrofit();
     }
 
@@ -40,7 +51,6 @@ public class AppJson {
                 }
             }
         }
-
         return INSTANCE;
     }
 

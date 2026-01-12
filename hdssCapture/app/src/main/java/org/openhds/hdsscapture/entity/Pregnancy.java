@@ -192,13 +192,13 @@ public class Pregnancy extends BaseObservable implements Parcelable {
 
     @Bindable
     public String getUpdatedAt() {
-        if (updatedAt == null) return "";
+        if (updatedAt == null) return null;
         return g.format(updatedAt);
     }
 
     public void setUpdatedAt(String updatedAt) {
         try {
-            this.updatedAt = f.parse(updatedAt);
+            this.updatedAt = g.parse(updatedAt);
         } catch (ParseException e) {
             System.out.println("updatedAt Date Error " + e.getMessage());
         }
@@ -862,6 +862,7 @@ public class Pregnancy extends BaseObservable implements Parcelable {
         patternSkipper(view);
 
     }
+
 
     //SPINNERS ENTITY
     public void setHealthfacility(AdapterView<?> parent, View view, int position, long id) {

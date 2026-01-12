@@ -225,13 +225,13 @@ public class Individual extends BaseObservable implements Parcelable {
 
     @Bindable
     public String getUpdatedAt() {
-        if (updatedAt == null) return "";
+        if (updatedAt == null) return null;
         return g.format(updatedAt);
     }
 
     public void setUpdatedAt(String updatedAt) {
         try {
-            this.updatedAt = f.parse(updatedAt);
+            this.updatedAt = g.parse(updatedAt);
         } catch (ParseException e) {
             System.out.println("updatedAt Date Error " + e.getMessage());
         }
