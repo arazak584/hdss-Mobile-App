@@ -140,7 +140,7 @@ public class OriginalAdapter extends RecyclerView.Adapter<OriginalAdapter.ViewHo
 
             if(socialgroup != null)
                 try {
-                    List<Individual> list = individualViewModel.retrieveDup(compno, individid);
+                    List<Individual> list = individualViewModel.findDup(compno);
 
                     if (list != null) {
                         individualList.addAll(list);

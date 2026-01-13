@@ -107,6 +107,10 @@ public class IndividualViewModel extends AndroidViewModel {
         return individualRepository.retrieveDup(id,ids);
     }
 
+    public List<Individual> findDup(String id) throws ExecutionException, InterruptedException {
+        return individualRepository.findDup(id);
+    }
+
     public List<Individual> retrieveHOH(String id) throws ExecutionException, InterruptedException {
         return individualRepository.retrieveHOH(id);
     }

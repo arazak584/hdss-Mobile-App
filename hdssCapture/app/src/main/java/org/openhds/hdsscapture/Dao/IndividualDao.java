@@ -176,6 +176,9 @@ public interface IndividualDao {
     @Query("SELECT * FROM individual  WHERE endType!=3 and compno=:id and firstName!='FAKE' and uuid!=:ids order by dob ")
     List<Individual> retrieveDup(String id,String ids);
 
+    @Query("SELECT * FROM individual  WHERE endType!=3 and compno=:id and firstName!='FAKE' order by dob ")
+    List<Individual> findDup(String id);
+
     @Query("SELECT * FROM individual WHERE endType=1 and gender=1 and compno=:id and firstName!='FAKE' and " +
             " strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) >=(SELECT rel_age from config) order by dob")
     List<Individual> retrievePartner(String id);

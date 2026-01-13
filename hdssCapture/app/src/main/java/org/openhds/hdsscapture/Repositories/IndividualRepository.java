@@ -299,6 +299,15 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public List<Individual> findDup(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Individual>> callable = () -> dao.findDup(id);
+
+        Future<List<Individual>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
 
     public Individual find(String id) throws ExecutionException, InterruptedException {
 

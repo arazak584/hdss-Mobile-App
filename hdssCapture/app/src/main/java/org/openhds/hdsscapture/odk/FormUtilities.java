@@ -609,39 +609,26 @@ public class FormUtilities {
 
     /**
      * Reopen an existing form instance for editing
-     * This prevents duplicate forms for the same individual
+     * This directly opens ODK without creating/loading anything
      */
     public void loadExistingForm(OdkFormLoadData loadData, String contentUriAsString,
                                  String instanceXmlUri, final OdkFormResultListener listener) {
         this.formId = loadData.formId;
         this.formLoadData = loadData;
         this.contentUri = Uri.parse(contentUriAsString);
-        this.metaInstanceName = "";
-        this.lastUpdatedDate = null;
-        loadData.formInstanceUri = instanceXmlUri;
+        this.instanceUri = instanceXmlUri;
 
-        this.currentLoadTask = new OdkFormLoadTask(this, loadData, this.contentUri,
-                new OdkFormLoadTask.OdkFormLoadListener() {
-                    @Override
-                    public void onOdkFormLoadSuccess(OdkFormLoadResult result) {
-                        FormUtilities.this.contentUri = result.getContentUri();
-                        FormUtilities.this.instanceUri = result.getInstanceUri();
-                        odkResultLauncher.launch(new Intent(Intent.ACTION_EDIT, result.getContentUri()));
-                    }
+        Log.d(TAG, "=== loadExistingForm ===");
+        Log.d(TAG, "  Form ID: " + formId);
+        Log.d(TAG, "  Content URI: " + contentUri);
+        Log.d(TAG, "  Instance URI: " + instanceUri);
 
-                    @Override
-                    public void onOdkFormLoadFailure(OdkFormLoadResult result) {
-                        if (listener != null) {
-                            listener.onFormInstanceNotFound(formLoadData, contentUri);
-                        } else {
-                            createFormLoadResultErrorDialog(result, loadData);
-                        }
-                    }
-                });
-
+        // Check permissions first
         OnPermissionRequestListener readPhoneStateGrantListener = granted -> {
             if (granted) {
-                callExecuteCurrentLoadTask();
+                // DIRECTLY LAUNCH ODK without any load task
+                Log.d(TAG, "Permissions granted, launching ODK directly");
+                odkResultLauncher.launch(new Intent(Intent.ACTION_EDIT, contentUri));
             } else {
                 showPermissionDeniedDialog(R.string.odk_form_load_permission_request_readphonestate_denied_lbl);
             }
@@ -650,15 +637,59 @@ public class FormUtilities {
         requestPermissionsForReadingPhoneState(readPhoneStateGrantListener);
     }
 
+//    /**
+//     * Reopen an existing form instance for editing
+//     * This prevents duplicate forms for the same individual
+//     */
+//    public void loadExistingForm(OdkFormLoadData loadData, String contentUriAsString,
+//                                 String instanceXmlUri, final OdkFormResultListener listener) {
+//        this.formId = loadData.formId;
+//        this.formLoadData = loadData;
+//        this.contentUri = Uri.parse(contentUriAsString);
+//        this.metaInstanceName = "";
+//        this.lastUpdatedDate = null;
+//        loadData.formInstanceUri = instanceXmlUri;
+//
+//        this.currentLoadTask = new OdkFormLoadTask(this, loadData, this.contentUri,
+//                new OdkFormLoadTask.OdkFormLoadListener() {
+//                    @Override
+//                    public void onOdkFormLoadSuccess(OdkFormLoadResult result) {
+//                        FormUtilities.this.contentUri = result.getContentUri();
+//                        FormUtilities.this.instanceUri = result.getInstanceUri();
+//                        odkResultLauncher.launch(new Intent(Intent.ACTION_EDIT, result.getContentUri()));
+//                    }
+//
+//                    @Override
+//                    public void onOdkFormLoadFailure(OdkFormLoadResult result) {
+//                        if (listener != null) {
+//                            listener.onFormInstanceNotFound(formLoadData, contentUri);
+//                        } else {
+//                            createFormLoadResultErrorDialog(result, loadData);
+//                        }
+//                    }
+//                });
+//
+//        OnPermissionRequestListener readPhoneStateGrantListener = granted -> {
+//            if (granted) {
+//                callExecuteCurrentLoadTask();
+//            } else {
+//                showPermissionDeniedDialog(R.string.odk_form_load_permission_request_readphonestate_denied_lbl);
+//            }
+//        };
+//
+//        requestPermissionsForReadingPhoneState(readPhoneStateGrantListener);
+//    }
+
     /**
      * Check if an existing form exists for this individual
      * Returns the ContentUri if found, null otherwise
      */
     public ExistingFormInfo findExistingForm(String individualUuid, String formId) {
         try {
-            Log.d(TAG, "Searching for existing form - Individual: " + individualUuid + ", Form: " + formId);
+            Log.d(TAG, "=== Searching for existing form ===");
+            Log.d(TAG, "  Individual UUID: " + individualUuid);
+            Log.d(TAG, "  Form ID: " + formId);
 
-            // Query ODK's instances database for matching forms
             Cursor cursor = mContext.getContentResolver().query(
                     InstanceProviderAPI.InstanceColumns.CONTENT_URI,
                     new String[]{
@@ -675,13 +706,13 @@ public class FormUtilities {
             );
 
             if (cursor != null && cursor.moveToFirst()) {
+                int count = 0;
                 do {
                     String instancePath = cursor.getString(cursor.getColumnIndex(
                             InstanceProviderAPI.InstanceColumns.INSTANCE_FILE_PATH));
 
-                    Log.d(TAG, "Checking instance: " + instancePath);
+                    Log.d(TAG, "  Checking instance #" + (++count) + ": " + instancePath);
 
-                    // Read the XML file to check if it matches this individual
                     if (isFormForIndividual(instancePath, individualUuid)) {
                         long id = cursor.getLong(cursor.getColumnIndex(
                                 InstanceProviderAPI.InstanceColumns._ID));
@@ -692,7 +723,10 @@ public class FormUtilities {
                         String displayName = cursor.getString(cursor.getColumnIndex(
                                 InstanceProviderAPI.InstanceColumns.DISPLAY_NAME));
 
-                        Log.d(TAG, "✓ Found matching form for individual");
+                        Log.d(TAG, "✓ Found matching form!");
+                        Log.d(TAG, "  Content URI: " + contentUri);
+                        Log.d(TAG, "  Instance Path: " + instancePath);
+
                         cursor.close();
                         return new ExistingFormInfo(contentUri, instancePath, displayName);
                     }
