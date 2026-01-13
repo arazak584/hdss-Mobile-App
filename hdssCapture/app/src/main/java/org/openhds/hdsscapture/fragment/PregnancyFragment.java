@@ -198,6 +198,7 @@ public class PregnancyFragment extends KeyboardFragment {
 
             if (allPregnancies != null && !allPregnancies.isEmpty()) {
                 pregnancyRecords = new ArrayList<>();
+                boolean needsUpdate = false;
 
                 // Process records
                 for (Pregnancy p : allPregnancies) {
@@ -207,6 +208,15 @@ public class PregnancyFragment extends KeyboardFragment {
                         viewModel.add(p);
                     }
                     pregnancyRecords.add(p);
+                }
+
+                // Save all fixed records back to database
+                if (needsUpdate) {
+                    for (Pregnancy p : pregnancyRecords) {
+                        if (p.pregnancyOrder == 1 && p.uuid != null && !p.uuid.isEmpty()) {
+                            viewModel.add(p); // This will update existing records
+                        }
+                    }
                 }
 
                 // Sort by pregnancyOrder
