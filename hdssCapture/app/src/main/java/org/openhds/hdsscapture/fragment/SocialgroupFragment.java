@@ -220,7 +220,7 @@ public class SocialgroupFragment extends KeyboardFragment {
                     for (Residency residency : residencies) {
                         try {
                             // Get individual by UUID
-                            Individual individual = individualViewModel.find(residency.individual_uuid);
+                            Individual individual = individualViewModel.finds(residency.individual_uuid);
                             if (individual != null) {
                                 memberDataList.add(new HouseholdMemberData(residency, individual));
                             }
@@ -251,31 +251,118 @@ public class SocialgroupFragment extends KeyboardFragment {
         executor.shutdown();
     }
 
+//    private void save(boolean save, boolean close) {
+//        if (save) {
+//            // Only validate if there are household members
+//            if (!householdMembers.isEmpty()) {
+//                // Validate all relationships are selected
+//                boolean allValid = true;
+//                int headOfHouseholdCount = 0;
+//
+//                for (HouseholdMemberData memberData : householdMembers) {
+//                    if (memberData.residency.rltn_head == 0 || memberData.residency.rltn_head == -1) {
+//                        allValid = false;
+//                        break;
+//                    }
+//                    // Count how many are marked as head of household
+//                    if (memberData.residency.rltn_head == 1) {
+//                        headOfHouseholdCount++;
+//                    }
+//                }
+//
+//                if (!allValid) {
+//                    Toast.makeText(requireContext(), "Please select relationship for all household members", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//
+//                if (headOfHouseholdCount != 1) {
+//                    Toast.makeText(requireContext(), "Exactly one member must be marked as Head of Household (relationship = 1)", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//            }
+//
+//            // Save socialgroup
+//            Socialgroup finalData = binding.getSocialgroup();
+//            finalData.individual_uuid = binding.getSocialgroup().individual_uuid;
+//            finalData.groupName = binding.getSocialgroup().groupName;
+//            finalData.complete = 1;
+//
+//            SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
+//            socialgroupViewModel.add(finalData);
+//
+//            // Update all household members' relationships (only if there are members)
+//            if (!householdMembers.isEmpty()) {
+//                updateAllRelationships();
+//            }
+//        }
+//
+//        if (close) {
+//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                    HouseMembersFragment.newInstance(locations, socialgroup, individual)).commit();
+//        }
+//    }
+
     private void save(boolean save, boolean close) {
         if (save) {
-            // Validate all relationships are selected
-            boolean allValid = true;
-            int headOfHouseholdCount = 0;
+            // Only validate if there are household members
+            if (!householdMembers.isEmpty()) {
+                // First, check if all relationships are selected
+                boolean allValid = true;
+                int headOfHouseholdCount = 0;
+                boolean headIsHouseholdMember = false;
+                String socialgroupHeadUuid = binding.getSocialgroup().individual_uuid;
 
-            for (HouseholdMemberData memberData : householdMembers) {
-                if (memberData.residency.rltn_head == 0 || memberData.residency.rltn_head == -1) {
-                    allValid = false;
-                    break;
+                for (HouseholdMemberData memberData : householdMembers) {
+                    if (memberData.residency.rltn_head == 0 || memberData.residency.rltn_head == -1) {
+                        allValid = false;
+                        break;
+                    }
+
+                    // Count how many are marked as head of household
+                    if (memberData.residency.rltn_head == 1) {
+                        headOfHouseholdCount++;
+                    }
+
+                    // Check if the socialgroup head is among household members
+                    if (memberData.individual.uuid.equals(socialgroupHeadUuid)) {
+                        headIsHouseholdMember = true;
+                    }
                 }
-                // Count how many are marked as head of household
-                if (memberData.residency.rltn_head == 1) {
-                    headOfHouseholdCount++;
+
+                if (!allValid) {
+                    Toast.makeText(requireContext(), "Please select relationship for all household members", Toast.LENGTH_LONG).show();
+                    return;
                 }
-            }
 
-            if (!allValid) {
-                Toast.makeText(requireContext(), "Please select relationship for all household members", Toast.LENGTH_LONG).show();
-                return;
-            }
+                // Validation based on whether head is a household member
+                if (headIsHouseholdMember) {
+                    // Head is a member: exactly one person must have rltn_head = 1
+                    if (headOfHouseholdCount != 1) {
+                        Toast.makeText(requireContext(), "The Head of Household must be marked with relationship = 1 (Head of Household)", Toast.LENGTH_LONG).show();
+                        return;
+                    }
 
-            if (headOfHouseholdCount != 1) {
-                Toast.makeText(requireContext(), "Exactly one member must be marked as Head of Household (relationship = 1)", Toast.LENGTH_LONG).show();
-                return;
+                    // Verify that the person marked as rltn_head=1 is actually the socialgroup head
+                    boolean correctHeadMarked = false;
+                    for (HouseholdMemberData memberData : householdMembers) {
+                        if (memberData.residency.rltn_head == 1 &&
+                                memberData.individual.uuid.equals(socialgroupHeadUuid)) {
+                            correctHeadMarked = true;
+                            break;
+                        }
+                    }
+
+                    if (!correctHeadMarked) {
+                        Toast.makeText(requireContext(), "Only the designated Head of Household can have relationship = 1", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                } else {
+                    // Head is NOT a member: NO one should have rltn_head = 1
+                    if (headOfHouseholdCount > 0) {
+                        Toast.makeText(requireContext(), "No household member can be marked as Head of Household (relationship = 1) when the head lives outside this household", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
             }
 
             // Save socialgroup
@@ -287,8 +374,10 @@ public class SocialgroupFragment extends KeyboardFragment {
             SocialgroupViewModel socialgroupViewModel = new ViewModelProvider(this).get(SocialgroupViewModel.class);
             socialgroupViewModel.add(finalData);
 
-            // Update all household members' relationships
-            updateAllRelationships();
+            // Update all household members' relationships (only if there are members)
+            if (!householdMembers.isEmpty()) {
+                updateAllRelationships();
+            }
         }
 
         if (close) {

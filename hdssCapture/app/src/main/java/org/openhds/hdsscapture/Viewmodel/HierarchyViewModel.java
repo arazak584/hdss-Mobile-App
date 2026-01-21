@@ -13,84 +13,84 @@ import java.util.concurrent.ExecutionException;
 
 public class HierarchyViewModel extends AndroidViewModel {
 
-    private final HierarchyRepository hierarchyRepository;
+    private final HierarchyRepository repo;
 
 
     public HierarchyViewModel(@NonNull Application application) {
         super(application);
-        hierarchyRepository = new HierarchyRepository(application);
+        repo = new HierarchyRepository(application);
     }
 
     public List<Hierarchy> retrieveLevel1() throws ExecutionException, InterruptedException {
-        return hierarchyRepository.retrieveLevel1();
+        return repo.retrieveLevel1();
     }
 
     public List<Hierarchy> retrieveLevel2(String id) throws ExecutionException, InterruptedException {
-        return hierarchyRepository.retrieveLevel2(id);
+        return repo.retrieveLevel2(id);
     }
 
     public List<Hierarchy> retrieveLevel3(String id) throws ExecutionException, InterruptedException {
-        return hierarchyRepository.retrieveLevel3(id);
+        return repo.retrieveLevel3(id);
     }
 
     public List<Hierarchy> retrieveLevel4(String id) throws ExecutionException, InterruptedException {
-        return hierarchyRepository.retrieveLevel4(id);
+        return repo.retrieveLevel4(id);
     }
 
     public List<Hierarchy> retrieveLevel5(String id) throws ExecutionException, InterruptedException {
-        return hierarchyRepository.retrieveLevel5(id);
+        return repo.retrieveLevel5(id);
     }
 
     public List<Hierarchy> retrieveLevel5i(String id,String fw) throws ExecutionException, InterruptedException {
-        return hierarchyRepository.retrieveLevel5i(id,fw);
+        return repo.retrieveLevel5i(id,fw);
     }
 
     public List<Hierarchy> retrieveLevel4i(String id,String fw) throws ExecutionException, InterruptedException {
-        return hierarchyRepository.retrieveLevel4i(id,fw);
+        return repo.retrieveLevel4i(id,fw);
     }
 
     public List<Hierarchy> retrieveLevel3i(String id,String fw) throws ExecutionException, InterruptedException {
-        return hierarchyRepository.retrieveLevel3i(id,fw);
+        return repo.retrieveLevel3i(id,fw);
     }
 
     public List<Hierarchy> retrieveLevel(String parentId,String level) throws ExecutionException, InterruptedException {
-        return hierarchyRepository.retrieveLevel(parentId,level);
+        return repo.retrieveLevel(parentId,level);
     }
 
     public List<Hierarchy> retrieveLevel2i(String id,String fw) throws ExecutionException, InterruptedException {
-        return hierarchyRepository.retrieveLevel2i(id,fw);
+        return repo.retrieveLevel2i(id,fw);
     }
 
     public List<Hierarchy> retrieveLevel6(String id) throws ExecutionException, InterruptedException {
-        return hierarchyRepository.retrieveLevel6(id);
+        return repo.retrieveLevel6(id);
     }
 
     public List<Hierarchy> clusters(String id) throws ExecutionException, InterruptedException {
-        return hierarchyRepository.clusters(id);
+        return repo.clusters(id);
     }
 
     public List<Hierarchy> retrieveLevel7() throws ExecutionException, InterruptedException {
-        return hierarchyRepository.retrieveLevel7();
+        return repo.retrieveLevel7();
     }
 
     public List<Hierarchy> retrieveVillage() throws ExecutionException, InterruptedException {
-        return hierarchyRepository.retrieveVillage();
+        return repo.retrieveVillage();
     }
 
     public List<Hierarchy> repo(String id) throws ExecutionException, InterruptedException {
-        return hierarchyRepository.repo(id);
+        return repo.repo(id);
     }
 
     public List<Hierarchy> repos(String id) throws ExecutionException, InterruptedException {
-        return hierarchyRepository.repos(id);
+        return repo.repos(id);
     }
 
     public void add(Hierarchy data){
-        hierarchyRepository.create(data);
+        repo.create(data);
     }
 
     public void add(Hierarchy... data){
-        hierarchyRepository.create(data);
+        repo.create(data);
     }
 
 }

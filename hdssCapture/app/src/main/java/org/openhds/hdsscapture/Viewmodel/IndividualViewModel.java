@@ -22,254 +22,248 @@ import java.util.concurrent.ExecutionException;
 
 public class IndividualViewModel extends AndroidViewModel {
 
-    private final IndividualRepository individualRepository;
+    private final IndividualRepository repo;
 
 
     public IndividualViewModel(@NonNull Application application) {
         super(application);
-        individualRepository = new IndividualRepository(application);
+        repo = new IndividualRepository(application);
     }
 
 
     public Individual findAll(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.findAll(id);
-    }
-    public Individual mapregistry(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.mapregistry(id);
+        return repo.findAll(id);
     }
 
     public List<Individual> hoh(String comp,String id) throws ExecutionException, InterruptedException {
-        return individualRepository.hoh(comp,id);
+        return repo.hoh(comp,id);
     }
     public List<Individual> retrieveByLocationId(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveByLocationId(id);
+        return repo.retrieveByLocationId(id);
     }
 
     public LiveData<List<Individual>> retrieveByHouseId(String id,String ids) {
-        return individualRepository.retrieveByHouseId(id,ids); // No throws, no Executor
+        return repo.retrieveByHouseId(id,ids); // No throws, no Executor
     }
 
     public List<Individual> retrieveReturn(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveReturn(id);
+        return repo.retrieveReturn(id);
     }
 
     public List<Individual> getHouseholdMembersSync(String id,String ids) throws ExecutionException, InterruptedException {
-        return individualRepository.getHouseholdMembersSync(id,ids);
+        return repo.getHouseholdMembersSync(id,ids);
     }
 
     public List<Individual> retrieveChild(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveChild(id);
+        return repo.retrieveChild(id);
     }
 
     public List<Individual> morbidity(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.morbidity(id);
+        return repo.morbidity(id);
     }
 
     public List<Individual> retrieveBy(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveBy("%" + id + "%");
+        return repo.retrieveBy("%" + id + "%");
     }
 
     public List<Individual> retrieveByMother(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveByMother(id);
+        return repo.retrieveByMother(id);
     }
 
 
     public List<Individual> retrieveByMotherSearch(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveByMotherSearch("%" + id + "%");
+        return repo.retrieveByMotherSearch("%" + id + "%");
     }
 
     public List<Individual> findToSync() throws ExecutionException, InterruptedException {
-        return individualRepository.findToSync();
+        return repo.findToSync();
     }
 
     public List<Individual> find() throws ExecutionException, InterruptedException {
-        return individualRepository.find();
+        return repo.find();
     }
 
     public List<Individual> retrieveBySearch(String id, String searchText) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveBySearch( "%" + id + "%", "%" + searchText + "%");
+        return repo.retrieveBySearch( "%" + id + "%", "%" + searchText + "%");
     }
 
 
     public List<Individual> retrieveByFatherSearch(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveByFatherSearch("%" + id + "%");
+        return repo.retrieveByFatherSearch("%" + id + "%");
     }
 
     public List<Individual> retrieveByFather(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveByFather(id);
+        return repo.retrieveByFather(id);
     }
 
     public List<Individual> retrievePartner(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.retrievePartner(id);
+        return repo.retrievePartner(id);
     }
 
     public List<Individual> retrieveDup(String id,String ids) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveDup(id,ids);
+        return repo.retrieveDup(id,ids);
     }
 
     public List<Individual> findDup(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.findDup(id);
+        return repo.findDup(id);
     }
 
     public List<Individual> retrieveHOH(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveHOH(id);
+        return repo.retrieveHOH(id);
     }
 
     public Individual find(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.find(id);
+        return repo.find(id);
+    }
+
+    public Individual finds(String id) throws ExecutionException, InterruptedException {
+        return repo.finds(id);
     }
 
     public Individual restore(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.restore(id);
+        return repo.restore(id);
     }
 
     public Individual unk(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.unk(id);
+        return repo.unk(id);
     }
 
     public List<Individual> retrieveDth(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveDth(id);
+        return repo.retrieveDth(id);
     }
 
     public List<Individual> retrieveOmg(String loc) throws ExecutionException, InterruptedException {
-        return individualRepository.retrieveOmg(loc);
+        return repo.retrieveOmg(loc);
     }
 
     public List<Individual> minors(String id,String ids) throws ExecutionException, InterruptedException {
-        return individualRepository.minors(id,ids);
+        return repo.minors(id,ids);
     }
 
     public Individual mother(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.mother(id);
+        return repo.mother(id);
     }
 
     public Individual father(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.father(id);
+        return repo.father(id);
     }
 
     public Individual visited(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.visited(id);
+        return repo.visited(id);
     }
 
     public long countIndividuals(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
-        return individualRepository.countIndividuals(startDate, endDate, username);
+        return repo.countIndividuals(startDate, endDate, username);
     }
 
     public long counts(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.counts(id);
+        return repo.counts(id);
     }
 
     public long count(String id,String ids) throws ExecutionException, InterruptedException {
-        return individualRepository.count(id,ids);
+        return repo.count(id,ids);
     }
 
     public long err(String id,String ids) throws ExecutionException, InterruptedException {
-        return individualRepository.err(id,ids);
+        return repo.err(id,ids);
     }
 
     public long errs(String id,String ids) throws ExecutionException, InterruptedException {
-        return individualRepository.errs(id,ids);
+        return repo.errs(id,ids);
     }
     public long cnt() throws ExecutionException, InterruptedException {
-        return individualRepository.cnt();
+        return repo.cnt();
     }
     public long cnts() throws ExecutionException, InterruptedException {
-        return individualRepository.cnts();
+        return repo.cnts();
     }
     public long cntss() throws ExecutionException, InterruptedException {
-        return individualRepository.cntss();
+        return repo.cntss();
     }
 
     public List<Individual> error() throws ExecutionException, InterruptedException {
-        return individualRepository.error();
+        return repo.error();
     }
 
     public List<Individual> errors() throws ExecutionException, InterruptedException {
-        return individualRepository.errors();
+        return repo.errors();
     }
 
     public List<Individual> nulls(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.nulls(id);
+        return repo.nulls(id);
     }
 
     public List<Individual> errz(String id) throws ExecutionException, InterruptedException {
-        return individualRepository.errz(id);
+        return repo.errz(id);
     }
 
     public List<Individual> repo() throws ExecutionException, InterruptedException {
-        return individualRepository.repo();
+        return repo.repo();
     }
 
-    public List<Individual> getIndividualsForCsv(int gender, int minAge, int maxAge, int status) {
-        return individualRepository.findIndividualsBatched(gender, minAge, maxAge, status);
-    }
 
     public List<Individual> dupRegistration(String uuid,String ghcard,String phone) throws ExecutionException, InterruptedException {
-        return individualRepository.dupRegistration(uuid, ghcard,phone);
-    }
-
-    public List<Individual> DuplicatesByPhone(String uuid,String ghcard) throws ExecutionException, InterruptedException {
-        return individualRepository.DuplicatesByPhone(uuid, ghcard);
+        return repo.dupRegistration(uuid, ghcard,phone);
     }
 
     public LiveData<Individual> getView(String id) {
-        return individualRepository.view(id);
+        return repo.view(id);
     }
 
-    public void add(Individual data){ individualRepository.create(data);}
+    public void add(Individual data){ repo.create(data);}
 
     public void add(Individual... data){
-        individualRepository.create(data);
+        repo.create(data);
     }
 
     public void update(IndividualAmendment s, Consumer<Integer> callback) {
-        individualRepository.update(s, callback);
+        repo.update(s, callback);
     }
 
 //    public int dthupdate(IndividualEnd e){
-//        return individualRepository.dthupdate(e);
+//        return repo.dthupdate(e);
 //    }
 //    public void visited(IndividualVisited e, Consumer<Integer> callback) {
-//        individualRepository.visited(e, callback);
+//        repo.visited(e, callback);
 //    }
 
     public void updateCompnoForIndividuals(String oldCompno, String newCompno, Consumer<Integer> callback) {
-        individualRepository.updateCompnoForIndividuals(oldCompno, newCompno, callback);
+        repo.updateCompnoForIndividuals(oldCompno, newCompno, callback);
     }
 
     public void dthupdate(IndividualEnd e, Consumer<Integer> callback) {
-        individualRepository.dthupdate(e, callback);
+        repo.dthupdate(e, callback);
     }
 
     public int visited(IndividualVisited e){
-        return individualRepository.visited(e);
+        return repo.visited(e);
     }
 
     public void updateres(IndividualResidency e, Consumer<Integer> callback) {
-        individualRepository.updateres(e, callback);
+        repo.updateres(e, callback);
     }
 
 //    public void contact(IndividualPhone e, Consumer<Integer> callback) {
-//        individualRepository.contact(e, callback);
+//        repo.contact(e, callback);
 //    }
 
     public int contact(IndividualPhone e){
-        return individualRepository.contact(e);
+        return repo.contact(e);
     }
 
     public LiveData<Long> sync() {
-        return individualRepository.sync();
+        return repo.sync();
     }
 
     public LiveData<Long> hh(String id) {
-        return individualRepository.hh(id);
+        return repo.hh(id);
     }
 
     public LiveData<Long> isHeadInCompound(String id,String ids) {
-        return individualRepository.isHeadInCompound(id,ids);
+        return repo.isHeadInCompound(id,ids);
     }
 
     public LiveData<Long> isActiveHouseholdHead(String id) {
-        return individualRepository.isActiveHouseholdHead(id);
+        return repo.isActiveHouseholdHead(id);
     }
 }

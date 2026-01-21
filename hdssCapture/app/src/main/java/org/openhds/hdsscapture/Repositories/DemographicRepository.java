@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
@@ -93,6 +94,17 @@ public class DemographicRepository {
         Future<List<Demographic>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
+    }
+
+    public List<Demographic> getByUuids(List<String> uuids) throws ExecutionException, InterruptedException {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        try {
+            Callable<List<Demographic>> callable = () -> dao.getByUuids(uuids);
+            Future<List<Demographic>> future = executor.submit(callable);
+            return future.get();
+        } finally {
+            executor.shutdown();
+        }
     }
 
     public LiveData<Demographic> view(String id) {

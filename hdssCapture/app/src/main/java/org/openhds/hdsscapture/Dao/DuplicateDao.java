@@ -6,7 +6,9 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Duplicate;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Vpm;
@@ -52,5 +54,14 @@ public interface DuplicateDao {
 
     @Query("SELECT COUNT(*) FROM duplicate WHERE complete= 1")
     LiveData<Long> sync();
+
+    @Query("SELECT * FROM duplicate WHERE uuid IN (:uuids) AND complete!=1")
+    List<Duplicate> getByUuids(List<String> uuids);
+
+    @Query("SELECT * FROM death WHERE fw_uuid=:id AND status=2 order by insertDate DESC")
+    List<Duplicate> reject(String id);
+
+    @Query("SELECT COUNT(*) FROM duplicate WHERE status=2 AND fw_uuid = :uuid ")
+    long rej(String uuid);
 
 }

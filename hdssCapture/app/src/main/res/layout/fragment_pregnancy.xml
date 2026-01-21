@@ -213,6 +213,7 @@
                             app:endIconDrawable="@drawable/ic_calendar"
                             app:endIconTint="@color/colorPrimary"
                             android:hint="@string/conception">
+
                             <com.google.android.material.textfield.TextInputEditText
                                 android:focusable="false"
                                 android:focusableInTouchMode="false"
@@ -385,6 +386,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/ageOfPregFromPregNotes">
+
                             <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/ageOfPregFromPregNotes"
                                 android:layout_width="match_parent"
@@ -502,6 +504,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/anc_visits">
+
                             <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/anc_visits"
                                 android:layout_width="match_parent"

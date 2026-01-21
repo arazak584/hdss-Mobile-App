@@ -15,24 +15,24 @@ import java.util.concurrent.ExecutionException;
 
 public class HierarchyLevelViewModel extends AndroidViewModel {
 
-    private final HierarchyLevelRepository hierarchyLevelRepository;
+    private final HierarchyLevelRepository repo;
 
 
     public HierarchyLevelViewModel(@NonNull Application application) {
         super(application);
-        hierarchyLevelRepository = new HierarchyLevelRepository(application);
+        repo = new HierarchyLevelRepository(application);
     }
 
     public List<HierarchyLevel> retrieve() throws ExecutionException, InterruptedException {
-        return hierarchyLevelRepository.retrieve();
+        return repo.retrieve();
     }
 
     public void add(HierarchyLevel data){
-        hierarchyLevelRepository.create(data);
+        repo.create(data);
     }
 
     public void add(HierarchyLevel... data){
-        hierarchyLevelRepository.create(data);
+        repo.create(data);
     }
 
 }

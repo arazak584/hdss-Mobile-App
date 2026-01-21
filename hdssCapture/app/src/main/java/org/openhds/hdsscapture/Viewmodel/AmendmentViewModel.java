@@ -16,39 +16,39 @@ import java.util.concurrent.ExecutionException;
 
 public class AmendmentViewModel extends AndroidViewModel {
 
-    private final AmendmentRepository amendmentRepository;
+    private final AmendmentRepository repo;
 
        public AmendmentViewModel(@NonNull Application application) {
         super(application);
-           amendmentRepository = new AmendmentRepository(application);
+           repo = new AmendmentRepository(application);
     }
 
     public Amendment find(String id) throws ExecutionException, InterruptedException {
-        return amendmentRepository.find(id);
+        return repo.find(id);
     }
 
     public List<Amendment> findToSync() throws ExecutionException, InterruptedException {
-        return amendmentRepository.findToSync();
+        return repo.findToSync();
     }
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
-        return amendmentRepository.count(startDate, endDate, username);
+        return repo.count(startDate, endDate, username);
     }
 
     public LiveData<Amendment> getView(String id) {
-        return amendmentRepository.view(id);
+        return repo.view(id);
     }
 
     public void add(Amendment data){
-        amendmentRepository.create(data);
+        repo.create(data);
     }
 
     public void add(Amendment... data){
-        amendmentRepository.create(data);
+        repo.create(data);
     }
 
     public LiveData<Long> sync() {
-        return amendmentRepository.sync();
+        return repo.sync();
     }
 
 }

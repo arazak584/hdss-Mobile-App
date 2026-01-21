@@ -9,6 +9,7 @@ import androidx.room.Transaction;
 
 import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Vaccination;
 
@@ -38,6 +39,9 @@ public interface VaccinationDao {
 
     @Query("SELECT * FROM vaccination WHERE complete=1")
     List<Vaccination> retrieveSync();
+
+    @Query("SELECT * FROM vaccination WHERE uuid IN (:uuids) AND complete!=1")
+    List<Vaccination> getByUuids(List<String> uuids);
 
     @Query("SELECT * FROM vaccination where individual_uuid=:id")
     Vaccination find(String id);

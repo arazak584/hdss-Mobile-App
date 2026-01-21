@@ -8,12 +8,15 @@ import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.VaccinationDao;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Inmigration;
+import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Vaccination;
 
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
@@ -85,6 +88,17 @@ public class VaccinationRepository {
         Callable<Long> callable = () -> dao.rej(uuid);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
+    }
+
+    public List<Vaccination> getByUuids(List<String> uuids) throws ExecutionException, InterruptedException {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        try {
+            Callable<List<Vaccination>> callable = () -> dao.getByUuids(uuids);
+            Future<List<Vaccination>> future = executor.submit(callable);
+            return future.get();
+        } finally {
+            executor.shutdown();
+        }
     }
 
     public LiveData<Vaccination> view(String id) {

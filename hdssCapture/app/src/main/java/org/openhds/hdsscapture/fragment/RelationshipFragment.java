@@ -40,6 +40,7 @@ import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
+import org.openhds.hdsscapture.validations.RelationshipValidation;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -253,72 +254,78 @@ public class RelationshipFragment extends KeyboardFragment {
         if (save) {
             Relationship finalData = binding.getRelationship();
 
-            boolean dob = false;
-            boolean val = false;
-            boolean mwive = false;
+//            boolean dob = false;
+//            boolean val = false;
+//            boolean mwive = false;
             final boolean validateOnComplete = true;//finalData.complete == 1;
             boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.RELATIONSHIPLAYOUT, validateOnComplete, false);
 
-            if (!binding.tnbch.getText().toString().trim().isEmpty() && !binding.nchdm.getText().toString().trim().isEmpty()) {
-                int totalBiolChildren = Integer.parseInt(binding.tnbch.getText().toString().trim());
-                int childrenFromMarriage = Integer.parseInt(binding.nchdm.getText().toString().trim());
-                if (totalBiolChildren < childrenFromMarriage) {
-                    val = true;
-                    binding.nchdm.setError("Number of Biological Children Cannot be Less Children from this Marriage");
-                    return;
-                }
+            //validation class for all relationship validations
+            RelationshipValidation validator = new RelationshipValidation(requireContext(), finalData);
+            if (!validator.validateAll()) {
+                return; // Stop save if any validation fails
             }
 
-            if (!binding.nwive.getText().toString().trim().isEmpty()) {
-                int totalwive = Integer.parseInt(binding.nwive.getText().toString().trim());
-                if (totalwive < 2) {
-                    mwive = true;
-                    binding.nwive.setError("Cannot be less than 2");
-                    return;
-                }
-            }
-
-            try {
-                if (!binding.womanDob.getText().toString().trim().isEmpty() && !binding.relStartDate.getText().toString().trim().isEmpty()) {
-                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date currentDate = new Date();
-                    Date stdate = f.parse(binding.relStartDate.getText().toString().trim());
-                    Date edate = f.parse(binding.womanDob.getText().toString().trim());
-                    if (edate.after(stdate)) {
-                        binding.relStartDate.setError("Start Date Cannot Be Less than Date of Birth");
-                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Date of Birth", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    if (stdate.after(currentDate)) {
-                        binding.relStartDate.setError("Date Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    // clear error if validation passes
-                    binding.relStartDate.setError(null);
-                }
-            } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-
-            try {
-                if (!binding.relEndDate.getText().toString().trim().isEmpty() && !binding.relStartDate.getText().toString().trim().isEmpty()) {
-                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date stdate = f.parse(binding.relStartDate.getText().toString().trim());
-                    Date edate = f.parse(binding.relEndDate.getText().toString().trim());
-                    if (edate.before(stdate)) {
-                        binding.relEndDate.setError("End Date Cannot Be Less than Start Date");
-                        Toast.makeText(getActivity(), "End Date Cannot Be Less than Start Date", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    // clear error if validation passes
-                    binding.relEndDate.setError(null);
-                }
-            } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
+//            if (!binding.tnbch.getText().toString().trim().isEmpty() && !binding.nchdm.getText().toString().trim().isEmpty()) {
+//                int totalBiolChildren = Integer.parseInt(binding.tnbch.getText().toString().trim());
+//                int childrenFromMarriage = Integer.parseInt(binding.nchdm.getText().toString().trim());
+//                if (totalBiolChildren < childrenFromMarriage) {
+//                    val = true;
+//                    binding.nchdm.setError("Number of Biological Children Cannot be Less Children from this Marriage");
+//                    return;
+//                }
+//            }
+//
+//            if (!binding.nwive.getText().toString().trim().isEmpty()) {
+//                int totalwive = Integer.parseInt(binding.nwive.getText().toString().trim());
+//                if (totalwive < 2) {
+//                    mwive = true;
+//                    binding.nwive.setError("Cannot be less than 2");
+//                    return;
+//                }
+//            }
+//
+//            try {
+//                if (!binding.womanDob.getText().toString().trim().isEmpty() && !binding.relStartDate.getText().toString().trim().isEmpty()) {
+//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                    Date currentDate = new Date();
+//                    Date stdate = f.parse(binding.relStartDate.getText().toString().trim());
+//                    Date edate = f.parse(binding.womanDob.getText().toString().trim());
+//                    if (edate.after(stdate)) {
+//                        binding.relStartDate.setError("Start Date Cannot Be Less than Date of Birth");
+//                        Toast.makeText(getActivity(), "Start Date Cannot Be Less than Date of Birth", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    if (stdate.after(currentDate)) {
+//                        binding.relStartDate.setError("Date Cannot Be a Future Date");
+//                        Toast.makeText(getActivity(), "Date Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    // clear error if validation passes
+//                    binding.relStartDate.setError(null);
+//                }
+//            } catch (ParseException e) {
+//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//
+//            try {
+//                if (!binding.relEndDate.getText().toString().trim().isEmpty() && !binding.relStartDate.getText().toString().trim().isEmpty()) {
+//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                    Date stdate = f.parse(binding.relStartDate.getText().toString().trim());
+//                    Date edate = f.parse(binding.relEndDate.getText().toString().trim());
+//                    if (edate.before(stdate)) {
+//                        binding.relEndDate.setError("End Date Cannot Be Less than Start Date");
+//                        Toast.makeText(getActivity(), "End Date Cannot Be Less than Start Date", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    // clear error if validation passes
+//                    binding.relEndDate.setError(null);
+//                }
+//            } catch (ParseException e) {
+//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
 
 
             if (hasErrors) {

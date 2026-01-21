@@ -9,11 +9,13 @@ import org.openhds.hdsscapture.Dao.PregnancyDao;
 import org.openhds.hdsscapture.entity.Individual;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
+import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
@@ -222,6 +224,17 @@ public class PregnancyRepository {
         Future<List<Pregnancy>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
+    }
+
+    public List<Pregnancy> getByUuids(List<String> uuids) throws ExecutionException, InterruptedException {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        try {
+            Callable<List<Pregnancy>> callable = () -> dao.getByUuids(uuids);
+            Future<List<Pregnancy>> future = executor.submit(callable);
+            return future.get();
+        } finally {
+            executor.shutdown();
+        }
     }
 
     public LiveData<Long> sync() {

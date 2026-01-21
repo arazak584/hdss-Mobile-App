@@ -7,12 +7,14 @@ import androidx.lifecycle.LiveData;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.MorbidityDao;
 import org.openhds.hdsscapture.entity.Death;
+import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Morbidity;
 
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
@@ -94,6 +96,17 @@ public class MorbidityRepository {
         Callable<Long> callable = () -> dao.rej(uuid);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
+    }
+
+    public List<Morbidity> getByUuids(List<String> uuids) throws ExecutionException, InterruptedException {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        try {
+            Callable<List<Morbidity>> callable = () -> dao.getByUuids(uuids);
+            Future<List<Morbidity>> future = executor.submit(callable);
+            return future.get();
+        } finally {
+            executor.shutdown();
+        }
     }
 
     public LiveData<Morbidity> view(String id) {

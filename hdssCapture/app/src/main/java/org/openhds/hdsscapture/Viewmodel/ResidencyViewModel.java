@@ -23,134 +23,134 @@ import java.util.concurrent.ExecutionException;
 
 public class ResidencyViewModel extends AndroidViewModel {
 
-    private final ResidencyRepository residencyRepository;
+    private final ResidencyRepository repo;
 
 
     public ResidencyViewModel(@NonNull Application application) {
         super(application);
-        residencyRepository = new ResidencyRepository(application);
+        repo = new ResidencyRepository(application);
     }
 
     public List<Residency> find(String id) throws ExecutionException, InterruptedException {
-        return residencyRepository.find(id);
+        return repo.find(id);
     }
 
     public List<Residency> findResidenciesBySocialgroup(String id,String ids) throws ExecutionException, InterruptedException {
-        return residencyRepository.findResidenciesBySocialgroup(id, ids);
+        return repo.findResidenciesBySocialgroup(id, ids);
     }
 
     public Residency findRes(String id,String locid) throws ExecutionException, InterruptedException {
-        return residencyRepository.findRes(id, locid);
+        return repo.findRes(id, locid);
     }
 
     public Residency getUuid(String id) throws ExecutionException, InterruptedException {
-        return residencyRepository.getUuid(id);
+        return repo.getUuid(id);
     }
 
     public Residency findDth(String id,String locid) throws ExecutionException, InterruptedException {
-        return residencyRepository.findDth(id, locid);
+        return repo.findDth(id, locid);
     }
 
     public Residency resomg(String id,String locid) throws ExecutionException, InterruptedException {
-        return residencyRepository.resomg(id, locid);
+        return repo.resomg(id, locid);
     }
 
     public Residency findEnd(String id,String locid) throws ExecutionException, InterruptedException {
-        return residencyRepository.findEnd(id, locid);
+        return repo.findEnd(id, locid);
     }
 
     public Residency finds(String id) throws ExecutionException, InterruptedException {
-        return residencyRepository.finds(id);
+        return repo.finds(id);
     }
 
     public Residency findLastButOne(String id) throws ExecutionException, InterruptedException {
-        return residencyRepository.findLastButOne(id);
+        return repo.findLastButOne(id);
     }
 
     public Residency updateres(String id) throws ExecutionException, InterruptedException {
-        return residencyRepository.updateres(id);
+        return repo.updateres(id);
     }
 
     public List<Residency> findToSync() throws ExecutionException, InterruptedException {
-        return residencyRepository.findToSync();
+        return repo.findToSync();
     }
 
 
     public Residency fetch(String id) throws ExecutionException, InterruptedException {
-        return residencyRepository.fetch(id);
+        return repo.fetch(id);
     }
 
     public Residency fetchs(String id, String locid) throws ExecutionException, InterruptedException {
-        return residencyRepository.fetchs(id, locid);
+        return repo.fetchs(id, locid);
     }
 
     public Residency unk(String id) throws ExecutionException, InterruptedException {
-        return residencyRepository.unk(id);
+        return repo.unk(id);
     }
 
     public Residency amend(String id) throws ExecutionException, InterruptedException {
-        return residencyRepository.amend(id);
+        return repo.amend(id);
     }
 
     public Residency views(String id) throws ExecutionException, InterruptedException {
-        return residencyRepository.views(id);
+        return repo.views(id);
     }
 
     public Residency dth(String id, String locid) throws ExecutionException, InterruptedException {
-        return residencyRepository.dth(id,locid);
+        return repo.dth(id,locid);
     }
 
     public Residency restore(String id) throws ExecutionException, InterruptedException {
-        return residencyRepository.restore(id);
+        return repo.restore(id);
     }
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
-        return residencyRepository.count(startDate, endDate, username);
+        return repo.count(startDate, endDate, username);
     }
 
     public List<Residency> error() throws ExecutionException, InterruptedException {
-        return residencyRepository.error();
+        return repo.error();
     }
 
     public LiveData<Residency> getView(String id) {
-        return residencyRepository.view(id);
+        return repo.view(id);
     }
 
     public LiveData<Residency> getViews(String id) {
-        return residencyRepository.getViews(id);
+        return repo.getViews(id);
     }
 
-    public void add(Residency data){ residencyRepository.create(data);}
+    public void add(Residency data){ repo.create(data);}
 
     public void add(Residency... data){
-        residencyRepository.create(data);
+        repo.create(data);
     }
 
 //    public int update(ResidencyAmendment s){
-//        return residencyRepository.update(s);
+//        return repo.update(s);
 //    }
 
     public void update(ResidencyAmendment s, Consumer<Integer> callback) {
-        residencyRepository.update(s, callback);
+        repo.update(s, callback);
     }
 
     public void update(ResidencyRelationshipUpdate s, Consumer<Integer> callback) {
-        residencyRepository.update(s, callback);
+        repo.update(s, callback);
     }
 
     public void updates(ResidencyUpdate s, Consumer<Integer> callback) {
-        residencyRepository.updates(s, callback);
+        repo.updates(s, callback);
     }
 
     public void updatez(ResidencyUpdateEndDate s, Consumer<Integer> callback) {
-        residencyRepository.updatez(s, callback);
+        repo.updatez(s, callback);
     }
 
     public LiveData<Long> sync() {
-        return residencyRepository.sync();
+        return repo.sync();
     }
 
 //    public int update(ResidencyUpdate s){
-//        return residencyRepository.update(s);
+//        return repo.update(s);
 //    }
 }

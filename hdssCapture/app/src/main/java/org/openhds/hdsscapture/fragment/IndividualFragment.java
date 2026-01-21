@@ -635,7 +635,10 @@ public class IndividualFragment extends KeyboardFragment {
         });
 
         binding.buttonClose.setOnClickListener(v -> {
-            checkForDuplicatesAndSave(false, true, viewModel, individualViewModel, inmigrationViewModel, demographicViewModel);
+            // Just close without saving or checking for duplicates
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    HouseMembersFragment.newInstance(locations, socialgroup, individual)).commit();
+            //checkForDuplicatesAndSave(false, true, viewModel, individualViewModel, inmigrationViewModel, demographicViewModel);
         });
 
         binding.setEventname(AppConstants.EVENT_MIND00S);

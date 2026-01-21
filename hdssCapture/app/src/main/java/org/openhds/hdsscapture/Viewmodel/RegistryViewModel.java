@@ -17,39 +17,39 @@ import java.util.concurrent.ExecutionException;
 
 public class RegistryViewModel extends AndroidViewModel {
 
-    private final RegistryRepository registryRepository;
+    private final RegistryRepository repo;
 
        public RegistryViewModel(@NonNull Application application) {
         super(application);
-           registryRepository = new RegistryRepository(application);
+           repo = new RegistryRepository(application);
     }
 
     public Registry find(String id) throws ExecutionException, InterruptedException {
-        return registryRepository.find(id);
+        return repo.find(id);
     }
 
     public Registry finds(String id) throws ExecutionException, InterruptedException {
-        return registryRepository.finds(id);
+        return repo.finds(id);
     }
 
     public List<Registry> findToSync() throws ExecutionException, InterruptedException {
-        return registryRepository.findToSync();
+        return repo.findToSync();
     }
 
     public long count(String id) throws ExecutionException, InterruptedException {
-        return registryRepository.count(id);
+        return repo.count(id);
     }
 
     public void add(Registry data){
-        registryRepository.create(data);
+        repo.create(data);
     }
 
     public void add(Registry... data){
-        registryRepository.create(data);
+        repo.create(data);
     }
 
     public LiveData<Long> sync() {
-        return registryRepository.sync();
+        return repo.sync();
     }
 
 }

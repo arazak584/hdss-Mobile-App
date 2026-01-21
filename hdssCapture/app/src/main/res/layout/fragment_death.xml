@@ -462,7 +462,7 @@
                             app:endIconMode="custom"
                             app:endIconDrawable="@drawable/ic_baseline_calendar_month_24"
                             app:endIconTint="@color/colorPrimary"
-                            android:hint="@string/actual_dob">
+                            android:hint="@string/dod">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/dth_deathDate"

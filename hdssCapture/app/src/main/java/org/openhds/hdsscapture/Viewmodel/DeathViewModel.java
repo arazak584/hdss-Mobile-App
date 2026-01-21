@@ -1,6 +1,7 @@
 package org.openhds.hdsscapture.Viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -19,73 +20,85 @@ import java.util.concurrent.ExecutionException;
 
 public class DeathViewModel extends AndroidViewModel {
 
-    private final DeathRepository deathRepository;
+    private final DeathRepository repo;
 
 
     public DeathViewModel(@NonNull Application application) {
         super(application);
-        deathRepository = new DeathRepository(application);
+        repo = new DeathRepository(application);
     }
 
     public Death find(String id) throws ExecutionException, InterruptedException {
-        return deathRepository.find(id);
+        return repo.find(id);
     }
 
     public Death retrieve(String id) throws ExecutionException, InterruptedException {
-        return deathRepository.retrieve(id);
+        return repo.retrieve(id);
     }
 
     public Death finds(String id) throws ExecutionException, InterruptedException {
-        return deathRepository.finds(id);
+        return repo.finds(id);
     }
 
     public List<Death> findToSync() throws ExecutionException, InterruptedException {
-        return deathRepository.findToSync();
+        return repo.findToSync();
     }
 
     public List<Death> end(String id) throws ExecutionException, InterruptedException {
-        return deathRepository.end(id);
+        return repo.end(id);
     }
 
     public List<Death> error(String id) throws ExecutionException, InterruptedException {
-        return deathRepository.error(id);
+        return repo.error(id);
     }
 
     public long count(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
-        return deathRepository.count(startDate, endDate, username);
+        return repo.count(startDate, endDate, username);
     }
 
     public long rej(String uuid) throws ExecutionException, InterruptedException {
-        return deathRepository.rej(uuid);
+        return repo.rej(uuid);
     }
     public long cnt() throws ExecutionException, InterruptedException {
-        return deathRepository.cnt();
+        return repo.cnt();
     }
 
     public long err(String id,String ids) throws ExecutionException, InterruptedException {
-        return deathRepository.err(id,ids);
+        return repo.err(id,ids);
     }
 
     public List<Death> repo() throws ExecutionException, InterruptedException {
-        return deathRepository.repo();
+        return repo.repo();
     }
 
     public List<Death> reject(String id) throws ExecutionException, InterruptedException {
-        return deathRepository.reject(id);
+        return repo.reject(id);
     }
     public Death ins(String id) throws ExecutionException, InterruptedException {
-        return deathRepository.ins(id);
+        return repo.ins(id);
+    }
+
+    public List<Death> getByUuids(List<String> uuids) {
+        try {
+            return repo.getByUuids(uuids);
+        } catch (ExecutionException | InterruptedException e) {
+            Log.e("DeathViewModel", "Error fetching by UUIDs: " + e.getMessage(), e);
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            throw new RuntimeException("Failed to fetch Death records", e);
+        }
     }
 
     public LiveData<Death> getView(String id) {
-        return deathRepository.view(id);
+        return repo.view(id);
     }
 
-    public void add(Death data){ deathRepository.create(data);}
+    public void add(Death data){ repo.create(data);}
 
-    public void add(Death... data){     deathRepository.create(data);  }
+    public void add(Death... data){     repo.create(data);  }
 
     public LiveData<Long> sync() {
-        return deathRepository.sync();
+        return repo.sync();
     }
 }

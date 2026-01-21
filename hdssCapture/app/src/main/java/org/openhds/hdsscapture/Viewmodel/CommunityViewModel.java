@@ -17,40 +17,40 @@ import java.util.concurrent.ExecutionException;
 
 public class CommunityViewModel extends AndroidViewModel {
 
-    private final CommunityRepository communityRepository;
+    private final CommunityRepository repo;
 
 
     public CommunityViewModel(@NonNull Application application) {
         super(application);
-        communityRepository = new CommunityRepository(application);
+        repo = new CommunityRepository(application);
     }
 
     public List<CommunityReport> retrieves(String id) throws ExecutionException, InterruptedException {
-        return communityRepository.retrieves(id);
+        return repo.retrieves(id);
     }
 
     public CommunityReport retrieve() throws ExecutionException, InterruptedException {
-        return communityRepository.retrieve();
+        return repo.retrieve();
     }
 
     public CommunityReport find(String id) throws ExecutionException, InterruptedException {
-        return communityRepository.find(id);
+        return repo.find(id);
     }
 
     public List<CommunityReport> retrieveToSync() throws ExecutionException, InterruptedException {
-        return communityRepository.retrieveToSync();
+        return repo.retrieveToSync();
     }
 
     public List<CommunityReport> fw(String id) throws ExecutionException, InterruptedException {
-        return communityRepository.fw(id);
+        return repo.fw(id);
     }
 
 
-    public void add(CommunityReport data){ communityRepository.create(data);}
+    public void add(CommunityReport data){ repo.create(data);}
 
-    public void add(CommunityReport... data){communityRepository.create(data);  }
+    public void add(CommunityReport... data){repo.create(data);  }
 
     public LiveData<Long> sync() {
-        return communityRepository.sync();
+        return repo.sync();
     }
 }

@@ -489,6 +489,8 @@ public class OutcomeFragment extends KeyboardFragment {
                                 // VPM exists, just update it
                                 existingVpm.complete = 1;
                                 existingVpm.insertDate = new Date();
+                                existingVpm.deathDate = pregnancyoutcome.outcomeDate;
+                                existingVpm.dob = pregnancyoutcome.outcomeDate;
                                 vpmViewModel.add(existingVpm);
                                 Log.d("OutcomeSave", "Updated existing VPM record: " + vpmUuid);
                             } else {
@@ -512,9 +514,10 @@ public class OutcomeFragment extends KeyboardFragment {
                                 vpm.deathPlace = 1;
                                 vpm.complete = 1;
                                 vpm.deathDate = pregnancyoutcome.outcomeDate;
+                                vpm.dob = pregnancyoutcome.outcomeDate;
 
                                 vpmViewModel.add(vpm);
-                                Log.d("OutcomeSave", "Created new VPM record for stillbirth: " + vpmUuid);
+                                Log.d("OutcomeSave", "Created new VPM record for stillbirth: " + vpmUuid + " " + pregnancyoutcome.outcomeDate);
                             }
                         } catch (ExecutionException | InterruptedException e) {
                             e.printStackTrace();

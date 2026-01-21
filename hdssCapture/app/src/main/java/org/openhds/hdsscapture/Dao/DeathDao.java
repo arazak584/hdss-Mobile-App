@@ -10,6 +10,7 @@ import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.Amendment;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Vpm;
@@ -37,6 +38,9 @@ public interface DeathDao {
 
     @Query("SELECT * FROM death where individual_uuid=:id")
     Death retrieve(String id);
+
+    @Query("SELECT * FROM death WHERE uuid IN (:uuids) AND complete!=1")
+    List<Death> getByUuids(List<String> uuids);
 
 //    @Query("SELECT a.uuid,a.individual_uuid,a.insertDate,deathDate,respondent,compname,villname,villcode," +
 //            "b.dob,b.firstName,b.lastName,b.gender,b.compno,a.visit_uuid,a.residency_uuid,a.socialgroup_uuid,comment,status " +

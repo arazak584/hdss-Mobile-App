@@ -15,41 +15,41 @@ import java.util.concurrent.ExecutionException;
 
 public class VisitViewModel extends AndroidViewModel {
 
-    private final VisitRepository visitRepository;
+    private final VisitRepository repo;
 
 
     public VisitViewModel(@NonNull Application application) {
         super(application);
-        visitRepository = new VisitRepository(application);
+        repo = new VisitRepository(application);
     }
 
     public Visit find(String id) throws ExecutionException, InterruptedException {
-        return visitRepository.find(id);
+        return repo.find(id);
     }
 
     public List<Visit> findToSync() throws ExecutionException, InterruptedException {
-        return visitRepository.findToSync();
+        return repo.findToSync();
     }
 
     public long countVisits(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
-        return visitRepository.countVisits(startDate, endDate, username);
+        return repo.countVisits(startDate, endDate, username);
     }
 
     public long count(String id) throws ExecutionException, InterruptedException {
-        return visitRepository.count(id);
+        return repo.count(id);
     }
 
 //    public long countLocs(Date startDate, Date endDate,String username) throws ExecutionException, InterruptedException {
-//        return visitRepository.countLocs(startDate, endDate, username);
+//        return repo.countLocs(startDate, endDate, username);
 //    }
 
 
-    public void add(Visit data){ visitRepository.create(data);}
+    public void add(Visit data){ repo.create(data);}
 
-    public void add(Visit... data){visitRepository.create(data);}
+    public void add(Visit... data){repo.create(data);}
 
     public LiveData<Long> sync() {
-        return visitRepository.sync();
+        return repo.sync();
     }
 
 

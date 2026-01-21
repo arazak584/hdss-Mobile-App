@@ -19,58 +19,58 @@ import java.util.concurrent.ExecutionException;
 
 public class ListingViewModel extends AndroidViewModel {
 
-    private final ListingRepository listingRepository;
+    private final ListingRepository repo;
 
        public ListingViewModel(@NonNull Application application) {
         super(application);
-           listingRepository = new ListingRepository(application);
+           repo = new ListingRepository(application);
     }
 
     public Listing find(String id) throws ExecutionException, InterruptedException {
-        return listingRepository.find(id);
+        return repo.find(id);
     }
 
     public Listing findByLocation(String id) throws ExecutionException, InterruptedException {
-        return listingRepository.findByLocation(id);
+        return repo.findByLocation(id);
     }
 
     public List<Listing> findToSync() throws ExecutionException, InterruptedException {
-        return listingRepository.findToSync();
+        return repo.findToSync();
     }
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
-        return listingRepository.count(startDate, endDate, username);
+        return repo.count(startDate, endDate, username);
     }
 
     public long done(String id) throws ExecutionException, InterruptedException {
-        return listingRepository.done(id);
+        return repo.done(id);
     }
     public long cnt() throws ExecutionException, InterruptedException {
-        return listingRepository.cnt();
+        return repo.cnt();
     }
 
     public List<Listing> error() throws ExecutionException, InterruptedException {
-        return listingRepository.error();
+        return repo.error();
     }
 
     public LiveData<Listing> getView(String id) {
-        return listingRepository.view(id);
+        return repo.view(id);
     }
 
     public void add(Listing data){
-        listingRepository.create(data);
+        repo.create(data);
     }
 
     public void add(Listing... data){
-        listingRepository.create(data);
+        repo.create(data);
     }
 
     public void deleteByCompno(String compno, Runnable onComplete) {
-        listingRepository.deleteByCompno(compno, onComplete);
+        repo.deleteByCompno(compno, onComplete);
     }
 
     public LiveData<Long> sync() {
-        return listingRepository.sync();
+        return repo.sync();
     }
 
 

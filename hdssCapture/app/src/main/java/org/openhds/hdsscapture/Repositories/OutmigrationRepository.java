@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -148,6 +149,17 @@ public class OutmigrationRepository {
         Callable<Long> callable = () -> dao.rej(uuid);
         Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
+    }
+
+    public List<Outmigration> getByUuids(List<String> uuids) throws ExecutionException, InterruptedException {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        try {
+            Callable<List<Outmigration>> callable = () -> dao.getByUuids(uuids);
+            Future<List<Outmigration>> future = executor.submit(callable);
+            return future.get();
+        } finally {
+            executor.shutdown();
+        }
     }
 
     public LiveData<Outmigration> view(String id) {

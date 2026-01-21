@@ -7,10 +7,13 @@ import androidx.lifecycle.LiveData;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.DuplicateDao;
 import org.openhds.hdsscapture.entity.Duplicate;
+import org.openhds.hdsscapture.entity.Inmigration;
+import org.openhds.hdsscapture.entity.Morbidity;
 
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
@@ -79,6 +82,32 @@ public class DuplicateRepository {
 
         Future<List<Duplicate>> future = Executors.newSingleThreadExecutor().submit(callable);
 
+        return future.get();
+    }
+
+    public List<Duplicate> getByUuids(List<String> uuids) throws ExecutionException, InterruptedException {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        try {
+            Callable<List<Duplicate>> callable = () -> dao.getByUuids(uuids);
+            Future<List<Duplicate>> future = executor.submit(callable);
+            return future.get();
+        } finally {
+            executor.shutdown();
+        }
+    }
+
+    public List<Duplicate> reject(String id) throws ExecutionException, InterruptedException {
+
+        Callable<List<Duplicate>> callable = () -> dao.reject(id);
+
+        Future<List<Duplicate>> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
+    public long rej(String uuid) throws ExecutionException, InterruptedException {
+        Callable<Long> callable = () -> dao.rej(uuid);
+        Future<Long> future = Executors.newSingleThreadExecutor().submit(callable);
         return future.get();
     }
 

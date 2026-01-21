@@ -11,6 +11,7 @@ import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.PregnancyoutcomeDao;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Inmigration;
+import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.subentity.OutcomeUpdate;
@@ -20,6 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
@@ -195,6 +197,17 @@ public class PregnancyoutcomeRepository {
         Future<Pregnancyoutcome> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
+    }
+
+    public List<Pregnancyoutcome> getByUuids(List<String> uuids) throws ExecutionException, InterruptedException {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        try {
+            Callable<List<Pregnancyoutcome>> callable = () -> dao.getByUuids(uuids);
+            Future<List<Pregnancyoutcome>> future = executor.submit(callable);
+            return future.get();
+        } finally {
+            executor.shutdown();
+        }
     }
 
     public LiveData<Pregnancyoutcome> view(String id) {

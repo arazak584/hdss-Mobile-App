@@ -11,6 +11,7 @@ import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.RelationshipDao;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Inmigration;
+import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.subentity.IndividualAmendment;
 import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
@@ -19,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -105,6 +107,17 @@ public class RelationshipRepository {
         Future<List<Relationship>> future = Executors.newSingleThreadExecutor().submit(callable);
 
         return future.get();
+    }
+
+    public List<Relationship> getByUuids(List<String> uuids) throws ExecutionException, InterruptedException {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        try {
+            Callable<List<Relationship>> callable = () -> dao.getByUuids(uuids);
+            Future<List<Relationship>> future = executor.submit(callable);
+            return future.get();
+        } finally {
+            executor.shutdown();
+        }
     }
 
     public LiveData<Relationship> view(String id) {

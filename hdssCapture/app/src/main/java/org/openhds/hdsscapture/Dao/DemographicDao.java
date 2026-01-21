@@ -13,6 +13,7 @@ import androidx.room.Update;
 import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
@@ -54,6 +55,9 @@ public interface DemographicDao {
 
     @Query("SELECT * FROM demographic WHERE complete=1")
     List<Demographic> retrieveToSync();
+
+    @Query("SELECT * FROM demographic WHERE individual_uuid IN (:uuids) AND complete!=1")
+    List<Demographic> getByUuids(List<String> uuids);
 
 //    @Query("SELECT * FROM demographic WHERE insertDate > 1748121600000")
 //    List<Demographic> retrieveToSync();

@@ -1,6 +1,7 @@
 package org.openhds.hdsscapture.Viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.util.Consumer;
@@ -10,6 +11,7 @@ import androidx.lifecycle.LiveData;
 import org.openhds.hdsscapture.Repositories.PregnancyoutcomeRepository;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Inmigration;
+import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.subentity.OutcomeUpdate;
@@ -21,117 +23,129 @@ import java.util.concurrent.ExecutionException;
 
 public class PregnancyoutcomeViewModel extends AndroidViewModel {
 
-    private final PregnancyoutcomeRepository pregnancyoutcomeRepository;
+    private final PregnancyoutcomeRepository repo;
 
 
     public PregnancyoutcomeViewModel(@NonNull Application application) {
         super(application);
-        pregnancyoutcomeRepository = new PregnancyoutcomeRepository(application);
+        repo = new PregnancyoutcomeRepository(application);
     }
 
     public List<Pregnancyoutcome> findToSync() throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.findToSync();
+        return repo.findToSync();
     }
 
     public List<Pregnancyoutcome> error(String id) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.error(id);
+        return repo.error(id);
     }
 
     public Pregnancyoutcome find(String id) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.find(id);
+        return repo.find(id);
     }
 
     public Pregnancyoutcome preg(String id) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.preg(id);
+        return repo.preg(id);
     }
 
     public Pregnancyoutcome find1(String id) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.find1(id);
+        return repo.find1(id);
     }
     public Pregnancyoutcome findloc(String id,String locid) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.findloc(id,locid);
+        return repo.findloc(id,locid);
     }
 
     public Pregnancyoutcome findMother(String id) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.findMother(id);
+        return repo.findMother(id);
     }
 
     public Pregnancyoutcome findedit(String id,String locid) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.findedit(id,locid);
+        return repo.findedit(id,locid);
     }
 
     public Pregnancyoutcome finds(String id) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.finds(id);
+        return repo.finds(id);
     }
 
     public Pregnancyoutcome finds3(String id) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.finds3(id);
+        return repo.finds3(id);
     }
 
     public Pregnancyoutcome findsloc(String id,String locid) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.findsloc(id,locid);
+        return repo.findsloc(id,locid);
     }
 
     public Pregnancyoutcome lastpregs(String id, Date recordedDate) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.lastpregs(id,recordedDate);
+        return repo.lastpregs(id,recordedDate);
     }
     public Pregnancyoutcome find3(String id,String locid) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.find3(id,locid);
+        return repo.find3(id,locid);
     }
 
     public Pregnancyoutcome findout(String id) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.findout(id);
+        return repo.findout(id);
     }
 
     public Pregnancyoutcome findout3(String id) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.findout3(id);
+        return repo.findout3(id);
     }
 
     public Pregnancyoutcome ins(String id) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.ins(id);
+        return repo.ins(id);
     }
 
     public Pregnancyoutcome findpreg(String id) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.findpreg(id);
+        return repo.findpreg(id);
     }
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.count(startDate, endDate, username);
+        return repo.count(startDate, endDate, username);
     }
 
     public long rej(String uuid) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.rej(uuid);
+        return repo.rej(uuid);
     }
 
     public long cnt(String id) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.cnt(id);
+        return repo.cnt(id);
     }
 
     public List<Pregnancyoutcome> reject(String id) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.reject(id);
+        return repo.reject(id);
     }
 
     public List<Pregnancyoutcome> retrieveOutcome(String id) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.retrieveOutcome(id);
+        return repo.retrieveOutcome(id);
     }
 
     public Pregnancyoutcome getId(String id) throws ExecutionException, InterruptedException {
-        return pregnancyoutcomeRepository.getId(id);
+        return repo.getId(id);
     }
 
     public LiveData<Pregnancyoutcome> getView(String id) {
-        return pregnancyoutcomeRepository.view(id);
+        return repo.view(id);
     }
 
     public void update(OutcomeUpdate s, Consumer<Integer> callback) {
-        pregnancyoutcomeRepository.update(s, callback);
+        repo.update(s, callback);
     }
 
-    public void add(Pregnancyoutcome data){ pregnancyoutcomeRepository.create(data);}
+    public List<Pregnancyoutcome> getByUuids(List<String> uuids) {
+        try {
+            return repo.getByUuids(uuids);
+        } catch (ExecutionException | InterruptedException e) {
+            Log.e("OutcomeViewModel", "Error fetching by UUIDs: " + e.getMessage(), e);
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            throw new RuntimeException("Failed to fetch Pregnancyoutcome records", e);
+        }
+    }
 
-    public void add(Pregnancyoutcome... data){ pregnancyoutcomeRepository.create(data);  }
+    public void add(Pregnancyoutcome data){ repo.create(data);}
+
+    public void add(Pregnancyoutcome... data){ repo.create(data);  }
 
     public LiveData<Long> sync() {
-        return pregnancyoutcomeRepository.sync();
+        return repo.sync();
     }
 }

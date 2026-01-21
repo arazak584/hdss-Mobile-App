@@ -13,31 +13,31 @@ import java.util.concurrent.ExecutionException;
 
 public class FieldworkerViewModel extends AndroidViewModel {
 
-    private final FieldworkerRepository userTableRepository;
+    private final FieldworkerRepository repo;
 
 
     public FieldworkerViewModel(@NonNull Application application) {
         super(application);
-        userTableRepository = new FieldworkerRepository(application);
+        repo = new FieldworkerRepository(application);
     }
 
     public Fieldworker find(String id, String password) throws ExecutionException, InterruptedException {
-        return userTableRepository.find(id, password);
+        return repo.find(id, password);
     }
     public Fieldworker finds(String id) throws ExecutionException, InterruptedException {
-        return userTableRepository.finds(id);
+        return repo.finds(id);
     }
 
     public List<Fieldworker> fw() throws ExecutionException, InterruptedException {
-        return userTableRepository.fw();
+        return repo.fw();
     }
 
     public void add(Fieldworker data){
-        userTableRepository.create(data);
+        repo.create(data);
     }
 
     public void add(Fieldworker... data){
-        userTableRepository.create(data);
+        repo.create(data);
     }
 
 }

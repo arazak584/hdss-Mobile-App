@@ -12,8 +12,10 @@ import androidx.room.Update;
 import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Relationship;
 
 import java.util.Date;
 import java.util.List;
@@ -45,6 +47,9 @@ public interface MorbidityDao {
 
     @Query("SELECT * FROM morbidity WHERE socialgroup_uuid=:id")
     List<Morbidity> retrieve(String id);
+
+    @Query("SELECT * FROM morbidity WHERE uuid IN (:uuids) AND complete!=1")
+    List<Morbidity> getByUuids(List<String> uuids);
 
     @Query("SELECT * FROM morbidity WHERE individual_uuid=:id")
     Morbidity find(String id);

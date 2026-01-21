@@ -28,6 +28,7 @@ import org.openhds.hdsscapture.MainActivity;
 import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
 import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
+import org.openhds.hdsscapture.Viewmodel.DuplicateViewModel;
 import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
 import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
 import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
@@ -38,6 +39,7 @@ import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
 import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Inmigration;
@@ -50,13 +52,18 @@ import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.subqueries.RejectEvent;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -77,6 +84,7 @@ public class RejectionsActivity extends AppCompatActivity {
     private VaccinationViewModel vaccinationViewModel;
     private HdssSociodemoViewModel hdssSociodemoViewModel;
     private MorbidityViewModel morbidityViewModel;
+    private DuplicateViewModel duplicateViewModel;
 
     private RejectAdapter viewsAdapter;
     private List<RejectEvent> filterAll;
@@ -139,6 +147,7 @@ public class RejectionsActivity extends AppCompatActivity {
         vaccinationViewModel = new ViewModelProvider(this).get(VaccinationViewModel.class);
         hdssSociodemoViewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
         morbidityViewModel = new ViewModelProvider(this).get(MorbidityViewModel.class);
+        duplicateViewModel = new ViewModelProvider(this).get(DuplicateViewModel.class);
 
         //Sync LocationHierarchy
         final ExtendedFloatingActionButton dwd = findViewById(R.id.btn_reject);
@@ -319,6 +328,21 @@ public class RejectionsActivity extends AppCompatActivity {
                 p++;
             }
 
+            int q=1;
+            for (Duplicate e : duplicateViewModel.reject(fw)) {
+                String formattedDate = f.format(e.approveDate);
+                RejectEvent r1 = new RejectEvent();
+                r1.id1 = p + ". Duplicate" + " (" + e.supervisor + ")";
+                r1.id2 = "" + e.fname + " " + e.lname;
+                r1.id3 = "" + e.compno;
+                r1.id4 = "" + formattedDate;
+                r1.id5 = "" + e.comment;
+                r1.index = q;
+
+                list.add(r1);
+                q++;
+            }
+
 
             filterAll = new ArrayList<>(list);
 
@@ -372,470 +396,880 @@ public class RejectionsActivity extends AppCompatActivity {
         query();
     }
 
+    // Step 1: Create a generic download task class
+    private class DownloadTask<T> {
+        String name;
+        Call<DataWrapper<T>> call;
+        BiConsumer<T[], ExecutorService> processor;
 
+        DownloadTask(String name, Call<DataWrapper<T>> call, BiConsumer<T[], ExecutorService> processor) {
+            this.name = name;
+            this.call = call;
+            this.processor = processor;
+        }
+    }
+
+    // Step 2: Create processing methods for each entity type
+    private void processInmigration(Inmigration[] data, ExecutorService executor) {
+        InmigrationViewModel vm = new ViewModelProvider(this).get(InmigrationViewModel.class);
+        List<String> uuids = Arrays.stream(data).map(i -> i.uuid).collect(Collectors.toList());
+        List<Inmigration> existing = vm.getByUuids(uuids);
+        Map<String, Inmigration> existingMap = existing.stream()
+                .collect(Collectors.toMap(i -> i.uuid, i -> i));
+
+        List<Inmigration> toUpdate = new ArrayList<>();
+        for (Inmigration item : data) {
+            Inmigration exist = existingMap.get(item.uuid);
+            if (exist != null) {
+                exist.comment = item.comment;
+                exist.status = item.status;
+                exist.supervisor = item.supervisor;
+                exist.approveDate = item.approveDate;
+                toUpdate.add(exist);
+            }
+        }
+
+        if (!toUpdate.isEmpty()) {
+            vm.add(toUpdate.toArray(new Inmigration[0]));
+        }
+    }
+
+    private void processOutmigration(Outmigration[] data, ExecutorService executor) {
+        OutmigrationViewModel vm = new ViewModelProvider(this).get(OutmigrationViewModel.class);
+        List<String> uuids = Arrays.stream(data).map(i -> i.uuid).collect(Collectors.toList());
+        List<Outmigration> existing = vm.getByUuids(uuids);
+        Map<String, Outmigration> existingMap = existing.stream()
+                .collect(Collectors.toMap(i -> i.uuid, i -> i));
+
+        List<Outmigration> toUpdate = new ArrayList<>();
+        for (Outmigration item : data) {
+            Outmigration exist = existingMap.get(item.uuid);
+            if (exist != null) {
+                exist.edit = 1;
+                exist.comment = item.comment;
+                exist.status = item.status;
+                exist.supervisor = item.supervisor;
+                exist.approveDate = item.approveDate;
+                toUpdate.add(exist);
+            }
+        }
+
+        if (!toUpdate.isEmpty()) {
+            vm.add(toUpdate.toArray(new Outmigration[0]));
+        }
+    }
+
+    private void processDeath(Death[] data, ExecutorService executor) {
+        DeathViewModel vm = new ViewModelProvider(this).get(DeathViewModel.class);
+        List<String> uuids = Arrays.stream(data).map(i -> i.uuid).collect(Collectors.toList());
+        List<Death> existing = vm.getByUuids(uuids);
+        Map<String, Death> existingMap = existing.stream()
+                .collect(Collectors.toMap(i -> i.uuid, i -> i));
+
+        List<Death> toUpdate = new ArrayList<>();
+        for (Death item : data) {
+            Death exist = existingMap.get(item.uuid);
+            if (exist != null) {
+                exist.edit = 1;
+                exist.comment = item.comment;
+                exist.status = item.status;
+                exist.supervisor = item.supervisor;
+                exist.approveDate = item.approveDate;
+                toUpdate.add(exist);
+            }
+        }
+
+        if (!toUpdate.isEmpty()) {
+            vm.add(toUpdate.toArray(new Death[0]));
+        }
+    }
+
+    private void processPregnancy(Pregnancy[] data, ExecutorService executor) {
+        PregnancyViewModel vm = new ViewModelProvider(this).get(PregnancyViewModel.class);
+        List<String> uuids = Arrays.stream(data).map(i -> i.uuid).collect(Collectors.toList());
+        List<Pregnancy> existing = vm.getByUuids(uuids);
+        Map<String, Pregnancy> existingMap = existing.stream()
+                .collect(Collectors.toMap(i -> i.uuid, i -> i));
+
+        List<Pregnancy> toUpdate = new ArrayList<>();
+        for (Pregnancy item : data) {
+            Pregnancy exist = existingMap.get(item.uuid);
+            if (exist != null) {
+                exist.comment = item.comment;
+                exist.status = item.status;
+                exist.supervisor = item.supervisor;
+                exist.approveDate = item.approveDate;
+                toUpdate.add(exist);
+            }
+        }
+
+        if (!toUpdate.isEmpty()) {
+            vm.add(toUpdate.toArray(new Pregnancy[0]));
+        }
+    }
+
+    private void processDemographic(Demographic[] data, ExecutorService executor) {
+        DemographicViewModel vm = new ViewModelProvider(this).get(DemographicViewModel.class);
+        List<String> uuids = Arrays.stream(data).map(i -> i.individual_uuid).collect(Collectors.toList());
+        List<Demographic> existing = vm.getByUuids(uuids);
+        Map<String, Demographic> existingMap = existing.stream()
+                .collect(Collectors.toMap(i -> i.individual_uuid, i -> i));
+
+        List<Demographic> toUpdate = new ArrayList<>();
+        for (Demographic item : data) {
+            Demographic exist = existingMap.get(item.individual_uuid);
+            if (exist != null) {
+                exist.comment = item.comment;
+                exist.status = item.status;
+                exist.supervisor = item.supervisor;
+                exist.approveDate = item.approveDate;
+                toUpdate.add(exist);
+            }
+        }
+
+        if (!toUpdate.isEmpty()) {
+            vm.add(toUpdate.toArray(new Demographic[0]));
+        }
+    }
+
+    private void processRelationship(Relationship[] data, ExecutorService executor) {
+        RelationshipViewModel vm = new ViewModelProvider(this).get(RelationshipViewModel.class);
+        List<String> uuids = Arrays.stream(data).map(i -> i.uuid).collect(Collectors.toList());
+        List<Relationship> existing = vm.getByUuids(uuids);
+        Map<String, Relationship> existingMap = existing.stream()
+                .collect(Collectors.toMap(i -> i.uuid, i -> i));
+
+        List<Relationship> toUpdate = new ArrayList<>();
+        for (Relationship item : data) {
+            Relationship exist = existingMap.get(item.uuid);
+            if (exist != null) {
+                exist.comment = item.comment;
+                exist.status = item.status;
+                exist.supervisor = item.supervisor;
+                exist.approveDate = item.approveDate;
+                toUpdate.add(exist);
+            }
+        }
+
+        if (!toUpdate.isEmpty()) {
+            vm.add(toUpdate.toArray(new Relationship[0]));
+        }
+    }
+
+    private void processVaccination(Vaccination[] data, ExecutorService executor) {
+        VaccinationViewModel vm = new ViewModelProvider(this).get(VaccinationViewModel.class);
+        List<String> uuids = Arrays.stream(data).map(i -> i.uuid).collect(Collectors.toList());
+        List<Vaccination> existing = vm.getByUuids(uuids);
+        Map<String, Vaccination> existingMap = existing.stream()
+                .collect(Collectors.toMap(i -> i.uuid, i -> i));
+
+        List<Vaccination> toUpdate = new ArrayList<>();
+        for (Vaccination item : data) {
+            Vaccination exist = existingMap.get(item.uuid);
+            if (exist != null) {
+                exist.comment = item.comment;
+                exist.status = item.status;
+                exist.supervisor = item.supervisor;
+                exist.approveDate = item.approveDate;
+                toUpdate.add(exist);
+            }
+        }
+
+        if (!toUpdate.isEmpty()) {
+            vm.add(toUpdate.toArray(new Vaccination[0]));
+        }
+    }
+
+    private void processHdssSociodemo(HdssSociodemo[] data, ExecutorService executor) {
+        HdssSociodemoViewModel vm = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
+        List<String> uuids = Arrays.stream(data).map(i -> i.uuid).collect(Collectors.toList());
+        List<HdssSociodemo> existing = vm.getByUuids(uuids);
+        Map<String, HdssSociodemo> existingMap = existing.stream()
+                .collect(Collectors.toMap(i -> i.uuid, i -> i));
+
+        List<HdssSociodemo> toUpdate = new ArrayList<>();
+        for (HdssSociodemo item : data) {
+            HdssSociodemo exist = existingMap.get(item.uuid);
+            if (exist != null) {
+                exist.comment = item.comment;
+                exist.status = item.status;
+                exist.supervisor = item.supervisor;
+                exist.approveDate = item.approveDate;
+                toUpdate.add(exist);
+            }
+        }
+
+        if (!toUpdate.isEmpty()) {
+            vm.add(toUpdate.toArray(new HdssSociodemo[0]));
+        }
+    }
+
+    private void processMorbidity(Morbidity[] data, ExecutorService executor) {
+        MorbidityViewModel vm = new ViewModelProvider(this).get(MorbidityViewModel.class);
+        List<String> uuids = Arrays.stream(data).map(i -> i.uuid).collect(Collectors.toList());
+        List<Morbidity> existing = vm.getByUuids(uuids);
+        Map<String, Morbidity> existingMap = existing.stream()
+                .collect(Collectors.toMap(i -> i.uuid, i -> i));
+
+        List<Morbidity> toUpdate = new ArrayList<>();
+        for (Morbidity item : data) {
+            Morbidity exist = existingMap.get(item.uuid);
+            if (exist != null) {
+                exist.comment = item.comment;
+                exist.status = item.status;
+                exist.supervisor = item.supervisor;
+                exist.approveDate = item.approveDate;
+                toUpdate.add(exist);
+            }
+        }
+
+        if (!toUpdate.isEmpty()) {
+            vm.add(toUpdate.toArray(new Morbidity[0]));
+        }
+    }
+
+    private void processPregnancyoutcome(Pregnancyoutcome[] data, ExecutorService executor) {
+        PregnancyoutcomeViewModel vm = new ViewModelProvider(this).get(PregnancyoutcomeViewModel.class);
+        List<String> uuids = Arrays.stream(data).map(i -> i.uuid).collect(Collectors.toList());
+        List<Pregnancyoutcome> existing = vm.getByUuids(uuids);
+        Map<String, Pregnancyoutcome> existingMap = existing.stream()
+                .collect(Collectors.toMap(i -> i.uuid, i -> i));
+
+        List<Pregnancyoutcome> toUpdate = new ArrayList<>();
+        for (Pregnancyoutcome item : data) {
+            Pregnancyoutcome exist = existingMap.get(item.uuid);
+            if (exist != null) {
+                exist.comment = item.comment;
+                exist.status = item.status;
+                exist.supervisor = item.supervisor;
+                exist.approveDate = item.approveDate;
+                toUpdate.add(exist);
+            }
+        }
+
+        if (!toUpdate.isEmpty()) {
+            vm.add(toUpdate.toArray(new Pregnancyoutcome[0]));
+        }
+    }
+
+
+    private void processDuplicate(Duplicate[] data, ExecutorService executor) {
+        DuplicateViewModel vm = new ViewModelProvider(this).get(DuplicateViewModel.class);
+        List<String> uuids = Arrays.stream(data).map(i -> i.uuid).collect(Collectors.toList());
+        List<Duplicate> existing = vm.getByUuids(uuids);
+        Map<String, Duplicate> existingMap = existing.stream()
+                .collect(Collectors.toMap(i -> i.uuid, i -> i));
+
+        List<Duplicate> toUpdate = new ArrayList<>();
+        for (Duplicate item : data) {
+            Duplicate exist = existingMap.get(item.uuid);
+            if (exist != null) {
+                exist.comment = item.comment;
+                exist.status = item.status;
+                exist.supervisor = item.supervisor;
+                exist.approveDate = item.approveDate;
+                toUpdate.add(exist);
+            }
+        }
+
+        if (!toUpdate.isEmpty()) {
+            vm.add(toUpdate.toArray(new Duplicate[0]));
+        }
+    }
+
+    // Step 3: Main download method with sequential processing
     private void startDownloadProcess() {
         if (!isInternetAvailable()) {
             Toast.makeText(this, "No internet connection available", Toast.LENGTH_LONG).show();
             return;
         }
+
         progres.setMessage("Downloading...");
         progres.show();
 
-        final InmigrationViewModel inmigrationViewModel = new ViewModelProvider(RejectionsActivity.this).get(InmigrationViewModel.class);
-        Call<DataWrapper<Inmigration>> c_callable = dao.getImg(authorizationHeader, fw);
-        c_callable.enqueue(new Callback<DataWrapper<Inmigration>>() {
+        // Create list of all download tasks
+        List<DownloadTask<?>> tasks = Arrays.asList(
+                new DownloadTask<>("Inmigration", dao.getImg(authorizationHeader, fw), this::processInmigration),
+                new DownloadTask<>("Outmigration", dao.getOmg(authorizationHeader, fw), this::processOutmigration),
+                new DownloadTask<>("Death", dao.getDth(authorizationHeader, fw), this::processDeath),
+                new DownloadTask<>("Pregnancy", dao.getPreg(authorizationHeader, fw), this::processPregnancy),
+                new DownloadTask<>("Demographic", dao.getDemo(authorizationHeader, fw), this::processDemographic),
+                new DownloadTask<>("Relationship", dao.getRel(authorizationHeader, fw), this::processRelationship),
+                new DownloadTask<>("Vaccination", dao.getVac(authorizationHeader, fw), this::processVaccination),
+                new DownloadTask<>("SES", dao.getSes(authorizationHeader, fw), this::processHdssSociodemo),
+                new DownloadTask<>("Morbidity", dao.getMor(authorizationHeader, fw), this::processMorbidity),
+                new DownloadTask<>("Pregnancy Outcome", dao.getOut(authorizationHeader, fw), this::processPregnancyoutcome),
+                new DownloadTask<>("Duplicate", dao.getDup(authorizationHeader, fw), this::processDuplicate)
+        );
+
+        // Process tasks sequentially
+        processNextTask(tasks, 0);
+    }
+
+    private <T> void processNextTask(List<DownloadTask<?>> tasks, int index) {
+        if (index >= tasks.size()) {
+            // All tasks completed successfully
+            runOnUiThread(() -> {
+                progres.dismiss();
+                Toast.makeText(this, "Download completed successfully", Toast.LENGTH_SHORT).show();
+                refreshActivity();
+            });
+            return;
+        }
+
+        DownloadTask<T> task = (DownloadTask<T>) tasks.get(index);
+        runOnUiThread(() -> progres.setMessage("Downloading " + task.name + "..."));
+
+        task.call.enqueue(new Callback<DataWrapper<T>>() {
             @Override
-            public void onResponse(Call<DataWrapper<Inmigration>> call, Response<DataWrapper<Inmigration>> response) {
+            public void onResponse(Call<DataWrapper<T>> call, Response<DataWrapper<T>> response) {
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.execute(() -> {
                     try {
                         if (response.body() != null && response.body().getData() != null) {
-                            Inmigration[] data = response.body().getData().toArray(new Inmigration[0]);
-                            List<Inmigration> toAdd = new ArrayList<>();
+                            List<T> dataList = response.body().getData();
 
-                            for (Inmigration item : data) {
-                                Inmigration exist = inmigrationViewModel.ins(item.uuid);
-                                if (exist != null) {
-                                    toAdd.add(item); // Only add the existing ones
-                                }
+                            // Check if the list is empty
+                            if (dataList.isEmpty()) {
+                                Log.d("Download", task.name + " - No data to process (empty list)");
+                                // Process next task even if current one has no data
+                                runOnUiThread(() -> processNextTask(tasks, index + 1));
+                                return;
                             }
 
-                            if (!toAdd.isEmpty()) {
-                                inmigrationViewModel.add(toAdd.toArray(new Inmigration[0]));
-                            }
+                            // Convert list to array safely
+                            T[] data = dataList.toArray((T[]) Array.newInstance(
+                                    dataList.get(0).getClass(), 0));
+                            task.processor.accept(data, executor);
 
+                            Log.d("Download", task.name + " processed successfully");
+
+                            // Process next task
+                            runOnUiThread(() -> processNextTask(tasks, index + 1));
                         } else {
-                            Log.e("Error", "Response body or data is null");
+                            Log.e("Error", task.name + " response body or data is null");
+                            handleDownloadError(task.name + " data is empty");
                         }
-                    } catch (ExecutionException | InterruptedException e) {
-                        Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
-                        Thread.currentThread().interrupt();
                     } catch (Exception e) {
-                        Log.e("Error", "Unexpected error: " + e.getMessage(), e);
-                    }
-                });
-
-                // Next Step: Outmigration
-                progres.setMessage("Downloading...");
-                final OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(RejectionsActivity.this).get(OutmigrationViewModel.class);
-                Call<DataWrapper<Outmigration>> c_callable = dao.getOmg(authorizationHeader, fw);
-                c_callable.enqueue(new Callback<DataWrapper<Outmigration>>() {
-                    @Override
-                    public void onResponse(Call<DataWrapper<Outmigration>> call, Response<DataWrapper<Outmigration>> response) {
-                        ExecutorService executor = Executors.newSingleThreadExecutor();
-                        executor.execute(() -> {
-                            try {
-                                if (response.body() != null && response.body().getData() != null) {
-                                    Outmigration[] data = response.body().getData().toArray(new Outmigration[0]);
-                                    List<Outmigration> toAdd = new ArrayList<>();
-
-                                    for (Outmigration item : data) {
-                                        Outmigration exist = outmigrationViewModel.ins(item.uuid);
-                                        if (exist != null) {
-                                            item.edit = 1;
-                                            toAdd.add(item);
-                                        }
-                                    }
-
-                                    if (!toAdd.isEmpty()) {
-                                        outmigrationViewModel.add(toAdd.toArray(new Outmigration[0]));
-                                    }
-
-                                } else {
-                                    Log.e("Error", "Response body or data is null");
-                                }
-                            } catch (ExecutionException | InterruptedException e) {
-                                Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
-                                Thread.currentThread().interrupt();
-                            } catch (Exception e) {
-                                Log.e("Error", "Unexpected error: " + e.getMessage(), e);
-                            }
-                        });
-
-                        // Next Step: Death
-                        progres.setMessage("Downloading...");
-                        final DeathViewModel deathViewModel = new ViewModelProvider(RejectionsActivity.this).get(DeathViewModel.class);
-                        Call<DataWrapper<Death>> c_callable = dao.getDth(authorizationHeader, fw);
-                        c_callable.enqueue(new Callback<DataWrapper<Death>>() {
-                            @Override
-                            public void onResponse(Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
-                                ExecutorService executor = Executors.newSingleThreadExecutor();
-                                executor.execute(() -> {
-                                    try {
-                                        if (response.body() != null && response.body().getData() != null) {
-                                            Death[] data = response.body().getData().toArray(new Death[0]);
-                                            List<Death> toAdd = new ArrayList<>();
-
-                                            for (Death item : data) {
-                                                Death exist = deathViewModel.ins(item.uuid);
-                                                if (exist != null) {
-                                                    item.edit = 1;
-                                                    toAdd.add(item);
-                                                }
-                                            }
-
-                                            if (!toAdd.isEmpty()) {
-                                                deathViewModel.add(toAdd.toArray(new Death[0]));
-                                            }
-
-                                        } else {
-                                            Log.e("Error", "Response body or data is null");
-                                        }
-                                    } catch (ExecutionException | InterruptedException e) {
-                                        Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
-                                        Thread.currentThread().interrupt();
-                                    } catch (Exception e) {
-                                        Log.e("Error", "Unexpected error: " + e.getMessage(), e);
-                                    }
-                                });
-
-                                // Next Step: Pregnancy
-                                progres.setMessage("Downloading...");
-                                final PregnancyViewModel pregnancyViewModel = new ViewModelProvider(RejectionsActivity.this).get(PregnancyViewModel.class);
-                                Call<DataWrapper<Pregnancy>> c_callable = dao.getPreg(authorizationHeader, fw);
-                                c_callable.enqueue(new Callback<DataWrapper<Pregnancy>>() {
-                                    @Override
-                                    public void onResponse(Call<DataWrapper<Pregnancy>> call, Response<DataWrapper<Pregnancy>> response) {
-                                        ExecutorService executor = Executors.newSingleThreadExecutor();
-                                        executor.execute(() -> {
-                                            try {
-                                                if (response.body() != null && response.body().getData() != null) {
-                                                    Pregnancy[] data = response.body().getData().toArray(new Pregnancy[0]);
-                                                    List<Pregnancy> toAdd = new ArrayList<>();
-
-                                                    for (Pregnancy item : data) {
-                                                        Pregnancy exist = pregnancyViewModel.ins(item.uuid);
-                                                        if (exist != null) {
-                                                            item.extra = exist.extra;
-                                                            item.outcome = exist.outcome;
-                                                            item.id = exist.id;
-                                                            item.complete = 0;
-                                                            item.pregnancyOrder = exist.pregnancyOrder;
-                                                            toAdd.add(item);
-                                                        }
-                                                    }
-
-                                                    if (!toAdd.isEmpty()) {
-                                                        pregnancyViewModel.add(toAdd.toArray(new Pregnancy[0]));
-                                                    }
-
-                                                } else {
-                                                    Log.e("Error", "Response body or data is null");
-                                                }
-                                            } catch (ExecutionException | InterruptedException e) {
-                                                Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
-                                                Thread.currentThread().interrupt();
-                                            } catch (Exception e) {
-                                                Log.e("Error", "Unexpected error: " + e.getMessage(), e);
-                                            }
-                                        });
-
-
-                                        // Next Step: Demographic
-                                        progres.setMessage("Downloading...");
-                                        final DemographicViewModel demographicViewModel = new ViewModelProvider(RejectionsActivity.this).get(DemographicViewModel.class);
-                                        Call<DataWrapper<Demographic>> c_callable = dao.getDemo(authorizationHeader, fw);
-                                        c_callable.enqueue(new Callback<DataWrapper<Demographic>>() {
-                                            @Override
-                                            public void onResponse(Call<DataWrapper<Demographic>> call, Response<DataWrapper<Demographic>> response) {
-                                                ExecutorService executor = Executors.newSingleThreadExecutor();
-                                                executor.execute(() -> {
-                                                    try {
-                                                        if (response.body() != null && response.body().getData() != null) {
-                                                            Demographic[] data = response.body().getData().toArray(new Demographic[0]);
-                                                            List<Demographic> toAdd = new ArrayList<>();
-
-                                                            for (Demographic item : data) {
-                                                                Demographic exist = demographicViewModel.ins(item.individual_uuid);
-                                                                if (exist != null) {
-                                                                    toAdd.add(item);
-                                                                }
-                                                            }
-
-                                                            if (!toAdd.isEmpty()) {
-                                                                demographicViewModel.add(toAdd.toArray(new Demographic[0]));
-                                                            }
-
-                                                        } else {
-                                                            Log.e("Error", "Response body or data is null");
-                                                        }
-                                                    } catch (ExecutionException | InterruptedException e) {
-                                                        Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
-                                                        Thread.currentThread().interrupt();
-                                                    } catch (Exception e) {
-                                                        Log.e("Error", "Unexpected error: " + e.getMessage(), e);
-                                                    }
-                                                });
-
-
-                                                // Next Step: Relationship
-                                                progres.setMessage("Downloading Relationship...");
-                                                final RelationshipViewModel relationshipViewModel = new ViewModelProvider(RejectionsActivity.this).get(RelationshipViewModel.class);
-                                                Call<DataWrapper<Relationship>> c_callable = dao.getRel(authorizationHeader, fw);
-                                                c_callable.enqueue(new Callback<DataWrapper<Relationship>>() {
-                                                    @Override
-                                                    public void onResponse(Call<DataWrapper<Relationship>> call, Response<DataWrapper<Relationship>> response) {
-                                                        ExecutorService executor = Executors.newSingleThreadExecutor();
-                                                        executor.execute(() -> {
-                                                            try {
-                                                                if (response.body() != null && response.body().getData() != null) {
-                                                                    Relationship[] data = response.body().getData().toArray(new Relationship[0]);
-                                                                    List<Relationship> toAdd = new ArrayList<>();
-
-                                                                    for (Relationship item : data) {
-                                                                        Relationship exist = relationshipViewModel.ins(item.uuid);
-                                                                        Log.d("Relationship", "Approval Date1: "+ item.approveDate);
-                                                                        if (exist != null) {
-                                                                            toAdd.add(item);
-                                                                            Log.d("Relationship", "Approval Date: "+ item.approveDate);
-                                                                        }
-                                                                    }
-
-                                                                    if (!toAdd.isEmpty()) {
-                                                                        relationshipViewModel.add(toAdd.toArray(new Relationship[0]));
-                                                                    }
-
-                                                                } else {
-                                                                    Log.e("Error", "Response body or data is null");
-                                                                }
-                                                            } catch (ExecutionException | InterruptedException e) {
-                                                                Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
-                                                                Thread.currentThread().interrupt();
-                                                            } catch (Exception e) {
-                                                                Log.e("Error", "Unexpected error: " + e.getMessage(), e);
-                                                            }
-                                                        });
-
-                                                        // Next Step: Vaccination
-                                                        progres.setMessage("Downloading...");
-                                                        final VaccinationViewModel vaccinationViewModel = new ViewModelProvider(RejectionsActivity.this).get(VaccinationViewModel.class);
-                                                        Call<DataWrapper<Vaccination>> c_callable = dao.getVac(authorizationHeader, fw);
-                                                        c_callable.enqueue(new Callback<DataWrapper<Vaccination>>() {
-                                                        @Override
-                                                        public void onResponse(Call<DataWrapper<Vaccination>> call, Response<DataWrapper<Vaccination>> response) {
-                                                            ExecutorService executor = Executors.newSingleThreadExecutor();
-                                                            executor.execute(() -> {
-                                                                try {
-                                                                    if (response.body() != null && response.body().getData() != null) {
-                                                                        Vaccination[] data = response.body().getData().toArray(new Vaccination[0]);
-                                                                        List<Vaccination> toAdd = new ArrayList<>();
-
-                                                                        for (Vaccination item : data) {
-                                                                            Vaccination exist = vaccinationViewModel.ins(item.uuid);
-                                                                            if (exist != null) {
-                                                                                toAdd.add(item);
-                                                                            }
-                                                                        }
-
-                                                                        if (!toAdd.isEmpty()) {
-                                                                            vaccinationViewModel.add(toAdd.toArray(new Vaccination[0]));
-                                                                        }
-
-                                                                    } else {
-                                                                        Log.e("Error", "Response body or data is null");
-                                                                    }
-                                                                } catch (ExecutionException | InterruptedException e) {
-                                                                    Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
-                                                                    Thread.currentThread().interrupt();
-                                                                } catch (Exception e) {
-                                                                    Log.e("Error", "Unexpected error: " + e.getMessage(), e);
-                                                                }
-                                                            });
-
-                                                            // Next Step: Ses
-                                                            progres.setMessage("Downloading...");
-                                                            final HdssSociodemoViewModel hdssSociodemoViewModel = new ViewModelProvider(RejectionsActivity.this).get(HdssSociodemoViewModel.class);
-                                                            Call<DataWrapper<HdssSociodemo>> c_callable = dao.getSes(authorizationHeader, fw);
-                                                            c_callable.enqueue(new Callback<DataWrapper<HdssSociodemo>>() {
-                                                                @Override
-                                                                public void onResponse(Call<DataWrapper<HdssSociodemo>> call, Response<DataWrapper<HdssSociodemo>> response) {
-                                                                    ExecutorService executor = Executors.newSingleThreadExecutor();
-                                                                    executor.execute(() -> {
-                                                                        try {
-                                                                            if (response.body() != null && response.body().getData() != null) {
-                                                                                HdssSociodemo[] data = response.body().getData().toArray(new HdssSociodemo[0]);
-                                                                                List<HdssSociodemo> toAdd = new ArrayList<>();
-
-                                                                                for (HdssSociodemo item : data) {
-                                                                                    HdssSociodemo exist = hdssSociodemoViewModel.ins(item.uuid);
-                                                                                    if (exist != null) {
-                                                                                        toAdd.add(item);
-                                                                                    }
-                                                                                }
-
-                                                                                if (!toAdd.isEmpty()) {
-                                                                                    hdssSociodemoViewModel.add(toAdd.toArray(new HdssSociodemo[0]));
-                                                                                }
-
-                                                                            } else {
-                                                                                Log.e("Error", "Response body or data is null");
-                                                                            }
-                                                                        } catch (ExecutionException | InterruptedException e) {
-                                                                            Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
-                                                                            Thread.currentThread().interrupt();
-                                                                        } catch (Exception e) {
-                                                                            Log.e("Error", "Unexpected error: " + e.getMessage(), e);
-                                                                        }
-                                                                    });
-
-                                                                    progres.setMessage("Downloading...");
-                                                                    final MorbidityViewModel morbidityViewModel = new ViewModelProvider(RejectionsActivity.this).get(MorbidityViewModel.class);
-                                                                    Call<DataWrapper<Morbidity>> c_callable = dao.getMor(authorizationHeader, fw);
-                                                                    c_callable.enqueue(new Callback<DataWrapper<Morbidity>>() {
-                                                                        @Override
-                                                                        public void onResponse(Call<DataWrapper<Morbidity>> call, Response<DataWrapper<Morbidity>> response) {
-                                                                            ExecutorService executor = Executors.newSingleThreadExecutor();
-                                                                            executor.execute(() -> {
-                                                                                try {
-                                                                                    if (response.body() != null && response.body().getData() != null) {
-                                                                                        Morbidity[] data = response.body().getData().toArray(new Morbidity[0]);
-                                                                                        List<Morbidity> toAdd = new ArrayList<>();
-
-                                                                                        for (Morbidity item : data) {
-                                                                                            Morbidity exist = morbidityViewModel.ins(item.uuid);
-                                                                                            if (exist != null) {
-                                                                                                toAdd.add(item);
-                                                                                            }
-                                                                                        }
-
-                                                                                        if (!toAdd.isEmpty()) {
-                                                                                            morbidityViewModel.add(toAdd.toArray(new Morbidity[0]));
-                                                                                        }
-
-                                                                                    } else {
-                                                                                        Log.e("Error", "Response body or data is null");
-                                                                                    }
-                                                                                } catch (ExecutionException | InterruptedException e) {
-                                                                                    Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
-                                                                                    Thread.currentThread().interrupt();
-                                                                                } catch (Exception e) {
-                                                                                    Log.e("Error", "Unexpected error: " + e.getMessage(), e);
-                                                                                }
-                                                                            });
-
-                                                        // Final Step: Pregnancy Outcome
-                                                        progres.setMessage("Downloading...");
-                                                        final PregnancyoutcomeViewModel pregout = new ViewModelProvider(RejectionsActivity.this).get(PregnancyoutcomeViewModel.class);
-                                                        Call<DataWrapper<Pregnancyoutcome>> c_callable = dao.getOut(authorizationHeader, fw);
-                                                        c_callable.enqueue(new Callback<DataWrapper<Pregnancyoutcome>>() {
-                                                            @Override
-                                                            public void onResponse(Call<DataWrapper<Pregnancyoutcome>> call, Response<DataWrapper<Pregnancyoutcome>> response) {
-                                                                ExecutorService executor = Executors.newSingleThreadExecutor();
-                                                                executor.execute(() -> {
-                                                                    try {
-                                                                        if (response.body() != null && response.body().getData() != null) {
-                                                                            Pregnancyoutcome[] data = response.body().getData().toArray(new Pregnancyoutcome[0]);
-                                                                            List<Pregnancyoutcome> toAdd = new ArrayList<>();
-
-                                                                            for (Pregnancyoutcome item : data) {
-                                                                                Pregnancyoutcome exist = pregout.ins(item.uuid);
-                                                                                if (exist != null) {
-                                                                                    item.extra = exist.extra;
-                                                                                    item.location = exist.location;
-                                                                                    item.id = exist.id;
-                                                                                    item.complete = 0;
-                                                                                    toAdd.add(item);
-                                                                                }
-                                                                            }
-
-                                                                            if (!toAdd.isEmpty()) {
-                                                                                pregout.add(toAdd.toArray(new Pregnancyoutcome[0]));
-                                                                            }
-
-                                                                        } else {
-                                                                            Log.e("Error", "Response body or data is null");
-                                                                        }
-                                                                    } catch (ExecutionException | InterruptedException e) {
-                                                                        Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
-                                                                        Thread.currentThread().interrupt();
-                                                                    } catch (Exception e) {
-                                                                        Log.e("Error", "Unexpected error: " + e.getMessage(), e);
-                                                                    }
-                                                                });
-
-                                                                progres.dismiss();
-                                                                refreshActivity();
-                                                            }
-
-                                                            @Override
-                                                            public void onFailure(Call<DataWrapper<Pregnancyoutcome>> call, Throwable t) {
-                                                                progres.dismiss();
-                                                                Toast.makeText(RejectionsActivity.this, "Outcome Download Error", Toast.LENGTH_LONG).show();
-                                                            }
-                                                        });
-                                                    }
-
-                                                                        @Override
-                                                                        public void onFailure(Call<DataWrapper<Morbidity>> call, Throwable t) {
-                                                                            progres.dismiss();
-                                                                            Toast.makeText(RejectionsActivity.this, "Morbidity Download Error", Toast.LENGTH_LONG).show();
-                                                                        }
-                                                                    });
-                                                                }
-
-                                                                @Override
-                                                                public void onFailure(Call<DataWrapper<HdssSociodemo>> call, Throwable t) {
-                                                                    progres.dismiss();
-                                                                    Toast.makeText(RejectionsActivity.this, "SES Download Error", Toast.LENGTH_LONG).show();
-                                                                }
-                                                            });
-                                                        }
-
-                                                            @Override
-                                                            public void onFailure(Call<DataWrapper<Vaccination>> call, Throwable t) {
-                                                                progres.dismiss();
-                                                                Toast.makeText(RejectionsActivity.this, "Vac Download Error", Toast.LENGTH_LONG).show();
-                                                            }
-                                                        });
-                                                    }
-
-                                                    @Override
-                                                    public void onFailure(Call<DataWrapper<Relationship>> call, Throwable t) {
-                                                        progres.dismiss();
-                                                        Toast.makeText(RejectionsActivity.this, "Rel Download Error", Toast.LENGTH_LONG).show();
-                                                    }
-                                                });
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<DataWrapper<Demographic>> call, Throwable t) {
-                                                progres.dismiss();
-                                                Toast.makeText(RejectionsActivity.this, "Dem Download Error", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<DataWrapper<Pregnancy>> call, Throwable t) {
-                                        progres.dismiss();
-                                        Toast.makeText(RejectionsActivity.this, "Preg Download Error", Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onFailure(Call<DataWrapper<Death>> call, Throwable t) {
-                                progres.dismiss();
-                                Toast.makeText(RejectionsActivity.this, "Death Download Error", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void onFailure(Call<DataWrapper<Outmigration>> call, Throwable t) {
-                        progres.dismiss();
-                        Toast.makeText(RejectionsActivity.this, "Omg Download Error", Toast.LENGTH_LONG).show();
+                        Log.e("Error", task.name + " processing error: " + e.getMessage(), e);
+                        handleDownloadError(task.name + " processing failed");
+                    } finally {
+                        executor.shutdown();
                     }
                 });
             }
 
             @Override
-            public void onFailure(Call<DataWrapper<Inmigration>> call, Throwable t) {
-                progres.dismiss();
-                Toast.makeText(RejectionsActivity.this, "Img Download Error", Toast.LENGTH_LONG).show();
+            public void onFailure(Call<DataWrapper<T>> call, Throwable t) {
+                handleDownloadError(task.name + " download failed: " + t.getMessage());
             }
         });
     }
+
+    private void handleDownloadError(String message) {
+        runOnUiThread(() -> {
+            progres.dismiss();
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+            Log.e("DownloadError", message);
+        });
+    }
+
+
+//    private void startDownloadProcess() {
+//        if (!isInternetAvailable()) {
+//            Toast.makeText(this, "No internet connection available", Toast.LENGTH_LONG).show();
+//            return;
+//        }
+//        progres.setMessage("Downloading...");
+//        progres.show();
+//
+//        final InmigrationViewModel inmigrationViewModel = new ViewModelProvider(RejectionsActivity.this).get(InmigrationViewModel.class);
+//        Call<DataWrapper<Inmigration>> c_callable = dao.getImg(authorizationHeader, fw);
+//        c_callable.enqueue(new Callback<DataWrapper<Inmigration>>() {
+//            @Override
+//            public void onResponse(Call<DataWrapper<Inmigration>> call, Response<DataWrapper<Inmigration>> response) {
+//                ExecutorService executor = Executors.newSingleThreadExecutor();
+//                executor.execute(() -> {
+//                    try {
+//                        if (response.body() != null && response.body().getData() != null) {
+//                            Inmigration[] data = response.body().getData().toArray(new Inmigration[0]);
+//                            List<Inmigration> toAdd = new ArrayList<>();
+//
+//                            for (Inmigration item : data) {
+//                                Inmigration exist = inmigrationViewModel.ins(item.uuid);
+//                                if (exist != null) {
+//                                    exist.comment = item.comment;
+//                                    exist.status = item.status;
+//                                    exist.supervisor = item.supervisor;
+//                                    exist.approveDate = item.approveDate;
+//                                    toAdd.add(exist); // Only add the existing ones
+//                                }
+//                            }
+//
+//                            if (!toAdd.isEmpty()) {
+//                                inmigrationViewModel.add(toAdd.toArray(new Inmigration[0]));
+//                            }
+//
+//                        } else {
+//                            Log.e("Error", "Response body or data is null");
+//                        }
+//                    } catch (ExecutionException | InterruptedException e) {
+//                        Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+//                        Thread.currentThread().interrupt();
+//                    } catch (Exception e) {
+//                        Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+//                    }
+//                });
+//
+//                // Next Step: Outmigration
+//                progres.setMessage("Downloading...");
+//                final OutmigrationViewModel outmigrationViewModel = new ViewModelProvider(RejectionsActivity.this).get(OutmigrationViewModel.class);
+//                Call<DataWrapper<Outmigration>> c_callable = dao.getOmg(authorizationHeader, fw);
+//                c_callable.enqueue(new Callback<DataWrapper<Outmigration>>() {
+//                    @Override
+//                    public void onResponse(Call<DataWrapper<Outmigration>> call, Response<DataWrapper<Outmigration>> response) {
+//                        ExecutorService executor = Executors.newSingleThreadExecutor();
+//                        executor.execute(() -> {
+//                            try {
+//                                if (response.body() != null && response.body().getData() != null) {
+//                                    Outmigration[] data = response.body().getData().toArray(new Outmigration[0]);
+//                                    List<Outmigration> toAdd = new ArrayList<>();
+//
+//                                    for (Outmigration item : data) {
+//                                        Outmigration exist = outmigrationViewModel.ins(item.uuid);
+//                                        if (exist != null) {
+//                                            exist.edit = 1;
+//                                            exist.comment = item.comment;
+//                                            exist.status = item.status;
+//                                            exist.supervisor = item.supervisor;
+//                                            exist.approveDate = item.approveDate;
+//                                            toAdd.add(exist);
+//                                        }
+//                                    }
+//
+//                                    if (!toAdd.isEmpty()) {
+//                                        outmigrationViewModel.add(toAdd.toArray(new Outmigration[0]));
+//                                    }
+//
+//                                } else {
+//                                    Log.e("Error", "Response body or data is null");
+//                                }
+//                            } catch (ExecutionException | InterruptedException e) {
+//                                Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+//                                Thread.currentThread().interrupt();
+//                            } catch (Exception e) {
+//                                Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+//                            }
+//                        });
+//
+//                        // Next Step: Death
+//                        progres.setMessage("Downloading...");
+//                        final DeathViewModel deathViewModel = new ViewModelProvider(RejectionsActivity.this).get(DeathViewModel.class);
+//                        Call<DataWrapper<Death>> c_callable = dao.getDth(authorizationHeader, fw);
+//                        c_callable.enqueue(new Callback<DataWrapper<Death>>() {
+//                            @Override
+//                            public void onResponse(Call<DataWrapper<Death>> call, Response<DataWrapper<Death>> response) {
+//                                ExecutorService executor = Executors.newSingleThreadExecutor();
+//                                executor.execute(() -> {
+//                                    try {
+//                                        if (response.body() != null && response.body().getData() != null) {
+//                                            Death[] data = response.body().getData().toArray(new Death[0]);
+//                                            List<Death> toAdd = new ArrayList<>();
+//
+//                                            for (Death item : data) {
+//                                                Death exist = deathViewModel.ins(item.uuid);
+//                                                if (exist != null) {
+//                                                    exist.edit = 1;
+//                                                    exist.comment = item.comment;
+//                                                    exist.status = item.status;
+//                                                    exist.supervisor = item.supervisor;
+//                                                    exist.approveDate = item.approveDate;
+//
+//                                                    toAdd.add(exist);
+//                                                }
+//                                            }
+//
+//                                            if (!toAdd.isEmpty()) {
+//                                                deathViewModel.add(toAdd.toArray(new Death[0]));
+//                                            }
+//
+//                                        } else {
+//                                            Log.e("Error", "Response body or data is null");
+//                                        }
+//                                    } catch (ExecutionException | InterruptedException e) {
+//                                        Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+//                                        Thread.currentThread().interrupt();
+//                                    } catch (Exception e) {
+//                                        Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+//                                    }
+//                                });
+//
+//                                // Next Step: Pregnancy
+//                                progres.setMessage("Downloading...");
+//                                final PregnancyViewModel pregnancyViewModel = new ViewModelProvider(RejectionsActivity.this).get(PregnancyViewModel.class);
+//                                Call<DataWrapper<Pregnancy>> c_callable = dao.getPreg(authorizationHeader, fw);
+//                                c_callable.enqueue(new Callback<DataWrapper<Pregnancy>>() {
+//                                    @Override
+//                                    public void onResponse(Call<DataWrapper<Pregnancy>> call, Response<DataWrapper<Pregnancy>> response) {
+//                                        ExecutorService executor = Executors.newSingleThreadExecutor();
+//                                        executor.execute(() -> {
+//                                            try {
+//                                                if (response.body() != null && response.body().getData() != null) {
+//                                                    Pregnancy[] data = response.body().getData().toArray(new Pregnancy[0]);
+//                                                    List<Pregnancy> toAdd = new ArrayList<>();
+//
+//                                                    for (Pregnancy item : data) {
+//                                                        Pregnancy exist = pregnancyViewModel.ins(item.uuid);
+//                                                        if (exist != null) {
+//                                                            exist.comment = item.comment;
+//                                                            exist.status = item.status;
+//                                                            exist.supervisor = item.supervisor;
+//                                                            exist.approveDate = item.approveDate;
+//                                                            toAdd.add(exist);
+//                                                        }
+//                                                    }
+//
+//                                                    if (!toAdd.isEmpty()) {
+//                                                        pregnancyViewModel.add(toAdd.toArray(new Pregnancy[0]));
+//                                                    }
+//
+//                                                } else {
+//                                                    Log.e("Error", "Response body or data is null");
+//                                                }
+//                                            } catch (ExecutionException | InterruptedException e) {
+//                                                Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+//                                                Thread.currentThread().interrupt();
+//                                            } catch (Exception e) {
+//                                                Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+//                                            }
+//                                        });
+//
+//
+//                                        // Next Step: Demographic
+//                                        progres.setMessage("Downloading...");
+//                                        final DemographicViewModel demographicViewModel = new ViewModelProvider(RejectionsActivity.this).get(DemographicViewModel.class);
+//                                        Call<DataWrapper<Demographic>> c_callable = dao.getDemo(authorizationHeader, fw);
+//                                        c_callable.enqueue(new Callback<DataWrapper<Demographic>>() {
+//                                            @Override
+//                                            public void onResponse(Call<DataWrapper<Demographic>> call, Response<DataWrapper<Demographic>> response) {
+//                                                ExecutorService executor = Executors.newSingleThreadExecutor();
+//                                                executor.execute(() -> {
+//                                                    try {
+//                                                        if (response.body() != null && response.body().getData() != null) {
+//                                                            Demographic[] data = response.body().getData().toArray(new Demographic[0]);
+//                                                            List<Demographic> toAdd = new ArrayList<>();
+//
+//                                                            for (Demographic item : data) {
+//                                                                Demographic exist = demographicViewModel.ins(item.individual_uuid);
+//                                                                if (exist != null) {
+//                                                                    exist.comment = item.comment;
+//                                                                    exist.status = item.status;
+//                                                                    exist.supervisor = item.supervisor;
+//                                                                    exist.approveDate = item.approveDate;
+//                                                                    toAdd.add(exist);
+//                                                                }
+//                                                            }
+//
+//                                                            if (!toAdd.isEmpty()) {
+//                                                                demographicViewModel.add(toAdd.toArray(new Demographic[0]));
+//                                                            }
+//
+//                                                        } else {
+//                                                            Log.e("Error", "Response body or data is null");
+//                                                        }
+//                                                    } catch (ExecutionException | InterruptedException e) {
+//                                                        Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+//                                                        Thread.currentThread().interrupt();
+//                                                    } catch (Exception e) {
+//                                                        Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+//                                                    }
+//                                                });
+//
+//
+//                                                // Next Step: Relationship
+//                                                progres.setMessage("Downloading Relationship...");
+//                                                final RelationshipViewModel relationshipViewModel = new ViewModelProvider(RejectionsActivity.this).get(RelationshipViewModel.class);
+//                                                Call<DataWrapper<Relationship>> c_callable = dao.getRel(authorizationHeader, fw);
+//                                                c_callable.enqueue(new Callback<DataWrapper<Relationship>>() {
+//                                                    @Override
+//                                                    public void onResponse(Call<DataWrapper<Relationship>> call, Response<DataWrapper<Relationship>> response) {
+//                                                        ExecutorService executor = Executors.newSingleThreadExecutor();
+//                                                        executor.execute(() -> {
+//                                                            try {
+//                                                                if (response.body() != null && response.body().getData() != null) {
+//                                                                    Relationship[] data = response.body().getData().toArray(new Relationship[0]);
+//                                                                    List<Relationship> toAdd = new ArrayList<>();
+//
+//                                                                    for (Relationship item : data) {
+//                                                                        Relationship exist = relationshipViewModel.ins(item.uuid);
+//                                                                        Log.d("Relationship", "Approval Date1: "+ item.approveDate);
+//                                                                        if (exist != null) {
+//                                                                            exist.comment = item.comment;
+//                                                                            exist.status = item.status;
+//                                                                            exist.supervisor = item.supervisor;
+//                                                                            exist.approveDate = item.approveDate;
+//                                                                            toAdd.add(exist);
+//                                                                            Log.d("Relationship", "Approval Date: "+ item.approveDate);
+//                                                                        }
+//                                                                    }
+//
+//                                                                    if (!toAdd.isEmpty()) {
+//                                                                        relationshipViewModel.add(toAdd.toArray(new Relationship[0]));
+//                                                                    }
+//
+//                                                                } else {
+//                                                                    Log.e("Error", "Response body or data is null");
+//                                                                }
+//                                                            } catch (ExecutionException | InterruptedException e) {
+//                                                                Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+//                                                                Thread.currentThread().interrupt();
+//                                                            } catch (Exception e) {
+//                                                                Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+//                                                            }
+//                                                        });
+//
+//                                                        // Next Step: Vaccination
+//                                                        progres.setMessage("Downloading...");
+//                                                        final VaccinationViewModel vaccinationViewModel = new ViewModelProvider(RejectionsActivity.this).get(VaccinationViewModel.class);
+//                                                        Call<DataWrapper<Vaccination>> c_callable = dao.getVac(authorizationHeader, fw);
+//                                                        c_callable.enqueue(new Callback<DataWrapper<Vaccination>>() {
+//                                                        @Override
+//                                                        public void onResponse(Call<DataWrapper<Vaccination>> call, Response<DataWrapper<Vaccination>> response) {
+//                                                            ExecutorService executor = Executors.newSingleThreadExecutor();
+//                                                            executor.execute(() -> {
+//                                                                try {
+//                                                                    if (response.body() != null && response.body().getData() != null) {
+//                                                                        Vaccination[] data = response.body().getData().toArray(new Vaccination[0]);
+//                                                                        List<Vaccination> toAdd = new ArrayList<>();
+//
+//                                                                        for (Vaccination item : data) {
+//                                                                            Vaccination exist = vaccinationViewModel.ins(item.uuid);
+//                                                                            if (exist != null) {
+//                                                                                exist.comment = item.comment;
+//                                                                                exist.status = item.status;
+//                                                                                exist.supervisor = item.supervisor;
+//                                                                                exist.approveDate = item.approveDate;
+//                                                                                toAdd.add(exist);
+//                                                                            }
+//                                                                        }
+//
+//                                                                        if (!toAdd.isEmpty()) {
+//                                                                            vaccinationViewModel.add(toAdd.toArray(new Vaccination[0]));
+//                                                                        }
+//
+//                                                                    } else {
+//                                                                        Log.e("Error", "Response body or data is null");
+//                                                                    }
+//                                                                } catch (ExecutionException | InterruptedException e) {
+//                                                                    Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+//                                                                    Thread.currentThread().interrupt();
+//                                                                } catch (Exception e) {
+//                                                                    Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+//                                                                }
+//                                                            });
+//
+//                                                            // Next Step: Ses
+//                                                            progres.setMessage("Downloading...");
+//                                                            final HdssSociodemoViewModel hdssSociodemoViewModel = new ViewModelProvider(RejectionsActivity.this).get(HdssSociodemoViewModel.class);
+//                                                            Call<DataWrapper<HdssSociodemo>> c_callable = dao.getSes(authorizationHeader, fw);
+//                                                            c_callable.enqueue(new Callback<DataWrapper<HdssSociodemo>>() {
+//                                                                @Override
+//                                                                public void onResponse(Call<DataWrapper<HdssSociodemo>> call, Response<DataWrapper<HdssSociodemo>> response) {
+//                                                                    ExecutorService executor = Executors.newSingleThreadExecutor();
+//                                                                    executor.execute(() -> {
+//                                                                        try {
+//                                                                            if (response.body() != null && response.body().getData() != null) {
+//                                                                                HdssSociodemo[] data = response.body().getData().toArray(new HdssSociodemo[0]);
+//                                                                                List<HdssSociodemo> toAdd = new ArrayList<>();
+//
+//                                                                                for (HdssSociodemo item : data) {
+//                                                                                    HdssSociodemo exist = hdssSociodemoViewModel.ins(item.uuid);
+//                                                                                    if (exist != null) {
+//                                                                                        exist.comment = item.comment;
+//                                                                                        exist.status = item.status;
+//                                                                                        exist.supervisor = item.supervisor;
+//                                                                                        exist.approveDate = item.approveDate;
+//                                                                                        toAdd.add(exist);
+//                                                                                    }
+//                                                                                }
+//
+//                                                                                if (!toAdd.isEmpty()) {
+//                                                                                    hdssSociodemoViewModel.add(toAdd.toArray(new HdssSociodemo[0]));
+//                                                                                }
+//
+//                                                                            } else {
+//                                                                                Log.e("Error", "Response body or data is null");
+//                                                                            }
+//                                                                        } catch (ExecutionException | InterruptedException e) {
+//                                                                            Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+//                                                                            Thread.currentThread().interrupt();
+//                                                                        } catch (Exception e) {
+//                                                                            Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+//                                                                        }
+//                                                                    });
+//
+//                                                                    progres.setMessage("Downloading...");
+//                                                                    final MorbidityViewModel morbidityViewModel = new ViewModelProvider(RejectionsActivity.this).get(MorbidityViewModel.class);
+//                                                                    Call<DataWrapper<Morbidity>> c_callable = dao.getMor(authorizationHeader, fw);
+//                                                                    c_callable.enqueue(new Callback<DataWrapper<Morbidity>>() {
+//                                                                        @Override
+//                                                                        public void onResponse(Call<DataWrapper<Morbidity>> call, Response<DataWrapper<Morbidity>> response) {
+//                                                                            ExecutorService executor = Executors.newSingleThreadExecutor();
+//                                                                            executor.execute(() -> {
+//                                                                                try {
+//                                                                                    if (response.body() != null && response.body().getData() != null) {
+//                                                                                        Morbidity[] data = response.body().getData().toArray(new Morbidity[0]);
+//                                                                                        List<Morbidity> toAdd = new ArrayList<>();
+//
+//                                                                                        for (Morbidity item : data) {
+//                                                                                            Morbidity exist = morbidityViewModel.ins(item.uuid);
+//                                                                                            if (exist != null) {
+//                                                                                                exist.comment = item.comment;
+//                                                                                                exist.status = item.status;
+//                                                                                                exist.supervisor = item.supervisor;
+//                                                                                                exist.approveDate = item.approveDate;
+//                                                                                                toAdd.add(exist);
+//                                                                                            }
+//                                                                                        }
+//
+//                                                                                        if (!toAdd.isEmpty()) {
+//                                                                                            morbidityViewModel.add(toAdd.toArray(new Morbidity[0]));
+//                                                                                        }
+//
+//                                                                                    } else {
+//                                                                                        Log.e("Error", "Response body or data is null");
+//                                                                                    }
+//                                                                                } catch (ExecutionException | InterruptedException e) {
+//                                                                                    Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+//                                                                                    Thread.currentThread().interrupt();
+//                                                                                } catch (Exception e) {
+//                                                                                    Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+//                                                                                }
+//                                                                            });
+//
+//                                                        // Final Step: Pregnancy Outcome
+//                                                        progres.setMessage("Downloading...");
+//                                                        final PregnancyoutcomeViewModel pregout = new ViewModelProvider(RejectionsActivity.this).get(PregnancyoutcomeViewModel.class);
+//                                                        Call<DataWrapper<Pregnancyoutcome>> c_callable = dao.getOut(authorizationHeader, fw);
+//                                                        c_callable.enqueue(new Callback<DataWrapper<Pregnancyoutcome>>() {
+//                                                            @Override
+//                                                            public void onResponse(Call<DataWrapper<Pregnancyoutcome>> call, Response<DataWrapper<Pregnancyoutcome>> response) {
+//                                                                ExecutorService executor = Executors.newSingleThreadExecutor();
+//                                                                executor.execute(() -> {
+//                                                                    try {
+//                                                                        if (response.body() != null && response.body().getData() != null) {
+//                                                                            Pregnancyoutcome[] data = response.body().getData().toArray(new Pregnancyoutcome[0]);
+//                                                                            List<Pregnancyoutcome> toAdd = new ArrayList<>();
+//
+//                                                                            for (Pregnancyoutcome item : data) {
+//                                                                                Pregnancyoutcome exist = pregout.ins(item.uuid);
+//                                                                                if (exist != null) {
+//                                                                                    exist.comment = item.comment;
+//                                                                                    exist.status = item.status;
+//                                                                                    exist.supervisor = item.supervisor;
+//                                                                                    exist.approveDate = item.approveDate;
+//                                                                                    toAdd.add(exist);
+//                                                                                }
+//                                                                            }
+//
+//                                                                            if (!toAdd.isEmpty()) {
+//                                                                                pregout.add(toAdd.toArray(new Pregnancyoutcome[0]));
+//                                                                            }
+//
+//                                                                        } else {
+//                                                                            Log.e("Error", "Response body or data is null");
+//                                                                        }
+//                                                                    } catch (ExecutionException | InterruptedException e) {
+//                                                                        Log.e("Error", "Error while fetching existing data: " + e.getMessage(), e);
+//                                                                        Thread.currentThread().interrupt();
+//                                                                    } catch (Exception e) {
+//                                                                        Log.e("Error", "Unexpected error: " + e.getMessage(), e);
+//                                                                    }
+//                                                                });
+//
+//                                                                progres.dismiss();
+//                                                                refreshActivity();
+//                                                            }
+//
+//                                                            @Override
+//                                                            public void onFailure(Call<DataWrapper<Pregnancyoutcome>> call, Throwable t) {
+//                                                                progres.dismiss();
+//                                                                Toast.makeText(RejectionsActivity.this, "Outcome Download Error", Toast.LENGTH_LONG).show();
+//                                                            }
+//                                                        });
+//                                                    }
+//
+//                                                                        @Override
+//                                                                        public void onFailure(Call<DataWrapper<Morbidity>> call, Throwable t) {
+//                                                                            progres.dismiss();
+//                                                                            Toast.makeText(RejectionsActivity.this, "Morbidity Download Error", Toast.LENGTH_LONG).show();
+//                                                                        }
+//                                                                    });
+//                                                                }
+//
+//                                                                @Override
+//                                                                public void onFailure(Call<DataWrapper<HdssSociodemo>> call, Throwable t) {
+//                                                                    progres.dismiss();
+//                                                                    Toast.makeText(RejectionsActivity.this, "SES Download Error", Toast.LENGTH_LONG).show();
+//                                                                }
+//                                                            });
+//                                                        }
+//
+//                                                            @Override
+//                                                            public void onFailure(Call<DataWrapper<Vaccination>> call, Throwable t) {
+//                                                                progres.dismiss();
+//                                                                Toast.makeText(RejectionsActivity.this, "Vac Download Error", Toast.LENGTH_LONG).show();
+//                                                            }
+//                                                        });
+//                                                    }
+//
+//                                                    @Override
+//                                                    public void onFailure(Call<DataWrapper<Relationship>> call, Throwable t) {
+//                                                        progres.dismiss();
+//                                                        Toast.makeText(RejectionsActivity.this, "Rel Download Error", Toast.LENGTH_LONG).show();
+//                                                    }
+//                                                });
+//                                            }
+//
+//                                            @Override
+//                                            public void onFailure(Call<DataWrapper<Demographic>> call, Throwable t) {
+//                                                progres.dismiss();
+//                                                Toast.makeText(RejectionsActivity.this, "Dem Download Error", Toast.LENGTH_LONG).show();
+//                                            }
+//                                        });
+//                                    }
+//
+//                                    @Override
+//                                    public void onFailure(Call<DataWrapper<Pregnancy>> call, Throwable t) {
+//                                        progres.dismiss();
+//                                        Toast.makeText(RejectionsActivity.this, "Preg Download Error", Toast.LENGTH_LONG).show();
+//                                    }
+//                                });
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Call<DataWrapper<Death>> call, Throwable t) {
+//                                progres.dismiss();
+//                                Toast.makeText(RejectionsActivity.this, "Death Download Error", Toast.LENGTH_LONG).show();
+//                            }
+//                        });
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<DataWrapper<Outmigration>> call, Throwable t) {
+//                        progres.dismiss();
+//                        Toast.makeText(RejectionsActivity.this, "Omg Download Error", Toast.LENGTH_LONG).show();
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void onFailure(Call<DataWrapper<Inmigration>> call, Throwable t) {
+//                progres.dismiss();
+//                Toast.makeText(RejectionsActivity.this, "Img Download Error", Toast.LENGTH_LONG).show();
+//            }
+//        });
+//    }
 
     private void refreshActivity() {
         finish(); // Finish the current activity

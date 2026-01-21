@@ -10,6 +10,7 @@ import androidx.room.Update;
 
 import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.Individual;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Relationship;
@@ -46,6 +47,9 @@ public interface PregnancyDao {
 
     @Query("SELECT * FROM pregnancy WHERE complete=1")
     List<Pregnancy> retrieveToSync();
+
+    @Query("SELECT * FROM pregnancy WHERE uuid IN (:uuids) AND complete!=1")
+    List<Pregnancy> getByUuids(List<String> uuids);
 
 //    @Query("SELECT * FROM pregnancy WHERE (formcompldate BETWEEN 1748121600000 AND 1749427200000) OR (insertDate BETWEEN 1748121600000 AND 1749427200000) ORDER BY insertDate ASC")
 //    List<Pregnancy> retrieveToSync();

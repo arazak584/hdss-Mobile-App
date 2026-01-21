@@ -1,6 +1,7 @@
 package org.openhds.hdsscapture.Viewmodel;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -17,51 +18,63 @@ import java.util.concurrent.ExecutionException;
 
 public class InmigrationViewModel extends AndroidViewModel {
 
-    private final InmigrationRepository inmigrationRepository;
+    private final InmigrationRepository repo;
 
 
     public InmigrationViewModel(@NonNull Application application) {
         super(application);
-        inmigrationRepository = new InmigrationRepository(application);
+        repo = new InmigrationRepository(application);
     }
 
     public List<Inmigration> findToSync() throws ExecutionException, InterruptedException {
-        return inmigrationRepository.findToSync();
+        return repo.findToSync();
     }
 
     public Inmigration find(String id, String locid) throws ExecutionException, InterruptedException {
-        return inmigrationRepository.find(id,locid);
+        return repo.find(id,locid);
     }
 
     public Inmigration ins(String id) throws ExecutionException, InterruptedException {
-        return inmigrationRepository.ins(id);
+        return repo.ins(id);
     }
 
     public Inmigration dup(String id,String ids) throws ExecutionException, InterruptedException {
-        return inmigrationRepository.dup(id,ids);
+        return repo.dup(id,ids);
     }
 
     public List<Inmigration> reject(String id) throws ExecutionException, InterruptedException {
-        return inmigrationRepository.reject(id);
+        return repo.reject(id);
+    }
+
+    public List<Inmigration> getByUuids(List<String> uuids) {
+        try {
+            return repo.getByUuids(uuids);
+        } catch (ExecutionException | InterruptedException e) {
+            Log.e("InmigrationViewModel", "Error fetching by UUIDs: " + e.getMessage(), e);
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            throw new RuntimeException("Failed to fetch Inmigration records", e);
+        }
     }
 
     public long count(Date startDate, Date endDate, String username) throws ExecutionException, InterruptedException {
-        return inmigrationRepository.count(startDate, endDate, username);
+        return repo.count(startDate, endDate, username);
     }
 
     public long rej(String uuid) throws ExecutionException, InterruptedException {
-        return inmigrationRepository.rej(uuid);
+        return repo.rej(uuid);
     }
 
     public LiveData<Inmigration> getView(String id) {
-        return inmigrationRepository.view(id);
+        return repo.view(id);
     }
 
-    public void add(Inmigration data){ inmigrationRepository.create(data);}
+    public void add(Inmigration data){ repo.create(data);}
 
-    public void add(Inmigration... data){inmigrationRepository.create(data); }
+    public void add(Inmigration... data){repo.create(data); }
 
     public LiveData<Long> sync() {
-        return inmigrationRepository.sync();
+        return repo.sync();
     }
 }

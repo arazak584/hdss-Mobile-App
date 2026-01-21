@@ -13,22 +13,22 @@ import java.util.concurrent.ExecutionException;
 
 public class RoundViewModel extends AndroidViewModel {
 
-    private final RoundRepository roundRepository;
+    private final RoundRepository repo;
 
 
     public RoundViewModel(@NonNull Application application) {
         super(application);
-        roundRepository = new RoundRepository(application);
+        repo = new RoundRepository(application);
     }
 
 
     public List<Round> findAll() throws ExecutionException, InterruptedException {
-        return roundRepository.findAll();
+        return repo.findAll();
     }
 
 
     //public void add(Visit data){ visitRepository.create(data);}
 
-    public void add(Round... data){roundRepository.create(data);}
+    public void add(Round... data){repo.create(data);}
 
 }

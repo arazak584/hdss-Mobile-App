@@ -12,6 +12,7 @@ import androidx.room.Update;
 import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
+import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Relationship;
 import org.openhds.hdsscapture.entity.subentity.RelationshipUpdate;
@@ -51,6 +52,9 @@ public interface RelationshipDao {
 
     @Query("SELECT * FROM relationship WHERE complete=1")
     List<Relationship> retrieveToSync();
+
+    @Query("SELECT * FROM relationship WHERE uuid IN (:uuids) AND complete!=1")
+    List<Relationship> getByUuids(List<String> uuids);
 
 //    @Query("SELECT * FROM relationship WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
 //    List<Relationship> retrieveToSync();

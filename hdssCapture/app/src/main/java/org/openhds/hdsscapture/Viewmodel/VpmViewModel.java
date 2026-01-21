@@ -19,36 +19,36 @@ import java.util.concurrent.ExecutionException;
 
 public class VpmViewModel extends AndroidViewModel {
 
-    private final VpmRepository vpmRepository;
+    private final VpmRepository repo;
 
 
     public VpmViewModel(@NonNull Application application) {
         super(application);
-        vpmRepository = new VpmRepository(application);
+        repo = new VpmRepository(application);
     }
 
 
     public List<Vpm> retrieveToSync() throws ExecutionException, InterruptedException {
-        return vpmRepository.retrieveToSync();
+        return repo.retrieveToSync();
     }
 
     public Vpm find(String id) throws ExecutionException, InterruptedException {
-        return vpmRepository.find(id);
+        return repo.find(id);
     }
 
     public Vpm finds(String id) throws ExecutionException, InterruptedException {
-        return vpmRepository.finds(id);
+        return repo.finds(id);
     }
 
     public int update(VpmUpdate s){
-        return vpmRepository.update(s);
+        return repo.update(s);
     }
 
-    public void add(Vpm data){vpmRepository.create(data);}
+    public void add(Vpm data){repo.create(data);}
 
-    public void add(Vpm... data){vpmRepository.create(data);  }
+    public void add(Vpm... data){repo.create(data);  }
 
     public LiveData<Long> sync() {
-        return vpmRepository.sync();
+        return repo.sync();
     }
 }

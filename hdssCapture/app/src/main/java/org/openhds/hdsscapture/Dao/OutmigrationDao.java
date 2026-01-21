@@ -42,6 +42,9 @@ public interface OutmigrationDao {
     @Query("SELECT * FROM outmigration WHERE complete IN (1,2)")
     List<Outmigration> retrieveomgToSync();
 
+    @Query("SELECT * FROM outmigration WHERE uuid IN (:uuids) AND complete!=1")
+    List<Outmigration> getByUuids(List<String> uuids);
+
 //    @Query("SELECT * FROM outmigration WHERE insertDate BETWEEN 1748121600000 AND 1749427200000 ORDER BY insertDate ASC")
 //    List<Outmigration> retrieveomgToSync();
 

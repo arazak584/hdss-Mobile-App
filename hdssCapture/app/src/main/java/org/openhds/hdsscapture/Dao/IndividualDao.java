@@ -104,28 +104,6 @@ public interface IndividualDao {
     @Query("UPDATE individual SET compno = :newCompno WHERE compno = :oldCompno")
     int updateCompnoForIndividuals(String oldCompno, String newCompno);
 
-
-//    @Query("SELECT a.*,f.extId as houseExtId, compno as compextId, firstName || ' ' || lastName as fullName, b.endType " +
-//            "FROM individual AS a " +
-//            "INNER JOIN ( " +
-//            "   SELECT individual_uuid, MAX(startDate) AS maxStartDate " +
-//            "   FROM residency " +
-//            "   GROUP BY individual_uuid " +
-//            ") AS latest_residency ON a.uuid = latest_residency.individual_uuid " +
-//            "INNER JOIN residency AS b ON a.uuid = b.individual_uuid AND b.startDate = latest_residency.maxStartDate " +
-//            "INNER JOIN socialgroup as f ON b.socialgroup_uuid=f.uuid " +
-//            "INNER JOIN Locations AS c ON b.location_uuid = c.uuid " +
-//            "INNER JOIN locationhierarchy as d on c.locationLevel_uuid=d.uuid " +
-//            "LEFT JOIN locationhierarchy as e on d.parent_uuid=e.uuid " +
-//            "WHERE b.endType != 3 AND firstName != 'FAKE' AND d.name LIKE :id AND (fullName LIKE :searchText OR c.compno LIKE :searchText OR ghanacard LIKE :searchText) " +
-//            "ORDER BY f.extId,dob")
-//    List<Individual> retrieveBySearch(String id, String searchText);
-
-//    @Query("SELECT * ,firstName || ' ' || lastName as fullName, endType FROM individual " +
-//            "WHERE endType != 3 AND firstName != 'FAKE' AND village LIKE :id AND " +
-//            "(fullName LIKE :searchText OR compno LIKE :searchText OR ghanacard LIKE :searchText) ORDER BY hohID,dob")
-//    List<Individual> retrieveBySearch(String id, String searchText);
-
     //Search Individual
     @Query("SELECT *, firstName || ' ' || lastName as fullName, lastName || ' ' ||  firstName as Names, endType FROM individual " +
             "WHERE endType != 3 AND firstName != 'FAKE' " +
@@ -138,15 +116,6 @@ public interface IndividualDao {
             " WHERE endType!=3 AND firstName!='FAKE' " +
             " AND (fullName LIKE :id OR Names LIKE :id OR compno LIKE :id OR ghanacard LIKE :id OR phone1 LIKE :id) ORDER BY dob")
     List<Individual> retrieveBy(String id);
-
-//    @Query("SELECT * FROM individual WHERE uuid IN (SELECT a.uuid FROM individual AS a " +
-//            "INNER JOIN residency AS b ON a.uuid = b.individual_uuid " +
-//            "INNER JOIN Locations AS c ON b.location_uuid = c.uuid " +
-//            "WHERE b.endType = 1 AND gender = 2 AND c.compextId = :id " +
-//            "AND strftime('%Y', 'now') - strftime('%Y', datetime(a.dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(a.dob / 1000, 'unixepoch'))) >=(SELECT mother_age from config) " +
-//            "UNION " +
-//            "SELECT uuid FROM individual WHERE extId = 'UNK') order by dob DESC")
-//    List<Individual> retrieveByMother(String id);
 
     @Query("SELECT * FROM individual WHERE endType = 1 AND gender = 2 AND compno = :id " +
             "AND strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) >=(SELECT mother_age from config) " +
@@ -183,9 +152,6 @@ public interface IndividualDao {
             " strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) >=(SELECT rel_age from config) order by dob")
     List<Individual> retrievePartner(String id);
 
-//    @Query("SELECT a.uuid,a.compno,a.dob,a.firstName,a.lastName,b.uuid as hohID,a.extId FROM individual as a INNER JOIN locations as b ON a.compno=b.compno WHERE endType=1 and gender=1 and a.compno=:id and firstName!='FAKE' and " +
-//            " strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) >=(SELECT rel_age from config) order by dob")
-//    List<Individual> retrievePartner(String id);
 
     @Query("SELECT *, firstName || ' ' || lastName as fullName, lastName || ' ' ||  firstName as Names FROM individual WHERE gender = 1 AND endType = 1 AND firstName!='FAKE' AND " +
             "strftime('%Y', 'now') - strftime('%Y', datetime(dob / 1000, 'unixepoch')) - (strftime('%m-%d', 'now') < strftime('%m-%d', datetime(dob / 1000, 'unixepoch'))) >=(SELECT father_age from config) AND " +
@@ -194,6 +160,9 @@ public interface IndividualDao {
 
     @Query("SELECT * FROM individual where uuid=:id")
     Individual find(String id);
+
+    @Query("SELECT * FROM individual where uuid=:id AND endType=1 AND firstName!='FAKE'")
+    Individual finds(String id);
 
     @Query("SELECT * FROM individual where uuid=:id AND endType=3")
     Individual restore(String id);
@@ -321,9 +290,6 @@ public interface IndividualDao {
             ") GROUP BY hohID " +
             "ORDER BY compno")
     long cntss();
-
-//    @Query("SELECT * FROM individual WHERE uuid != :currentUuid AND (ghanacard = :ghanacard OR phone1 = :phone)")
-//    List<Individual> dupRegistration(String currentUuid, String ghanacard, String phone);
 
     @Query("SELECT * FROM individual WHERE uuid != :currentUuid AND ((:ghanacard IS NOT NULL AND ghanacard = :ghanacard) OR " +
         " (:phone IS NOT NULL AND phone1 = :phone) ) ")

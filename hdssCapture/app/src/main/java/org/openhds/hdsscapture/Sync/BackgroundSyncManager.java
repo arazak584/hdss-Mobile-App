@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class BackgroundSyncManager {
 
     private static final String SYNC_WORK_TAG = "syncWork";
-    private static final long MIN_SYNC_INTERVAL = 15; // WorkManager requires at least 15 minutes
+    private static final long MIN_SYNC_INTERVAL = 45; // WorkManager requires at least 45 minutes
 
     public static void setupBackgroundSync(Context context, long interval, TimeUnit timeUnit) {
         long safeInterval = Math.max(interval, MIN_SYNC_INTERVAL); // Ensure valid interval

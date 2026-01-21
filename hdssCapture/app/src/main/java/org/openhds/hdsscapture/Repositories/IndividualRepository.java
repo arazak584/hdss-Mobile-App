@@ -318,6 +318,15 @@ public class IndividualRepository {
         return future.get();
     }
 
+    public Individual finds(String id) throws ExecutionException, InterruptedException {
+
+        Callable<Individual> callable = () -> dao.finds(id);
+
+        Future<Individual> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        return future.get();
+    }
+
     public Individual restore(String id) throws ExecutionException, InterruptedException {
 
         Callable<Individual> callable = () -> dao.restore(id);

@@ -16,60 +16,60 @@ import java.util.concurrent.ExecutionException;
 
 public class OutcomeViewModel extends AndroidViewModel {
 
-    private final OutcomeRepository outcomeRepository;
+    private final OutcomeRepository repo;
 
 
     public OutcomeViewModel(@NonNull Application application) {
         super(application);
-        outcomeRepository = new OutcomeRepository(application);
+        repo = new OutcomeRepository(application);
     }
 
     public List<Outcome> findToSync() throws ExecutionException, InterruptedException {
-        return outcomeRepository.findToSync();
+        return repo.findToSync();
     }
 
 //    public Outcome find(String id,String locid) throws ExecutionException, InterruptedException {
-//        return outcomeRepository.find(id,locid);
+//        return repo.find(id,locid);
 //    }
 //
 //    public LiveData<Outcome> getView1(String id) {
-//        return outcomeRepository.view1(id);
+//        return repo.view1(id);
 //    }
 //    public LiveData<Outcome> getView2(String id) {
-//        return outcomeRepository.view2(id);
+//        return repo.view2(id);
 //    }
 //    public LiveData<Outcome> getView3(String id) {
-//        return outcomeRepository.view3(id);
+//        return repo.view3(id);
 //    }
 //    public LiveData<Outcome> getView4(String id) {
-//        return outcomeRepository.view4(id);
+//        return repo.view4(id);
 //    }
 
     public LiveData<Outcome> getView(String id,Integer outcomeNumber) {
-        return outcomeRepository.view(id,outcomeNumber);
+        return repo.view(id,outcomeNumber);
     }
 
 //    public List<Outcome> error(String id) throws ExecutionException, InterruptedException {
-//        return outcomeRepository.error(id);
+//        return repo.error(id);
 //    }
 
 //    public long cnt(String id) throws ExecutionException, InterruptedException {
-//        return outcomeRepository.cnt(id);
+//        return repo.cnt(id);
 //    }
 
-    public void add(Outcome data){ outcomeRepository.create(data);}
+    public void add(Outcome data){ repo.create(data);}
 
-    public void add(Outcome... data){ outcomeRepository.create(data);  }
+    public void add(Outcome... data){ repo.create(data);  }
 
     public LiveData<Long> sync() {
-        return outcomeRepository.sync();
+        return repo.sync();
     }
 
     public Outcome getByOutcomeIdAndNumber(String id,Integer outcomeNumber) throws ExecutionException, InterruptedException {
-        return outcomeRepository.getByOutcomeIdAndNumber(id,outcomeNumber);
+        return repo.getByOutcomeIdAndNumber(id,outcomeNumber);
     }
 
     public Outcome getUuid(String id) throws ExecutionException, InterruptedException {
-        return outcomeRepository.getUuid(id);
+        return repo.getUuid(id);
     }
 }

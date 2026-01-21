@@ -15,20 +15,20 @@ import java.util.concurrent.ExecutionException;
 
 public class ConfigViewModel extends AndroidViewModel {
 
-    private final ConfigRepository configRepository;
+    private final ConfigRepository repo;
 
 
     public ConfigViewModel(@NonNull Application application) {
         super(application);
-        configRepository = new ConfigRepository(application);
+        repo = new ConfigRepository(application);
     }
 
 
     public List<Configsettings> findAll() throws ExecutionException, InterruptedException {
-        return configRepository.findAll();
+        return repo.findAll();
     }
 
 
-    public void add(Configsettings... data){configRepository.create(data);}
+    public void add(Configsettings... data){repo.create(data);}
 
 }

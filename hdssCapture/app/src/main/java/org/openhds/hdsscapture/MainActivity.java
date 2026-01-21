@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private HdssSociodemoViewModel hdssSociodemoViewModel;
     private VaccinationViewModel vaccinationViewModel;
     private MorbidityViewModel morbidityViewModel;
+    private DuplicateViewModel duplicateViewModel;
 
     // Single thread executor for background tasks
     private ExecutorService executorService;
@@ -153,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
         vaccinationViewModel = provider.get(VaccinationViewModel.class);
         hdssSociodemoViewModel = provider.get(HdssSociodemoViewModel.class);
         morbidityViewModel = provider.get(MorbidityViewModel.class);
+        duplicateViewModel = provider.get(DuplicateViewModel.class);
     }
 
     private void initializeLastSyncDatetime() {
@@ -508,15 +510,17 @@ public class MainActivity extends AppCompatActivity {
             try {
                 long totalRejected =
                         inmigrationViewModel.rej(fws) +
-                                outmigrationViewModel.rej(fws) +
-                                pregnancyViewModel.rej(fws) +
-                                pregnancyoutcomeViewModel.rej(fws) +
-                                demographicViewModel.rej(fws) +
-                                deathViewModel.rej(fws) +
-                                relationshipViewModel.rej(fws) +
-                                hdssSociodemoViewModel.rej(fws) +
-                                vaccinationViewModel.rej(fws) +
-                                morbidityViewModel.rej(fws);
+                        outmigrationViewModel.rej(fws) +
+                        pregnancyViewModel.rej(fws) +
+                        pregnancyoutcomeViewModel.rej(fws) +
+                        demographicViewModel.rej(fws) +
+                        deathViewModel.rej(fws) +
+                        relationshipViewModel.rej(fws) +
+                        hdssSociodemoViewModel.rej(fws) +
+                        vaccinationViewModel.rej(fws) +
+                        morbidityViewModel.rej(fws) +
+                        duplicateViewModel.rej(fws);
+
 
                 runOnUiThread(() -> {
                     reject.setText("REJECTIONS (" + totalRejected + ")");

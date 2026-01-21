@@ -11,7 +11,6 @@ import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
 import org.openhds.hdsscapture.Activity.LoginActivity;
-import org.openhds.hdsscapture.Activity.RejectionsActivity;
 import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.AppJson;
 import org.openhds.hdsscapture.Dao.ApiDao;
@@ -26,38 +25,29 @@ import org.openhds.hdsscapture.Dao.PregnancyDao;
 import org.openhds.hdsscapture.Dao.PregnancyoutcomeDao;
 import org.openhds.hdsscapture.Dao.RelationshipDao;
 import org.openhds.hdsscapture.Dao.VaccinationDao;
-import org.openhds.hdsscapture.Viewmodel.DeathViewModel;
-import org.openhds.hdsscapture.Viewmodel.DemographicViewModel;
-import org.openhds.hdsscapture.Viewmodel.HdssSociodemoViewModel;
-import org.openhds.hdsscapture.Viewmodel.InmigrationViewModel;
-import org.openhds.hdsscapture.Viewmodel.MorbidityViewModel;
-import org.openhds.hdsscapture.Viewmodel.OutmigrationViewModel;
-import org.openhds.hdsscapture.Viewmodel.PregnancyoutcomeViewModel;
-import org.openhds.hdsscapture.Viewmodel.PregnancyViewModel;
-import org.openhds.hdsscapture.Viewmodel.RelationshipViewModel;
-import org.openhds.hdsscapture.Viewmodel.VaccinationViewModel;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Demographic;
 import org.openhds.hdsscapture.entity.Duplicate;
-import org.openhds.hdsscapture.entity.Fieldworker;
 import org.openhds.hdsscapture.entity.HdssSociodemo;
 import org.openhds.hdsscapture.entity.Inmigration;
-import org.openhds.hdsscapture.entity.Locations;
 import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Outmigration;
 import org.openhds.hdsscapture.entity.Pregnancy;
 import org.openhds.hdsscapture.entity.Pregnancyoutcome;
 import org.openhds.hdsscapture.entity.Relationship;
-import org.openhds.hdsscapture.entity.Round;
-import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
-import java.util.concurrent.ExecutionException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import io.reactivex.rxjava3.core.Scheduler;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -71,6 +61,9 @@ public class DownloadManager extends Worker {
     private String fw;
     private String authorizationHeader;
 
+    private final AtomicInteger pendingDownloads = new AtomicInteger(0);
+    private final CountDownLatch downloadLatch = new CountDownLatch(11); // 11 download tasks
+
     public DownloadManager(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
         this.context = context;
@@ -81,7 +74,6 @@ public class DownloadManager extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        // Retrieve fw and authorizationHeader from SharedPreferences
         SharedPreferences preferences = context.getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
         authorizationHeader = preferences.getString("authorizationHeader", null);
 
@@ -89,49 +81,46 @@ public class DownloadManager extends Worker {
         fw = sharedPreferences.getString(LoginActivity.FW_UUID_KEY, null);
 
         if (authorizationHeader == null || fw == null) {
-            Log.e(TAG, "Authorization header or field worker UUID not found in SharedPreferences");
+            Log.e(TAG, "Authorization header or field worker UUID not found");
             return Result.failure();
         }
-        Log.d("FieldworkerID", "FW ID: " + fw);
 
         if (!isInternetAvailable()) {
             Log.e(TAG, "No internet connection available");
             return Result.retry();
         }
 
-        executorService.execute(() -> {
-            try {
-                // Download Inmigration data
-                downloadInmigrationData();
-                // Download Outmigration data
-                downloadOutmigrationData();
-                // Download Death data
-                downloadDeathData();
-                // Download Pregnancy data
-                downloadPregnancyData();
-                // Download Demographic data
-                downloadDemographicData();
-                // Download Relationship data
-                downloadRelationshipData();
-                // Download Vaccination data
-                downloadVaccinationData();
-                // Download HdssSociodemo data
-                downloadHdssSociodemoData();
-                // Download Morbidity data
-                downloadMorbidityData();
-                // Download PregnancyOutcome data
-                downloadPregnancyOutcomeData();
-                // Download Duplicate data
-                downloadDuplicateData();
+        try {
+            // Start all downloads
+            downloadInmigrationData();
+            downloadOutmigrationData();
+            downloadDeathData();
+            downloadPregnancyData();
+            downloadDemographicData();
+            downloadRelationshipData();
+            downloadVaccinationData();
+            downloadHdssSociodemoData();
+            downloadMorbidityData();
+            downloadPregnancyOutcomeData();
+            downloadDuplicateData();
 
-                Log.d(TAG, "Download process completed successfully");
-            } catch (Exception e) {
-                Log.e(TAG, "Error during download process: " + e.getMessage());
-                e.printStackTrace();
+            // Wait for all downloads to complete (max 5 minutes)
+            boolean completed = downloadLatch.await(5, TimeUnit.MINUTES);
+
+            if (completed) {
+                Log.d(TAG, "All downloads completed successfully");
+                return Result.success();
+            } else {
+                Log.e(TAG, "Download timeout - some tasks did not complete");
+                return Result.retry();
             }
-        });
-
-        return Result.success();
+        } catch (InterruptedException e) {
+            Log.e(TAG, "Download interrupted: " + e.getMessage());
+            Thread.currentThread().interrupt();
+            return Result.retry();
+        } finally {
+            executorService.shutdown();
+        }
     }
 
     private boolean isInternetAvailable() {
@@ -146,42 +135,65 @@ public class DownloadManager extends Worker {
             @Override
             public void onResponse(@NonNull Call<DataWrapper<Inmigration>> call, @NonNull Response<DataWrapper<Inmigration>> response) {
                 try {
-                    if (response.isSuccessful() && response.body() != null) {
-                        Inmigration[] inmigrations = response.body().getData().toArray(new Inmigration[0]);
-                        InmigrationDao inmigrationDao = AppDatabase.getDatabase(context).inmigrationDao();
+                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                        Inmigration[] data = response.body().getData().toArray(new Inmigration[0]);
+                        InmigrationDao dao = AppDatabase.getDatabase(context).inmigrationDao();
 
                         executorService.execute(() -> {
-                            for (Inmigration newInmigration : inmigrations) {
-                                Inmigration existingInmigration = inmigrationDao.ins(newInmigration.uuid);
-
-                                //((existingInmigration != null && !(existingInmigration.complete != null && existingInmigration.complete == 1)))
-                                if (existingInmigration != null) {
-                                    inmigrationDao.create(newInmigration);
-                                    Log.d(TAG, "Added or updated Inmigration record with UUID: " + newInmigration.uuid);
-                                } else {
-                                    Log.d(TAG, "Skipping Inmigration record with UUID: " + newInmigration.uuid);
+                            try {
+                                // Extract UUIDs
+                                List<String> uuids = new ArrayList<>();
+                                for (Inmigration item : data) {
+                                    uuids.add(item.uuid);
                                 }
-                            }
-                            Log.d(TAG, "Inmigration data processed successfully");
-                        });
 
+                                // Batch fetch existing records
+                                List<Inmigration> existing = dao.getByUuids(uuids);
+                                Map<String, Inmigration> existingMap = new HashMap<>();
+                                for (Inmigration item : existing) {
+                                    existingMap.put(item.uuid, item);
+                                }
+
+                                // Update records
+                                List<Inmigration> toUpdate = new ArrayList<>();
+                                for (Inmigration item : data) {
+                                    Inmigration exist = existingMap.get(item.uuid);
+                                    if (exist != null) {
+                                        exist.comment = item.comment;
+                                        exist.status = item.status;
+                                        exist.supervisor = item.supervisor;
+                                        exist.approveDate = item.approveDate;
+                                        toUpdate.add(exist);
+                                    }
+                                }
+
+                                if (!toUpdate.isEmpty()) {
+                                    dao.create(toUpdate.toArray(new Inmigration[0]));
+                                    Log.d(TAG, "Updated " + toUpdate.size() + " Inmigration records");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error processing Inmigration: " + e.getMessage(), e);
+                            } finally {
+                                downloadLatch.countDown();
+                            }
+                        });
                     } else {
                         Log.e(TAG, "Failed to download Inmigration data");
+                        downloadLatch.countDown();
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "Error processing Inmigration data: " + e.getMessage());
-                    e.printStackTrace();
+                    Log.e(TAG, "Error in Inmigration response: " + e.getMessage(), e);
+                    downloadLatch.countDown();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DataWrapper<Inmigration>> call, @NonNull Throwable t) {
-                Log.e(TAG, "Error downloading Inmigration data: " + t.getMessage());
+                Log.e(TAG, "Inmigration download failed: " + t.getMessage());
+                downloadLatch.countDown();
             }
         });
     }
-
-
 
     private void downloadOutmigrationData() {
         Call<DataWrapper<Outmigration>> call = dao.getOmg(authorizationHeader, fw);
@@ -189,40 +201,60 @@ public class DownloadManager extends Worker {
             @Override
             public void onResponse(@NonNull Call<DataWrapper<Outmigration>> call, @NonNull Response<DataWrapper<Outmigration>> response) {
                 try {
-                    if (response.isSuccessful() && response.body() != null) {
-                        Outmigration[] outmigrations = response.body().getData().toArray(new Outmigration[0]);
+                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                        Outmigration[] data = response.body().getData().toArray(new Outmigration[0]);
+                        OutmigrationDao dao = AppDatabase.getDatabase(context).outmigrationDao();
 
-                            OutmigrationDao outmigrationDao = AppDatabase.getDatabase(context).outmigrationDao();
-                            // Run database operations in a background thread
                         executorService.execute(() -> {
-                                for (Outmigration newOutmigration : outmigrations) {
-                                    Outmigration existingOutmigration = outmigrationDao.ins(newOutmigration.uuid);
+                            try {
+                                List<String> uuids = new ArrayList<>();
+                                for (Outmigration item : data) {
+                                    uuids.add(item.uuid);
+                                }
 
-                                    // Ensure existingOutmigration is NOT NULL and complete is NOT 1
-                                    //((existingOutmigration != null && !(existingOutmigration.complete != null && existingOutmigration.complete == 1)))
-                                    if (existingOutmigration != null ) {
-                                        newOutmigration.edit = 1;
-                                        outmigrationDao.create(newOutmigration);
-                                        Log.d(TAG, "Updated existing Outmigration record with UUID: " + newOutmigration.uuid);
-                                    } else {
-                                        Log.d(TAG, "Skipping Outmigration record with UUID: " + newOutmigration.uuid);
+                                List<Outmigration> existing = dao.getByUuids(uuids);
+                                Map<String, Outmigration> existingMap = new HashMap<>();
+                                for (Outmigration item : existing) {
+                                    existingMap.put(item.uuid, item);
+                                }
+
+                                List<Outmigration> toUpdate = new ArrayList<>();
+                                for (Outmigration item : data) {
+                                    Outmigration exist = existingMap.get(item.uuid);
+                                    if (exist != null) {
+                                        exist.edit = 1;
+                                        exist.comment = item.comment;
+                                        exist.status = item.status;
+                                        exist.supervisor = item.supervisor;
+                                        exist.approveDate = item.approveDate;
+                                        toUpdate.add(exist);
                                     }
                                 }
-                                Log.d(TAG, "Outmigration data processed successfully");
-                            });
 
+                                if (!toUpdate.isEmpty()) {
+                                    dao.create(toUpdate.toArray(new Outmigration[0]));
+                                    Log.d(TAG, "Updated " + toUpdate.size() + " Outmigration records");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error processing Outmigration: " + e.getMessage(), e);
+                            } finally {
+                                downloadLatch.countDown();
+                            }
+                        });
                     } else {
                         Log.e(TAG, "Failed to download Outmigration data");
+                        downloadLatch.countDown();
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "Error processing Outmigration data: " + e.getMessage());
-                    e.printStackTrace();
+                    Log.e(TAG, "Error in Outmigration response: " + e.getMessage(), e);
+                    downloadLatch.countDown();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DataWrapper<Outmigration>> call, @NonNull Throwable t) {
-                Log.e(TAG, "Error downloading data: " + t.getMessage());
+                Log.e(TAG, "Outmigration download failed: " + t.getMessage());
+                downloadLatch.countDown();
             }
         });
     }
@@ -233,44 +265,63 @@ public class DownloadManager extends Worker {
             @Override
             public void onResponse(@NonNull Call<DataWrapper<Death>> call, @NonNull Response<DataWrapper<Death>> response) {
                 try {
-                    if (response.isSuccessful() && response.body() != null) {
-                        Death[] deaths = response.body().getData().toArray(new Death[0]);
+                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                        Death[] data = response.body().getData().toArray(new Death[0]);
+                        DeathDao dao = AppDatabase.getDatabase(context).deathDao();
 
-                            DeathDao deathDao = AppDatabase.getDatabase(context).deathDao();
-                            // Run database operations in a background thread
-                            executorService.execute(() -> {
-                                for (Death newDeath : deaths) {
-                                    Death existingDeath = deathDao.ins(newDeath.uuid);
+                        executorService.execute(() -> {
+                            try {
+                                List<String> uuids = new ArrayList<>();
+                                for (Death item : data) {
+                                    uuids.add(item.uuid);
+                                }
 
-                                    // Ensure existingDeath is NOT NULL and complete is NOT 1
-                                    if (existingDeath != null) {
-                                        newDeath.complete = 0;
-                                        newDeath.edit = 1;
-                                        deathDao.create(newDeath);
-                                        Log.d(TAG, "Updated existing Death record with UUID: " + newDeath.uuid);
-                                    } else {
-                                        Log.d(TAG, "Skipping Death record with UUID: " + newDeath.uuid);
+                                List<Death> existing = dao.getByUuids(uuids);
+                                Map<String, Death> existingMap = new HashMap<>();
+                                for (Death item : existing) {
+                                    existingMap.put(item.uuid, item);
+                                }
+
+                                List<Death> toUpdate = new ArrayList<>();
+                                for (Death item : data) {
+                                    Death exist = existingMap.get(item.uuid);
+                                    if (exist != null) {
+                                        exist.edit = 1;
+                                        exist.comment = item.comment;
+                                        exist.status = item.status;
+                                        exist.supervisor = item.supervisor;
+                                        exist.approveDate = item.approveDate;
+                                        toUpdate.add(exist);
                                     }
                                 }
-                                Log.d(TAG, "Death data processed successfully");
-                            });
 
+                                if (!toUpdate.isEmpty()) {
+                                    dao.create(toUpdate.toArray(new Death[0]));
+                                    Log.d(TAG, "Updated " + toUpdate.size() + " Death records");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error processing Death: " + e.getMessage(), e);
+                            } finally {
+                                downloadLatch.countDown();
+                            }
+                        });
                     } else {
                         Log.e(TAG, "Failed to download Death data");
+                        downloadLatch.countDown();
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "Error processing Death data: " + e.getMessage());
-                    e.printStackTrace();
+                    Log.e(TAG, "Error in Death response: " + e.getMessage(), e);
+                    downloadLatch.countDown();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DataWrapper<Death>> call, @NonNull Throwable t) {
-                Log.e(TAG, "Error downloading data: " + t.getMessage());
+                Log.e(TAG, "Death download failed: " + t.getMessage());
+                downloadLatch.countDown();
             }
         });
     }
-
 
     private void downloadPregnancyData() {
         Call<DataWrapper<Pregnancy>> call = dao.getPreg(authorizationHeader, fw);
@@ -278,135 +329,188 @@ public class DownloadManager extends Worker {
             @Override
             public void onResponse(@NonNull Call<DataWrapper<Pregnancy>> call, @NonNull Response<DataWrapper<Pregnancy>> response) {
                 try {
-                    if (response.isSuccessful() && response.body() != null) {
-                        Pregnancy[] newPregs = response.body().getData().toArray(new Pregnancy[0]);
-                        PregnancyDao pregnancyDao = AppDatabase.getDatabase(context).pregnancyDao();
+                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                        Pregnancy[] data = response.body().getData().toArray(new Pregnancy[0]);
+                        PregnancyDao dao = AppDatabase.getDatabase(context).pregnancyDao();
 
-                        // Run database operations in a background thread
-                        Executors.newSingleThreadExecutor().execute(() -> {
-                            for (Pregnancy newPregnancy : newPregs) {
-                                Pregnancy existingPregnancy = pregnancyDao.ins(newPregnancy.uuid);
-
-                                if (existingPregnancy != null) {
-                                    // Update newPregnancy with fields from existingPregnancy
-                                    newPregnancy.extra = existingPregnancy.extra;
-                                    newPregnancy.outcome = existingPregnancy.outcome;
-                                    newPregnancy.id = existingPregnancy.id;
-                                    newPregnancy.complete = 0;
-                                    newPregnancy.pregnancyOrder = existingPregnancy.pregnancyOrder;
-                                    // Save the updated pregnancy data
-                                    pregnancyDao.create(newPregnancy);
-                                    Log.d(TAG, "Updated and saved Pregnancy record with UUID: " + newPregnancy.uuid);
-                                    //Log.d(TAG, "Pregnancy Approved Date: " + newPregnancy.approveDate + " : "  + existingPregnancy.approveDate);
-                                } else {
-                                    Log.d(TAG, "Skipping Pregnancy record with UUID: " + newPregnancy.uuid);
+                        executorService.execute(() -> {
+                            try {
+                                List<String> uuids = new ArrayList<>();
+                                for (Pregnancy item : data) {
+                                    uuids.add(item.uuid);
                                 }
-                            }
-                            Log.d(TAG, "Pregnancy data processed successfully");
-                        });
 
+                                List<Pregnancy> existing = dao.getByUuids(uuids);
+                                Map<String, Pregnancy> existingMap = new HashMap<>();
+                                for (Pregnancy item : existing) {
+                                    existingMap.put(item.uuid, item);
+                                }
+
+                                List<Pregnancy> toUpdate = new ArrayList<>();
+                                for (Pregnancy item : data) {
+                                    Pregnancy exist = existingMap.get(item.uuid);
+                                    if (exist != null) {
+                                        exist.comment = item.comment;
+                                        exist.status = item.status;
+                                        exist.supervisor = item.supervisor;
+                                        exist.approveDate = item.approveDate;
+                                        toUpdate.add(exist);
+                                    }
+                                }
+
+                                if (!toUpdate.isEmpty()) {
+                                    dao.create(toUpdate.toArray(new Pregnancy[0]));
+                                    Log.d(TAG, "Updated " + toUpdate.size() + " Pregnancy records");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error processing Pregnancy: " + e.getMessage(), e);
+                            } finally {
+                                downloadLatch.countDown();
+                            }
+                        });
                     } else {
                         Log.e(TAG, "Failed to download Pregnancy data");
+                        downloadLatch.countDown();
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "Error processing Pregnancy data: " + e.getMessage());
-                    e.printStackTrace();
+                    Log.e(TAG, "Error in Pregnancy response: " + e.getMessage(), e);
+                    downloadLatch.countDown();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DataWrapper<Pregnancy>> call, @NonNull Throwable t) {
-                Log.e(TAG, "Error downloading data: " + t.getMessage());
+                Log.e(TAG, "Pregnancy download failed: " + t.getMessage());
+                downloadLatch.countDown();
             }
         });
     }
 
     private void downloadDemographicData() {
-
         Call<DataWrapper<Demographic>> call = dao.getDemo(authorizationHeader, fw);
         call.enqueue(new Callback<DataWrapper<Demographic>>() {
             @Override
             public void onResponse(@NonNull Call<DataWrapper<Demographic>> call, @NonNull Response<DataWrapper<Demographic>> response) {
                 try {
-                    if (response.isSuccessful() && response.body() != null) {
-                        Demographic[] demographics = response.body().getData().toArray(new Demographic[0]);
-                        DemographicDao demographicDao = AppDatabase.getDatabase(context).demographicDao();
+                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                        Demographic[] data = response.body().getData().toArray(new Demographic[0]);
+                        DemographicDao dao = AppDatabase.getDatabase(context).demographicDao();
 
-                        // Run database operations in a background thread
-                        Executors.newSingleThreadExecutor().execute(() -> {
-                            for (Demographic newDemographic : demographics) {
-                                Demographic existingDemographic = demographicDao.ins(newDemographic.individual_uuid);
-
-                                if (existingDemographic != null) {
-                                    // Save updated demographic data
-                                    demographicDao.create(newDemographic);
-                                    Log.d(TAG, "Updated and saved Demographic record with UUID: " + newDemographic.individual_uuid);
-                                } else {
-                                    Log.d(TAG, "Skipping existing Demographic record with UUID: " + newDemographic.individual_uuid);
+                        executorService.execute(() -> {
+                            try {
+                                List<String> uuids = new ArrayList<>();
+                                for (Demographic item : data) {
+                                    uuids.add(item.individual_uuid);
                                 }
-                            }
-                            Log.d(TAG, "Demographic data processed successfully");
-                        });
 
+                                List<Demographic> existing = dao.getByUuids(uuids);
+                                Map<String, Demographic> existingMap = new HashMap<>();
+                                for (Demographic item : existing) {
+                                    existingMap.put(item.individual_uuid, item);
+                                }
+
+                                List<Demographic> toUpdate = new ArrayList<>();
+                                for (Demographic item : data) {
+                                    Demographic exist = existingMap.get(item.individual_uuid);
+                                    if (exist != null) {
+                                        exist.comment = item.comment;
+                                        exist.status = item.status;
+                                        exist.supervisor = item.supervisor;
+                                        exist.approveDate = item.approveDate;
+                                        toUpdate.add(exist);
+                                    }
+                                }
+
+                                if (!toUpdate.isEmpty()) {
+                                    dao.create(toUpdate.toArray(new Demographic[0]));
+                                    Log.d(TAG, "Updated " + toUpdate.size() + " Demographic records");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error processing Demographic: " + e.getMessage(), e);
+                            } finally {
+                                downloadLatch.countDown();
+                            }
+                        });
                     } else {
                         Log.e(TAG, "Failed to download Demographic data");
+                        downloadLatch.countDown();
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "Error processing Demographic data: " + e.getMessage());
-                    e.printStackTrace();
+                    Log.e(TAG, "Error in Demographic response: " + e.getMessage(), e);
+                    downloadLatch.countDown();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DataWrapper<Demographic>> call, @NonNull Throwable t) {
-                Log.e(TAG, "Error downloading data: " + t.getMessage());
+                Log.e(TAG, "Demographic download failed: " + t.getMessage());
+                downloadLatch.countDown();
             }
         });
     }
 
-
     private void downloadRelationshipData() {
-
         Call<DataWrapper<Relationship>> call = dao.getRel(authorizationHeader, fw);
         call.enqueue(new Callback<DataWrapper<Relationship>>() {
             @Override
             public void onResponse(@NonNull Call<DataWrapper<Relationship>> call, @NonNull Response<DataWrapper<Relationship>> response) {
                 try {
-                    if (response.isSuccessful() && response.body() != null) {
-                        Relationship[] relationships = response.body().getData().toArray(new Relationship[0]);
-                        RelationshipDao relationshipDao = AppDatabase.getDatabase(context).relationshipDao();
+                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                        Relationship[] data = response.body().getData().toArray(new Relationship[0]);
+                        RelationshipDao dao = AppDatabase.getDatabase(context).relationshipDao();
 
-                        // Run database operations in a background thread
-                        Executors.newSingleThreadExecutor().execute(() -> {
-                            for (Relationship newRelationship : relationships) {
-                                Relationship existingRelationship = relationshipDao.ins(newRelationship.uuid);
-
-                                if (existingRelationship != null) {
-                                    // Save updated relationship data
-                                    relationshipDao.create(newRelationship);
-                                    Log.d(TAG, "Updated and saved Relationship record with UUID: " + newRelationship.uuid);
-                                } else {
-                                    Log.d(TAG, "Skipping existing Relationship record with UUID: " + newRelationship.uuid);
+                        executorService.execute(() -> {
+                            try {
+                                List<String> uuids = new ArrayList<>();
+                                for (Relationship item : data) {
+                                    uuids.add(item.uuid);
                                 }
-                            }
-                            Log.d(TAG, "Relationship data processed successfully");
-                        });
 
+                                List<Relationship> existing = dao.getByUuids(uuids);
+                                Map<String, Relationship> existingMap = new HashMap<>();
+                                for (Relationship item : existing) {
+                                    existingMap.put(item.uuid, item);
+                                }
+
+                                List<Relationship> toUpdate = new ArrayList<>();
+                                for (Relationship item : data) {
+                                    Relationship exist = existingMap.get(item.uuid);
+                                    if (exist != null) {
+                                        exist.comment = item.comment;
+                                        exist.status = item.status;
+                                        exist.supervisor = item.supervisor;
+                                        exist.approveDate = item.approveDate;
+                                        toUpdate.add(exist);
+                                    }
+                                }
+
+                                if (!toUpdate.isEmpty()) {
+                                    dao.create(toUpdate.toArray(new Relationship[0]));
+                                    Log.d(TAG, "Updated " + toUpdate.size() + " Relationship records");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error processing Relationship: " + e.getMessage(), e);
+                            } finally {
+                                downloadLatch.countDown();
+                            }
+                        });
                     } else {
                         Log.e(TAG, "Failed to download Relationship data");
+                        downloadLatch.countDown();
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "Error processing Relationship data: " + e.getMessage(), e);
+                    Log.e(TAG, "Error in Relationship response: " + e.getMessage(), e);
+                    downloadLatch.countDown();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DataWrapper<Relationship>> call, @NonNull Throwable t) {
-                Log.e(TAG, "Error downloading data: " + t.getMessage());
+                Log.e(TAG, "Relationship download failed: " + t.getMessage());
+                downloadLatch.countDown();
             }
         });
     }
-
 
     private void downloadVaccinationData() {
         Call<DataWrapper<Vaccination>> call = dao.getVac(authorizationHeader, fw);
@@ -414,44 +518,62 @@ public class DownloadManager extends Worker {
             @Override
             public void onResponse(@NonNull Call<DataWrapper<Vaccination>> call, @NonNull Response<DataWrapper<Vaccination>> response) {
                 try {
-                    if (response.isSuccessful() && response.body() != null) {
-                        Vaccination[] vaccinations = response.body().getData().toArray(new Vaccination[0]);
+                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                        Vaccination[] data = response.body().getData().toArray(new Vaccination[0]);
+                        VaccinationDao dao = AppDatabase.getDatabase(context).vaccinationDao();
 
-                            VaccinationDao vaccinationDao = AppDatabase.getDatabase(context).vaccinationDao();
+                        executorService.execute(() -> {
+                            try {
+                                List<String> uuids = new ArrayList<>();
+                                for (Vaccination item : data) {
+                                    uuids.add(item.uuid);
+                                }
 
-                            // Run database operations in a background thread
-                            Executors.newSingleThreadExecutor().execute(() -> {
-                                for (Vaccination newVaccination : vaccinations) {
-                                    Vaccination existingVaccination = vaccinationDao.ins(newVaccination.uuid);
+                                List<Vaccination> existing = dao.getByUuids(uuids);
+                                Map<String, Vaccination> existingMap = new HashMap<>();
+                                for (Vaccination item : existing) {
+                                    existingMap.put(item.uuid, item);
+                                }
 
-                                    // Ensure existingVaccination is NOT NULL and complete is NOT 1
-                                    if (existingVaccination != null) {
-                                        vaccinationDao.create(newVaccination);
-                                        Log.d(TAG, "Updated existing Vaccination record with UUID: " + newVaccination.uuid);
-                                    } else {
-                                        Log.d(TAG, "Skipping Vaccination record with UUID: " + newVaccination.uuid);
+                                List<Vaccination> toUpdate = new ArrayList<>();
+                                for (Vaccination item : data) {
+                                    Vaccination exist = existingMap.get(item.uuid);
+                                    if (exist != null) {
+                                        exist.comment = item.comment;
+                                        exist.status = item.status;
+                                        exist.supervisor = item.supervisor;
+                                        exist.approveDate = item.approveDate;
+                                        toUpdate.add(exist);
                                     }
                                 }
-                                Log.d(TAG, "Vaccination data processed successfully");
-                            });
 
-
+                                if (!toUpdate.isEmpty()) {
+                                    dao.create(toUpdate.toArray(new Vaccination[0]));
+                                    Log.d(TAG, "Updated " + toUpdate.size() + " Vaccination records");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error processing Vaccination: " + e.getMessage(), e);
+                            } finally {
+                                downloadLatch.countDown();
+                            }
+                        });
                     } else {
                         Log.e(TAG, "Failed to download Vaccination data");
+                        downloadLatch.countDown();
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "Error processing Vaccination data: " + e.getMessage());
-                    e.printStackTrace();
+                    Log.e(TAG, "Error in Vaccination response: " + e.getMessage(), e);
+                    downloadLatch.countDown();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DataWrapper<Vaccination>> call, @NonNull Throwable t) {
-                Log.e(TAG, "Error downloading data: " + t.getMessage());
+                Log.e(TAG, "Vaccination download failed: " + t.getMessage());
+                downloadLatch.countDown();
             }
         });
     }
-
 
     private void downloadHdssSociodemoData() {
         Call<DataWrapper<HdssSociodemo>> call = dao.getSes(authorizationHeader, fw);
@@ -459,44 +581,62 @@ public class DownloadManager extends Worker {
             @Override
             public void onResponse(@NonNull Call<DataWrapper<HdssSociodemo>> call, @NonNull Response<DataWrapper<HdssSociodemo>> response) {
                 try {
-                    if (response.isSuccessful() && response.body() != null) {
-                        HdssSociodemo[] hdssSociodemographics = response.body().getData().toArray(new HdssSociodemo[0]);
+                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                        HdssSociodemo[] data = response.body().getData().toArray(new HdssSociodemo[0]);
+                        HdssSociodemoDao dao = AppDatabase.getDatabase(context).hdssSociodemoDao();
 
-                            HdssSociodemoDao hdssSociodemoDao = AppDatabase.getDatabase(context).hdssSociodemoDao();
+                        executorService.execute(() -> {
+                            try {
+                                List<String> uuids = new ArrayList<>();
+                                for (HdssSociodemo item : data) {
+                                    uuids.add(item.uuid);
+                                }
 
-                            // Run database operations in a background thread
-                            Executors.newSingleThreadExecutor().execute(() -> {
-                                for (HdssSociodemo newHdssSociodemo : hdssSociodemographics) {
-                                    HdssSociodemo existingHdssSociodemo = hdssSociodemoDao.ins(newHdssSociodemo.uuid);
+                                List<HdssSociodemo> existing = dao.getByUuids(uuids);
+                                Map<String, HdssSociodemo> existingMap = new HashMap<>();
+                                for (HdssSociodemo item : existing) {
+                                    existingMap.put(item.uuid, item);
+                                }
 
-                                    // Ensure existing record is NOT NULL and complete is NOT 1 before updating
-                                    if (existingHdssSociodemo != null ) {
-                                        hdssSociodemoDao.create(newHdssSociodemo);
-                                        Log.d(TAG, "Added/Updated HdssSociodemo record with UUID: " + newHdssSociodemo.uuid);
-                                    } else {
-                                        Log.d(TAG, "Skipping existing HdssSociodemo record with UUID: " + newHdssSociodemo.uuid);
+                                List<HdssSociodemo> toUpdate = new ArrayList<>();
+                                for (HdssSociodemo item : data) {
+                                    HdssSociodemo exist = existingMap.get(item.uuid);
+                                    if (exist != null) {
+                                        exist.comment = item.comment;
+                                        exist.status = item.status;
+                                        exist.supervisor = item.supervisor;
+                                        exist.approveDate = item.approveDate;
+                                        toUpdate.add(exist);
                                     }
                                 }
-                                Log.d(TAG, "HdssSociodemo data processed successfully");
-                            });
 
-
+                                if (!toUpdate.isEmpty()) {
+                                    dao.create(toUpdate.toArray(new HdssSociodemo[0]));
+                                    Log.d(TAG, "Updated " + toUpdate.size() + " HdssSociodemo records");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error processing HdssSociodemo: " + e.getMessage(), e);
+                            } finally {
+                                downloadLatch.countDown();
+                            }
+                        });
                     } else {
-                        Log.e(TAG, "Failed to download HdssSociodemo data, Response Code: " + response.code());
+                        Log.e(TAG, "Failed to download HdssSociodemo data");
+                        downloadLatch.countDown();
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "Error processing HdssSociodemo data: " + e.getMessage(), e);
+                    Log.e(TAG, "Error in HdssSociodemo response: " + e.getMessage(), e);
+                    downloadLatch.countDown();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DataWrapper<HdssSociodemo>> call, @NonNull Throwable t) {
-                Log.e(TAG, "Error downloading HdssSociodemo data: " + t.getMessage(), t);
+                Log.e(TAG, "HdssSociodemo download failed: " + t.getMessage());
+                downloadLatch.countDown();
             }
         });
     }
-
-
 
     private void downloadMorbidityData() {
         Call<DataWrapper<Morbidity>> call = dao.getMor(authorizationHeader, fw);
@@ -504,43 +644,62 @@ public class DownloadManager extends Worker {
             @Override
             public void onResponse(@NonNull Call<DataWrapper<Morbidity>> call, @NonNull Response<DataWrapper<Morbidity>> response) {
                 try {
-                    if (response.isSuccessful() && response.body() != null) {
-                        Morbidity[] morbidities = response.body().getData().toArray(new Morbidity[0]);
+                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                        Morbidity[] data = response.body().getData().toArray(new Morbidity[0]);
+                        MorbidityDao dao = AppDatabase.getDatabase(context).morbidityDao();
 
-                            MorbidityDao morbidityDao = AppDatabase.getDatabase(context).morbidityDao();
-                            // Run database operations in a background thread
-                            Executors.newSingleThreadExecutor().execute(() -> {
-                                for (Morbidity newMorbidity : morbidities) {
-                                    Morbidity existingMorbidity = morbidityDao.ins(newMorbidity.uuid);
+                        executorService.execute(() -> {
+                            try {
+                                List<String> uuids = new ArrayList<>();
+                                for (Morbidity item : data) {
+                                    uuids.add(item.uuid);
+                                }
 
-                                    // Ensure existing record is NOT NULL and complete is NOT 1 before updating
-                                    if (existingMorbidity != null) {
-                                        morbidityDao.create(newMorbidity);
-                                        Log.d(TAG, "Added/Updated Morbidity record with UUID: " + newMorbidity.uuid);
-                                    } else {
-                                        Log.d(TAG, "Skipping existing Morbidity record with UUID: " + newMorbidity.uuid);
+                                List<Morbidity> existing = dao.getByUuids(uuids);
+                                Map<String, Morbidity> existingMap = new HashMap<>();
+                                for (Morbidity item : existing) {
+                                    existingMap.put(item.uuid, item);
+                                }
+
+                                List<Morbidity> toUpdate = new ArrayList<>();
+                                for (Morbidity item : data) {
+                                    Morbidity exist = existingMap.get(item.uuid);
+                                    if (exist != null) {
+                                        exist.comment = item.comment;
+                                        exist.status = item.status;
+                                        exist.supervisor = item.supervisor;
+                                        exist.approveDate = item.approveDate;
+                                        toUpdate.add(exist);
                                     }
                                 }
-                                Log.d(TAG, "Morbidity data processed successfully");
-                            });
 
-
+                                if (!toUpdate.isEmpty()) {
+                                    dao.create(toUpdate.toArray(new Morbidity[0]));
+                                    Log.d(TAG, "Updated " + toUpdate.size() + " Morbidity records");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error processing Morbidity: " + e.getMessage(), e);
+                            } finally {
+                                downloadLatch.countDown();
+                            }
+                        });
                     } else {
-                        Log.e(TAG, "Failed to download Morbidity data, Response Code: " + response.code());
+                        Log.e(TAG, "Failed to download Morbidity data");
+                        downloadLatch.countDown();
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "Error processing Morbidity data: " + e.getMessage(), e);
+                    Log.e(TAG, "Error in Morbidity response: " + e.getMessage(), e);
+                    downloadLatch.countDown();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DataWrapper<Morbidity>> call, @NonNull Throwable t) {
-                Log.e(TAG, "Error downloading Morbidity data: " + t.getMessage(), t);
+                Log.e(TAG, "Morbidity download failed: " + t.getMessage());
+                downloadLatch.countDown();
             }
         });
     }
-
-
 
     private void downloadPregnancyOutcomeData() {
         Call<DataWrapper<Pregnancyoutcome>> call = dao.getOut(authorizationHeader, fw);
@@ -548,43 +707,59 @@ public class DownloadManager extends Worker {
             @Override
             public void onResponse(@NonNull Call<DataWrapper<Pregnancyoutcome>> call, @NonNull Response<DataWrapper<Pregnancyoutcome>> response) {
                 try {
-                    if (response.isSuccessful() && response.body() != null) {
-                        Pregnancyoutcome[] newPregnancies = response.body().getData().toArray(new Pregnancyoutcome[0]);
-                            PregnancyoutcomeDao pregnancyDao = AppDatabase.getDatabase(context).pregnancyoutcomeDao();
+                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                        Pregnancyoutcome[] data = response.body().getData().toArray(new Pregnancyoutcome[0]);
+                        PregnancyoutcomeDao dao = AppDatabase.getDatabase(context).pregnancyoutcomeDao();
 
-                            // Run database operations in a background thread
-                            Executors.newSingleThreadExecutor().execute(() -> {
-                                for (Pregnancyoutcome newPregnancy : newPregnancies) {
-                                    Pregnancyoutcome existingPregnancy = pregnancyDao.ins(newPregnancy.uuid);
+                        executorService.execute(() -> {
+                            try {
+                                List<String> uuids = new ArrayList<>();
+                                for (Pregnancyoutcome item : data) {
+                                    uuids.add(item.uuid);
+                                }
 
-                                    if (existingPregnancy != null) {
-                                            // Preserve certain fields while updating
-                                            newPregnancy.location = existingPregnancy.location;
-                                            newPregnancy.id = existingPregnancy.id;
-                                            newPregnancy.complete = 0;
+                                List<Pregnancyoutcome> existing = dao.getByUuids(uuids);
+                                Map<String, Pregnancyoutcome> existingMap = new HashMap<>();
+                                for (Pregnancyoutcome item : existing) {
+                                    existingMap.put(item.uuid, item);
+                                }
 
-                                        // Save updated/new record
-                                        pregnancyDao.create(newPregnancy);
-                                        Log.d(TAG, "Added/Updated PregnancyOutcome record with UUID: " + newPregnancy.uuid);
-                                    } else {
-                                        Log.d(TAG, "Skipping existing PregnancyOutcome record with UUID: " + newPregnancy.uuid);
+                                List<Pregnancyoutcome> toUpdate = new ArrayList<>();
+                                for (Pregnancyoutcome item : data) {
+                                    Pregnancyoutcome exist = existingMap.get(item.uuid);
+                                    if (exist != null) {
+                                        exist.comment = item.comment;
+                                        exist.status = item.status;
+                                        exist.supervisor = item.supervisor;
+                                        exist.approveDate = item.approveDate;
+                                        toUpdate.add(exist);
                                     }
                                 }
-                                Log.d(TAG, "PregnancyOutcome data processed successfully");
-                            });
 
-
+                                if (!toUpdate.isEmpty()) {
+                                    dao.create(toUpdate.toArray(new Pregnancyoutcome[0]));
+                                    Log.d(TAG, "Updated " + toUpdate.size() + " PregnancyOutcome records");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error processing PregnancyOutcome: " + e.getMessage(), e);
+                            } finally {
+                                downloadLatch.countDown();
+                            }
+                        });
                     } else {
-                        Log.e(TAG, "Failed to download PregnancyOutcome data, Response Code: " + response.code());
+                        Log.e(TAG, "Failed to download PregnancyOutcome data");
+                        downloadLatch.countDown();
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "Error processing PregnancyOutcome data: " + e.getMessage(), e);
+                    Log.e(TAG, "Error in PregnancyOutcome response: " + e.getMessage(), e);
+                    downloadLatch.countDown();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DataWrapper<Pregnancyoutcome>> call, @NonNull Throwable t) {
-                Log.e(TAG, "Error downloading PregnancyOutcome data: " + t.getMessage(), t);
+                Log.e(TAG, "PregnancyOutcome download failed: " + t.getMessage());
+                downloadLatch.countDown();
             }
         });
     }
@@ -595,42 +770,62 @@ public class DownloadManager extends Worker {
             @Override
             public void onResponse(@NonNull Call<DataWrapper<Duplicate>> call, @NonNull Response<DataWrapper<Duplicate>> response) {
                 try {
-                    if (response.isSuccessful() && response.body() != null) {
-                        Duplicate[] item = response.body().getData().toArray(new Duplicate[0]);
+                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                        Duplicate[] data = response.body().getData().toArray(new Duplicate[0]);
+                        DuplicateDao dao = AppDatabase.getDatabase(context).duplicateDao();
 
-                        DuplicateDao duplicateDao = AppDatabase.getDatabase(context).duplicateDao();
-                        // Run database operations in a background thread
-                        Executors.newSingleThreadExecutor().execute(() -> {
-                            for (Duplicate newDuplicate : item) {
-                                Duplicate existingDuplicate = duplicateDao.ins(newDuplicate.individual_uuid);
-
-                                // Ensure existing record is NOT NULL and complete is NOT 1 before updating
-                                if (existingDuplicate != null) {
-                                    duplicateDao.create(newDuplicate);
-                                    Log.d(TAG, "Added/Updated Duplicate record with UUID: " + newDuplicate.individual_uuid);
-                                } else {
-                                    Log.d(TAG, "Skipping existing Duplicate record with UUID: " + newDuplicate.individual_uuid);
+                        executorService.execute(() -> {
+                            try {
+                                List<String> uuids = new ArrayList<>();
+                                for (Duplicate item : data) {
+                                    uuids.add(item.individual_uuid);
                                 }
+
+                                List<Duplicate> existing = dao.getByUuids(uuids);
+                                Map<String, Duplicate> existingMap = new HashMap<>();
+                                for (Duplicate item : existing) {
+                                    existingMap.put(item.individual_uuid, item);
+                                }
+
+                                List<Duplicate> toUpdate = new ArrayList<>();
+                                for (Duplicate item : data) {
+                                    Duplicate exist = existingMap.get(item.individual_uuid);
+                                    if (exist != null) {
+                                        exist.comment = item.comment;
+                                        exist.status = item.status;
+                                        exist.supervisor = item.supervisor;
+                                        exist.approveDate = item.approveDate;
+                                        toUpdate.add(exist);
+                                    }
+                                }
+
+                                if (!toUpdate.isEmpty()) {
+                                    dao.create(toUpdate.toArray(new Duplicate[0]));
+                                    Log.d(TAG, "Updated " + toUpdate.size() + " Duplicate records");
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, "Error processing Duplicate: " + e.getMessage(), e);
+                            } finally {
+                                downloadLatch.countDown();
                             }
-                            Log.d(TAG, "Duplicate data processed successfully");
                         });
-
-
                     } else {
-                        Log.e(TAG, "Failed to download Duplicate data, Response Code: " + response.code());
+                        Log.e(TAG, "Failed to download Duplicate data");
+                        downloadLatch.countDown();
                     }
                 } catch (Exception e) {
-                    Log.e(TAG, "Error processing Duplicate data: " + e.getMessage(), e);
+                    Log.e(TAG, "Error in Duplicate response: " + e.getMessage(), e);
+                    downloadLatch.countDown();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DataWrapper<Duplicate>> call, @NonNull Throwable t) {
-                Log.e(TAG, "Error downloading Morbidity data: " + t.getMessage(), t);
+                Log.e(TAG, "Duplicate download failed: " + t.getMessage());
+                downloadLatch.countDown();
             }
         });
     }
 
-
-
 }
+
