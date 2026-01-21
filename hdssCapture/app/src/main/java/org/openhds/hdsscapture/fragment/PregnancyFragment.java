@@ -571,14 +571,14 @@ public class PregnancyFragment extends KeyboardFragment {
             Pregnancy finalData = binding.getPregnancy();
 
             // Validate dates
-            if (!validateAllDates()) {
-                return;
-            }
-
-            // Validate numeric fields
-            if (!validateNumericFields(finalData)) {
-                return;
-            }
+//            if (!validateAllDates()) {
+//                return;
+//            }
+//
+//            // Validate numeric fields
+//            if (!validateNumericFields(finalData)) {
+//                return;
+//            }
 
             final boolean validateOnComplete = true;
             boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.PREGNANCYLAYOUT, validateOnComplete, false);
@@ -589,15 +589,15 @@ public class PregnancyFragment extends KeyboardFragment {
             }
 
             // Use validation class for all pregnancy validations
-//            PregnancyValidation validator = new PregnancyValidation(
-//                    requireContext(),
-//                    finalData,
-//                    getEarliestEventDate(),
-//                    pregnancyRecords
-//            );
-//            if (!validator.validateAll()) {
-//                return; // Stop save if any validation fails
-//            }
+            PregnancyValidation validator = new PregnancyValidation(
+                    requireContext(),
+                    finalData,
+                    getEarliestEventDate(),
+                    pregnancyRecords
+            );
+            if (!validator.validateAll()) {
+                return; // Stop save if any validation fails
+            }
 
             // Set end time
             Date end = new Date();
@@ -663,320 +663,320 @@ public class PregnancyFragment extends KeyboardFragment {
         return null;
     }
 
-    private boolean validateAllDates() {
-        try {
-            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-
-            // Validate conception date against earliest event date
-            if (!binding.earliest.getText().toString().trim().isEmpty() &&
-                    !binding.editTextRecordedDate.getText().toString().trim().isEmpty()) {
-                Date stdate = f.parse(binding.earliest.getText().toString().trim());
-                Date edate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
-                if (edate.before(stdate)) {
-                    binding.editTextRecordedDate.setError("Conception Date Cannot Be Less than Earliest Event Date");
-                    Toast.makeText(getActivity(), "Conception Date Cannot Be Less than Earliest Event Date", Toast.LENGTH_LONG).show();
-                    return false;
-                }
-                binding.editTextRecordedDate.setError(null);
-            }
-
-            // Validate conception date and last clinic visit
-            if (!binding.editTextRecordedDate.getText().toString().trim().isEmpty() &&
-                    !binding.editTextLastClinicVisitDate.getText().toString().trim().isEmpty()) {
-                Date currentDate = new Date();
-                Date stdate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
-                Date edate = f.parse(binding.editTextLastClinicVisitDate.getText().toString().trim());
-
-                if (stdate.after(currentDate)) {
-                    binding.editTextRecordedDate.setError("Date of Conception Cannot Be a Future Date");
-                    Toast.makeText(getActivity(), "Date of Conception Cannot Be a Future Date", Toast.LENGTH_LONG).show();
-                    return false;
-                }
-                if (edate.before(stdate) || edate.equals(stdate)) {
-                    binding.editTextLastClinicVisitDate.setError("Last Visit Date Cannot Be Less than or Equal to Conception Date");
-                    Toast.makeText(getActivity(), "Last Visit Date Cannot Be Less than or Equal to Conception Date", Toast.LENGTH_LONG).show();
-                    return false;
-                }
-                binding.editTextLastClinicVisitDate.setError(null);
-            }
-
-            // Validate outcome date against last clinic visit
-            if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() &&
-                    !binding.editTextLastClinicVisitDate.getText().toString().trim().isEmpty()) {
-                Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
-                Date clinicDate = f.parse(binding.editTextLastClinicVisitDate.getText().toString().trim());
-                if (outcomeDate.before(clinicDate)) {
-                    binding.editTextLastClinicVisitDate.setError("Date of Outcome Cannot Be Before Last Clinic Visit Date");
-                    Toast.makeText(getActivity(), "Date of Outcome Cannot Be Before Last Clinic Visit Date", Toast.LENGTH_LONG).show();
-                    return false;
-                }
-                binding.editTextLastClinicVisitDate.setError(null);
-            }
-
-            // Validate outcome date against conception date
-            if (!binding.editTextRecordedDate.getText().toString().trim().isEmpty() &&
-                    !binding.editTextOutcomeDate.getText().toString().trim().isEmpty()) {
-                Date currentDate = new Date();
-                Date conceptionDate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
-                Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
-
-                if (outcomeDate.after(currentDate)) {
-                    binding.editTextOutcomeDate.setError("Date of Outcome Cannot Be a Future Date");
-                    Toast.makeText(getActivity(), "Date of Outcome Cannot Be a Future Date", Toast.LENGTH_LONG).show();
-                    return false;
-                }
-                if (outcomeDate.before(conceptionDate) || outcomeDate.equals(conceptionDate)) {
-                    binding.editTextOutcomeDate.setError("Delivery Date Cannot Be Less than Conception Date");
-                    Toast.makeText(getActivity(), "Delivery Date Cannot Be Less than Conception Date", Toast.LENGTH_LONG).show();
-                    return false;
-                }
-                binding.editTextOutcomeDate.setError(null);
-            }
-
-            // Validate pregnancy duration (conception to outcome should be 1-12 months)
-            if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() &&
-                    !binding.editTextRecordedDate.getText().toString().trim().isEmpty()) {
-                Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
-                Date recordedDate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
-
-                Calendar startCalendar = Calendar.getInstance();
-                startCalendar.setTime(recordedDate);
-
-                Calendar endCalendar = Calendar.getInstance();
-                endCalendar.setTime(outcomeDate);
-
-                int yearDiff = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
-                int monthDiff = endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
-                int dayDiff = endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH);
-
-                if (dayDiff < 0) {
-                    monthDiff--;
-                }
-
-                int totalDiffMonths = yearDiff * 12 + monthDiff;
-
-                if (totalDiffMonths < 1 || totalDiffMonths > 12) {
-                    binding.editTextRecordedDate.setError("The difference between outcome and conception Date should be between 1 and 12 months");
-                    Toast.makeText(getActivity(), "The difference between outcome and conception Date should be between 1 and 12 months", Toast.LENGTH_LONG).show();
-                    return false;
-                }
-                binding.editTextRecordedDate.setError(null);
-            }
-
-            // Validate chronological order with previous pregnancies
-            if (!validatePregnancyChronologicalOrder()) {
-                return false;
-            }
-
-        } catch (ParseException e) {
-            Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validatePregnancyChronologicalOrder() {
-        try {
-            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-            String currentRecordedDateStr = binding.editTextRecordedDate.getText().toString().trim();
-            String currentOutcomeDateStr = binding.editTextOutcomeDate.getText().toString().trim();
-
-            if (currentRecordedDateStr.isEmpty()) {
-                return true;
-            }
-
-            Date currentRecordedDate = f.parse(currentRecordedDateStr);
-            Date currentOutcomeDate = !currentOutcomeDateStr.isEmpty() ? f.parse(currentOutcomeDateStr) : null;
-
-            // Get the previous pregnancy (pregnancyOrder - 1)
-            if (currentPregnancyNumber > 1) {
-                Pregnancy previousPregnancy = null;
-                for (Pregnancy p : pregnancyRecords) {
-                    // FIXED: Direct int comparison instead of Integer
-                    int pOrder = p.pregnancyOrder;
-                    if (pOrder == (currentPregnancyNumber - 1)) {
-                        previousPregnancy = p;
-                        break;
-                    }
-                }
-
-                if (previousPregnancy != null) {
-                    // Validate recordedDate against previous pregnancy's recordedDate
-                    if (previousPregnancy.recordedDate != null) {
-                        Date prevRecordedDate = previousPregnancy.recordedDate;
-                        if (currentRecordedDate.before(prevRecordedDate)) {
-                            String prevDateStr = f.format(prevRecordedDate);
-                            binding.editTextRecordedDate.setError("Pregnancy " + currentPregnancyNumber +
-                                    " Conception Date cannot be before Pregnancy " + (currentPregnancyNumber - 1) +
-                                    " Conception Date (" + prevDateStr + ")");
-                            Toast.makeText(getActivity(),
-                                    "Pregnancy " + currentPregnancyNumber + " Conception Date cannot be before Pregnancy " +
-                                            (currentPregnancyNumber - 1) + " Conception Date", Toast.LENGTH_LONG).show();
-                            return false;
-                        }
-                    }
-
-                    // Validate recordedDate against previous pregnancy's outcome_date (if exists)
-                    if (previousPregnancy.outcome_date != null) {
-                        Date prevOutcomeDate = previousPregnancy.outcome_date;
-                        if (currentRecordedDate.before(prevOutcomeDate)) {
-                            String prevOutcomeDateStr = f.format(prevOutcomeDate);
-                            binding.editTextRecordedDate.setError("Pregnancy " + currentPregnancyNumber +
-                                    " Conception Date cannot be before Pregnancy " + (currentPregnancyNumber - 1) +
-                                    " Outcome Date (" + prevOutcomeDateStr + ")");
-                            Toast.makeText(getActivity(),
-                                    "Pregnancy " + currentPregnancyNumber + " Conception Date cannot be before Pregnancy " +
-                                            (currentPregnancyNumber - 1) + " Outcome Date", Toast.LENGTH_LONG).show();
-                            return false;
-                        }
-                    }
-
-                    // Validate outcomeDate against previous pregnancy's outcome_date (if both exist)
-                    if (currentOutcomeDate != null && previousPregnancy.outcome_date != null) {
-                        Date prevOutcomeDate = previousPregnancy.outcome_date;
-                        if (currentOutcomeDate.before(prevOutcomeDate)) {
-                            String prevOutcomeDateStr = f.format(prevOutcomeDate);
-                            binding.editTextOutcomeDate.setError("Pregnancy " + currentPregnancyNumber +
-                                    " Outcome Date cannot be before Pregnancy " + (currentPregnancyNumber - 1) +
-                                    " Outcome Date (" + prevOutcomeDateStr + ")");
-                            Toast.makeText(getActivity(),
-                                    "Pregnancy " + currentPregnancyNumber + " Outcome Date cannot be before Pregnancy " +
-                                            (currentPregnancyNumber - 1) + " Outcome Date", Toast.LENGTH_LONG).show();
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            // Check against next pregnancy if it exists (in case editing earlier pregnancy)
-            if (pregnancyRecords.size() > currentPregnancyNumber) {
-                Pregnancy nextPregnancy = null;
-                for (Pregnancy p : pregnancyRecords) {
-                    // Direct int comparison instead of Integer
-                    int pOrder = p.pregnancyOrder;
-                    if (pOrder == (currentPregnancyNumber + 1)) {
-                        nextPregnancy = p;
-                        break;
-                    }
-                }
-
-                if (nextPregnancy != null && nextPregnancy.recordedDate != null) {
-                    Date nextRecordedDate = nextPregnancy.recordedDate;
-
-                    // Current recordedDate cannot be after next pregnancy's recordedDate
-                    if (currentRecordedDate.after(nextRecordedDate)) {
-                        String nextDateStr = f.format(nextRecordedDate);
-                        binding.editTextRecordedDate.setError("Pregnancy " + currentPregnancyNumber +
-                                " Conception Date cannot be after Pregnancy " + (currentPregnancyNumber + 1) +
-                                " Conception Date (" + nextDateStr + ")");
-                        Toast.makeText(getActivity(),
-                                "Pregnancy " + currentPregnancyNumber + " Conception Date cannot be after Pregnancy " +
-                                        (currentPregnancyNumber + 1) + " Conception Date", Toast.LENGTH_LONG).show();
-                        return false;
-                    }
-
-                    // Current outcomeDate cannot be after next pregnancy's recordedDate
-                    if (currentOutcomeDate != null && currentOutcomeDate.after(nextRecordedDate)) {
-                        String nextDateStr = f.format(nextRecordedDate);
-                        binding.editTextOutcomeDate.setError("Pregnancy " + currentPregnancyNumber +
-                                " Outcome Date cannot be after Pregnancy " + (currentPregnancyNumber + 1) +
-                                " Conception Date (" + nextDateStr + ")");
-                        Toast.makeText(getActivity(),
-                                "Pregnancy " + currentPregnancyNumber + " Outcome Date cannot be after Pregnancy " +
-                                        (currentPregnancyNumber + 1) + " Conception Date", Toast.LENGTH_LONG).show();
-                        return false;
-                    }
-                }
-            }
-
-            // Clear errors if all validations pass
-            binding.editTextRecordedDate.setError(null);
-            binding.editTextOutcomeDate.setError(null);
-
-        } catch (ParseException e) {
-            Toast.makeText(getActivity(), "Error parsing date in chronological validation", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validateNumericFields(Pregnancy finalData) {
-        // Validate pregnancy weeks
-        if (finalData.anteNatalClinic == 1 && !binding.ageOfPregFromPregNotes.getText().toString().trim().isEmpty()) {
-            int totalweeks = Integer.parseInt(binding.ageOfPregFromPregNotes.getText().toString().trim());
-            if (totalweeks < 4 || totalweeks > 52) {
-                binding.ageOfPregFromPregNotes.setError("Maximum Number of Weeks Allowed is 4 - 52");
-                Toast.makeText(getActivity(), "Maximum Number of Weeks Allowed is 4 - 52 ", Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-
-        // Validate pregnancy months
-        if (finalData.anteNatalClinic == 1 && !binding.estimatedAgeOfPreg.getText().toString().trim().isEmpty()) {
-            int totalmnth = Integer.parseInt(binding.estimatedAgeOfPreg.getText().toString().trim());
-            if (totalmnth < 1 || totalmnth > 12) {
-                binding.estimatedAgeOfPreg.setError("Maximum Number of Months Allowed is 12");
-                Toast.makeText(getActivity(), "Maximum Number of Months Allowed is 12", Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-
-        if (finalData.anteNatalClinic == 1
-                && !binding.estimatedAgeOfPreg.getText().toString().trim().isEmpty()
-                && !binding.ageOfPregFromPregNotes.getText().toString().trim().isEmpty()) {
-
-            int totalMonths = Integer.parseInt(binding.estimatedAgeOfPreg.getText().toString().trim());
-            int totalWeeks = Integer.parseInt(binding.ageOfPregFromPregNotes.getText().toString().trim());
-
-            int totalWeeksConvertedToMonths = totalWeeks / 4;
-
-            if (totalMonths < totalWeeksConvertedToMonths) {
-                binding.ageOfPregFromPregNotes.setError("Check Number of Months and weeks Pregnant");
-                Toast.makeText(getActivity(), "Check Number of Months and weeks Pregnant", Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-
-        if (finalData.anteNatalClinic == 1 && !binding.firstRec.getText().toString().trim().isEmpty()) {
-            int totalmnth = Integer.parseInt(binding.firstRec.getText().toString().trim());
-            if (totalmnth < 1 || totalmnth > 12) {
-                binding.firstRec.setError("Maximum Number of Months Allowed is 12");
-                Toast.makeText(getActivity(), "Maximum Number of Months Allowed is 12", Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-
-        if (finalData.own_bnet == 1 && !binding.howMany.getText().toString().trim().isEmpty()) {
-            int totalmnth = Integer.parseInt(binding.howMany.getText().toString().trim());
-            if (totalmnth < 1 || totalmnth > 10) {
-                binding.howMany.setError("Maximum Number of Bednets is 10");
-                Toast.makeText(getActivity(), "Maximum Number of Bednets is 10", Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-
-        if (finalData.first_preg == 2 && !binding.pregnancyNumber.getText().toString().trim().isEmpty()) {
-            int totalbirth = Integer.parseInt(binding.pregnancyNumber.getText().toString().trim());
-            if (totalbirth < 2 || totalbirth > 15) {
-                binding.pregnancyNumber.setError("Cannot be less than 2");
-                Toast.makeText(getActivity(), "Total Pregnancies Cannot be less than 2", Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-
-        if (finalData.anteNatalClinic == 1 && !binding.ancVisits.getText().toString().trim().isEmpty()) {
-            int totalmth = Integer.parseInt(binding.ancVisits.getText().toString().trim());
-            if (totalmth < 1 || totalmth > 20) {
-                binding.ancVisits.setError("Maximum Number of ANC Visit is 20");
-                Toast.makeText(getActivity(), "Maximum Number of ANC Visit is 20", Toast.LENGTH_LONG).show();
-                return false;
-            }
-        }
-
-        return true;
-    }
+//    private boolean validateAllDates() {
+//        try {
+//            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//
+//            // Validate conception date against earliest event date
+//            if (!binding.earliest.getText().toString().trim().isEmpty() &&
+//                    !binding.editTextRecordedDate.getText().toString().trim().isEmpty()) {
+//                Date stdate = f.parse(binding.earliest.getText().toString().trim());
+//                Date edate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
+//                if (edate.before(stdate)) {
+//                    binding.editTextRecordedDate.setError("Conception Date Cannot Be Less than Earliest Event Date");
+//                    Toast.makeText(getActivity(), "Conception Date Cannot Be Less than Earliest Event Date", Toast.LENGTH_LONG).show();
+//                    return false;
+//                }
+//                binding.editTextRecordedDate.setError(null);
+//            }
+//
+//            // Validate conception date and last clinic visit
+//            if (!binding.editTextRecordedDate.getText().toString().trim().isEmpty() &&
+//                    !binding.editTextLastClinicVisitDate.getText().toString().trim().isEmpty()) {
+//                Date currentDate = new Date();
+//                Date stdate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
+//                Date edate = f.parse(binding.editTextLastClinicVisitDate.getText().toString().trim());
+//
+//                if (stdate.after(currentDate)) {
+//                    binding.editTextRecordedDate.setError("Date of Conception Cannot Be a Future Date");
+//                    Toast.makeText(getActivity(), "Date of Conception Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+//                    return false;
+//                }
+//                if (edate.before(stdate) || edate.equals(stdate)) {
+//                    binding.editTextLastClinicVisitDate.setError("Last Visit Date Cannot Be Less than or Equal to Conception Date");
+//                    Toast.makeText(getActivity(), "Last Visit Date Cannot Be Less than or Equal to Conception Date", Toast.LENGTH_LONG).show();
+//                    return false;
+//                }
+//                binding.editTextLastClinicVisitDate.setError(null);
+//            }
+//
+//            // Validate outcome date against last clinic visit
+//            if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() &&
+//                    !binding.editTextLastClinicVisitDate.getText().toString().trim().isEmpty()) {
+//                Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+//                Date clinicDate = f.parse(binding.editTextLastClinicVisitDate.getText().toString().trim());
+//                if (outcomeDate.before(clinicDate)) {
+//                    binding.editTextLastClinicVisitDate.setError("Date of Outcome Cannot Be Before Last Clinic Visit Date");
+//                    Toast.makeText(getActivity(), "Date of Outcome Cannot Be Before Last Clinic Visit Date", Toast.LENGTH_LONG).show();
+//                    return false;
+//                }
+//                binding.editTextLastClinicVisitDate.setError(null);
+//            }
+//
+//            // Validate outcome date against conception date
+//            if (!binding.editTextRecordedDate.getText().toString().trim().isEmpty() &&
+//                    !binding.editTextOutcomeDate.getText().toString().trim().isEmpty()) {
+//                Date currentDate = new Date();
+//                Date conceptionDate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
+//                Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+//
+//                if (outcomeDate.after(currentDate)) {
+//                    binding.editTextOutcomeDate.setError("Date of Outcome Cannot Be a Future Date");
+//                    Toast.makeText(getActivity(), "Date of Outcome Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+//                    return false;
+//                }
+//                if (outcomeDate.before(conceptionDate) || outcomeDate.equals(conceptionDate)) {
+//                    binding.editTextOutcomeDate.setError("Delivery Date Cannot Be Less than Conception Date");
+//                    Toast.makeText(getActivity(), "Delivery Date Cannot Be Less than Conception Date", Toast.LENGTH_LONG).show();
+//                    return false;
+//                }
+//                binding.editTextOutcomeDate.setError(null);
+//            }
+//
+//            // Validate pregnancy duration (conception to outcome should be 1-12 months)
+//            if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() &&
+//                    !binding.editTextRecordedDate.getText().toString().trim().isEmpty()) {
+//                Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+//                Date recordedDate = f.parse(binding.editTextRecordedDate.getText().toString().trim());
+//
+//                Calendar startCalendar = Calendar.getInstance();
+//                startCalendar.setTime(recordedDate);
+//
+//                Calendar endCalendar = Calendar.getInstance();
+//                endCalendar.setTime(outcomeDate);
+//
+//                int yearDiff = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+//                int monthDiff = endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+//                int dayDiff = endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH);
+//
+//                if (dayDiff < 0) {
+//                    monthDiff--;
+//                }
+//
+//                int totalDiffMonths = yearDiff * 12 + monthDiff;
+//
+//                if (totalDiffMonths < 1 || totalDiffMonths > 12) {
+//                    binding.editTextRecordedDate.setError("The difference between outcome and conception Date should be between 1 and 12 months");
+//                    Toast.makeText(getActivity(), "The difference between outcome and conception Date should be between 1 and 12 months", Toast.LENGTH_LONG).show();
+//                    return false;
+//                }
+//                binding.editTextRecordedDate.setError(null);
+//            }
+//
+//            // Validate chronological order with previous pregnancies
+//            if (!validatePregnancyChronologicalOrder()) {
+//                return false;
+//            }
+//
+//        } catch (ParseException e) {
+//            Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//            e.printStackTrace();
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    private boolean validatePregnancyChronologicalOrder() {
+//        try {
+//            final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//            String currentRecordedDateStr = binding.editTextRecordedDate.getText().toString().trim();
+//            String currentOutcomeDateStr = binding.editTextOutcomeDate.getText().toString().trim();
+//
+//            if (currentRecordedDateStr.isEmpty()) {
+//                return true;
+//            }
+//
+//            Date currentRecordedDate = f.parse(currentRecordedDateStr);
+//            Date currentOutcomeDate = !currentOutcomeDateStr.isEmpty() ? f.parse(currentOutcomeDateStr) : null;
+//
+//            // Get the previous pregnancy (pregnancyOrder - 1)
+//            if (currentPregnancyNumber > 1) {
+//                Pregnancy previousPregnancy = null;
+//                for (Pregnancy p : pregnancyRecords) {
+//                    // FIXED: Direct int comparison instead of Integer
+//                    int pOrder = p.pregnancyOrder;
+//                    if (pOrder == (currentPregnancyNumber - 1)) {
+//                        previousPregnancy = p;
+//                        break;
+//                    }
+//                }
+//
+//                if (previousPregnancy != null) {
+//                    // Validate recordedDate against previous pregnancy's recordedDate
+//                    if (previousPregnancy.recordedDate != null) {
+//                        Date prevRecordedDate = previousPregnancy.recordedDate;
+//                        if (currentRecordedDate.before(prevRecordedDate)) {
+//                            String prevDateStr = f.format(prevRecordedDate);
+//                            binding.editTextRecordedDate.setError("Pregnancy " + currentPregnancyNumber +
+//                                    " Conception Date cannot be before Pregnancy " + (currentPregnancyNumber - 1) +
+//                                    " Conception Date (" + prevDateStr + ")");
+//                            Toast.makeText(getActivity(),
+//                                    "Pregnancy " + currentPregnancyNumber + " Conception Date cannot be before Pregnancy " +
+//                                            (currentPregnancyNumber - 1) + " Conception Date", Toast.LENGTH_LONG).show();
+//                            return false;
+//                        }
+//                    }
+//
+//                    // Validate recordedDate against previous pregnancy's outcome_date (if exists)
+//                    if (previousPregnancy.outcome_date != null) {
+//                        Date prevOutcomeDate = previousPregnancy.outcome_date;
+//                        if (currentRecordedDate.before(prevOutcomeDate)) {
+//                            String prevOutcomeDateStr = f.format(prevOutcomeDate);
+//                            binding.editTextRecordedDate.setError("Pregnancy " + currentPregnancyNumber +
+//                                    " Conception Date cannot be before Pregnancy " + (currentPregnancyNumber - 1) +
+//                                    " Outcome Date (" + prevOutcomeDateStr + ")");
+//                            Toast.makeText(getActivity(),
+//                                    "Pregnancy " + currentPregnancyNumber + " Conception Date cannot be before Pregnancy " +
+//                                            (currentPregnancyNumber - 1) + " Outcome Date", Toast.LENGTH_LONG).show();
+//                            return false;
+//                        }
+//                    }
+//
+//                    // Validate outcomeDate against previous pregnancy's outcome_date (if both exist)
+//                    if (currentOutcomeDate != null && previousPregnancy.outcome_date != null) {
+//                        Date prevOutcomeDate = previousPregnancy.outcome_date;
+//                        if (currentOutcomeDate.before(prevOutcomeDate)) {
+//                            String prevOutcomeDateStr = f.format(prevOutcomeDate);
+//                            binding.editTextOutcomeDate.setError("Pregnancy " + currentPregnancyNumber +
+//                                    " Outcome Date cannot be before Pregnancy " + (currentPregnancyNumber - 1) +
+//                                    " Outcome Date (" + prevOutcomeDateStr + ")");
+//                            Toast.makeText(getActivity(),
+//                                    "Pregnancy " + currentPregnancyNumber + " Outcome Date cannot be before Pregnancy " +
+//                                            (currentPregnancyNumber - 1) + " Outcome Date", Toast.LENGTH_LONG).show();
+//                            return false;
+//                        }
+//                    }
+//                }
+//            }
+//
+//            // Check against next pregnancy if it exists (in case editing earlier pregnancy)
+//            if (pregnancyRecords.size() > currentPregnancyNumber) {
+//                Pregnancy nextPregnancy = null;
+//                for (Pregnancy p : pregnancyRecords) {
+//                    // Direct int comparison instead of Integer
+//                    int pOrder = p.pregnancyOrder;
+//                    if (pOrder == (currentPregnancyNumber + 1)) {
+//                        nextPregnancy = p;
+//                        break;
+//                    }
+//                }
+//
+//                if (nextPregnancy != null && nextPregnancy.recordedDate != null) {
+//                    Date nextRecordedDate = nextPregnancy.recordedDate;
+//
+//                    // Current recordedDate cannot be after next pregnancy's recordedDate
+//                    if (currentRecordedDate.after(nextRecordedDate)) {
+//                        String nextDateStr = f.format(nextRecordedDate);
+//                        binding.editTextRecordedDate.setError("Pregnancy " + currentPregnancyNumber +
+//                                " Conception Date cannot be after Pregnancy " + (currentPregnancyNumber + 1) +
+//                                " Conception Date (" + nextDateStr + ")");
+//                        Toast.makeText(getActivity(),
+//                                "Pregnancy " + currentPregnancyNumber + " Conception Date cannot be after Pregnancy " +
+//                                        (currentPregnancyNumber + 1) + " Conception Date", Toast.LENGTH_LONG).show();
+//                        return false;
+//                    }
+//
+//                    // Current outcomeDate cannot be after next pregnancy's recordedDate
+//                    if (currentOutcomeDate != null && currentOutcomeDate.after(nextRecordedDate)) {
+//                        String nextDateStr = f.format(nextRecordedDate);
+//                        binding.editTextOutcomeDate.setError("Pregnancy " + currentPregnancyNumber +
+//                                " Outcome Date cannot be after Pregnancy " + (currentPregnancyNumber + 1) +
+//                                " Conception Date (" + nextDateStr + ")");
+//                        Toast.makeText(getActivity(),
+//                                "Pregnancy " + currentPregnancyNumber + " Outcome Date cannot be after Pregnancy " +
+//                                        (currentPregnancyNumber + 1) + " Conception Date", Toast.LENGTH_LONG).show();
+//                        return false;
+//                    }
+//                }
+//            }
+//
+//            // Clear errors if all validations pass
+//            binding.editTextRecordedDate.setError(null);
+//            binding.editTextOutcomeDate.setError(null);
+//
+//        } catch (ParseException e) {
+//            Toast.makeText(getActivity(), "Error parsing date in chronological validation", Toast.LENGTH_LONG).show();
+//            e.printStackTrace();
+//            return false;
+//        }
+//        return true;
+//    }
+//
+//    private boolean validateNumericFields(Pregnancy finalData) {
+//        // Validate pregnancy weeks
+//        if (finalData.anteNatalClinic == 1 && !binding.ageOfPregFromPregNotes.getText().toString().trim().isEmpty()) {
+//            int totalweeks = Integer.parseInt(binding.ageOfPregFromPregNotes.getText().toString().trim());
+//            if (totalweeks < 4 || totalweeks > 52) {
+//                binding.ageOfPregFromPregNotes.setError("Maximum Number of Weeks Allowed is 4 - 52");
+//                Toast.makeText(getActivity(), "Maximum Number of Weeks Allowed is 4 - 52 ", Toast.LENGTH_LONG).show();
+//                return false;
+//            }
+//        }
+//
+//        // Validate pregnancy months
+//        if (finalData.anteNatalClinic == 1 && !binding.estimatedAgeOfPreg.getText().toString().trim().isEmpty()) {
+//            int totalmnth = Integer.parseInt(binding.estimatedAgeOfPreg.getText().toString().trim());
+//            if (totalmnth < 1 || totalmnth > 12) {
+//                binding.estimatedAgeOfPreg.setError("Maximum Number of Months Allowed is 12");
+//                Toast.makeText(getActivity(), "Maximum Number of Months Allowed is 12", Toast.LENGTH_LONG).show();
+//                return false;
+//            }
+//        }
+//
+//        if (finalData.anteNatalClinic == 1
+//                && !binding.estimatedAgeOfPreg.getText().toString().trim().isEmpty()
+//                && !binding.ageOfPregFromPregNotes.getText().toString().trim().isEmpty()) {
+//
+//            int totalMonths = Integer.parseInt(binding.estimatedAgeOfPreg.getText().toString().trim());
+//            int totalWeeks = Integer.parseInt(binding.ageOfPregFromPregNotes.getText().toString().trim());
+//
+//            int totalWeeksConvertedToMonths = totalWeeks / 4;
+//
+//            if (totalMonths < totalWeeksConvertedToMonths) {
+//                binding.ageOfPregFromPregNotes.setError("Check Number of Months and weeks Pregnant");
+//                Toast.makeText(getActivity(), "Check Number of Months and weeks Pregnant", Toast.LENGTH_LONG).show();
+//                return false;
+//            }
+//        }
+//
+//        if (finalData.anteNatalClinic == 1 && !binding.firstRec.getText().toString().trim().isEmpty()) {
+//            int totalmnth = Integer.parseInt(binding.firstRec.getText().toString().trim());
+//            if (totalmnth < 1 || totalmnth > 12) {
+//                binding.firstRec.setError("Maximum Number of Months Allowed is 12");
+//                Toast.makeText(getActivity(), "Maximum Number of Months Allowed is 12", Toast.LENGTH_LONG).show();
+//                return false;
+//            }
+//        }
+//
+//        if (finalData.own_bnet == 1 && !binding.howMany.getText().toString().trim().isEmpty()) {
+//            int totalmnth = Integer.parseInt(binding.howMany.getText().toString().trim());
+//            if (totalmnth < 1 || totalmnth > 10) {
+//                binding.howMany.setError("Maximum Number of Bednets is 10");
+//                Toast.makeText(getActivity(), "Maximum Number of Bednets is 10", Toast.LENGTH_LONG).show();
+//                return false;
+//            }
+//        }
+//
+//        if (finalData.first_preg == 2 && !binding.pregnancyNumber.getText().toString().trim().isEmpty()) {
+//            int totalbirth = Integer.parseInt(binding.pregnancyNumber.getText().toString().trim());
+//            if (totalbirth < 2 || totalbirth > 15) {
+//                binding.pregnancyNumber.setError("Cannot be less than 2");
+//                Toast.makeText(getActivity(), "Total Pregnancies Cannot be less than 2", Toast.LENGTH_LONG).show();
+//                return false;
+//            }
+//        }
+//
+//        if (finalData.anteNatalClinic == 1 && !binding.ancVisits.getText().toString().trim().isEmpty()) {
+//            int totalmth = Integer.parseInt(binding.ancVisits.getText().toString().trim());
+//            if (totalmth < 1 || totalmth > 20) {
+//                binding.ancVisits.setError("Maximum Number of ANC Visit is 20");
+//                Toast.makeText(getActivity(), "Maximum Number of ANC Visit is 20", Toast.LENGTH_LONG).show();
+//                return false;
+//            }
+//        }
+//
+//        return true;
+//    }
 
     @Override
     public void onDestroyView() {

@@ -225,6 +225,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/childeverborn">
+
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/et_outcomes"
                                 android:layout_width="match_parent"
@@ -237,6 +238,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/numberOfLiveBirths">
+
                             <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/numberOfLiveBirths"
                                 android:layout_width="match_parent"
@@ -437,6 +439,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/attend_you_other">
+
                             <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/how_del_other"
                                 android:layout_width="match_parent"
@@ -639,6 +642,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/first_recs">
+
                                 <androidx.appcompat.widget.AppCompatEditText
                                     android:id="@+id/first_rec"
                                     android:layout_width="match_parent"

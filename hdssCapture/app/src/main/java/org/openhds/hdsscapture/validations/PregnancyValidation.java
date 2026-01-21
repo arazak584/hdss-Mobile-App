@@ -55,11 +55,29 @@ public class PregnancyValidation {
         }
 
         if (!errors.isEmpty()) {
+            // First, highlight all fields with errors
+            highlightAllFieldsWithErrors(errors);
+
+            // Then show the dialog
             showValidationErrors(errors);
             return false;
         }
 
+//        if (!errors.isEmpty()) {
+//            showValidationErrors(errors);
+//            return false;
+//        }
+
         return true;
+    }
+
+    /**
+     * Highlight all fields that have errors
+     */
+    private void highlightAllFieldsWithErrors(List<PregnancyValidation.ValidationError> errors) {
+        for (PregnancyValidation.ValidationError error : errors) {
+            highlightFieldWithError(error.fieldId, error.message);
+        }
     }
 
     private List<ValidationError> validateDates() {
@@ -69,7 +87,7 @@ public class PregnancyValidation {
             Date currentDate = new Date();
 
             // Validate conception date against earliest event date
-            if (earliestEventDate != null && item.getRecordedDate() != null) {
+            if (earliestEventDate != null && item.getRecordedDate() != null && !item.getRecordedDate().trim().isEmpty()) {
                 Date conceptionDate = sdf.parse(item.getRecordedDate().trim());
                 if (conceptionDate.before(earliestEventDate)) {
                     errors.add(new ValidationError("recorded_date_earliest",
@@ -78,7 +96,7 @@ public class PregnancyValidation {
             }
 
             // Validate conception date is not in future
-            if (item.getRecordedDate() != null) {
+            if (item.getRecordedDate() != null && !item.getRecordedDate().trim().isEmpty()) {
                 Date conceptionDate = sdf.parse(item.getRecordedDate().trim());
                 if (conceptionDate.after(currentDate)) {
                     errors.add(new ValidationError("recorded_date_future",
@@ -87,7 +105,8 @@ public class PregnancyValidation {
             }
 
             // Validate last clinic visit date
-            if (item.getRecordedDate() != null && item.getLastClinicVisitDate() != null) {
+            if (item.getRecordedDate() != null && !item.getRecordedDate().trim().isEmpty() &&
+                    item.getLastClinicVisitDate() != null && !item.getLastClinicVisitDate().trim().isEmpty()) {
                 Date conceptionDate = sdf.parse(item.getRecordedDate().trim());
                 Date clinicDate = sdf.parse(item.getLastClinicVisitDate().trim());
 
@@ -95,10 +114,15 @@ public class PregnancyValidation {
                     errors.add(new ValidationError("clinic_date_invalid",
                             "Last Visit Date Cannot Be Less than or Equal to Conception Date", "editText_lastClinicVisitDate"));
                 }
+
+                if (clinicDate.after(currentDate)) {
+                    errors.add(new ValidationError("clinic_date_invalids",
+                            "Last Visit Date Cannot Be Future Date", "editText_lastClinicVisitDate"));
+                }
             }
 
             // Validate outcome date
-            if (item.getOutcome_date() != null) {
+            if (item.getOutcome_date() != null && !item.getOutcome_date().trim().isEmpty()) {
                 Date outcomeDate = sdf.parse(item.getOutcome_date().trim());
 
                 // Outcome date cannot be in future
@@ -108,7 +132,7 @@ public class PregnancyValidation {
                 }
 
                 // Validate outcome date against conception date
-                if (item.getRecordedDate() != null) {
+                if (item.getRecordedDate() != null && !item.getRecordedDate().trim().isEmpty()) {
                     Date conceptionDate = sdf.parse(item.getRecordedDate().trim());
                     if (outcomeDate.before(conceptionDate) || outcomeDate.equals(conceptionDate)) {
                         errors.add(new ValidationError("outcome_date_before_conception",
@@ -117,7 +141,7 @@ public class PregnancyValidation {
                 }
 
                 // Validate outcome date against last clinic visit
-                if (item.getLastClinicVisitDate() != null) {
+                if (item.getLastClinicVisitDate() != null && !item.getLastClinicVisitDate().trim().isEmpty()) {
                     Date clinicDate = sdf.parse(item.getLastClinicVisitDate().trim());
                     if (outcomeDate.before(clinicDate)) {
                         errors.add(new ValidationError("outcome_date_before_clinic",
@@ -127,7 +151,8 @@ public class PregnancyValidation {
             }
 
             // Validate pregnancy duration (1-12 months)
-            if (item.getRecordedDate() != null && item.getOutcome_date() != null) {
+            if (item.getRecordedDate() != null && !item.getRecordedDate().trim().isEmpty() &&
+                    item.getOutcome_date() != null && !item.getOutcome_date().trim().isEmpty()) {
                 Date conceptionDate = sdf.parse(item.getRecordedDate().trim());
                 Date outcomeDate = sdf.parse(item.getOutcome_date().trim());
 
@@ -149,7 +174,7 @@ public class PregnancyValidation {
 
                 if (totalDiffMonths < 1 || totalDiffMonths > 12) {
                     errors.add(new ValidationError("pregnancy_duration_invalid",
-                            "The difference between outcome and conception Date should be between 1 and 12 months", "editTextRecordedDate"));
+                            "The difference between outcome and conception Date should be between 1 and 12 months", "editText_recordedDate"));
                 }
             }
 
@@ -174,6 +199,15 @@ public class PregnancyValidation {
         if (item.anteNatalClinic == 1) {
             validateRange(item.estimatedAgeOfPreg, 1, 12, "estimatedAgeOfPreg",
                     "Maximum Number of Months Allowed is 12", errors);
+        }
+
+        //Validate first anc visit against months pregnant
+        if(item.estimatedAgeOfPreg != null && item.first_rec !=null){
+            if (item.estimatedAgeOfPreg < item.first_rec){
+                errors.add(new ValidationError("first_anc_months_pregnant",
+                        "Please check your answer. The first ANC visit cannot be after the current pregnancy duration.",
+                        "first_rec"));
+            }
         }
 
         // Validate months vs weeks consistency
@@ -215,13 +249,13 @@ public class PregnancyValidation {
     private List<ValidationError> validateChronologicalOrder() {
         List<ValidationError> errors = new ArrayList<>();
 
-        if (item.pregnancyOrder <= 0 || item.getRecordedDate() == null) {
+        if (item.pregnancyOrder <= 0 || item.getRecordedDate() == null || item.getRecordedDate().trim().isEmpty()) {
             return errors;
         }
 
         try {
             Date currentRecordedDate = sdf.parse(item.getRecordedDate().trim());
-            Date currentOutcomeDate = item.getOutcome_date() != null ?
+            Date currentOutcomeDate = (item.getOutcome_date() != null && !item.getOutcome_date().trim().isEmpty()) ?
                     sdf.parse(item.getOutcome_date().trim()) : null;
 
             // Find previous pregnancy

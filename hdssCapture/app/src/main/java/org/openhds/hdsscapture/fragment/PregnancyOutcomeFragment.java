@@ -50,6 +50,7 @@ import org.openhds.hdsscapture.entity.Socialgroup;
 import org.openhds.hdsscapture.entity.Visit;
 import org.openhds.hdsscapture.entity.subentity.IndividualVisited;
 import org.openhds.hdsscapture.entity.subqueries.KeyValuePair;
+import org.openhds.hdsscapture.validations.PregnancyoutcomeValidation;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -316,115 +317,18 @@ public class PregnancyOutcomeFragment extends KeyboardFragment {
         if (save) {
             Pregnancyoutcome finalData = binding.getPregoutcome();
 
-            final Intent j = getActivity().getIntent();
-            final Hierarchy level6Data = j.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
+            // Create validator and validate all
+            PregnancyoutcomeValidation validator = new PregnancyoutcomeValidation(
+                    requireContext(),
+                    finalData,
+                    getEarliestEventDate()
+            );
 
-            try {
-                if (!binding.earliest.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
-                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date stdate = f.parse(binding.earliest.getText().toString().trim());
-                    Date edate = f.parse(binding.editTextConception.getText().toString().trim());
-                    if (edate.before(stdate)) {
-                        binding.editTextConception.setError("Conception Date Cannot Be Less than Earliest Event Date");
-                        Toast.makeText(getActivity(), "Conception Date Cannot Be Less than Earliest Event Date", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    // clear error if validation passes
-                    binding.editTextConception.setError(null);
-                }
-            } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
+            if (!validator.validateAll()) {
+                return; // Validation failed, errors shown to user
             }
 
-            try {
-                if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
-                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    Date currentDate = new Date();
-                    Date stdate = f.parse(binding.editTextConception.getText().toString().trim());
-                    Date edate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
-                    if (edate.after(currentDate)) {
-                        binding.editTextOutcomeDate.setError("Date of Delivery Cannot Be a Future Date");
-                        Toast.makeText(getActivity(), "Date of Delivery Cannot Be a Future Date", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    if (edate.before(stdate)) {
-                        binding.editTextConception.setError("Delivery Date Cannot Be Less than Conception Date");
-                        Toast.makeText(getActivity(), "Delivery Date Cannot Be Less than Conception Date", Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    // clear error if validation passes
-                    binding.editTextConception.setError(null);
-                }
-            } catch (ParseException e) {
-                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-
-            boolean month = false;
-            if (finalData.rec_anc == 1 && !binding.monthPg.getText().toString().trim().isEmpty()) {
-                int totalmth = Integer.parseInt(binding.monthPg.getText().toString().trim());
-                if (totalmth < 1 || totalmth > 12) {
-                    month = true;
-                    binding.monthPg.setError("Months Pregnant Before ANC Cannot be More than 12");
-                    Toast.makeText(getActivity(), "Months Pregnant Before ANC Cannot be More than 12", Toast.LENGTH_LONG).show();
-                    return;
-                }
-            }
-
-            boolean anc = false;
-            if (finalData.rec_anc == 1 && !binding.numAnc.getText().toString().trim().isEmpty()) {
-                int totalmth = Integer.parseInt(binding.numAnc.getText().toString().trim());
-                if (totalmth < 1 || totalmth > 20) {
-                    anc = true;
-                    binding.numAnc.setError("Maximum Number of ANC Visit is 20");
-                    Toast.makeText(getActivity(), "Maximum Number of ANC Visit is 20", Toast.LENGTH_LONG).show();
-                    return;
-                }
-            }
-
-            boolean ipt = false;
-            if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.firstRec.getText().toString().trim().isEmpty()) {
-                int totalmth = Integer.parseInt(binding.firstRec.getText().toString().trim());
-                if (totalmth < 1 || totalmth > 12) {
-                    ipt = true;
-                    binding.firstRec.setError("Months Pregnant for IPT Cannot be More than 12");
-                    Toast.makeText(getActivity(), "Months Pregnant for IPT Cannot be More than 12", Toast.LENGTH_LONG).show();
-                    return;
-                }
-            }
-
-            boolean iptt = false;
-            if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.manyIpt.getText().toString().trim().isEmpty()) {
-                int totalmth = Integer.parseInt(binding.manyIpt.getText().toString().trim());
-                if (totalmth < 1 || totalmth > 10) {
-                    iptt = true;
-                    binding.manyIpt.setError("Number of IPT taken Cannot be More than 10");
-                    Toast.makeText(getActivity(), "Number of IPT taken Cannot be More than 10", Toast.LENGTH_LONG).show();
-                    return;
-                }
-            }
-
-            boolean iptm = false;
-            if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.firstRec.getText().toString().trim().isEmpty()) {
-                int totalmth = Integer.parseInt(binding.firstRec.getText().toString().trim());
-                if (totalmth < 3) {
-                    iptm = true;
-                    binding.firstRec.setError("IPT is given at 13 weeks (3 Months)");
-                    Toast.makeText(getActivity(), "IPT is given at 13 weeks (3 Months)", Toast.LENGTH_LONG).show();
-                    return;
-                }
-            }
-
-            boolean nurse = false;
-            if (finalData.ass_del != 1 && finalData.how_del == 2) {
-                nurse = true;
-                Toast.makeText(getActivity(), "Only Doctors Perform Caesarian Section", Toast.LENGTH_LONG).show();
-                return;
-            }
-
-
-            final boolean validateOnComplete = true;//finalData.complete == 1;
+            final boolean validateOnComplete = true;
             boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.OUTCOMELAYOUT, validateOnComplete, false);
 
             if (hasErrors) {
@@ -432,51 +336,167 @@ public class PregnancyOutcomeFragment extends KeyboardFragment {
                 return;
             }
 
-
-
-
-            if (binding.getPregoutcome().numberofBirths != null) {
-
-                try {
-                    if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
-                        final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                        Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
-                        Date recordedDate = f.parse(binding.editTextConception.getText().toString().trim());
-
-                        Calendar startCalendar = Calendar.getInstance();
-                        startCalendar.setTime(recordedDate);
-
-                        Calendar endCalendar = Calendar.getInstance();
-                        endCalendar.setTime(outcomeDate);
-
-                        int yearDiff = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
-                        int monthDiff = endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
-                        int dayDiff = endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH);
-
-                        // Adjust the difference based on the day component
-                        if (dayDiff < 0) {
-                            monthDiff--;
-                        }
-
-                        // Calculate the total difference in months
-                        int totalDiffMonths = yearDiff * 12 + monthDiff;
-
-                        if (totalDiffMonths < 1 || totalDiffMonths > 12) {
-                            binding.editTextConception.setError("The difference between outcome and conception Date should be between 1 and 12 months");
-                            Toast.makeText(getActivity(), "The difference between outcome and conception Date should be between 1 and 12 months", Toast.LENGTH_LONG).show();
-                            return;
-                        }
-
-                        // Clear error if validation passes
-                        binding.editTextConception.setError(null);
-                    }
-                } catch (ParseException e) {
-                    Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-
-
-            }
+//            try {
+//                if (!binding.earliest.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
+//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                    Date stdate = f.parse(binding.earliest.getText().toString().trim());
+//                    Date edate = f.parse(binding.editTextConception.getText().toString().trim());
+//                    if (edate.before(stdate)) {
+//                        binding.editTextConception.setError("Conception Date Cannot Be Less than Earliest Event Date");
+//                        Toast.makeText(getActivity(), "Conception Date Cannot Be Less than Earliest Event Date", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    // clear error if validation passes
+//                    binding.editTextConception.setError(null);
+//                }
+//            } catch (ParseException e) {
+//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//
+//            try {
+//                if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
+//                    final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                    Date currentDate = new Date();
+//                    Date stdate = f.parse(binding.editTextConception.getText().toString().trim());
+//                    Date edate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+//                    if (edate.after(currentDate)) {
+//                        binding.editTextOutcomeDate.setError("Date of Delivery Cannot Be a Future Date");
+//                        Toast.makeText(getActivity(), "Date of Delivery Cannot Be a Future Date", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    if (edate.before(stdate)) {
+//                        binding.editTextConception.setError("Delivery Date Cannot Be Less than Conception Date");
+//                        Toast.makeText(getActivity(), "Delivery Date Cannot Be Less than Conception Date", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//                    // clear error if validation passes
+//                    binding.editTextConception.setError(null);
+//                }
+//            } catch (ParseException e) {
+//                Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//
+//            boolean month = false;
+//            if (finalData.rec_anc == 1 && !binding.monthPg.getText().toString().trim().isEmpty()) {
+//                int totalmth = Integer.parseInt(binding.monthPg.getText().toString().trim());
+//                if (totalmth < 1 || totalmth > 12) {
+//                    month = true;
+//                    binding.monthPg.setError("Months Pregnant Before ANC Cannot be More than 12");
+//                    Toast.makeText(getActivity(), "Months Pregnant Before ANC Cannot be More than 12", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//            }
+//
+//            boolean anc = false;
+//            if (finalData.rec_anc == 1 && !binding.numAnc.getText().toString().trim().isEmpty()) {
+//                int totalmth = Integer.parseInt(binding.numAnc.getText().toString().trim());
+//                if (totalmth < 1 || totalmth > 20) {
+//                    anc = true;
+//                    binding.numAnc.setError("Maximum Number of ANC Visit is 20");
+//                    Toast.makeText(getActivity(), "Maximum Number of ANC Visit is 20", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//            }
+//
+//            boolean ipt = false;
+//            if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.firstRec.getText().toString().trim().isEmpty()) {
+//                int totalmth = Integer.parseInt(binding.firstRec.getText().toString().trim());
+//                if (totalmth < 1 || totalmth > 12) {
+//                    ipt = true;
+//                    binding.firstRec.setError("Months Pregnant for IPT Cannot be More than 12");
+//                    Toast.makeText(getActivity(), "Months Pregnant for IPT Cannot be More than 12", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//            }
+//
+//            boolean iptt = false;
+//            if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.manyIpt.getText().toString().trim().isEmpty()) {
+//                int totalmth = Integer.parseInt(binding.manyIpt.getText().toString().trim());
+//                if (totalmth < 1 || totalmth > 10) {
+//                    iptt = true;
+//                    binding.manyIpt.setError("Number of IPT taken Cannot be More than 10");
+//                    Toast.makeText(getActivity(), "Number of IPT taken Cannot be More than 10", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//            }
+//
+//            boolean iptm = false;
+//            if (finalData.rec_anc == 1 && finalData.rec_ipt == 1 && !binding.firstRec.getText().toString().trim().isEmpty()) {
+//                int totalmth = Integer.parseInt(binding.firstRec.getText().toString().trim());
+//                if (totalmth < 3) {
+//                    iptm = true;
+//                    binding.firstRec.setError("IPT is given at 13 weeks (3 Months)");
+//                    Toast.makeText(getActivity(), "IPT is given at 13 weeks (3 Months)", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//            }
+//
+//            boolean nurse = false;
+//            if (finalData.ass_del != 1 && finalData.how_del == 2) {
+//                nurse = true;
+//                Toast.makeText(getActivity(), "Only Doctors Perform Caesarian Section", Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//
+//            boolean val = false;
+//            if (!binding.etOutcomes.getText().toString().trim().isEmpty() && !binding.numberOfLiveBirths.getText().toString().trim().isEmpty()) {
+//                int totalOutcomes = Integer.parseInt(binding.etOutcomes.getText().toString().trim());
+//                int lvBirths = Integer.parseInt(binding.numberOfLiveBirths.getText().toString().trim());
+//                if (totalOutcomes < lvBirths) {
+//                    val = true;
+//                    binding.numberOfLiveBirths.setError("Number of livebirths for this pregnancy cannot be more than number of outcomes");
+//                    Toast.makeText(getActivity(), "Number of livebirths for this pregnancy cannot be more than number of outcomes", Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//            }
+//
+//
+//
+//
+//            if (binding.getPregoutcome().numberofBirths != null) {
+//
+//                try {
+//                    if (!binding.editTextOutcomeDate.getText().toString().trim().isEmpty() && !binding.editTextConception.getText().toString().trim().isEmpty()) {
+//                        final SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+//                        Date outcomeDate = f.parse(binding.editTextOutcomeDate.getText().toString().trim());
+//                        Date recordedDate = f.parse(binding.editTextConception.getText().toString().trim());
+//
+//                        Calendar startCalendar = Calendar.getInstance();
+//                        startCalendar.setTime(recordedDate);
+//
+//                        Calendar endCalendar = Calendar.getInstance();
+//                        endCalendar.setTime(outcomeDate);
+//
+//                        int yearDiff = endCalendar.get(Calendar.YEAR) - startCalendar.get(Calendar.YEAR);
+//                        int monthDiff = endCalendar.get(Calendar.MONTH) - startCalendar.get(Calendar.MONTH);
+//                        int dayDiff = endCalendar.get(Calendar.DAY_OF_MONTH) - startCalendar.get(Calendar.DAY_OF_MONTH);
+//
+//                        // Adjust the difference based on the day component
+//                        if (dayDiff < 0) {
+//                            monthDiff--;
+//                        }
+//
+//                        // Calculate the total difference in months
+//                        int totalDiffMonths = yearDiff * 12 + monthDiff;
+//
+//                        if (totalDiffMonths < 1 || totalDiffMonths > 12) {
+//                            binding.editTextConception.setError("The difference between outcome and conception Date should be between 1 and 12 months");
+//                            Toast.makeText(getActivity(), "The difference between outcome and conception Date should be between 1 and 12 months", Toast.LENGTH_LONG).show();
+//                            return;
+//                        }
+//
+//                        // Clear error if validation passes
+//                        binding.editTextConception.setError(null);
+//                    }
+//                } catch (ParseException e) {
+//                    Toast.makeText(getActivity(), "Error parsing date", Toast.LENGTH_LONG).show();
+//                    e.printStackTrace();
+//                }
+//
+//
+//            }
 
             finalData.mother_uuid = selectedIndividual.getUuid();
             finalData.visit_uuid = binding.getPregoutcome().visit_uuid;
@@ -515,6 +535,19 @@ public class PregnancyOutcomeFragment extends KeyboardFragment {
                     PregnancyFragment.newInstance(individual, locations, socialgroup, pregnancyNumber)).commit();
         }
 
+    }
+
+    // Helper method to get earliest event date
+    private Date getEarliestEventDate() {
+        try {
+            if (!binding.earliest.getText().toString().trim().isEmpty()) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                return sdf.parse(binding.earliest.getText().toString().trim());
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
