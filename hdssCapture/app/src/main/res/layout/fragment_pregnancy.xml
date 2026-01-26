@@ -1053,26 +1053,6 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Hidden Admin Fields -->
-                <TextView
-                    android:visibility="gone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="start"
-                    android:padding="5dp"
-                    android:textColor="@color/black"
-                    android:text="@string/form_complete"/>
-
-                <org.openhds.searchSpinner.SearchableSpinner
-                    android:visibility="gone"
-                    android:id="@+id/individual_complete"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    selection="@{pregnancy.complete}"
-                    android:onItemSelected="@{pregnancy::setComplete}"
-                    android:gravity="left"
-                    android:spinnerMode="dialog"
-                    android:padding="15dp"/>
 
                 <TextView
                     android:visibility="gone"
@@ -1131,7 +1111,7 @@
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 style="@style/SupervisorButton"
-                android:text="@string/saveclosedata" />
+                android:text="@string/save" />
 
             <Button
                 android:id="@+id/buttonClose"

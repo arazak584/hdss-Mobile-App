@@ -98,6 +98,14 @@ public class DeathViewModel extends AndroidViewModel {
 
     public void add(Death... data){     repo.create(data);  }
 
+    public void delete(Death data) {
+        repo.delete(data);
+    }
+
+    public void delete(Death... data) {
+        repo.delete(data);
+    }
+
     public LiveData<Long> sync() {
         return repo.sync();
     }

@@ -92,7 +92,7 @@ public interface HdssSociodemoDao {
             " where a.form_comments_yn IS NULL AND a.fw_uuid= :id GROUP BY a.socialgroup_uuid")
     long cnt(String id);
 
-    @Query("SELECT a.uuid, 'SES' AS formType, a.insertDate, extId || ' - ' || groupName as fullName FROM sociodemo as a inner join socialgroup as b ON a.socialgroup_uuid=b.uuid WHERE a.complete = 1 ORDER BY a.insertDate DESC")
+    @Query("SELECT a.uuid, 'SES' AS formType, a.insertDate, extId || ' - ' || groupName as fullName FROM sociodemo as a inner join socialgroup as b ON a.socialgroup_uuid=b.uuid WHERE a.complete = 1 OR a.status = 2 ORDER BY a.insertDate DESC")
     List<CompletedForm> getCompletedForms();
     @Query("SELECT * FROM sociodemo where uuid=:id")
     LiveData<HdssSociodemo> getView(String id);

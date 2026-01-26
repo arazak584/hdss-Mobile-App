@@ -288,7 +288,6 @@ public class PregFragment extends KeyboardFragment {
 
         //LOAD SPINNERS
         loadCodeData(binding.anteNatalClinic, "yn_anc");
-        loadCodeData(binding.individualComplete, "submit");
         loadCodeData(binding.ttinjection, "complete");
         loadCodeData(binding.slpBednet, "complete");
         loadCodeData(binding.firstPreg, "complete");

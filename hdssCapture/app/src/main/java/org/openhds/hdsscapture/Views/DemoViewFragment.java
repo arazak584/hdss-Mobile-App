@@ -147,7 +147,6 @@ public class DemoViewFragment extends KeyboardFragment {
         loadCodeData(binding.education, "education");
         loadCodeData(binding.occupation, "occupation");
         loadCodeData(binding.marital, "marital");
-        loadCodeData(binding.demoComplete, "submit");
         loadCodeData(binding.demoPhone, "complete");
         loadCodeData(binding.akan, "akan");
         loadCodeData(binding.denomination, "denomination");

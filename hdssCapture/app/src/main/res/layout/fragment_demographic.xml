@@ -596,8 +596,7 @@
                     app:cardElevation="4dp"
                     app:strokeColor="@color/primary"
                     app:strokeWidth="2dp"
-                    app:cardUseCompatPadding="true"
-                    android:visibility="gone">
+                    app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -654,25 +653,6 @@
                                 android:visibility="invisible" />
                         </RadioGroup>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="start"
-                            android:padding="5dp"
-                            android:text="@string/form_complete"
-                            android:textColor="@color/black"
-                            android:visibility="gone" />
-
-                        <Spinner
-                            android:id="@+id/demo_complete"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="left"
-                            android:onItemSelected="@{demographic::setComplete}"
-                            android:padding="15dp"
-                            selection="@{demographic.complete}"
-                            android:spinnerMode="dialog"
-                            android:visibility="gone" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 

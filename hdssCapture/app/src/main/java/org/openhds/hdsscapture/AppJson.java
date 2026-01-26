@@ -11,6 +11,7 @@ import org.openhds.hdsscapture.Dao.ApiDao;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -27,19 +28,25 @@ public class AppJson {
     private final Context context;
     private Retrofit retrofit;
     private final Gson gson;
-
-//    private AppJson(Context context) {
-//        this.context = context.getApplicationContext();
-//        refreshRetrofit();
-//    }
+    private final OkHttpClient client;
 
     private AppJson(Context context) {
         this.context = context.getApplicationContext();
+
         // Create Gson once with your desired date format
         this.gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
                 .setLenient()
                 .create();
+
+        // Create OkHttpClient once with custom timeouts and no cache
+        this.client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(120, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .cache(null)
+                .build();
+
         refreshRetrofit();
     }
 
@@ -60,7 +67,6 @@ public class AppJson {
     }
 
     public ApiDao getJsonApi() {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").setLenient().create();
         if (retrofit == null) {
             refreshRetrofit();
         }
@@ -82,7 +88,7 @@ public class AppJson {
     public void updateBaseUrl(String newBaseUrl) {
         setBaseUrl(newBaseUrl);
         resetInstance();
-        INSTANCE = new AppJson(context); // Create a new instance with the updated configuration
+        INSTANCE = new AppJson(context);
         INSTANCE.refreshRetrofit();
     }
 
@@ -93,16 +99,16 @@ public class AppJson {
     public void refreshRetrofit() {
         retrofit = new Retrofit.Builder()
                 .baseUrl(getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX").setLenient().create()))
-                .client(new OkHttpClient.Builder()
-                        .cache(null)
-                        .build())
+                .addConverterFactory(GsonConverterFactory.create(
+                        new GsonBuilder()
+                                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX")
+                                .setLenient()
+                                .create()))
+                .client(client)  //single client instance with timeouts
                 .build();
     }
 
     public Context getAppContext() {
         return context;
     }
-
 }
-

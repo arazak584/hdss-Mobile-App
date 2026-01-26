@@ -139,7 +139,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:goneUnless="@{sociodemo.h2o_fcorres==77}"
+                            goneUnless="@{sociodemo.h2o_fcorres==77}"
                             android:layout_marginTop="8dp">
 
                             <TextView
@@ -282,7 +282,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:goneUnless="@{sociodemo.h2o_prep_fcorres==1}"
+                            goneUnless="@{sociodemo.h2o_prep_fcorres==1}"
                             android:layout_marginTop="8dp">
 
                             <TextView
@@ -574,7 +574,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:goneUnless="@{sociodemo.toilet_fcorres!=12}"
+                            goneUnless="@{sociodemo.toilet_fcorres!=12}"
                             android:layout_marginTop="8dp">
 
                             <!-- Other Toilet Specification (Conditional) -->
@@ -582,7 +582,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                app:goneUnless="@{sociodemo.toilet_fcorres==77}">
+                                goneUnless="@{sociodemo.toilet_fcorres==77}">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -623,7 +623,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                app:goneUnless="@{sociodemo.toilet_loc_fcorres==77}"
+                                goneUnless="@{sociodemo.toilet_loc_fcorres==77}"
                                 android:layout_marginTop="8dp">
 
                                 <TextView
@@ -686,7 +686,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                app:goneUnless="@{sociodemo.toilet_share_fcorres==1}"
+                                goneUnless="@{sociodemo.toilet_share_fcorres==1}"
                                 android:layout_marginTop="8dp">
 
                                 <TextView
@@ -753,7 +753,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:goneUnless="@{sociodemo.ext_wall_fcorres==77}"
+                            goneUnless="@{sociodemo.ext_wall_fcorres==77}"
                             android:layout_marginTop="8dp">
 
                             <TextView
@@ -793,7 +793,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:goneUnless="@{sociodemo.floor_fcorres==77}"
+                            goneUnless="@{sociodemo.floor_fcorres==77}"
                             android:layout_marginTop="8dp">
 
                             <TextView
@@ -833,7 +833,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:goneUnless="@{sociodemo.roof_fcorres==77}"
+                            goneUnless="@{sociodemo.roof_fcorres==77}"
                             android:layout_marginTop="8dp">
 
                             <TextView

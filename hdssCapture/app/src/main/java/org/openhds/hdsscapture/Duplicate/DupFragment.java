@@ -308,248 +308,449 @@ public class DupFragment extends DialogFragment {
         return view;
     }
 
-
     private void save(boolean save, boolean close, DuplicateViewModel viewModel) {
 
         if (save) {
             Duplicate finalData = binding.getDup();
 
-            boolean sameID = false;
-            boolean dup1 = false;
-            boolean dup2 = false;
-            boolean dup3 = false;
-
+            // Basic validation - check if same individual selected
             if (binding.uuid.getText().toString().trim().equals(binding.dupUuid.getText().toString().trim())) {
-                sameID = true;
                 binding.dupFname.setError("Same Individual Selected as Duplicate");
                 Toast.makeText(requireContext(), "Same Individual Selected as Duplicate", Toast.LENGTH_LONG).show();
                 return;
             }
 
-            final boolean validateOnComplete = true;//finalData.complete == 1;
+            final boolean validateOnComplete = true;
             boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
-
 
             if (hasErrors) {
                 Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
                 return;
             }
 
-            ExecutorService executor = Executors.newSingleThreadExecutor();
-            executor.execute(() -> {
-                String dp1 = binding.getDup().dup_uuid;
-                String dp2 = binding.getDup().dup1_uuid;
-                String dp3 = binding.getDup().dup2_uuid;
+            // Extract ALL UUIDs before background thread (including the main individual)
+            String mainUuid = finalData.uuid;  // The individual_uuid
+            String dp1 = finalData.dup_uuid;
+            String dp2 = finalData.dup1_uuid;
+            String dp3 = finalData.dup2_uuid;
+            String currentUuid = binding.uuid.getText().toString().trim();
 
-                if (dp1 != null || dp2 != null || dp3 != null) {
-                    try {
-                        if (dp1 != null && viewModel.finds(dp1) != null) {
-                            requireActivity().runOnUiThread(() -> {
-                                binding.dupFname.setError("Same Individual Exist as Duplicate");
-                                Toast.makeText(requireContext(), "Same Individual Exist as Duplicate", Toast.LENGTH_LONG).show();
-                            });
-                            return;
-                        }
-
-                        if (dp2 != null && viewModel.finds(dp2) != null) {
-                            requireActivity().runOnUiThread(() -> {
-                                binding.dup1Fname.setError("Second Duplicate Individual Exist as Duplicate");
-                                Toast.makeText(requireContext(), "Second Duplicate Individual Exist as Duplicate", Toast.LENGTH_LONG).show();
-                            });
-                            return;
-                        }
-
-                        if (dp3 != null && viewModel.finds(dp3) != null) {
-                            requireActivity().runOnUiThread(() -> {
-                                binding.dup2Fname.setError("Third Duplicate Individual Exist as Duplicate");
-                                Toast.makeText(requireContext(), "Third Duplicate Individual Exist as Duplicate", Toast.LENGTH_LONG).show();
-                            });
-                            return;
-                        }
-
-                        // If all checks pass, continue processing here
-                        requireActivity().runOnUiThread(() -> {
-                            // Do your next action (e.g., save or navigate)
-                        });
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
-
-//            String dp1 = binding.getDup().dup_uuid;
-//            String dp2 = binding.getDup().dup1_uuid;
-//            String dp3 = binding.getDup().dup2_uuid;
-//
-//            if (dp1 != null || dp2 != null || dp3 != null) {
-//
-//                try {
-//                if (dp1 != null) {
-//                    Duplicate data = viewModel.finds(dp1);
-//                    if (data != null) {
-//                        binding.dupFname.setError("Same Individual Exist as Duplicate");
-//                        Toast.makeText(requireContext(), "Same Individual Exist as Duplicate", Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
-//                }
-//
-//                if (dp2 != null) {
-//                    Duplicate data1 = viewModel.finds(dp2);
-//                    if (data1 != null) {
-//                        binding.dup1Fname.setError("Second Duplicate Individual Exist as Duplicate");
-//                        Toast.makeText(requireContext(), "Second Duplicate Individual Exist as Duplicate", Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
-//                }
-//
-//                if (dp3 != null) {
-//                    Duplicate data2 = viewModel.finds(dp3);
-//                    if (data2 != null) {
-//                        binding.dup2Fname.setError("Third Duplicate Individual Exist as Duplicate");
-//                        Toast.makeText(requireContext(), "Third Duplicate Individual Exist as Duplicate", Toast.LENGTH_LONG).show();
-//                        return;
-//                    }
-//                }
-//
-//                } catch (ExecutionException | InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-
-
-            finalData.complete_n = finalData.getComplete();
-
+            // Validate duplicates within this form
             if (finalData.numberofdup != null) {
-
                 if (finalData.numberofdup >= 1) {
-
-                    if (binding.uuid.getText().toString().trim().equals(binding.dupUuid.getText().toString().trim())) {
-                        dup1 = true;
+                    if (currentUuid.equals(binding.dupUuid.getText().toString().trim())) {
                         binding.dupFname.setError("Same Individual Selected as Duplicate");
                         Toast.makeText(requireContext(), "Same Individual Selected as Duplicate", Toast.LENGTH_LONG).show();
                         return;
                     }
-
                 }
 
                 if (finalData.numberofdup >= 2) {
-
-                    if (binding.uuid.getText().toString().trim().equals(binding.dup1Uuid.getText().toString().trim())) {
-                        dup1 = true;
+                    if (currentUuid.equals(binding.dup1Uuid.getText().toString().trim())) {
                         binding.dup1Fname.setError("Same Individual Selected as Duplicate");
                         Toast.makeText(requireContext(), "Same Individual Selected as Duplicate", Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     if (binding.dupUuid.getText().toString().trim().equals(binding.dup1Uuid.getText().toString().trim())) {
-                        dup2 = true;
                         binding.dup1Fname.setError("Same Individual Selected as Duplicate 1");
                         Toast.makeText(requireContext(), "Same Individual Selected as Duplicate 1", Toast.LENGTH_LONG).show();
                         return;
                     }
-
                 }
 
                 if (finalData.numberofdup >= 3) {
-
-                    if (binding.uuid.getText().toString().trim().equals(binding.dup2Uuid.getText().toString().trim())) {
-                        dup1 = true;
+                    if (currentUuid.equals(binding.dup2Uuid.getText().toString().trim())) {
                         binding.dup2Fname.setError("Same Individual Selected as Duplicate");
                         Toast.makeText(requireContext(), "Same Individual Selected as Duplicate", Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     if (binding.dupUuid.getText().toString().trim().equals(binding.dup2Uuid.getText().toString().trim())) {
-                        dup2 = true;
                         binding.dup2Fname.setError("Same Individual Selected as Duplicate 1");
                         Toast.makeText(requireContext(), "Same Individual Selected as Duplicate 1", Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     if (binding.dup1Uuid.getText().toString().trim().equals(binding.dup2Uuid.getText().toString().trim())) {
-                        dup3 = true;
                         binding.dup2Fname.setError("Same Individual Selected as Duplicate 2");
                         Toast.makeText(requireContext(), "Same Individual Selected as Duplicate 2", Toast.LENGTH_LONG).show();
                         return;
                     }
-
-
                 }
-
-
             }
 
-            IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
-
-            //ExecutorService executor = Executors.newSingleThreadExecutor();
+            // Now check if ANY of these UUIDs (including main individual) exist in other duplicate records
+            ExecutorService executor = Executors.newSingleThreadExecutor();
             executor.execute(() -> {
-
-                if (binding.getDup().numberofdup>=1 && finalData.complete ==1) {
-                    IndividualEnd endInd = new IndividualEnd();
-                    endInd.endType = 4;
-                    endInd.uuid = binding.getDup().dup_uuid;
-                    endInd.complete = 1;
-
-                    individualViewModel.dthupdate(endInd, result ->
-                            new Handler(Looper.getMainLooper()).post(() -> {
-                                if (result > 0) {
-                                    Log.d("DuplicateFragment", "Dup Update successful!");
-                                } else {
-                                    Log.d("BaselineFragment", "Dup Update Failed!");
+                try {
+                    // Check main individual_uuid
+                    if (mainUuid != null) {
+                        Duplicate existingDup = viewModel.findByAnyUuid(mainUuid);
+                        if (existingDup != null && !existingDup.uuid.equals(currentUuid)) {
+                            requireActivity().runOnUiThread(() -> {
+                                if (binding != null) {
+                                    binding.fname.setError("This individual already exists in another duplicate record");
+                                    Toast.makeText(requireContext(), "This individual already exists in another duplicate record", Toast.LENGTH_LONG).show();
                                 }
-                            })
-                    );
-                }
+                            });
+                            return;
+                        }
+                    }
 
-                if (binding.getDup().numberofdup>=2 && finalData.complete ==1) {
-                    IndividualEnd endInd = new IndividualEnd();
-                    endInd.endType = 4;
-                    endInd.uuid = binding.getDup().dup1_uuid;
-                    endInd.complete = 1;
-                    individualViewModel.dthupdate(endInd, result ->
-                            new Handler(Looper.getMainLooper()).post(() -> {
-                                if (result > 0) {
-                                    Log.d("DuplicateFragment", "Dup Update successful!");
-                                } else {
-                                    Log.d("BaselineFragment", "Dup Update Failed!");
+                    // Check dp1 (dup_uuid)
+                    if (dp1 != null) {
+                        Duplicate existingDup = viewModel.findByAnyUuid(dp1);
+                        if (existingDup != null && !existingDup.uuid.equals(currentUuid)) {
+                            requireActivity().runOnUiThread(() -> {
+                                if (binding != null) {
+                                    binding.dupFname.setError("This individual already exists in another duplicate record");
+                                    Toast.makeText(requireContext(), "This individual already exists in another duplicate record", Toast.LENGTH_LONG).show();
                                 }
-                            })
-                    );
-                }
+                            });
+                            return;
+                        }
+                    }
 
-                if (binding.getDup().numberofdup>=3 && finalData.complete ==1) {
-                    IndividualEnd endInd = new IndividualEnd();
-                    endInd.endType = 4;
-                    endInd.uuid = binding.getDup().dup2_uuid;
-                    endInd.complete = 1;
-                    individualViewModel.dthupdate(endInd, result ->
-                            new Handler(Looper.getMainLooper()).post(() -> {
-                                if (result > 0) {
-                                    Log.d("DuplicateFragment", "Dup Update successful!");
-                                } else {
-                                    Log.d("BaselineFragment", "Dup Update Failed!");
+                    // Check dp2 (dup1_uuid)
+                    if (dp2 != null) {
+                        Duplicate existingDup = viewModel.findByAnyUuid(dp2);
+                        if (existingDup != null && !existingDup.uuid.equals(currentUuid)) {
+                            requireActivity().runOnUiThread(() -> {
+                                if (binding != null) {
+                                    binding.dup1Fname.setError("This individual already exists in another duplicate record");
+                                    Toast.makeText(requireContext(), "This individual already exists in another duplicate record", Toast.LENGTH_LONG).show();
                                 }
-                            })
-                    );
+                            });
+                            return;
+                        }
+                    }
+
+                    // Check dp3 (dup2_uuid)
+                    if (dp3 != null) {
+                        Duplicate existingDup = viewModel.findByAnyUuid(dp3);
+                        if (existingDup != null && !existingDup.uuid.equals(currentUuid)) {
+                            requireActivity().runOnUiThread(() -> {
+                                if (binding != null) {
+                                    binding.dup2Fname.setError("This individual already exists in another duplicate record");
+                                    Toast.makeText(requireContext(), "This individual already exists in another duplicate record", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            return;
+                        }
+                    }
+
+                    // All validations passed - proceed with save on UI thread
+                    requireActivity().runOnUiThread(() -> {
+                        if (binding != null) {
+                            performSave(finalData, close, viewModel);
+                        }
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    requireActivity().runOnUiThread(() -> {
+                        Toast.makeText(requireContext(), "Error validating duplicates", Toast.LENGTH_SHORT).show();
+                    });
+                } finally {
+                    executor.shutdown();
                 }
-
-
             });
 
-            executor.shutdown();
-
-            viewModel.add(finalData);
-
+        } else if (close) {
+            // Just close without saving
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.container_cluster, HouseMembersFragment.newInstance(locations, socialgroup, individual))
+                    .commit();
         }
-        if (close) {
-            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                    HouseMembersFragment.newInstance(locations, socialgroup,individual)).commit();
-        }
-
     }
+
+    private void performSave(Duplicate finalData, boolean close, DuplicateViewModel viewModel) {
+        if (binding == null) return;
+
+        finalData.complete_n = finalData.getComplete();
+
+        IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            // Update individuals marked as duplicates
+            if (finalData.numberofdup != null && finalData.numberofdup >= 1 && finalData.complete == 1) {
+                if (finalData.dup_uuid != null) {
+                    IndividualEnd endInd = new IndividualEnd();
+                    endInd.endType = 4;
+                    endInd.uuid = finalData.dup_uuid;
+                    endInd.complete = 1;
+
+                    individualViewModel.dthupdate(endInd, result ->
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                if (result > 0) {
+                                    Log.d("DuplicateFragment", "Dup 1 Update successful!");
+                                } else {
+                                    Log.d("DuplicateFragment", "Dup 1 Update Failed!");
+                                }
+                            })
+                    );
+                }
+            }
+
+            if (finalData.numberofdup != null && finalData.numberofdup >= 2 && finalData.complete == 1) {
+                if (finalData.dup1_uuid != null) {
+                    IndividualEnd endInd = new IndividualEnd();
+                    endInd.endType = 4;
+                    endInd.uuid = finalData.dup1_uuid;
+                    endInd.complete = 1;
+
+                    individualViewModel.dthupdate(endInd, result ->
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                if (result > 0) {
+                                    Log.d("DuplicateFragment", "Dup 2 Update successful!");
+                                } else {
+                                    Log.d("DuplicateFragment", "Dup 2 Update Failed!");
+                                }
+                            })
+                    );
+                }
+            }
+
+            if (finalData.numberofdup != null && finalData.numberofdup >= 3 && finalData.complete == 1) {
+                if (finalData.dup2_uuid != null) {
+                    IndividualEnd endInd = new IndividualEnd();
+                    endInd.endType = 4;
+                    endInd.uuid = finalData.dup2_uuid;
+                    endInd.complete = 1;
+
+                    individualViewModel.dthupdate(endInd, result ->
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                if (result > 0) {
+                                    Log.d("DuplicateFragment", "Dup 3 Update successful!");
+                                } else {
+                                    Log.d("DuplicateFragment", "Dup 3 Update Failed!");
+                                }
+                            })
+                    );
+                }
+            }
+
+            // Save the duplicate record
+            new Handler(Looper.getMainLooper()).post(() -> {
+                viewModel.add(finalData);
+
+                if (close) {
+                    requireActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.container_cluster, HouseMembersFragment.newInstance(locations, socialgroup, individual))
+                            .commit();
+                }
+            });
+        });
+
+        executor.shutdown();
+    }
+
+
+//    private void save(boolean save, boolean close, DuplicateViewModel viewModel) {
+//
+//        if (save) {
+//            Duplicate finalData = binding.getDup();
+//
+//            boolean sameID = false;
+//            boolean dup1 = false;
+//            boolean dup2 = false;
+//            boolean dup3 = false;
+//
+//            if (binding.uuid.getText().toString().trim().equals(binding.dupUuid.getText().toString().trim())) {
+//                sameID = true;
+//                binding.dupFname.setError("Same Individual Selected as Duplicate");
+//                Toast.makeText(requireContext(), "Same Individual Selected as Duplicate", Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//
+//            final boolean validateOnComplete = true;//finalData.complete == 1;
+//            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
+//
+//
+//            if (hasErrors) {
+//                Toast.makeText(requireContext(), "Some fields are Missing", Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//
+//            ExecutorService executor = Executors.newSingleThreadExecutor();
+//            executor.execute(() -> {
+//                String dp1 = binding.getDup().dup_uuid;
+//                String dp2 = binding.getDup().dup1_uuid;
+//                String dp3 = binding.getDup().dup2_uuid;
+//
+//                if (dp1 != null || dp2 != null || dp3 != null) {
+//                    try {
+//                        if (dp1 != null && viewModel.findByAnyUuid(dp1) != null) {
+//                            requireActivity().runOnUiThread(() -> {
+//                                binding.dupFname.setError("This individual already exists in another duplicate record");
+//                                Toast.makeText(requireContext(), "This individual already exists in another duplicate record", Toast.LENGTH_LONG).show();
+//                            });
+//                            return;
+//                        }
+//
+//                        if (dp2 != null && viewModel.findByAnyUuid(dp2) != null) {
+//                            requireActivity().runOnUiThread(() -> {
+//                                binding.dup1Fname.setError("This individual already exists in another duplicate record");
+//                                Toast.makeText(requireContext(), "This individual already exists in another duplicate record", Toast.LENGTH_LONG).show();
+//                            });
+//                            return;
+//                        }
+//
+//                        if (dp3 != null && viewModel.findByAnyUuid(dp3) != null) {
+//                            requireActivity().runOnUiThread(() -> {
+//                                binding.dup2Fname.setError("This individual already exists in another duplicate record");
+//                                Toast.makeText(requireContext(), "This individual already exists in another duplicate record", Toast.LENGTH_LONG).show();
+//                            });
+//                            return;
+//                        }
+//
+//                        // If all checks pass, continue processing
+//                        requireActivity().runOnUiThread(() -> {
+//                            // Do your next action (e.g., save or navigate)
+//                        });
+//
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                        requireActivity().runOnUiThread(() -> {
+//                            Toast.makeText(requireContext(), "Error validating duplicates", Toast.LENGTH_SHORT).show();
+//                        });
+//                    }
+//                }
+//            });
+//
+//
+//            finalData.complete_n = finalData.getComplete();
+//
+//            if (finalData.numberofdup != null) {
+//
+//                if (finalData.numberofdup >= 1) {
+//
+//                    if (binding.uuid.getText().toString().trim().equals(binding.dupUuid.getText().toString().trim())) {
+//                        dup1 = true;
+//                        binding.dupFname.setError("Same Individual Selected as Duplicate");
+//                        Toast.makeText(requireContext(), "Same Individual Selected as Duplicate", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//
+//                }
+//
+//                if (finalData.numberofdup >= 2) {
+//
+//                    if (binding.uuid.getText().toString().trim().equals(binding.dup1Uuid.getText().toString().trim())) {
+//                        dup1 = true;
+//                        binding.dup1Fname.setError("Same Individual Selected as Duplicate");
+//                        Toast.makeText(requireContext(), "Same Individual Selected as Duplicate", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//
+//                    if (binding.dupUuid.getText().toString().trim().equals(binding.dup1Uuid.getText().toString().trim())) {
+//                        dup2 = true;
+//                        binding.dup1Fname.setError("Same Individual Selected as Duplicate 1");
+//                        Toast.makeText(requireContext(), "Same Individual Selected as Duplicate 1", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//
+//                }
+//
+//                if (finalData.numberofdup >= 3) {
+//
+//                    if (binding.uuid.getText().toString().trim().equals(binding.dup2Uuid.getText().toString().trim())) {
+//                        dup1 = true;
+//                        binding.dup2Fname.setError("Same Individual Selected as Duplicate");
+//                        Toast.makeText(requireContext(), "Same Individual Selected as Duplicate", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//
+//                    if (binding.dupUuid.getText().toString().trim().equals(binding.dup2Uuid.getText().toString().trim())) {
+//                        dup2 = true;
+//                        binding.dup2Fname.setError("Same Individual Selected as Duplicate 1");
+//                        Toast.makeText(requireContext(), "Same Individual Selected as Duplicate 1", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//
+//                    if (binding.dup1Uuid.getText().toString().trim().equals(binding.dup2Uuid.getText().toString().trim())) {
+//                        dup3 = true;
+//                        binding.dup2Fname.setError("Same Individual Selected as Duplicate 2");
+//                        Toast.makeText(requireContext(), "Same Individual Selected as Duplicate 2", Toast.LENGTH_LONG).show();
+//                        return;
+//                    }
+//
+//
+//                }
+//
+//
+//            }
+//
+//            IndividualViewModel individualViewModel = new ViewModelProvider(this).get(IndividualViewModel.class);
+//
+//            //ExecutorService executor = Executors.newSingleThreadExecutor();
+//            executor.execute(() -> {
+//
+//                if (binding.getDup().numberofdup>=1 && finalData.complete ==1) {
+//                    IndividualEnd endInd = new IndividualEnd();
+//                    endInd.endType = 4;
+//                    endInd.uuid = binding.getDup().dup_uuid;
+//                    endInd.complete = 1;
+//
+//                    individualViewModel.dthupdate(endInd, result ->
+//                            new Handler(Looper.getMainLooper()).post(() -> {
+//                                if (result > 0) {
+//                                    Log.d("DuplicateFragment", "Dup Update successful!");
+//                                } else {
+//                                    Log.d("BaselineFragment", "Dup Update Failed!");
+//                                }
+//                            })
+//                    );
+//                }
+//
+//                if (binding.getDup().numberofdup>=2 && finalData.complete ==1) {
+//                    IndividualEnd endInd = new IndividualEnd();
+//                    endInd.endType = 4;
+//                    endInd.uuid = binding.getDup().dup1_uuid;
+//                    endInd.complete = 1;
+//                    individualViewModel.dthupdate(endInd, result ->
+//                            new Handler(Looper.getMainLooper()).post(() -> {
+//                                if (result > 0) {
+//                                    Log.d("DuplicateFragment", "Dup Update successful!");
+//                                } else {
+//                                    Log.d("BaselineFragment", "Dup Update Failed!");
+//                                }
+//                            })
+//                    );
+//                }
+//
+//                if (binding.getDup().numberofdup>=3 && finalData.complete ==1) {
+//                    IndividualEnd endInd = new IndividualEnd();
+//                    endInd.endType = 4;
+//                    endInd.uuid = binding.getDup().dup2_uuid;
+//                    endInd.complete = 1;
+//                    individualViewModel.dthupdate(endInd, result ->
+//                            new Handler(Looper.getMainLooper()).post(() -> {
+//                                if (result > 0) {
+//                                    Log.d("DuplicateFragment", "Dup Update successful!");
+//                                } else {
+//                                    Log.d("BaselineFragment", "Dup Update Failed!");
+//                                }
+//                            })
+//                    );
+//                }
+//
+//
+//            });
+//
+//            executor.shutdown();
+//
+//            viewModel.add(finalData);
+//
+//        }
+//        if (close) {
+//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                    HouseMembersFragment.newInstance(locations, socialgroup,individual)).commit();
+//        }
+//
+//    }
 
     @Override
     public void onDestroyView() {

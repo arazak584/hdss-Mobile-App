@@ -142,7 +142,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:goneUnless="@{sociodemo.stove_fcorres==77}">
+                            goneUnless="@{sociodemo.stove_fcorres==77}">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -194,7 +194,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:goneUnless="@{sociodemo.stove_fcorres!=3 &amp; sociodemo.stove_fcorres!=10}">
+                            goneUnless="@{sociodemo.stove_fcorres!=3 &amp; sociodemo.stove_fcorres!=10}">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -809,7 +809,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                app:goneUnless="@{sociodemo.stove_fuel_fcorres_88==1}">
+                                goneUnless="@{sociodemo.stove_fuel_fcorres_88==1}">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -862,7 +862,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:goneUnless="@{sociodemo.stove_fcorres!=10}">
+                            goneUnless="@{sociodemo.stove_fcorres!=10}">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -908,7 +908,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
-                                app:goneUnless="@{sociodemo.cooking_inside_fcorres==1}">
+                                goneUnless="@{sociodemo.cooking_inside_fcorres==1}">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -952,6 +952,7 @@
 
                             <!-- Cooking Location -->
                             <TextView
+                                goneUnless="@{sociodemo.cooking_inside_fcorres==2}"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="@string/COOKING_LOC_FCORRES_SOCIO"
@@ -959,6 +960,7 @@
                                 android:layout_marginBottom="4dp" />
 
                             <org.openhds.searchSpinner.SearchableSpinner
+                                goneUnless="@{sociodemo.cooking_inside_fcorres==2}"
                                 android:id="@+id/COOKING_LOC_FCORRES"
                                 android:layout_width="match_parent"
                                 android:layout_height="50dp"
@@ -971,15 +973,14 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                app:goneUnless="@{sociodemo.cooking_loc_fcorres==1}">
+                                android:orientation="vertical">
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="@string/COOKING_VENT_FCORRES_SOCIO"
                                     android:textColor="@color/black"
-                                    android:layout_marginBottom="4dp" />
+                                    android:layout_marginBottom="4dp"/>
 
                                 <RadioGroup
                                     android:id="@+id/COOKING_VENT_FCORRES"

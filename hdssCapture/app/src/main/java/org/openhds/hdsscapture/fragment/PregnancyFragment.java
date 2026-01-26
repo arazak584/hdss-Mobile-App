@@ -76,6 +76,8 @@ public class PregnancyFragment extends KeyboardFragment {
     private int currentPregnancyNumber = 1;
     private List<Pregnancy> pregnancyRecords = new ArrayList<>();
     private int initialPregnancyNumber = 1;
+    private TextView cmt,rsv;
+    private RadioGroup rsvd;
 
     public PregnancyFragment() {
         // Required empty public constructor
@@ -128,6 +130,9 @@ public class PregnancyFragment extends KeyboardFragment {
         setupDatePickers();
 
         viewModel = new ViewModelProvider(this).get(PregnancyViewModel.class);
+        cmt = binding.getRoot().findViewById(R.id.txt_comment);
+        rsv = binding.getRoot().findViewById(R.id.resolve);
+        rsvd = binding.getRoot().findViewById(R.id.status);
 
         // Step 1: Setup dropdown (doesn't set any text yet)
         setupPregnancyNumberDropdown();
@@ -169,16 +174,11 @@ public class PregnancyFragment extends KeyboardFragment {
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
 
-        final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
-        final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
-        final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
-
         // Initialize config settings
         initializeConfigSettings();
 
         // Load spinners
         loadCodeData(binding.anteNatalClinic, "yn_anc");
-        loadCodeData(binding.individualComplete, "submit");
         loadCodeData(binding.ttinjection, "complete");
         loadCodeData(binding.slpBednet, "complete");
         loadCodeData(binding.firstPreg, "complete");
@@ -375,69 +375,6 @@ public class PregnancyFragment extends KeyboardFragment {
 
     }
 
-//    private void updateDropdownOptions() {
-//        List<String> availableNumbers = new ArrayList<>();
-//
-//        // Get the highest pregnancyOrder from records
-//        int maxOrder = 0;
-//        for (Pregnancy p : pregnancyRecords) {
-//            if (p.pregnancyOrder > maxOrder) {
-//                maxOrder = p.pregnancyOrder;
-//            }
-//        }
-//
-//        // Always show at least Pregnancy 1
-//        if (maxOrder == 0) {
-//            maxOrder = 1;
-//        }
-//
-//        // Show all pregnancies from 1 to max
-//        for (int i = 1; i <= maxOrder; i++) {
-//            availableNumbers.add("Pregnancy " + i);
-//        }
-//
-//        // Check if we can add a new pregnancy (max 10)
-//        if (maxOrder < 10) {
-//            boolean canAddNew = false;
-//
-//            if (pregnancyRecords.isEmpty()) {
-//                canAddNew = true;
-//            } else {
-//                // Find the pregnancy with the highest order
-//                Pregnancy lastPregnancy = null;
-//                for (Pregnancy p : pregnancyRecords) {
-//                    if (p.pregnancyOrder == maxOrder) {
-//                        lastPregnancy = p;
-//                        break;
-//                    }
-//                }
-//
-//                // Check if the last pregnancy has outcome = yes (1)
-//                if (lastPregnancy != null && lastPregnancy.outcome != null && lastPregnancy.outcome == 1) {
-//                    canAddNew = true;
-//                }
-//            }
-//
-//            if (canAddNew) {
-//                availableNumbers.add("Pregnancy " + (maxOrder + 1));
-//            }
-//        }
-//
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-//                requireContext(),
-//                android.R.layout.simple_dropdown_item_1line,
-//                availableNumbers
-//        );
-//        pregnancyNumberDropdown.setAdapter(adapter);
-//
-//        // Keep current selection if valid
-//        if (currentPregnancyNumber >= 1 && currentPregnancyNumber <= availableNumbers.size()) {
-//            pregnancyNumberDropdown.setText("Pregnancy " + currentPregnancyNumber, false);
-//        } else if (!availableNumbers.isEmpty()) {
-//            currentPregnancyNumber = 1;
-//            pregnancyNumberDropdown.setText("Pregnancy 1", false);
-//        }
-//    }
 
     private void loadPregnancyByNumber(int pregnancyNumber) {
         Pregnancy pregnancy = null;
@@ -465,6 +402,9 @@ public class PregnancyFragment extends KeyboardFragment {
 
         //Force UI update after binding
         binding.executePendingBindings();
+
+        // Update visibility based on pregnancy status
+        updateVisibility(pregnancy);
 
         // Manually set the outcome_date field if it exists
         if (pregnancy.outcome_date != null) {
@@ -510,6 +450,14 @@ public class PregnancyFragment extends KeyboardFragment {
         return data;
     }
 
+    private void updateVisibility(Pregnancy pregnancy) {
+        int visibility = (pregnancy.status != null && pregnancy.status == AppConstants.NO)
+                ? View.VISIBLE : View.GONE;
+        cmt.setVisibility(visibility);
+        rsv.setVisibility(visibility);
+        rsvd.setVisibility(visibility);
+    }
+
     private void saveCurrentPregnancyToList() {
         Pregnancy current = binding.getPregnancy();
         if (current != null && current.uuid != null && !current.uuid.isEmpty()) {
@@ -537,18 +485,6 @@ public class PregnancyFragment extends KeyboardFragment {
             }
         }
     }
-
-//    private void setFieldsEnabled(boolean enabled) {
-//        binding.editTextRecordedDate.setEnabled(enabled);
-//        binding.editTextLastClinicVisitDate.setEnabled(enabled);
-//        binding.expectedDelivery.setEnabled(enabled);
-//        binding.editTextOutcomeDate.setEnabled(enabled);
-//
-//        // Enable/disable radio buttons and other inputs as needed
-////        for (int i = 0; i < binding.outcome.getChildCount(); i++) {
-////            binding.outcome.getChildAt(i).setEnabled(enabled);
-////        }
-//    }
 
     private void initializeConfigSettings() {
         ConfigViewModel configViewModel = new ViewModelProvider(this).get(ConfigViewModel.class);

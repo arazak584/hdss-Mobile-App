@@ -162,7 +162,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:goneUnless="@{sociodemo.form_comments_yn==1}">
+                            goneUnless="@{sociodemo.form_comments_yn==1}">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -192,6 +192,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     android:visibility="gone"
+                    android:id="@+id/qCard"
                     app:cardElevation="4dp"
                     app:strokeColor="@color/primary"
                     app:strokeWidth="2dp"
@@ -254,23 +255,6 @@
                                 android:tag="0"/>
                         </RadioGroup>
 
-                        <!-- Form Completion -->
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/form_complete"
-                            android:textColor="@color/black"
-                            android:layout_marginBottom="4dp" />
-
-                        <Spinner
-                            android:id="@+id/socio_complete"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:gravity="left"
-                            android:onItemSelected="@{sociodemo::setComplete}"
-                            android:padding="8dp"
-                            android:textColor="#000301"
-                            app:selection="@{sociodemo.complete}" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
             </LinearLayout>

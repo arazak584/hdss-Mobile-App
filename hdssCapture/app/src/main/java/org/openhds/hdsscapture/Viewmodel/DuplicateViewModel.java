@@ -36,6 +36,10 @@ public class DuplicateViewModel extends AndroidViewModel {
         return repo.finds(id);
     }
 
+    public Duplicate findByAnyUuid(String id) throws ExecutionException, InterruptedException {
+        return repo.findByAnyUuid(id);
+    }
+
     public List<Duplicate> findToSync() throws ExecutionException, InterruptedException {
         return repo.findToSync();
     }
@@ -70,6 +74,14 @@ public class DuplicateViewModel extends AndroidViewModel {
 
     public void add(Duplicate... data){
         repo.create(data);
+    }
+
+    public void delete(Duplicate data) {
+        repo.delete(data);
+    }
+
+    public void delete(Duplicate... data) {
+        repo.delete(data);
     }
 
     public LiveData<Long> sync() {

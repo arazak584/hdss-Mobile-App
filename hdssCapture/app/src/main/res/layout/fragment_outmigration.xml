@@ -465,7 +465,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:onCheckedChanged="@{outmigration::setEdit}"
-                                    android:orientation="horizontal">
+                                    android:orientation="vertical">
 
                                     <TextView
                                         android:id="@+id/edit"
@@ -517,7 +517,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onCheckedChanged="@{outmigration::setStatus}"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
                             android:visibility="gone">
 
                             <RadioButton

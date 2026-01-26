@@ -35,13 +35,23 @@ public class DeathRepository {
         });
     }
 
-
     public void create(Death data) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             dao.create(data);
         });
     }
 
+    public void delete(Death data) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            dao.delete(data);
+        });
+    }
+
+    public void delete(Death... data) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            dao.delete(data);
+        });
+    }
 
     public Death find(String id) throws ExecutionException, InterruptedException {
 

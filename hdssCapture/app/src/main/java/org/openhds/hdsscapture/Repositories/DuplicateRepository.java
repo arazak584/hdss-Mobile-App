@@ -38,6 +38,18 @@ public class DuplicateRepository {
         });
     }
 
+    public void delete(Duplicate data) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            dao.delete(data);
+        });
+    }
+
+    public void delete(Duplicate... data) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            dao.delete(data);
+        });
+    }
+
 
     public Duplicate find(String id) throws ExecutionException, InterruptedException {
 
@@ -66,6 +78,11 @@ public class DuplicateRepository {
         return future.get();
     }
 
+    public Duplicate findByAnyUuid(String id) throws ExecutionException, InterruptedException {
+        Callable<Duplicate> callable = () -> dao.findByAnyUuid(id);
+        Future<Duplicate> future = Executors.newSingleThreadExecutor().submit(callable);
+        return future.get();
+    }
 
     public List<Duplicate> findToSync() throws ExecutionException, InterruptedException {
 

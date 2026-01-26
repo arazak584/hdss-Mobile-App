@@ -304,10 +304,14 @@ public class PregnancyoutcomeValidation {
 
             } else if (view instanceof Spinner) {
                 Spinner spinner = (Spinner) view;
+                // Create error TextView for Spinner
+                showSpinnerError(spinner, displayMessage);
                 spinner.requestFocus();
                 highlightParentContainer(spinner);
 
             } else if (view instanceof org.openhds.searchSpinner.SearchableSpinner) {
+                // Create error TextView for SearchableSpinner
+                showSpinnerError(view, displayMessage);
                 view.requestFocus();
                 highlightParentContainer(view);
 
@@ -338,35 +342,56 @@ public class PregnancyoutcomeValidation {
     }
 
     /**
-     * Highlight the parent container with a colored border
+     * Show error message below a Spinner or SearchableSpinner
      */
-    private void highlightParentContainer(View view) {
+    private void showSpinnerError(View spinnerView, String errorMessage) {
         try {
-            ViewParent parent = view.getParent();
-            if (parent instanceof View) {
-                View parentView = (View) parent;
+            ViewParent parent = spinnerView.getParent();
+            if (!(parent instanceof android.view.ViewGroup)) return;
 
-                // Save original background
-                if (parentView.getTag(android.R.id.background) == null) {
-                    parentView.setTag(android.R.id.background, parentView.getBackground());
-                }
+            android.view.ViewGroup parentView = (android.view.ViewGroup) parent;
 
-                // Create error background drawable
-                android.graphics.drawable.GradientDrawable errorBg = new android.graphics.drawable.GradientDrawable();
-                errorBg.setStroke(6, android.graphics.Color.parseColor("#F44336")); // Red border
-                errorBg.setCornerRadius(8);
-                parentView.setBackground(errorBg);
-
-                // Remove error background after 5 seconds
-                parentView.postDelayed(() -> {
-                    android.graphics.drawable.Drawable original = (android.graphics.drawable.Drawable) parentView.getTag(android.R.id.background);
-                    if (original != null) {
-                        parentView.setBackground(original);
-                    } else {
-                        parentView.setBackgroundColor(android.graphics.Color.TRANSPARENT);
-                    }
-                }, 5000);
+            // Remove any existing error TextView
+            int errorTextViewId = android.R.id.message; // Use a standard Android ID
+            View existingError = parentView.findViewById(errorTextViewId);
+            if (existingError != null) {
+                parentView.removeView(existingError);
             }
+
+            // Create error TextView
+            TextView errorTextView = new TextView(context);
+            errorTextView.setId(errorTextViewId);
+            errorTextView.setText(errorMessage);
+            errorTextView.setTextColor(android.graphics.Color.parseColor("#D32F2F")); // Red color
+            errorTextView.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 12);
+
+            // Add error icon
+            android.graphics.drawable.Drawable errorIcon = context.getResources().getDrawable(android.R.drawable.ic_dialog_alert);
+            if (errorIcon != null) {
+                errorIcon.setBounds(0, 0, errorIcon.getIntrinsicWidth(), errorIcon.getIntrinsicHeight());
+                errorTextView.setCompoundDrawables(errorIcon, null, null, null);
+                errorTextView.setCompoundDrawablePadding(8);
+            }
+
+            errorTextView.setPadding(16, 8, 16, 0);
+
+            // Find the spinner's index in parent
+            int spinnerIndex = parentView.indexOfChild(spinnerView);
+
+            // Add error TextView right after the spinner
+            android.view.ViewGroup.LayoutParams params = new android.view.ViewGroup.LayoutParams(
+                    android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            parentView.addView(errorTextView, spinnerIndex + 1, params);
+
+            // Remove error message after 5 seconds
+            errorTextView.postDelayed(() -> {
+                if (errorTextView.getParent() != null) {
+                    parentView.removeView(errorTextView);
+                }
+            }, 5000);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -388,36 +413,116 @@ public class PregnancyoutcomeValidation {
             }
             if (resId == 0) return;
 
-            View view = ((android.app.Activity) context).findViewById(resId);
-            if (view != null) {
-                // Find the ScrollView or NestedScrollView parent
-                ViewParent parent = view.getParent();
-                while (parent != null) {
-                    if (parent instanceof android.widget.ScrollView) {
-                        final android.widget.ScrollView scrollView = (android.widget.ScrollView) parent;
-                        scrollView.post(() -> {
-                            scrollView.smoothScrollTo(0, view.getTop() - 100);
-                        });
-                        break;
-                    } else if (parent instanceof androidx.core.widget.NestedScrollView) {
-                        final androidx.core.widget.NestedScrollView nestedScrollView = (androidx.core.widget.NestedScrollView) parent;
-                        nestedScrollView.post(() -> {
-                            nestedScrollView.smoothScrollTo(0, view.getTop() - 100);
-                        });
-                        break;
-                    } else if (parent instanceof androidx.recyclerview.widget.RecyclerView) {
-                        androidx.recyclerview.widget.RecyclerView rv = (androidx.recyclerview.widget.RecyclerView) parent;
-                        ViewParent rvParent = rv.getParent();
-                        if (rvParent instanceof View) {
-                            ((View) rvParent).requestLayout();
-                        }
-                        break;
+            final View view = ((android.app.Activity) context).findViewById(resId);
+            if (view == null) return;
+
+            // Find the ScrollView or NestedScrollView parent
+            ViewParent parent = view.getParent();
+            while (parent != null) {
+                if (parent instanceof android.widget.ScrollView) {
+                    final android.widget.ScrollView scrollView = (android.widget.ScrollView) parent;
+
+                    // Post with delay to ensure layout is complete
+                    view.post(() -> {
+                        // Force layout update
+                        view.requestLayout();
+
+                        // Calculate position with better offset
+                        view.postDelayed(() -> {
+                            int[] location = new int[2];
+                            view.getLocationOnScreen(location);
+
+                            int[] scrollLocation = new int[2];
+                            scrollView.getLocationOnScreen(scrollLocation);
+
+                            // Calculate the Y position relative to ScrollView
+                            int scrollY = location[1] - scrollLocation[1] + scrollView.getScrollY();
+
+                            // Add offset to show field in middle of screen
+                            int offset = scrollView.getHeight() / 4;
+                            int targetY = Math.max(0, scrollY - offset);
+
+                            scrollView.smoothScrollTo(0, targetY);
+                        }, 100);
+                    });
+                    break;
+
+                } else if (parent instanceof androidx.core.widget.NestedScrollView) {
+                    final androidx.core.widget.NestedScrollView nestedScrollView = (androidx.core.widget.NestedScrollView) parent;
+
+                    // Post with delay to ensure layout is complete
+                    view.post(() -> {
+                        // Force layout update
+                        view.requestLayout();
+
+                        // Calculate position with better offset
+                        view.postDelayed(() -> {
+                            int[] location = new int[2];
+                            view.getLocationOnScreen(location);
+
+                            int[] scrollLocation = new int[2];
+                            nestedScrollView.getLocationOnScreen(scrollLocation);
+
+                            // Calculate the Y position relative to NestedScrollView
+                            int scrollY = location[1] - scrollLocation[1] + nestedScrollView.getScrollY();
+
+                            // Add offset to show field in middle of screen
+                            int offset = nestedScrollView.getHeight() / 4;
+                            int targetY = Math.max(0, scrollY - offset);
+
+                            nestedScrollView.smoothScrollTo(0, targetY);
+                        }, 100);
+                    });
+                    break;
+
+                } else if (parent instanceof androidx.recyclerview.widget.RecyclerView) {
+                    androidx.recyclerview.widget.RecyclerView rv = (androidx.recyclerview.widget.RecyclerView) parent;
+                    ViewParent rvParent = rv.getParent();
+                    if (rvParent instanceof View) {
+                        ((View) rvParent).requestLayout();
                     }
-                    parent = parent.getParent();
+                    break;
+                }
+                parent = parent.getParent();
+            }
+
+            // Request focus with a delay to ensure scroll completes
+            view.postDelayed(() -> view.requestFocus(), 400);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Highlight the parent container with a colored border
+     */
+    private void highlightParentContainer(View view) {
+        try {
+            ViewParent parent = view.getParent();
+            if (parent instanceof View) {
+                View parentView = (View) parent;
+
+                // Save original background
+                if (parentView.getTag(android.R.id.background) == null) {
+                    parentView.setTag(android.R.id.background, parentView.getBackground());
                 }
 
-                // Request focus with a delay to ensure scroll completes
-                view.postDelayed(() -> view.requestFocus(), 300);
+                // Create error background drawable
+                android.graphics.drawable.GradientDrawable errorBg = new android.graphics.drawable.GradientDrawable();
+                errorBg.setStroke(6, android.graphics.Color.parseColor("#F44336")); // Red border
+                errorBg.setCornerRadius(8);
+                parentView.setBackground(errorBg);
+
+                // Remove error background after 10 seconds
+                parentView.postDelayed(() -> {
+                    android.graphics.drawable.Drawable original = (android.graphics.drawable.Drawable) parentView.getTag(android.R.id.background);
+                    if (original != null) {
+                        parentView.setBackground(original);
+                    } else {
+                        parentView.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+                    }
+                }, 10000);
             }
         } catch (Exception e) {
             e.printStackTrace();

@@ -23,6 +23,7 @@ import org.openhds.hdsscapture.R;
 import org.openhds.hdsscapture.entity.subentity.AvailableCompnoDTO;
 import org.openhds.hdsscapture.wrapper.DataWrapper;
 
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +44,8 @@ public class CompoundActivity extends AppCompatActivity {
 
     private String authorizationHeader;
     private SharedPreferences preferences;
+    private int retryCount = 0;
+    private final int MAX_RETRIES = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,8 +106,9 @@ public class CompoundActivity extends AppCompatActivity {
             public void onResponse(Call<List<AvailableCompnoDTO>> call,
                                    Response<List<AvailableCompnoDTO>> response) {
                 dismissProgressDialog();
+                retryCount = 0;  // Reset on success
 
-                if (response.isSuccessful() && response.body() != null) {
+                  if (response.isSuccessful() && response.body() != null) {
                     List<AvailableCompnoDTO> compoundList = response.body();
 
                     if (!compoundList.isEmpty()) {
@@ -131,20 +135,85 @@ public class CompoundActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<AvailableCompnoDTO>> call, Throwable t) {
-                dismissProgressDialog();
-                Log.e(TAG, "Network error: " + t.getMessage(), t);
-                Toast.makeText(CompoundActivity.this,
-                        "Network error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                if (t instanceof SocketTimeoutException && retryCount < MAX_RETRIES) {
+                    retryCount++;
+                    Log.w(TAG, "Timeout occurred, retry " + retryCount + "/" + MAX_RETRIES);
+                    Toast.makeText(CompoundActivity.this,
+                            "Request timed out, retrying... (" + retryCount + "/" + MAX_RETRIES + ")",
+                            Toast.LENGTH_SHORT).show();
+                    fetchAvailableCompounds(prefix);  // Retry
+                } else {
+                    dismissProgressDialog();
+                    retryCount = 0;  // Reset retry count
+                    Log.e(TAG, "Network error: " + t.getMessage(), t);
+                    Toast.makeText(CompoundActivity.this,
+                            "Network error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
+
+//    private void fetchAvailableCompounds(String prefix) {
+//        showProgressDialog("Fetching available compounds...");
+//
+//        Call<List<AvailableCompnoDTO>> call = dao.getAvailableCompounds(authorizationHeader, prefix);
+//
+//        call.enqueue(new Callback<List<AvailableCompnoDTO>>() {
+//            @Override
+//            public void onResponse(Call<List<AvailableCompnoDTO>> call,
+//                                   Response<List<AvailableCompnoDTO>> response) {
+//                dismissProgressDialog();
+//
+//                if (response.isSuccessful() && response.body() != null) {
+//                    List<AvailableCompnoDTO> compoundList = response.body();
+//
+//                    if (!compoundList.isEmpty()) {
+//                        // Convert DTO list to display strings
+//                        List<String> compoundStrings = new ArrayList<>();
+//                        for (AvailableCompnoDTO dto : compoundList) {
+//                            compoundStrings.add(dto.getAvailableCompno() + " (" + dto.getSource() + ")");
+//                        }
+//
+//                        adapter.updateData(compoundStrings);
+//                        Toast.makeText(CompoundActivity.this,
+//                                "Found " + compoundStrings.size() + " compounds",
+//                                Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(CompoundActivity.this,
+//                                "No compounds found", Toast.LENGTH_SHORT).show();
+//                    }
+//                } else {
+//                    Log.e(TAG, "Error response: " + response.code());
+//                    Toast.makeText(CompoundActivity.this,
+//                            "Error: " + response.code(), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<List<AvailableCompnoDTO>> call, Throwable t) {
+//                dismissProgressDialog();
+//                Log.e(TAG, "Network error: " + t.getMessage(), t);
+//                Toast.makeText(CompoundActivity.this,
+//                        "Network error: " + t.getMessage(), Toast.LENGTH_LONG).show();
+//            }
+//        });
+//    }
+
+//    private void showProgressDialog(String message) {
+//        if (progress == null) {
+//            progress = new ProgressDialog(this);
+//            progress.setCancelable(false);
+//        }
+//        progress.setMessage(message);
+//        progress.show();
+//    }
 
     private void showProgressDialog(String message) {
         if (progress == null) {
             progress = new ProgressDialog(this);
             progress.setCancelable(false);
         }
-        progress.setMessage(message);
+        progress.setMessage(message + "\nThis may take a while for large areas...");
         progress.show();
     }
 

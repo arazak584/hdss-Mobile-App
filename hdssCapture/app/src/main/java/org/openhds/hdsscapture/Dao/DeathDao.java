@@ -2,6 +2,7 @@ package org.openhds.hdsscapture.Dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -25,6 +26,12 @@ public interface DeathDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void create(Death... death);
+
+    @Delete
+    void delete(Death death);
+
+    @Delete
+    void delete(Death... death);
 
     @Query("DELETE FROM death")
     void deleteAll();

@@ -118,7 +118,6 @@ public class VaccinationViewFragment extends KeyboardFragment {
         });
 
         //Codebook
-        loadCodeData(binding.vacComplete, "submit");
         loadCodeData(binding.sbf, "complete");
         loadCodeData(binding.nhis, "nhis");
         loadCodeData(binding.hl, "HL");

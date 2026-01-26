@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="true">HDSS CAPTURE</string>
-    <string name="versions">2026.01.06</string>
+    <string name="versions">2026.01.08</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>
@@ -404,7 +404,7 @@
 
 
     <!-- SOCIODEMOGRAPHIC FORM TEXT Adoma -->
-    <string name="Instruct_socio"><b>Instructions: This odkForm should be completed to collect sociodemographic information for the household.</b></string>
+    <string name="Instruct_socio"><b>Instructions: This Form should be completed to collect sociodemographic information for the household.</b></string>
     <string name="intro_section">SECTION A INTRODUCTION</string>
     <string name="GA_VISIT_SOCIO">A1 Gestational age at time of visit</string>
     <string name="SUBJID_SOCIO">A2 MNH Participant ID:</string>

@@ -227,7 +227,6 @@ public class RelationshipFragment extends KeyboardFragment {
         }
 
         //SPINNERS
-        loadCodeData(binding.relComplete,  "submit");
         loadCodeData(binding.relStarttype,  "relationshipType");
         loadCodeData(binding.relEndtype,  "relendType");
         loadCodeData(binding.mar,  "complete");

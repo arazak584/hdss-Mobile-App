@@ -628,9 +628,24 @@ public class PushActivity extends AppCompatActivity {
                         sentData -> {
                             Death[] array = sentData.toArray(new Death[0]);
                             for (Death elem : array) {
-                                elem.complete = 0;
+                                if (elem.complete == 2) {
+                                    // Delete records with complete==2
+                                    deathViewModel.delete(elem);
+                                } else {
+                                    // Reset complete flag to 0 for complete==1
+                                    elem.complete = 0;
+                                }
                             }
-                            deathViewModel.add(array);
+                            // Only update records that weren't deleted (complete==1)
+                            List<Death> toUpdate = new java.util.ArrayList<>();
+                            for (Death elem : array) {
+                                if (elem.complete == 0) {
+                                    toUpdate.add(elem);
+                                }
+                            }
+                            if (!toUpdate.isEmpty()) {
+                                deathViewModel.add(toUpdate.toArray(new Death[0]));
+                            }
                         },
                         this::sendVpmData
                 );
@@ -640,6 +655,32 @@ public class PushActivity extends AppCompatActivity {
             }
         }).start();
     }
+
+//    private void sendDeathData() {
+//        if (isDestroyed.get()) return;
+//
+//        new Thread(() -> {
+//            try {
+//                List<Death> itemsToSync = deathViewModel.findToSync();
+//                sendDataInBatches(
+//                        itemsToSync,
+//                        "Deaths",
+//                        (auth, data) -> dao.sendDeathdata(auth, data),
+//                        sentData -> {
+//                            Death[] array = sentData.toArray(new Death[0]);
+//                            for (Death elem : array) {
+//                                elem.complete = 0;
+//                            }
+//                            deathViewModel.add(array);
+//                        },
+//                        this::sendVpmData
+//                );
+//            } catch (ExecutionException | InterruptedException e) {
+//                Log.e(TAG, "Error retrieving Deaths", e);
+//                onSyncError("Error retrieving Deaths: " + e.getMessage());
+//            }
+//        }).start();
+//    }
 
     private void sendVpmData() {
         if (isDestroyed.get()) return;
@@ -758,9 +799,24 @@ public class PushActivity extends AppCompatActivity {
                         sentData -> {
                             Outmigration[] array = sentData.toArray(new Outmigration[0]);
                             for (Outmigration elem : array) {
-                                elem.complete = 0;
+                                if (elem.complete == 2) {
+                                    // Delete records with complete==2
+                                    outmigrationViewModel.delete(elem);
+                                } else {
+                                    // Reset complete flag to 0 for complete==1
+                                    elem.complete = 0;
+                                }
                             }
-                            outmigrationViewModel.add(array);
+                            // Only update records that weren't deleted (complete==1)
+                            List<Outmigration> toUpdate = new java.util.ArrayList<>();
+                            for (Outmigration elem : array) {
+                                if (elem.complete == 0) {
+                                    toUpdate.add(elem);
+                                }
+                            }
+                            if (!toUpdate.isEmpty()) {
+                                outmigrationViewModel.add(toUpdate.toArray(new Outmigration[0]));
+                            }
                         },
                         this::sendAmendmentData
                 );
@@ -770,6 +826,32 @@ public class PushActivity extends AppCompatActivity {
             }
         }).start();
     }
+
+//    private void sendOutmigrationData() {
+//        if (isDestroyed.get()) return;
+//
+//        new Thread(() -> {
+//            try {
+//                List<Outmigration> itemsToSync = outmigrationViewModel.findToSync();
+//                sendDataInBatches(
+//                        itemsToSync,
+//                        "Outmigrations",
+//                        (auth, data) -> dao.sendOutmigrationdata(auth, data),
+//                        sentData -> {
+//                            Outmigration[] array = sentData.toArray(new Outmigration[0]);
+//                            for (Outmigration elem : array) {
+//                                elem.complete = 0;
+//                            }
+//                            outmigrationViewModel.add(array);
+//                        },
+//                        this::sendAmendmentData
+//                );
+//            } catch (ExecutionException | InterruptedException e) {
+//                Log.e(TAG, "Error retrieving Outmigrations", e);
+//                onSyncError("Error retrieving Outmigrations: " + e.getMessage());
+//            }
+//        }).start();
+//    }
 
     private void sendAmendmentData() {
         if (isDestroyed.get()) return;
@@ -836,9 +918,25 @@ public class PushActivity extends AppCompatActivity {
                         sentData -> {
                             Duplicate[] array = sentData.toArray(new Duplicate[0]);
                             for (Duplicate elem : array) {
-                                elem.complete = 0;
+                                if (elem.complete == 2) {
+                                    // Delete records with complete==2
+                                    duplicateViewModel.delete(elem);
+                                    Log.d("DupDelete", "Delete Successful: ");
+                                } else {
+                                    // Reset complete flag to 0 for complete==1
+                                    elem.complete = 0;
+                                }
                             }
-                            duplicateViewModel.add(array);
+                            // Only update records that weren't deleted (complete==1)
+                            List<Duplicate> toUpdate = new java.util.ArrayList<>();
+                            for (Duplicate elem : array) {
+                                if (elem.complete == 0) {
+                                    toUpdate.add(elem);
+                                }
+                            }
+                            if (!toUpdate.isEmpty()) {
+                                duplicateViewModel.add(toUpdate.toArray(new Duplicate[0]));
+                            }
                         },
                         this::sendCommunityData
                 );
@@ -848,6 +946,32 @@ public class PushActivity extends AppCompatActivity {
             }
         }).start();
     }
+
+//    private void sendDuplicateData() {
+//        if (isDestroyed.get()) return;
+//
+//        new Thread(() -> {
+//            try {
+//                List<Duplicate> itemsToSync = duplicateViewModel.findToSync();
+//                sendDataInBatches(
+//                        itemsToSync,
+//                        "Duplicates",
+//                        (auth, data) -> dao.sendDup(auth, data),
+//                        sentData -> {
+//                            Duplicate[] array = sentData.toArray(new Duplicate[0]);
+//                            for (Duplicate elem : array) {
+//                                elem.complete = 0;
+//                            }
+//                            duplicateViewModel.add(array);
+//                        },
+//                        this::sendCommunityData
+//                );
+//            } catch (ExecutionException | InterruptedException e) {
+//                Log.e(TAG, "Error retrieving Duplicates", e);
+//                onSyncError("Error retrieving Duplicates: " + e.getMessage());
+//            }
+//        }).start();
+//    }
 
     private void sendCommunityData() {
         if (isDestroyed.get()) return;

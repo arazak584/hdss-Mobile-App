@@ -1232,65 +1232,7 @@ public class HouseMembersFragment extends Fragment implements IndividualViewAdap
                 .show();
     }
 
-    /**
-     * Reopen existing form for editing
-     */
-//    private void reopenExistingForm(Individual individual, OdkForm form,
-//                                    FormUtilities.ExistingFormInfo existingForm) {
-//        try {
-//            Log.d(TAG, "=== Reopening Existing Form ===");
-//            Log.d(TAG, "  Individual: " + individual.firstName + " " + individual.lastName);
-//            Log.d(TAG, "  Form ID: " + form.formID);
-//            Log.d(TAG, "  Content URI: " + existingForm.contentUri);
-//            Log.d(TAG, "  Instance Path: " + existingForm.instancePath);
-//
-//            // Create load data for existing form using the factory method
-//            OdkFormLoadData loadData = OdkFormLoadData.forExistingForm(form, existingForm.instancePath);
-//
-//            Log.d(TAG, "  Skip Unfinalized Check: " + loadData.skipUnfinalizedCheck);
-//
-//            // CRITICAL: Use the simple reopen approach
-//            formUtilities.loadExistingForm(
-//                    loadData,
-//                    existingForm.contentUri.toString(),
-//                    existingForm.instancePath,
-//                    new OdkFormResultListener() {
-//                        @Override
-//                        public void onFormFinalized(OdkFormLoadData loadData, Uri contentUri, String formId,
-//                                                    String instanceUri, String metaInstanceName, Date lastUpdatedDate) {
-//                            Toast.makeText(requireContext(), "Form completed!", Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                        @Override
-//                        public void onFormUnFinalized(OdkFormLoadData loadData, Uri contentUri, String formId,
-//                                                      String instanceUri, String metaInstanceName, Date lastUpdatedDate) {
-//                            Toast.makeText(requireContext(), "Form saved for later", Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                        @Override
-//                        public void onDeleteForm(OdkFormLoadData loadData, Uri contentUri, String instanceUri) {
-//                            Toast.makeText(requireContext(), "Form deleted", Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                        @Override
-//                        public void onFormLoadError(OdkFormLoadData loadData, Object result) {
-//                            Log.e(TAG, "Form load error");
-//                        }
-//
-//                        @Override
-//                        public void onFormInstanceNotFound(OdkFormLoadData loadData, Uri contentUri) {
-//                            Toast.makeText(requireContext(), "Form instance not found", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//            );
-//
-//        } catch (Exception e) {
-//            Log.e(TAG, "Error reopening form", e);
-//            Toast.makeText(requireContext(),
-//                    "Error reopening form: " + e.getMessage(),
-//                    Toast.LENGTH_LONG).show();
-//        }
-//    }
+
 
     /**
      * Reopen existing form for editing - DIRECT APPROACH

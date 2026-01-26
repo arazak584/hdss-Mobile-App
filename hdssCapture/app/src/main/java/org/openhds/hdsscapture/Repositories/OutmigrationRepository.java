@@ -58,6 +58,18 @@ public class OutmigrationRepository {
         });
     }
 
+    public void delete(Outmigration data) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            dao.delete(data);
+        });
+    }
+
+    public void delete(Outmigration... data) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            dao.delete(data);
+        });
+    }
+
     public List<Outmigration> findToSync() throws ExecutionException, InterruptedException {
 
         Callable<List<Outmigration>> callable = () -> dao.retrieveomgToSync();

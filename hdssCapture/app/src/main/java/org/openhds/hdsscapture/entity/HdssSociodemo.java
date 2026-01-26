@@ -3382,6 +3382,9 @@ public class HdssSociodemo extends BaseObservable {
             if (cooking_inside_fcorres == null || cooking_inside_fcorres != AppConstants.YES)
                 cooking_room_fcorres = null;
 
+            if (cooking_inside_fcorres == null || cooking_inside_fcorres != AppConstants.NO)
+                cooking_loc_fcorres = null;
+
             if (smoke_oecoccur == null || smoke_oecoccur != AppConstants.YES)
                 smoke_in_oecdosfrq = null;
 

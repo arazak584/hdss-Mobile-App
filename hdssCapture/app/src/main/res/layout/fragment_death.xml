@@ -685,9 +685,10 @@
                     android:layout_marginBottom="8dp"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="4dp"
+                    app:strokeColor="@color/primary"
+                    app:strokeWidth="2dp"
                     app:cardUseCompatPadding="true"
-                    android:id="@+id/vcard"
-                    android:visibility="gone">
+                    android:id="@+id/vcard">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -717,7 +718,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:onCheckedChanged="@{death::setEdit}"
-                                    android:orientation="horizontal">
+                                    android:orientation="vertical">
 
                                     <TextView
                                         android:id="@+id/edit"
@@ -769,7 +770,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:onCheckedChanged="@{death::setStatus}"
-                            android:orientation="horizontal"
+                            android:orientation="vertical"
                             android:visibility="gone">
 
                             <RadioButton

@@ -34,6 +34,14 @@ public class OutmigrationViewModel extends AndroidViewModel {
 
     public void add(Outmigration... data){repo.create(data);  }
 
+    public void delete(Outmigration data) {
+        repo.delete(data);
+    }
+
+    public void delete(Outmigration... data) {
+        repo.delete(data);
+    }
+
     public Outmigration find(String id,String locid) throws ExecutionException, InterruptedException {
         return repo.find(id,locid);
     }

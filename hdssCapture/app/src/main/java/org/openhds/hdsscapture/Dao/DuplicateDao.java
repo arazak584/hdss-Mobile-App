@@ -2,6 +2,7 @@ package org.openhds.hdsscapture.Dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -27,6 +28,12 @@ public interface DuplicateDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(List<Duplicate> duplicate);
 
+    @Delete
+    void delete(Duplicate duplicate);
+
+    @Delete
+    void delete(Duplicate... duplicate);
+
 
     @Query("DELETE FROM duplicate")
     void deleteAll();
@@ -46,6 +53,10 @@ public interface DuplicateDao {
     @Query("SELECT * FROM duplicate where individual_uuid=:id AND complete_n!=2 limit 1")
     Duplicate finds(String id);
 
+    @Query("SELECT * FROM duplicate WHERE " +
+            "(individual_uuid = :id OR dup_uuid = :id OR dup1_uuid = :id OR dup2_uuid = :id) LIMIT 1")
+    Duplicate findByAnyUuid(String id);
+
     @Query("SELECT * FROM duplicate where individual_uuid=:id AND complete!=1 ")
     Duplicate ins(String id);
 
@@ -58,7 +69,7 @@ public interface DuplicateDao {
     @Query("SELECT * FROM duplicate WHERE uuid IN (:uuids) AND complete!=1")
     List<Duplicate> getByUuids(List<String> uuids);
 
-    @Query("SELECT * FROM death WHERE fw_uuid=:id AND status=2 order by insertDate DESC")
+    @Query("SELECT * FROM duplicate WHERE fw_uuid=:id AND status=2 order by insertDate DESC")
     List<Duplicate> reject(String id);
 
     @Query("SELECT COUNT(*) FROM duplicate WHERE status=2 AND fw_uuid = :uuid ")

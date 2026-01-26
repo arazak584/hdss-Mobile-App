@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.card.MaterialCardView;
+
 import org.openhds.hdsscapture.Activity.HierarchyActivity;
 import org.openhds.hdsscapture.AppConstants;
 import org.openhds.hdsscapture.R;
@@ -52,6 +54,7 @@ public class SocioZViewFragment extends KeyboardFragment {
     private FragmentSocioZBinding binding;
     private HdssSociodemo hdssSociodemo;
     private HdssSociodemoRepository repository;
+    private MaterialCardView queryStatus;
 
     public SocioZViewFragment() {
         // Required empty public constructor
@@ -94,12 +97,7 @@ public class SocioZViewFragment extends KeyboardFragment {
         // Setup keyboard hiding for all views in the layout
         setupKeyboardHiding(binding.getRoot());
 
-        final Intent i = getActivity().getIntent();
-        final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
-
-        final TextView rsv = binding.getRoot().findViewById(R.id.resolve);
-        final RadioGroup rsvd = binding.getRoot().findViewById(R.id.status);
-        final TextView cmt = binding.getRoot().findViewById(R.id.txt_comment);
+        queryStatus = binding.getRoot().findViewById(R.id.qCard);;
 
         HdssSociodemoViewModel viewModel = new ViewModelProvider(this).get(HdssSociodemoViewModel.class);
         viewModel.getView(hdssSociodemo.uuid).observe(getViewLifecycleOwner(), data -> {
@@ -107,13 +105,9 @@ public class SocioZViewFragment extends KeyboardFragment {
                 binding.setSociodemo(data);
 
                 if(data.status!=null && data.status==2){
-                    rsv.setVisibility(View.VISIBLE);
-                    rsvd.setVisibility(View.VISIBLE);
-                    cmt.setVisibility(View.VISIBLE);
+                    queryStatus.setVisibility(View.VISIBLE);
                 }else{
-                    rsv.setVisibility(View.GONE);
-                    rsvd.setVisibility(View.GONE);
-                    cmt.setVisibility(View.GONE);
+                    queryStatus.setVisibility(View.GONE);
                 }
 
             }
