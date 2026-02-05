@@ -122,7 +122,7 @@ public class RelationshipValidation {
         }
 
         // Validate number of wives (must be >= 2 if polygamous)
-        if (item.polygamous == 1 && item.nwive != null) {
+        if (item.polygamous != null && item.polygamous == 1 && item.nwive != null) {
             validateRange(item.nwive, 2, null, "nwive",
                     "Cannot be less than 2", errors);
         }

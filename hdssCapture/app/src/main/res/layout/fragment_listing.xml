@@ -194,7 +194,7 @@
                 <Button
                     goneUnless="@{listing.status!=3}"
                     android:id="@+id/button_gps"
-                    android:layout_width="200dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/gps"
@@ -218,66 +218,57 @@
                     android:layout_height="wrap_content"
                     android:visibility="gone"/>
 
-
-                <EditText
+                <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{listing.status!=3}"
-                    android:id="@+id/longitude"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/member_filter_textbox_size"
-                    android:background="@drawable/txtbox_rone_wbevel"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
                     android:hint="@string/longitude"
-                    android:inputType="textPersonName|textCapCharacters"
-                    android:paddingLeft="20dp"
-                    android:text="@={listing.longitude}"
-                    android:textColor="@color/black" />
+                    app:startIconTint="@color/primary">
 
-                <Space
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/longitude"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:inputType="textPersonName|textCapCharacters"
+                        android:text="@={listing.longitude}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{listing.status!=3}"
                     android:layout_width="match_parent"
-                    android:layout_height="16dp" />
-
-
-                <EditText
-                    goneUnless="@{listing.status!=3}"
-                    android:id="@+id/latitude"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/txtbox_rone_wbevel"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
                     android:hint="@string/latitude"
-                    android:inputType="textPersonName|textCapCharacters"
-                    android:paddingStart="20dp"
-                    android:text="@={listing.latitude}"
-                    android:textColor="@color/black" />
+                    app:startIconTint="@color/primary">
 
-                <Space
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/latitude"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:inputType="textPersonName|textCapCharacters"
+                        android:text="@={listing.latitude}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
                     goneUnless="@{listing.status!=3}"
                     android:layout_width="match_parent"
-                    android:layout_height="16dp" />
-
-
-                <EditText
-                    goneUnless="@{listing.status!=3}"
-                    android:id="@+id/accuracy"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/txtbox_rone_wbevel"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
                     android:hint="@string/accuracy"
-                    android:inputType="textPersonName|textCapCharacters"
-                    android:paddingStart="20dp"
-                    android:text="@={listing.accuracy}"
-                    android:textColor="@color/black" />
+                    app:startIconTint="@color/primary">
 
-                <Space
-                    goneUnless="@{listing.status!=3}"
-                    android:layout_width="match_parent"
-                    android:layout_height="16dp" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/accuracy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:inputType="textPersonName|textCapCharacters"
+                        android:text="@={listing.accuracy}" />
+                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <EditText

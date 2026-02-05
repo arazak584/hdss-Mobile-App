@@ -368,7 +368,7 @@
                     app:cardElevation="4dp"
                     app:strokeColor="@color/primary"
                     app:strokeWidth="2dp"
-                    goneUnless="@{relationship.aIsToB==2}">
+                    >
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -386,6 +386,7 @@
                             android:layout_marginBottom="8dp" />
 
                         <TextView
+                            goneUnless="@{relationship.aIsToB==2}"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="start"
@@ -394,6 +395,7 @@
                             android:textColor="@color/black" />
 
                         <org.openhds.searchSpinner.SearchableSpinner
+                            goneUnless="@{relationship.aIsToB==2}"
                             android:id="@+id/mar"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -432,6 +434,7 @@
                             android:text="@={relationship.nchdm}" />
 
                         <TextView
+                            goneUnless="@{relationship.aIsToB==2}"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="start"
@@ -440,6 +443,7 @@
                             android:text="@string/polygamous" />
 
                         <org.openhds.searchSpinner.SearchableSpinner
+                            goneUnless="@{relationship.aIsToB==2}"
                             android:id="@+id/polygamous"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

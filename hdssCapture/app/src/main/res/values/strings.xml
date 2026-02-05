@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="true">HDSS CAPTURE</string>
-    <string name="versions">2026.01.08</string>
+    <string name="versions">2026.01.11</string>
     <string name="update">update</string>
     <string name="send">send</string>
     <string name="sync">sync</string>
@@ -486,7 +486,7 @@
     <string name="CART_FCORRES_SOCIO">G4j Animal drawn cart</string>
     <string name="PLOUGH_FCORRES_SOCIO">G4k Plough</string>
     <string name="FOAM_MATT_FCORRES_SOCIO">G4l Foam mattress</string>
-    <string name="STRAW_MATT_FCORRES_SOCIO">G4m Straw mattress</string>
+    <string name="STRAW_MATT_FCORRES_SOCIO">G4m Straw mattress/Mat</string>
     <string name="SPRING_MATT_FCORRES_SOCIO">G4n Spring mattress</string>
     <string name="SOFA_FCORRES_SOCIO">G4o Sofa</string>
     <string name="LANTERN_FCORRES_SOCIO">G4p Lantern</string>
@@ -975,5 +975,6 @@
     <string name="create_new">Create New</string>
     <string name="loading_members">Loading household members...</string>
     <string name="checking_forms">Checking for existing forms...</string>
+    <string name="subcode">Sub-Village Code *</string>
 
 </resources>

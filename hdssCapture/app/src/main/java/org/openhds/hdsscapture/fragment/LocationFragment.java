@@ -86,6 +86,7 @@ public class LocationFragment extends KeyboardFragment {
     private LocationCallback locationCallback;
     private EditText latitudeEditText, longitudeEditText, accuracyEditText, altitudeEditText;
     List<Configsettings> configsettings;
+    private Hierarchy level6Data;
 
     public LocationFragment() {
         // Required empty public constructor
@@ -153,7 +154,7 @@ public class LocationFragment extends KeyboardFragment {
 
 
         final Intent intent = getActivity().getIntent();
-        final Hierarchy level6Data = intent.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
+        level6Data = intent.getParcelableExtra(HierarchyActivity.LEVEL6_DATA);
 
         final Intent i = getActivity().getIntent();
         final Fieldworker fieldworkerData = i.getParcelableExtra(HierarchyActivity.FIELDWORKER_DATA);
@@ -250,11 +251,182 @@ public class LocationFragment extends KeyboardFragment {
         loadCodeData(binding.locationtype, codeBookViewModel, "locationType");
         loadCodeData(binding.site, codeBookViewModel, "site");
 
+//        binding.buttonSubmit.setOnClickListener(v -> {
+//            final LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
+//
+//            final Locations locations = binding.getLocations();
+//           //locations.setCompextId(this.locations.getCompextId());
+//
+//            boolean isExists = false;
+//            binding.locationextid.setError(null);
+//            binding.locationcluster.setError(null);
+//            binding.locationName.setError(null);
+//            binding.locationcompno.setError(null);
+//            binding.longitude.setError(null);
+//            binding.latitude.setError(null);
+//
+//            boolean val = false;
+//            boolean fmt = false;
+//
+//            if (!binding.locationcompno.getText().toString().isEmpty()) {
+//                String comp = binding.locationcompno.getText().toString();
+//
+//                if (comp.contains(" ")) {
+//                    binding.locationcompno.setError("Spaces are not allowed");
+//                    Toast.makeText(getActivity(), "Spaces are not allowed in Compound Number", Toast.LENGTH_LONG).show();
+//                    val = true;
+//                    return;
+//                }
+//
+//                comp = comp.trim();
+//                String cmp = configsettings != null && !configsettings.isEmpty() ? configsettings.get(0).compno : null;
+//                //cmp = cmp.trim();
+//                cmp = (cmp != null) ? cmp.trim() : null;
+//                Log.d("ComActivity", "Compno Format: "+ cmp);
+//                int cmplength = (cmp != null) ? cmp.trim().length() : 0;
+//
+//                String villExtId = level6Data.getExtId();
+//
+//                if (cmplength != comp.length()){
+//                    binding.locationcompno.setError("Must be " + cmplength + " characters in length");
+//                    Toast.makeText(getActivity(), "Must be " + cmplength + " characters in length", Toast.LENGTH_LONG).show();
+//                    val = true;
+//                    return;
+//                }
+//
+//                // Step 1: Separate letters and digits in cmp
+//                Pattern pattern = Pattern.compile("^([A-Za-z]+)([0-9]+)$");
+//                Matcher matcher = pattern.matcher(cmp);
+//
+//                if (matcher.find()) {
+//                    int letterCount = matcher.group(1).length();
+//                    int digitCount = matcher.group(2).length();
+//
+//                    // Build regex pattern like ^[A-Za-z]{4}[0-9]{3}$
+//                    String formatPattern = "^[A-Za-z]{" + letterCount + "}[0-9]{" + digitCount + "}$";
+//
+//                    if (!comp.matches(formatPattern)) {
+//                        binding.locationcompno.setError("Compound Number format must match " + letterCount + " letters and " + digitCount + " digits");
+//                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
+//                        val = true;
+//                        return;
+//                    }
+//                } else {
+//                    // cmp is not in expected letter+digit format
+//                    binding.locationcompno.setError("Reference compound number format is invalid");
+//                    val = true;
+//                    return;
+//                }
+//
+//            }
+//
+//
+//            try {
+//                Locations locations1 = null;
+//                if(locations.getCompno()!=null) {
+//                    Log.e("COMPNO","LOCATION IS " + isExists);
+//                    locations1 = locationViewModel.find(locations.getCompno());
+//                    if (locations1 != null) {
+//                        isExists = true;
+//                        binding.locationcompno.setError("Already Exists");
+//                        Toast.makeText(getActivity(), "Compound Number Already Exists", Toast.LENGTH_LONG).show();
+//                    }
+//                }
+//
+//            } catch (ExecutionException e) {
+//                e.printStackTrace();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//
+//            if(isExists){//if there is an error, do not continue
+//                return;
+//            }
+//
+//            final boolean validateOnComplete = true;//finalData.complete == 1;
+//            boolean hasErrors = new HandlerSelect().hasInvalidInput(binding.MAINLAYOUT, validateOnComplete, false);
+//
+//            if (hasErrors) {
+//                Toast.makeText(requireContext(), "All Fields Required", Toast.LENGTH_LONG).show();
+//                return;
+//            }
+//
+//            boolean loc = false;
+//            String compno = binding.locationcompno.getText().toString().trim();
+//            String extid = binding.locationextid.getText().toString().trim();
+//
+//            if (!compno.isEmpty() && !extid.isEmpty()) {
+//                // Extract leading letters from compno (e.g. XA from XA0001)
+//                String compnoLetters = compno.replaceAll("[^A-Za-z]", "");
+//                int letterCount = compnoLetters.length();
+//
+//                // Extract first N letters from extid
+//                String extidLetters = extid.replaceAll("[^A-Za-z]", "");
+//                String extidPrefix = extidLetters.length() >= letterCount
+//                        ? extidLetters.substring(0, letterCount)
+//                        : extidLetters; // in case extid is too short
+//
+//                if (!compnoLetters.equals(extidPrefix)) {
+//                    Toast.makeText(getActivity(), "Location Creation in Wrong Village", Toast.LENGTH_LONG).show();
+//                    binding.locationcompno.setError("Expected to start with: " + extidPrefix);
+//                    loc = true;
+//                    return;
+//                }
+//            }
+//
+//            Date end = new Date(); // Get the current date and time
+//            // Create a Calendar instance and set it to the current date and time
+//            Calendar cal = Calendar.getInstance();
+//            cal.setTime(end);
+//            // Extract the hour, minute, and second components
+//            int hh = cal.get(Calendar.HOUR_OF_DAY);
+//            int mm = cal.get(Calendar.MINUTE);
+//            int ss = cal.get(Calendar.SECOND);
+//            // Format the components into a string with leading zeros
+//            String endtime = String.format("%02d:%02d:%02d", hh, mm, ss);
+//
+//            if (locations.sttime !=null && locations.edtime==null){
+//                locations.edtime = endtime;
+//            }
+//            locations.complete = 1;
+//            locationViewModel.add(locations);
+//            //Toast.makeText(v.getContext(), "Saved Successfully", Toast.LENGTH_LONG).show();
+//            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+//                 ClusterFragment.newInstance(level6Data,locations, socialgroup)).commit();
+//
+//
+//        });
+
         binding.buttonSubmit.setOnClickListener(v -> {
+
+            save(true, true);
+        });
+
+        binding.buttonClose.setOnClickListener(v -> {
+
+            save(false, true);
+        });
+
+        HandlerSelect.colorLayouts(requireContext(), binding.MAINLAYOUT);
+        View v = binding.getRoot();
+        return v;
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    private void save(boolean save, boolean close) {
+
+        if (save) {
+
             final LocationViewModel locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
 
             final Locations locations = binding.getLocations();
-           //locations.setCompextId(this.locations.getCompextId());
+            //locations.setCompextId(this.locations.getCompextId());
 
             boolean isExists = false;
             binding.locationextid.setError(null);
@@ -317,64 +489,6 @@ public class LocationFragment extends KeyboardFragment {
                     return;
                 }
 
-
-//                boolean fmat = false;
-//                if (cmp != null && !comp.matches(cmp)){
-//                    fmat = true;
-//                    Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
-//                    binding.locationcompno.setError("Compound Number format is incorrect");
-//                    return;
-//                }
-
-//                if (binding.getLocations().site == 1 && comp.length() != 6) {
-//                    binding.locationcompno.setError("Must be 6 characters in length");
-//                    Toast.makeText(getActivity(), "Must be 6 characters in length", Toast.LENGTH_LONG).show();
-//                    val = true;
-//                    return;
-//                } else if (binding.getLocations().site == 2 && comp.length() != 6) {
-//                    binding.locationcompno.setError("Must be 6 characters in length");
-//                    Toast.makeText(getActivity(), "Must be 6 characters in length", Toast.LENGTH_LONG).show();
-//                    val = true;
-//                    return;
-//                } else if (binding.getLocations().site == 3 && comp.length() != 7) {
-//                    binding.locationcompno.setError("Must be 7 characters in length");
-//                    Toast.makeText(getActivity(), "Must be 7 characters in length", Toast.LENGTH_LONG).show();
-//                    val = true;
-//                    return;
-//                }
-
-
-//                boolean khd = false;
-//                //String regex = "[A-Z]{2}\\d{4}"; // Two uppercase letters followed by four digits
-//                String regnn = "[A-Z]{3}\\d{3}"; // Three uppercase letters followed by three digits
-//                String regdd = "[A-Z]{4}\\d{3}"; // Four uppercase letters followed by three digits
-//
-//                String regex = "[A-Z]{2}\\d{4}";
-//                if (!binding.locationcompno.getText().toString().trim().isEmpty() && binding.getLocations().site == 1) {
-//                    String input = binding.locationcompno.getText().toString().trim();
-//                    if (!input.matches(regex)) {
-//                        khd = true;
-//                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
-//                        binding.locationcompno.setError("Compound Number format is incorrect");
-//                        return;
-//                    }
-//                } else if (!binding.locationcompno.getText().toString().trim().isEmpty() && binding.getLocations().site == 2) {
-//                    String input = binding.locationcompno.getText().toString().trim();
-//                    if (!input.matches(regnn)) {
-//                        khd = true;
-//                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
-//                        binding.locationcompno.setError("Compound Number format is incorrect");
-//                        return;
-//                    }
-//                } else if (!binding.locationcompno.getText().toString().trim().isEmpty() && binding.getLocations().site == 3) {
-//                    String input = binding.locationcompno.getText().toString().trim();
-//                    if (!input.matches(regdd)) {
-//                        khd = true;
-//                        Toast.makeText(getActivity(), "Compound Number format is incorrect", Toast.LENGTH_LONG).show();
-//                        binding.locationcompno.setError("Compound Number format is incorrect");
-//                        return;
-//                    }
-//                }
             }
 
 
@@ -447,23 +561,17 @@ public class LocationFragment extends KeyboardFragment {
             }
             locations.complete = 1;
             locationViewModel.add(locations);
-            //Toast.makeText(v.getContext(), "Saved Successfully", Toast.LENGTH_LONG).show();
+            Toast.makeText(requireContext(), "Saved Successfully", Toast.LENGTH_LONG).show();
+
+        }
+        if (save) {
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
-                 ClusterFragment.newInstance(level6Data,locations, socialgroup)).commit();
+                    ClusterFragment.newInstance(level6Data,locations, socialgroup)).commit();
+        } else {
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container_cluster,
+                    ClusterFragment.newInstance(level6Data,locations, socialgroup)).commit();
+        }
 
-
-        });
-
-        HandlerSelect.colorLayouts(requireContext(), binding.MAINLAYOUT);
-        View v = binding.getRoot();
-        return v;
-
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 
     private void getLocation() {

@@ -153,31 +153,31 @@ public class PregnancyoutcomeValidation {
         List<ValidationError> errors = new ArrayList<>();
 
         // Validate months pregnant before ANC (1-12)
-        if (item.rec_anc == 1) {
+        if (item.rec_anc !=null && item.rec_anc == 1) {
             validateRange(item.month_pg, 1, 12, "month_pg",
                     "Months Pregnant Before ANC Cannot be More than 12", errors);
         }
 
         // Validate number of ANC visits (1-20)
-        if (item.rec_anc == 1) {
+        if (item.rec_anc !=null && item.rec_anc == 1) {
             validateRange(item.num_anc, 1, 20, "num_anc",
                     "Maximum Number of ANC Visit is 20", errors);
         }
 
         // Validate months pregnant for IPT (1-12)
-        if (item.rec_anc == 1 && item.rec_ipt == 1) {
+        if ((item.rec_anc !=null && item.rec_anc == 1) && (item.rec_ipt != null && item.rec_ipt == 1)) {
             validateRange(item.first_rec, 1, 12, "first_rec",
                     "Months Pregnant for IPT Cannot be More than 12", errors);
         }
 
         // Validate number of IPT taken (1-10)
-        if (item.rec_anc == 1 && item.rec_ipt == 1) {
+        if ((item.rec_anc !=null && item.rec_anc == 1) && (item.rec_ipt != null && item.rec_ipt == 1)) {
             validateRange(item.many_ipt, 1, 10, "many_ipt",
                     "Number of IPT taken Cannot be More than 10", errors);
         }
 
         // Validate IPT given at minimum 3 months (13 weeks)
-        if (item.rec_anc == 1 && item.rec_ipt == 1 && item.first_rec != null) {
+        if ((item.rec_anc !=null && item.rec_anc == 1) && (item.rec_ipt != null && item.rec_ipt == 1) && item.first_rec != null) {
             if (item.first_rec < 3) {
                 errors.add(new ValidationError("ipt_minimum_months",
                         "IPT is given at 13 weeks (3 Months)", "first_rec"));

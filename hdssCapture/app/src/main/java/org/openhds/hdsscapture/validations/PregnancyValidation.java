@@ -190,13 +190,13 @@ public class PregnancyValidation {
         List<ValidationError> errors = new ArrayList<>();
 
         // Validate pregnancy weeks (4-52)
-        if (item.anteNatalClinic == 1) {
+        if (item.anteNatalClinic !=null && item.anteNatalClinic == 1) {
             validateRange(item.ageOfPregFromPregNotes, 4, 52, "ageOfPregFromPregNotes",
                     "Maximum Number of Weeks Allowed is 4 - 52", errors);
         }
 
         // Validate pregnancy months (1-12)
-        if (item.anteNatalClinic == 1) {
+        if (item.anteNatalClinic !=null && item.anteNatalClinic == 1) {
             validateRange(item.estimatedAgeOfPreg, 1, 12, "estimatedAgeOfPreg",
                     "Maximum Number of Months Allowed is 12", errors);
         }
@@ -211,7 +211,7 @@ public class PregnancyValidation {
         }
 
         // Validate months vs weeks consistency
-        if (item.anteNatalClinic == 1 && item.estimatedAgeOfPreg != null && item.ageOfPregFromPregNotes != null) {
+        if (item.anteNatalClinic !=null && item.anteNatalClinic == 1 && item.estimatedAgeOfPreg != null && item.ageOfPregFromPregNotes != null) {
             int totalWeeksConvertedToMonths = item.ageOfPregFromPregNotes / 4;
             if (item.estimatedAgeOfPreg < totalWeeksConvertedToMonths) {
                 errors.add(new ValidationError("pregnancy_duration_mismatch",
@@ -220,25 +220,25 @@ public class PregnancyValidation {
         }
 
         // Validate first recorded month (1-12)
-        if (item.anteNatalClinic == 1) {
+        if (item.anteNatalClinic !=null && item.anteNatalClinic == 1) {
             validateRange(item.first_rec, 1, 12, "first_rec",
                     "Maximum Number of Months Allowed is 12", errors);
         }
 
         // Validate number of bednets (1-10)
-        if (item.own_bnet == 1) {
+        if (item.own_bnet != null && item.own_bnet == 1) {
             validateRange(item.how_many, 1, 10, "how_many",
                     "Maximum Number of Bednets is 10", errors);
         }
 
         // Validate pregnancy number (2-15)
-        if (item.first_preg == 2) {
+        if (item.first_preg != null && item.first_preg == 2) {
             validateRange(item.pregnancyNumber, 2, 15, "pregnancyNumber",
                     "Total Pregnancies Cannot be less than 2", errors);
         }
 
         // Validate ANC visits (1-20)
-        if (item.anteNatalClinic == 1) {
+        if (item.anteNatalClinic !=null && item.anteNatalClinic == 1) {
             validateRange(item.anc_visits, 1, 20, "anc_visits",
                     "Maximum Number of ANC Visit is 20", errors);
         }

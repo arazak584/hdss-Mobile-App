@@ -91,6 +91,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="@string/fw">
+
                             <androidx.appcompat.widget.AppCompatEditText
                                 android:id="@+id/fw"
                                 android:text="@={pregnancy.fw_uuid}"

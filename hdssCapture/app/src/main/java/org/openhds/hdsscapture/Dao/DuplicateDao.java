@@ -7,10 +7,12 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import org.openhds.hdsscapture.Views.CompletedForm;
 import org.openhds.hdsscapture.entity.Death;
 import org.openhds.hdsscapture.entity.Duplicate;
 import org.openhds.hdsscapture.entity.Inmigration;
 import org.openhds.hdsscapture.entity.Locations;
+import org.openhds.hdsscapture.entity.Morbidity;
 import org.openhds.hdsscapture.entity.Vaccination;
 import org.openhds.hdsscapture.entity.Vpm;
 
@@ -74,5 +76,11 @@ public interface DuplicateDao {
 
     @Query("SELECT COUNT(*) FROM duplicate WHERE status=2 AND fw_uuid = :uuid ")
     long rej(String uuid);
+
+    @Query("SELECT uuid, 'Duplicate' AS formType, insertDate, fname || ' ' || lname as fullName FROM duplicate WHERE complete IN (1,2) ORDER BY insertDate DESC")
+    List<CompletedForm> getCompletedForms();
+
+    @Query("SELECT * FROM duplicate where uuid=:id")
+    LiveData<Duplicate> getView(String id);
 
 }

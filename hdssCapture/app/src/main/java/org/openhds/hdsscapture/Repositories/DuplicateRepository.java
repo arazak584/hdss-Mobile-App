@@ -128,6 +128,10 @@ public class DuplicateRepository {
         return future.get();
     }
 
+    public LiveData<Duplicate> view(String id) {
+        return dao.getView(id);
+    }
+
     public LiveData<Long> sync() {
         return dao.sync();
     }

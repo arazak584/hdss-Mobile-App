@@ -12,6 +12,7 @@ import org.openhds.hdsscapture.AppDatabase;
 import org.openhds.hdsscapture.Dao.AmendmentDao;
 import org.openhds.hdsscapture.Dao.DeathDao;
 import org.openhds.hdsscapture.Dao.DemographicDao;
+import org.openhds.hdsscapture.Dao.DuplicateDao;
 import org.openhds.hdsscapture.Dao.HdssSociodemoDao;
 import org.openhds.hdsscapture.Dao.IndividualDao;
 import org.openhds.hdsscapture.Dao.InmigrationDao;
@@ -46,6 +47,7 @@ public class CompletedFormsViewModel extends AndroidViewModel {
     private final ResidencyDao residencyDao;
     private final VaccinationDao vaccinationDao;
     private final PregnancyoutcomeDao pregnancyoutcomeDao;
+    private final DuplicateDao duplicateDao;
 
     public CompletedFormsViewModel(@NonNull Application application) {
         super(application);
@@ -64,6 +66,7 @@ public class CompletedFormsViewModel extends AndroidViewModel {
         this.residencyDao = db.residencyDao();
         this.vaccinationDao = db.vaccinationDao();
         this.pregnancyoutcomeDao = db.pregnancyoutcomeDao();
+        this.duplicateDao = db.duplicateDao();
     }
 
     public LiveData<List<CompletedForm>> getAllCompletedForms() {
@@ -89,6 +92,7 @@ public class CompletedFormsViewModel extends AndroidViewModel {
                 List<CompletedForm> membership = residencyDao.getCompletedForms();
                 List<CompletedForm> vaccination = vaccinationDao.getCompletedForms();
                 List<CompletedForm> birth = pregnancyoutcomeDao.getCompletedForms();
+                List<CompletedForm> duplicate = duplicateDao.getCompletedForms();
 
 
                 // Add all forms to the combined list
@@ -106,6 +110,7 @@ public class CompletedFormsViewModel extends AndroidViewModel {
                 if (membership != null) all.addAll(membership);
                 if (vaccination != null) all.addAll(vaccination);
                 if (birth != null) all.addAll(birth);
+                if (duplicate != null) all.addAll(duplicate);
 
 
                 // Sort by insertDate (most recent first)

@@ -84,6 +84,10 @@ public class DuplicateViewModel extends AndroidViewModel {
         repo.delete(data);
     }
 
+    public LiveData<Duplicate> getView(String id) {
+        return repo.view(id);
+    }
+
     public LiveData<Long> sync() {
         return repo.sync();
     }
